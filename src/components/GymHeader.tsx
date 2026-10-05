@@ -42,18 +42,18 @@ export function GymHeader() {
       <Pressy accessibilityRole="button" accessibilityLabel={`Switch programme, current: ${current.short}`} onPress={() => openSheet(<ProgrammeSwitcherSheet />, { label: 'Switch programme' })} onLongPress={jumpLast} delayLongPress={500} style={{ flexShrink: 1, flexDirection: 'row', alignItems: 'center', gap: 10, height: 52 }}>
         <ProgLogo p={current} size={40} />
         <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 19, lineHeight: 26, letterSpacing: -0.4, flexShrink: 1 }}>{current.short}</Txt>
-        {multi && <ChevronDown size={18} color={c.muted} />}
+        {multi && <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><ChevronDown size={16} color={c.ink} strokeWidth={2.4} /></View>}
       </Pressy>
       <View style={{ flex: 1 }} />
       {/* Bell and profile photo share one glass container. */}
-      <View style={[{ height: 56, borderRadius: 28 }, lift]}>
-        <GlassShell radius={28} style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 56, paddingHorizontal: 5 }}>
-          <Pressy accessibilityRole="button" accessibilityLabel={unread ? `Notifications, ${unread} unread` : 'Notifications'} onPress={() => router.push('/notifications')} style={{ width: 46, height: 46, borderRadius: 23, alignItems: 'center', justifyContent: 'center' }}>
-            <Bell size={22} color={c.ink} />
-            {unread > 0 && <View style={{ position: 'absolute', top: 11, right: 12, width: 8, height: 8, borderRadius: 4, backgroundColor: c.accent, borderWidth: 2, borderColor: c.bg }} />}
+      <View style={[{ height: 44, borderRadius: 22 }, lift]}>
+        <GlassShell radius={22} style={{ flexDirection: 'row', alignItems: 'center', gap: 2, height: 44, paddingHorizontal: 4 }}>
+          <Pressy accessibilityRole="button" accessibilityLabel={unread ? `Notifications, ${unread} unread` : 'Notifications'} onPress={() => router.push('/notifications')} style={{ width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' }}>
+            <Bell size={19} color={c.ink} />
+            {unread > 0 && <View style={{ position: 'absolute', top: 6, right: 7, width: 8, height: 8, borderRadius: 4, backgroundColor: c.accent, borderWidth: 2, borderColor: c.bg }} />}
           </Pressy>
-          <Pressy accessibilityRole="button" accessibilityLabel="Profile" onPress={() => router.push('/profile')} style={{ width: 46, height: 46, borderRadius: 23 }}>
-            <Avatar size={46} />
+          <Pressy accessibilityRole="button" accessibilityLabel="Profile" onPress={() => router.push('/profile')} style={{ width: 36, height: 36, borderRadius: 18 }} hitSlop={4}>
+            <Avatar size={36} />
           </Pressy>
         </GlassShell>
       </View>

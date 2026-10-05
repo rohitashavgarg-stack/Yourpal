@@ -133,7 +133,7 @@ function ProgressCard({ k }: { k: CardKey }) {
           <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
             <View style={{ flexShrink: 1, gap: 2 }}>
               <Big big={`${st.weekDone} of ${st.target}`} unit=" this week" />
-              <Txt v="caption" style={{ fontSize: 13 }}>{st.weeks > 0 ? `${st.weeks}-week streak` : 'Streak paused, not lost'}</Txt>
+              <Txt v="caption" style={{ fontSize: 13 }}>{st.weekDone >= st.target ? 'Week complete' : `${st.left} to go this week`}</Txt>
             </View>
             <MiniBars key={`${ps.range}-${ps.anchor}`} vals={t!.vals} color={tint} w={112} />
           </Row>
