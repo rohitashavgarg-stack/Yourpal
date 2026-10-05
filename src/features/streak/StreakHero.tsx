@@ -42,8 +42,7 @@ export function StreakHero() {
       : st.weeks === 0
         ? `Start again: finish ${st.target} sessions this week.`
         : `${st.left} more ${st.left === 1 ? 'session' : 'sessions'} this week to keep it going.`;
-  const track0 = isDark ? '#2B3342' : '#E3E7EF';
-  const trackLine = isDark ? '#3A4457' : '#CDD3DF';
+  const track0 = isDark ? '#2B3342' : '#DDE2EB';
   const next = MILESTONES.find((m) => st.weeks < m);
 
   return (
@@ -57,7 +56,7 @@ export function StreakHero() {
 
       {/* The bar runs the full width of the card; each flame is centred on its week and kept inside the edges. */}
       <View onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)} style={{ height: F, marginTop: 8 }}>
-        <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: BAR, borderRadius: BAR / 2, backgroundColor: track0, borderWidth: 1, borderColor: trackLine, overflow: 'hidden' }}>
+        <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: BAR, borderRadius: BAR / 2, backgroundColor: track0, overflow: 'hidden' }}>
           <LinearGradient colors={['#FFB347', '#F0692C']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ width: `${Math.max(pct * 100, st.weeks > 0 ? 6 : 0)}%`, height: '100%', borderRadius: BAR / 2 }} />
         </View>
         {w > 0 && MILESTONES.map((m) => (
@@ -69,7 +68,7 @@ export function StreakHero() {
       <View style={{ height: 1, backgroundColor: c.line, marginVertical: 6 }} />
       <Row style={{ gap: 8 }}>
         {Array.from({ length: st.target }, (_, i) => (
-          <View key={i} style={{ flex: 1, height: 14, borderRadius: 7, backgroundColor: i < st.weekDone ? FLAME : track0, borderWidth: i < st.weekDone ? 0 : 1, borderColor: trackLine }} />
+          <View key={i} style={{ flex: 1, height: 14, borderRadius: 7, backgroundColor: i < st.weekDone ? FLAME : track0 }} />
         ))}
       </Row>
       <Txt v="caption">This week · {st.weekDone} of {st.target} sessions</Txt>
