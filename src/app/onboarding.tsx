@@ -24,11 +24,11 @@ import { KCAL_TARGET, MACRO_TARGET } from '@/lib/data';
 import { DobPicker, HeightPicker, WeightPicker } from '@/features/body/BodyLog';
 import { dirOf, needsTarget, planMath } from '@/features/onboarding/plan';
 import { useDomain } from '@/lib/domain';
-import { HealthStep, HowStep, MealStep, ProjectionStep, ReadyContent, SignStep } from '@/features/onboarding/Steps';
+import { HealthStep, HowStep, ProjectionStep, ReadyContent, SignStep } from '@/features/onboarding/Steps';
 import { HEALTH_NAME } from '@/lib/health';
 import Svg, { Circle, Path } from 'react-native-svg';
 
-const ORDER = ['welcome', 'how', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'meal', 'health', 'consent', 'sign', 'building', 'ready'] as const;
+const ORDER = ['welcome', 'how', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'sign', 'building', 'ready'] as const;
 type Step = (typeof ORDER)[number];
 const COUNTED: Step[] = ['goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'basics'];
 const GOALS = ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness', 'Not sure yet'];
@@ -97,7 +97,7 @@ export default function Onboarding() {
   useScenarios({
     title: 'Onboarding',
     rows: [
-      { label: 'Jump to step', options: ['Welcome', 'How it works', 'Goal', 'Experience', 'Schedule', 'Age', 'Height', 'Weight', 'Target', 'Projection', 'Basics', 'Meal photo', 'Health', 'Privacy', 'Signature', 'Building', 'All set'], value: ({ welcome: 'Welcome', goal: 'Goal', exp: 'Experience', sched: 'Schedule', age: 'Age', height: 'Height', weight: 'Weight', target: 'Target', plan: 'Projection', how: 'How it works', basics: 'Basics', meal: 'Meal photo', health: 'Health', consent: 'Privacy', sign: 'Signature', building: 'Building', ready: 'All set' } as any)[step], onPick: (v) => go(({ Welcome: 'welcome', Goal: 'goal', Experience: 'exp', Schedule: 'sched', Age: 'age', Height: 'height', Weight: 'weight', Target: 'target', Projection: 'plan', 'How it works': 'how', Basics: 'basics', 'Meal photo': 'meal', Health: 'health', Privacy: 'consent', Signature: 'sign', Building: 'building', 'All set': 'ready' } as any)[v]) },
+      { label: 'Jump to step', options: ['Welcome', 'How it works', 'Goal', 'Experience', 'Schedule', 'Age', 'Height', 'Weight', 'Target', 'Projection', 'Basics', 'Health', 'Privacy', 'Signature', 'Building', 'All set'], value: ({ welcome: 'Welcome', goal: 'Goal', exp: 'Experience', sched: 'Schedule', age: 'Age', height: 'Height', weight: 'Weight', target: 'Target', plan: 'Projection', how: 'How it works', basics: 'Basics', health: 'Health', consent: 'Privacy', sign: 'Signature', building: 'Building', ready: 'All set' } as any)[step], onPick: (v) => go(({ Welcome: 'welcome', Goal: 'goal', Experience: 'exp', Schedule: 'sched', Age: 'age', Height: 'height', Weight: 'weight', Target: 'target', Projection: 'plan', 'How it works': 'how', Basics: 'basics', Health: 'health', Privacy: 'consent', Signature: 'sign', Building: 'building', 'All set': 'ready' } as any)[v]) },
       { label: 'Assessment', options: ['Scheduled', 'Not scheduled'], value: sc.assess, onPick: (v) => setSc({ assess: v as any }) },
       { label: 'Connection', options: ['Online', 'Offline'], value: sc.net, onPick: (v) => setSc({ net: v as any }) },
     ],
@@ -106,9 +106,8 @@ export default function Onboarding() {
 
   const qsteps = flow.filter((x) => COUNTED.includes(x));
   // Screens that aren't questions share the progress of the question before them.
-  const ANCHOR: Partial<Record<Step, Step>> = { plan: 'target', meal: 'basics', health: 'basics', sign: 'basics' };
-  const anchor = ANCHOR[step];
-  const qn = anchor ? (qsteps.indexOf(anchor) >= 0 ? qsteps.indexOf(anchor) + 1 : qsteps.indexOf('age') + 1) : qsteps.indexOf(step) + 1 || undefined;
+  // The step counter shows only on the questions themselves (goal to basics). Projection, health, privacy and signature are not questions, so no counter there.
+  const qn = qsteps.indexOf(step) + 1 || undefined;
   const QTOTAL = qsteps.length;
   const showChrome = step !== 'welcome' && step !== 'how' && step !== 'ready' && step !== 'building';
   const primaryLabel = step === 'welcome' ? 'Get started' : step === 'consent' ? 'Agree and continue' : step === 'ready' ? "Let's start" : step === 'plan' ? 'I want to get there' : step === 'how' ? 'Continue' : step === 'sign' ? 'Confirm' : step === 'health' ? `Connect ${HEALTH_NAME}` : 'Continue';
@@ -138,7 +137,6 @@ export default function Onboarding() {
           {step === 'target' && <TargetStep />}
           {step === 'plan' && <ProjectionStep />}
           {step === 'how' && <HowStep />}
-          {step === 'meal' && <MealStep />}
           {step === 'health' && <HealthStep />}
           {step === 'sign' && <SignStep onDrawn={setSigned} />}
           {step === 'basics' && <BasicsStep tried={tried} />}
