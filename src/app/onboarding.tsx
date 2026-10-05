@@ -90,8 +90,8 @@ export default function Onboarding() {
       <View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Bell size={26} color={c.accentText} /></View>
       <Txt v="title">Get notified when Coach sends your plan</Txt>
       <Txt muted>Only plan updates and trainer replies. Reminders stay off until you turn them on.</Txt>
-      <Button kind="accent" label="Allow notifications" onPress={() => { setProfile({ notifications: 'on' }); closeSheet(() => go('building')); haptic.success(); }} />
-      <Button kind="secondary" label="Not now" onPress={() => { setProfile({ notifications: 'off' }); closeSheet(() => go('building')); }} />
+      <Button kind="accent" label="Allow notifications" onPress={() => { setProfile({ notifications: 'on' }); closeSheet(() => go('sign')); haptic.success(); }} />
+      <Button kind="secondary" label="Not now" onPress={() => { setProfile({ notifications: 'off' }); closeSheet(() => go('sign')); }} />
     </View>, { label: 'Notifications' });
 
   useScenarios({
