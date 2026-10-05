@@ -14,7 +14,7 @@ import { haptic } from '@/lib/haptics';
 import { fade, fadeOut } from '@/theme/motion';
 import { goBack, Note, SubPage } from '@/features/shell/parts';
 import { goalV2Store, kindOf, addDays, fmtDay, parseBy } from '@/features/goalv2/model';
-import { FinishBy } from '@/features/goalv2/FinishBy';
+import { DateSheet, FinishBy } from '@/features/goalv2/FinishBy';
 import { TODAY } from '@/features/progress/trends';
 import { BYS, GDEF, GOAL2, GOALS, goalNote, goalStep, GVERB, isNumeric } from '@/features/shell/goal';
 
@@ -24,7 +24,7 @@ export default function Goal() {
   const { c } = useTheme();
   const { d, set } = useDomain();
   const { state, setProfile } = useStore();
-  const { toast } = useOverlay();
+  const { toast, openSheet } = useOverlay();
   const v2 = goalV2Store.use().version === 'Version 2';
   const defBy = fmtDay(addDays(TODAY, 84)); // 12 weeks
   const needsDate = (t: string) => v2 && kindOf(t) !== 'consistency';
@@ -94,6 +94,7 @@ export default function Goal() {
                 <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>By when? <Txt muted style={{ fontSize: 13 }}>Optional</Txt></Txt>
                 <Row style={{ gap: 8, flexWrap: 'wrap' }}>
                   {bys.map((b) => <Pill key={b} label={b} on={g.by === b} onPress={() => patch({ by: b })} />)}
+                  <Pill label="Pick a date" on={false} onPress={() => openSheet(<DateSheet start={parseBy(g.by) ?? addDays(TODAY, 84)} onPick={(by) => patch({ by })} />, { label: 'Pick a finish date' })} />
                 </Row>
               </View>
             </>

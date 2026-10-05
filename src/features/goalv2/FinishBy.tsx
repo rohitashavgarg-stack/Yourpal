@@ -32,7 +32,7 @@ export function FinishBy({ by, onChange }: { by: string; onChange: (by: string) 
   );
 }
 
-function DateSheet({ start, onPick }: { start: Date; onPick: (by: string) => void }) {
+export function DateSheet({ start, onPick }: { start: Date; onPick: (by: string) => void }) {
   const { closeSheet } = useOverlay();
   const [m, setM] = useState(start.getMonth() + 1);
   const [y, setY] = useState(start.getFullYear());

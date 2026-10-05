@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { DateSheet } from '@/features/goalv2/FinishBy';
+import { addDays, parseBy } from '@/features/goalv2/model';
+import { TODAY } from '@/features/progress/trends';
 import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
@@ -16,7 +19,7 @@ import { useProgressScenarios } from '@/features/progress/scenarios';
 export default function EditGoal() {
   const { c } = useTheme();
   const { d: dom, set } = useDomain();
-  const { toast } = useOverlay();
+  const { toast, openSheet } = useOverlay();
   const [g, setG] = useState(dom.goal);
   useProgressScenarios('Edit goal', [
     { label: 'Draft target', options: ['Default', 'Big (20 kg)'], value: g.type === 'Weight loss' && g.target > 15 ? 'Big (20 kg)' : 'Default', onPick: (v) => setG({ ...g, type: 'Weight loss', target: v === 'Default' ? 6 : 20 }) },
@@ -56,6 +59,7 @@ export default function EditGoal() {
         <Txt v="label">By (optional)</Txt>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
           {byList.map((b) => <Pill key={b} label={b === '—' ? 'No date' : b} on={g.by === b} onPress={() => setG({ ...g, by: b })} />)}
+          <Pill label="Pick a date" on={false} onPress={() => openSheet(<DateSheet start={parseBy(g.by) ?? addDays(TODAY, 84)} onPick={(by) => setG({ ...g, by })} />, { label: 'Pick a finish date' })} />
         </View>
       </Card>
       <Txt v="caption" style={{ fontSize: 13, paddingHorizontal: 6 }}>Coach Vikram will be notified. Goals are per programme; quick trackers are shared.</Txt>

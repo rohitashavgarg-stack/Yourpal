@@ -45,6 +45,7 @@ function GoalHero() {
   const line = isNew ? 'Starting point saved · Week 1' : `${progressLine(g2)} · ${statusLine(g2)}`;
   const early = isNew ? 'Early signs show up after your first week' : earlyLive;
   return (
+    <Pressy accessibilityRole="link" accessibilityLabel="Your goal. Open goal details" scaleTo={0.98} onPress={() => router.push('/goal-detail')}>
     <LinearGradient colors={['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
       style={{ borderRadius: 28, padding: 20, gap: 10, overflow: 'hidden' }}>
       <Svg width={240} height={240} viewBox="0 0 240 240" style={{ position: 'absolute', right: -80, top: -90, opacity: 0.15 }}>
@@ -62,6 +63,7 @@ function GoalHero() {
       <Txt style={{ fontSize: 14, color: '#fff' }}>{line}</Txt>
       <Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)' }}>{early}</Txt>
     </LinearGradient>
+    </Pressy>
   );
 }
 
