@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
-import { useScenarioRegistry, useStore } from '@/lib/store';
+import { useStore } from '@/lib/store';
+import { mealsFor, NOWS, TimeOfDay, useDomain } from '@/lib/domain';
+import { STEPS_DESIGNS, StepsDesign, stepsStore } from '@/features/today/StepsCards';
+import { goalV2Store } from '@/features/goalv2/model';
+import { WEEK_TARGET } from '@/features/streak/data';
 import { font } from '@/theme/tokens';
 import { useOverlay } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
 import { SlidersHorizontal } from '@/lib/icons';
-import { NAV_STYLES, navStore, NavStyle } from '@/components/navStyle';
 
 const PHONE_W = 390, PHONE_H = 844;
 
@@ -73,28 +75,58 @@ function StatusBarMock() {
   );
 }
 
+// A three-stop slider for the time of day (Morning, Afternoon, Evening). Tap or drag along the track.
+const TIME_STOPS: { t: TimeOfDay; label: string }[] = [
+  { t: 'Morning', label: 'Morning' }, { t: 'Afternoon', label: 'Afternoon' }, { t: 'Evening', label: 'Evening' },
+];
+function TimeSlider({ value, onPick }: { value: TimeOfDay; onPick: (t: TimeOfDay) => void }) {
+  const [w, setW] = useState(0);
+  const idx = Math.max(0, TIME_STOPS.findIndex((x) => x.t === value));
+  const from = (x: number) => { if (w <= 0) return; const i = Math.max(0, Math.min(2, Math.round((x / w) * 2))); if (TIME_STOPS[i].t !== value) onPick(TIME_STOPS[i].t); };
+  const clock = (t: TimeOfDay) => { const m = NOWS[t]; const h = Math.floor(m / 60); return `${((h + 11) % 12) + 1}:${String(m % 60).padStart(2, '0')} ${h >= 12 ? 'pm' : 'am'}`; };
+  return (
+    <View style={{ gap: 8 }}>
+      <View accessibilityRole="adjustable" accessibilityLabel={`Time of day, ${value}`} accessibilityValue={{ text: value }}
+        onLayout={(e) => setW(e.nativeEvent.layout.width)}
+        onStartShouldSetResponder={() => true} onMoveShouldSetResponder={() => true}
+        onResponderGrant={(e) => from(e.nativeEvent.locationX)} onResponderMove={(e) => from(e.nativeEvent.locationX)}
+        style={{ height: 32, justifyContent: 'center' }}>
+        <View pointerEvents="none" style={{ height: 4, borderRadius: 2, backgroundColor: '#DCE1E8' }}>
+          <View style={{ width: `${idx * 50}%`, height: 4, borderRadius: 2, backgroundColor: '#12151C' }} />
+        </View>
+        {[0, 1, 2].map((i) => <View key={i} pointerEvents="none" style={{ position: 'absolute', left: `${i * 50}%`, marginLeft: -3, top: 14, width: 6, height: 6, borderRadius: 3, backgroundColor: i <= idx ? '#12151C' : '#C3CAD5' }} />)}
+        <View pointerEvents="none" style={{ position: 'absolute', left: `${idx * 50}%`, marginLeft: -11, top: 5, width: 22, height: 22, borderRadius: 11, backgroundColor: '#fff', borderWidth: 2, borderColor: '#12151C', shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } }} />
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        {TIME_STOPS.map((x, i) => <Text key={x.t} style={{ fontFamily: i === idx ? font.semibold : font.regular, fontSize: 11.5, lineHeight: 15, color: i === idx ? '#12151C' : '#5C6370' }}>{x.label}</Text>)}
+      </View>
+      <Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#12151C' }}>{clock(value)}</Text>
+    </View>
+  );
+}
+
+// Kept deliberately small: goal type, member type, light / dark, steps tracker design and the time of day.
 function PanelBody() {
-  const { current } = useScenarioRegistry();
-  const { state, setSc, reset } = useStore();
-  const nav = navStore.use();
-  const global = [
-    { label: 'Navigation style', options: NAV_STYLES as string[], value: nav.style, onPick: (v: string) => navStore.set({ style: v as NavStyle }) },
-    { label: 'Theme', options: ['System', 'Light', 'Dark'], value: state.sc.theme, onPick: (v: string) => setSc({ theme: v as any }) },
+  const { state, setSc } = useStore();
+  const { isDark } = useTheme();
+  const { d, set } = useDomain();
+  const steps = stepsStore.use();
+  const type = d.goal.type === 'General fitness' || d.goal.type === 'Not sure yet' ? 'Consistency' : ['Strength', 'Flexibility'].includes(d.goal.type) ? d.goal.type : 'Weight loss';
+  const pickGoal = (v: string) => {
+    const next = v === 'Consistency' ? { type: 'General fitness', target: WEEK_TARGET } : v === 'Weight loss' ? { type: v, target: 6 } : v === 'Strength' ? { type: v, target: 80 } : { type: v, target: 0 };
+    set({ goal: { ...d.goal, ...next, by: d.goal.by && d.goal.by !== '—' ? d.goal.by : '30 Nov' } });
+    goalV2Store.set({ extendDays: 0, lowerBy: 0, finished: false, kept: false });
+  };
+  const pickTime = (t: TimeOfDay) => set({ time: t, meals: mealsFor(t), openMeal: null, ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null });
+  const rows = [
+    { label: 'Goal type', options: ['Weight loss', 'Strength', 'Flexibility', 'Consistency'], value: type, onPick: pickGoal },
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },
-  ];
-  const rows = [...(current?.rows ?? []), ...global];
-  const jumps: [string, () => void][] = [
-    ['Welcome', () => router.replace('/welcome')],
-    ['Log in', () => router.replace('/login')],
-    ['Onboarding', () => router.replace('/onboarding')],
-    ['Today', () => router.replace('/(tabs)')],
+    { label: 'Theme', options: ['Light', 'Dark'], value: isDark ? 'Dark' : 'Light', onPick: (v: string) => setSc({ theme: v as any }) },
+    { label: 'Steps tracker design', options: STEPS_DESIGNS as string[], value: steps.design, onPick: (v: string) => stepsStore.set({ design: v as StepsDesign }) },
   ];
   return (
     <View style={{ gap: 14 }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
-        <Text style={{ fontFamily: font.bold, fontSize: 16, lineHeight: 21, color: '#12151C' }}>Edge cases</Text>
-        <Text style={{ fontFamily: font.regular, fontSize: 13, lineHeight: 17, color: '#5C6370' }}>{current?.title ?? 'App'}</Text>
-      </View>
+      <Text style={{ fontFamily: font.bold, fontSize: 16, lineHeight: 21, color: '#12151C' }}>Edge cases</Text>
       {rows.map((r) => (
         <View key={r.label} style={{ gap: 6 }}>
           <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: '#5C6370' }}>{r.label}</Text>
@@ -111,24 +143,10 @@ function PanelBody() {
           </View>
         </View>
       ))}
-      <View style={{ gap: 6, borderTopWidth: 1, borderTopColor: '#E1E6EC', paddingTop: 12 }}>
-        <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: '#5C6370' }}>Jump to</Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-          {jumps.map(([l, go]) => (
-            <Pressable key={l} onPress={go} style={{ height: 32, paddingHorizontal: 12, borderRadius: 16, borderWidth: 1, borderColor: '#CBD2DC', backgroundColor: '#fff', justifyContent: 'center' }}>
-              <Text style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 16, color: '#12151C' }}>{l}</Text>
-            </Pressable>
-          ))}
-        </View>
+      <View style={{ gap: 6 }}>
+        <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: '#5C6370' }}>Time of day</Text>
+        <TimeSlider value={d.time} onPick={pickTime} />
       </View>
-      {(current?.actions ?? []).map((a) => (
-        <Pressable key={a.label} onPress={a.run} style={{ height: 38, borderRadius: 19, backgroundColor: '#EEF1F5', alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 17, color: '#12151C' }}>{a.label}</Text>
-        </Pressable>
-      ))}
-      <Pressable onPress={() => { reset(); router.replace('/login'); }} style={{ height: 38, borderRadius: 19, backgroundColor: '#EEF1F5', alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 17, color: '#12151C' }}>Reset the whole app</Text>
-      </Pressable>
     </View>
   );
 }
@@ -138,7 +156,6 @@ function SidePanel({ height }: { height: number }) {
     <View style={{ width: 320, maxHeight: height, flexGrow: 0, flexShrink: 0 }}>
     <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: '#fff', borderRadius: 22, borderWidth: 1, borderColor: '#E1E6EC' }} contentContainerStyle={{ padding: 16 }}>
       <PanelBody />
-      <Text style={{ marginTop: 16, fontFamily: font.regular, fontSize: 12, lineHeight: 16, color: '#5C6370' }}>YourPal member app · React Native (Expo) · web build. On a phone this panel opens from the tab on the right edge.</Text>
     </ScrollView>
     </View>
   );

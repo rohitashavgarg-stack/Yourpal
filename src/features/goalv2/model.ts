@@ -21,7 +21,7 @@ export type StatusScenario = 'Ahead' | 'On track' | 'A bit behind' | 'Ending soo
 export const STATUS_SCENARIOS: StatusScenario[] = ['Ahead', 'On track', 'A bit behind', 'Ending soon', 'Reached'];
 
 export const goalV2Store = createStore(() => ({
-  version: 'Version 1' as GoalDesignVersion,
+  version: 'Version 2' as GoalDesignVersion, // Version 1 is still in the code; the edge-case panel no longer switches it
   scenario: 'On track' as StatusScenario,
   extendDays: 0, // "Extend by 4 weeks" adds days to the end date
   lowerBy: 0, // "Adjust target" moves the target toward the start

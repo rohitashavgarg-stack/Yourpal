@@ -42,7 +42,12 @@ export function GymHeader() {
       <Pressy accessibilityRole="button" accessibilityLabel={`Switch programme, current: ${current.short}`} onPress={() => openSheet(<ProgrammeSwitcherSheet />, { label: 'Switch programme' })} onLongPress={jumpLast} delayLongPress={500} style={{ flexShrink: 1, flexDirection: 'row', alignItems: 'center', gap: 10, height: 52 }}>
         <ProgLogo p={current} size={40} />
         <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 19, lineHeight: 26, letterSpacing: -0.4, flexShrink: 1 }}>{current.short}</Txt>
-        {multi && <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><ChevronDown size={16} color={c.ink} strokeWidth={2.4} /></View>}
+        {multi && (
+          <View style={{ width: 26, height: 26, borderRadius: 13, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
+            <GlassBackdrop radius={13} />
+            <View style={{ zIndex: 2 }}><ChevronDown size={16} color={c.ink} strokeWidth={2.4} /></View>
+          </View>
+        )}
       </Pressy>
       <View style={{ flex: 1 }} />
       {/* Bell and profile photo share one glass container. */}
