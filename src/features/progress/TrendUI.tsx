@@ -57,6 +57,7 @@ export function RangeBar() {
 // Slim version that docks under the header once the full bar has scrolled away: period chips + ‹ › + the date in one small block.
 export function RangeBarSlim() {
   const { c } = useTheme();
+  const { openSheet } = useOverlay();
   const ps = progressStore.use();
   const anchor = new Date(ps.anchor);
   const win = windowOf(ps.range, anchor);
@@ -83,7 +84,9 @@ export function RangeBarSlim() {
         </View>
         <Pressy accessibilityRole="button" accessibilityLabel="Later" disabled={!win.canNext} onPress={() => go(1)} style={[btn, { opacity: win.canNext ? 1 : 0.35 }]}><ChevronRight size={18} color={c.ink} /></Pressy>
       </Row>
-      <Txt v="caption" style={{ textAlign: 'center', fontSize: 12, lineHeight: 16 }}>{win.label}</Txt>
+      <Pressy accessibilityRole="button" accessibilityLabel={`${win.label}. Pick a date`} onPress={() => openSheet(<DateSheet />, { label: 'Pick a date' })} style={{ alignSelf: 'center', minHeight: 24, paddingHorizontal: 12, justifyContent: 'center' }}>
+        <Txt v="caption" style={{ textAlign: 'center', fontSize: 12, lineHeight: 16 }}>{win.label}</Txt>
+      </Pressy>
     </View>
   );
 }

@@ -36,7 +36,7 @@ export function TabScreen({ title, header, children, compactTitle = true, bottom
   // A bar (like a period filter) that docks under the header once the in-page copy has scrolled out of view.
   const [pinOn, setPinOn] = useState(false);
   const after = pinAfter ?? 1e9;
-  useAnimatedReaction(() => y.value > after, (v, p) => { if (v !== p) scheduleOnRN(setPinOn, v); });
+  useAnimatedReaction(() => y.value > after, (v, p) => { if (v !== p) scheduleOnRN(setPinOn, v); }, [after]);
   const top = insets.top + 8;
   const compact = useAnimatedStyle(() => ({ opacity: interpolate(y.value, [40, 70], [0, 1], Extrapolation.CLAMP) }));
   const large = useAnimatedStyle(() => ({
@@ -57,7 +57,7 @@ export function TabScreen({ title, header, children, compactTitle = true, bottom
         {compactTitle && <Animated.Text pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, bottom: 16, textAlign: 'center', fontFamily: font.semibold, fontSize: 17, lineHeight: 24, color: c.ink }, compact]}>{title}</Animated.Text>}
       </View>
       {pinned && pinOn && (
-        <Animated.View entering={fade()} style={{ position: 'absolute', top: top + 56, left: 0, right: 0, zIndex: 1, backgroundColor: c.bg, paddingHorizontal: 16, paddingTop: 4, paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: c.line }}>
+        <Animated.View style={{ position: 'absolute', top: top + 56, left: 0, right: 0, zIndex: 1, backgroundColor: c.bg, paddingHorizontal: 16, paddingTop: 4, paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: c.line }}>
           {pinned}
         </Animated.View>
       )}

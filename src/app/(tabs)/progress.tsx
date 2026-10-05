@@ -222,7 +222,7 @@ export default function Progress() {
   const cards = order.filter((k) => !hidden.includes(k));
 
   return (
-    <TabScreen title="Progress" header={<GymHeader />} compactTitle={false} pinned={v2 ? <RangeBarSlim /> : undefined} pinAfter={bar.y + bar.h - (insets.top + 8 + 56)}
+    <TabScreen title="Progress" header={<GymHeader />} compactTitle={false} pinned={v2 ? <RangeBarSlim /> : undefined} pinAfter={v2 && bar.h > 0 && !ps.loading ? bar.y + bar.h - (insets.top + 8 + 56) : undefined}
       refreshControl={<RefreshControl refreshing={ps.refreshing} tintColor={c.accentText} onRefresh={() => { progressStore.set({ refreshing: true }); showProgressLoading(900); }} />}>
       {v2 && !ps.loading && <Animated.View entering={fade()}><GoalCard2 size="expanded" /></Animated.View>}
       {v2 && ps.loading && <Skeleton h={190} />}
