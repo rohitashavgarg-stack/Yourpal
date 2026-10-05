@@ -26,7 +26,7 @@ export function ringCentre(g: Goal2): { big?: string; small?: string; check?: bo
 }
 
 export function GoalRing({ g, size = 88, onDark = true }: { g: Goal2; size?: number; onDark?: boolean }) {
-  const stroke = Math.round(size * 0.105);
+  const stroke = size >= 110 ? 12 : Math.round(size * 0.105);
   const r = (size - stroke) / 2 - 1;
   const c = ringCentre(g);
   const ink = onDark ? '#fff' : '#12151C';
@@ -35,8 +35,8 @@ export function GoalRing({ g, size = 88, onDark = true }: { g: Goal2; size?: num
       <Ring size={size} r={r} stroke={stroke} pct={g.kind === 'consistency' ? g.pct : g.status === 'reached' ? 1 : g.pct} color={onDark ? '#fff' : '#2F6BEA'} track={onDark ? 'rgba(255,255,255,0.25)' : 'rgba(47,107,234,0.15)'} />
       <View style={{ position: 'absolute', alignItems: 'center', justifyContent: 'center' }}>
         {c.check ? <Check size={size * 0.4} color={ink} strokeWidth={3} /> : (
-          <Txt style={{ fontFamily: font.semibold, fontSize: g.kind === 'consistency' ? size * 0.27 : size * 0.3, lineHeight: size * 0.38, letterSpacing: -0.8, color: ink }}>
-            {c.big}{g.kind !== 'consistency' ? <Txt style={{ fontFamily: font.semibold, fontSize: size * 0.17, lineHeight: size * 0.24, color: onDark ? 'rgba(255,255,255,0.7)' : '#5C6370' }}>{c.small}</Txt> : null}
+          <Txt style={{ fontFamily: font.semibold, fontSize: g.kind === 'consistency' ? size * 0.26 : size * 0.26, lineHeight: size * 0.34, letterSpacing: -0.8, color: ink }}>
+            {c.big}{g.kind !== 'consistency' ? <Txt style={{ fontFamily: font.semibold, fontSize: size * 0.14, lineHeight: size * 0.2, color: onDark ? 'rgba(255,255,255,0.7)' : '#5C6370' }}>{c.small}</Txt> : null}
           </Txt>
         )}
         {g.kind === 'consistency' && !c.check ? <Txt style={{ fontSize: 10, lineHeight: 14, color: onDark ? 'rgba(255,255,255,0.75)' : '#5C6370' }}>this week</Txt> : null}
@@ -63,7 +63,7 @@ export function GoalCard2({ size }: { size: 'compact' | 'expanded' | 'hero' }) {
   const streakLine = useStreakLine();
   const look = g.status === 'reached' && g.kind !== 'consistency' ? STYLE.reached : g.status === 'endingSoon' ? STYLE.endingSoon : STYLE.normal;
   const highlight = look !== STYLE.normal;
-  const rs = size === 'hero' ? 84 : size === 'expanded' ? 76 : 68;
+  const rs = size === 'hero' ? 112 : 132; // same big ring as Version 1
   const sub = g.kind === 'consistency' ? `${streakLine} · standing goal` : g.status === 'reached' ? `${g.name} · done` : progressLine(g);
   const Wrap: any = size === 'hero' ? View : Pressy;
   const wrapProps = size === 'hero' ? { accessible: true, accessibilityLabel: `Your goal: ${g.name}. ${sub}. ${statusLine(g)}` } : { accessibilityRole: 'link', scaleTo: 0.98, onPress: () => router.push('/goal-detail'), accessibilityLabel: `Your goal: ${g.name}. ${sub}. ${statusLine(g)}. Open goal` };
@@ -74,7 +74,7 @@ export function GoalCard2({ size }: { size: 'compact' | 'expanded' | 'hero' }) {
         <Svg width={240} height={240} viewBox="0 0 240 240" style={{ position: 'absolute', right: -80, top: -90, opacity: highlight ? 0.22 : 0.15 }}>
           <Circle cx={120} cy={120} r={110} fill="none" stroke="#fff" strokeWidth={16} /><Circle cx={120} cy={120} r={70} fill="none" stroke="#fff" strokeWidth={10} />
         </Svg>
-        <Row style={{ gap: 16, alignItems: 'center' }}>
+        <Row style={{ gap: 14, alignItems: 'center' }}>
           <GoalRing g={g} size={rs} />
           <View style={{ flex: 1, gap: 4, minWidth: 0 }}>
             <Row style={{ justifyContent: 'space-between' }}>
