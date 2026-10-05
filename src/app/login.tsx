@@ -10,6 +10,7 @@ import { ChevronLeft, ChevronRight, Phone, WifiOff, Ticket } from '@/lib/icons';
 import { ProgLogo } from '@/features/shell/parts';
 import { setShell, switchProgramme, useShell } from '@/features/shell/state';
 import { Button, Card, Field, Pressy, Row, Txt } from '@/components/ui';
+import { LOGO_BLUE, YourPalLogo } from '@/components/YourPalLogo';
 import { OtpInput } from '@/components/OtpInput';
 import { useOverlay } from '@/components/Overlay';
 import { useScenarios, useStore } from '@/lib/store';
@@ -20,7 +21,7 @@ import { haptic } from '@/lib/haptics';
 type Step = 'phone' | 'otp' | 'programme';
 
 export default function Login() {
-  const { c } = useTheme();
+  const { c, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const { state, set, setSc } = useStore();
   const { toast, openSheet } = useOverlay();
@@ -126,12 +127,7 @@ export default function Login() {
 
         {step === 'phone' && (
           <Animated.View key="phone" entering={fade()} exiting={fadeOut()} style={{ gap: 16, flexGrow: 1 }}>
-            <Row style={{ gap: 10 }}>
-              <View style={{ width: 40, height: 40, borderRadius: 13, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
-                <Txt style={{ fontFamily: font.displayBold, fontSize: 22, lineHeight: 30, color: '#fff' }}>Y</Txt>
-              </View>
-              <Txt style={{ fontFamily: font.displayBold, fontSize: 22, lineHeight: 30, letterSpacing: -0.5 }}>YourPal</Txt>
-            </Row>
+            <YourPalLogo height={34} color={isDark ? '#fff' : LOGO_BLUE} />
 
             <View style={{ gap: 6, marginTop: 12 }}>
               <Txt v="title">Log in with your phone</Txt>

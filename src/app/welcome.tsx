@@ -8,6 +8,7 @@ import Svg, { Circle, Defs, Path, RadialGradient, Rect, Stop } from 'react-nativ
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button, Pressy, Txt } from '@/components/ui';
 import { fade, fadeOut } from '@/theme/motion';
+import { YourPalLogo } from '@/components/YourPalLogo';
 import { font } from '@/theme/tokens';
 
 // One soft blue glow bleeding in from the top-right corner. Radial gradient, so it is blurred with no filter (works on web and native).
@@ -174,10 +175,7 @@ export default function Welcome() {
     <View onLayout={(e) => setBox({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height })} style={{ flex: 1, backgroundColor: '#000' }}>
       <Glow width={box.w} height={box.h} />
       <View style={{ paddingTop: insets.top + 18, paddingHorizontal: 24, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: '#2F6BEA', alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.displayBold, fontSize: 26, lineHeight: 34, color: '#fff' }}>Y</Txt>
-        </View>
-        <Txt accessibilityRole="header" style={{ fontFamily: font.displayBold, fontSize: 32, lineHeight: 42, letterSpacing: -0.8, color: '#fff' }}>YourPal</Txt>
+        <View accessibilityRole="header"><YourPalLogo height={40} color="#fff" /></View>
       </View>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
         <Animated.View key={i} entering={fade()} exiting={fadeOut()}><Mock /></Animated.View>
