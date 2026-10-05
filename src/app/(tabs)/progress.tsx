@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, RefreshControl, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle } from 'react-native-svg';
 import { ChevronRight, Flame, Lock } from '@/lib/icons';
@@ -19,7 +20,7 @@ import { haptic } from '@/lib/haptics';
 import { fmt1 } from '@/lib/useNow';
 import { CardKey, goalTitle, NEW_EMPTY, ORDER } from '@/features/progress/data';
 import { MetricKey, trend } from '@/features/progress/trends';
-import { MiniBars, RangeBar } from '@/features/progress/TrendUI';
+import { MiniBars, RangeBar, RangeBarSlim } from '@/features/progress/TrendUI';
 import { CardTitle, CornerGlow, GrowBar, PCard, Spark } from '@/features/progress/parts';
 import { progressStore } from '@/features/progress/store';
 import { AFTER_PHOTO, BEFORE_PHOTO } from '@/features/progress/photoAssets';
@@ -209,7 +210,9 @@ export default function Progress() {
   const { c } = useTheme();
   const { d } = useDomain();
   const ps = progressStore.use();
+  const insets = useSafeAreaInsets();
   const v2 = goalV2Store.use().version === 'Version 2';
+  const [bar, setBar] = useState({ y: 0, h: 0 });
   useEffect(() => { if (firstLoad) { firstLoad = false; showProgressLoading(1000); } }, []);
   useProgressScenarios('Progress');
 
@@ -219,12 +222,11 @@ export default function Progress() {
   const cards = order.filter((k) => !hidden.includes(k));
 
   return (
-    <TabScreen title="Progress" header={<GymHeader />} compactTitle={false}
+    <TabScreen title="Progress" header={<GymHeader />} compactTitle={false} pinned={v2 ? <RangeBarSlim /> : undefined} pinAfter={bar.y + bar.h - (insets.top + 8 + 56)}
       refreshControl={<RefreshControl refreshing={ps.refreshing} tintColor={c.accentText} onRefresh={() => { progressStore.set({ refreshing: true }); showProgressLoading(900); }} />}>
       {v2 && !ps.loading && <Animated.View entering={fade()}><GoalCard2 size="expanded" /></Animated.View>}
       {v2 && ps.loading && <Skeleton h={190} />}
-      <RangeBar />
-      {v2 && <Txt v="caption" style={{ marginTop: -6, marginHorizontal: 4 }}>The period above filters the cards below. Your goal always shows where you are now.</Txt>}
+      <View onLayout={(e) => setBar({ y: e.nativeEvent.layout.y, h: e.nativeEvent.layout.height })}><RangeBar /></View>
       {ps.loading ? (
         <>
           <Skeleton h={168} /><Skeleton h={120} /><Skeleton h={120} /><Skeleton h={120} />

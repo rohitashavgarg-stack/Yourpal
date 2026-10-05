@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { GlassBackdrop } from '@/components/Glass';
-import { StyleProp, Text, View, ViewStyle } from 'react-native';
+import { Platform, StyleProp, Text, View, ViewStyle } from 'react-native';
 import Animated, { Easing, interpolateColor, useAnimatedProps, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -129,7 +129,7 @@ export function RoundBtn({ label, onPress, children, bg, style, glass }: { label
       style={[{ width: 44, height: 44, borderRadius: 22, backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center' }, rim, style]}>
       {glass ? (
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: 22, overflow: 'hidden' }}>
-          <GlassBackdrop radius={22} />
+          <GlassBackdrop radius={22} tint={Platform.OS === 'web' ? (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.82)') : undefined} />
         </View>
       ) : null}
       {glass ? <View style={{ zIndex: 2 }}>{children}</View> : children}

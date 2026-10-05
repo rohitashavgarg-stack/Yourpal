@@ -17,6 +17,10 @@ export function GlassBackdrop({ radius, tint }: { radius: number; tint?: string 
   if (native) {
     return <GlassView glassEffectStyle="regular" tintColor={tint} colorScheme={isDark ? 'dark' : 'light'} style={[StyleSheet.absoluteFill, { borderRadius: radius }]} pointerEvents="none" />;
   }
+  if (Platform.OS === 'web') {
+    // A single CSS backdrop blur. (Stacked expo-blur layers multiply their saturation on the web and smear colours.)
+    return <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius, backgroundColor: tint ?? c.navBg, backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' } as any} />;
+  }
   return (
     <>
       <BlurView intensity={40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', inset: 0 } as any} />
@@ -30,6 +34,16 @@ export function GlassBackdrop({ radius, tint }: { radius: number; tint?: string 
 export function ProgressiveBlur({ height, layers = 12, edge = 'top' }: { height: number; layers?: number; edge?: 'top' | 'bottom' }) {
   const { c, isDark } = useTheme();
   const top = edge === 'top';
+  if (Platform.OS === 'web') {
+    // One backdrop blur faded out with a CSS mask: strongest at the edge, nothing at the bottom, no colour shift.
+    const mask = top ? 'linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.6) 45%, transparent 100%)' : 'linear-gradient(to top, #000 0%, rgba(0,0,0,0.6) 45%, transparent 100%)';
+    return (
+      <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, height, [top ? 'top' : 'bottom']: 0 }}>
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', maskImage: mask, WebkitMaskImage: mask } as any} />
+        <LinearGradient colors={top ? [c.bg + '8C', c.bg + '00'] : [c.bg + '00', c.bg + '8C']} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      </View>
+    );
+  }
   return (
     <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, height, [top ? 'top' : 'bottom']: 0 }}>
       {Platform.OS !== 'android' && Array.from({ length: layers }, (_, i) => (

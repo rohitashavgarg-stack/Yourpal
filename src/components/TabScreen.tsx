@@ -5,13 +5,14 @@ import Animated, { interpolate, useAnimatedReaction, useAnimatedScrollHandler, u
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useNavHidden } from './FloatingTabBar';
+import { fade } from '@/theme/motion';
 import { withTiming } from 'react-native-reanimated';
 import { font } from '@/theme/tokens';
 import { ProgressiveBlur } from './Glass';
 
 // A tab page with an iOS large title that collapses into a compact header,
 // and a scroll that hides / shows the floating nav.
-export function TabScreen({ title, header, children, compactTitle = true, bottomPad = 130, refreshControl }: { title: string; header?: React.ReactNode; children: React.ReactNode; compactTitle?: boolean; bottomPad?: number; refreshControl?: React.ReactElement<any> }) {
+export function TabScreen({ title, header, children, compactTitle = true, bottomPad = 130, refreshControl, pinned, pinAfter }: { title: string; header?: React.ReactNode; children: React.ReactNode; compactTitle?: boolean; bottomPad?: number; refreshControl?: React.ReactElement<any>; pinned?: React.ReactNode; pinAfter?: number }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
@@ -32,6 +33,10 @@ export function TabScreen({ title, header, children, compactTitle = true, bottom
   });
   const [scrolled, setScrolled] = useState(false);
   useAnimatedReaction(() => y.value > 6, (v, p) => { if (v !== p) scheduleOnRN(setScrolled, v); });
+  // A bar (like a period filter) that docks under the header once the in-page copy has scrolled out of view.
+  const [pinOn, setPinOn] = useState(false);
+  const after = pinAfter ?? 1e9;
+  useAnimatedReaction(() => y.value > after, (v, p) => { if (v !== p) scheduleOnRN(setPinOn, v); });
   const top = insets.top + 8;
   const compact = useAnimatedStyle(() => ({ opacity: interpolate(y.value, [40, 70], [0, 1], Extrapolation.CLAMP) }));
   const large = useAnimatedStyle(() => ({
@@ -51,6 +56,11 @@ export function TabScreen({ title, header, children, compactTitle = true, bottom
         {header}
         {compactTitle && <Animated.Text pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, bottom: 16, textAlign: 'center', fontFamily: font.semibold, fontSize: 17, lineHeight: 24, color: c.ink }, compact]}>{title}</Animated.Text>}
       </View>
+      {pinned && pinOn && (
+        <Animated.View entering={fade()} style={{ position: 'absolute', top: top + 56, left: 0, right: 0, zIndex: 1, backgroundColor: c.bg, paddingHorizontal: 16, paddingTop: 4, paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: c.line }}>
+          {pinned}
+        </Animated.View>
+      )}
       <Animated.ScrollView onScroll={onScroll} scrollEventThrottle={16} refreshControl={refreshControl} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: top + 56, paddingBottom: bottomPad, gap: 12 }}>
         <Animated.Text accessibilityRole="header" style={[{ fontFamily: font.regular, fontSize: 34, lineHeight: 44, letterSpacing: -1.4, color: c.ink, marginTop: 4, marginBottom: 8, marginHorizontal: 4, transformOrigin: 'left' as any }, large]}>{title}</Animated.Text>
         {children}

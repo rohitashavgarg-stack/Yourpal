@@ -54,6 +54,40 @@ export function RangeBar() {
   );
 }
 
+// Slim version that docks under the header once the full bar has scrolled away: period chips + ‹ › + the date in one small block.
+export function RangeBarSlim() {
+  const { c } = useTheme();
+  const ps = progressStore.use();
+  const anchor = new Date(ps.anchor);
+  const win = windowOf(ps.range, anchor);
+  const go = (n: number) => {
+    if ((n > 0 && !win.canNext) || (n < 0 && !win.canPrev)) { haptic.warn(); return; }
+    haptic.tick();
+    progressStore.set({ anchor: shift(ps.range, anchor, n).getTime() });
+  };
+  const btn = { width: 36, height: 36, borderRadius: 18, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' } as const;
+  return (
+    <View style={{ gap: 4 }}>
+      <Row style={{ gap: 6 }}>
+        <Pressy accessibilityRole="button" accessibilityLabel="Earlier" disabled={!win.canPrev} onPress={() => go(-1)} style={[btn, { opacity: win.canPrev ? 1 : 0.35 }]}><ChevronLeft size={18} color={c.ink} /></Pressy>
+        <View accessibilityRole="radiogroup" accessibilityLabel="Period" style={{ flex: 1, flexDirection: 'row', gap: 4, backgroundColor: c.surface2, borderRadius: 18, padding: 2 }}>
+          {RANGES.map((r) => {
+            const on = r.value === ps.range;
+            return (
+              <Pressy key={r.value} accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={r.label} onPress={() => { haptic.tick(); progressStore.set({ range: r.value }); }}
+                style={{ flex: 1, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? c.ink : 'transparent' }}>
+                <Txt style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: on ? c.bg : c.muted }}>{r.label}</Txt>
+              </Pressy>
+            );
+          })}
+        </View>
+        <Pressy accessibilityRole="button" accessibilityLabel="Later" disabled={!win.canNext} onPress={() => go(1)} style={[btn, { opacity: win.canNext ? 1 : 0.35 }]}><ChevronRight size={18} color={c.ink} /></Pressy>
+      </Row>
+      <Txt v="caption" style={{ textAlign: 'center', fontSize: 12, lineHeight: 16 }}>{win.label}</Txt>
+    </View>
+  );
+}
+
 // ============ Calendar to jump to any day ============
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 function DateSheet() {
