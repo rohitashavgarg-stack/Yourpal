@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { ProgressiveBlur, useScrolled } from '@/components/Glass';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleProp, TextStyle, View, ViewStyle } from 'react-native';
 import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import Svg, { Defs, Polyline, RadialGradient, Rect, Stop } from 'react-native-svg';
@@ -19,16 +20,17 @@ export function SubPage({ title, titleIcon, onTitlePress, right, children, foote
 }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
+  const { scrolled, onScroll } = useScrolled();
   useToastLift(insets.bottom + toastLift);
   const back = () => { if (onBack?.()) return; if (router.canGoBack()) router.back(); else router.replace(fallback as any); };
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
       {scroll ? (
         <>
-          <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + 12 + 44 + 8 + 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
+          <ScrollView onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + 12 + 44 + 8 + 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
             {children}
           </ScrollView>
-          <LinearGradient pointerEvents="none" colors={[c.bg, c.bg + '00']} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: insets.top + 12 + 44 + 8 + 14 }} />
+          {scrolled && <ProgressiveBlur height={insets.top + 12 + 44 + 8 + 36} />}
           
       <Row style={[{ paddingTop: insets.top + 12, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }, scroll && { position: 'absolute', top: 0, left: 0, right: 0 }]}>
         <RoundBtn label="Back" onPress={back} glass><ChevronLeft size={20} color={c.ink} /></RoundBtn>

@@ -45,16 +45,18 @@ export function GymHeader() {
         {multi && <ChevronDown size={18} color={c.muted} />}
       </Pressy>
       <View style={{ flex: 1 }} />
-      <Pressy accessibilityRole="button" accessibilityLabel={unread ? `Notifications, ${unread} unread` : 'Notifications'} onPress={() => router.push('/notifications')} style={[{ width: 48, height: 48, borderRadius: 24, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }, lift]}>
-        <GlassBackdrop radius={24} />
-        <View style={{ zIndex: 2 }}><Bell size={20} color={c.ink} /></View>
-        {unread > 0 && <View style={{ zIndex: 3, position: 'absolute', top: 11, right: 12, width: 8, height: 8, borderRadius: 4, backgroundColor: c.accent, borderWidth: 2, borderColor: c.surface }} />}
-      </Pressy>
-      <Pressy accessibilityRole="button" accessibilityLabel="Profile" onPress={() => router.push('/profile')} style={[{ width: 52, height: 52, borderRadius: 26 }, lift]}>
-        <GlassShell radius={26} style={{ width: 52, height: 52, alignItems: 'center', justifyContent: 'center' }}>
-          <Avatar size={44} />
+      {/* Bell and profile photo share one glass container. */}
+      <View style={[{ height: 56, borderRadius: 28 }, lift]}>
+        <GlassShell radius={28} style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 56, paddingHorizontal: 5 }}>
+          <Pressy accessibilityRole="button" accessibilityLabel={unread ? `Notifications, ${unread} unread` : 'Notifications'} onPress={() => router.push('/notifications')} style={{ width: 46, height: 46, borderRadius: 23, alignItems: 'center', justifyContent: 'center' }}>
+            <Bell size={22} color={c.ink} />
+            {unread > 0 && <View style={{ position: 'absolute', top: 11, right: 12, width: 8, height: 8, borderRadius: 4, backgroundColor: c.accent, borderWidth: 2, borderColor: c.bg }} />}
+          </Pressy>
+          <Pressy accessibilityRole="button" accessibilityLabel="Profile" onPress={() => router.push('/profile')} style={{ width: 46, height: 46, borderRadius: 23 }}>
+            <Avatar size={46} />
+          </Pressy>
         </GlassShell>
-      </Pressy>
+      </View>
     </Row>
   );
 }

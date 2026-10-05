@@ -1,4 +1,4 @@
-import { createStore } from '@/features/progress/store';
+import { createStore } from '@/lib/createStore';
 import { useDomain } from '@/lib/domain';
 import { TODAY, START, sod } from '@/features/progress/trends';
 import { WEEK_TARGET } from '@/features/streak/data';

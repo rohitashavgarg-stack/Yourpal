@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
-import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, Extrapolation } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
+import Animated, { interpolate, useAnimatedReaction, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, Extrapolation } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useNavHidden } from './FloatingTabBar';
 import { withTiming } from 'react-native-reanimated';
 import { font } from '@/theme/tokens';
-import { GlassBackdrop } from './Glass';
+import { ProgressiveBlur } from './Glass';
 
 // A tab page with an iOS large title that collapses into a compact header,
 // and a scroll that hides / shows the floating nav.
@@ -29,21 +30,24 @@ export function TabScreen({ title, header, children, compactTitle = true, bottom
       last.value = v;
     },
   });
+  const [scrolled, setScrolled] = useState(false);
+  useAnimatedReaction(() => y.value > 6, (v, p) => { if (v !== p) scheduleOnRN(setScrolled, v); });
   const top = insets.top + 8;
   const compact = useAnimatedStyle(() => ({ opacity: interpolate(y.value, [40, 70], [0, 1], Extrapolation.CLAMP) }));
   const large = useAnimatedStyle(() => ({
     opacity: interpolate(y.value, [0, 50], [1, 0], Extrapolation.CLAMP),
     transform: [{ scale: interpolate(y.value, [-80, 0], [1.08, 1], Extrapolation.CLAMP) }],
   }));
-  const border = useAnimatedStyle(() => ({ opacity: interpolate(y.value, [50, 80], [0, 1], Extrapolation.CLAMP) }));
 
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
-      {/* The header floats over the page. Once you scroll, a frosted glass bar fades in behind it so it stays clear at the top. */}
       <View style={{ position: 'absolute', top: 0, left: 0, right: 0, paddingTop: top, paddingHorizontal: 16, height: top + 56, justifyContent: 'center', zIndex: 2 }}>
-        <Animated.View pointerEvents="none" style={[{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', borderBottomLeftRadius: 22, borderBottomRightRadius: 22 }, border]}>
-          <GlassBackdrop radius={22} />
-        </Animated.View>
+        {/* Content scrolling under the header is blurred more the closer it gets to the top. */}
+        {scrolled && (
+          <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: top + 56 + 36 }}>
+            <ProgressiveBlur height={top + 56 + 36} />
+          </View>
+        )}
         {header}
         {compactTitle && <Animated.Text pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, bottom: 16, textAlign: 'center', fontFamily: font.semibold, fontSize: 17, lineHeight: 24, color: c.ink }, compact]}>{title}</Animated.Text>}
       </View>

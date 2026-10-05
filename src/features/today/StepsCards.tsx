@@ -13,7 +13,7 @@ import { font } from '@/theme/tokens';
 import { fade } from '@/theme/motion';
 import { haptic } from '@/lib/haptics';
 import { HEALTH_NAME } from '@/lib/health';
-import { createStore } from '@/features/progress/store';
+import { createStore } from '@/lib/createStore';
 
 // Steps tracker designs to compare. Pick one in the Today edge-case panel.
 export type StepsDesign = 'Current' | 'Ruler' | 'Day bars';

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { ProgressiveBlur, useScrolled } from '@/components/Glass';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleProp, Text, View, ViewStyle } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming, interpolateColor } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -22,14 +23,15 @@ export const goHome = () => (router.canDismiss() ? router.dismissAll() : router.
 export function SubPage({ title, right, close, fallback, children, gap = 12, footer }: { title: string; right?: React.ReactNode; close?: boolean; fallback?: string; children: React.ReactNode; gap?: number; footer?: React.ReactNode }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
+  const { scrolled, onScroll } = useScrolled();
   const headH = insets.top + 12 + 44 + 8;
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: headH + 4, paddingBottom: footer ? 24 : 40 + insets.bottom, gap }}>
+      <ScrollView onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: headH + 4, paddingBottom: footer ? 24 : 40 + insets.bottom, gap }}>
         <Animated.View entering={fade()} style={{ gap }}>{children}</Animated.View>
       </ScrollView>
       {/* The header floats over the content so the glass buttons have something to blur as it scrolls underneath. */}
-      <LinearGradient pointerEvents="none" colors={[c.bg, c.bg + '00']} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: headH + 14 }} />
+      {scrolled && <ProgressiveBlur height={headH + 36} />}
       <Row style={{ position: 'absolute', top: 0, left: 0, right: 0, gap: 8, paddingTop: insets.top + 12, paddingHorizontal: 16, paddingBottom: 8 }}>
         <RoundBtn label={close ? 'Close' : 'Back'} onPress={() => goBack(fallback)} glass>
           {close ? <X size={20} color={c.ink} /> : <ChevronLeft size={22} color={c.ink} />}
