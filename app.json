@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "yourpal",
+    "name": "YourPal",
     "slug": "yourpal",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true
     },
@@ -19,7 +19,18 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "single"
+    },
+    "scheme": "yourpal",
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-asset",
+      "expo-audio",
+      ["expo-camera", { "cameraPermission": "YourPal uses the camera to scan your plate and estimate what you ate.", "recordAudioAndroid": false }],
+      ["expo-image-picker", { "photosPermission": "YourPal uses your photos so you can send them to your coach.", "cameraPermission": "YourPal uses the camera so you can send a photo to your coach." }]
+    ]
   }
 }
