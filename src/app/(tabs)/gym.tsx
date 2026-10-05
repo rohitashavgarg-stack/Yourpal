@@ -98,8 +98,11 @@ function ChatCard() {
   return (
     <PCard onPress={() => router.push('/gym/chat')} label={last ? `Coach Vikram: ${last.t}. Open chat` : 'Chat with Coach Vikram'} style={{ gap: 10 }}>
       <Row style={{ gap: 14 }}>
-        <PersonAvatar who="coach" size={68} />
-        <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 26, letterSpacing: -0.4 }}>Coach Vikram</Txt><Txt v="caption">Your trainer</Txt></View>
+        {/* Photo and name open the coach's profile; the rest of the card opens the chat. */}
+        <Pressy accessibilityRole="button" accessibilityLabel="Coach Vikram. View profile" onPress={() => router.push('/coach')} scaleTo={0.97} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+          <PersonAvatar who="coach" size={68} />
+          <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 26, letterSpacing: -0.4 }}>Coach Vikram</Txt><Txt v="caption">Your trainer · View profile</Txt></View>
+        </Pressy>
         <Txt style={{ fontSize: 13, fontFamily: font.semibold, color: c.accentText }}>Chat ›</Txt>
       </Row>
       {d.chat.length && last ? (
@@ -155,7 +158,6 @@ export default function Gym() {
       <Enter i={4}><PTCard isPT={isPT} /></Enter>
       <Enter i={5}>
         <ListCard rows={[
-          { l: 'Your coach · Coach Vikram', onPress: () => router.push('/coach') },
           { l: 'Membership & payments', onPress: () => router.push('/gym/membership') },
           { l: 'Membership pauses', onPress: () => router.push('/gym/break') },
           { l: 'Help & support', onPress: () => toast("Help opens the gym's support chat and FAQs") },
