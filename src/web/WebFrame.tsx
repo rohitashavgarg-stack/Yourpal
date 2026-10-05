@@ -111,15 +111,15 @@ function PanelBody() {
   const { isDark } = useTheme();
   const { d, set } = useDomain();
   const steps = stepsStore.use();
-  const type = d.goal.type === 'General fitness' || d.goal.type === 'Not sure yet' ? 'Consistency' : ['Strength', 'Flexibility'].includes(d.goal.type) ? d.goal.type : 'Weight loss';
+  const type = d.goal.type;
+  const GOAL_TARGET: Record<string, number> = { 'Weight loss': 6, 'Muscle gain': 3, 'Lean body': 3, Strength: 80, Flexibility: 0, Agility: 0, 'General fitness': WEEK_TARGET, 'Not sure yet': 0 };
   const pickGoal = (v: string) => {
-    const next = v === 'Consistency' ? { type: 'General fitness', target: WEEK_TARGET } : v === 'Weight loss' ? { type: v, target: 6 } : v === 'Strength' ? { type: v, target: 80 } : { type: v, target: 0 };
-    set({ goal: { ...d.goal, ...next, by: d.goal.by && d.goal.by !== '—' ? d.goal.by : '30 Nov' } });
+    set({ goal: { type: v, target: GOAL_TARGET[v] ?? 0, by: v === 'General fitness' || v === 'Not sure yet' ? '—' : d.goal.by && d.goal.by !== '—' ? d.goal.by : '30 Nov' } });
     goalV2Store.set({ extendDays: 0, lowerBy: 0, finished: false, kept: false });
   };
   const pickTime = (t: TimeOfDay) => set({ time: t, meals: mealsFor(t), openMeal: null, ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null });
   const rows = [
-    { label: 'Goal type', options: ['Weight loss', 'Strength', 'Flexibility', 'Consistency'], value: type, onPick: pickGoal },
+    { label: 'Goal type', options: ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness', 'Not sure yet'], value: type, onPick: pickGoal },
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },
     { label: 'Theme', options: ['Light', 'Dark'], value: isDark ? 'Dark' : 'Light', onPick: (v: string) => setSc({ theme: v as any }) },
     { label: 'Steps tracker design', options: STEPS_DESIGNS as string[], value: steps.design, onPick: (v: string) => stepsStore.set({ design: v as StepsDesign }) },

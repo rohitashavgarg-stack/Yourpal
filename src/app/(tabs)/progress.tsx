@@ -28,7 +28,7 @@ import { FLAME } from '@/features/streak/StreakChip';
 import { useStreak } from '@/features/streak/useStreak';
 import { showProgressLoading, useProgressScenarios } from '@/features/progress/scenarios';
 import { GoalCard2 } from '@/features/goalv2/GoalCard2';
-import { goalV2Store, useGoalV2 } from '@/features/goalv2/model';
+import { goalV2Store, progressLine, statusLine, useGoalV2 } from '@/features/goalv2/model';
 import { useEarlySigns } from '@/features/goalv2/signs';
 
 let firstLoad = true;
@@ -40,8 +40,9 @@ function GoalHero() {
   const g = d.goal;
   const g2 = useGoalV2();
   const earlyLive = useEarlySigns();
-  const pct = isNew ? 0 : g.type === 'Weight loss' ? Math.min(100, Math.round((2.1 / (g.target || 6)) * 100)) : Math.round(g2.pct * 100);
-  const line = isNew ? 'Starting point saved · Week 1' : g.type === 'Weight loss' ? `2.1 kg down · On track · ${pct}%` : `On track · ${pct}%`;
+  // same numbers as the Today card (one goal model), whatever kind of goal it is
+  const pct = isNew ? 0 : Math.round((g2.status === 'reached' && g2.kind !== 'consistency' ? 1 : g2.pct) * 100);
+  const line = isNew ? 'Starting point saved · Week 1' : `${progressLine(g2)} · ${statusLine(g2)}`;
   const early = isNew ? 'Early signs show up after your first week' : earlyLive;
   return (
     <LinearGradient colors={['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
@@ -56,7 +57,7 @@ function GoalHero() {
           <Txt style={{ fontFamily: font.semibold, fontSize: 13, color: '#fff' }}>Edit</Txt>
         </Pressy>
       </Row>
-      <Txt style={{ fontFamily: font.display, fontSize: 34, lineHeight: 44, letterSpacing: -0.6, color: '#fff' }}>{goalTitle(g)}</Txt>
+      <Txt style={{ fontFamily: font.display, fontSize: 34, lineHeight: 44, letterSpacing: -0.6, color: '#fff' }}>{g2.name}{g.by && g.by !== '—' && g.by !== 'No date' ? ` by ${g.by}` : ''}</Txt>
       <GrowBar pct={pct} color="#fff" h={8} track="rgba(255,255,255,0.22)" />
       <Txt style={{ fontSize: 14, color: '#fff' }}>{line}</Txt>
       <Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)' }}>{early}</Txt>

@@ -73,7 +73,7 @@ export const defaultState: AppState = {
   onboarded: false,
   onboardingStep: 'welcome',
   profile: defaultProfile,
-  sc: { member: 'Regular', number: 'In CRM', otp: 'Correct', autoRead: 'Off', assess: 'Scheduled', net: 'Online', theme: 'System' },
+  sc: { member: 'Regular', number: 'In CRM', otp: 'Correct', autoRead: 'Off', assess: 'Scheduled', net: 'Online', theme: 'Dark' },
 };
 
 type Ctx = {
@@ -90,7 +90,7 @@ const KEY = 'yourpal-state-v1';
 function load(): AppState {
   try {
     const raw = (globalThis as any).localStorage?.getItem(KEY);
-    if (raw) { const o = JSON.parse(raw); if (o?.profile?.name === 'Ankit' || o?.profile?.name === 'Rohitashav Garg') o.profile.name = 'Jyotsana Rankawat'; return { ...defaultState, ...o }; }
+    if (raw) { const o = JSON.parse(raw); if (o?.sc?.theme === 'System') o.sc.theme = 'Dark'; if (o?.profile?.name === 'Ankit' || o?.profile?.name === 'Rohitashav Garg') o.profile.name = 'Jyotsana Rankawat'; return { ...defaultState, ...o }; }
   } catch {}
   return defaultState;
 }

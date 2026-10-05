@@ -5,7 +5,7 @@ import { fade } from '@/theme/motion';
 import Svg, { Circle } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { CalendarClock, ChevronRight, CircleCheck, ClipboardList, CreditCard, MessageCircle, Pause, Flame, X } from '@/lib/icons';
+import { CalendarClock, Check, ChevronRight, CircleCheck, ClipboardList, CreditCard, MessageCircle, Pause, Flame, X } from '@/lib/icons';
 import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
 import { PillBtn } from '@/components/bits';
 import { PersonAvatar } from '@/components/Brand';
@@ -17,6 +17,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { StartWorkoutSheet } from '@/features/workout/StartSheet';
+import { progressLine, statusLine, useGoalV2 } from '@/features/goalv2/model';
+import { ringCentre, StatusChip } from '@/features/goalv2/GoalCard2';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
 
@@ -28,20 +30,25 @@ const GOAL_PCT = 0.35;
 export function GoalCard() {
   const { d } = useDomain();
   const t = totals(d);
+  // Name, numbers and status come from the goal itself, so every kind of goal reads differently (weight, strength, flexibility, weekly workouts...).
+  const g2 = useGoalV2();
+  const pct = g2.status === 'reached' && g2.kind !== 'consistency' ? 1 : g2.pct;
   const p = useSharedValue(0);
   const [shown, setShown] = useState(0);
   useEffect(() => {
-    p.value = withDelay(150, withTiming(GOAL_PCT, { duration: 1300, easing: Easing.out(Easing.cubic) }));
+    p.value = withDelay(150, withTiming(pct, { duration: 1300, easing: Easing.out(Easing.cubic) }));
     let raf = 0; const t0 = Date.now();
-    const step = () => { const k = Math.min(1, (Date.now() - t0) / 1100); setShown(Math.round(GOAL_PCT * 100 * (1 - Math.pow(1 - k, 3)))); if (k < 1) raf = requestAnimationFrame(step); };
+    const step = () => { const k = Math.min(1, (Date.now() - t0) / 1100); setShown(Math.round(pct * 100 * (1 - Math.pow(1 - k, 3)))); if (k < 1) raf = requestAnimationFrame(step); };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [pct]);
   const props = useAnimatedProps(() => ({ strokeDashoffset: CIRC * (1 - p.value) }));
-  const goal = d.goal.type === 'Weight loss' ? `Lose ${d.goal.target} kg` : d.goal.type === 'Muscle gain' && d.goal.target ? `Gain ${d.goal.target} kg` : d.goal.type;
+  const goal = g2.name;
+  const sub = progressLine(g2);
+  const centre = ringCentre(g2);
   return (
     <Pressy accessibilityRole="link" scaleTo={0.98}
-      accessibilityLabel={`Your goal: ${goal.toLowerCase()}. 2.1 kg down, on track. Eaten ${t.k} of ${KCAL_TARGET} kcal, burned ${burned(d)}. Open progress`}
+      accessibilityLabel={`Your goal: ${goal.toLowerCase()}. ${sub}, ${statusLine(g2).toLowerCase()}. Eaten ${t.k} of ${KCAL_TARGET} kcal, burned ${burned(d)}. Open progress`}
       onPress={() => router.navigate('/progress')}>
       <LinearGradient colors={['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
         style={{ borderRadius: 28, paddingVertical: 18, paddingLeft: 16, paddingRight: 18, flexDirection: 'row', alignItems: 'center', gap: 18, overflow: 'hidden' }}>
@@ -54,14 +61,21 @@ export function GoalCard() {
             <ACircle cx={66} cy={66} r={R} stroke="#fff" strokeWidth={12} fill="none" strokeLinecap="round" strokeDasharray={`${CIRC}`} animatedProps={props} transform="rotate(-90 66 66)" />
           </Svg>
           <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 34, letterSpacing: -1, color: '#fff' }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: 18, color: 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
+            {centre.check ? <Check size={52} color="#fff" strokeWidth={3} /> : g2.kind === 'consistency' ? (
+              <View style={{ alignItems: 'center' }}>
+                <Txt style={{ fontFamily: font.semibold, fontSize: 34, letterSpacing: -1, color: '#fff' }}>{centre.big}</Txt>
+                <Txt style={{ fontSize: 12, lineHeight: 16, color: 'rgba(255,255,255,0.75)' }}>this week</Txt>
+              </View>
+            ) : (
+              <Txt style={{ fontFamily: font.semibold, fontSize: 34, letterSpacing: -1, color: '#fff' }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: 18, color: 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
+            )}
           </View>
         </View>
         <View style={{ flex: 1, gap: 6, minWidth: 0 }}>
           <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)' }}>Your goal</Txt><ChevronRight size={18} color="#fff" /></Row>
-          <Txt style={{ fontFamily: font.display, fontSize: 32, lineHeight: 30, color: '#fff' }}>{goal}</Txt>
-          <Txt style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>2.1 kg down</Txt>
-          <View style={{ alignSelf: 'flex-start', backgroundColor: '#fff', borderRadius: 999, paddingHorizontal: 10, paddingVertical: 3 }}><Txt style={{ fontFamily: font.semibold, fontSize: 12, color: '#1B3FB8' }}>On track</Txt></View>
+          <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: 30, lineHeight: 34, color: '#fff' }}>{goal}</Txt>
+          <Txt style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>{sub}</Txt>
+          <StatusChip g={g2} fg="#1B3FB8" />
         </View>
       </LinearGradient>
     </Pressy>
