@@ -46,9 +46,9 @@ export function TabScreen({ title, header, children, compactTitle = true, bottom
 
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
-      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, paddingTop: top, paddingHorizontal: 16, height: top + 56, justifyContent: 'center', zIndex: 2 }}>
-        {/* Content scrolling under the header is blurred more the closer it gets to the top. */}
-        {scrolled && (
+      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, paddingTop: top, paddingHorizontal: 16, height: top + 56, justifyContent: 'center', zIndex: 2, backgroundColor: pinned && pinOn ? c.bg : undefined }}>
+        {/* While the period bar is docked, header and bar read as one solid block so nothing shows through. Otherwise: content scrolling under the header is blurred more the closer it gets to the top. */}
+        {scrolled && !(pinned && pinOn) && (
           <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: top + 56 + 36 }}>
             <ProgressiveBlur height={top + 56 + 36} />
           </View>
