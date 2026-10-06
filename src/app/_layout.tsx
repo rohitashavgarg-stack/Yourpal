@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Platform, View } from 'react-native';
-import Animated, { Easing, SlideInDown, SlideInRight, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -35,9 +35,11 @@ function WebTransition({ name, children }: { name: string; children: React.React
   return <WebSlide name={name} bottom={FROM_BOTTOM.includes(name)}>{children}</WebSlide>;
 }
 function WebSlide({ name, bottom, children }: { name: string; bottom: boolean; children: React.ReactNode }) {
+  // Driven by a shared value, not a reanimated "entering" layout animation: that one is a CSS animation on web and replays
+  // every time the screen is shown again (when you go back to it), which made the screen underneath slide in.
   const off = useSharedValue(0);
   const busy = useRef(false);
-  const dims = useRef({ w: 400, h: 800 });
+  const dims = useRef({ w: 0, h: 0 });
   useEffect(() => {
     const entry = {
       name,
@@ -52,8 +54,17 @@ function WebSlide({ name, bottom, children }: { name: string; bottom: boolean; c
   }, [name, bottom, off]);
   const style = useAnimatedStyle(() => ({ transform: [bottom ? { translateY: off.value } : { translateX: off.value }] }));
   return (
-    <Animated.View style={{ flex: 1 }} entering={(bottom ? SlideInDown : SlideInRight).duration(280).easing(Easing.out(Easing.cubic))}
-      onLayout={(e) => { dims.current = { w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height }; }}>
+    <Animated.View style={{ flex: 1 }}
+      onLayout={(e) => {
+        const { width, height } = e.nativeEvent.layout;
+        const first = dims.current.w === 0;
+        dims.current = { w: width, h: height };
+        if (first) {
+          // eslint-disable-next-line react-hooks/immutability -- reanimated shared value
+          off.value = bottom ? height : width;
+          off.value = withTiming(0, { duration: 280, easing: Easing.out(Easing.cubic) });
+        }
+      }}>
       <Animated.View style={[{ flex: 1 }, style]}>{children}</Animated.View>
     </Animated.View>
   );

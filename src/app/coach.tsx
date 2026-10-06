@@ -1,6 +1,5 @@
 import React from 'react';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { CalendarCheck, ChevronRight, ClipboardList, MessageCircle } from '@/lib/icons';
 import { fade } from '@/theme/motion';
@@ -38,7 +37,7 @@ export default function CoachHub() {
 
   return (
     <SubPage title="Your coach" fallback="/(tabs)">
-      <Animated.View entering={fade()} style={{ alignItems: 'center', gap: 6, paddingTop: 4 }}>
+      <View style={{ alignItems: 'center', gap: 6, paddingTop: 4 }}>
         <View>
           <PersonAvatar who="coach" size={96} />
           {cs.unread && <View accessibilityLabel="Unread reply" style={{ position: 'absolute', right: 2, top: 2, width: 18, height: 18, borderRadius: 9, backgroundColor: c.accent, borderWidth: 3, borderColor: c.bg }} />}
@@ -48,7 +47,7 @@ export default function CoachHub() {
         {cs.away
           ? <Tag label="Away until Mon 10:00 am · replies will be slower" bg={c.warnSoft} fg={c.warn} style={{ marginTop: 4 }} />
           : <Tag label={isPT ? 'Replies within the hour · PT' : 'Usually replies in a few hours'} bg={c.goodSoft} fg={c.good} style={{ marginTop: 4 }} />}
-      </Animated.View>
+      </View>
 
       <Row style={{ gap: 8 }}>
         <Button label="Message" icon={<MessageCircle size={18} color={c.bg} />} onPress={() => askCoach()} style={{ flex: 1 }} />

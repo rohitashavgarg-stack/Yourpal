@@ -13,7 +13,6 @@ import { GymLogoMark } from '@/components/Brand';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { fade } from '@/theme/motion';
 import type { Programme } from './state';
 
 export const goBack = (fallback: string = '/(tabs)') => (router.canGoBack() ? router.back() : router.replace(fallback as any));
@@ -28,7 +27,7 @@ export function SubPage({ title, right, close, fallback, children, gap = 12, foo
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
       <ScrollView onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: headH + 4, paddingBottom: footer ? 24 : 40 + insets.bottom, gap }}>
-        <Animated.View entering={fade()} style={{ gap }}>{children}</Animated.View>
+        <View style={{ gap }}>{children}</View>
       </ScrollView>
       {/* The header floats over the content so the glass buttons have something to blur as it scrolls underneath. */}
       {scrolled && <ProgressiveBlur height={headH + 36} />}
