@@ -23,7 +23,7 @@ const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
 // Web only: the stack drops a popped screen at once, so the slide-out is played first, then the real back runs.
 // True for a moment after a back: a screen that mounts then is being revealed, not pushed, so it must not slide in.
 let popping = false;
-const closers: { name: string; close: (done: () => void) => void }[] = [];
+const closers: { name: string; el?: HTMLElement | null; close: (done: () => void) => void }[] = [];
 if (Platform.OS === 'web' && !(router as any).__slideBack) {
   const rb = router.back.bind(router);
   const realBack = () => { popping = true; setTimeout(() => { popping = false; }, 600); rb(); };
@@ -39,14 +39,23 @@ function WebTransition({ name, children }: { name: string; children: React.React
 }
 // The stack hides every screen that is not on top, so during a slide the page underneath would be blank.
 // Show it (static) with a dim over it, like the sheets, while this screen moves; then let the stack's own styling take over.
-function underlay(el: any) {
+function screenOf(el: any): HTMLElement | null {
   let n = el as HTMLElement | null;
   while (n && n.parentElement) {
-    if (n.parentElement.children.length > 1 && getComputedStyle(n).position === 'absolute') break;
+    if (n.parentElement.children.length > 1 && getComputedStyle(n).position === 'absolute') return n;
     n = n.parentElement;
   }
-  const prev = n?.previousElementSibling as HTMLElement | null;
-  if (!n || !prev) return null;
+  return null;
+}
+function underlay(el: any) {
+  const n = screenOf(el);
+  if (!n) return null;
+  // The screen mounted just before this one is the page underneath; fall back to any hidden sibling (the tabs).
+  const mine = closers.findIndex((c) => c.el === n);
+  const before = mine > 0 ? closers[mine - 1].el : null;
+  const hidden = [...n.parentElement!.children].filter((c) => c !== n && getComputedStyle(c).display === 'none') as HTMLElement[];
+  const prev = before && before.isConnected ? before : hidden[hidden.length - 1];
+  if (!prev) return null;
   prev.style.display = 'flex';
   const scrim = document.createElement('div');
   scrim.style.cssText = 'position:absolute;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,0.45);pointer-events:none;opacity:0';
@@ -89,15 +98,18 @@ function WebSlide({ name, bottom, children }: { name: string; bottom: boolean; c
       onLayout={(e) => {
         const { width, height } = e.nativeEvent.layout;
         box.current = (e.nativeEvent as any).target; // the DOM node on web
+        const me = closers.find((c) => c.name === name && !c.el);
+        if (me) me.el = screenOf(box.current);
         const first = dims.current.w === 0;
         dims.current = { w: width, h: height };
         if (first && !popping) {
-          // eslint-disable-next-line react-hooks/immutability -- reanimated shared value
+          /* eslint-disable react-hooks/immutability -- reanimated shared values */
           off.value = bottom ? height : width;
           under.current = underlay(box.current);
           p.value = withTiming(1, IN);
           off.value = withTiming(0, IN, (fin) => { if (fin) runOnJS(opened)(); });
-        } else if (first) p.value = 1;
+          /* eslint-enable react-hooks/immutability */
+        } else if (first) p.value = 1; // eslint-disable-line react-hooks/immutability
       }}>
       <Animated.View style={[{ flex: 1 }, style]}>{children}</Animated.View>
     </Animated.View>
