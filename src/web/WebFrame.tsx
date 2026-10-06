@@ -163,6 +163,12 @@ function SidePanel({ height }: { height: number }) {
   );
 }
 
+// Opens the same edge-case controls as a sheet. Used by the slim edge tab and by Profile → Demo controls, so they work in Expo Go too.
+export function useOpenEdgeCases() {
+  const { openSheet } = useOverlay();
+  return () => openSheet(<View style={{ backgroundColor: '#fff', borderRadius: 20, padding: 12 }}><PanelBody /></View>, { label: 'Edge cases' });
+}
+
 // Slim tab on the right edge (phones / narrow web) — opens the same panel as a sheet.
 export function EdgeTab() {
   const { openSheet } = useOverlay();

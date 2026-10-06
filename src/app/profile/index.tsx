@@ -1,4 +1,5 @@
 import React from 'react';
+import { useOpenEdgeCases } from '@/web/WebFrame';
 import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
@@ -45,6 +46,7 @@ export default function Profile() {
 
   const trackers = (['water', 'weight', 'steps'] as const).filter((k) => s.trk[k]).map((k) => k[0].toUpperCase() + k.slice(1)).join(', ') || 'None';
   const go = (path: string) => () => router.push(path as any);
+  const openEdgeCases = useOpenEdgeCases();
   const rows: { l: string; s?: string; go: () => void; color?: string }[] = [
     { l: 'My details', s: 'Date of birth, height, weight, diet, injuries', go: go('/profile/details') },
     { l: 'Change goal', s: goalSummary(d.goal), go: go('/goal') },
@@ -56,6 +58,7 @@ export default function Profile() {
     { l: 'Export my data', go: go('/profile/export') },
     { l: 'Delete account', go: go('/profile/delete'), color: c.warn },
     { l: 'Help & support', go: go('/profile/help') },
+    { l: 'Demo controls', s: 'Goal type, Today states, time of day, light or dark', go: openEdgeCases },
   ];
 
   return (
