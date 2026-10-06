@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Linking, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Activity, ChevronRight, Footprints, Heart, Lock, Moon, RefreshCw } from '@/lib/icons';
+import { Activity, ChevronRight, Footprints, Heart, Lock, Moon } from '@/lib/icons';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { HeartIcon } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -26,15 +25,9 @@ export default function ConnectedApps() {
   const { toast, openSheet, closeSheet } = useOverlay();
   const on = d.hc;
   const [metrics, setMetrics] = useState<Record<string, boolean>>({ Steps: true, 'Heart rate': true, Sleep: true, 'Active energy': true });
-  const [syncing, setSyncing] = useState(false);
   const count = READS.filter((r) => metrics[r.t]).length;
 
   const connect = () => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected · ${count} things sync automatically`); };
-  const sync = () => {
-    if (syncing) return;
-    setSyncing(true); haptic.light();
-    setTimeout(() => { setSyncing(false); haptic.success(); toast('Up to date · just now'); }, 1200);
-  };
   const disconnect = () => openSheet(
     <View style={{ gap: 12 }}>
       <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29 }}>{`Disconnect ${HEALTH_NAME}?`}</Txt>
@@ -47,29 +40,20 @@ export default function ConnectedApps() {
 
   return (
     <SubPage title="Connected apps" fallback="/profile">
-      {/* Hero: status first, one primary action */}
-      <View style={{ borderRadius: 28, overflow: 'hidden', padding: 20, gap: 16, backgroundColor: c.heroFrom }}>
-        <LinearGradient colors={[c.heroFrom, c.heroMid, c.heroTo]} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
+      <View style={{ backgroundColor: c.surface, borderRadius: 26, padding: 18, gap: 14 }}>
         <Row style={{ gap: 14 }}>
-          <View accessibilityLabel={HEALTH_NAME} style={{ width: 60, height: 60, borderRadius: 20, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
-            <HeartIcon size={30} color="#FF3B5C" />
+          <View accessibilityLabel={HEALTH_NAME} style={{ width: 56, height: 56, borderRadius: 18, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: c.line }}>
+            <HeartIcon size={28} color="#FF3B5C" />
           </View>
-          <View style={{ flex: 1, gap: 4 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 26, color: '#fff' }}>{HEALTH_NAME}</Txt>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 3, borderRadius: 999, backgroundColor: 'rgba(255,255,255,0.2)' }}>
-              <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: on ? c.live : 'rgba(255,255,255,0.6)' }} />
-              <Txt style={{ fontSize: 12, lineHeight: 18, fontFamily: font.semibold, color: '#fff' }}>{on ? 'Connected' : 'Not connected'}</Txt>
-            </View>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 19, lineHeight: 26 }}>{HEALTH_NAME}</Txt>
+            <Row style={{ gap: 6 }}>
+              <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: on ? c.good : c.muted }} />
+              <Txt v="caption" style={{ fontSize: 13, color: on ? c.good : c.muted }}>{on ? 'Connected · last synced 5 min ago' : 'Not connected'}</Txt>
+            </Row>
           </View>
         </Row>
-        <Txt style={{ fontSize: 15, lineHeight: 22, color: 'rgba(255,255,255,0.92)' }}>
-          {on ? (syncing ? 'Syncing…' : `Last synced 5 min ago · ${count} of ${READS.length} on`) : 'Steps, heart rate and sleep fill in on their own. No typing, no extra steps.'}
-        </Txt>
-        {on ? (
-          <Button kind="white" label={syncing ? 'Syncing…' : 'Sync now'} icon={<RefreshCw size={18} color="#111" />} onPress={sync} />
-        ) : (
-          <Button kind="white" label={`Connect ${HEALTH_NAME}`} onPress={connect} />
-        )}
+        {on ? <Button kind="secondary" label="Disconnect" onPress={disconnect} /> : <Button kind="accent" label={`Connect ${HEALTH_NAME}`} onPress={connect} />}
       </View>
 
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, marginTop: 6 }}>
@@ -110,12 +94,6 @@ export default function ConnectedApps() {
           <ChevronRight size={18} color={c.muted} />
         </Pressy>
       </ListCard>
-
-      {on && (
-        <Pressy accessibilityRole="button" accessibilityLabel={`Disconnect ${HEALTH_NAME}`} onPress={disconnect} scaleTo={0.97} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}>
-          <Txt style={{ fontSize: 15, lineHeight: 21, color: c.muted, fontFamily: font.semibold }}>{`Disconnect ${HEALTH_NAME}`}</Txt>
-        </Pressy>
-      )}
     </SubPage>
   );
 }
