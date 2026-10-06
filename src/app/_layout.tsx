@@ -21,9 +21,12 @@ import { CheckInEngine } from '@/features/checkin/CheckInEngine';
 const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
 const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
 // Web only: the stack drops a popped screen at once, so the slide-out is played first, then the real back runs.
+// True for a moment after a back: a screen that mounts then is being revealed, not pushed, so it must not slide in.
+let popping = false;
 const closers: { name: string; close: (done: () => void) => void }[] = [];
 if (Platform.OS === 'web' && !(router as any).__slideBack) {
-  const realBack = router.back.bind(router);
+  const rb = router.back.bind(router);
+  const realBack = () => { popping = true; setTimeout(() => { popping = false; }, 600); rb(); };
   (router as any).__slideBack = true;
   (router as any).back = () => {
     const top = closers[closers.length - 1];
@@ -59,7 +62,7 @@ function WebSlide({ name, bottom, children }: { name: string; bottom: boolean; c
         const { width, height } = e.nativeEvent.layout;
         const first = dims.current.w === 0;
         dims.current = { w: width, h: height };
-        if (first) {
+        if (first && !popping) {
           // eslint-disable-next-line react-hooks/immutability -- reanimated shared value
           off.value = bottom ? height : width;
           off.value = withTiming(0, { duration: 280, easing: Easing.out(Easing.cubic) });
