@@ -9,6 +9,7 @@ import { CalendarClock, Check, ChevronRight, CircleCheck, ClipboardList, CreditC
 import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
 import { PillBtn } from '@/components/bits';
 import { PersonAvatar } from '@/components/Brand';
+import { FlagSheet } from '@/features/gym/sheets';
 import { useOverlay } from '@/components/Overlay';
 import { burned, totals, useDomain } from '@/lib/domain';
 import { KCAL_TARGET } from '@/lib/data';
@@ -85,6 +86,7 @@ export function GoalCard() {
 // ---------- PT session waiting to be confirmed ----------
 export function PtConfirmCard() {
   const { c, isDark } = useTheme();
+  const { openSheet } = useOverlay();
   return (
     <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 18, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
       <CornerGlow color={c.accent} size={420} />
@@ -95,7 +97,10 @@ export function PtConfirmCard() {
           <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Coach Vikram marked Tue 23 Sep, 6–7 pm as done.</Txt>
         </View>
       </Row>
-      <Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} />
+      <Row style={{ gap: 10 }}>
+        <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => openSheet(<FlagSheet />, { label: 'Flag session' })} /></View>
+        <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} /></View>
+      </Row>
       <Txt v="caption" style={{ textAlign: 'center' }}>Not confirmed? It confirms itself on Fri 26 Sep, so your package stays right.</Txt>
     </Animated.View>
   );

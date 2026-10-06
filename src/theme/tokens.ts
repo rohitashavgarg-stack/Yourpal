@@ -94,4 +94,5 @@ export const spring = {
   snappy: { damping: 18, stiffness: 260, mass: 0.8 },
   soft: { damping: 22, stiffness: 180, mass: 1 },
   bouncy: { damping: 12, stiffness: 220, mass: 0.9 },
+  nav: { damping: 32, stiffness: 300, mass: 1 }, // tab bar pill: near critically damped, no visible bounce
 };

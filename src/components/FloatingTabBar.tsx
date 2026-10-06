@@ -110,7 +110,7 @@ function MergedNav({ state, navigation }: any) {
   const D = 58, R = D / 2, STEP = 66;
   const W = STEP * (N - 1) + D;
   const x = useSharedValue(state.index * STEP);
-  useEffect(() => { x.value = withSpring(state.index * STEP, spring.snappy); }, [state.index]);
+  useEffect(() => { x.value = withSpring(state.index * STEP, spring.nav); }, [state.index]);
   const bubble = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   const bar = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 110 }] }));
   const bottom = Math.max(insets.bottom - 6, 14);
@@ -211,7 +211,7 @@ function PillBar({ state, navigation }: any) {
   const count = state.routes.length;
   const seg = w > 0 ? (w - 12) / count : 0;
   const x = useSharedValue(0);
-  useEffect(() => { x.value = withSpring(state.index * seg, spring.bouncy); }, [state.index, seg]);
+  useEffect(() => { x.value = withSpring(state.index * seg, spring.nav); }, [state.index, seg]);
   const hl = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   const bar = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 110 }] }));
   const bottom = Math.max(insets.bottom - 6, 14);
