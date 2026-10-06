@@ -1,5 +1,6 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
+import Animated, { Easing, SlideInDown, SlideInRight, SlideOutDown, SlideOutRight } from 'react-native-reanimated';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -15,6 +16,23 @@ import { OverlayProvider } from '@/components/Overlay';
 import { EdgeTab, WebFrame, useIsWideWeb } from '@/web/WebFrame';
 import { CheckInEngine } from '@/features/checkin/CheckInEngine';
 
+// Screens with an X (close) open from the bottom and close back down. Screens with a back arrow come in from the right and leave to the right.
+// On the phone the native stack does this (see the Stack.Screen options below). The web stack has no transitions, so this wrapper adds them there.
+const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
+const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
+function WebTransition({ name, children }: { name: string; children: React.ReactNode }) {
+  if (Platform.OS !== 'web' || NO_TRANSITION.includes(name)) return <>{children}</>;
+  const bottom = FROM_BOTTOM.includes(name);
+  const ease = Easing.out(Easing.cubic);
+  return (
+    <Animated.View style={{ flex: 1 }}
+      entering={(bottom ? SlideInDown : SlideInRight).duration(280).easing(ease)}
+      exiting={(bottom ? SlideOutDown : SlideOutRight).duration(240).easing(ease)}>
+      {children}
+    </Animated.View>
+  );
+}
+
 function Shell() {
   const { c, isDark } = useTheme();
   const wide = useIsWideWeb();
@@ -23,7 +41,7 @@ function Shell() {
       <View style={{ flex: 1, backgroundColor: c.bg }}>
         <OverlayProvider>
           <StatusBar style={isDark ? 'light' : 'dark'} />
-          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg }, animation: 'slide_from_right', gestureEnabled: true, fullScreenGestureEnabled: true } as any}>
+          <Stack screenLayout={({ route, children }: any) => <WebTransition name={route.name}>{children}</WebTransition>} screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg }, animation: 'slide_from_right', gestureEnabled: true, fullScreenGestureEnabled: true } as any}>
             {/* Root screens: nothing to swipe back to once you are in. */}
             {['(tabs)', 'onboarding'].map((n) => (
               <Stack.Screen key={n} name={n} options={{ gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
@@ -33,7 +51,7 @@ function Shell() {
             {/* The first screen has nothing behind it, so no back swipe. */}
             <Stack.Screen name="welcome" options={{ animationTypeForReplace: 'pop', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
             {/* Close-button (X) screens open from the bottom. */}
-            {['log-weight', 'log-height', 'food', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search'].map((n) => (
+            {FROM_BOTTOM.map((n) => (
               <Stack.Screen key={n} name={n} options={{ animation: 'slide_from_bottom', gestureDirection: 'vertical' } as any} />
             ))}
           </Stack>
