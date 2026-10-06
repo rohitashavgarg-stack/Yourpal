@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Platform, View } from 'react-native';
-import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, runOnJS, useAnimatedReaction, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -38,38 +38,52 @@ function WebTransition({ name, children }: { name: string; children: React.React
   return <WebSlide name={name} bottom={FROM_BOTTOM.includes(name)}>{children}</WebSlide>;
 }
 // The stack hides every screen that is not on top, so during a slide the page underneath would be blank.
-// Show it (static) while this screen moves, then let the stack's own styling take over again.
-function previousScreen(el: any): HTMLElement | null {
+// Show it (static) with a dim over it, like the sheets, while this screen moves; then let the stack's own styling take over.
+function underlay(el: any) {
   let n = el as HTMLElement | null;
   while (n && n.parentElement) {
-    if (n.parentElement.children.length > 1 && getComputedStyle(n).position === 'absolute') return n.previousElementSibling as HTMLElement | null;
+    if (n.parentElement.children.length > 1 && getComputedStyle(n).position === 'absolute') break;
     n = n.parentElement;
   }
-  return null;
+  const prev = n?.previousElementSibling as HTMLElement | null;
+  if (!n || !prev) return null;
+  prev.style.display = 'flex';
+  const scrim = document.createElement('div');
+  scrim.style.cssText = 'position:absolute;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,0.45);pointer-events:none;opacity:0';
+  n.parentElement!.insertBefore(scrim, n);
+  return { prev, scrim, done: () => { scrim.remove(); } };
 }
-const hide = (el: HTMLElement) => { el.style.display = ''; };
+type Under = NonNullable<ReturnType<typeof underlay>>;
+// Same feel as the bottom sheets: 260 ms, ease out in, ease in out.
+const IN = { duration: 260, easing: Easing.out(Easing.cubic) };
+const OUT = { duration: 260, easing: Easing.in(Easing.cubic) };
 function WebSlide({ name, bottom, children }: { name: string; bottom: boolean; children: React.ReactNode }) {
-  // Driven by a shared value, not a reanimated "entering" layout animation: that one is a CSS animation on web and replays
+  // Driven by shared values, not a reanimated "entering" layout animation: that one is a CSS animation on web and replays
   // every time the screen is shown again (when you go back to it), which made the screen underneath slide in.
   const off = useSharedValue(0);
+  const p = useSharedValue(0); // 0 = closed, 1 = open: drives the dim over the page underneath
   const busy = useRef(false);
   const box = useRef<any>(null);
+  const under = useRef<Under | null>(null);
   const dims = useRef({ w: 0, h: 0 });
+  const setDim = (v: number) => { if (under.current) under.current.scrim.style.opacity = String(v); };
+  useAnimatedReaction(() => p.value, (v) => { runOnJS(setDim)(v); });
   useEffect(() => {
     const entry = {
       name,
       close: (done: () => void) => {
         if (busy.current) return;
         busy.current = true;
-        const prev = previousScreen(box.current);
-        if (prev) prev.style.display = 'flex';
-        off.value = withTiming(bottom ? dims.current.h : dims.current.w, { duration: 240, easing: Easing.out(Easing.cubic) }, (fin) => { if (fin) runOnJS(done)(); });
+        under.current = underlay(box.current);
+        p.value = withTiming(0, OUT);
+        off.value = withTiming(bottom ? dims.current.h : dims.current.w, OUT, (fin) => { if (fin) runOnJS(done)(); });
       },
     };
     closers.push(entry);
-    return () => { const i = closers.indexOf(entry); if (i >= 0) closers.splice(i, 1); };
-  }, [name, bottom, off]);
+    return () => { const i = closers.indexOf(entry); if (i >= 0) closers.splice(i, 1); under.current?.done(); };
+  }, [name, bottom, off, p]);
   const style = useAnimatedStyle(() => ({ transform: [bottom ? { translateY: off.value } : { translateX: off.value }] }));
+  const opened = () => { const u = under.current; if (u) { u.prev.style.display = ''; u.done(); under.current = null; } };
   return (
     <Animated.View style={{ flex: 1 }}
       onLayout={(e) => {
@@ -80,10 +94,10 @@ function WebSlide({ name, bottom, children }: { name: string; bottom: boolean; c
         if (first && !popping) {
           // eslint-disable-next-line react-hooks/immutability -- reanimated shared value
           off.value = bottom ? height : width;
-          const prev = previousScreen(box.current);
-          if (prev) prev.style.display = 'flex';
-          off.value = withTiming(0, { duration: 280, easing: Easing.out(Easing.cubic) }, (fin) => { if (fin && prev) runOnJS(hide)(prev); });
-        }
+          under.current = underlay(box.current);
+          p.value = withTiming(1, IN);
+          off.value = withTiming(0, IN, (fin) => { if (fin) runOnJS(opened)(); });
+        } else if (first) p.value = 1;
       }}>
       <Animated.View style={[{ flex: 1 }, style]}>{children}</Animated.View>
     </Animated.View>
