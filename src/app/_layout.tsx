@@ -52,7 +52,7 @@ function Shell() {
             <Stack.Screen name="welcome" options={{ animationTypeForReplace: 'pop', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
             {/* Close-button (X) screens open from the bottom. */}
             {FROM_BOTTOM.map((n) => (
-              <Stack.Screen key={n} name={n} options={{ animation: 'slide_from_bottom', gestureDirection: 'vertical' } as any} />
+              <Stack.Screen key={n} name={n} options={{ animation: 'slide_from_bottom', presentation: 'modal', gestureEnabled: true, fullScreenGestureEnabled: false } as any} />
             ))}
           </Stack>
           <CheckInEngine />

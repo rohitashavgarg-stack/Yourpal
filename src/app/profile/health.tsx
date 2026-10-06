@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Activity, Footprints, Heart, Moon } from '@/lib/icons';
 import { Button, Row, Txt } from '@/components/ui';
@@ -9,7 +9,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { HEALTH_NAME } from '@/lib/health';
-import { ListCard, Note, SubPage } from '@/features/shell/parts';
+import { ListCard, Note, SubPage, Switch } from '@/features/shell/parts';
 
 // What YourPal reads from the phone's health store, one line each.
 const READS = [
@@ -24,6 +24,7 @@ export default function ConnectedApps() {
   const { d, set } = useDomain();
   const { toast, openSheet, closeSheet } = useOverlay();
   const on = d.hc;
+  const [metrics, setMetrics] = useState<Record<string, boolean>>({ Steps: true, 'Heart rate': true, Sleep: true, 'Active energy': true });
   const connect = () => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected · steps, heart rate and sleep sync automatically`); };
   const disconnect = () => openSheet(
     <View style={{ gap: 12 }}>
@@ -62,6 +63,7 @@ export default function ConnectedApps() {
               <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{t}</Txt>
               <Txt v="caption" style={{ fontSize: 13 }}>{s}</Txt>
             </View>
+            <Switch label={`Read ${t}`} on={on && metrics[t]} locked={!on} onChange={(v) => { setMetrics((m) => ({ ...m, [t]: v })); haptic.tap(); toast(`${t} ${v ? 'will sync' : 'sync paused'}`); }} />
           </Row>
         ))}
       </ListCard>
