@@ -12,7 +12,8 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fade, fadeOut } from '@/theme/motion';
 import { goHome, ListCard, Note, ProgLogo, SubPage } from '@/features/shell/parts';
-import { NOTIFS, switchProgramme, useShell } from '@/features/shell/state';
+import { switchProgramme, useShell } from '@/features/shell/state';
+import { useVisibleNotifs } from '@/features/shell/notifs';
 
 export default function Notifications() {
   const { c } = useTheme();
@@ -21,6 +22,7 @@ export default function Notifications() {
   const { toast } = useOverlay();
   const [filter, setFilter] = useState('all');
 
+  const NOTIFS = useVisibleNotifs();
   const visible = progs.map((p) => p.id);
   const all = s.sc.notifs === 'None' ? [] : NOTIFS.filter((n) => visible.includes(n.p)).map((n) => ({ ...n, unread: n.unread && !d.notifsRead[n.id] }));
   const list = all.filter((n) => filter === 'all' || n.p === filter);

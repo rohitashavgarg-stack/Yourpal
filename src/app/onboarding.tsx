@@ -6,7 +6,8 @@ import { WEEK_TARGET } from '@/features/streak/data';
 import { ageFrom, defaultDob } from '@/lib/dob';
 import { RoundBtn } from '@/components/bits';
 import { PersonAvatar } from '@/components/Brand';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Switch, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
+import { Switch } from '@/features/shell/parts';
 import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
 import { fade, fadeOut } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -443,7 +444,7 @@ function ConsentStep({ isPT }: { isPT: boolean }) {
         <Row style={{ gap: 14, minHeight: 68, paddingHorizontal: 14 }}>
           <Lock size={20} color={c.muted} />
           <View style={{ flex: 1, paddingVertical: 10 }}><Txt style={{ fontFamily: font.semibold }}>Progress photos</Txt><Txt v="caption">{state.profile.photosPrivate ? 'Private · only you see them' : 'Shared with Coach Vikram'}</Txt></View>
-          <View style={{ alignSelf: 'center' }}><Switch accessibilityLabel="Share progress photos with coach" value={!state.profile.photosPrivate} onValueChange={(v) => { haptic.tap(); setProfile({ photosPrivate: !v }); }} trackColor={{ true: c.accent, false: c.surface3 }} /></View>
+          <View style={{ alignSelf: 'center' }}><Switch label="Share progress photos with coach" on={!state.profile.photosPrivate} onChange={(v) => { setProfile({ photosPrivate: !v }); }} /></View>
         </Row>
       </Card>
       <Txt v="caption">Health data from your watch (heart rate, sleep) is never shared unless you turn it on later.</Txt>

@@ -5,9 +5,11 @@ import { useSyncExternalStore } from 'react';
 // and every Profile sub-page read the same values without touching the root layout.
 
 export type Programme = { id: string; name: string; short: string; kind: string; logo: string; color: string; clinic: boolean; unread: number };
-export type Notif = { id: string; p: string; t: string; s: string; when: string; unread: boolean; to?: '/plans' | '/progress' | '/gym' };
+export type Notif = { id: string; p: string; t: string; s: string; when: string; unread: boolean; to?: '/plans' | '/progress' | '/gym' | '/gym/confirm'; pt?: boolean };
 
 export const NOTIFS: Notif[] = [
+  // PT members only, and only while a session is waiting for their confirmation (see useVisibleNotifs).
+  { id: 'n0', p: 'gold', t: 'Confirm your PT session', s: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', when: '2h', unread: true, to: '/gym/confirm', pt: true },
   { id: 'n1', p: 'gold', t: 'Coach Vikram updated your plan', s: 'Leg day: lunges added', when: '2h', unread: true, to: '/plans' },
   { id: 'n2', p: 'gold', t: 'Coach Vikram replied', s: '“Keep your back straight…”', when: '5h', unread: true, to: '/gym' },
   { id: 'n3', p: 'gold', t: 'Reassessment due this week', s: 'Book with the front desk', when: '1d', unread: false, to: '/progress' },

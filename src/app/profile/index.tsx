@@ -1,4 +1,5 @@
 import React from 'react';
+import { HEALTH_NAME } from '@/lib/health';
 import { useOpenEdgeCases } from '@/web/WebFrame';
 import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -54,6 +55,7 @@ export default function Profile() {
     { l: 'Privacy & what each provider sees', go: go('/profile/privacy') },
     { l: 'Notifications', s: s.notif.remind || s.notif.water ? 'Reminders on' : 'Reminders off by default', go: go('/profile/notifications') },
     { l: 'Units & diet detail level', s: `${s.unitsW} · ${s.unitsL} · ${s.detail}`, go: go('/profile/units') },
+    { l: 'Connected apps', s: d.hc ? `${HEALTH_NAME} · connected` : `${HEALTH_NAME} · not connected`, go: go('/profile/health') },
     { l: 'Quick trackers to show', s: trackers, go: go('/profile/trackers') },
     { l: 'Export my data', go: go('/profile/export') },
     { l: 'Delete account', go: go('/profile/delete'), color: c.warn },

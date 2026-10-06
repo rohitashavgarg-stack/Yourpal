@@ -10,7 +10,8 @@ import { CheckInScenario, mealsFor, TimeOfDay, useDomain } from '@/lib/domain';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ComebackCard, GoalCard, UpdatesCard } from '@/features/today/TopCards';
+import { ComebackCard, GoalCard, PtConfirmCard, UpdatesCard } from '@/features/today/TopCards';
+import { usePtPending } from '@/features/shell/notifs';
 import { Trackers } from '@/features/today/Trackers';
 import { WorkoutCard } from '@/features/today/WorkoutCard';
 import { MealsCard } from '@/features/today/MealsCard';
@@ -47,6 +48,7 @@ export default function Today() {
   const navBottom = Math.max(insets.bottom - 6, 14);
   useToastLift(anyBar ? navBottom + 74 + 68 : 0);
 
+  const ptPending = usePtPending();
   const gs = goalStore.use();
   const st = stepsStore.use();
   const gv = goalV2Store.use();
@@ -88,6 +90,7 @@ Jyotsana`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186 :
           </>
         ) : (
           <>
+            {ptPending && <Enter i={0}><PtConfirmCard /></Enter>}
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
             <Enter i={1}><StreakChip /></Enter>
             <Enter i={1}>{gv.version === 'Version 2' ? <GoalCard2 size="compact" /> : <GoalSwitch />}</Enter>

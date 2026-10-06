@@ -1,4 +1,5 @@
 import React from 'react';
+import { HEALTH_NAME } from '@/lib/health';
 import Animated from 'react-native-reanimated';
 import { useScenarios } from '@/lib/store';
 import { fade, fadeOut } from '@/theme/motion';
@@ -18,7 +19,7 @@ export default function Trackers() {
   const rows: { k: keyof typeof s.trk; l: string; s: string }[] = [
     { k: 'water', l: 'Water', s: 'Bottle on Today · glasses' },
     { k: 'weight', l: 'Weight', s: 'Weekly average trend' },
-    { k: 'steps', l: 'Steps', s: 'From Health Connect / Apple Health' },
+    { k: 'steps', l: 'Steps', s: `From ${HEALTH_NAME}` },
   ];
 
   return (

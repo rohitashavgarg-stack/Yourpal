@@ -82,6 +82,25 @@ export function GoalCard() {
   );
 }
 
+// ---------- PT session waiting to be confirmed ----------
+export function PtConfirmCard() {
+  const { c, isDark } = useTheme();
+  return (
+    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 18, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
+      <CornerGlow color={c.accent} size={420} />
+      <Row style={{ gap: 12 }}>
+        <PersonAvatar who="coach" size={44} />
+        <View style={{ flex: 1 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25, letterSpacing: -0.3 }}>Confirm your PT session</Txt>
+          <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Coach Vikram marked Tue 23 Sep, 6–7 pm as done.</Txt>
+        </View>
+      </Row>
+      <Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} />
+      <Txt v="caption" style={{ textAlign: 'center' }}>Not confirmed? It confirms itself on Fri 26 Sep, so your package stays right.</Txt>
+    </Animated.View>
+  );
+}
+
 // ---------- Comeback (after a break) ----------
 export function ComebackCard() {
   const { c, isDark } = useTheme();
@@ -127,7 +146,6 @@ function useUpdates() {
   const { openSheet, toast } = useOverlay();
   const isPT = state.sc.member === 'PT member';
   const all: Upd[] = [
-    ...(isPT ? [{ key: 'pt', title: "Confirm yesterday's PT session", body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done', btn: 'Confirm & rate', act: () => router.navigate('/gym'), icon: CircleCheck, tone: 'accent' as const }] : []),
     { key: 'plan', title: 'Coach Vikram updated your plan', body: 'Leg day: lunges added, leg extension removed', isPlan: true, icon: ClipboardList, tone: 'accent' },
     { key: 'reply', title: 'Coach Vikram replied', body: '“Keep your back straight on rows.”', btn: 'Reply', act: () => toast('Chat with Coach Vikram opens in the Gym tab'), icon: MessageCircle, tone: 'accent' },
     { key: 'reassess', title: 'Reassessment due', body: 'This week · book with front desk', icon: CalendarClock, tone: 'warn' },

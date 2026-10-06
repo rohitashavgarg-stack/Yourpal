@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { HEALTH_NAME } from '@/lib/health';
 import { Image, RefreshControl, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
@@ -94,14 +95,14 @@ function ProgressCard({ k }: { k: CardKey }) {
 
   const connect = k === 'steps' && !d.hc;
   let empty = isNew ? NEW_EMPTY[k] ?? '' : '';
-  if (connect) empty = 'Read from Health Connect / Apple Health once you allow it.';
+  if (connect) empty = `Read from ${HEALTH_NAME} once you allow it.`;
 
   const titles: Record<CardKey, string> = {
     weight: 'Weight', cons: 'Consistency', diet: 'Diet', lifts: 'Lifts & PRs', steps: 'Steps', meas: 'Measurements', assess: 'Assessments',
-    photos: 'Photos · Private', water: 'Water', hr: 'Resting heart rate · Health Connect', sleep: 'Sleep · Health Connect',
+    photos: 'Photos · Private', water: 'Water', hr: `Resting heart rate · ${HEALTH_NAME}`, sleep: `Sleep · ${HEALTH_NAME}`,
   };
   const open = () => {
-    if (connect) { set({ hc: true }); haptic.success(); toast('Health Connect connected · steps sync automatically'); return; }
+    if (connect) { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected · steps sync automatically`); return; }
     if (k === 'lifts') { progressStore.set({ lift: 'Leg press' }); router.push('/progress/lift'); }
     else if (k === 'assess') router.push('/progress/assess');
     else if (k === 'photos') router.push('/progress/photos');
@@ -179,13 +180,13 @@ function ProgressCard({ k }: { k: CardKey }) {
     }
   }
   return (
-    <PCard onPress={open} label={connect ? 'Steps. Connect Health Connect' : `${titles[k]}, open details`} style={{ overflow: 'hidden' }}>
+    <PCard onPress={open} label={connect ? `Steps. Connect ${HEALTH_NAME}` : `${titles[k]}, open details`} style={{ overflow: 'hidden' }}>
       <CornerGlow color={tint} />
       <CardTitle title={titles[k]} icon={<look.Icon size={17} color={tint} />} tint={tint} />
       {body}
       {connect && (
         <View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: c.surface2, justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: 14 }}>Connect Health Connect</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: 14 }}>Connect {HEALTH_NAME}</Txt>
         </View>
       )}
     </PCard>

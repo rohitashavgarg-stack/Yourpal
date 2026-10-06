@@ -100,6 +100,7 @@ export default function ConfirmSession() {
         <Button label="Confirm session" onPress={confirm} />
       )}
       <ListCard rows={[{ l: "This didn't happen", onPress: () => openSheet(<FlagSheet />, { label: 'Flag session' }) }]} />
+      <Hint style={{ fontSize: 12 }}>We remind you after 24 hours. If you don’t confirm, the session confirms itself on Fri 26 Sep, three days after it happened, without a rating.</Hint>
       <Hint style={{ fontSize: 12 }}>Your rating and remarks go only to the gym admin, never to Coach Vikram or other members.</Hint>
     </SubPage>
   );

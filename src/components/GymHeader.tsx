@@ -9,7 +9,8 @@ import { font } from '@/theme/tokens';
 import { useOverlay } from './Overlay';
 import { GymLogoMark, PersonAvatar } from './Brand';
 import { ProgrammeSwitcherSheet } from '@/features/shell/Switcher';
-import { NOTIFS, switchProgramme, useShell } from '@/features/shell/state';
+import { switchProgramme, useShell } from '@/features/shell/state';
+import { useVisibleNotifs } from '@/features/shell/notifs';
 import { ProgLogo } from '@/features/shell/parts';
 import { useDomain } from '@/lib/domain';
 import { haptic } from '@/lib/haptics';
@@ -21,9 +22,12 @@ const lift = { shadowColor: '#101828', shadowOpacity: 0.08, shadowRadius: 12, sh
 
 // A rounded glass container; children sit above the blur.
 function GlassShell({ radius, style, children }: { radius: number; style: any; children: React.ReactNode }) {
+  // Only the glass is clipped to the rounded shape; the content (like the Premium crown on the photo) may reach past the edge.
   return (
-    <View style={[{ borderRadius: radius, overflow: 'hidden' }, style]}>
-      <GlassBackdrop radius={radius} />
+    <View style={[{ borderRadius: radius }, style]}>
+      <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius, overflow: 'hidden' }}>
+        <GlassBackdrop radius={radius} />
+      </View>
       {React.Children.map(children, (ch) => (ch == null || ch === false ? ch : <View style={{ zIndex: 2, flexShrink: 1 }}>{ch}</View>))}
     </View>
   );
@@ -34,6 +38,7 @@ export function GymHeader() {
   const { openSheet, toast } = useOverlay();
   const { s, current, multi } = useShell();
   const { d } = useDomain();
+  const NOTIFS = useVisibleNotifs();
   const unread = s.sc.notifs === 'None' ? 0 : NOTIFS.filter((n) => n.unread && !d.notifsRead[n.id]).length;
   // Long-press jumps back to the last programme, like switching accounts.
   const jumpLast = () => { if (!multi) return; haptic.medium(); const n = switchProgramme(s.last); if (n) toast(`Switched to ${n}`); };
