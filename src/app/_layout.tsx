@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Platform, View } from 'react-native';
-import Animated, { Easing, SlideInDown, SlideInRight, SlideOutDown, SlideOutRight } from 'react-native-reanimated';
-import { Stack } from 'expo-router';
+import Animated, { Easing, SlideInDown, SlideInRight, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -20,15 +20,41 @@ import { CheckInEngine } from '@/features/checkin/CheckInEngine';
 // On the phone the native stack does this (see the Stack.Screen options below). The web stack has no transitions, so this wrapper adds them there.
 const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
 const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
+// Web only: the stack drops a popped screen at once, so the slide-out is played first, then the real back runs.
+const closers: { name: string; close: (done: () => void) => void }[] = [];
+if (Platform.OS === 'web' && !(router as any).__slideBack) {
+  const realBack = router.back.bind(router);
+  (router as any).__slideBack = true;
+  (router as any).back = () => {
+    const top = closers[closers.length - 1];
+    if (top && router.canGoBack()) top.close(realBack); else realBack();
+  };
+}
 function WebTransition({ name, children }: { name: string; children: React.ReactNode }) {
   if (Platform.OS !== 'web' || NO_TRANSITION.includes(name)) return <>{children}</>;
-  const bottom = FROM_BOTTOM.includes(name);
-  const ease = Easing.out(Easing.cubic);
+  return <WebSlide name={name} bottom={FROM_BOTTOM.includes(name)}>{children}</WebSlide>;
+}
+function WebSlide({ name, bottom, children }: { name: string; bottom: boolean; children: React.ReactNode }) {
+  const off = useSharedValue(0);
+  const busy = useRef(false);
+  const dims = useRef({ w: 400, h: 800 });
+  useEffect(() => {
+    const entry = {
+      name,
+      close: (done: () => void) => {
+        if (busy.current) return;
+        busy.current = true;
+        off.value = withTiming(bottom ? dims.current.h : dims.current.w, { duration: 240, easing: Easing.out(Easing.cubic) }, (fin) => { if (fin) runOnJS(done)(); });
+      },
+    };
+    closers.push(entry);
+    return () => { const i = closers.indexOf(entry); if (i >= 0) closers.splice(i, 1); };
+  }, [name, bottom, off]);
+  const style = useAnimatedStyle(() => ({ transform: [bottom ? { translateY: off.value } : { translateX: off.value }] }));
   return (
-    <Animated.View style={{ flex: 1 }}
-      entering={(bottom ? SlideInDown : SlideInRight).duration(280).easing(ease)}
-      exiting={(bottom ? SlideOutDown : SlideOutRight).duration(240).easing(ease)}>
-      {children}
+    <Animated.View style={{ flex: 1 }} entering={(bottom ? SlideInDown : SlideInRight).duration(280).easing(Easing.out(Easing.cubic))}
+      onLayout={(e) => { dims.current = { w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height }; }}>
+      <Animated.View style={[{ flex: 1 }, style]}>{children}</Animated.View>
     </Animated.View>
   );
 }
