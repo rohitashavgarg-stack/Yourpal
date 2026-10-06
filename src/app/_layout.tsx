@@ -37,11 +37,23 @@ function WebTransition({ name, children }: { name: string; children: React.React
   if (Platform.OS !== 'web' || NO_TRANSITION.includes(name)) return <>{children}</>;
   return <WebSlide name={name} bottom={FROM_BOTTOM.includes(name)}>{children}</WebSlide>;
 }
+// The stack hides every screen that is not on top, so during a slide the page underneath would be blank.
+// Show it (static) while this screen moves, then let the stack's own styling take over again.
+function previousScreen(el: any): HTMLElement | null {
+  let n = el as HTMLElement | null;
+  while (n && n.parentElement) {
+    if (n.parentElement.children.length > 1 && getComputedStyle(n).position === 'absolute') return n.previousElementSibling as HTMLElement | null;
+    n = n.parentElement;
+  }
+  return null;
+}
+const hide = (el: HTMLElement) => { el.style.display = ''; };
 function WebSlide({ name, bottom, children }: { name: string; bottom: boolean; children: React.ReactNode }) {
   // Driven by a shared value, not a reanimated "entering" layout animation: that one is a CSS animation on web and replays
   // every time the screen is shown again (when you go back to it), which made the screen underneath slide in.
   const off = useSharedValue(0);
   const busy = useRef(false);
+  const box = useRef<any>(null);
   const dims = useRef({ w: 0, h: 0 });
   useEffect(() => {
     const entry = {
@@ -49,6 +61,8 @@ function WebSlide({ name, bottom, children }: { name: string; bottom: boolean; c
       close: (done: () => void) => {
         if (busy.current) return;
         busy.current = true;
+        const prev = previousScreen(box.current);
+        if (prev) prev.style.display = 'flex';
         off.value = withTiming(bottom ? dims.current.h : dims.current.w, { duration: 240, easing: Easing.out(Easing.cubic) }, (fin) => { if (fin) runOnJS(done)(); });
       },
     };
@@ -60,12 +74,15 @@ function WebSlide({ name, bottom, children }: { name: string; bottom: boolean; c
     <Animated.View style={{ flex: 1 }}
       onLayout={(e) => {
         const { width, height } = e.nativeEvent.layout;
+        box.current = (e.nativeEvent as any).target; // the DOM node on web
         const first = dims.current.w === 0;
         dims.current = { w: width, h: height };
         if (first && !popping) {
           // eslint-disable-next-line react-hooks/immutability -- reanimated shared value
           off.value = bottom ? height : width;
-          off.value = withTiming(0, { duration: 280, easing: Easing.out(Easing.cubic) });
+          const prev = previousScreen(box.current);
+          if (prev) prev.style.display = 'flex';
+          off.value = withTiming(0, { duration: 280, easing: Easing.out(Easing.cubic) }, (fin) => { if (fin && prev) runOnJS(hide)(prev); });
         }
       }}>
       <Animated.View style={[{ flex: 1 }, style]}>{children}</Animated.View>
