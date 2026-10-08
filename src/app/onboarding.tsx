@@ -74,7 +74,7 @@ export default function Onboarding() {
   const go = (s: Step, d = 1) => { setDir(d); setTried(false); setStep(s); set({ onboardingStep: s }); };
   // Height, weight, target and the projection go together; target and projection need a weight goal.
   const { d: dom } = useDomain();
-  const flow = ORDER.filter((s) => !(s === 'facility' && !dom.hasGym) && !(p.skipBody && (s === 'height' || s === 'weight' || s === 'target' || s === 'plan')) && !(!needsTarget(p.goal) && (s === 'target' || s === 'plan')));
+  const flow = ORDER.filter((s) => !(s === 'facility' && !(dom.hasGym && dom.askGym)) && !(p.skipBody && (s === 'height' || s === 'weight' || s === 'target' || s === 'plan')) && !(!needsTarget(p.goal) && (s === 'target' || s === 'plan')));
   const idx = Math.max(0, flow.indexOf(step));
   const next = () => {
     if (step === 'goal' && !p.goal) { setTried(true); haptic.error(); return; }

@@ -135,6 +135,7 @@ function PanelBody() {
     { label: 'Gym', options: ['Has a gym', 'No gym'], value: d.hasGym ? 'Has a gym' : 'No gym', onPick: (v: string) => { set({ hasGym: v === 'Has a gym' }); if (v !== 'Has a gym') router.replace('/(tabs)'); } },
     // A number that belongs to several programmes picks one after the code; one programme goes straight in.
     { label: 'Programme choice screen (login)', options: ['Shown', 'Hidden'], value: shell.s.sc.progs === 'Three' ? 'Shown' : 'Hidden', onPick: (v: string) => shell.set((x) => ({ sc: { ...x.sc, progs: v === 'Shown' ? 'Three' : 'Only one' }, cur: 'gold' })) },
+    { label: 'Gym choice in onboarding', options: ['Shown', 'Hidden'], value: d.askGym ? 'Shown' : 'Hidden', onPick: (v: string) => set({ askGym: v === 'Shown' }) },
     // Undo one thing so it can be tried again.
     { label: 'Redo today', options: ['Workout', 'Meals', 'Steps', 'Check-in'], value: '', onPick: (v: string) => {
       if (v === 'Workout') set({ wkScenario: 'Not started', wkDone: null, session: null });
