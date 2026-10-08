@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { router } from 'expo-router';
 import { Dimensions, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useStore } from '@/lib/store';
@@ -106,7 +107,7 @@ function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number
 
 // Kept deliberately small: goal type, member type, light / dark, steps tracker design and the time of day.
 function PanelBody() {
-  const { state, setSc } = useStore();
+  const { state, setSc, set: setApp, setProfile } = useStore();
   const { isDark } = useTheme();
   const { d, set } = useDomain();
   const steps = stepsStore.use();
@@ -128,6 +129,21 @@ function PanelBody() {
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },
     { label: 'Theme', options: ['Light', 'Dark'], value: isDark ? 'Dark' : 'Light', onPick: (v: string) => setSc({ theme: v as any }) },
     { label: 'Steps tracker design', options: STEPS_DESIGNS as string[], value: steps.design, onPick: (v: string) => stepsStore.set({ design: v as StepsDesign }) },
+    // With a gym: Gym tab, check-in, coach, PT and the gym step in onboarding. Without: just the app.
+    { label: 'Gym', options: ['Has a gym', 'No gym'], value: d.hasGym ? 'Has a gym' : 'No gym', onPick: (v: string) => { set({ hasGym: v === 'Has a gym' }); if (v !== 'Has a gym') router.replace('/(tabs)'); } },
+    // Undo one thing so it can be tried again.
+    { label: 'Redo today', options: ['Workout', 'Meals', 'Steps', 'Check-in'], value: '', onPick: (v: string) => {
+      if (v === 'Workout') set({ wkScenario: 'Not started', wkDone: null, session: null });
+      else if (v === 'Meals') set({ meals: mealsFor(d.time), openMeal: null });
+      else if (v === 'Steps') stepsStore.set({ manual: [] });
+      else set({ ci: 'Away', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null });
+    } },
+    { label: 'Redo onboarding', options: ['Start over', 'Gym', 'Goal', 'Experience', 'Schedule', 'Age', 'Height', 'Weight', 'Basics', 'Health', 'Privacy'], value: '', onPick: (v: string) => {
+      const at = ({ 'Start over': 'welcome', Gym: 'facility', Goal: 'goal', Experience: 'exp', Schedule: 'sched', Age: 'age', Height: 'height', Weight: 'weight', Basics: 'basics', Health: 'health', Privacy: 'consent' } as Record<string, string>)[v];
+      if (v === 'Start over') setProfile({ goal: '', exp: '', injury: 'No', injuryNote: '', skipBody: false });
+      setApp({ onboarded: false, onboardingStep: at });
+      router.replace('/onboarding');
+    } },
     // Steps need Health. Heart rate, sleep and energy also need a watch or band, which a member may not have.
     { label: 'Health (steps)', options: ['Connected', 'Not connected'], value: d.hc ? 'Connected' : 'Not connected', onPick: (v: string) => set({ hc: v === 'Connected' }) },
     { label: 'Wearable (heart rate, sleep, energy)', options: ['Has a wearable', 'No wearable'], value: d.wearable ? 'Has a wearable' : 'No wearable', onPick: (v: string) => set({ wearable: v === 'Has a wearable' }) },

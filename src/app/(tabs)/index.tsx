@@ -91,7 +91,7 @@ Jyotsana`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186 :
           </>
         ) : (
           <>
-            {ptPending && <Enter i={0}><PtConfirmCard /></Enter>}
+            {ptPending && d.hasGym && <Enter i={0}><PtConfirmCard /></Enter>}
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
             <Enter i={1}><StreakChip /></Enter>
             <Enter i={1}>{gv.version === 'Version 2' ? <GoalCard2 size="compact" /> : <GoalSwitch />}</Enter>

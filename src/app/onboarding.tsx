@@ -14,6 +14,7 @@ import { fade, fadeOut } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GymLogoMark } from '@/components/Brand';
 import { LinearGradient } from 'expo-linear-gradient';
+import { GlassBackdrop } from '@/components/Glass';
 import { router } from 'expo-router';
 import { Activity, Bell, CalendarCheck, Check, ChevronLeft, ChevronRight, ChevronsRight, Compass, Dumbbell, Flame, Lock, PersonStanding, Scale, Zap, MessageCircle, Minus, Plus, ShieldCheck, Trophy, UtensilsCrossed } from '@/lib/icons';
 import { Button, Card, Chip, Field, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
@@ -28,9 +29,12 @@ import { dirOf, needsTarget, planMath } from '@/features/onboarding/plan';
 import { useDomain } from '@/lib/domain';
 import { HealthStep, ProjectionStep, ReadyContent } from '@/features/onboarding/Steps';
 import { HEALTH_NAME } from '@/lib/health';
+import { YourPalLogo } from '@/components/YourPalLogo';
+import { useShell } from '@/features/shell/state';
+import { ProgLogo } from '@/features/shell/parts';
 import Svg, { Circle, Path } from 'react-native-svg';
 
-const ORDER = ['welcome', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
+const ORDER = ['welcome', 'facility', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
 type Step = (typeof ORDER)[number];
 const COUNTED: Step[] = ['goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'basics'];
 const GOALS = ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness', 'Not sure yet'];
@@ -69,7 +73,8 @@ export default function Onboarding() {
   };
   const go = (s: Step, d = 1) => { setDir(d); setTried(false); setStep(s); set({ onboardingStep: s }); };
   // Height, weight, target and the projection go together; target and projection need a weight goal.
-  const flow = ORDER.filter((s) => !(p.skipBody && (s === 'height' || s === 'weight' || s === 'target' || s === 'plan')) && !(!needsTarget(p.goal) && (s === 'target' || s === 'plan')));
+  const { d: dom } = useDomain();
+  const flow = ORDER.filter((s) => !(s === 'facility' && !dom.hasGym) && !(p.skipBody && (s === 'height' || s === 'weight' || s === 'target' || s === 'plan')) && !(!needsTarget(p.goal) && (s === 'target' || s === 'plan')));
   const idx = Math.max(0, flow.indexOf(step));
   const next = () => {
     if (step === 'goal' && !p.goal) { setTried(true); haptic.error(); return; }
@@ -93,6 +98,7 @@ export default function Onboarding() {
   // One quiet skip per step, worded for that step.
   const skipBody = () => { setProfile({ skipBody: true, heightCm: '', weightKg: '' }); go('basics'); };
   const skipFor: Partial<Record<Step, { label: string; run: () => void }>> = {
+    facility: { label: 'Choose my gym later', run: () => go(flow[idx + 1]) },
     goal: { label: 'Not sure yet · decide with Coach', run: () => { setProfile({ goal: 'Not sure yet' }); go('exp'); } },
     exp: { label: "Skip · I'll tell my coach", run: () => go(flow[idx + 1]) },
     sched: { label: 'Decide the days later', run: () => go(flow[idx + 1]) },
@@ -119,7 +125,7 @@ export default function Onboarding() {
   useScenarios({
     title: 'Onboarding',
     rows: [
-      { label: 'Jump to step', options: ['Welcome', 'Goal', 'Experience', 'Schedule', 'Age', 'Height', 'Weight', 'Target', 'Projection', 'Basics', 'Health', 'Privacy', 'Building', 'All set'], value: ({ welcome: 'Welcome', goal: 'Goal', exp: 'Experience', sched: 'Schedule', age: 'Age', height: 'Height', weight: 'Weight', target: 'Target', plan: 'Projection', basics: 'Basics', health: 'Health', consent: 'Privacy', building: 'Building', ready: 'All set' } as any)[step], onPick: (v) => go(({ Welcome: 'welcome', Goal: 'goal', Experience: 'exp', Schedule: 'sched', Age: 'age', Height: 'height', Weight: 'weight', Target: 'target', Projection: 'plan', Basics: 'basics', Health: 'health', Privacy: 'consent', Building: 'building', 'All set': 'ready' } as any)[v]) },
+      { label: 'Jump to step', options: ['Welcome', 'Gym', 'Goal', 'Experience', 'Schedule', 'Age', 'Height', 'Weight', 'Target', 'Projection', 'Basics', 'Health', 'Privacy', 'Building', 'All set'], value: ({ welcome: 'Welcome', facility: 'Gym', goal: 'Goal', exp: 'Experience', sched: 'Schedule', age: 'Age', height: 'Height', weight: 'Weight', target: 'Target', plan: 'Projection', basics: 'Basics', health: 'Health', consent: 'Privacy', building: 'Building', ready: 'All set' } as any)[step], onPick: (v) => go(({ Welcome: 'welcome', Gym: 'facility', Goal: 'goal', Experience: 'exp', Schedule: 'sched', Age: 'age', Height: 'height', Weight: 'weight', Target: 'target', Projection: 'plan', Basics: 'basics', Health: 'health', Privacy: 'consent', Building: 'building', 'All set': 'ready' } as any)[v]) },
       { label: 'Assessment', options: ['Scheduled', 'Not scheduled'], value: sc.assess, onPick: (v) => setSc({ assess: v as any }) },
       { label: 'Connection', options: ['Online', 'Offline'], value: sc.net, onPick: (v) => setSc({ net: v as any }) },
     ],
@@ -154,7 +160,8 @@ export default function Onboarding() {
 
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 24, paddingTop: 8, gap: 14, flexGrow: 1 }} keyboardShouldPersistTaps="handled">
         <Animated.View key={step} entering={fade()} exiting={fadeOut()} style={[{ gap: 14 }, step === 'building' && { flex: 1, justifyContent: 'center' }]}>
-          {step === 'welcome' && <Welcome isPT={isPT} assess={sc.assess} />}
+          {step === 'welcome' && <Welcome isPT={isPT} assess={sc.assess} hasGym={dom.hasGym} />}
+          {step === 'facility' && <FacilityStep />}
           {step === 'goal' && <GoalStep tried={tried} />}
           {step === 'exp' && <ExpStep tried={tried} />}
           {step === 'sched' && <SchedStep />}
@@ -203,18 +210,18 @@ function Title({ t, s }: { t: string; s?: string }) {
   );
 }
 
-function Welcome({ isPT, assess }: { isPT: boolean; assess: string }) {
+function Welcome({ isPT, assess, hasGym }: { isPT: boolean; assess: string; hasGym: boolean }) {
   const { c } = useTheme();
   return (
     <>
       <View style={{ gap: 12, paddingTop: 8, paddingBottom: 6 }}>
-        <GymLogoMark size={64} />
-        <Txt style={{ fontFamily: font.regular, fontSize: 32, lineHeight: 42, letterSpacing: -1.2 }}>Hi Jyotsana, welcome to Wulf Fitness</Txt>
-        <Txt muted>{isPT ? 'Your PT package is active. Coach Vikram will build your plan.' : 'Your membership is active. Here is how your first week works.'}</Txt>
+        {hasGym ? <GymLogoMark size={64} /> : <YourPalLogo height={34} color={c.ink} />}
+        <Txt style={{ fontFamily: font.regular, fontSize: 32, lineHeight: 42, letterSpacing: -1.2 }}>{hasGym ? 'Hi Jyotsana, welcome to Wulf Fitness' : 'Hi Jyotsana, welcome to YourPal'}</Txt>
+        <Txt muted>{!hasGym ? 'Answer a few quick questions and your plan is ready.' : isPT ? 'Your PT package is active. Coach Vikram will build your plan.' : 'Your membership is active. Here is how your first week works.'}</Txt>
       </View>
       <Card style={{ gap: 0, padding: 6 }}>
-        <InfoRow icon={<PersonAvatar who="coach" size={30} />} t="Coach Vikram" s="You can message him any time" />
-        <InfoRow icon={<CalendarCheck size={19} color={c.muted} />} t={assess === 'Scheduled' ? 'Sat 10:00 am with Coach Vikram' : 'Assessment not booked yet'} s={assess === 'Scheduled' ? 'Your first assessment · about 30 min' : 'The front desk will book it. You can still set up now.'} warn={assess !== 'Scheduled'} />
+        {hasGym && <InfoRow icon={<PersonAvatar who="coach" size={30} />} t="Coach Vikram" s="You can message him any time" />}
+        {hasGym && <InfoRow icon={<CalendarCheck size={19} color={c.muted} />} t={assess === 'Scheduled' ? 'Sat 10:00 am with Coach Vikram' : 'Assessment not booked yet'} s={assess === 'Scheduled' ? 'Your first assessment · about 30 min' : 'The front desk will book it. You can still set up now.'} warn={assess !== 'Scheduled'} />}
         <InfoRow icon={<Dumbbell size={19} color={c.muted} />} t="3 quick questions to set up your plan" s="About a minute. You can change answers later." last />
       </Card>
     </>
@@ -300,6 +307,33 @@ function GoalTile({ goal, on, onPress }: { goal: string; on: boolean; onPress: (
       <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: c.ink }}>{goal}</Txt>
       {on && <View style={{ position: 'absolute', left: 12, top: 12, width: 22, height: 22, borderRadius: 11, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Check size={13} strokeWidth={3} color={c.bg} /></View>}
     </Pressy>
+  );
+}
+
+function FacilityStep() {
+  const { c } = useTheme();
+  const { s, set: setShell } = useShell();
+  const gyms = s.progs.filter((x) => x.kind === 'Gym');
+  return (
+    <>
+      <Title t="Which gym are you joining?" s="Your coach, plan and check-in come from the gym you pick." />
+      {gyms.map((g) => {
+        const on = s.cur === g.id;
+        return (
+          <Pressy key={g.id} accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={() => setShell({ cur: g.id })}
+            style={{ minHeight: 72, borderRadius: 22, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <ProgLogo p={g} size={44} />
+            <View style={{ flex: 1, paddingVertical: 12 }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{g.name}</Txt>
+              <Txt v="caption">Gym</Txt>
+            </View>
+            <View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+              {on && <Check size={15} strokeWidth={3} color={c.bg} />}
+            </View>
+          </Pressy>
+        );
+      })}
+    </>
   );
 }
 
@@ -506,7 +540,7 @@ function ReadyStep({ assess }: { assess: string }) {
 
 // Big swipe-to-start button for the last screen: drag the thumb across. Plain timing, no spring.
 function SwipeToStart({ onDone }: { onDone: () => void }) {
-  const { c } = useTheme();
+  const { c, isDark } = useTheme();
   const [w, setW] = useState(0);
   const TH = 64, PAD = 5;
   const max = Math.max(0, w - TH - PAD * 2);
@@ -521,17 +555,26 @@ function SwipeToStart({ onDone }: { onDone: () => void }) {
     });
   const thumb = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   const label = useAnimatedStyle(() => ({ opacity: max ? 1 - Math.min(1, x.value / (max * 0.55)) : 1 }));
+  // Glass track with a soft blue glow along every inner edge; the thumb is a lighter glass circle.
+  const glow = isDark ? 'rgba(80,140,255,0.62)' : 'rgba(47,107,234,0.55)';
+  const clear = 'rgba(47,107,234,0)';
+  const R = (TH + PAD * 2) / 2;
   return (
     <View onLayout={(e) => setW(e.nativeEvent.layout.width)} accessibilityRole="button" accessibilityLabel="Swipe to start your journey" accessibilityHint="Double tap to start" accessible
       onAccessibilityTap={onDone}
-      style={{ height: TH + PAD * 2, borderRadius: (TH + PAD * 2) / 2, backgroundColor: c.accent, justifyContent: 'center', overflow: 'hidden' }}>
+      style={{ height: TH + PAD * 2, borderRadius: R, justifyContent: 'center', overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(110,160,255,0.5)', backgroundColor: isDark ? 'rgba(14,24,48,0.55)' : 'rgba(255,255,255,0.45)' }}>
+      <GlassBackdrop radius={R} />
+      <LinearGradient pointerEvents="none" colors={[glow, clear]} style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 30 }} />
+      <LinearGradient pointerEvents="none" colors={[clear, glow]} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 30 }} />
+      <LinearGradient pointerEvents="none" colors={[glow, clear]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 44 }} />
+      <LinearGradient pointerEvents="none" colors={[clear, glow]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 44 }} />
       <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: TH + PAD * 2, right: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 6 }, label]}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, color: '#fff' }}>Swipe to start your journey</Txt>
-        <ChevronsRight size={20} color="#fff" />
+        <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, color: c.ink }}>Swipe to start</Txt>
+        <ChevronsRight size={20} color={c.ink} />
       </Animated.View>
       <GestureDetector gesture={pan}>
-        <Animated.View style={[{ marginLeft: PAD, width: TH, height: TH, borderRadius: TH / 2, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }, thumb]}>
-          <ChevronRight size={26} color={c.accent} />
+        <Animated.View style={[{ marginLeft: PAD, width: TH, height: TH, borderRadius: TH / 2, backgroundColor: 'rgba(255,255,255,0.22)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.55)', alignItems: 'center', justifyContent: 'center' }, thumb]}>
+          <ChevronRight size={26} color={c.ink} />
         </Animated.View>
       </GestureDetector>
     </View>

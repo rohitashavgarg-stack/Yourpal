@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useDomain } from '@/lib/domain';
 import { LayoutChangeEvent, Platform, Pressable, Text, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import Animated, { SharedValue, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
@@ -196,8 +197,11 @@ function MergedNav({ state, navigation }: any) {
 }
 
 // ---- Floating pill tab bar (Blinkit / Zomato style) ----
-export function FloatingTabBar(props: any) {
+export function FloatingTabBar(allProps: any) {
   const { style } = navStore.use();
+  const { d } = useDomain();
+  // No gym: the Gym tab is not shown.
+  const props = d.hasGym ? allProps : (() => { const routes = allProps.state.routes.filter((r: any) => r.name !== 'gym'); return { ...allProps, state: { ...allProps.state, routes, index: Math.min(allProps.state.index, routes.length - 1) } }; })();
   if (style === 'Circles') return <CircleNav {...props} />;
   if (style === 'Linked circles') return <MergedNav {...props} />;
   return <PillBar {...props} />;

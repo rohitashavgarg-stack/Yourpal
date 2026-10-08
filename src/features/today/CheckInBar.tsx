@@ -1,4 +1,5 @@
 import React from 'react';
+import { StartWorkoutSheet } from '@/features/workout/StartSheet';
 import { View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { fade } from '@/theme/motion';
@@ -22,7 +23,7 @@ import { elapsedMin } from '@/features/checkin/logic';
 export type CiMode = 'none' | 'here' | 'near' | 'in' | 'out' | 'off';
 export function useCiMode(): CiMode {
   const { d } = useDomain();
-  if (d.session) return 'none';
+  if (d.session || !d.hasGym) return 'none';
   if (d.ciOut) return 'out';
   if (d.ciStart != null || ciTime(d) != null) return 'in';
   return d.ci === 'At the gym' ? 'here' : d.ci === 'Near (25 m)' ? 'near' : d.ci === 'Location off' ? 'off' : 'none';
@@ -63,7 +64,7 @@ function MiniWorkout() {
 export function CheckInBar() {
   const { c } = useTheme();
   const { d, set } = useDomain();
-  const { toast } = useOverlay();
+  const { toast, openSheet } = useOverlay();
   const A = useCheckIn();
   const mode = useCiMode();
   const now = useNow(mode === 'in', 15000);
@@ -88,8 +89,8 @@ export function CheckInBar() {
     const mins = Math.max(0, Math.floor(elapsedMin(d, now)));
     title = `Checked in ${mins} min`;
     sub = `Since ${fmtT(at!).full} · ${st === 'todo' ? 'Leg day is next' : st === 'done' ? 'Workout done' : 'Rest day'}`;
-    btn = 'Check out';
-    act = A.checkOut;
+    if (st === 'todo') { btn = 'Start workout'; act = () => openSheet(<StartWorkoutSheet />, { label: 'Start options' }); }
+    else { btn = 'Check out'; act = A.checkOut; }
     icon = <Check size={16} strokeWidth={2.6} color={c.good} />;
   } else if (mode === 'out') {
     bg = c.surface; icBg = c.goodSoft;

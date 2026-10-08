@@ -1,4 +1,5 @@
 import React from 'react';
+import { YourPalLogo } from '@/components/YourPalLogo';
 import { GlassBackdrop } from '@/components/Glass';
 import { View } from 'react-native';
 import { router } from 'expo-router';
@@ -44,6 +45,9 @@ export function GymHeader() {
   const jumpLast = () => { if (!multi) return; haptic.medium(); const n = switchProgramme(s.last); if (n) toast(`Switched to ${n}`); };
   return (
     <Row style={{ gap: 8 }}>
+      {!d.hasGym ? (
+        <View style={{ height: 52, justifyContent: 'center' }}><YourPalLogo height={26} color={c.ink} /></View>
+      ) : (
       <Pressy accessibilityRole="button" accessibilityLabel={`Switch programme, current: ${current.short}`} onPress={() => openSheet(<ProgrammeSwitcherSheet />, { label: 'Switch programme' })} onLongPress={jumpLast} delayLongPress={500} style={{ flexShrink: 1, flexDirection: 'row', alignItems: 'center', gap: 10, height: 52 }}>
         <ProgLogo p={current} size={40} />
         <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 19, lineHeight: 26, letterSpacing: -0.4, flexShrink: 1 }}>{current.short}</Txt>
@@ -54,6 +58,7 @@ export function GymHeader() {
           </View>
         )}
       </Pressy>
+      )}
       <View style={{ flex: 1 }} />
       {/* Bell and profile photo share one glass container. */}
       <View style={[{ height: 44, borderRadius: 22 }, lift]}>
