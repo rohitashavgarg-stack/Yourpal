@@ -298,43 +298,16 @@ const GOAL_ART: Record<string, { Icon: any; tint: string; col: string }> = {
 function GoalTile({ goal, on, onPress }: { goal: string; on: boolean; onPress: () => void }) {
   const { c } = useTheme();
   const a = GOAL_ART[goal];
-  const bg = (c as any)[a.tint], fg = (c as any)[a.col];
+  // Quiet card: the surface colour, a thin line, one small icon. The selected card gets a darker line.
   return (
     <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onPress} scaleTo={0.97}
-      style={{ width: '48%', flexGrow: 1, height: 116, borderRadius: 24, backgroundColor: bg, borderWidth: on ? 2 : 0, borderColor: c.ink, overflow: 'hidden', padding: 14, justifyContent: 'space-between' }}>
-      <View pointerEvents="none" style={{ position: 'absolute', right: -26, top: -26, width: 104, height: 104, borderRadius: 52, backgroundColor: fg, opacity: 0.12 }} />
-      <View pointerEvents="none" style={{ position: 'absolute', right: 10, top: 34, width: 46, height: 46, borderRadius: 23, backgroundColor: fg, opacity: 0.12 }} />
-      <a.Icon size={38} strokeWidth={1.6} color={fg} style={{ alignSelf: 'flex-end' }} />
+      style={{ width: '48%', flexGrow: 1, height: 108, borderRadius: 22, backgroundColor: c.surface, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, padding: 14, justifyContent: 'space-between' }}>
+      <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+        <a.Icon size={20} strokeWidth={1.8} color={c.ink} />
+      </View>
       <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: c.ink }}>{goal}</Txt>
-      {on && <View style={{ position: 'absolute', left: 12, top: 12, width: 22, height: 22, borderRadius: 11, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Check size={13} strokeWidth={3} color={c.bg} /></View>}
+      {on && <View style={{ position: 'absolute', right: 12, top: 12, width: 22, height: 22, borderRadius: 11, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Check size={13} strokeWidth={3} color={c.bg} /></View>}
     </Pressy>
-  );
-}
-
-function FacilityStep() {
-  const { c } = useTheme();
-  const { s, set: setShell } = useShell();
-  const gyms = s.progs.filter((x) => x.kind === 'Gym');
-  return (
-    <>
-      <Title t="Which gym are you joining?" s="Your coach, plan and check-in come from the gym you pick." />
-      {gyms.map((g) => {
-        const on = s.cur === g.id;
-        return (
-          <Pressy key={g.id} accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={() => setShell({ cur: g.id })}
-            style={{ minHeight: 72, borderRadius: 22, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-            <ProgLogo p={g} size={44} />
-            <View style={{ flex: 1, paddingVertical: 12 }}>
-              <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{g.name}</Txt>
-              <Txt v="caption">Gym</Txt>
-            </View>
-            <View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-              {on && <Check size={15} strokeWidth={3} color={c.bg} />}
-            </View>
-          </Pressy>
-        );
-      })}
-    </>
   );
 }
 
