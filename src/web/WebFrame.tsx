@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useShell } from '@/features/shell/state';
 import { router } from 'expo-router';
 import { Dimensions, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
@@ -108,6 +109,7 @@ function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number
 // Kept deliberately small: goal type, member type, light / dark, steps tracker design and the time of day.
 function PanelBody() {
   const { state, setSc, set: setApp, setProfile } = useStore();
+  const shell = useShell();
   const { isDark } = useTheme();
   const { d, set } = useDomain();
   const steps = stepsStore.use();
@@ -131,6 +133,8 @@ function PanelBody() {
     { label: 'Steps tracker design', options: STEPS_DESIGNS as string[], value: steps.design, onPick: (v: string) => stepsStore.set({ design: v as StepsDesign }) },
     // With a gym: Gym tab, check-in, coach, PT and the gym step in onboarding. Without: just the app.
     { label: 'Gym', options: ['Has a gym', 'No gym'], value: d.hasGym ? 'Has a gym' : 'No gym', onPick: (v: string) => { set({ hasGym: v === 'Has a gym' }); if (v !== 'Has a gym') router.replace('/(tabs)'); } },
+    // A number that belongs to several programmes picks one after the code; one programme goes straight in.
+    { label: 'Programme choice screen (login)', options: ['Shown', 'Hidden'], value: shell.s.sc.progs === 'Three' ? 'Shown' : 'Hidden', onPick: (v: string) => shell.set((x) => ({ sc: { ...x.sc, progs: v === 'Shown' ? 'Three' : 'Only one' }, cur: 'gold' })) },
     // Undo one thing so it can be tried again.
     { label: 'Redo today', options: ['Workout', 'Meals', 'Steps', 'Check-in'], value: '', onPick: (v: string) => {
       if (v === 'Workout') set({ wkScenario: 'Not started', wkDone: null, session: null });
