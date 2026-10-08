@@ -1,52 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
-import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
+import { View } from 'react-native';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
 import { fade } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
-import { Check, Flame, Trophy, X } from '@/lib/icons';
+import { BlurView } from 'expo-blur';
+import { Check, Flame, Share, Trophy, X } from '@/lib/icons';
 import { FLAME } from '@/features/streak/StreakChip';
 import { useStreak } from '@/features/streak/useStreak';
 import { Button, Field, Pressy, Row, Txt } from '@/components/ui';
-import { RoundBtn } from '@/components/bits';
-import { useDomain } from '@/lib/domain';
+import { RoundBtn, Tag } from '@/components/bits';
+import { useOverlay } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
-import { font } from '@/theme/tokens';
+import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
+import { useDomain } from '@/lib/domain';
+import { fmt1 } from '@/lib/useNow';
 
-const ACircle = Animated.createAnimatedComponent(Circle);
-const R = 44, CIRC = 2 * Math.PI * R;
+const COLORS = ['#3A36C9', '#B9B6FF', '#FFFFFF', '#F2B544', '#1F6E63'];
+const PARTS = Array.from({ length: 34 }, (_, i) => {
+  const a = (i / 34) * Math.PI * 2 + (i % 3) * 0.21, dist = 90 + ((i * 37) % 80);
+  return { dx: Math.cos(a) * dist * 1.3, dy: Math.sin(a) * dist * 0.9 + 30, w: 5 + (i % 3) * 2, col: COLORS[i % COLORS.length], delay: 380 + (i % 5) * 25 };
+});
 
-// A thin ring draws itself, then the tick appears. Plain timing, no bounce.
-function DoneRing() {
-  const { c } = useTheme();
-  const p = useSharedValue(0);
-  const tick = useSharedValue(0);
-  useEffect(() => {
-    p.value = withTiming(1, { duration: 700, easing: Easing.out(Easing.cubic) });
-    tick.value = withDelay(500, withTiming(1, { duration: 200 }));
-  }, []);
-  const ring = useAnimatedProps(() => ({ strokeDashoffset: CIRC * (1 - p.value) }));
-  const tickStyle = useAnimatedStyle(() => ({ opacity: tick.value }));
-  return (
-    <View style={{ width: 104, height: 104, alignItems: 'center', justifyContent: 'center' }}>
-      <Svg width={104} height={104} viewBox="0 0 104 104">
-        <Circle cx={52} cy={52} r={R} fill="none" stroke={c.surface2} strokeWidth={5} />
-        <ACircle cx={52} cy={52} r={R} fill="none" stroke={c.accent} strokeWidth={5} strokeLinecap="round" strokeDasharray={CIRC} animatedProps={ring} transform="rotate(-90 52 52)" />
-      </Svg>
-      <Animated.View style={[{ position: 'absolute' }, tickStyle]}><Check size={38} strokeWidth={2.2} color={c.accent} /></Animated.View>
-    </View>
-  );
+function Particle({ p, run }: { p: (typeof PARTS)[number]; run: number }) {
+  const t = useSharedValue(0);
+  useEffect(() => { t.value = 0; t.value = withDelay(p.delay, withTiming(1, { duration: 1300, easing: Easing.bezier(0.12, 0.75, 0.3, 1) })); }, [run]);
+  const a = useAnimatedStyle(() => ({ opacity: t.value === 0 ? 0 : t.value < 0.75 ? 1 : 1 - (t.value - 0.75) * 4, transform: [{ translateX: p.dx * t.value }, { translateY: p.dy * t.value }, { scale: 0.5 + 0.5 * t.value }] }));
+  return <Animated.View style={[{ position: 'absolute', left: '50%', top: '50%', width: p.w, height: p.w, marginLeft: -p.w / 2, marginTop: -p.w / 2, borderRadius: p.w, backgroundColor: p.col }, a]} />;
 }
 
-function Stat({ value, unit, label }: { value: string; unit?: string; label: string }) {
+function PopCheck({ delay }: { delay: number }) {
   const { c } = useTheme();
-  return (
-    <View style={{ flex: 1, backgroundColor: c.surface, borderRadius: 22, paddingVertical: 16, paddingHorizontal: 14, gap: 2 }}>
-      <Txt style={{ fontFamily: font.display, fontSize: 30, lineHeight: 38, letterSpacing: -0.6 }}>{value}{unit ? <Txt muted style={{ fontFamily: font.display, fontSize: 16, lineHeight: 22 }}>{unit}</Txt> : null}</Txt>
-      <Txt v="caption" style={{ fontSize: 13 }}>{label}</Txt>
-    </View>
-  );
+  const s = useSharedValue(0);
+  useEffect(() => { s.value = withDelay(delay, withTiming(1, { duration: 180 })); }, []);
+  const a = useAnimatedStyle(() => ({ opacity: s.value }));
+  return <Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }, a]}><Check size={13} strokeWidth={3} color="#fff" /></Animated.View>;
 }
 
 // Streak status for the finish moment: kept, or how many sessions are left this week.
@@ -56,76 +45,94 @@ function StreakLine({ done }: { done: number }) {
   const left = Math.max(0, st.target - done);
   const kept = left === 0;
   return (
-    <Row style={{ gap: 10, paddingVertical: 12, paddingHorizontal: 14, borderRadius: 18, backgroundColor: 'rgba(255,138,61,0.12)' }}>
+    <Animated.View entering={fade(900)} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 10, paddingHorizontal: 14, borderRadius: 16, backgroundColor: 'rgba(255,138,61,0.14)' }}>
       <Flame size={18} color={FLAME} fill={kept ? FLAME : 'transparent'} strokeWidth={2} />
-      <Txt style={{ flex: 1, fontSize: 14, lineHeight: 20, color: c.ink }}>{kept ? `Week complete · streak now ${st.weeks + (st.kept ? 0 : 1)} weeks` : `${left} more ${left === 1 ? 'session' : 'sessions'} to keep your streak this week`}</Txt>
-    </Row>
+      <Txt style={{ flex: 1, fontSize: 14, lineHeight: 20, color: c.ink }}>{kept ? `Week complete · streak now ${st.weeks + (st.kept ? 0 : 1)} weeks` : `${left} more ${left === 1 ? 'session' : 'sessions'} to keep your streak`}</Txt>
+    </Animated.View>
   );
 }
 
+export type Feel = 'Hard' | 'Just right' | 'Easy';
 export type FinishStats = { mins: number; sets: number; exercises: number; totalEx: number; kcal: number; pr: { name: string; kg: number } | null; hc: boolean; weekDone: number };
 
-export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (note: string) => void }) {
-  const { c } = useTheme();
+export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Feel, note: string) => void }) {
+  const { c, isDark } = useTheme();
   const insets = useSafeAreaInsets();
+  const { toast } = useOverlay();
+  const [feel, setFeel] = useState<Feel>('Just right');
   const { d } = useDomain();
   const [note, setNote] = useState('');
-  const [noting, setNoting] = useState(false);
+  const [run, setRun] = useState(1);
   useEffect(() => { haptic.success(); }, []);
   return (
-    <View style={{ flex: 1, backgroundColor: c.bg }}>
-      <ScrollView contentContainerStyle={{ paddingTop: insets.top + 64, paddingHorizontal: 20, paddingBottom: 130, gap: 14 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-        <View style={{ alignItems: 'center', gap: 14, paddingBottom: 10 }}>
-          <DoneRing />
-          <View style={{ alignItems: 'center', gap: 4 }}>
-            <Txt accessibilityRole="header" style={{ fontFamily: font.light, fontSize: 34, lineHeight: 44, letterSpacing: -1 }}>Workout complete</Txt>
-            <Txt muted style={{ fontSize: 15, lineHeight: 22 }}>Leg day · nice work, Jyotsana</Txt>
+    <View style={{ flex: 1, backgroundColor: c.sky }}>
+      <Svg width="100%" height="100%" style={{ position: 'absolute' }}>
+        <Circle cx={96} cy={170} r={150} fill={c.moon} />
+        <Circle cx={114} cy={156} r={150} fill="none" stroke={c.moonRing} strokeWidth={1.5} opacity={0.5} />
+      </Svg>
+      <RoundBtn label="Close" onPress={() => onDone(feel, note)} bg={c.glass} style={{ position: 'absolute', top: insets.top + 8, right: 16 }}><X size={20} color={c.ink} /></RoundBtn>
+
+      <Animated.View entering={fade()} style={{ position: 'absolute', left: 12, right: 12, bottom: Math.max(insets.bottom, 14), borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: c.glassLine,
+        shadowColor: '#0F0E3C', shadowOpacity: 0.28, shadowRadius: 60, shadowOffset: { width: 0, height: 24 } }}>
+        <BlurView intensity={40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: c.glass }} />
+        <View style={{ paddingTop: 22, paddingHorizontal: 18, paddingBottom: 18, gap: 14 }}>
+          <View style={{ gap: 4 }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 13, color: c.muted }}>Workout done · Leg day</Txt>
+            <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 38, lineHeight: 36 }}>Nice work, Jyotsana</Txt>
           </View>
-        </View>
-
-        <Row style={{ gap: 10 }}>
-          <Stat value={String(s.mins)} unit=" min" label="Time" />
-          <Stat value={String(s.sets)} label={s.sets === 1 ? 'Set done' : 'Sets done'} />
-          <Stat value={`${s.exercises}/${s.totalEx}`} label="Exercises" />
-        </Row>
-        {s.hc && (
-          <Row style={{ gap: 10 }}>
-            <Stat value={String(s.kcal)} unit=" kcal" label="Calories" />
-            <Stat value="124" unit=" bpm" label="Average heart rate" />
+          <Row style={{ backgroundColor: c.tile, borderRadius: 20, paddingVertical: 12, paddingHorizontal: 4 }}>
+            {[[String(s.mins), ' min', 'Time'], [String(s.sets), '', s.sets === 1 ? 'Set done' : 'Sets done'], [`${s.exercises}/${s.totalEx}`, '', 'Exercises']].map(([v, u, l], i) => (
+              <View key={l} style={{ flex: 1, alignItems: 'center', borderLeftWidth: i ? 1 : 0, borderLeftColor: c.line }}>
+                <Txt style={{ fontFamily: font.display, fontSize: 32, lineHeight: 36 }}>{v}<Txt muted style={{ fontFamily: font.display, fontSize: 17 }}>{u}</Txt></Txt>
+                <Txt v="caption">{l}</Txt>
+              </View>
+            ))}
           </Row>
-        )}
-
-        {!!s.pr && (
-          <Animated.View entering={fade(300)} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: c.surface, borderRadius: 22, padding: 14 }}>
-            <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Trophy size={20} strokeWidth={1.9} color={c.accentText} /></View>
-            <View style={{ flex: 1 }}>
-              <Txt v="caption" style={{ fontSize: 13 }}>New personal best</Txt>
-              <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24 }}>{s.pr.name} · {s.pr.kg} kg</Txt>
+          <View>
+            <Animated.View entering={fade(350)} style={{ backgroundColor: c.surface, borderRadius: 22, padding: 14, gap: 10 }}>
+              <Row style={{ gap: 12 }}>
+                <Pressy accessibilityRole="button" accessibilityLabel="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }}
+                  style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
+                  <Trophy size={24} strokeWidth={1.9} color="#fff" />
+                </Pressy>
+                <View style={{ flex: 1 }}>
+                  <Txt style={{ fontFamily: font.bold, fontSize: 12, letterSpacing: 0.5, color: c.accent }}>{s.pr ? 'New PR' : 'Logged'}</Txt>
+                  <Txt style={{ fontFamily: font.display, fontSize: 26, lineHeight: 28 }}>{s.pr ? `${s.pr.name} ${fmt1(s.pr.kg)} kg` : `${s.sets} ${s.sets === 1 ? "set" : "sets"} done`}</Txt>
+                </View>
+              </Row>
+              <Button kind="outline" small label="Share" icon={<Share size={16} color={c.ink} />} onPress={() => toast('Sharing opens the system share sheet')} />
+            </Animated.View>
+            <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+              {PARTS.map((p, i) => <Particle key={i} p={p} run={run} />)}
             </View>
-          </Animated.View>
-        )}
-
-        <View style={{ gap: 8 }}>
-          <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
-            <Txt style={{ fontFamily: font.semibold }}>This week</Txt>
-            <Txt muted style={{ fontSize: 14 }}>{s.weekDone} of 4 workouts</Txt>
+          </View>
+          {s.hc && (
+            <Row style={{ gap: 8 }}>
+              <Tag label="♥ Avg 124 · max 158 bpm" bg="rgba(255,107,122,0.16)" fg="#FF8A96" style={{ paddingVertical: 6, paddingHorizontal: 12 }} />
+              <Tag label={`${s.kcal} kcal · from watch`} bg={c.tile} fg={c.ink} style={{ paddingVertical: 6, paddingHorizontal: 12 }} />
+            </Row>
+          )}
+          <Row style={{ gap: 12, paddingHorizontal: 4 }}>
+            <Txt style={{ flex: 1, fontFamily: font.semibold }}>This week · {s.weekDone} of 4 workouts</Txt>
+            <Row style={{ gap: 6 }}>{Array.from({ length: s.weekDone }, (_, i) => <PopCheck key={i} delay={700 + i * 120} />)}</Row>
           </Row>
           <StreakLine done={s.weekDone} />
+          <View style={{ gap: 8 }}>
+            <Txt style={{ fontFamily: font.semibold, paddingHorizontal: 4 }}>How did you feel?</Txt>
+            <View accessibilityRole="radiogroup" accessibilityLabel="How did you feel" style={{ flexDirection: 'row', gap: 8 }}>
+              {(['Hard', 'Just right', 'Easy'] as Feel[]).map((n) => (
+                <Pressy key={n} accessibilityRole="radio" accessibilityState={{ selected: feel === n }} onPress={() => setFeel(n)}
+                  style={{ flex: 1, height: 50, borderRadius: 25, borderWidth: 1, borderColor: feel === n ? c.ink : c.line, backgroundColor: feel === n ? c.ink : c.tile, alignItems: 'center', justifyContent: 'center' }}>
+                  <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: feel === n ? c.bg : c.ink }}>{n}</Txt>
+                </Pressy>
+              ))}
+            </View>
+          </View>
+          {d.hasGym && <Field value={note} onChangeText={setNote} placeholder="Note for Coach Vikram" accessibilityLabel="Note for Coach Vikram" returnKeyType="done" />}
+          <Button label={note.trim() ? 'Send to Coach and finish' : 'Done'} onPress={() => onDone(feel, note)} />
         </View>
-
-        {d.hasGym && (noting ? (
-          <Field value={note} onChangeText={setNote} placeholder="Note for Coach Vikram" accessibilityLabel="Note for Coach Vikram" returnKeyType="done" autoFocus />
-        ) : (
-          <Pressy accessibilityRole="button" onPress={() => setNoting(true)} scaleTo={0.97} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 12 }}>
-            <Txt style={{ fontSize: 15, lineHeight: 21, color: c.accentText, fontFamily: font.medium }}>Add a note for Coach Vikram</Txt>
-          </Pressy>
-        ))}
-      </ScrollView>
-
-      <RoundBtn label="Close" onPress={() => onDone(note)} glass style={{ position: 'absolute', top: insets.top + 8, right: 16 }}><X size={20} color={c.ink} /></RoundBtn>
-      <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 20, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 14) + 4, backgroundColor: c.bg }}>
-        <Button label={note.trim() ? 'Send note and finish' : 'Done'} onPress={() => onDone(note)} />
-      </View>
+      </Animated.View>
     </View>
   );
 }
