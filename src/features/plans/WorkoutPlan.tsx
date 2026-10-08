@@ -14,7 +14,7 @@ import { TODAY_IDX } from '@/lib/data';
 import { useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { StartWorkoutSheet } from '@/features/workout/StartSheet';
+import { useStartWorkout } from '@/features/workout/StartSheet';
 import { COACH_BANNER } from './content';
 import { startCreate } from './openers';
 import { ExTile, Highlight, Moon } from './parts';
@@ -44,6 +44,7 @@ export function WorkoutPlan() {
   const { d } = useDomain();
   const { p } = usePlans();
   const { openSheet } = useOverlay();
+  const startWorkout = useStartWorkout();
   const plan = dayPlan(d, p, p.day);
 
   if (p.noPlan) {
@@ -61,7 +62,7 @@ export function WorkoutPlan() {
             <Txt v="label">Starter workout</Txt>
             <Txt style={{ fontFamily: font.display, fontSize: 22, letterSpacing: -0.4 }}>Full body basics</Txt>
             <Txt muted style={{ fontSize: 14 }}>35 min · works for any gym floor</Txt>
-            <Button kind="accent" label="Start starter workout" onPress={() => openSheet(<StartWorkoutSheet />, { label: 'Start workout' })} />
+            <Button kind="accent" label="Start starter workout" onPress={() => startWorkout()} />
           </Card>
         </E>
       </>
@@ -180,6 +181,7 @@ export function StickyStart() {
   const { c } = useTheme();
   const { d } = useDomain();
   const { openSheet } = useOverlay();
+  const startWorkout = useStartWorkout();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
   const live = !!d.session;
@@ -188,7 +190,7 @@ export function StickyStart() {
   return (
     <Animated.View entering={fade()} pointerEvents="box-none" style={[{ position: 'absolute', left: 16, right: 16, bottom }, lift]}>
       <Button kind="accent" label={live ? 'Resume workout' : 'Start workout'} icon={<Play size={18} color={c.accentInk} fill={c.accentInk} />}
-        onPress={() => (live ? router.push('/workout') : openSheet(<StartWorkoutSheet />, { label: 'Start workout' }))} />
+        onPress={() => (live ? router.push('/workout') : startWorkout())} />
     </Animated.View>
   );
 }

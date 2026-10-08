@@ -17,7 +17,7 @@ import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { StartWorkoutSheet } from '@/features/workout/StartSheet';
+import { useStartWorkout } from '@/features/workout/StartSheet';
 import { progressLine, statusLine, useGoalV2 } from '@/features/goalv2/model';
 import { ringCentre, StatusChip } from '@/features/goalv2/GoalCard2';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
@@ -111,7 +111,7 @@ export function ComebackCard() {
   const { c, isDark } = useTheme();
   const { state } = useStore();
   const { openSheet, toast } = useOverlay();
-  const { set } = useDomain();
+  const startWorkout = useStartWorkout();
   const isPT = state.sc.member === 'PT member';
   const a = useSharedValue(0);
   useEffect(() => { a.value = withDelay(1200, withTiming(1, { duration: 700 })); }, []);
@@ -136,7 +136,7 @@ export function ComebackCard() {
           <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused, not lost</Txt>
         </View>
       </View>
-      <Button label="Start session" onPress={() => { openSheet(<StartWorkoutSheet />, { label: 'Start options' }); }} />
+      <Button label="Start session" onPress={() => { startWorkout(); }} />
       <Button kind="outline" small label="Re-plan my week" onPress={() => router.navigate('/plans')} />
     </Animated.View>
   );
@@ -149,13 +149,14 @@ function useUpdates() {
   const { state } = useStore();
   const { d, set } = useDomain();
   const { openSheet, toast } = useOverlay();
+  const startWorkout = useStartWorkout();
   const isPT = state.sc.member === 'PT member';
   const all: Upd[] = [
     { key: 'plan', title: 'Coach Vikram updated your plan', body: 'Leg day: lunges added, leg extension removed', isPlan: true, icon: ClipboardList, tone: 'accent' },
     { key: 'reply', title: 'Coach Vikram replied', body: '“Keep your back straight on rows.”', btn: 'Reply', act: () => toast('Chat with Coach Vikram opens in the Gym tab'), icon: MessageCircle, tone: 'accent' },
     { key: 'reassess', title: 'Reassessment due', body: 'This week · book with front desk', icon: CalendarClock, tone: 'warn' },
     { key: 'member', title: 'Membership', body: 'Expires in 12 days · renew at the front desk', icon: CreditCard, tone: 'warn' },
-    { key: 'log', title: 'Checked in 6:42 pm (location)', body: "Log today's workout?", btn: 'Log workout', act: () => openSheet(<StartWorkoutSheet />, { label: 'Start options' }), icon: CircleCheck, tone: 'good' },
+    { key: 'log', title: 'Checked in 6:42 pm (location)', body: "Log today's workout?", btn: 'Log workout', act: () => startWorkout(), icon: CircleCheck, tone: 'good' },
   ];
   const live = d.todayVariant === 'With updates' ? all.filter((u) => !d.dismissed[u.key]) : [];
   const dismiss = (k: string) => { haptic.light(); set((s) => ({ dismissed: { ...s.dismissed, [k]: true } })); };

@@ -12,7 +12,7 @@ import { fmtT } from '@/lib/data';
 import { burned, useDomain, wkDoneInfo, workoutState } from '@/lib/domain';
 import { font } from '@/theme/tokens';
 import { mmss, useNow } from '@/lib/useNow';
-import { StartWorkoutSheet } from '@/features/workout/StartSheet';
+import { useStartWorkout } from '@/features/workout/StartSheet';
 import { WORKOUT_MIN } from '@/features/workout/session';
 import { rel } from './meals';
 
@@ -31,6 +31,7 @@ function Tile({ k, v, color }: { k: string; v: string; color?: string }) {
 export function WorkoutCard() {
   const { d } = useDomain();
   const { openSheet } = useOverlay();
+  const startWorkout = useStartWorkout();
   const st = workoutState(d);
   const cs = coachStore.use();
   const now = useNow(st === 'live', 1000);
@@ -42,7 +43,7 @@ export function WorkoutCard() {
   const chips = st === 'rest' ? ['Recovery day', 'Next: Pull · Thu 6:30 pm'] : ['6 exercises', `~${WORKOUT_MIN} min`, ...(d.hc && d.wearable ? ['~350 kcal'] : [])];
   const did = st === 'done' ? `${fmtT(done.a).hm} – ${fmtT(done.b).full}` : st === 'live' ? `Started · ${elapsed}` : st === 'rest' ? 'A walk counts' : 'Not yet';
   const cta = st === 'todo' ? 'Start workout' : st === 'live' ? 'Resume workout' : null;
-  const onCta = () => (st === 'live' ? router.push('/workout') : openSheet(<StartWorkoutSheet />, { label: 'Start options' }));
+  const onCta = () => (st === 'live' ? router.push('/workout') : startWorkout());
 
   return (
     <View accessibilityLabel="Today's workout" style={{ borderRadius: 24, backgroundColor: '#0B0E14', padding: 16, gap: 12, overflow: 'hidden' }}>

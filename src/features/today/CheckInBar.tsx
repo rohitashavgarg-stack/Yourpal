@@ -1,5 +1,5 @@
 import React from 'react';
-import { StartWorkoutSheet } from '@/features/workout/StartSheet';
+import { useStartWorkout } from '@/features/workout/StartSheet';
 import { View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { fade } from '@/theme/motion';
@@ -64,7 +64,8 @@ function MiniWorkout() {
 export function CheckInBar() {
   const { c } = useTheme();
   const { d, set } = useDomain();
-  const { toast, openSheet } = useOverlay();
+  const { toast } = useOverlay();
+  const startWorkout = useStartWorkout();
   const A = useCheckIn();
   const mode = useCiMode();
   const now = useNow(mode === 'in', 15000);
@@ -89,7 +90,7 @@ export function CheckInBar() {
     const mins = Math.max(0, Math.floor(elapsedMin(d, now)));
     title = `Checked in ${mins} min`;
     sub = `Since ${fmtT(at!).full} · ${st === 'todo' ? 'Leg day is next' : st === 'done' ? 'Workout done' : 'Rest day'}`;
-    if (st === 'todo') { btn = 'Start workout'; act = () => openSheet(<StartWorkoutSheet />, { label: 'Start options' }); }
+    if (st === 'todo') { btn = 'Start workout'; act = () => startWorkout(); }
     else { btn = 'Check out'; act = A.checkOut; }
     icon = <Check size={16} strokeWidth={2.6} color={c.good} />;
   } else if (mode === 'out') {
