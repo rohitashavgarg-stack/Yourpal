@@ -242,11 +242,11 @@ function ConnectCard() {
   const { set } = useDomain();
   const { toast } = useOverlay();
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={`Connect ${HEALTH_NAME} for heart rate, sleep and energy`} onPress={() => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected · watch data syncs automatically`); }}
+    <Pressy accessibilityRole="button" accessibilityLabel={`Connect ${HEALTH_NAME} for steps, heart rate, sleep and energy`} onPress={() => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected · steps, heart rate and sleep sync automatically`); }}
       style={[SQ, { gap: 8, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.surface3, justifyContent: 'center' }]}>
       <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><HeartIcon size={20} color="#FF6B7A" /></View>
       <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{`Connect ${HEALTH_NAME}`}</Txt>
-      <Txt v="caption">Heart rate, sleep and energy from your watch</Txt>
+      <Txt v="caption">Steps, heart rate, sleep and energy</Txt>
     </Pressy>
   );
 }
@@ -259,10 +259,9 @@ export function Trackers() {
         contentContainerStyle={{ gap: 10, paddingHorizontal: 16, paddingVertical: 2 }}>
         <WaterCard />
         <WeightCard />
-        <StepsTile />
-        {d.hc ? <HealthCards /> : <ConnectCard />}
+        {d.hc ? <><StepsTile /><HealthCards /></> : <ConnectCard />}
       </ScrollView>
-      <Txt v="caption" style={{ paddingHorizontal: 20 }}>{d.hc ? `Swipe for heart rate, sleep and energy from ${HEALTH_NAME}` : 'Swipe for more · connect a watch for heart rate and sleep'}</Txt>
+      <Txt v="caption" style={{ paddingHorizontal: 20 }}>{d.hc ? `Swipe for heart rate, sleep and energy from ${HEALTH_NAME}` : `Swipe for more · connect ${HEALTH_NAME} for steps, heart rate and sleep`}</Txt>
     </View>
   );
 }

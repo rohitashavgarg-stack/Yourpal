@@ -18,7 +18,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fmt1, mmss, useNow } from '@/lib/useNow';
 import { useSessionActions } from '@/features/workout/actions';
-import { COL_LABEL, firstTodo, modeLabel, openSets, setLabel, stats } from '@/features/workout/session';
+import { COL_LABEL, firstTodo, openSets, setLabel, stats } from '@/features/workout/session';
 import { Draft, SetRow } from '@/features/workout/SetRow';
 import { RestPanel } from '@/features/workout/RestPanel';
 import { ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
@@ -188,7 +188,7 @@ export default function Workout() {
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Txt accessibilityLabel={`Elapsed ${elapsed}`} style={{ fontFamily: font.monoBold, fontSize: 22 }}>{elapsed}</Txt>
           <Row style={{ gap: 6 }}>
-            <Txt v="caption">Leg day · {modeLabel(s)}</Txt>
+            <Txt v="caption">Leg day</Txt>
             {d.hc && <Row style={{ gap: 3 }}><Beat><HeartIcon size={11} color="#FF8A96" /></Beat><Txt style={{ fontFamily: font.semibold, fontSize: 12, color: '#FF8A96' }}>{hr} bpm</Txt></Row>}
           </Row>
         </View>

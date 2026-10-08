@@ -2,25 +2,15 @@ import { Ex, legDay, SetT } from '@/lib/data';
 import { Session } from '@/lib/domain';
 import { fmt1 } from '@/lib/useNow';
 
-export const MODE_MIN = (mode: 0 | 1 | 2, quick: number) => (mode === 1 ? quick : mode === 2 ? 30 : 50);
-export const modeLabel = (s: Pick<Session, 'mode' | 'quick'>) => ['Full', `Quick ${s.quick} min`, 'Low energy'][s.mode];
+export const WORKOUT_MIN = 50;
 
-// Quick keeps coach's key exercises (the first ones) and caps sets;
-// Low energy keeps every exercise but takes ~20% off the load.
-export function buildExercises(mode: 0 | 1 | 2, quick: number): Ex[] {
-  let ex = legDay();
-  if (mode === 1) {
-    const keep = quick === 20 ? 3 : quick === 30 ? 4 : 5;
-    ex = ex.slice(0, keep).map((e) => ({ ...e, sets: e.sets.slice(0, quick === 45 ? 4 : 3) }));
-  }
-  if (mode === 2) {
-    ex = ex.map((e) => ({ ...e, sets: e.sets.map((s) => (s.k > 0 && !s.w ? { ...s, k: Math.max(e.step, Math.round((s.k * 0.8) / e.step) * e.step) } : s)) }));
-  }
-  return ex;
+// One version of the workout: the coach's plan as written.
+export function buildExercises(): Ex[] {
+  return legDay();
 }
 
-export function newSession(mode: 0 | 1 | 2, quick: 20 | 30 | 45): Session {
-  return { startAt: Date.now(), phase: 'warmup', exIdx: 0, ex: buildExercises(mode, quick), listDone: {}, rest: null, mode, quick, setTimer: null, itemTimer: null };
+export function newSession(): Session {
+  return { startAt: Date.now(), phase: 'warmup', exIdx: 0, ex: buildExercises(), listDone: {}, rest: null, setTimer: null, itemTimer: null };
 }
 
 export const firstTodo = (e: Ex) => e.sets.findIndex((s) => s.st === 'todo');

@@ -31,7 +31,7 @@ export function useCheckIn() {
     simAutoFired() { set((s) => ({ ...ciPatch(s, 'Checked in', Date.now()), ciStart: Date.now() - (LIMIT_MIN + 1) * 60000, session: null })); },
     simPrompt() { set((s) => ({ ...ciPatch(s, 'Checked in', Date.now()), ciStart: Date.now() - (LIMIT_MIN - WARN_BEFORE + 0.3) * 60000, session: null })); },
     simWorkoutAtLimit() {
-      set((s) => ({ ...ciPatch(s, 'Checked in', Date.now()), ciStart: Date.now() - (LIMIT_MIN + 1) * 60000, session: s.session ?? newSession(s.mode, s.quick) }));
+      set((s) => ({ ...ciPatch(s, 'Checked in', Date.now()), ciStart: Date.now() - (LIMIT_MIN + 1) * 60000, session: s.session ?? newSession() }));
     },
   }), [d, set, toast]);
 }

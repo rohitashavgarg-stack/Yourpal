@@ -89,7 +89,7 @@ export function dayPlan(d: Domain, p: PlansState, i: number): DayPlan | null {
   const b = d.plans[i];
   if (!b) return null;
   let done = p.week === 0 ? b.done : undefined; // logged history only exists for this week
-  if (i === TODAY_IDX && p.week === 0 && workoutState(d) === 'done') { const w = wkDoneInfo(d); done = `${fmtT(w.a).full} – ${fmtT(w.b).full} · ${w.k} kcal`; }
+  if (i === TODAY_IDX && p.week === 0 && workoutState(d) === 'done') { const w = wkDoneInfo(d); done = `${fmtT(w.a).full} – ${fmtT(w.b).full} ${d.hc ? ` · ${w.k} kcal` : ''}`; }
   return { name: b.name, time: b.time, wu: b.wu, cd: b.cd, done, ex: b.ex.map((e) => ({ ...e, hl: p.applied && p.hl.includes(e.id) })) };
 }
 

@@ -23,7 +23,7 @@ function days(d: Domain): Day[] {
     num: 24, let: 'W', today: true,
     wk: st === 'done' ? 'done' : st === 'rest' ? 'rest' : '',
     w: st === 'done' ? `Leg day · ${fmtT(done.a).full} – ${fmtT(done.b).full}` : st === 'rest' ? 'Rest day' : st === 'live' ? 'Leg day · in progress' : 'Leg day · planned 6:30 pm',
-    ws: st === 'done' ? `Planned 6:30 pm · ${done.k} kcal` : st === 'rest' ? 'Recovery day' : 'Planned 6:30 pm',
+    ws: st === 'done' ? `Planned 6:30 pm${d.hc ? ` · ${done.k} kcal` : ''}` : st === 'rest' ? 'Recovery day' : 'Planned 6:30 pm',
     m: `${t.done} of 4 meals done · ${t.onPlan} on plan`, ms: `${t.k} kcal so far · protein ${t.p} g`,
     c: ci != null ? `Checked in ${fmtT(ci).full}${d.ciOut ? ` · out ${fmtT(d.ciOut.at).hm}` : ''}` : 'Not checked in yet', cs: d.ciOut ? `${d.ciOut.mins} min at the gym` : ci != null ? 'Counted in your attendance' : 'Check in when you reach the gym',
     mealW: Math.round((t.onPlan / 4) * 100),

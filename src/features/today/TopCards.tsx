@@ -49,7 +49,7 @@ export function GoalCard() {
   const centre = ringCentre(g2);
   return (
     <Pressy accessibilityRole="link" scaleTo={0.98}
-      accessibilityLabel={`Your goal: ${goal.toLowerCase()}. ${sub}, ${statusLine(g2).toLowerCase()}. Eaten ${t.k} of ${KCAL_TARGET} kcal, burned ${burned(d)}. Open goal details`}
+      accessibilityLabel={`Your goal: ${goal.toLowerCase()}. ${sub}, ${statusLine(g2).toLowerCase()}. Eaten ${t.k} of ${KCAL_TARGET} kcal.${d.hc ? ` Burned ${burned(d)}.` : ""} Open goal details`}
       onPress={() => router.push('/goal-detail')}>
       <LinearGradient colors={['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
         style={{ borderRadius: 28, paddingVertical: 18, paddingLeft: 16, paddingRight: 18, flexDirection: 'row', alignItems: 'center', gap: 18, overflow: 'hidden' }}>
@@ -131,12 +131,12 @@ export function ComebackCard() {
         </View>
       </Row>
       <View style={{ gap: 8 }}>
-        <Txt style={{ fontSize: 16, lineHeight: 23 }}>Here's a 30-minute restart session.</Txt>
+        <Txt style={{ fontSize: 16, lineHeight: 23 }}>Here's an easy restart session.</Txt>
         <View style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused, not lost</Txt>
         </View>
       </View>
-      <Button label="Start 30-min session" onPress={() => { set({ mode: 1, quick: 30 }); openSheet(<StartWorkoutSheet />, { label: 'Start options' }); }} />
+      <Button label="Start session" onPress={() => { openSheet(<StartWorkoutSheet />, { label: 'Start options' }); }} />
       <Button kind="outline" small label="Re-plan my week" onPress={() => router.navigate('/plans')} />
     </Animated.View>
   );

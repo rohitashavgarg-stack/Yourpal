@@ -16,8 +16,6 @@ export type Session = {
   ex: Ex[];
   listDone: Record<string, boolean>;
   rest: { endAt: number; total: number } | null;
-  mode: 0 | 1 | 2; // Full, Quick, Low energy
-  quick: 20 | 30 | 45;
   setTimer?: { exIdx: number; i: number; endAt: number; total: number } | null; // timed set running
   itemTimer?: { id: string; endAt: number } | null; // warm-up / cool-down timer
 };
@@ -33,8 +31,6 @@ export type Domain = {
   meals: Partial<Record<MealId, MealLog>>;
   wkScenario: 'Not started' | 'Done' | 'Rest day';
   wkDone: { a: number; b: number; k: number } | null;
-  mode: 0 | 1 | 2;
-  quick: 20 | 30 | 45;
   session: Session | null;
   ci: CheckInScenario;
   ciAt: number | null;      // check-in time, minutes of the day (display)
@@ -71,7 +67,7 @@ export function initialDomain(): Domain {
   return {
     time: 'Evening', todayVariant: 'Regular', loading: false, hc: true,
     water: 1.8, weight: 72.4, weightLog: [{ t: 'Mon 22', v: 72.6 }, { t: 'Tue 23', v: 72.5 }],
-    meals: mealsFor('Evening'), wkScenario: 'Not started', wkDone: null, mode: 0, quick: 30, session: null,
+    meals: mealsFor('Evening'), wkScenario: 'Not started', wkDone: null, session: null,
     ci: 'At the gym', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null, scanFails: false, dismissed: {}, plans: basePlans(), planReq: 'none', coachUpdated: false,
     goal: { type: 'Weight loss', target: 6, by: '30 Nov' }, membership: 'Active', assess: 'Two done', ptLeft: 8, onBreak: false,
     chat: [{ me: true, t: 'Is my squat depth ok?', ctx: 'Squat', meta: 'Yesterday · Seen' }, { me: false, t: 'Go to parallel. Film one set and send it.', meta: '2 hours ago' }],
