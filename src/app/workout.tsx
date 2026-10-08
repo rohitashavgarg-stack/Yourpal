@@ -203,31 +203,22 @@ export default function Workout() {
               <Bars n={n} pos={pos} />
               <Txt style={{ fontFamily: font.semibold, fontSize: 12, letterSpacing: 0.7, color: '#DDE6FF' }}>{s.phase === 'cooldown' ? 'AFTER YOUR WORKOUT' : 'BEFORE YOU START'}</Txt>
               <Txt style={{ fontFamily: font.display, fontSize: 34, lineHeight: 34, color: '#F4F4F6' }}>{s.phase === 'cooldown' ? 'Cool-down' : 'Warm-up'}</Txt>
-              <Txt style={{ fontSize: 13, color: 'rgba(244,244,246,0.8)' }}>{s.phase === 'cooldown' ? '4 stretches · about 4 min · slow and easy' : '4 moves · about 4 min · no weights'}</Txt>
+              <Txt style={{ fontSize: 13, color: 'rgba(244,244,246,0.8)' }}>{s.phase === 'cooldown' ? '4 stretches · slow and easy' : '4 moves · no weights'}</Txt>
             </View>
             <Card style={{ paddingVertical: 4, paddingHorizontal: 12 }}>
               {list.map((it, i) => {
                 const on = !!s.listDone[it.id];
-                const run = s.itemTimer?.id === it.id;
-                const left = run ? Math.max(0, Math.ceil((s.itemTimer!.endAt - now) / 1000)) : it.t;
                 return (
-                  <Row key={it.id} style={{ gap: 12, minHeight: 66, paddingVertical: 8, paddingHorizontal: 2, borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-                    <CheckCircle on={on} label={`${on ? 'Undo' : 'Done'}: ${it.n}`} onPress={() => A.upd((x) => ({ listDone: { ...x.listDone, [it.id]: !on }, itemTimer: run ? null : x.itemTimer }))} />
+                  <Row key={it.id} style={{ gap: 12, minHeight: 58, paddingVertical: 8, paddingHorizontal: 2, borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
+                    <CheckCircle on={on} label={`${on ? 'Undo' : 'Done'}: ${it.n}`} onPress={() => A.upd((x) => ({ listDone: { ...x.listDone, [it.id]: !on } }))} />
                     <View style={{ flex: 1, minWidth: 0 }}>
                       <Txt style={{ fontFamily: font.medium, color: on ? c.muted : c.ink, textDecorationLine: on ? 'line-through' : 'none' }}>{it.n}</Txt>
-                      <Txt v="caption">{it.sub}</Txt>
                     </View>
-                    {!!it.t && !on && (
-                      <Pressy accessibilityRole="button" accessibilityLabel={run ? 'Stop timer' : `Start ${it.t} second timer`} onPress={() => A.upd(() => ({ itemTimer: run ? null : { id: it.id, endAt: Date.now() + it.t! * 1000 } }))}
-                        style={{ minWidth: 76, height: 40, paddingHorizontal: 12, borderRadius: 20, backgroundColor: run ? c.warn : c.surface2, alignItems: 'center', justifyContent: 'center' }}>
-                        <Txt style={{ fontFamily: font.monoBold, fontSize: 13, color: run ? '#1A1204' : c.ink }}>{run ? mmss(left!) : `Start ${it.t} s`}</Txt>
-                      </Pressy>
-                    )}
                   </Row>
                 );
               })}
             </Card>
-            <Txt v="caption" style={{ textAlign: 'center' }}>Counts are a guide, not a target. Tick each move when you are done.</Txt>
+            <Txt v="caption" style={{ textAlign: 'center' }}>Tick each move when you are done.</Txt>
             <Button label={s.phase === 'cooldown' ? 'Finish workout' : 'Start main workout'} onPress={() => (s.phase === 'cooldown' ? finishNow() : A.phase('main'))} />
             <Button kind="outline" label={s.phase === 'cooldown' ? 'Skip cool-down' : 'Skip warm-up'} onPress={() => {
               if (s.phase === 'cooldown') finishNow(); else { A.phase('main'); toast('Warm-up skipped · take the first set light'); }
