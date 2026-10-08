@@ -63,7 +63,8 @@ export default function ConnectedApps() {
       <ListCard>
         {READS.map(({ Icon, t, s, v, tone }, i) => {
           const bg = (c as any)[tone[0]], fg = (c as any)[tone[1]];
-          const live = on && metrics[t];
+          const noWatch = on && t !== 'Steps' && !d.wearable;
+          const live = on && metrics[t] && !noWatch;
           return (
             <Row key={t} style={{ gap: 14, minHeight: 72, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
               <View style={{ width: 44, height: 44, borderRadius: 15, backgroundColor: bg, alignItems: 'center', justifyContent: 'center', opacity: on && !metrics[t] ? 0.5 : 1 }}>
@@ -71,9 +72,9 @@ export default function ConnectedApps() {
               </View>
               <View style={{ flex: 1, paddingVertical: 10 }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{t}</Txt>
-                <Txt v="caption" style={{ fontSize: 13 }}>{live ? `Today · ${v}` : on ? 'Paused' : s}</Txt>
+                <Txt v="caption" style={{ fontSize: 13 }}>{noWatch ? 'Needs a watch or band' : live ? `Today · ${v}` : on ? 'Paused' : s}</Txt>
               </View>
-              {on && <Switch label={`Read ${t}`} on={!!metrics[t]} onChange={(val) => { setMetrics((m) => ({ ...m, [t]: val })); haptic.tap(); toast(`${t} ${val ? 'will sync' : 'sync paused'}`); }} />}
+              {on && !noWatch && <Switch label={`Read ${t}`} on={!!metrics[t]} onChange={(val) => { setMetrics((m) => ({ ...m, [t]: val })); haptic.tap(); toast(`${t} ${val ? 'will sync' : 'sync paused'}`); }} />}
             </Row>
           );
         })}

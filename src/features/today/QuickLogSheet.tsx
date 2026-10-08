@@ -12,7 +12,7 @@ import { useOverlay } from '@/components/Overlay';
 import { CATALOG, MealId, parseFood, Parsed, SCAN_RESULT, SWAPS } from '@/lib/data';
 import { allowedFor, usePlans } from '@/features/plans/store';
 import { FoodMark } from '@/components/bits';
-import { mealLog, NOWS, useDomain } from '@/lib/domain';
+import { mealLog, useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
@@ -93,7 +93,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
     const label = items.map((x) => x.n).join(' + ');
     const prev = d.meals;
     const cur = mealLog(d, mealId);
-    const at = cur.at ?? NOWS[d.time];
+    const at = cur.at ?? d.min;
     closeSheet(() => {
       if (replaceIdx != null && repl) {
         const eaten = mode === 'sugg' || cur.eaten.includes(replaceIdx) ? cur.eaten : [...cur.eaten, replaceIdx];

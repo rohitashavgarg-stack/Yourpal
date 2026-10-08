@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useStore } from '@/lib/store';
-import { mealsFor, NOWS, TimeOfDay, useDomain } from '@/lib/domain';
+import { bucketOf, mealsFor, useDomain } from '@/lib/domain';
 import { STEPS_DESIGNS, StepsDesign, stepsStore } from '@/features/today/StepsCards';
 import { goalV2Store } from '@/features/goalv2/model';
 import { WEEK_TARGET } from '@/features/streak/data';
@@ -76,31 +76,30 @@ function StatusBarMock() {
 }
 
 // A three-stop slider for the time of day (Morning, Afternoon, Evening). Tap or drag along the track.
-const TIME_STOPS: { t: TimeOfDay; label: string }[] = [
-  { t: 'Morning', label: 'Morning' }, { t: 'Afternoon', label: 'Afternoon' }, { t: 'Evening', label: 'Evening' },
-];
-function TimeSlider({ value, onPick }: { value: TimeOfDay; onPick: (t: TimeOfDay) => void }) {
+const hourLabel = (m: number) => { const h = Math.floor(m / 60); return `${((h + 11) % 12) + 1}:${String(m % 60).padStart(2, '0')} ${h >= 12 ? 'pm' : 'am'}`; };
+// Hourly slider: 0 to 23, drag or tap anywhere on the track. The whole app follows the hour.
+function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number) => void }) {
   const [w, setW] = useState(0);
-  const idx = Math.max(0, TIME_STOPS.findIndex((x) => x.t === value));
-  const from = (x: number) => { if (w <= 0) return; const i = Math.max(0, Math.min(2, Math.round((x / w) * 2))); if (TIME_STOPS[i].t !== value) onPick(TIME_STOPS[i].t); };
-  const clock = (t: TimeOfDay) => { const m = NOWS[t]; const h = Math.floor(m / 60); return `${((h + 11) % 12) + 1}:${String(m % 60).padStart(2, '0')} ${h >= 12 ? 'pm' : 'am'}`; };
+  const hour = Math.max(0, Math.min(23, Math.floor(minutes / 60)));
+  const from = (x: number) => { if (w <= 0) return; const h = Math.max(0, Math.min(23, Math.round((x / w) * 23))); if (h !== hour) onPick(h * 60); };
+  const pct = (hour / 23) * 100;
   return (
     <View style={{ gap: 8 }}>
-      <View accessibilityRole="adjustable" accessibilityLabel={`Time of day, ${value}`} accessibilityValue={{ text: value }}
+      <View accessibilityRole="adjustable" accessibilityLabel={`Time of day, ${hourLabel(minutes)}`} accessibilityValue={{ text: hourLabel(minutes) }}
         onLayout={(e) => setW(e.nativeEvent.layout.width)}
         onStartShouldSetResponder={() => true} onMoveShouldSetResponder={() => true}
         onResponderGrant={(e) => from(e.nativeEvent.locationX)} onResponderMove={(e) => from(e.nativeEvent.locationX)}
         style={{ height: 32, justifyContent: 'center' }}>
         <View pointerEvents="none" style={{ height: 4, borderRadius: 2, backgroundColor: '#DCE1E8' }}>
-          <View style={{ width: `${idx * 50}%`, height: 4, borderRadius: 2, backgroundColor: '#12151C' }} />
+          <View style={{ width: `${pct}%`, height: 4, borderRadius: 2, backgroundColor: '#12151C' }} />
         </View>
-        {[0, 1, 2].map((i) => <View key={i} pointerEvents="none" style={{ position: 'absolute', left: `${i * 50}%`, marginLeft: -3, top: 14, width: 6, height: 6, borderRadius: 3, backgroundColor: i <= idx ? '#12151C' : '#C3CAD5' }} />)}
-        <View pointerEvents="none" style={{ position: 'absolute', left: `${idx * 50}%`, marginLeft: -11, top: 5, width: 22, height: 22, borderRadius: 11, backgroundColor: '#fff', borderWidth: 2, borderColor: '#12151C', shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } }} />
+        {[0, 6, 12, 18, 23].map((h) => <View key={h} pointerEvents="none" style={{ position: 'absolute', left: `${(h / 23) * 100}%`, marginLeft: -3, top: 14, width: 6, height: 6, borderRadius: 3, backgroundColor: h <= hour ? '#12151C' : '#C3CAD5' }} />)}
+        <View pointerEvents="none" style={{ position: 'absolute', left: `${pct}%`, marginLeft: -11, top: 5, width: 22, height: 22, borderRadius: 11, backgroundColor: '#fff', borderWidth: 2, borderColor: '#12151C', shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } }} />
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        {TIME_STOPS.map((x, i) => <Text key={x.t} style={{ fontFamily: i === idx ? font.semibold : font.regular, fontSize: 11.5, lineHeight: 15, color: i === idx ? '#12151C' : '#5C6370' }}>{x.label}</Text>)}
+        {['12 am', '6 am', '12 pm', '6 pm', '11 pm'].map((l) => <Text key={l} style={{ fontFamily: font.regular, fontSize: 11, lineHeight: 15, color: '#5C6370' }}>{l}</Text>)}
       </View>
-      <Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#12151C' }}>{clock(value)}</Text>
+      <Text style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 19, color: '#12151C' }}>{hourLabel(minutes)}</Text>
     </View>
   );
 }
@@ -117,7 +116,11 @@ function PanelBody() {
     set({ goal: { type: v, target: GOAL_TARGET[v] ?? 0, by: v === 'General fitness' || v === 'Not sure yet' ? '—' : d.goal.by && d.goal.by !== '—' ? d.goal.by : '30 Nov' } });
     goalV2Store.set({ extendDays: 0, lowerBy: 0, finished: false, kept: false });
   };
-  const pickTime = (t: TimeOfDay) => set({ time: t, meals: mealsFor(t), openMeal: null, ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null });
+  // Move "now" to a minute of the day. Meals and the check-in reset only when the part of the day changes.
+  const pickMinute = (m: number) => {
+    const t = bucketOf(m);
+    set(t !== d.time ? { min: m, time: t, meals: mealsFor(t), openMeal: null, ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null } : { min: m });
+  };
   const rows = [
     { label: 'Goal type', options: ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness', 'Not sure yet'], value: type, onPick: pickGoal },
     // What the member sees at the top of Today: a normal day, the updates card (plan changes, messages), or the welcome-back card after a break.
@@ -125,6 +128,9 @@ function PanelBody() {
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },
     { label: 'Theme', options: ['Light', 'Dark'], value: isDark ? 'Dark' : 'Light', onPick: (v: string) => setSc({ theme: v as any }) },
     { label: 'Steps tracker design', options: STEPS_DESIGNS as string[], value: steps.design, onPick: (v: string) => stepsStore.set({ design: v as StepsDesign }) },
+    // Steps need Health. Heart rate, sleep and energy also need a watch or band, which a member may not have.
+    { label: 'Health (steps)', options: ['Connected', 'Not connected'], value: d.hc ? 'Connected' : 'Not connected', onPick: (v: string) => set({ hc: v === 'Connected' }) },
+    { label: 'Wearable (heart rate, sleep, energy)', options: ['Has a wearable', 'No wearable'], value: d.wearable ? 'Has a wearable' : 'No wearable', onPick: (v: string) => set({ wearable: v === 'Has a wearable' }) },
   ];
   return (
     <View style={{ gap: 14 }}>
@@ -147,7 +153,7 @@ function PanelBody() {
       ))}
       <View style={{ gap: 6 }}>
         <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: '#5C6370' }}>Time of day</Text>
-        <TimeSlider value={d.time} onPick={pickTime} />
+        <TimeSlider minutes={d.min} onPick={pickMinute} />
       </View>
     </View>
   );

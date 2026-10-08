@@ -99,7 +99,7 @@ export default function Workout() {
     A.skipOpenSets();
     closeSheet();
     const st = stats(s);
-    setFinished({ ...st, hc: d.hc, weekDone: 2 });
+    setFinished({ ...st, hc: d.hc && d.wearable, weekDone: 2 });
   };
 
   const api = useRef<WkApi>(null as any);
@@ -189,7 +189,7 @@ export default function Workout() {
           <Txt accessibilityLabel={`Elapsed ${elapsed}`} style={{ fontFamily: font.monoBold, fontSize: 22 }}>{elapsed}</Txt>
           <Row style={{ gap: 6 }}>
             <Txt v="caption">Leg day</Txt>
-            {d.hc && <Row style={{ gap: 3 }}><Beat><HeartIcon size={11} color="#FF8A96" /></Beat><Txt style={{ fontFamily: font.semibold, fontSize: 12, color: '#FF8A96' }}>{hr} bpm</Txt></Row>}
+            {d.hc && d.wearable && <Row style={{ gap: 3 }}><Beat><HeartIcon size={11} color="#FF8A96" /></Beat><Txt style={{ fontFamily: font.semibold, fontSize: 12, color: '#FF8A96' }}>{hr} bpm</Txt></Row>}
           </Row>
         </View>
         <PillBtn label="Finish" h={40} onPress={askFinish} style={{ paddingHorizontal: 16 }} />

@@ -8,7 +8,7 @@ import { Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
 import { fmtT, KCAL_TARGET, MACRO_TARGET, MealId, MEALS } from '@/lib/data';
-import { mealLog, NOWS, totals, useDomain, useMeals } from '@/lib/domain';
+import { mealLog, totals, useDomain, useMeals } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { inr } from '@/lib/useNow';
@@ -62,7 +62,7 @@ function MealRow({ id, open }: { id: MealId; open: boolean }) {
   const all = () => {
     if (x.skip) patch(id, { skip: false });
     else if (v.full) patch(id, { eaten: [] });
-    else if (v.any) withUndo(`${m.n} done`, () => patch(id, { eaten: m.items.map((_, k) => k), at: x.at ?? NOWS[d.time] }));
+    else if (v.any) withUndo(`${m.n} done`, () => patch(id, { eaten: m.items.map((_, k) => k), at: x.at ?? d.min }));
     else withUndo(`${m.n} skipped`, () => patch(id, { skip: true, eaten: [] }));
   };
   const allL = x.skip ? 'Undo skip' : v.full ? 'Unmark all' : v.any ? 'Mark rest eaten' : 'Skip meal';

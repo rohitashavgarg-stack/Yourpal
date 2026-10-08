@@ -21,10 +21,12 @@ export type Session = {
 };
 
 export type Domain = {
-  time: TimeOfDay;
+  time: TimeOfDay; // the part of the day, derived from min
+  min: number; // minutes since midnight: the app's "now" (set by the hourly slider in the edge-case panel)
   todayVariant: 'Regular' | 'With updates' | 'Comeback';
   loading: boolean;
-  hc: boolean; // Health Connect / wearable connected
+  hc: boolean; // the phone's health store is connected (steps)
+  wearable: boolean; // the member has a watch or band (heart rate, sleep, active energy, burned kcal); needs hc too
   water: number; // litres
   weight: number;
   weightLog: { t: string; v: number }[];
@@ -65,7 +67,7 @@ export function mealsFor(t: TimeOfDay): Partial<Record<MealId, MealLog>> {
 
 export function initialDomain(): Domain {
   return {
-    time: 'Evening', todayVariant: 'Regular', loading: false, hc: true,
+    time: 'Evening', min: 1100, todayVariant: 'Regular', loading: false, hc: true, wearable: true,
     water: 1.8, weight: 72.4, weightLog: [{ t: 'Mon 22', v: 72.6 }, { t: 'Tue 23', v: 72.5 }],
     meals: mealsFor('Evening'), wkScenario: 'Not started', wkDone: null, session: null,
     ci: 'At the gym', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null, scanFails: false, dismissed: {}, plans: basePlans(), planReq: 'none', coachUpdated: false,
@@ -93,7 +95,10 @@ export function useDomain() {
 }
 
 // ---------- Derived helpers used by several screens ----------
-export const nowMin = (d: Domain) => NOWS[d.time];
+export const bucketOf = (m: number): TimeOfDay => (m < 720 ? 'Morning' : m < 1020 ? 'Afternoon' : 'Evening');
+export const nowMin = (d: Domain) => d.min;
+// Heart rate, sleep, active energy and burned kcal come from a wearable through the health store.
+export const hasWearableData = (d: Pick<Domain, 'hc' | 'wearable'>) => d.hc && d.wearable;
 
 export function mealLog(d: Domain, id: MealId): MealLog {
   const x = d.meals[id];
@@ -127,7 +132,7 @@ export function workoutState(d: Domain): 'hidden' | 'rest' | 'done' | 'live' | '
   return 'todo';
 }
 export const wkDoneInfo = (d: Domain) => d.wkDone ?? { a: 1122, b: 1168, k: 380 };
-export const burned = (d: Domain) => ACTIVE_KCAL[d.time] + (workoutState(d) === 'done' ? wkDoneInfo(d).k : 0);
+export const burned = (d: Domain) => Math.round(320 * Math.min(1, Math.max(0, (d.min - 360) / 740))) + (workoutState(d) === 'done' ? wkDoneInfo(d).k : 0);
 
 // Meal mutations
 export function useMeals() {
@@ -139,7 +144,7 @@ export function useMeals() {
   const toggleItem = useCallback((id: MealId, k: number) => set((s) => {
     const cur = mealLog(s, id); const e = cur.eaten.includes(k) ? cur.eaten.filter((x) => x !== k) : [...cur.eaten, k];
     // Pin the accordion to this meal so ticking an item never collapses it.
-    return { meals: { ...s.meals, [id]: { ...cur, eaten: e, skip: false, at: cur.at ?? NOWS[s.time] } }, openMeal: s.openMeal ?? id };
+    return { meals: { ...s.meals, [id]: { ...cur, eaten: e, skip: false, at: cur.at ?? s.min } }, openMeal: s.openMeal ?? id };
   }), [set]);
   const snapshot = () => d.meals;
   const restore = (m: Domain['meals']) => set({ meals: m });

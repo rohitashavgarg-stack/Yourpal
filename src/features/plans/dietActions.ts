@@ -1,5 +1,5 @@
 import { MealId, MEALS } from '@/lib/data';
-import { Domain, Extra, MealLog, mealLog, NOWS, useDomain } from '@/lib/domain';
+import { Domain, Extra, MealLog, mealLog, useDomain } from '@/lib/domain';
 import { useOverlay } from '@/components/Overlay';
 import { haptic } from '@/lib/haptics';
 import { DItem, getP, pk, PlansState, setP } from './store';
@@ -29,7 +29,7 @@ export function useDietActions() {
     }
     if (on) haptic.success();
     clearSkip(mid, it.key);
-    patchMeal(mid, (x, s) => ({ eaten: on ? Array.from(new Set([...x.eaten, it.idx])) : x.eaten.filter((k) => k !== it.idx), skip: false, at: x.at ?? NOWS[s.time] }));
+    patchMeal(mid, (x, s) => ({ eaten: on ? Array.from(new Set([...x.eaten, it.idx])) : x.eaten.filter((k) => k !== it.idx), skip: false, at: x.at ?? s.min }));
   };
 
   const skipItem = (mid: MealId, it: DItem) => {
@@ -46,7 +46,7 @@ export function useDietActions() {
     haptic.success();
     withUndo(`${name} marked as eaten`, () => {
       setP((p) => { const n = { ...p.skip }; Object.keys(n).forEach((k) => { if (k.startsWith(`${mid}:`)) delete n[k]; }); return { skip: n }; });
-      patchMeal(mid, (x, s) => ({ eaten: planned.map((i) => i.idx), skip: false, at: x.at ?? NOWS[s.time] }));
+      patchMeal(mid, (x, s) => ({ eaten: planned.map((i) => i.idx), skip: false, at: x.at ?? s.min }));
     });
   };
 
@@ -74,7 +74,7 @@ export function useDietActions() {
     });
   };
 
-  const addExtra = (mid: MealId, e: Extra) => patchMeal(mid, (x, s) => ({ extra: [...x.extra, e], skip: false, at: x.at ?? NOWS[s.time] }));
+  const addExtra = (mid: MealId, e: Extra) => patchMeal(mid, (x, s) => ({ extra: [...x.extra, e], skip: false, at: x.at ?? s.min }));
 
   const resetDiet = () => {
     set((s) => { const meals = { ...s.meals }; MEALS.forEach((m) => { const x = s.meals[m.id]; if (x) meals[m.id] = { ...x, repl: {} }; }); return { meals }; });

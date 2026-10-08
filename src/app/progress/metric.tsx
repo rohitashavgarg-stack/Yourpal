@@ -50,7 +50,7 @@ export default function MetricDetail() {
   };
 
   const bigUnit = k === 'steps' ? (ps.range === 'day' ? ' steps' : ' steps / day') : k === 'water' ? (ps.range === 'day' ? ' L' : ' L / day') : k === 'cons' && Number(t.big) === 1 ? ' workout' : t.unit;
-  const extra = k === 'steps' ? [{ l: 'Source', v: d.hc ? HEALTH_NAME : 'Phone sensor' }, { l: 'Daily goal', v: '8,000' }]
+  const extra = k === 'steps' ? [{ l: 'Source', v: HEALTH_NAME }, { l: 'Daily goal', v: '8,000' }]
     : k === 'water' ? [{ l: 'Daily target', v: '3 L' }]
     : k === 'hr' ? [{ l: 'Source', v: HEALTH_NAME }]
     : k === 'weight' ? [{ l: 'Started', v: '74.5 kg · 2 Sep' }] : [];

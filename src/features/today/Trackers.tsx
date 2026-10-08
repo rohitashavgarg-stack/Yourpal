@@ -259,9 +259,9 @@ export function Trackers() {
         contentContainerStyle={{ gap: 10, paddingHorizontal: 16, paddingVertical: 2 }}>
         <WaterCard />
         <WeightCard />
-        {d.hc ? <><StepsTile /><HealthCards /></> : <ConnectCard />}
+        {!d.hc ? <ConnectCard /> : <><StepsTile />{d.wearable && <HealthCards />}</>}
       </ScrollView>
-      <Txt v="caption" style={{ paddingHorizontal: 20 }}>{d.hc ? `Swipe for heart rate, sleep and energy from ${HEALTH_NAME}` : `Swipe for more · connect ${HEALTH_NAME} for steps, heart rate and sleep`}</Txt>
+      <Txt v="caption" style={{ paddingHorizontal: 20 }}>{!d.hc ? `Swipe for more · connect ${HEALTH_NAME} for steps` : d.wearable ? `Swipe for heart rate, sleep and energy from your watch` : `Steps from ${HEALTH_NAME} · heart rate and sleep need a watch or band`}</Txt>
     </View>
   );
 }

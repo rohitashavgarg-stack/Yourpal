@@ -77,3 +77,7 @@ export { default as WifiOff } from 'lucide-react-native/icons/wifi-off';
 export { default as X } from 'lucide-react-native/icons/x';
 export { default as Activity } from 'lucide-react-native/icons/activity';
 export { default as Ruler } from 'lucide-react-native/icons/ruler';
+export { default as ChevronsRight } from 'lucide-react-native/icons/chevrons-right';
+export { default as Compass } from 'lucide-react-native/icons/compass';
+export { default as PersonStanding } from 'lucide-react-native/icons/person-standing';
+export { default as Zap } from 'lucide-react-native/icons/zap';

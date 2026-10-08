@@ -6,7 +6,7 @@ import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Skeleton } from '@/components/bits';
 import { useToastLift } from '@/components/Overlay';
-import { CheckInScenario, mealsFor, TimeOfDay, useDomain } from '@/lib/domain';
+import { CheckInScenario, mealsFor, NOWS, TimeOfDay, useDomain } from '@/lib/domain';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -61,8 +61,9 @@ export default function Today() {
       ...(gv.version === 'Version 1' ? [{ label: 'Goal card design', options: DESIGNS, value: gs.design, onPick: (v: string) => goalStore.set({ design: v as GoalDesign }) }] : []),
       { label: 'Steps tracker design', options: STEPS_DESIGNS, value: st.design, onPick: (v) => stepsStore.set({ design: v as StepsDesign }) },
       ...(gv.version === 'Version 1' ? [{ label: 'Goal pace', options: PACES, value: gs.pace, onPick: (v: string) => goalStore.set({ pace: v as GoalPace }) }] : []),
-      { label: 'Wearable (Health Connect)', options: ['Connected', 'Not connected'], value: d.hc ? 'Connected' : 'Not connected', onPick: (v) => set({ hc: v === 'Connected' }) },
-      { label: 'Time of day', options: ['Morning', 'Afternoon', 'Evening'], value: d.time, onPick: (v) => set({ time: v as TimeOfDay, meals: mealsFor(v as TimeOfDay), openMeal: null, ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null }) },
+      { label: 'Health (steps)', options: ['Connected', 'Not connected'], value: d.hc ? 'Connected' : 'Not connected', onPick: (v) => set({ hc: v === 'Connected' }) },
+      { label: 'Wearable (heart rate, sleep, energy)', options: ['Has a wearable', 'No wearable'], value: d.wearable ? 'Has a wearable' : 'No wearable', onPick: (v) => set({ wearable: v === 'Has a wearable' }) },
+      { label: 'Time of day', options: ['Morning', 'Afternoon', 'Evening'], value: d.time, onPick: (v) => set({ time: v as TimeOfDay, min: NOWS[v as TimeOfDay], meals: mealsFor(v as TimeOfDay), openMeal: null, ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null }) },
       { label: 'Workout today', options: ['Not started', 'Done', 'Rest day'], value: d.wkDone ? 'Done' : d.wkScenario, onPick: (v) => set({ wkScenario: v as any, wkDone: null, session: v === 'Not started' ? d.session : null }) },
       { label: 'Check-in (location)', options: ['Away', 'Near (25 m)', 'At the gym', 'Checked in', 'Location off'], value: d.ci, onPick: (v) => CI.pickCi(v as CheckInScenario) },
       { label: 'Food scan result', options: ['Works', 'Fails'], value: d.scanFails ? 'Fails' : 'Works', onPick: (v) => set({ scanFails: v === 'Fails' }) },

@@ -222,7 +222,8 @@ export default function Progress() {
 
   const order = ORDER[d.goal.type] ?? ORDER['Weight loss'];
   let hidden: CardKey[] = ps.hidden === 'Water & steps' ? ['water', 'steps'] : [];
-  if (!d.hc) hidden = [...hidden, 'steps', 'hr', 'sleep']; // health-store data: nothing is shown until Health is connected
+  if (!d.hc) hidden = [...hidden, 'steps'];
+  if (!d.hc || !d.wearable) hidden = [...hidden, 'hr', 'sleep']; // health-store data: nothing is shown until Health is connected
   const cards = order.filter((k) => !hidden.includes(k));
 
   return (

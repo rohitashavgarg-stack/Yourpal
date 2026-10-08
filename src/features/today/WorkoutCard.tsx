@@ -1,4 +1,3 @@
-import { HEALTH_NAME } from '@/lib/health';
 import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -40,7 +39,7 @@ export function WorkoutCard() {
   const elapsed = d.session ? mmss((now - d.session.startAt) / 1000).padStart(5, '0') : '';
   const chip = st === 'done' ? 'Done' : st === 'rest' ? 'Rest' : st === 'live' ? 'In progress' : rel(d, WKT).t;
   const live = st === 'done' || st === 'live';
-  const chips = st === 'rest' ? ['Recovery day', 'Next: Pull · Thu 6:30 pm'] : ['6 exercises', `~${WORKOUT_MIN} min`, ...(d.hc ? ['~350 kcal'] : [])];
+  const chips = st === 'rest' ? ['Recovery day', 'Next: Pull · Thu 6:30 pm'] : ['6 exercises', `~${WORKOUT_MIN} min`, ...(d.hc && d.wearable ? ['~350 kcal'] : [])];
   const did = st === 'done' ? `${fmtT(done.a).hm} – ${fmtT(done.b).full}` : st === 'live' ? `Started · ${elapsed}` : st === 'rest' ? 'A walk counts' : 'Not yet';
   const cta = st === 'todo' ? 'Start workout' : st === 'live' ? 'Resume workout' : null;
   const onCta = () => (st === 'live' ? router.push('/workout') : openSheet(<StartWorkoutSheet />, { label: 'Start options' }));
@@ -71,11 +70,11 @@ export function WorkoutCard() {
           <Txt style={{ fontFamily: font.semibold, fontSize: 15, color: '#0B0E14' }}>{cta}</Txt>
         </Pressy>
       )}
-      {d.hc && (
+      {d.hc && d.wearable && (
       <Row style={{ gap: 8, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.12)' }}>
         <Flame size={15} color="#fff" />
         <Txt style={{ flex: 1, fontSize: 13, color: '#fff' }}>Burned today <Txt style={{ fontFamily: font.monoBold, fontSize: 13, color: '#fff' }}>{burned(d)}</Txt> kcal</Txt>
-        <Txt style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)' }}>From {HEALTH_NAME}</Txt>
+        <Txt style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)' }}>From your watch</Txt>
       </Row>
       )}
     </View>

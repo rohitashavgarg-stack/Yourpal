@@ -8,13 +8,14 @@ import { RoundBtn } from '@/components/bits';
 import { PersonAvatar } from '@/components/Brand';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
 import { Switch } from '@/features/shell/parts';
-import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, { Easing, runOnJS, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
 import { fade, fadeOut } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GymLogoMark } from '@/components/Brand';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { Bell, CalendarCheck, Check, ChevronLeft, Dumbbell, Lock, MessageCircle, Minus, Plus, ShieldCheck, Trophy, UtensilsCrossed } from '@/lib/icons';
+import { Activity, Bell, CalendarCheck, Check, ChevronLeft, ChevronRight, ChevronsRight, Compass, Dumbbell, Flame, Lock, PersonStanding, Scale, Zap, MessageCircle, Minus, Plus, ShieldCheck, Trophy, UtensilsCrossed } from '@/lib/icons';
 import { Button, Card, Chip, Field, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useScenarios, useStore } from '@/lib/store';
@@ -25,11 +26,11 @@ import { KCAL_TARGET, MACRO_TARGET } from '@/lib/data';
 import { DobPicker, HeightPicker, WeightPicker } from '@/features/body/BodyLog';
 import { dirOf, needsTarget, planMath } from '@/features/onboarding/plan';
 import { useDomain } from '@/lib/domain';
-import { HealthStep, HowStep, ProjectionStep, ReadyContent, SignStep } from '@/features/onboarding/Steps';
+import { HealthStep, ProjectionStep, ReadyContent } from '@/features/onboarding/Steps';
 import { HEALTH_NAME } from '@/lib/health';
 import Svg, { Circle, Path } from 'react-native-svg';
 
-const ORDER = ['welcome', 'how', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'sign', 'building', 'ready'] as const;
+const ORDER = ['welcome', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
 type Step = (typeof ORDER)[number];
 const COUNTED: Step[] = ['goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'basics'];
 const GOALS = ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness', 'Not sure yet'];
@@ -50,7 +51,6 @@ export default function Onboarding() {
   const [step, setStep] = useState<Step>((ORDER as readonly string[]).includes(state.onboardingStep) ? (state.onboardingStep as Step) : 'welcome');
   const [dir, setDir] = useState(1);
   const [tried, setTried] = useState(false);
-  const [signed, setSigned] = useState(false); // the tick on the commitment screen
 
   const { set: setDomain } = useDomain();
   // The one goal the rest of the app reads (Today, Progress) comes from what was answered here.
@@ -84,6 +84,27 @@ export default function Onboarding() {
     haptic.light();
     go(flow[Math.min(idx + 1, flow.length - 1)]);
   };
+  // Skip all: the rest gets sensible defaults and you land on Today.
+  const skipAll = () => {
+    if (!p.goal) setProfile({ goal: 'Not sure yet' });
+    finishGoal(); set({ onboarded: true }); haptic.success(); router.replace('/(tabs)');
+    toast('Skipped · you can fill these in any time from Profile');
+  };
+  // One quiet skip per step, worded for that step.
+  const skipBody = () => { setProfile({ skipBody: true, heightCm: '', weightKg: '' }); go('basics'); };
+  const skipFor: Partial<Record<Step, { label: string; run: () => void }>> = {
+    goal: { label: 'Not sure yet · decide with Coach', run: () => { setProfile({ goal: 'Not sure yet' }); go('exp'); } },
+    exp: { label: "Skip · I'll tell my coach", run: () => go(flow[idx + 1]) },
+    sched: { label: 'Decide the days later', run: () => go(flow[idx + 1]) },
+    age: { label: 'Skip date of birth', run: () => go(flow[idx + 1]) },
+    height: { label: 'Skip height and weight', run: skipBody },
+    weight: { label: 'Skip weight', run: skipBody },
+    target: { label: 'Skip target weight', run: skipBody },
+    plan: { label: 'Maybe later', run: () => go(flow[idx + 1]) },
+    basics: { label: 'Skip diet and injuries', run: () => go(flow[idx + 1]) },
+    health: { label: `Connect ${HEALTH_NAME} later`, run: () => { setDomain({ hc: false }); go(flow[idx + 1]); } },
+  };
+  const skip = skipFor[step];
   const back = () => { if (idx > 0) go(flow[idx - 1], -1); else { set({ loggedIn: false }); router.replace('/login'); } };
 
   const askNotifications = () => openSheet(
@@ -91,14 +112,14 @@ export default function Onboarding() {
       <View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Bell size={26} color={c.accentText} /></View>
       <Txt v="title">Get notified when Coach sends your plan</Txt>
       <Txt muted>Only plan updates and trainer replies. Reminders stay off until you turn them on.</Txt>
-      <Button kind="accent" label="Allow notifications" onPress={() => { setProfile({ notifications: 'on' }); closeSheet(() => go('sign')); haptic.success(); }} />
-      <Button kind="secondary" label="Not now" onPress={() => { setProfile({ notifications: 'off' }); closeSheet(() => go('sign')); }} />
+      <Button kind="accent" label="Allow notifications" onPress={() => { setProfile({ notifications: 'on' }); closeSheet(() => go('building')); haptic.success(); }} />
+      <Button kind="secondary" label="Not now" onPress={() => { setProfile({ notifications: 'off' }); closeSheet(() => go('building')); }} />
     </View>, { label: 'Notifications' });
 
   useScenarios({
     title: 'Onboarding',
     rows: [
-      { label: 'Jump to step', options: ['Welcome', 'How it works', 'Goal', 'Experience', 'Schedule', 'Age', 'Height', 'Weight', 'Target', 'Projection', 'Basics', 'Health', 'Privacy', 'Signature', 'Building', 'All set'], value: ({ welcome: 'Welcome', goal: 'Goal', exp: 'Experience', sched: 'Schedule', age: 'Age', height: 'Height', weight: 'Weight', target: 'Target', plan: 'Projection', how: 'How it works', basics: 'Basics', health: 'Health', consent: 'Privacy', sign: 'Signature', building: 'Building', ready: 'All set' } as any)[step], onPick: (v) => go(({ Welcome: 'welcome', Goal: 'goal', Experience: 'exp', Schedule: 'sched', Age: 'age', Height: 'height', Weight: 'weight', Target: 'target', Projection: 'plan', 'How it works': 'how', Basics: 'basics', Health: 'health', Privacy: 'consent', Signature: 'sign', Building: 'building', 'All set': 'ready' } as any)[v]) },
+      { label: 'Jump to step', options: ['Welcome', 'Goal', 'Experience', 'Schedule', 'Age', 'Height', 'Weight', 'Target', 'Projection', 'Basics', 'Health', 'Privacy', 'Building', 'All set'], value: ({ welcome: 'Welcome', goal: 'Goal', exp: 'Experience', sched: 'Schedule', age: 'Age', height: 'Height', weight: 'Weight', target: 'Target', plan: 'Projection', basics: 'Basics', health: 'Health', consent: 'Privacy', building: 'Building', ready: 'All set' } as any)[step], onPick: (v) => go(({ Welcome: 'welcome', Goal: 'goal', Experience: 'exp', Schedule: 'sched', Age: 'age', Height: 'height', Weight: 'weight', Target: 'target', Projection: 'plan', Basics: 'basics', Health: 'health', Privacy: 'consent', Building: 'building', 'All set': 'ready' } as any)[v]) },
       { label: 'Assessment', options: ['Scheduled', 'Not scheduled'], value: sc.assess, onPick: (v) => setSc({ assess: v as any }) },
       { label: 'Connection', options: ['Online', 'Offline'], value: sc.net, onPick: (v) => setSc({ net: v as any }) },
     ],
@@ -110,8 +131,8 @@ export default function Onboarding() {
   // The step counter shows only on the questions themselves (goal to basics). Projection, health, privacy and signature are not questions, so no counter there.
   const qn = qsteps.indexOf(step) + 1 || undefined;
   const QTOTAL = qsteps.length;
-  const showChrome = step !== 'welcome' && step !== 'how' && step !== 'ready' && step !== 'building';
-  const primaryLabel = step === 'welcome' ? 'Get started' : step === 'consent' ? 'Agree and continue' : step === 'ready' ? "Let's start" : step === 'plan' ? 'I want to get there' : step === 'how' ? 'Continue' : step === 'sign' ? 'Confirm' : step === 'health' ? `Connect ${HEALTH_NAME}` : 'Continue';
+  const showChrome = step !== 'welcome' && step !== 'ready' && step !== 'building';
+  const primaryLabel = step === 'welcome' ? 'Get started' : step === 'consent' ? 'Agree and continue' : step === 'ready' ? "Let's start" : step === 'plan' ? 'I want to get there' : step === 'health' ? `Connect ${HEALTH_NAME}` : 'Continue';
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
@@ -123,7 +144,12 @@ export default function Onboarding() {
           </RoundBtn>
         )}
         {qn ? <Progress n={qn} total={QTOTAL} /> : <View style={{ flex: 1 }} />}
-        {qn ? <Txt v="label" style={{ width: 44, textAlign: 'right' }}>{qn} of {QTOTAL}</Txt> : null}
+        {qn ? <Txt v="label" style={{ textAlign: 'right' }}>{qn} of {QTOTAL}</Txt> : null}
+        {step !== 'building' && step !== 'ready' && (
+          <Pressy accessibilityRole="button" accessibilityLabel="Skip all questions and go to Today" onPress={skipAll} scaleTo={0.94} style={{ minHeight: 44, minWidth: 44, justifyContent: 'center', alignItems: 'flex-end', paddingLeft: 6 }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.accentText }}>Skip all</Txt>
+          </Pressy>
+        )}
       </View>
 
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 24, paddingTop: 8, gap: 14, flexGrow: 1 }} keyboardShouldPersistTaps="handled">
@@ -137,9 +163,7 @@ export default function Onboarding() {
           {step === 'weight' && <WeightStep />}
           {step === 'target' && <TargetStep />}
           {step === 'plan' && <ProjectionStep />}
-          {step === 'how' && <HowStep />}
           {step === 'health' && <HealthStep />}
-          {step === 'sign' && <SignStep onDrawn={setSigned} />}
           {step === 'basics' && <BasicsStep tried={tried} />}
           {step === 'consent' && <ConsentStep isPT={isPT} />}
           {step === 'building' && <BuildingStep onDone={() => go('ready')} />}
@@ -149,13 +173,10 @@ export default function Onboarding() {
 
       <View style={{ paddingHorizontal: 20, paddingBottom: insets.bottom + 12, paddingTop: 8, gap: 6, backgroundColor: c.bg }}>
         {sc.net === 'Offline' && showChrome && <Txt v="caption" style={{ textAlign: 'center' }}>You're offline. Answers are saved on this phone and sync later.</Txt>}
-        {step !== 'building' && <Button label={primaryLabel} disabled={step === 'sign' && !signed} onPress={() => {
-          if (step === 'ready') { finishGoal(); set({ onboarded: true }); haptic.success(); router.replace('/(tabs)'); toast("You're all set · your plan fills in after the assessment"); return; }
-          next();
-        }} />}
-        {(step === 'height' || step === 'weight' || step === 'target') && <Button kind="ghost" label="Skip height and weight" onPress={() => { setProfile({ skipBody: true, heightCm: '', weightKg: '' }); go('basics'); }} />}
-        {step === 'health' && <Button kind="ghost" label="Not now" onPress={() => { setDomain({ hc: false }); go(flow[idx + 1]); }} />}
-        {step === 'goal' && <Button kind="ghost" label="Not sure yet · decide with Coach" onPress={() => { setProfile({ goal: 'Not sure yet' }); go('exp'); }} />}
+        {step === 'ready' ? (
+          <SwipeToStart onDone={() => { finishGoal(); set({ onboarded: true }); haptic.success(); router.replace('/(tabs)'); toast("You're all set · your plan fills in after the assessment"); }} />
+        ) : step !== 'building' && <Button label={primaryLabel} onPress={next} />}
+        {skip && step !== 'ready' && step !== 'building' && <Button kind="ghost" label={skip.label} onPress={skip.run} />}
       </View>
     </KeyboardAvoidingView>
   );
@@ -234,8 +255,8 @@ function GoalStep({ tried }: { tried: boolean }) {
   return (
     <>
       <Title t="What's your main goal?" s="Pick one. Coach Vikram fine-tunes it with you at the assessment." />
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-        {GOALS.map((g) => <Pill key={g} label={g} on={p.goal === g} onPress={() => setProfile({ goal: g, goalTarget: 0, targetKg: '', goal2: p.goal2 === g ? 'None' : p.goal2 })} />)}
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+        {GOALS.map((g) => <GoalTile key={g} goal={g} on={p.goal === g} onPress={() => setProfile({ goal: g, goalTarget: 0, targetKg: '', goal2: p.goal2 === g ? 'None' : p.goal2 })} />)}
       </View>
       {tried && !p.goal && <Txt v="caption" color={c.warn}>Pick a goal, or "Not sure yet".</Txt>}
       {!!p.goal && (
@@ -252,6 +273,33 @@ function GoalStep({ tried }: { tried: boolean }) {
         </Animated.View>
       )}
     </>
+  );
+}
+
+// Each goal has its own small illustration: a tinted card with a large icon and soft shapes behind it.
+const GOAL_ART: Record<string, { Icon: any; tint: string; col: string }> = {
+  'Weight loss': { Icon: Scale, tint: 'tNutri', col: 'cNutri' },
+  'Muscle gain': { Icon: Dumbbell, tint: 'tAct', col: 'cAct' },
+  'Lean body': { Icon: Flame, tint: 'tHeart', col: 'cHeart' },
+  Strength: { Icon: Trophy, tint: 'accentSoft', col: 'accentText' },
+  Flexibility: { Icon: PersonStanding, tint: 'tSleep', col: 'cSleep' },
+  Agility: { Icon: Zap, tint: 'tAct', col: 'cAct' },
+  'General fitness': { Icon: Activity, tint: 'tNutri', col: 'cNutri' },
+  'Not sure yet': { Icon: Compass, tint: 'surface2', col: 'muted' },
+};
+function GoalTile({ goal, on, onPress }: { goal: string; on: boolean; onPress: () => void }) {
+  const { c } = useTheme();
+  const a = GOAL_ART[goal];
+  const bg = (c as any)[a.tint], fg = (c as any)[a.col];
+  return (
+    <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onPress} scaleTo={0.97}
+      style={{ width: '48%', flexGrow: 1, height: 116, borderRadius: 24, backgroundColor: bg, borderWidth: on ? 2 : 0, borderColor: c.ink, overflow: 'hidden', padding: 14, justifyContent: 'space-between' }}>
+      <View pointerEvents="none" style={{ position: 'absolute', right: -26, top: -26, width: 104, height: 104, borderRadius: 52, backgroundColor: fg, opacity: 0.12 }} />
+      <View pointerEvents="none" style={{ position: 'absolute', right: 10, top: 34, width: 46, height: 46, borderRadius: 23, backgroundColor: fg, opacity: 0.12 }} />
+      <a.Icon size={38} strokeWidth={1.6} color={fg} style={{ alignSelf: 'flex-end' }} />
+      <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: c.ink }}>{goal}</Txt>
+      {on && <View style={{ position: 'absolute', left: 12, top: 12, width: 22, height: 22, borderRadius: 11, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Check size={13} strokeWidth={3} color={c.bg} /></View>}
+    </Pressy>
   );
 }
 
@@ -454,4 +502,38 @@ function ConsentStep({ isPT }: { isPT: boolean }) {
 
 function ReadyStep({ assess }: { assess: string }) {
   return <ReadyContent assess={assess} />;
+}
+
+// Big swipe-to-start button for the last screen: drag the thumb across. Plain timing, no spring.
+function SwipeToStart({ onDone }: { onDone: () => void }) {
+  const { c } = useTheme();
+  const [w, setW] = useState(0);
+  const TH = 64, PAD = 5;
+  const max = Math.max(0, w - TH - PAD * 2);
+  const x = useSharedValue(0);
+  const done = useSharedValue(false);
+  const pan = Gesture.Pan()
+    .onUpdate((e) => { if (!done.value) x.value = Math.max(0, Math.min(max, e.translationX)); })
+    .onEnd(() => {
+      if (done.value) return;
+      if (x.value > max * 0.78) { done.value = true; x.value = withTiming(max, { duration: 140 }, (f) => { if (f) runOnJS(onDone)(); }); }
+      else x.value = withTiming(0, { duration: 200, easing: Easing.out(Easing.cubic) });
+    });
+  const thumb = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
+  const label = useAnimatedStyle(() => ({ opacity: max ? 1 - Math.min(1, x.value / (max * 0.55)) : 1 }));
+  return (
+    <View onLayout={(e) => setW(e.nativeEvent.layout.width)} accessibilityRole="button" accessibilityLabel="Swipe to start your journey" accessibilityHint="Double tap to start" accessible
+      onAccessibilityTap={onDone}
+      style={{ height: TH + PAD * 2, borderRadius: (TH + PAD * 2) / 2, backgroundColor: c.accent, justifyContent: 'center', overflow: 'hidden' }}>
+      <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: TH + PAD * 2, right: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 6 }, label]}>
+        <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, color: '#fff' }}>Swipe to start your journey</Txt>
+        <ChevronsRight size={20} color="#fff" />
+      </Animated.View>
+      <GestureDetector gesture={pan}>
+        <Animated.View style={[{ marginLeft: PAD, width: TH, height: TH, borderRadius: TH / 2, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }, thumb]}>
+          <ChevronRight size={26} color={c.accent} />
+        </Animated.View>
+      </GestureDetector>
+    </View>
+  );
 }
