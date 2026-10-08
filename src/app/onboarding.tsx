@@ -185,8 +185,8 @@ export default function Onboarding() {
           <SwipeToStart onDone={() => { finishGoal(); set({ onboarded: true }); haptic.success(); router.replace('/(tabs)'); toast("You're all set · your plan fills in after the assessment"); }} />
         ) : step !== 'building' && <Button label={primaryLabel} onPress={next} />}
         {skip && (
-          <Pressy accessibilityRole="button" accessibilityLabel={skip.label} onPress={skip.run} scaleTo={0.96} style={{ alignSelf: 'center', height: 40, justifyContent: 'center', paddingHorizontal: 20, borderRadius: 20, backgroundColor: c.surface2 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.ink }}>{skip.label}</Txt>
+          <Pressy accessibilityRole="button" accessibilityLabel={skip.label} onPress={skip.run} scaleTo={0.96} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}>
+            <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 21, color: c.ink, opacity: 0.7 }}>{skip.label}</Txt>
           </Pressy>
         )}
       </View>
