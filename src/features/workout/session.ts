@@ -36,7 +36,7 @@ export const COL_LABEL = { rw: 'kg × reps', r: 'Reps', t: 'Time', tw: 'Time · 
 
 export function stats(s: Session) {
   const mins = Math.max(1, Math.round((Date.now() - s.startAt) / 60000));
-  let vol = 0, sets = 0;
+  let sets = 0;
   let pr: { name: string; kg: number } | null = null;
   const base = legDay();
   s.ex.forEach((e) => {
@@ -45,9 +45,9 @@ export function stats(s: Session) {
     e.sets.forEach((x) => {
       if (x.st !== 'done') return;
       sets++;
-      vol += (x.dk ?? x.k) * (x.dr ?? x.r);
       if (!x.w && (e.mode === 'rw' || e.mode === 'tw') && (x.dk ?? x.k) > planMax && (!pr || (x.dk ?? x.k) > pr.kg)) pr = { name: e.name, kg: x.dk ?? x.k };
     });
   });
-  return { mins, tonnes: Math.round(vol / 100) / 10, sets, pr: pr as { name: string; kg: number } | null, kcal: Math.max(40, mins * 7) };
+  const exercises = s.ex.filter((e) => e.sets.some((x) => x.st === 'done')).length;
+  return { mins, sets, exercises, totalEx: s.ex.length, pr: pr as { name: string; kg: number } | null, kcal: Math.max(40, mins * 7) };
 }

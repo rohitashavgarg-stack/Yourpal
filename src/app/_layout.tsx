@@ -103,6 +103,7 @@ function Slide({ name, bottom, children }: { name: string; bottom: boolean; chil
     return () => { const i = closers.indexOf(e); if (i >= 0) closers.splice(i, 1); under.current?.done(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, bottom]);
+  const closeFromDrag = () => { const top = entry.current; if (top && router.canGoBack()) (router as any).back(); };
   // Drag down from the top of an X screen to close it: it follows the finger and leaves with the same plain ease.
   const pan = Gesture.Pan()
     .enabled(bottom)
@@ -115,7 +116,6 @@ function Slide({ name, bottom, children }: { name: string; bottom: boolean; chil
       if (e.translationY > 110 || e.velocityY > 900) runOnJS(closeFromDrag)();
       else { off.value = withTiming(0, IN); p.value = withTiming(1, IN); }
     });
-  const closeFromDrag = () => { const top = entry.current; if (top && router.canGoBack()) (router as any).back(); };
   const style = useAnimatedStyle(() => ({ transform: [bottom ? { translateY: off.value } : { translateX: off.value }] }));
   const dim = useAnimatedStyle(() => ({ opacity: p.value * DIM }));
   const opened = () => { const u = under.current; if (u) { u.prev.style.display = ''; u.done(); under.current = null; } };

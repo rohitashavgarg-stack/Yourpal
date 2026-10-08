@@ -132,10 +132,10 @@ export default function Workout() {
   }, [d.hc, s?.phase, !!s?.rest]);
 
   if (finished) {
-    return <FinishScreen s={finished} onDone={(feel, note) => {
+    return <FinishScreen s={finished} onDone={(note) => {
       const mins = finished.mins, at = nowMin(d);
       const msg = note.trim();
-      set((x) => ({ session: null, wkDone: { a: at, b: at + mins, k: Math.max(40, mins * 7) }, ...(msg ? { chat: [...x.chat, { me: true, t: msg, ctx: `Leg day · felt ${feel}/5`, meta: 'Just now · Delivered' }] } : {}) }));
+      set((x) => ({ session: null, wkDone: { a: at, b: at + mins, k: Math.max(40, mins * 7) }, ...(msg ? { chat: [...x.chat, { me: true, t: msg, ctx: 'Leg day', meta: 'Just now · Delivered' }] } : {}) }));
       if (msg) { coachStore.set({ unread: false }); toast('Note sent to Coach Vikram'); }
       router.canGoBack() ? router.back() : router.replace('/(tabs)');
     }} />;
