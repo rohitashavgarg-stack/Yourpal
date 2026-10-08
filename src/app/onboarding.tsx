@@ -185,8 +185,8 @@ export default function Onboarding() {
           <SwipeToStart onDone={() => { finishGoal(); set({ onboarded: true }); haptic.success(); router.replace('/(tabs)'); toast("You're all set · your plan fills in after the assessment"); }} />
         ) : step !== 'building' && <Button label={primaryLabel} onPress={next} />}
         {skip && (
-          <Pressy accessibilityRole="button" accessibilityLabel={skip.label} onPress={skip.run} scaleTo={0.96} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}>
-            <Txt style={{ fontSize: 15, lineHeight: 21, color: c.muted }}>{skip.label}</Txt>
+          <Pressy accessibilityRole="button" accessibilityLabel={skip.label} onPress={skip.run} scaleTo={0.96} style={{ alignSelf: 'center', height: 40, justifyContent: 'center', paddingHorizontal: 20, borderRadius: 20, backgroundColor: c.surface2 }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.ink }}>{skip.label}</Txt>
           </Pressy>
         )}
       </View>
@@ -548,24 +548,24 @@ function SwipeToStart({ onDone }: { onDone: () => void }) {
   const thumb = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   const label = useAnimatedStyle(() => ({ opacity: max ? 1 - Math.min(1, x.value / (max * 0.55)) : 1 }));
   // Glass track with a soft blue glow along every inner edge; the thumb is a lighter glass circle.
-  const glow = isDark ? 'rgba(80,140,255,0.62)' : 'rgba(47,107,234,0.55)';
+  const glow = isDark ? 'rgba(47,107,234,0.95)' : 'rgba(47,107,234,0.8)';
   const clear = 'rgba(47,107,234,0)';
   const R = (TH + PAD * 2) / 2;
   return (
     <View onLayout={(e) => setW(e.nativeEvent.layout.width)} accessibilityRole="button" accessibilityLabel="Swipe to start your journey" accessibilityHint="Double tap to start" accessible
       onAccessibilityTap={onDone}
-      style={{ height: TH + PAD * 2, borderRadius: R, justifyContent: 'center', overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(110,160,255,0.5)', backgroundColor: isDark ? 'rgba(14,24,48,0.55)' : 'rgba(255,255,255,0.45)' }}>
+      style={{ height: TH + PAD * 2, borderRadius: R, justifyContent: 'center', overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(47,107,234,0.9)', backgroundColor: isDark ? 'rgba(18,40,100,0.5)' : 'rgba(47,107,234,0.12)' }}>
       <GlassBackdrop radius={R} />
-      <LinearGradient pointerEvents="none" colors={[glow, clear]} style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 30 }} />
-      <LinearGradient pointerEvents="none" colors={[clear, glow]} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 30 }} />
-      <LinearGradient pointerEvents="none" colors={[glow, clear]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 44 }} />
-      <LinearGradient pointerEvents="none" colors={[clear, glow]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 44 }} />
+      <LinearGradient pointerEvents="none" colors={[glow, clear]} style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 38 }} />
+      <LinearGradient pointerEvents="none" colors={[clear, glow]} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 38 }} />
+      <LinearGradient pointerEvents="none" colors={[glow, clear]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 56 }} />
+      <LinearGradient pointerEvents="none" colors={[clear, glow]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 56 }} />
       <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: TH + PAD * 2, right: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 6 }, label]}>
         <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, color: c.ink }}>Swipe to start</Txt>
         <ChevronsRight size={20} color={c.ink} />
       </Animated.View>
       <GestureDetector gesture={pan}>
-        <Animated.View style={[{ marginLeft: PAD, width: TH, height: TH, borderRadius: TH / 2, backgroundColor: 'rgba(255,255,255,0.22)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.55)', alignItems: 'center', justifyContent: 'center' }, thumb]}>
+        <Animated.View style={[{ marginLeft: PAD, width: TH, height: TH, borderRadius: TH / 2, backgroundColor: 'rgba(255,255,255,0.28)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.7)', alignItems: 'center', justifyContent: 'center' }, thumb]}>
           <ChevronRight size={26} color={c.ink} />
         </Animated.View>
       </GestureDetector>
