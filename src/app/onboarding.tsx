@@ -98,7 +98,6 @@ export default function Onboarding() {
   // One quiet skip per step, worded for that step.
   const skipBody = () => { setProfile({ skipBody: true, heightCm: '', weightKg: '' }); go('basics'); };
   const skipFor: Partial<Record<Step, { label: string; run: () => void }>> = {
-    facility: { label: 'Choose my gym later', run: () => go(flow[idx + 1]) },
     goal: { label: 'Not sure yet · decide with Coach', run: () => { setProfile({ goal: 'Not sure yet' }); go('exp'); } },
     exp: { label: "Skip · I'll tell my coach", run: () => go(flow[idx + 1]) },
     sched: { label: 'Decide the days later', run: () => go(flow[idx + 1]) },
@@ -110,7 +109,9 @@ export default function Onboarding() {
     basics: { label: 'Skip diet and injuries', run: () => go(flow[idx + 1]) },
     health: { label: `Connect ${HEALTH_NAME} later`, run: () => { setDomain({ hc: false }); go(flow[idx + 1]); } },
   };
-  const skip = skipFor[step];
+  // Skip and Skip all start with the questionnaire (the goal question); the welcome and gym screens have neither.
+  const questionnaire = step !== 'welcome' && step !== 'facility' && step !== 'building' && step !== 'ready';
+  const skip = questionnaire ? skipFor[step] : undefined;
   const back = () => { if (idx > 0) go(flow[idx - 1], -1); else { set({ loggedIn: false }); router.replace('/login'); } };
 
   const askNotifications = () => openSheet(
@@ -151,7 +152,7 @@ export default function Onboarding() {
         )}
         {qn ? <Progress n={qn} total={QTOTAL} /> : <View style={{ flex: 1 }} />}
         {qn ? <Txt v="label" style={{ textAlign: 'right' }}>{qn} of {QTOTAL}</Txt> : null}
-        {step !== 'building' && step !== 'ready' && (
+        {questionnaire && (
           <Pressy accessibilityRole="button" accessibilityLabel="Skip all questions and go to Today" onPress={skipAll} scaleTo={0.94} style={{ minHeight: 44, minWidth: 44, justifyContent: 'center', alignItems: 'flex-end', paddingLeft: 6 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.accentText }}>Skip all</Txt>
           </Pressy>
