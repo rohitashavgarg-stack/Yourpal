@@ -87,7 +87,7 @@ export default function Login() {
       if (sc.otp === 'Correct') {
         setCodeState('ok'); haptic.success();
         // Several programmes on this number: let the member choose where to start. One: go straight in.
-        setTimeout(() => { if (multi) setStep('programme'); else finish(); }, 650);
+        setTimeout(() => { if (multi && shell.sc.pick === 'Shown') setStep('programme'); else finish(); }, 650);
       } else {
         const n = tries + 1; setTries(n); haptic.error(); setShake((k) => k + 1);
         if (n >= 3) { setCodeState('locked'); setLockIn(59); }

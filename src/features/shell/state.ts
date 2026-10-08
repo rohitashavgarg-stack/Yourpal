@@ -21,7 +21,7 @@ export type ShellState = {
   progs: Programme[];
   cur: string;
   last: string;
-  sc: { progs: 'Three' | 'Only one'; notifs: 'Some' | 'None' };
+  sc: { progs: 'Three' | 'Only one'; notifs: 'Some' | 'None'; pick: 'Shown' | 'Hidden' }; // pick: the "choose a programme" screen after the login code
   priv: Record<'gold_summary' | 'mehta_photos' | 'mehta_routine', boolean>;
   notif: Record<'plan' | 'msgs' | 'remind' | 'water' | 'member', boolean>;
   trk: Record<'water' | 'weight' | 'steps', boolean>;
@@ -40,7 +40,7 @@ const fresh = (): ShellState => ({
     { id: 'mehta', name: 'Dr. Mehta Skin Clinic', short: 'Dr. Mehta Skin', kind: 'Clinic', logo: 'M', color: '#B8532B', clinic: true, unread: 1 },
   ],
   cur: 'gold', last: 'mehta',
-  sc: { progs: 'Three', notifs: 'Some' },
+  sc: { progs: 'Three', notifs: 'Some', pick: 'Hidden' },
   priv: { gold_summary: true, mehta_photos: false, mehta_routine: true },
   notif: { plan: true, msgs: true, remind: false, water: false, member: true },
   trk: { water: true, weight: true, steps: true },
