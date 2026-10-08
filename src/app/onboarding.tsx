@@ -98,15 +98,15 @@ export default function Onboarding() {
   // One quiet skip per step, worded for that step.
   const skipBody = () => { setProfile({ skipBody: true, heightCm: '', weightKg: '' }); go('basics'); };
   const skipFor: Partial<Record<Step, { label: string; run: () => void }>> = {
-    goal: { label: 'Not sure yet · decide with Coach', run: () => { setProfile({ goal: 'Not sure yet' }); go('exp'); } },
-    exp: { label: "Skip · I'll tell my coach", run: () => go(flow[idx + 1]) },
-    sched: { label: 'Decide the days later', run: () => go(flow[idx + 1]) },
-    age: { label: 'Skip date of birth', run: () => go(flow[idx + 1]) },
-    height: { label: 'Skip height and weight', run: skipBody },
-    weight: { label: 'Skip weight', run: skipBody },
-    target: { label: 'Skip target weight', run: skipBody },
+    goal: { label: 'Not sure yet', run: () => { setProfile({ goal: 'Not sure yet' }); go('exp'); } },
+    exp: { label: 'Skip', run: () => go(flow[idx + 1]) },
+    sched: { label: 'Decide later', run: () => go(flow[idx + 1]) },
+    age: { label: 'Skip', run: () => go(flow[idx + 1]) },
+    height: { label: 'Skip', run: skipBody },
+    weight: { label: 'Skip', run: skipBody },
+    target: { label: 'Skip', run: skipBody },
     plan: { label: 'Maybe later', run: () => go(flow[idx + 1]) },
-    basics: { label: 'Skip diet and injuries', run: () => go(flow[idx + 1]) },
+    basics: { label: 'Skip', run: () => go(flow[idx + 1]) },
     health: { label: 'Not now', run: () => { setDomain({ hc: false }); go(flow[idx + 1]); } },
   };
   // Skip and Skip all start with the questionnaire (the goal question); the welcome and gym screens have neither.
@@ -184,7 +184,11 @@ export default function Onboarding() {
         {step === 'ready' ? (
           <SwipeToStart onDone={() => { finishGoal(); set({ onboarded: true }); haptic.success(); router.replace('/(tabs)'); toast("You're all set · your plan fills in after the assessment"); }} />
         ) : step !== 'building' && <Button label={primaryLabel} onPress={next} />}
-        {skip && step !== 'ready' && step !== 'building' && <Button kind="ghost" label={skip.label} onPress={skip.run} />}
+        {skip && (
+          <Pressy accessibilityRole="button" accessibilityLabel={skip.label} onPress={skip.run} scaleTo={0.96} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}>
+            <Txt style={{ fontSize: 15, lineHeight: 21, color: c.muted }}>{skip.label}</Txt>
+          </Pressy>
+        )}
       </View>
     </KeyboardAvoidingView>
   );
