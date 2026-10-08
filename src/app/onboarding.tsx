@@ -37,7 +37,7 @@ import Svg, { Circle, Path } from 'react-native-svg';
 const ORDER = ['welcome', 'facility', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
 type Step = (typeof ORDER)[number];
 const COUNTED: Step[] = ['goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'basics'];
-const GOALS = ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness', 'Not sure yet'];
+const GOALS = ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness'];
 const EXPS = [
   { l: 'New to the gym', s: 'We start with the basics and good form' },
   { l: 'Returning after a break', s: 'A gentle ramp back up over two weeks' },
@@ -267,19 +267,6 @@ function GoalStep({ tried }: { tried: boolean }) {
         {GOALS.map((g) => <GoalTile key={g} goal={g} on={p.goal === g} onPress={() => setProfile({ goal: g, goalTarget: 0, targetKg: '', goal2: p.goal2 === g ? 'None' : p.goal2 })} />)}
       </View>
       {tried && !p.goal && <Txt v="caption" color={c.warn}>Pick a goal, or "Not sure yet".</Txt>}
-      {!!p.goal && (
-        <Animated.View entering={fade()} style={{ padding: 14, borderRadius: 18, backgroundColor: c.surface2 }}>
-          <Txt style={{ fontSize: 14 }} muted>{p.goal === 'Not sure yet' ? "We'll start with general fitness. Decide the real goal with Coach Vikram at your assessment." : needsTarget(p.goal) ? "You'll set your target weight after a few quick questions." : 'Coach Vikram sets the numbers with you at your assessment.'}</Txt>
-        </Animated.View>
-      )}
-      {!!p.goal && p.goal !== 'Not sure yet' && (
-        <Animated.View entering={fade(80)} style={{ gap: 8 }}>
-          <Txt v="label">Second goal (optional)</Txt>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-            {['Flexibility', 'General fitness', 'Strength', 'None'].filter((g) => g !== p.goal).map((g) => <Pill key={g} label={g} on={p.goal2 === g} onPress={() => setProfile({ goal2: g })} />)}
-          </View>
-        </Animated.View>
-      )}
     </>
   );
 }
@@ -301,7 +288,7 @@ function GoalTile({ goal, on, onPress }: { goal: string; on: boolean; onPress: (
   // Quiet card: the surface colour, a thin line, one small icon. The selected card gets a darker line.
   return (
     <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onPress} scaleTo={0.97}
-      style={{ width: '48%', flexGrow: 1, height: 108, borderRadius: 22, backgroundColor: c.surface, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, padding: 14, justifyContent: 'space-between' }}>
+      style={{ width: '48.5%', height: 108, borderRadius: 22, backgroundColor: c.surface, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, padding: 14, justifyContent: 'space-between' }}>
       <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
         <a.Icon size={20} strokeWidth={1.8} color={c.ink} />
       </View>
