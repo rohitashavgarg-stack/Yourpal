@@ -548,7 +548,7 @@ function SwipeToStart({ onDone }: { onDone: () => void }) {
   const thumb = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   const label = useAnimatedStyle(() => ({ opacity: max ? 1 - Math.min(1, x.value / (max * 0.55)) : 1 }));
   // Glass track with a soft blue glow along every inner edge; the thumb is a lighter glass circle.
-  const glow = isDark ? 'rgba(47,107,234,0.95)' : 'rgba(47,107,234,0.8)';
+  const glow = isDark ? 'rgba(47,107,234,0.5)' : 'rgba(47,107,234,0.4)';
   const clear = 'rgba(47,107,234,0)';
   const R = (TH + PAD * 2) / 2;
   return (
@@ -556,17 +556,17 @@ function SwipeToStart({ onDone }: { onDone: () => void }) {
       onAccessibilityTap={onDone}
       style={{ height: TH + PAD * 2, borderRadius: R, justifyContent: 'center', overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(47,107,234,0.9)', backgroundColor: isDark ? 'rgba(18,40,100,0.5)' : 'rgba(47,107,234,0.12)' }}>
       <GlassBackdrop radius={R} />
-      <LinearGradient pointerEvents="none" colors={[glow, clear]} style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 38 }} />
-      <LinearGradient pointerEvents="none" colors={[clear, glow]} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 38 }} />
-      <LinearGradient pointerEvents="none" colors={[glow, clear]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 56 }} />
-      <LinearGradient pointerEvents="none" colors={[clear, glow]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 56 }} />
+      <LinearGradient pointerEvents="none" colors={[glow, clear]} style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 19 }} />
+      <LinearGradient pointerEvents="none" colors={[clear, glow]} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 19 }} />
+      <LinearGradient pointerEvents="none" colors={[glow, clear]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 28 }} />
+      <LinearGradient pointerEvents="none" colors={[clear, glow]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 28 }} />
       <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: TH + PAD * 2, right: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 6 }, label]}>
         <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, color: c.ink }}>Swipe to start</Txt>
         <ChevronsRight size={20} color={c.ink} />
       </Animated.View>
       <GestureDetector gesture={pan}>
-        <Animated.View style={[{ marginLeft: PAD, width: TH, height: TH, borderRadius: TH / 2, backgroundColor: 'rgba(255,255,255,0.28)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.7)', alignItems: 'center', justifyContent: 'center' }, thumb]}>
-          <ChevronRight size={26} color={c.ink} />
+        <Animated.View style={[{ marginLeft: PAD, width: TH, height: TH, borderRadius: TH / 2, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }, thumb]}>
+          <ChevronRight size={26} color="#0B0E14" />
         </Animated.View>
       </GestureDetector>
     </View>
