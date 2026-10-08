@@ -69,7 +69,7 @@ export function mealsFor(t: TimeOfDay): Partial<Record<MealId, MealLog>> {
 
 export function initialDomain(): Domain {
   return {
-    time: 'Evening', min: 1100, todayVariant: 'Regular', loading: false, hc: true, wearable: true, hasGym: true, askGym: false,
+    time: 'Evening', min: 1100, todayVariant: 'Regular', loading: false, hc: false, wearable: false, hasGym: true, askGym: false,
     water: 1.8, weight: 72.4, weightLog: [{ t: 'Mon 22', v: 72.6 }, { t: 'Tue 23', v: 72.5 }],
     meals: mealsFor('Evening'), wkScenario: 'Not started', wkDone: null, session: null,
     ci: 'At the gym', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null, scanFails: false, dismissed: {}, plans: basePlans(), planReq: 'none', coachUpdated: false,
