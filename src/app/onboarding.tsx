@@ -107,7 +107,7 @@ export default function Onboarding() {
     target: { label: 'Skip target weight', run: skipBody },
     plan: { label: 'Maybe later', run: () => go(flow[idx + 1]) },
     basics: { label: 'Skip diet and injuries', run: () => go(flow[idx + 1]) },
-    health: { label: `Connect ${HEALTH_NAME} later`, run: () => { setDomain({ hc: false }); go(flow[idx + 1]); } },
+    health: { label: 'Not now', run: () => { setDomain({ hc: false }); go(flow[idx + 1]); } },
   };
   // Skip and Skip all start with the questionnaire (the goal question); the welcome and gym screens have neither.
   const questionnaire = step !== 'welcome' && step !== 'facility' && step !== 'building' && step !== 'ready';
