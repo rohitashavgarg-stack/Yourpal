@@ -311,6 +311,33 @@ function GoalTile({ goal, on, onPress }: { goal: string; on: boolean; onPress: (
   );
 }
 
+function FacilityStep() {
+  const { c } = useTheme();
+  const { s, set: setShell } = useShell();
+  const gyms = s.progs.filter((x) => x.kind === 'Gym');
+  return (
+    <>
+      <Title t="Which gym are you joining?" s="Your coach, plan and check-in come from the gym you pick." />
+      {gyms.map((g) => {
+        const on = s.cur === g.id;
+        return (
+          <Pressy key={g.id} accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={() => setShell({ cur: g.id })}
+            style={{ minHeight: 72, borderRadius: 22, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <ProgLogo p={g} size={44} />
+            <View style={{ flex: 1, paddingVertical: 12 }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{g.name}</Txt>
+              <Txt v="caption">Gym</Txt>
+            </View>
+            <View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+              {on && <Check size={15} strokeWidth={3} color={c.bg} />}
+            </View>
+          </Pressy>
+        );
+      })}
+    </>
+  );
+}
+
 function ExpStep({ tried }: { tried: boolean }) {
   const { c } = useTheme();
   const { state, setProfile } = useStore();
