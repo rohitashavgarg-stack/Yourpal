@@ -203,7 +203,7 @@ function Peek({ x, rot, dy, k, children }: { x: number; rot: number; dy: number;
 function BigFooter() {
   const { c, isDark } = useTheme();
   return (
-    <View style={{ marginTop: 14, paddingTop: 18, borderTopWidth: 1, borderTopColor: c.line, borderStyle: 'dashed', gap: 14 }}>
+    <View style={{ marginTop: 14, paddingTop: 18, borderTopWidth: 2, borderTopColor: c.surface3, borderStyle: 'dotted', gap: 14 }}>
       <Row style={{ justifyContent: 'space-between' }}>
         <YourPalLogo height={22} color={c.muted} />
         <Txt style={{ fontFamily: font.mono, fontSize: 9, lineHeight: 13, color: c.muted, opacity: 0.8 }}>v1.0</Txt>
