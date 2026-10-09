@@ -83,16 +83,9 @@ export default function Profile() {
             <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20 }}>Edit</Txt>
           </Pressy>
         </Row>
-        <Row style={{ gap: 0, borderTopWidth: 1, borderTopColor: c.line, paddingTop: 14 }}>
-          <View style={{ flex: 1, gap: 2 }}>
-            <Txt v="caption" style={{ fontSize: 12 }}>Member since</Txt>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25 }}>{fmtDay(START)} {START.getFullYear()}</Txt>
-          </View>
-          <View style={{ width: 1, backgroundColor: c.line, marginRight: 16 }} />
-          <View style={{ flex: 1, gap: 2 }}>
-            <Txt v="caption" style={{ fontSize: 12 }}>Current streak</Txt>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25 }}>{st.weeks} {st.weeks === 1 ? 'week' : 'weeks'}</Txt>
-          </View>
+        <Row style={{ gap: 10 }}>
+          <StatCard label="Member since" value={`${fmtDay(START)} ${START.getFullYear()}`} />
+          <StatCard label="Current streak" value={`${st.weeks} ${st.weeks === 1 ? 'week' : 'weeks'}`} />
         </Row>
       </View>
 
@@ -152,6 +145,18 @@ export default function Profile() {
       <Button kind="secondary" label="Log out" icon={<LogOut size={18} color={c.ink} />} onPress={() => openSheet(<LogoutSheet />, { label: 'Log out' })} />
       <BigFooter />
     </SubPage>
+  );
+}
+
+// A small card with a soft glow along its inner edge.
+function StatCard({ label, value }: { label: string; value: string }) {
+  const { c, isDark } = useTheme();
+  return (
+    <View style={{ flex: 1, minHeight: 78, borderRadius: 22, overflow: 'hidden', backgroundColor: isDark ? '#0F131B' : c.surface, borderWidth: 1, borderColor: isDark ? 'rgba(255,255,255,0.18)' : c.line, padding: 14, justifyContent: 'space-between' }}>
+      <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: 22, boxShadow: [{ offsetX: 0, offsetY: 0, blurRadius: 20, spreadDistance: 0, color: isDark ? 'rgba(255,255,255,0.18)' : 'rgba(47,107,234,0.14)', inset: true }] } as any} />
+      <Txt v="caption" style={{ fontSize: 12 }}>{label}</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25 }}>{value}</Txt>
+    </View>
   );
 }
 
