@@ -60,19 +60,15 @@ export function EnergyDot({ onPress }: { onPress?: () => void }) {
 export function EnergyStack({ onPress }: { onPress?: () => void }) {
   return (
     <WTile colors={['#FF8A3D', '#D4521A', '#8F2E0F']} label="Active energy" a11y="Active energy 320 of 450 kilocalories, 69 percent" onPress={onPress}>
-      <View style={{ position: 'absolute', right: 14, top: 14, alignItems: 'flex-end' }}>
-        <Txt style={{ fontFamily: font.displayBold, fontSize: 26, lineHeight: 32, color: '#fff' }}>69%</Txt>
-        <Txt style={cap}>of goal</Txt>
+      {/* six pills, the bottom four filled */}
+      <View style={{ position: 'absolute', left: 14, bottom: 14, flexDirection: 'column-reverse', gap: 5 }}>
+        {Array.from({ length: 6 }, (_, i) => <View key={i} style={{ width: 36, height: 14, borderRadius: 7, backgroundColor: i < 4 ? '#fff' : 'rgba(255,255,255,0.35)' }} />)}
       </View>
-      <View style={{ position: 'absolute', left: 14, bottom: 14, flexDirection: 'row', alignItems: 'flex-end', gap: 12 }}>
-        <View style={{ flexDirection: 'column-reverse', gap: 5 }}>
-          {Array.from({ length: 6 }, (_, i) => <View key={i} style={{ width: 34, height: 14, borderRadius: 7, backgroundColor: i < 4 ? '#fff' : 'rgba(255,255,255,0.28)' }} />)}
-        </View>
-        <View>
-          <Txt style={{ fontFamily: font.displayBold, fontSize: 22, lineHeight: 28, color: '#fff' }}>320</Txt>
-          <Txt style={cap}>kcal</Txt>
-        </View>
+      <View style={{ position: 'absolute', right: 14, top: 58, alignItems: 'flex-end' }}>
+        <Txt style={{ fontFamily: font.displayBold, fontSize: 38, lineHeight: 44, letterSpacing: -1, color: '#fff' }}>69%</Txt>
+        <Txt style={{ fontSize: 14, lineHeight: 20, color: 'rgba(255,255,255,0.75)' }}>of goal</Txt>
       </View>
+      <Txt style={{ position: 'absolute', right: 14, bottom: 12, fontSize: 14, lineHeight: 20, color: '#fff' }}>320 kcal</Txt>
     </WTile>
   );
 }
