@@ -59,6 +59,17 @@ export function StepsTile() {
 
 type S = ReturnType<typeof useSteps>;
 
+// The real card for a given design, not tappable: used where designs are shown (Profile → Tracker designs).
+export function StepsPreview({ design }: { design: StepsDesign }) {
+  const s = useSteps();
+  return (
+    <View pointerEvents="none" style={{ width: SQ, height: SQ, borderRadius: 28, overflow: 'hidden' }}>
+      {design === 'Ruler' ? <RulerFace s={s} /> : design === 'Day bars' ? <BarsFace s={s} /> : <CurrentFace s={s} />}
+    </View>
+  );
+}
+export const STEPS_CARD = SQ;
+
 function CurrentFace({ s }: { s: S }) {
   return (
     <LinearGradient colors={['#5468FF', '#3346E8', '#222FB5']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14, justifyContent: 'space-between' }}>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { haptic } from '@/lib/haptics';
-import { stepsStore } from '@/features/today/StepsCards';
+import { STEPS_CARD, StepsPreview, stepsStore } from '@/features/today/StepsCards';
+import { LinearGradient } from 'expo-linear-gradient';
 import { fmtDay, useGoalV2 } from '@/features/goalv2/model';
 import { START } from '@/features/progress/trends';
 import { useStreak } from '@/features/streak/useStreak';
@@ -9,7 +10,7 @@ import { useOpenEdgeCases } from '@/web/WebFrame';
 import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
-import { Check, ChevronRight, LogOut } from '@/lib/icons';
+import { ArrowRight, Check, ChevronRight, LogOut } from '@/lib/icons';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Avatar } from '@/components/GymHeader';
 import { useOverlay } from '@/components/Overlay';
@@ -124,6 +125,8 @@ export default function Profile() {
         </Row>
       </View>
 
+      <TrackerPromo onPress={go('/profile/tracker-designs')} />
+
       {group('TRACKERS', [
         { l: 'Quick trackers to show', s: trackers, go: go('/profile/trackers') },
         { l: 'Tracker designs', s: `Steps · ${stepsStore.use().design}`, go: go('/profile/tracker-designs') },
@@ -146,7 +149,7 @@ export default function Profile() {
       ])}
 
       <Button kind="secondary" label="Log out" icon={<LogOut size={18} color={c.ink} />} onPress={() => openSheet(<LogoutSheet />, { label: 'Log out' })} />
-      <Note center>Made in India · Version 1.0</Note>
+      <BigFooter />
     </SubPage>
   );
 }
@@ -199,5 +202,44 @@ function ThemeTile({ mode, on, onPress }: { mode: 'Light' | 'Dark' | 'System'; o
         <Txt style={{ fontFamily: on ? font.semibold : font.medium, fontSize: 14, lineHeight: 20 }}>{mode}</Txt>
       </Row>
     </Pressy>
+  );
+}
+
+// Opens the tracker designs page: the real tracker cards peeking up from the bottom of a blue card.
+function TrackerPromo({ onPress }: { onPress: () => void }) {
+  const { c } = useTheme();
+  const { design } = stepsStore.use();
+  const other = design === 'Current' ? 'Day bars' : 'Current';
+  const W = 132, k = W / STEPS_CARD;
+  return (
+    <Pressy accessibilityRole="button" accessibilityLabel="Tracker designs. Choose how your trackers look" onPress={onPress} scaleTo={0.985}
+      style={{ height: 196, borderRadius: 28, overflow: 'hidden', backgroundColor: c.heroFrom }}>
+      <LinearGradient colors={[c.heroFrom, c.heroMid, c.heroTo]} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
+      <Row style={{ paddingTop: 18, paddingHorizontal: 20, justifyContent: 'space-between' }}>
+        <View style={{ gap: 2 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.5, color: '#fff' }}>Tracker designs</Txt>
+          <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.85)' }}>Pick how your steps look</Txt>
+        </View>
+        <View style={{ width: 52, height: 36, borderRadius: 18, backgroundColor: '#0B0E14', alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={18} color="#fff" /></View>
+      </Row>
+      <View pointerEvents="none" style={{ position: 'absolute', left: 150, bottom: -44, width: W, height: W, transform: [{ rotate: '6deg' }] }}>
+        <View style={{ transform: [{ scale: k }], transformOrigin: 'top left' } as any}><StepsPreview design={other as any} /></View>
+      </View>
+      <View pointerEvents="none" style={{ position: 'absolute', left: 28, bottom: -30, width: W + 8, height: W + 8, transform: [{ rotate: '-4deg' }] }}>
+        <View style={{ transform: [{ scale: (W + 8) / STEPS_CARD }], transformOrigin: 'top left' } as any}><StepsPreview design={design} /></View>
+      </View>
+    </Pressy>
+  );
+}
+
+// Big quiet line at the bottom of the page, in the page's own colours.
+function BigFooter() {
+  const { c, isDark } = useTheme();
+  return (
+    <View style={{ marginTop: 10, paddingTop: 22, borderTopWidth: 1, borderTopColor: c.line, borderStyle: 'dashed', gap: 8 }}>
+      <Txt style={{ fontFamily: font.semibold, fontSize: 44, lineHeight: 52, letterSpacing: -1.6, color: c.accent, opacity: isDark ? 0.32 : 0.24 }}>{'your health,\nevery day.'}</Txt>
+      <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>Built for you · Made in India</Txt>
+      <Txt style={{ fontSize: 12, lineHeight: 18, color: c.muted, opacity: 0.7, paddingBottom: 12 }}>YourPal · Version 1.0</Txt>
+    </View>
   );
 }
