@@ -110,7 +110,7 @@ export function BottleArt({ litres, w, h, id = 'bottleBody', onLight, live = fal
   );
 }
 
-function WaterCard() {
+export function WaterCard() {
   const { openSheet } = useOverlay();
   const { water, change, hit } = useWater();
   const ml = Math.round(water * 1000);
@@ -163,7 +163,7 @@ function Tile({ bg, label, labelColor, onPress, a11y, right, children, shadow }:
 }
 
 const AArea = Animated.createAnimatedComponent(Path);
-function WeightCard() {
+export function WeightCard() {
   const { c, isDark } = useTheme();
   const { d } = useDomain();
   const series = [...SPARK, d.weight];

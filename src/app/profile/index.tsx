@@ -1,6 +1,7 @@
 import React from 'react';
 import { haptic } from '@/lib/haptics';
 import { STEPS_CARD, StepsPreview, stepsStore } from '@/features/today/StepsCards';
+import { WaterCard, WeightCard } from '@/features/today/Trackers';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fmtDay, useGoalV2 } from '@/features/goalv2/model';
 import { START } from '@/features/progress/trends';
@@ -209,8 +210,7 @@ function ThemeTile({ mode, on, onPress }: { mode: 'Light' | 'Dark' | 'System'; o
 function TrackerPromo({ onPress }: { onPress: () => void }) {
   const { c } = useTheme();
   const { design } = stepsStore.use();
-  const other = design === 'Current' ? 'Day bars' : 'Current';
-  const W = 132, k = W / STEPS_CARD;
+  const W = 134, k = W / STEPS_CARD;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Tracker designs. Choose how your trackers look" onPress={onPress} scaleTo={0.985}
       style={{ height: 196, borderRadius: 28, overflow: 'hidden', backgroundColor: c.heroFrom }}>
@@ -218,17 +218,25 @@ function TrackerPromo({ onPress }: { onPress: () => void }) {
       <Row style={{ paddingTop: 18, paddingHorizontal: 20, justifyContent: 'space-between' }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.5, color: '#fff' }}>Tracker designs</Txt>
-          <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.85)' }}>Pick how your steps look</Txt>
+          <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.85)' }}>Pick how your trackers look</Txt>
         </View>
         <View style={{ width: 52, height: 36, borderRadius: 18, backgroundColor: '#0B0E14', alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={18} color="#fff" /></View>
       </Row>
-      <View pointerEvents="none" style={{ position: 'absolute', left: 150, bottom: -44, width: W, height: W, transform: [{ rotate: '6deg' }] }}>
-        <View style={{ transform: [{ scale: k }], transformOrigin: 'top left' } as any}><StepsPreview design={other as any} /></View>
-      </View>
-      <View pointerEvents="none" style={{ position: 'absolute', left: 28, bottom: -30, width: W + 8, height: W + 8, transform: [{ rotate: '-4deg' }] }}>
-        <View style={{ transform: [{ scale: (W + 8) / STEPS_CARD }], transformOrigin: 'top left' } as any}><StepsPreview design={design} /></View>
-      </View>
+      {/* different kinds of trackers peek up from the bottom: water, weight, steps (in front) */}
+      <Peek x={-4} rot={-9} dy={-48} k={k}><WaterCard /></Peek>
+      <Peek x={216} rot={9} dy={-54} k={k}><WeightCard /></Peek>
+      <Peek x={108} rot={0} dy={-34} k={k}><StepsPreview design={design} /></Peek>
     </Pressy>
+  );
+}
+
+// One scaled, non-tappable tracker card for the promo.
+function Peek({ x, rot, dy, k, children }: { x: number; rot: number; dy: number; k: number; children: React.ReactNode }) {
+  const W = STEPS_CARD * k;
+  return (
+    <View pointerEvents="none" style={{ position: 'absolute', left: x, bottom: dy, width: W, height: W, transform: [{ rotate: `${rot}deg` }] }}>
+      <View style={{ transform: [{ scale: k }], transformOrigin: 'top left' } as any}>{children}</View>
+    </View>
   );
 }
 
