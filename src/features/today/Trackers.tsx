@@ -16,7 +16,7 @@ import { haptic } from '@/lib/haptics';
 import { fmt1 } from '@/lib/useNow';
 import { HEALTH_NAME } from '@/lib/health';
 import { StepsDesign, StepsPreview, StepsTile } from './StepsCards';
-import { TrackerKey, designStore } from '@/features/trackers/designs';
+import { TrackerKey } from '@/features/trackers/designs';
 import { EnergyDot, EnergyStack, HrDot, SleepDot, SleepStages, WaterDot, WaterGlasses, WeightDot, WeightRuler } from '@/features/trackers/Widgets';
 
 const APath = Animated.createAnimatedComponent(Path);
@@ -289,21 +289,15 @@ export function TileFor({ tracker, design, interactive = true }: { tracker: Trac
   }
 }
 
-// The tile for a tracker in the design the member picked on Profile → Tracker designs.
-function DesignedTile({ tracker }: { tracker: Exclude<TrackerKey, 'steps'> }) {
-  const D = designStore.use();
-  return <TileFor tracker={tracker} design={D[tracker]} />;
-}
-
 export function Trackers() {
   const { d } = useDomain();
   return (
     <View style={{ marginHorizontal: -16, gap: 6 }}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} decelerationRate="fast" accessibilityLabel="Quick trackers, swipe for more"
         contentContainerStyle={{ gap: 10, paddingHorizontal: 16, paddingVertical: 2 }}>
-        <DesignedTile tracker="water" />
-        <DesignedTile tracker="weight" />
-        {!d.hc ? <ConnectCard /> : <><StepsTile />{d.wearable && <><DesignedTile tracker="hr" /><DesignedTile tracker="sleep" /><DesignedTile tracker="energy" /></>}</>}
+        <WaterCard />
+        <WeightCard />
+        {!d.hc ? <ConnectCard /> : <><StepsTile />{d.wearable && <HealthCards />}</>}
       </ScrollView>
       <Txt v="caption" style={{ paddingHorizontal: 20 }}>{!d.hc ? `Swipe for more · connect ${HEALTH_NAME} for steps` : d.wearable ? `Swipe for heart rate, sleep and energy from your watch` : `Steps from ${HEALTH_NAME} · heart rate and sleep need a watch or band`}</Txt>
     </View>
