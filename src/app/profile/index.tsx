@@ -152,8 +152,8 @@ export default function Profile() {
 function StatCard({ label, value }: { label: string; value: string }) {
   const { c, isDark } = useTheme();
   return (
-    <View style={{ flex: 1, minHeight: 78, borderRadius: 22, overflow: 'hidden', backgroundColor: isDark ? '#0F131B' : c.surface, borderWidth: 1, borderColor: isDark ? 'rgba(255,255,255,0.18)' : c.line, padding: 14, justifyContent: 'space-between' }}>
-      <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: 22, boxShadow: [{ offsetX: 0, offsetY: 0, blurRadius: 20, spreadDistance: 0, color: isDark ? 'rgba(255,255,255,0.18)' : 'rgba(47,107,234,0.14)', inset: true }] } as any} />
+    <View style={{ flex: 1, minHeight: 78, borderRadius: 22, overflow: 'hidden', backgroundColor: isDark ? '#0F131B' : c.surface, borderWidth: 1, borderColor: isDark ? 'rgba(80,140,255,0.45)' : c.line, padding: 14, justifyContent: 'space-between' }}>
+      <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: 22, boxShadow: [{ offsetX: 0, offsetY: 0, blurRadius: 20, spreadDistance: 0, color: isDark ? 'rgba(60,120,255,0.42)' : 'rgba(47,107,234,0.14)', inset: true }] } as any} />
       <Txt v="caption" style={{ fontSize: 12 }}>{label}</Txt>
       <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25 }}>{value}</Txt>
     </View>
