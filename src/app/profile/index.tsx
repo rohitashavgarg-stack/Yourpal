@@ -1,11 +1,16 @@
 import React from 'react';
+import { haptic } from '@/lib/haptics';
+import { stepsStore } from '@/features/today/StepsCards';
+import { fmtDay, useGoalV2 } from '@/features/goalv2/model';
+import { START } from '@/features/progress/trends';
+import { useStreak } from '@/features/streak/useStreak';
 import { HEALTH_NAME } from '@/lib/health';
 import { useOpenEdgeCases } from '@/web/WebFrame';
 import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
-import { LogOut, Moon, Smartphone, Sun } from '@/lib/icons';
-import { Button, Pressy, Row, Segmented, Txt } from '@/components/ui';
+import { Check, ChevronRight, LogOut } from '@/lib/icons';
+import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Avatar } from '@/components/GymHeader';
 import { useOverlay } from '@/components/Overlay';
 import { useStore, useScenarios } from '@/lib/store';
@@ -48,34 +53,44 @@ export default function Profile() {
   const trackers = (['water', 'weight', 'steps'] as const).filter((k) => s.trk[k]).map((k) => k[0].toUpperCase() + k.slice(1)).join(', ') || 'None';
   const go = (path: string) => () => router.push(path as any);
   const openEdgeCases = useOpenEdgeCases();
-  const rows: { l: string; s?: string; go: () => void; color?: string }[] = [
-    { l: 'My details', s: 'Date of birth, height, weight, diet, injuries', go: go('/profile/details') },
-    { l: 'Change goal', s: goalSummary(d.goal), go: go('/goal') },
-    { l: 'Membership pauses', s: d.onBreak ? 'Paused by the front desk' : 'History and pauses left', go: go('/gym/break') },
-    { l: 'Privacy & what each provider sees', go: go('/profile/privacy') },
-    { l: 'Notifications', s: s.notif.remind || s.notif.water ? 'Reminders on' : 'Reminders off by default', go: go('/profile/notifications') },
-    { l: 'Units & diet detail level', s: `${s.unitsW} · ${s.unitsL} · ${s.detail}`, go: go('/profile/units') },
-    { l: 'Connected apps', s: d.hc ? `${HEALTH_NAME} · connected` : `${HEALTH_NAME} · not connected`, go: go('/profile/health') },
-    { l: 'Quick trackers to show', s: trackers, go: go('/profile/trackers') },
-    { l: 'Export my data', go: go('/profile/export') },
-    { l: 'Delete account', go: go('/profile/delete'), color: c.warn },
-    { l: 'Help & support', go: go('/profile/help') },
-    { l: 'Demo controls', s: 'Goal type, Today states, time of day, light or dark', go: openEdgeCases },
-  ];
+  const st = useStreak();
+  const g2 = useGoalV2();
+  const group = (title: string, rows: { l: string; s?: string; go: () => void; color?: string }[]) => (
+    <View style={{ gap: 8 }}>
+      <Txt v="label" style={{ paddingHorizontal: 4 }}>{title}</Txt>
+      <ListCard>
+        {rows.map((r, i) => <LineRow key={r.l} title={r.l} sub={r.s} color={r.color} onPress={r.go} last={i === rows.length - 1} />)}
+      </ListCard>
+    </View>
+  );
 
   return (
     <SubPage title="Profile" fallback="/(tabs)">
-      <Row style={{ gap: 14, paddingVertical: 6, paddingHorizontal: 4 }}>
-        <Avatar size={64} />
-        <View style={{ flex: 1 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 22, letterSpacing: -0.6 }} numberOfLines={1}>{p.name || 'Jyotsana Rankawat'}</Txt>
-          <Txt v="mono" muted>{maskPhone(state.phone)}</Txt>
-          {state.sc.member === 'PT member' && <View style={{ alignSelf: 'flex-start', marginTop: 6, height: 24, paddingHorizontal: 10, borderRadius: 12, backgroundColor: '#F5B301', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: '#3A2A00' }}>Premium · PT</Txt></View>}
-        </View>
-        <Pressy accessibilityRole="button" accessibilityLabel="Edit name and number" onPress={go('/profile/details')} scaleTo={0.94} style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: c.surface, justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20 }}>Edit</Txt>
-        </Pressy>
-      </Row>
+      {/* Header: who you are, how long you have been here */}
+      <View style={{ gap: 14, paddingTop: 4 }}>
+        <Row style={{ gap: 14, alignItems: 'flex-start' }}>
+          <Avatar size={84} />
+          <View style={{ flex: 1, gap: 4, paddingTop: 4 }}>
+            <Txt style={{ fontFamily: font.light, fontSize: 28, lineHeight: 36, letterSpacing: -0.8 }} numberOfLines={2}>{p.name || 'Jyotsana Rankawat'}</Txt>
+            <Txt v="mono" muted>{maskPhone(state.phone)}</Txt>
+            {state.sc.member === 'PT member' && <View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, borderRadius: 12, backgroundColor: '#F5B301', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: '#3A2A00' }}>Premium · PT</Txt></View>}
+          </View>
+          <Pressy accessibilityRole="button" accessibilityLabel="Edit name and number" onPress={go('/profile/details')} scaleTo={0.94} style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: c.surface, justifyContent: 'center' }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20 }}>Edit</Txt>
+          </Pressy>
+        </Row>
+        <Row style={{ gap: 0, borderTopWidth: 1, borderTopColor: c.line, paddingTop: 14 }}>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Txt v="caption" style={{ fontSize: 12 }}>Member since</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25 }}>{fmtDay(START)} {START.getFullYear()}</Txt>
+          </View>
+          <View style={{ width: 1, backgroundColor: c.line, marginRight: 16 }} />
+          <View style={{ flex: 1, gap: 2 }}>
+            <Txt v="caption" style={{ fontSize: 12 }}>Current streak</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25 }}>{st.weeks} {st.weeks === 1 ? 'week' : 'weeks'}</Txt>
+          </View>
+        </Row>
+      </View>
 
       {s.deleting && (
         <Animated.View entering={fade()} exiting={fadeOut()} style={{ paddingVertical: 14, paddingHorizontal: 18, borderRadius: 22, backgroundColor: c.warnSoft, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -84,23 +99,105 @@ export default function Profile() {
         </Animated.View>
       )}
 
-      <ListCard>
-        {rows.map((r, i) => <LineRow key={r.l} title={r.l} sub={r.s} color={r.color} onPress={r.go} last={i === rows.length - 1} />)}
-      </ListCard>
+      {/* My goals */}
+      <View style={{ gap: 8 }}>
+        <Txt v="label" style={{ paddingHorizontal: 4 }}>MY GOALS</Txt>
+        <Row style={{ gap: 10 }}>
+          <GoalTile title="Daily steps" value="8,000" onPress={go('/profile/trackers')} />
+          <GoalTile title="Water" value="3 L" onPress={go('/profile/trackers')} />
+        </Row>
+        <Pressy accessibilityRole="button" accessibilityLabel={`Goal: ${g2.name}. Change goal`} onPress={go('/goal')} scaleTo={0.985}
+          style={{ minHeight: 64, borderRadius: 22, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <View style={{ flex: 1 }}>
+            <Txt v="caption" style={{ fontSize: 12 }}>Main goal</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24 }}>{g2.name}</Txt>
+          </View>
+          <ChevronRight size={18} color={c.muted} />
+        </Pressy>
+      </View>
 
-      <ListCard style={{ paddingVertical: 16, gap: 12 }}>
-        <Txt style={{ fontFamily: font.medium }}>Appearance</Txt>
-        <Segmented
-          accessibilityLabel="Appearance"
-          value={state.sc.theme}
-          onChange={(v) => setSc({ theme: v })}
-          options={[{ value: 'System', label: 'System' }, { value: 'Light', label: 'Light' }, { value: 'Dark', label: 'Dark' }]}
-          icons={{ System: (col) => <Smartphone size={15} color={col} />, Light: (col) => <Sun size={15} color={col} />, Dark: (col) => <Moon size={15} color={col} /> }}
-        />
-      </ListCard>
+      {/* Appearance: see both themes */}
+      <View style={{ gap: 8 }}>
+        <Txt v="label" style={{ paddingHorizontal: 4 }}>APPEARANCE</Txt>
+        <Row style={{ gap: 10, alignItems: 'flex-start' }}>
+          {(['Light', 'Dark', 'System'] as const).map((m) => <ThemeTile key={m} mode={m} on={state.sc.theme === m} onPress={() => { haptic.tap(); setSc({ theme: m }); }} />)}
+        </Row>
+      </View>
+
+      {group('TRACKERS', [
+        { l: 'Quick trackers to show', s: trackers, go: go('/profile/trackers') },
+        { l: 'Tracker designs', s: `Steps · ${stepsStore.use().design}`, go: go('/profile/tracker-designs') },
+        { l: 'Connected apps', s: d.hc ? `${HEALTH_NAME} · connected` : `${HEALTH_NAME} · not connected`, go: go('/profile/health') },
+      ])}
+      {group('ACCOUNT', [
+        { l: 'My details', s: 'Date of birth, height, weight, diet, injuries', go: go('/profile/details') },
+        ...(d.hasGym ? [{ l: 'Membership pauses', s: d.onBreak ? 'Paused by the front desk' : 'History and pauses left', go: go('/gym/break') }] : []),
+        { l: 'Units & diet detail level', s: `${s.unitsW} · ${s.unitsL} · ${s.detail}`, go: go('/profile/units') },
+      ])}
+      {group('PRIVACY AND ALERTS', [
+        { l: 'Privacy & what each provider sees', go: go('/profile/privacy') },
+        { l: 'Notifications', s: s.notif.remind || s.notif.water ? 'Reminders on' : 'Reminders off by default', go: go('/profile/notifications') },
+        { l: 'Export my data', go: go('/profile/export') },
+        { l: 'Delete account', go: go('/profile/delete'), color: c.warn },
+      ])}
+      {group('SUPPORT', [
+        { l: 'Help & support', go: go('/profile/help') },
+        { l: 'Demo controls', s: 'Goal type, Today states, time of day, light or dark', go: openEdgeCases },
+      ])}
 
       <Button kind="secondary" label="Log out" icon={<LogOut size={18} color={c.ink} />} onPress={() => openSheet(<LogoutSheet />, { label: 'Log out' })} />
-      <Note center>Shared across programmes · coming in v1.5: health connections, Hindi / Hinglish</Note>
+      <Note center>Made in India · Version 1.0</Note>
     </SubPage>
+  );
+}
+
+function GoalTile({ title, value, onPress }: { title: string; value: string; onPress: () => void }) {
+  const { c } = useTheme();
+  return (
+    <Pressy accessibilityRole="button" accessibilityLabel={`${title} goal ${value}. Edit`} onPress={onPress} scaleTo={0.97}
+      style={{ flex: 1, minHeight: 84, borderRadius: 22, backgroundColor: c.surface, padding: 14, justifyContent: 'space-between' }}>
+      <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 30, letterSpacing: -0.5 }}>{value}</Txt>
+      <Row style={{ justifyContent: 'space-between' }}>
+        <Txt v="caption" style={{ fontSize: 13 }}>{title}</Txt>
+        <ChevronRight size={16} color={c.muted} />
+      </Row>
+    </Pressy>
+  );
+}
+
+// A small phone drawn in each theme's own colours, so the choice is something you can see.
+const MOCK = {
+  Light: { bg: '#F4F6F9', card: '#FFFFFF', ink: '#14171C', mute: '#C9CFD8' },
+  Dark: { bg: '#0F1218', card: '#1A1F29', ink: '#F1F3F6', mute: '#3A4250' },
+} as const;
+function ThemeTile({ mode, on, onPress }: { mode: 'Light' | 'Dark' | 'System'; on: boolean; onPress: () => void }) {
+  const { c } = useTheme();
+  const Phone = ({ t, style }: { t: 'Light' | 'Dark'; style?: any }) => {
+    const m = MOCK[t];
+    return (
+      <View style={[{ flex: 1, backgroundColor: m.bg, padding: 8, gap: 5 }, style]}>
+        <View style={{ width: 22, height: 5, borderRadius: 3, backgroundColor: m.ink, opacity: 0.8 }} />
+        <View style={{ height: 22, borderRadius: 7, backgroundColor: c.accent }} />
+        <View style={{ height: 14, borderRadius: 6, backgroundColor: m.card }} />
+        <View style={{ height: 14, borderRadius: 6, backgroundColor: m.card }} />
+        <View style={{ flexDirection: 'row', gap: 4 }}>
+          <View style={{ flex: 1, height: 5, borderRadius: 3, backgroundColor: m.mute }} />
+          <View style={{ flex: 1, height: 5, borderRadius: 3, backgroundColor: m.mute }} />
+        </View>
+      </View>
+    );
+  };
+  return (
+    <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={`${mode} theme`} onPress={onPress} scaleTo={0.97} style={{ flex: 1, gap: 8, alignItems: 'center' }}>
+      <View style={{ width: '100%', height: 116, borderRadius: 18, overflow: 'hidden', borderWidth: on ? 2.5 : 1, borderColor: on ? c.accent : c.line, flexDirection: 'row' }}>
+        {mode === 'System' ? (<><Phone t="Light" /><Phone t="Dark" /></>) : <Phone t={mode} />}
+      </View>
+      <Row style={{ gap: 6 }}>
+        <View style={{ width: 16, height: 16, borderRadius: 8, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.accent : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+          {on && <Check size={10} strokeWidth={3.5} color="#fff" />}
+        </View>
+        <Txt style={{ fontFamily: on ? font.semibold : font.medium, fontSize: 14, lineHeight: 20 }}>{mode}</Txt>
+      </Row>
+    </Pressy>
   );
 }
