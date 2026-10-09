@@ -214,19 +214,19 @@ function TrackerPromo({ onPress }: { onPress: () => void }) {
   const W = 134, k = W / STEPS_CARD;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Tracker designs. Choose how your trackers look" onPress={onPress} scaleTo={0.985}
-      style={{ height: 196, borderRadius: 28, overflow: 'hidden', backgroundColor: c.heroFrom }}>
-      <LinearGradient colors={[c.heroFrom, c.heroMid, c.heroTo]} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
+      style={{ height: 196, borderRadius: 28, overflow: 'hidden', backgroundColor: '#0B0E14', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)' }}>
+      <LinearGradient colors={['#0B0E14', '#161B26']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
       <Row style={{ paddingTop: 18, paddingHorizontal: 20, justifyContent: 'space-between' }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.5, color: '#fff' }}>Tracker designs</Txt>
-          <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.85)' }}>Pick how your trackers look</Txt>
+          <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.6)' }}>Pick how your trackers look</Txt>
         </View>
-        <View style={{ width: 52, height: 36, borderRadius: 18, backgroundColor: '#0B0E14', alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={18} color="#fff" /></View>
+        <View style={{ width: 52, height: 36, borderRadius: 18, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={18} color="#0B0E14" /></View>
       </Row>
       {/* three kinds of trackers peek up from the bottom: water, workout week, steps (in front) */}
-      <Peek x={-4} rot={-9} dy={-48} k={k}><WaterCard /></Peek>
-      <Peek x={216} rot={9} dy={-54} k={k}><WeekTile /></Peek>
-      <Peek x={108} rot={0} dy={-34} k={k}><StepsPreview design="Dot matrix" /></Peek>
+      <Peek x={-6} rot={-9} dy={-40} k={k}><WaterCard /></Peek>
+      <Peek x={228} rot={10} dy={-44} k={k}><WeekTile /></Peek>
+      <Peek x={104} rot={0} dy={-26} k={k}><StepsPreview design="Dot matrix" /></Peek>
     </Pressy>
   );
 }

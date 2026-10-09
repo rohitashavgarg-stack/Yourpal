@@ -30,7 +30,7 @@ export function WTile({ colors, onPress, label, Icon, a11y, children, right }: {
       {children}
     </>
   );
-  const style = { width: TILE, height: TILE, borderRadius: 28, overflow: 'hidden', padding: 14 } as const;
+  const style = { width: TILE, height: TILE, borderRadius: 28, overflow: 'hidden', padding: 14, borderWidth: 1, borderColor: 'rgba(255,255,255,0.10)' } as const;
   return onPress
     ? <Pressy accessibilityRole="button" accessibilityLabel={a11y} onPress={onPress} scaleTo={0.97} style={style}>{inner}</Pressy>
     : <View accessible accessibilityLabel={a11y} style={style}>{inner}</View>;
