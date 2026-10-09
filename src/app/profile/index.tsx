@@ -252,8 +252,7 @@ function BigFooter() {
           <Txt style={{ fontFamily: font.mono, fontSize: 11, lineHeight: 16, color: c.muted }}>v1.0</Txt>
         </View>
       </Row>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 50, lineHeight: 56, letterSpacing: -2.2, color: isDark ? 'rgba(255,255,255,0.13)' : 'rgba(10,20,40,0.10)' }}>{'your health,
-every day.'}</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: 50, lineHeight: 56, letterSpacing: -2.2, color: isDark ? 'rgba(255,255,255,0.13)' : 'rgba(10,20,40,0.10)' }}>{'your health,\nevery day.'}</Txt>
       <Row style={{ gap: 8, paddingBottom: 18 }}>
         <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.accent }} />
         <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>Built for you · Made in India</Txt>
