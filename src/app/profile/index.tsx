@@ -122,11 +122,16 @@ export default function Profile() {
         </Pressy>
       </View>
 
-      <TrackerPromo onPress={go('/profile/tracker-designs')} />
-      {group('TRACKERS', [
-        { l: 'Quick trackers to show', s: trackers, go: go('/profile/trackers') },
-        { l: 'Connected apps', s: d.hc ? `${HEALTH_NAME} · connected` : `${HEALTH_NAME} · not connected`, go: go('/profile/health') },
-      ])}
+      <View style={{ gap: 8 }}>
+        <Txt v="label" style={{ paddingHorizontal: 4 }}>TRACKERS</Txt>
+        <TrackerPromo onPress={go('/profile/tracker-designs')} />
+        <ListCard>
+          {([
+          { l: 'Quick trackers to show', s: trackers, go: go('/profile/trackers') },
+          { l: 'Connected apps', s: d.hc ? `${HEALTH_NAME} · connected` : `${HEALTH_NAME} · not connected`, go: go('/profile/health') },
+          ] as { l: string; s?: string; go: () => void; color?: string }[]).map((r, i, all) => <LineRow key={r.l} title={r.l} sub={r.s} color={r.color} onPress={r.go} last={i === all.length - 1} />)}
+        </ListCard>
+      </View>
       {group('ACCOUNT', [
         { l: 'Appearance', s: state.sc.theme, go: go('/profile/appearance') },
         { l: 'My details', s: 'Date of birth, height, weight, diet, injuries', go: go('/profile/details') },
