@@ -3,7 +3,7 @@ import { YourPalLogo } from '@/components/YourPalLogo';
 import { haptic } from '@/lib/haptics';
 import { STEPS_CARD, StepsPreview } from '@/features/today/StepsCards';
 import { WaterCard } from '@/features/today/Trackers';
-import { WeekTile } from '@/features/trackers/Widgets';
+import { HrDot } from '@/features/trackers/Widgets';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fmtDay, useGoalV2 } from '@/features/goalv2/model';
 import { START } from '@/features/progress/trends';
@@ -186,9 +186,9 @@ function TrackerPromo({ onPress }: { onPress: () => void }) {
         </View>
         <View style={{ width: 52, height: 36, borderRadius: 18, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={18} color="#0B0E14" /></View>
       </Row>
-      {/* three kinds of trackers peek up from the bottom: water, workout week, steps (in front) */}
+      {/* three kinds of trackers peek up from the bottom: water, heart rate, steps (in front) */}
       <Peek x={-6} rot={-9} dy={-40} k={k}><WaterCard /></Peek>
-      <Peek x={228} rot={10} dy={-44} k={k}><WeekTile /></Peek>
+      <Peek x={228} rot={10} dy={-44} k={k}><HrDot /></Peek>
       <Peek x={104} rot={0} dy={-26} k={k}><StepsPreview design="Dot matrix" /></Peek>
     </Pressy>
   );
