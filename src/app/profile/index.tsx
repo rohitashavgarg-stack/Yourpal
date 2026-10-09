@@ -1,4 +1,5 @@
 import React from 'react';
+import { YourPalLogo } from '@/components/YourPalLogo';
 import { haptic } from '@/lib/haptics';
 import { STEPS_CARD, StepsPreview, stepsStore } from '@/features/today/StepsCards';
 import { WaterCard, WeightCard } from '@/features/today/Trackers';
@@ -240,14 +241,23 @@ function Peek({ x, rot, dy, k, children }: { x: number; rot: number; dy: number;
   );
 }
 
-// Big quiet line at the bottom of the page, in the page's own colours.
+// Big translucent line at the bottom of the page, with the logo and version above and the small print below.
 function BigFooter() {
   const { c, isDark } = useTheme();
   return (
-    <View style={{ marginTop: 10, paddingTop: 22, borderTopWidth: 1, borderTopColor: c.line, borderStyle: 'dashed', gap: 8 }}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 44, lineHeight: 52, letterSpacing: -1.6, color: c.accent, opacity: isDark ? 0.32 : 0.24 }}>{'your health,\nevery day.'}</Txt>
-      <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>Built for you · Made in India</Txt>
-      <Txt style={{ fontSize: 12, lineHeight: 18, color: c.muted, opacity: 0.7, paddingBottom: 12 }}>YourPal · Version 1.0</Txt>
+    <View style={{ marginTop: 14, paddingTop: 18, borderTopWidth: 1, borderTopColor: c.line, borderStyle: 'dashed', gap: 14 }}>
+      <Row style={{ justifyContent: 'space-between' }}>
+        <YourPalLogo height={22} color={c.muted} />
+        <View style={{ height: 24, paddingHorizontal: 10, borderRadius: 12, backgroundColor: c.surface, justifyContent: 'center' }}>
+          <Txt style={{ fontFamily: font.mono, fontSize: 11, lineHeight: 16, color: c.muted }}>v1.0</Txt>
+        </View>
+      </Row>
+      <Txt style={{ fontFamily: font.semibold, fontSize: 50, lineHeight: 56, letterSpacing: -2.2, color: isDark ? 'rgba(255,255,255,0.13)' : 'rgba(10,20,40,0.10)' }}>{'your health,
+every day.'}</Txt>
+      <Row style={{ gap: 8, paddingBottom: 18 }}>
+        <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.accent }} />
+        <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>Built for you · Made in India</Txt>
+      </Row>
     </View>
   );
 }
