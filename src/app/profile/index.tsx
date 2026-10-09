@@ -96,8 +96,6 @@ export default function Profile() {
         </Animated.View>
       )}
 
-      <View style={{ height: 1, backgroundColor: c.line, marginVertical: 6 }} />
-
       {/* My goals */}
       <View style={{ gap: 8 }}>
         <Txt v="label" style={{ paddingHorizontal: 4 }}>MY GOALS</Txt>
