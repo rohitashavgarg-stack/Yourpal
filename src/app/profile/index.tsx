@@ -122,20 +122,13 @@ export default function Profile() {
         </Pressy>
       </View>
 
-      {/* Appearance: see both themes */}
-      <View style={{ gap: 8 }}>
-        <Txt v="label" style={{ paddingHorizontal: 4 }}>APPEARANCE</Txt>
-        <Row style={{ gap: 10, alignItems: 'flex-start' }}>
-          {(['Light', 'Dark', 'System'] as const).map((m) => <ThemeTile key={m} mode={m} on={state.sc.theme === m} onPress={() => { haptic.tap(); setSc({ theme: m }); }} />)}
-        </Row>
-      </View>
-
+      <TrackerPromo onPress={go('/profile/tracker-designs')} />
       {group('TRACKERS', [
         { l: 'Quick trackers to show', s: trackers, go: go('/profile/trackers') },
         { l: 'Connected apps', s: d.hc ? `${HEALTH_NAME} · connected` : `${HEALTH_NAME} · not connected`, go: go('/profile/health') },
       ])}
-      <TrackerPromo onPress={go('/profile/tracker-designs')} />
       {group('ACCOUNT', [
+        { l: 'Appearance', s: state.sc.theme, go: go('/profile/appearance') },
         { l: 'My details', s: 'Date of birth, height, weight, diet, injuries', go: go('/profile/details') },
         ...(d.hasGym ? [{ l: 'Membership pauses', s: d.onBreak ? 'Paused by the front desk' : 'History and pauses left', go: go('/gym/break') }] : []),
         { l: 'Units & diet detail level', s: `${s.unitsW} · ${s.unitsL} · ${s.detail}`, go: go('/profile/units') },
@@ -171,51 +164,16 @@ function GoalTile({ title, value, onPress }: { title: string; value: string; onP
   );
 }
 
-// A small phone drawn in each theme's own colours, so the choice is something you can see.
-const MOCK = {
-  Light: { bg: '#F4F6F9', card: '#FFFFFF', ink: '#14171C', mute: '#C9CFD8' },
-  Dark: { bg: '#0F1218', card: '#1A1F29', ink: '#F1F3F6', mute: '#3A4250' },
-} as const;
-function ThemeTile({ mode, on, onPress }: { mode: 'Light' | 'Dark' | 'System'; on: boolean; onPress: () => void }) {
-  const { c } = useTheme();
-  const Phone = ({ t, style }: { t: 'Light' | 'Dark'; style?: any }) => {
-    const m = MOCK[t];
-    return (
-      <View style={[{ flex: 1, backgroundColor: m.bg, padding: 8, gap: 5 }, style]}>
-        <View style={{ width: 22, height: 5, borderRadius: 3, backgroundColor: m.ink, opacity: 0.8 }} />
-        <View style={{ height: 22, borderRadius: 7, backgroundColor: c.accent }} />
-        <View style={{ height: 14, borderRadius: 6, backgroundColor: m.card }} />
-        <View style={{ height: 14, borderRadius: 6, backgroundColor: m.card }} />
-        <View style={{ flexDirection: 'row', gap: 4 }}>
-          <View style={{ flex: 1, height: 5, borderRadius: 3, backgroundColor: m.mute }} />
-          <View style={{ flex: 1, height: 5, borderRadius: 3, backgroundColor: m.mute }} />
-        </View>
-      </View>
-    );
-  };
-  return (
-    <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={`${mode} theme`} onPress={onPress} scaleTo={0.97} style={{ flex: 1, gap: 8, alignItems: 'center' }}>
-      <View style={{ width: '100%', height: 116, borderRadius: 18, overflow: 'hidden', borderWidth: on ? 2.5 : 1, borderColor: on ? c.accent : c.line, flexDirection: 'row' }}>
-        {mode === 'System' ? (<><Phone t="Light" /><Phone t="Dark" /></>) : <Phone t={mode} />}
-      </View>
-      <Row style={{ gap: 6 }}>
-        <View style={{ width: 16, height: 16, borderRadius: 8, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.accent : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-          {on && <Check size={10} strokeWidth={3.5} color="#fff" />}
-        </View>
-        <Txt style={{ fontFamily: on ? font.semibold : font.medium, fontSize: 14, lineHeight: 20 }}>{mode}</Txt>
-      </Row>
-    </Pressy>
-  );
-}
-
 // Opens the tracker designs page: the real tracker cards peeking up from the bottom of a blue card.
 function TrackerPromo({ onPress }: { onPress: () => void }) {
   const { c } = useTheme();
   const W = 134, k = W / STEPS_CARD;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Tracker designs. Choose how your trackers look" onPress={onPress} scaleTo={0.985}
-      style={{ height: 196, borderRadius: 28, overflow: 'hidden', backgroundColor: '#0B0E14', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)' }}>
+      style={{ height: 196, borderRadius: 28, overflow: 'hidden', backgroundColor: '#0B0E14', borderWidth: 1, borderColor: 'rgba(255,255,255,0.18)' }}>
       <LinearGradient colors={['#0B0E14', '#161B26']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
+      {/* soft white glow along the inside edge, lighter than the swipe-to-start button */}
+      <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: 28, boxShadow: [{ offsetX: 0, offsetY: 0, blurRadius: 18, spreadDistance: 0, color: 'rgba(255,255,255,0.16)', inset: true }] } as any} />
       <Row style={{ paddingTop: 18, paddingHorizontal: 20, justifyContent: 'space-between' }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.5, color: '#fff' }}>Tracker designs</Txt>
@@ -241,22 +199,18 @@ function Peek({ x, rot, dy, k, children }: { x: number; rot: number; dy: number;
   );
 }
 
-// Big translucent line at the bottom of the page, with the logo and version above and the small print below.
+// Logo and version, a dotted line, the big translucent line, then the small print.
 function BigFooter() {
   const { c, isDark } = useTheme();
   return (
     <View style={{ marginTop: 14, paddingTop: 18, borderTopWidth: 1, borderTopColor: c.line, borderStyle: 'dashed', gap: 14 }}>
       <Row style={{ justifyContent: 'space-between' }}>
         <YourPalLogo height={22} color={c.muted} />
-        <View style={{ height: 24, paddingHorizontal: 10, borderRadius: 12, backgroundColor: c.surface, justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.mono, fontSize: 11, lineHeight: 16, color: c.muted }}>v1.0</Txt>
-        </View>
+        <Txt style={{ fontFamily: font.mono, fontSize: 9, lineHeight: 13, color: c.muted, opacity: 0.8 }}>v1.0</Txt>
       </Row>
+      <View style={{ borderTopWidth: 1, borderTopColor: c.line, borderStyle: 'dotted' }} />
       <Txt style={{ fontFamily: font.semibold, fontSize: 50, lineHeight: 56, letterSpacing: -2.2, color: isDark ? 'rgba(255,255,255,0.13)' : 'rgba(10,20,40,0.10)' }}>{'your health,\nevery day.'}</Txt>
-      <Row style={{ gap: 8, paddingBottom: 18 }}>
-        <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.accent }} />
-        <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>Built for you · Made in India</Txt>
-      </Row>
+      <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted, paddingBottom: 18 }}>Built for you · Made in India</Txt>
     </View>
   );
 }

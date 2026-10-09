@@ -88,6 +88,7 @@ const StoreCtx = createContext<Ctx | null>(null);
 
 const KEY = 'yourpal-state-v1';
 function load(): AppState {
+  if (typeof location !== 'undefined' && /[?&]signedin=1/.test(location.search)) return { ...defaultState, loggedIn: true, onboarded: true, sc: { ...defaultState.sc, member: 'PT member' } }; // TEMP-SHOT
   try {
     const raw = (globalThis as any).localStorage?.getItem(KEY);
     if (raw) { const o = JSON.parse(raw); if (o?.sc?.theme === 'System') o.sc.theme = 'Dark'; if (o?.profile?.name === 'Ankit' || o?.profile?.name === 'Rohitashav Garg') o.profile.name = 'Jyotsana Rankawat'; return { ...defaultState, ...o }; }

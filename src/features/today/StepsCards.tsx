@@ -138,11 +138,13 @@ function DotFace({ s }: { s: S }) {
         <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>Steps</Txt>
       </Row>
       <View style={{ marginTop: 12 }}><DotText text={String(s.total)} maxW={132} /></View>
-      <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.7)', marginTop: 6 }}>of {fmt(s.goal)}</Txt>
-      <View style={{ marginTop: 'auto', gap: 3 }}>
-        <Row style={{ gap: 8 }}><ArrowRightLeft size={13} color="#fff" /><Txt style={{ fontSize: 13, lineHeight: 18, color: '#fff' }}><Txt style={{ fontFamily: font.semibold }}>{km(s.total)}</Txt> km</Txt></Row>
-        <Row style={{ gap: 8 }}><Flame size={13} color="#fff" /><Txt style={{ fontSize: 13, lineHeight: 18, color: '#fff' }}><Txt style={{ fontFamily: font.semibold }}>{kcalOf(s.total)}</Txt> kcal</Txt></Row>
-      </View>
+      <Row style={{ marginTop: 'auto', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+        <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.7)' }}>of {fmt(s.goal)}</Txt>
+        <View style={{ gap: 3, alignItems: 'flex-end' }}>
+          <Row style={{ gap: 6 }}><ArrowRightLeft size={13} color="#fff" /><Txt style={{ fontSize: 13, lineHeight: 18, color: '#fff' }}><Txt style={{ fontFamily: font.semibold }}>{km(s.total)}</Txt> km</Txt></Row>
+          <Row style={{ gap: 6 }}><Flame size={13} color="#fff" /><Txt style={{ fontSize: 13, lineHeight: 18, color: '#fff' }}><Txt style={{ fontFamily: font.semibold }}>{kcalOf(s.total)}</Txt> kcal</Txt></Row>
+        </View>
+      </Row>
     </LinearGradient>
   );
 }
