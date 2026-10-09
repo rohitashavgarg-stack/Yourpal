@@ -19,7 +19,7 @@ function Mini({ design, ink, accent, faint }: { design: StepsDesign; ink: string
   if (design === 'Ruler') {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 4, height: 44 }}>
-        {Array.from({ length: 16 }, (_, i) => <View key={i} style={{ width: 3, height: i % 5 === 0 ? 34 : 18, borderRadius: 1.5, backgroundColor: i < 10 ? accent : faint }} />)}
+        {Array.from({ length: 11 }, (_, i) => <View key={i} style={{ width: 3, height: i % 5 === 0 ? 34 : 18, borderRadius: 1.5, backgroundColor: i < 7 ? accent : faint }} />)}
       </View>
     );
   }
