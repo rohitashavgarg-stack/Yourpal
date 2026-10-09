@@ -1,13 +1,10 @@
 import React from 'react';
 import { YourPalLogo } from '@/components/YourPalLogo';
-import { haptic } from '@/lib/haptics';
 import { STEPS_CARD, StepsPreview } from '@/features/today/StepsCards';
 import { WaterCard } from '@/features/today/Trackers';
 import { HrDot } from '@/features/trackers/Widgets';
 import { LinearGradient } from 'expo-linear-gradient';
-import { fmtDay, useGoalV2 } from '@/features/goalv2/model';
-import { START } from '@/features/progress/trends';
-import { useStreak } from '@/features/streak/useStreak';
+import { useGoalV2 } from '@/features/goalv2/model';
 import { HEALTH_NAME } from '@/lib/health';
 import { useOpenEdgeCases } from '@/web/WebFrame';
 import { View } from 'react-native';
@@ -57,7 +54,6 @@ export default function Profile() {
   const trackers = (['water', 'weight', 'steps'] as const).filter((k) => s.trk[k]).map((k) => k[0].toUpperCase() + k.slice(1)).join(', ') || 'None';
   const go = (path: string) => () => router.push(path as any);
   const openEdgeCases = useOpenEdgeCases();
-  const st = useStreak();
   const g2 = useGoalV2();
   const group = (title: string, rows: { l: string; s?: string; go: () => void; color?: string }[]) => (
     <View style={{ gap: 8 }}>
@@ -82,10 +78,6 @@ export default function Profile() {
           <Pressy accessibilityRole="button" accessibilityLabel="Edit name and number" onPress={go('/profile/details')} scaleTo={0.94} style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: c.surface, justifyContent: 'center' }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20 }}>Edit</Txt>
           </Pressy>
-        </Row>
-        <Row style={{ gap: 10 }}>
-          <StatCard label="Member since" value={`${fmtDay(START)} ${START.getFullYear()}`} />
-          <StatCard label="Current streak" value={`${st.weeks} ${st.weeks === 1 ? 'week' : 'weeks'}`} />
         </Row>
       </View>
 
@@ -143,18 +135,6 @@ export default function Profile() {
       <Button kind="secondary" label="Log out" icon={<LogOut size={18} color={c.ink} />} onPress={() => openSheet(<LogoutSheet />, { label: 'Log out' })} />
       <BigFooter />
     </SubPage>
-  );
-}
-
-// A small card with a soft glow along its inner edge.
-function StatCard({ label, value }: { label: string; value: string }) {
-  const { c, isDark } = useTheme();
-  return (
-    <View style={{ flex: 1, minHeight: 78, borderRadius: 22, overflow: 'hidden', backgroundColor: isDark ? '#0F131B' : c.surface, borderWidth: 1, borderColor: isDark ? 'rgba(80,140,255,0.45)' : c.line, padding: 14, justifyContent: 'space-between' }}>
-      <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: 22, boxShadow: [{ offsetX: 0, offsetY: 0, blurRadius: 20, spreadDistance: 0, color: isDark ? 'rgba(60,120,255,0.42)' : 'rgba(47,107,234,0.14)', inset: true }] } as any} />
-      <Txt v="caption" style={{ fontSize: 12 }}>{label}</Txt>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25 }}>{value}</Txt>
-    </View>
   );
 }
 
