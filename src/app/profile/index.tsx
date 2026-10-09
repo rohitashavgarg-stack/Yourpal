@@ -208,7 +208,7 @@ function BigFooter() {
         <YourPalLogo height={22} color={c.muted} />
         <Txt style={{ fontFamily: font.mono, fontSize: 9, lineHeight: 13, color: c.muted, opacity: 0.8 }}>v1.0</Txt>
       </Row>
-      <View style={{ borderTopWidth: 1, borderTopColor: c.line, borderStyle: 'dotted' }} />
+      <View style={{ borderTopWidth: 2, borderTopColor: c.surface3, borderStyle: 'dotted' }} />
       <Txt style={{ fontFamily: font.semibold, fontSize: 50, lineHeight: 56, letterSpacing: -2.2, color: isDark ? 'rgba(255,255,255,0.13)' : 'rgba(10,20,40,0.10)' }}>{'your health,\nevery day.'}</Txt>
       <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted, paddingBottom: 18 }}>Built for you · Made in India</Txt>
     </View>
