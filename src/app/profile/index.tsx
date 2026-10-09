@@ -69,7 +69,7 @@ export default function Profile() {
   );
 
   return (
-    <SubPage title="Profile" fallback="/(tabs)">
+    <SubPage title="Profile" fallback="/(tabs)" gap={28}>
       {/* Header: who you are, how long you have been here */}
       <View style={{ gap: 14, paddingTop: 4 }}>
         <Row style={{ gap: 14, alignItems: 'flex-start' }}>
