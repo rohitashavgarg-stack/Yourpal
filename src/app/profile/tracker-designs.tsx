@@ -1,48 +1,55 @@
 import React from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Check } from '@/lib/icons';
-import { Pressy, Row, Txt } from '@/components/ui';
+import { Pressy, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { STEPS_CARD, STEPS_DESIGNS, StepsDesign, StepsPreview, stepsStore } from '@/features/today/StepsCards';
-import { Note, SubPage } from '@/features/shell/parts';
+import { StepsDesign, stepsStore } from '@/features/today/StepsCards';
+import { TileFor } from '@/features/today/Trackers';
+import { CATALOG, TrackerKey, designStore } from '@/features/trackers/designs';
+import { SubPage } from '@/features/shell/parts';
 
-const SUB: Record<StepsDesign, string> = {
-  Current: 'A ring that fills as you walk',
-  Ruler: 'A measuring scale for the day',
-  'Day bars': 'Steps through the day as bars',
-};
-
-const PREV = 96;
+// The widgets only, grouped by category. Tap one to use it on Today.
+function Option({ tracker, design, on, onPick }: { tracker: TrackerKey; design: string; on: boolean; onPick: () => void }) {
+  const { c } = useTheme();
+  return (
+    <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={`${design} design`} onPress={onPick} scaleTo={0.97} style={{ padding: 3, borderRadius: 31, borderWidth: 2, borderColor: on ? c.ink : 'transparent' }}>
+      <View pointerEvents="none"><TileFor tracker={tracker} design={design} interactive={false} /></View>
+      {on && (
+        <View style={{ position: 'absolute', right: 10, bottom: 10, width: 24, height: 24, borderRadius: 12, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>
+          <Check size={14} strokeWidth={3} color={c.bg} />
+        </View>
+      )}
+    </Pressy>
+  );
+}
 
 export default function TrackerDesigns() {
   const { c } = useTheme();
   const st = stepsStore.use();
+  const D = designStore.use();
   return (
-    <SubPage title="Tracker designs" fallback="/profile">
-      <Txt v="label" style={{ paddingHorizontal: 4 }}>STEPS</Txt>
-      <View style={{ gap: 10 }}>
-        {STEPS_DESIGNS.map((dsg) => {
-          const on = st.design === dsg;
-          return (
-            <Pressy key={dsg} accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={`${dsg}. ${SUB[dsg]}`} onPress={() => { haptic.tap(); stepsStore.set({ design: dsg }); }} scaleTo={0.985}
-              style={{ minHeight: 120, borderRadius: 24, backgroundColor: c.surface, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, padding: 16, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-              <View style={{ width: PREV, height: PREV }}>
-                <View style={{ transform: [{ scale: PREV / STEPS_CARD }], transformOrigin: 'top left' } as any}><StepsPreview design={dsg} /></View>
+    <SubPage title="Tracker designs" fallback="/profile" gap={10}>
+      {CATALOG.map((cat) => (
+        <View key={cat.category} style={{ gap: 14, marginTop: 8 }}>
+          <Txt style={{ fontFamily: font.light, fontSize: 26, lineHeight: 34, letterSpacing: -0.6, paddingHorizontal: 4 }}>{cat.category}</Txt>
+          {cat.trackers.map((t) => {
+            const current = t.key === 'steps' ? st.design : D[t.key as Exclude<TrackerKey, 'steps'>];
+            return (
+              <View key={t.key} style={{ gap: 8 }}>
+                <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: c.muted, paddingHorizontal: 4 }}>{t.title}</Txt>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: -16 }} contentContainerStyle={{ gap: 6, paddingHorizontal: 13, paddingVertical: 2 }}>
+                  {t.designs.map((dsg) => (
+                    <Option key={dsg} tracker={t.key} design={dsg} on={current === dsg}
+                      onPick={() => { haptic.tap(); if (t.key === 'steps') stepsStore.set({ design: dsg as StepsDesign }); else designStore.set({ [t.key]: dsg } as any); }} />
+                  ))}
+                </ScrollView>
               </View>
-              <View style={{ flex: 1, gap: 2 }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{dsg}</Txt>
-                <Txt v="caption" style={{ fontSize: 13 }}>{SUB[dsg]}</Txt>
-              </View>
-              <View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-                {on && <Check size={15} strokeWidth={3} color={c.bg} />}
-              </View>
-            </Pressy>
-          );
-        })}
-      </View>
-      <Row style={{ paddingHorizontal: 4 }}><Note>Designs for water, weight and the other trackers will appear here.</Note></Row>
+            );
+          })}
+        </View>
+      ))}
     </SubPage>
   );
 }

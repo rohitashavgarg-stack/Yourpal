@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { DotText } from '@/features/trackers/DotText';
 import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { Footprints, Plus, X } from '@/lib/icons';
+import { ArrowRightLeft, Flame, Footprints, Plus, X } from '@/lib/icons';
 import { Button, Field, Pressy, Row, Txt } from '@/components/ui';
 import { Ring } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -16,8 +17,8 @@ import { HEALTH_NAME } from '@/lib/health';
 import { createStore } from '@/lib/createStore';
 
 // Steps tracker designs to compare. Pick one in the Today edge-case panel.
-export type StepsDesign = 'Current' | 'Ruler' | 'Day bars';
-export const STEPS_DESIGNS: StepsDesign[] = ['Current', 'Ruler', 'Day bars'];
+export type StepsDesign = 'Current' | 'Ruler' | 'Day bars' | 'Dot matrix' | 'Bars + details';
+export const STEPS_DESIGNS: StepsDesign[] = ['Current', 'Ruler', 'Day bars', 'Dot matrix', 'Bars + details'];
 type Entry = { id: number; n: number; label: string };
 export const stepsStore = createStore(() => ({ design: 'Current' as StepsDesign, manual: [] as Entry[] }));
 
@@ -47,7 +48,7 @@ export function StepsTile() {
   return (
     <View style={{ width: SQ, height: SQ }}>
       <Pressy accessibilityRole="button" accessibilityLabel={a11y} onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'steps' } })} scaleTo={0.97} style={{ width: SQ, height: SQ, borderRadius: 28, overflow: 'hidden' }}>
-        {design === 'Ruler' ? <RulerFace s={s} /> : design === 'Day bars' ? <BarsFace s={s} /> : <CurrentFace s={s} />}
+        <Face design={design} s={s} />
       </Pressy>
       <Pressy accessibilityRole="button" accessibilityLabel="Add steps manually" onPress={() => openSheet(<StepsSheet />, { label: 'Add steps' })} hitSlop={10}
         style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: dark ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.22)', zIndex: 3 }}>
@@ -59,12 +60,23 @@ export function StepsTile() {
 
 type S = ReturnType<typeof useSteps>;
 
+function Face({ design, s }: { design: StepsDesign; s: S }) {
+  if (design === 'Ruler') return <RulerFace s={s} />;
+  if (design === 'Day bars') return <BarsFace s={s} />;
+  if (design === 'Dot matrix') return <DotFace s={s} />;
+  if (design === 'Bars + details') return <BarsPlusFace s={s} />;
+  return <CurrentFace s={s} />;
+}
+// Distance and calories follow from the step count.
+const km = (n: number) => (Math.round(n * 0.00075 * 10) / 10).toFixed(1);
+const kcalOf = (n: number) => Math.round(n * 0.043);
+
 // The real card for a given design, not tappable: used where designs are shown (Profile → Tracker designs).
 export function StepsPreview({ design }: { design: StepsDesign }) {
   const s = useSteps();
   return (
     <View pointerEvents="none" style={{ width: SQ, height: SQ, borderRadius: 28, overflow: 'hidden' }}>
-      {design === 'Ruler' ? <RulerFace s={s} /> : design === 'Day bars' ? <BarsFace s={s} /> : <CurrentFace s={s} />}
+      <Face design={design} s={s} />
     </View>
   );
 }
@@ -113,6 +125,41 @@ function RulerFace({ s }: { s: S }) {
           })}
         </Row>
       </View>
+    </LinearGradient>
+  );
+}
+
+// Dark green glass card: dot-matrix steps, with distance and calories.
+function DotFace({ s }: { s: S }) {
+  return (
+    <LinearGradient colors={['#1F7A52', '#0E3B2C', '#07130F']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14 }}>
+      <Row style={{ gap: 8 }}>
+        <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(255,255,255,0.16)', alignItems: 'center', justifyContent: 'center' }}><Footprints size={14} color="#fff" strokeWidth={2} /></View>
+        <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>Steps</Txt>
+      </Row>
+      <View style={{ marginTop: 12 }}><DotText text={String(s.total)} maxW={132} /></View>
+      <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.7)', marginTop: 6 }}>of {fmt(s.goal)}</Txt>
+      <View style={{ marginTop: 'auto', gap: 3 }}>
+        <Row style={{ gap: 8 }}><ArrowRightLeft size={13} color="#fff" /><Txt style={{ fontSize: 13, lineHeight: 18, color: '#fff' }}><Txt style={{ fontFamily: font.semibold }}>{km(s.total)}</Txt> km</Txt></Row>
+        <Row style={{ gap: 8 }}><Flame size={13} color="#fff" /><Txt style={{ fontSize: 13, lineHeight: 18, color: '#fff' }}><Txt style={{ fontFamily: font.semibold }}>{kcalOf(s.total)}</Txt> kcal</Txt></Row>
+      </View>
+    </LinearGradient>
+  );
+}
+
+// Indigo card: the day's bars plus distance and calories.
+function BarsPlusFace({ s }: { s: S }) {
+  const max = Math.max(...DAY, 1);
+  return (
+    <LinearGradient colors={['#4B5CF5', '#2F3FD6', '#1E2A9E']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14, justifyContent: 'space-between' }}>
+      <View>
+        <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.8)' }}>Steps</Txt>
+        <Txt style={{ fontFamily: font.displayBold, fontSize: 28, lineHeight: 34, letterSpacing: -0.8, color: '#fff' }}>{fmt(s.total)}</Txt>
+        <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.85)' }}>{km(s.total)} km · {kcalOf(s.total)} kcal</Txt>
+      </View>
+      <Row style={{ alignItems: 'flex-end', justifyContent: 'space-between', height: 40 }}>
+        {DAY.map((v, i) => <View key={i} style={{ width: 8, height: Math.max(4, (v / max) * 40), borderRadius: 3, backgroundColor: v ? '#fff' : 'rgba(255,255,255,0.22)' }} />)}
+      </Row>
     </LinearGradient>
   );
 }

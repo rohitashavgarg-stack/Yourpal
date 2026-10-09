@@ -1,8 +1,9 @@
 import React from 'react';
 import { YourPalLogo } from '@/components/YourPalLogo';
 import { haptic } from '@/lib/haptics';
-import { STEPS_CARD, StepsPreview, stepsStore } from '@/features/today/StepsCards';
-import { WaterCard, WeightCard } from '@/features/today/Trackers';
+import { STEPS_CARD, StepsPreview } from '@/features/today/StepsCards';
+import { WaterCard } from '@/features/today/Trackers';
+import { WeekTile } from '@/features/trackers/Widgets';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fmtDay, useGoalV2 } from '@/features/goalv2/model';
 import { START } from '@/features/progress/trends';
@@ -210,7 +211,6 @@ function ThemeTile({ mode, on, onPress }: { mode: 'Light' | 'Dark' | 'System'; o
 // Opens the tracker designs page: the real tracker cards peeking up from the bottom of a blue card.
 function TrackerPromo({ onPress }: { onPress: () => void }) {
   const { c } = useTheme();
-  const { design } = stepsStore.use();
   const W = 134, k = W / STEPS_CARD;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Tracker designs. Choose how your trackers look" onPress={onPress} scaleTo={0.985}
@@ -223,10 +223,10 @@ function TrackerPromo({ onPress }: { onPress: () => void }) {
         </View>
         <View style={{ width: 52, height: 36, borderRadius: 18, backgroundColor: '#0B0E14', alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={18} color="#fff" /></View>
       </Row>
-      {/* different kinds of trackers peek up from the bottom: water, weight, steps (in front) */}
+      {/* three kinds of trackers peek up from the bottom: water, workout week, steps (in front) */}
       <Peek x={-4} rot={-9} dy={-48} k={k}><WaterCard /></Peek>
-      <Peek x={216} rot={9} dy={-54} k={k}><WeightCard /></Peek>
-      <Peek x={108} rot={0} dy={-34} k={k}><StepsPreview design={design} /></Peek>
+      <Peek x={216} rot={9} dy={-54} k={k}><WeekTile /></Peek>
+      <Peek x={108} rot={0} dy={-34} k={k}><StepsPreview design="Dot matrix" /></Peek>
     </Pressy>
   );
 }

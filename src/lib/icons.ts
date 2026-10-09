@@ -82,3 +82,4 @@ export { default as Compass } from 'lucide-react-native/icons/compass';
 export { default as PersonStanding } from 'lucide-react-native/icons/person-standing';
 export { default as Zap } from 'lucide-react-native/icons/zap';
 export { default as ArrowRight } from 'lucide-react-native/icons/arrow-right';
+export { default as Droplet } from 'lucide-react-native/icons/droplet';

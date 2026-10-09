@@ -15,7 +15,9 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fmt1 } from '@/lib/useNow';
 import { HEALTH_NAME } from '@/lib/health';
-import { StepsTile } from './StepsCards';
+import { StepsDesign, StepsPreview, StepsTile } from './StepsCards';
+import { TrackerKey, designStore } from '@/features/trackers/designs';
+import { EnergyDot, EnergyStack, HrDot, SleepDot, SleepStages, WaterDot, WaterGlasses, WeightDot, WeightRuler } from '@/features/trackers/Widgets';
 
 const APath = Animated.createAnimatedComponent(Path);
 const ALine = Animated.createAnimatedComponent(Line);
@@ -206,12 +208,13 @@ function Sneaker({ w }: { w: number }) {
 }
 
 type HK = 'hr' | 'sleep' | 'kcal';
-function HealthCards() {
+export function HealthCards({ only }: { only?: 'hr' | 'sleep' | 'kcal' } = {}) {
   const { c } = useTheme();
   const { openSheet } = useOverlay();
   const open = (k: HK) => openSheet(<HealthSheet k={k} />, { label: 'Health data' });
   return (
     <>
+      {(!only || only === 'hr') && (
       <Tile bg={c.tHeart} label="Heart rate" labelColor={c.cHeart} a11y="Heart rate 72 bpm, open details" onPress={() => open('hr')} right={<Beat><HeartIcon color={c.cHeart} /></Beat>}>
         <Txt style={{ ...NUM, color: c.ink }}>72<Txt muted style={UNIT_TXT}> bpm</Txt></Txt>
         <Txt v="caption">Resting 64</Txt>
@@ -219,6 +222,8 @@ function HealthCards() {
           <Svg width={136} height={34} viewBox="0 0 108 30" preserveAspectRatio="none"><Polyline points="0,18 12,16 20,20 28,8 34,24 42,15 56,17 66,12 76,19 86,14 98,16 108,13" fill="none" stroke={c.cHeart} strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" /></Svg>
         </View>
       </Tile>
+      )}
+      {(!only || only === 'sleep') && (
       <Tile bg={c.tSleep} label="Sleep" labelColor={c.cSleep} a11y="Sleep 7 hours 10 minutes, open details" onPress={() => open('sleep')}>
         <Txt style={{ ...NUM, color: c.ink }}>7h 10<Txt muted style={UNIT_TXT}>m</Txt></Txt>
         <Txt v="caption">11:40 pm – 6:50 am</Txt>
@@ -226,6 +231,8 @@ function HealthCards() {
           <View style={{ width: '22%', backgroundColor: c.cSleep, opacity: 0.7 }} /><View style={{ width: '48%', backgroundColor: c.cSleep }} /><View style={{ width: '18%', backgroundColor: c.cSleep, opacity: 0.45 }} /><View style={{ width: '12%', backgroundColor: c.surface3 }} />
         </View>
       </Tile>
+      )}
+      {(!only || only === 'kcal') && (
       <Tile bg={c.tAct} label="Active energy" labelColor={c.cAct} a11y="Active energy 320 of 450 kilocalories, open details" onPress={() => open('kcal')}>
         <Txt style={{ ...NUM, color: c.ink }}>320<Txt muted style={UNIT_TXT}> kcal</Txt></Txt>
         <Txt v="caption">Goal 450 kcal</Txt>
@@ -233,6 +240,7 @@ function HealthCards() {
           <View style={{ width: `${Math.round((320 / 450) * 100)}%`, height: '100%', borderRadius: 5, backgroundColor: c.cAct }} />
         </View>
       </Tile>
+      )}
     </>
   );
 }
@@ -251,15 +259,51 @@ function ConnectCard() {
   );
 }
 
+// One tracker in one design. interactive: false is for the designs page and the Profile card (looks only, no taps).
+export function TileFor({ tracker, design, interactive = true }: { tracker: TrackerKey; design: string; interactive?: boolean }) {
+  const { d } = useDomain();
+  const { water } = useWater();
+  const { openSheet } = useOverlay();
+  const press = (fn: () => void) => (interactive ? fn : undefined);
+  const health = (k: HK) => press(() => openSheet(<HealthSheet k={k} />, { label: 'Health data' }));
+  const diff = Math.round((d.weight - SPARK[0]) * 10) / 10;
+  switch (tracker) {
+    case 'steps': return interactive ? <StepsTile /> : <StepsPreview design={design as StepsDesign} />;
+    case 'water':
+      if (design === 'Dot matrix') return <WaterDot litres={water} onPress={press(() => openSheet(<WaterSheet />, { label: 'Water', glow: '#2F6BEA' }))} />;
+      if (design === 'Glasses') return <WaterGlasses litres={water} onPress={press(() => openSheet(<WaterSheet />, { label: 'Water', glow: '#2F6BEA' }))} />;
+      return <WaterCard />;
+    case 'weight':
+      if (design === 'Dot matrix') return <WeightDot kg={d.weight} delta={diff} onPress={press(() => router.push('/log-weight'))} />;
+      if (design === 'Ruler') return <WeightRuler kg={d.weight} onPress={press(() => router.push('/log-weight'))} />;
+      return <WeightCard />;
+    case 'hr': return design === 'Dot matrix' ? <HrDot onPress={health('hr')} /> : <HealthCards only="hr" />;
+    case 'sleep':
+      if (design === 'Stages') return <SleepStages onPress={health('sleep')} />;
+      if (design === 'Dot matrix') return <SleepDot onPress={health('sleep')} />;
+      return <HealthCards only="sleep" />;
+    case 'energy':
+      if (design === 'Dot matrix') return <EnergyDot onPress={health('kcal')} />;
+      if (design === 'Stack') return <EnergyStack onPress={health('kcal')} />;
+      return <HealthCards only="kcal" />;
+  }
+}
+
+// The tile for a tracker in the design the member picked on Profile → Tracker designs.
+function DesignedTile({ tracker }: { tracker: Exclude<TrackerKey, 'steps'> }) {
+  const D = designStore.use();
+  return <TileFor tracker={tracker} design={D[tracker]} />;
+}
+
 export function Trackers() {
   const { d } = useDomain();
   return (
     <View style={{ marginHorizontal: -16, gap: 6 }}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} decelerationRate="fast" accessibilityLabel="Quick trackers, swipe for more"
         contentContainerStyle={{ gap: 10, paddingHorizontal: 16, paddingVertical: 2 }}>
-        <WaterCard />
-        <WeightCard />
-        {!d.hc ? <ConnectCard /> : <><StepsTile />{d.wearable && <HealthCards />}</>}
+        <DesignedTile tracker="water" />
+        <DesignedTile tracker="weight" />
+        {!d.hc ? <ConnectCard /> : <><StepsTile />{d.wearable && <><DesignedTile tracker="hr" /><DesignedTile tracker="sleep" /><DesignedTile tracker="energy" /></>}</>}
       </ScrollView>
       <Txt v="caption" style={{ paddingHorizontal: 20 }}>{!d.hc ? `Swipe for more · connect ${HEALTH_NAME} for steps` : d.wearable ? `Swipe for heart rate, sleep and energy from your watch` : `Steps from ${HEALTH_NAME} · heart rate and sleep need a watch or band`}</Txt>
     </View>
