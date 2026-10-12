@@ -1,15 +1,13 @@
 import { Ex, SetT } from '@/lib/data';
 
-// Looping exercise clips (silent, about 6 s). Keyed by exercise id; an exercise without a clip falls back to its picture.
-const FRONT_SQUAT = require('../../../assets/exercises/front-squat.mp4');
+// Looping exercise clips (silent, about 6 s), keyed by exercise id. Only these videos are used in the new workout design: no pictures.
 export const CLIPS: Record<string, number> = {
-  sq: FRONT_SQUAT,
   dcr: require('../../../assets/exercises/crunch.mp4'),
   dlr: require('../../../assets/exercises/leg-raise-crunch.mp4'),
   dbe: require('../../../assets/exercises/back-extension.mp4'),
   dbc: require('../../../assets/exercises/ball-crunch.mp4'),
   dtd: require('../../../assets/exercises/triceps-dip.mp4'),
-  dfs: FRONT_SQUAT,
+  dfs: require('../../../assets/exercises/front-squat.mp4'),
   dbp: require('../../../assets/exercises/bench-press.mp4'),
 };
 

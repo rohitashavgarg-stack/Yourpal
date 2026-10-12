@@ -245,7 +245,7 @@ export default function Workout() {
   if (newUi) {
     if (isList) {
       return <NewList key={s.phase} s={s} list={list} now={now} cool={s.phase === 'cooldown'} onToggle={(id, on) => A.upd((x) => ({ listDone: { ...x.listDone, [id]: on } }))}
-        onMain={() => A.phase('main')} onFinishNow={finishNow} onMinimise={minimise} onFinish={askFinish} />;
+        onMain={() => A.phase('main')} onFinishNow={finishNow} onMinimise={minimise} />;
     }
     return <NewExercise key={s.exIdx} s={s} e={e} cur={cur} elapsed={elapsed} now={now} onMinimise={minimise} onFinish={askFinish}
       onMenu={() => openSheet(<WkMenuSheet api={api} />, { label: 'Workout options' })} prevEx={prevEx} nextEx={nextEx} prevName={prevName} nextName={nextName}

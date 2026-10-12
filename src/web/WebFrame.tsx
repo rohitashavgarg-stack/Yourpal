@@ -3,7 +3,6 @@ import { useShell } from '@/features/shell/state';
 import { router } from 'expo-router';
 import { workoutUiStore } from '@/features/workout/ui';
 import { newSession } from '@/features/workout/session';
-import { clipDemoExercises } from '@/features/workout/clips';
 import { Dimensions, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useStore } from '@/lib/store';
@@ -160,10 +159,9 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
     } },
     // The workout screen has two designs. New = full-screen clip with the sets in a bottom sheet.
     { label: 'Workout design', options: ['Current', 'New'], value: wk.design, onPick: (v: string) => { workoutUiStore.set({ design: v as 'Current' | 'New' }); said(`Workout design: ${v}`); } },
-    { label: 'Open a workout', options: ['Leg day', 'Clip demo'], value: '', onPick: (v: string) => {
-      const base = newSession();
-      set({ session: v === 'Clip demo' ? { ...base, ex: clipDemoExercises(), phase: 'main' } : base });
-      said(v === 'Clip demo' ? 'Opened the clip demo workout (7 exercises with clips)' : 'Opened Leg day');
+    { label: 'Open a workout', options: ['Start'], value: '', onPick: () => {
+      set({ session: newSession() });
+      said(wk.design === 'New' ? 'Started the workout with the 7 clip exercises' : 'Started Leg day');
       router.push('/workout');
     } },
     // Steps need Health. Heart rate, sleep and energy also need a watch or band, which a member may not have.

@@ -4,7 +4,6 @@ import { useEvent } from 'expo';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { Pause, Play } from '@/lib/icons';
 import { Pressy } from '@/components/ui';
-import { ExerciseArt } from './ExerciseArt';
 import { CLIPS } from './clips';
 
 // The clips have a white background, so on a white stage the video reads as filling the whole screen.
@@ -34,11 +33,7 @@ export function ClipStage({ id, bottom }: { id: string; bottom: number }) {
   const source = CLIPS[id];
   return (
     <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: STAGE_BG }}>
-      {source ? <Clip key={id} source={source} bottom={bottom} /> : (
-        <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 70, bottom, alignItems: 'center', justifyContent: 'center' }}>
-          <ExerciseArt id={id} width={250} />
-        </View>
-      )}
+      {source ? <Clip key={id} source={source} bottom={bottom} /> : null}
     </View>
   );
 }

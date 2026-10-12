@@ -1,12 +1,14 @@
 import { Ex, legDay, SetT } from '@/lib/data';
 import { Session } from '@/lib/domain';
 import { fmt1 } from '@/lib/useNow';
+import { workoutUiStore } from './ui';
+import { clipDemoExercises } from './clips';
 
 export const WORKOUT_MIN = 50;
 
-// One version of the workout: the coach's plan as written.
+// The coach's plan as written. In the new workout design the exercises are the ones that have a video clip.
 export function buildExercises(): Ex[] {
-  return legDay();
+  return workoutUiStore.get().design === 'New' ? clipDemoExercises() : legDay();
 }
 
 export function newSession(): Session {

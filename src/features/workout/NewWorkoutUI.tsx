@@ -18,11 +18,10 @@ const INK = '#0B0E14'; // text drawn straight on the white clip stage
 
 // Solid pill, top right, on every workout screen: Finish is easy to find.
 function FinishPill({ onPress }: { onPress: () => void }) {
-  const { c } = useTheme();
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Finish workout" onPress={onPress} scaleTo={0.94}
-      style={{ height: 44, paddingHorizontal: 20, borderRadius: 22, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: '#fff' }}>Finish</Txt>
+      style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
+      <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: INK }}>Finish</Txt>
     </Pressy>
   );
 }
@@ -128,8 +127,8 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
 // Warm-up and cool-down: a simple list with a big plain timer. No clip on top, no back button.
 // ---------------------------------------------------------------------------------------------
 const TOTAL_SEC = 240;
-export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onMinimise, onFinish }: {
-  s: Session; list: ListItem[]; now: number; cool: boolean; onToggle: (id: string, on: boolean) => void; onMain: () => void; onFinishNow: () => void; onMinimise: () => void; onFinish: () => void;
+export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onMinimise }: {
+  s: Session; list: ListItem[]; now: number; cool: boolean; onToggle: (id: string, on: boolean) => void; onMain: () => void; onFinishNow: () => void; onMinimise: () => void;
 }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
@@ -138,17 +137,19 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
   const allDone = list.every((it) => !!s.listDone[it.id]);
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
-      <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 10, justifyContent: 'space-between' }}>
+      <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 10, justifyContent: 'flex-start' }}>
         <Pressy accessibilityRole="button" accessibilityLabel="Minimise workout" onPress={onMinimise} scaleTo={0.92} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
           <X size={20} color={c.ink} />
         </Pressy>
-        <FinishPill onPress={onFinish} />
       </Row>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 10, paddingBottom: 200, gap: 16 }}>
-        <View style={{ gap: 2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, letterSpacing: 1, color: c.muted }}>{cool ? 'COOL-DOWN' : 'WARM-UP'} · {list.length} {cool ? 'stretches' : 'moves'} · {cool ? 'slow and easy' : 'no weights'}</Txt>
-          <Txt accessibilityLabel={`Total time left ${mmss(left)}`} style={{ fontFamily: font.display, fontSize: 84, lineHeight: 92, letterSpacing: -3 }}>{mmss(left).padStart(5, '0')}</Txt>
-          <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>total time</Txt>
+        <View style={{ gap: 4 }}>
+          <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 48, lineHeight: 56, letterSpacing: -1.6 }}>{cool ? 'Cool-down' : 'Warm-up'}</Txt>
+          <Txt muted style={{ fontSize: 16, lineHeight: 23 }}>{list.length} {cool ? 'stretches' : 'moves'} · {cool ? 'slow and easy' : 'no weights'}</Txt>
+          <Row style={{ gap: 8, marginTop: 10 }}>
+            <Txt accessibilityLabel={`Total time left ${mmss(left)}`} style={{ fontFamily: font.monoBold, fontSize: 26, lineHeight: 34 }}>{mmss(left).padStart(5, '0')}</Txt>
+            <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>total time</Txt>
+          </Row>
         </View>
         <Card style={{ paddingVertical: 4, paddingHorizontal: 12 }}>
           {list.map((it, i) => {
