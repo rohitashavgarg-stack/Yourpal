@@ -75,6 +75,7 @@ export { default as Trophy } from 'lucide-react-native/icons/trophy';
 export { default as UtensilsCrossed } from 'lucide-react-native/icons/utensils-crossed';
 export { default as WifiOff } from 'lucide-react-native/icons/wifi-off';
 export { default as X } from 'lucide-react-native/icons/x';
+export { default as ChartNoAxesColumn } from 'lucide-react-native/icons/chart-no-axes-column';
 export { default as Activity } from 'lucide-react-native/icons/activity';
 export { default as Ruler } from 'lucide-react-native/icons/ruler';
 export { default as ChevronsRight } from 'lucide-react-native/icons/chevrons-right';

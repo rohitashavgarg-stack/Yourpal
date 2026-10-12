@@ -4,7 +4,7 @@ import Animated, { cancelAnimation, Easing, useAnimatedProps, useAnimatedStyle, 
 import { fade } from '@/theme/motion';
 import Svg, { Circle, ClipPath, Defs, G, Line, LinearGradient as SvgGradient, Path, Polyline, Rect, Stop } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Footprints, Plus } from '@/lib/icons';
+import { ChartNoAxesColumn, Footprints, Plus } from '@/lib/icons';
 import { router } from 'expo-router';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Beat, HeartIcon, Ring, Tag } from '@/components/bits';
@@ -310,7 +310,13 @@ export function WaterSheet() {
   const add = (v: number) => { const before = water; const w = change(v); if (w > before) setLog((l) => [Date.now(), ...l].slice(0, 5)); else if (w < before) setLog((l) => l.slice(1)); };
   return (
     <>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 26, letterSpacing: -0.6 }}>Water</Txt>
+      <Row style={{ justifyContent: 'space-between' }}>
+        <Txt style={{ fontFamily: font.semibold, fontSize: 26, lineHeight: 34, letterSpacing: -0.6 }}>Water</Txt>
+        <Pressy accessibilityRole="button" accessibilityLabel="See water trend" onPress={() => closeSheet(() => router.push({ pathname: '/progress/metric', params: { k: 'water' } }))} scaleTo={0.92}
+          style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+          <ChartNoAxesColumn size={20} color={c.ink} />
+        </Pressy>
+      </Row>
       <Row style={{ gap: 20 }}>
         <View style={{ width: 84, height: 200, alignItems: 'center', justifyContent: 'center' }}>
           <BottleArt litres={water} w={76} h={190} id="bottleSheet" onLight={!isDark} live />
@@ -326,7 +332,6 @@ export function WaterSheet() {
         <Button kind="secondary" label="− 250 ml" accessibilityLabel="Remove 250 ml" onPress={() => add(-0.25)} style={{ flex: 1 }} />
         <Button kind="accent" label="+ 250 ml" accessibilityLabel="Add 250 ml" onPress={() => add(0.25)} style={{ flex: 1, backgroundColor: c.water }} />
       </Row>
-      <Button kind="outline" small label="See water trend" onPress={() => closeSheet(() => router.push({ pathname: '/progress/metric', params: { k: 'water' } }))} />
       {log.length > 0 && (
         <View>
           <Txt v="label" style={{ paddingBottom: 4 }}>Logged just now</Txt>
