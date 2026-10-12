@@ -13,6 +13,7 @@ import { font } from '@/theme/tokens';
 import { mmss } from '@/lib/useNow';
 import { ClipStage } from './ClipStage';
 import { RestPanel } from './RestPanel';
+import { GlassBackdrop } from '@/components/Glass';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { CLIPS, THUMBS } from './clips';
 
@@ -20,19 +21,21 @@ import { CLIPS, THUMBS } from './clips';
 const LIST_THUMB: Record<string, string> = { w2: 'dfs', c3: 'dbe' };
 // Just the clip in a popup over a dim, with a close button.
 function ClipPopup({ source, onClose }: { source: number; onClose: () => void }) {
-  const insets = useSafeAreaInsets();
   const player = useVideoPlayer(source, (p) => { p.loop = true; p.muted = true; p.play(); });
   return (
     <Modal transparent animationType="fade" onRequestClose={onClose} statusBarTranslucent>
-      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.72)', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.92)', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
         <Pressable accessibilityLabel="Close clip" onPress={onClose} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
-        <View style={{ width: '100%', aspectRatio: 1, maxHeight: '70%', borderRadius: 24, overflow: 'hidden', backgroundColor: '#FFFFFF' }}>
-          <VideoView player={player} nativeControls={false} contentFit="contain" allowsPictureInPicture={false} pointerEvents="none" style={{ width: '100%', height: '100%' }} />
+        <View style={{ width: '100%', maxHeight: '75%', gap: 12, alignItems: 'flex-end' }}>
+          <Pressy accessibilityRole="button" accessibilityLabel="Close" onPress={onClose} scaleTo={0.92}
+            style={{ width: 44, height: 44, borderRadius: 22, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.35)' }}>
+            <GlassBackdrop radius={22} tint="rgba(255,255,255,0.22)" />
+            <X size={20} color="#fff" />
+          </Pressy>
+          <View style={{ width: '100%', aspectRatio: 1, borderRadius: 24, overflow: 'hidden', backgroundColor: '#FFFFFF' }}>
+            <VideoView player={player} nativeControls={false} contentFit="contain" allowsPictureInPicture={false} pointerEvents="none" style={{ width: '100%', height: '100%' }} />
+          </View>
         </View>
-        <Pressy accessibilityRole="button" accessibilityLabel="Close" onPress={onClose} scaleTo={0.92}
-          style={{ position: 'absolute', top: insets.top + 12, right: 16, width: 44, height: 44, borderRadius: 22, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center' }}>
-          <X size={20} color="#0B0E14" />
-        </Pressy>
       </View>
     </Modal>
   );
