@@ -130,7 +130,7 @@ export function WaterCard() {
         </View>
       </Pressy>
       {/* Sits above the card press target so tapping it only adds a glass. */}
-      <AddButton label="Add a glass, 250 millilitres" onPress={() => change(0.25)} />
+      <AddButton variant="glass" label="Add a glass, 250 millilitres" onPress={() => change(0.25)} />
     </View>
   );
 }
