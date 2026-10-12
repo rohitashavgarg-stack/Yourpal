@@ -104,9 +104,10 @@ function Slide({ name, bottom, children }: { name: string; bottom: boolean; chil
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, bottom]);
   const closeFromDrag = () => { const top = entry.current; if (top && router.canGoBack()) (router as any).back(); };
+  // The workout screen is left out: its own sheet is dragged up and down, and it has its own minimise button.
   // Drag down from the top of an X screen to close it: it follows the finger and leaves with the same plain ease.
   const pan = Gesture.Pan()
-    .enabled(bottom)
+    .enabled(bottom && name !== 'workout')
     .hitSlop({ top: 0, height: 130 })
     .activeOffsetY(10)
     .failOffsetX([-25, 25])
