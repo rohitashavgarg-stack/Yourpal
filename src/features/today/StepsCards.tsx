@@ -77,6 +77,9 @@ export function StepsPreview({ design }: { design: StepsDesign }) {
   return (
     <View pointerEvents="none" style={{ width: SQ, height: SQ, borderRadius: 28, overflow: 'hidden' }}>
       <Face design={design} s={s} />
+      <View style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: design === 'Ruler' ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.22)' }}>
+        <Plus size={17} color="#fff" />
+      </View>
     </View>
   );
 }
