@@ -45,8 +45,8 @@ export default function CoachHub() {
         <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: 26, lineHeight: 34, letterSpacing: -0.7 }}>Coach Vikram</Txt>
         <Txt muted style={{ fontSize: 14 }}>Your trainer · Wulf Fitness</Txt>
         {cs.away
-          ? <Tag label="Away until Mon 10:00 am · replies will be slower" bg={c.warnSoft} fg={c.warn} style={{ marginTop: 4 }} />
-          : <Tag label={isPT ? 'Replies within the hour · PT' : 'Usually replies in a few hours'} bg={c.goodSoft} fg={c.good} style={{ marginTop: 4 }} />}
+          ? <Tag label="Away until Mon 10:00 am · replies will be slower" bg={c.warnSoft} fg={c.warn} style={{ marginTop: 4, alignSelf: 'center' }} />
+          : <Tag label={isPT ? 'Replies within the hour · PT' : 'Usually replies in a few hours'} bg={c.goodSoft} fg={c.good} style={{ marginTop: 4, alignSelf: 'center' }} />}
       </View>
 
       <Row style={{ gap: 8 }}>
