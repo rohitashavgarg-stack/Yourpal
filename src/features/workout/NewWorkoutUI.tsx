@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, Modal, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
+import { Image, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -10,6 +10,7 @@ import { Ex, ListItem } from '@/lib/data';
 import { Session } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
+import { fade } from '@/theme/motion';
 import { mmss } from '@/lib/useNow';
 import { ClipStage } from './ClipStage';
 import { RestPanel } from './RestPanel';
@@ -23,7 +24,8 @@ const LIST_THUMB: Record<string, string> = { w2: 'dfs', c3: 'dbe' };
 function ClipPopup({ source, onClose }: { source: number; onClose: () => void }) {
   const player = useVideoPlayer(source, (p) => { p.loop = true; p.muted = true; p.play(); });
   return (
-    <Modal transparent animationType="fade" onRequestClose={onClose} statusBarTranslucent>
+    // Drawn inside the screen (not a Modal) so on the web it stays inside the phone frame.
+    <Animated.View entering={fade()} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, zIndex: 100, elevation: 100 }}>
       <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.92)', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
         <Pressable accessibilityLabel="Close clip" onPress={onClose} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
         <View style={{ width: '100%', maxHeight: '75%', gap: 12, alignItems: 'flex-end' }}>
@@ -37,7 +39,7 @@ function ClipPopup({ source, onClose }: { source: number; onClose: () => void })
           </View>
         </View>
       </View>
-    </Modal>
+    </Animated.View>
   );
 }
 // A still of the move with a play button. Tapping it opens the clip.
