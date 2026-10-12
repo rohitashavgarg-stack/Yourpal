@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, ScrollView, View, useWindowDimensions } from 'react-native';
+import { Image, Modal, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -14,46 +14,40 @@ import { mmss } from '@/lib/useNow';
 import { ClipStage } from './ClipStage';
 import { RestPanel } from './RestPanel';
 import { VideoView, useVideoPlayer } from 'expo-video';
-import { useOverlay } from '@/components/Overlay';
 import { CLIPS, THUMBS } from './clips';
 
 // The only clips we have are the main-lift ones, so a move gets a still only where it is the same movement; the rest show a plain tile.
 const LIST_THUMB: Record<string, string> = { w2: 'dfs', c3: 'dbe' };
-function MoveClip({ source, thumb }: { source: number; thumb?: number }) {
+// Just the clip in a popup over a dim, with a close button.
+function ClipPopup({ source, onClose }: { source: number; onClose: () => void }) {
+  const insets = useSafeAreaInsets();
   const player = useVideoPlayer(source, (p) => { p.loop = true; p.muted = true; p.play(); });
   return (
-    <>
-      <VideoView player={player} nativeControls={false} contentFit="cover" allowsPictureInPicture={false} pointerEvents="none" style={{ width: '100%', height: '100%' }} />
-      {!!thumb && <Image source={thumb} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%', opacity: 0 }} />}
-    </>
-  );
-}
-// Bigger view of a move's clip, opened from its thumbnail.
-function MoveSheet({ name, source, on, onToggle }: { name: string; source: number; on: boolean; onToggle: () => void }) {
-  const { c } = useTheme();
-  const { closeSheet } = useOverlay();
-  const player = useVideoPlayer(source, (p) => { p.loop = true; p.muted = true; p.play(); });
-  return (
-    <View style={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 8, gap: 14 }}>
-      <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 30, letterSpacing: -0.5 }}>{name}</Txt>
-      <View style={{ height: 300, borderRadius: 20, overflow: 'hidden', backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: c.line }}>
-        <VideoView player={player} nativeControls={false} contentFit="contain" allowsPictureInPicture={false} pointerEvents="none" style={{ width: '100%', height: '100%' }} />
+    <Modal transparent animationType="fade" onRequestClose={onClose} statusBarTranslucent>
+      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.72)', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+        <Pressable accessibilityLabel="Close clip" onPress={onClose} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
+        <View style={{ width: '100%', aspectRatio: 1, maxHeight: '70%', borderRadius: 24, overflow: 'hidden', backgroundColor: '#FFFFFF' }}>
+          <VideoView player={player} nativeControls={false} contentFit="contain" allowsPictureInPicture={false} pointerEvents="none" style={{ width: '100%', height: '100%' }} />
+        </View>
+        <Pressy accessibilityRole="button" accessibilityLabel="Close" onPress={onClose} scaleTo={0.92}
+          style={{ position: 'absolute', top: insets.top + 12, right: 16, width: 44, height: 44, borderRadius: 22, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center' }}>
+          <X size={20} color="#0B0E14" />
+        </Pressy>
       </View>
-      <Button kind={on ? 'secondary' : 'accent'} label={on ? 'Undo done' : 'Mark as done'} onPress={() => { onToggle(); closeSheet(); }} />
-    </View>
+    </Modal>
   );
 }
+// A still of the move with a play button. Tapping it opens the clip.
 function MoveThumb({ id, onOpen }: { id: string; onOpen?: () => void }) {
   const { c } = useTheme();
   const key = LIST_THUMB[id];
-  const clip = key ? CLIPS[key] : undefined;
+  const still = key ? THUMBS[key] : undefined;
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel="Watch the clip" disabled={!clip} onPress={onOpen} scaleTo={0.94} style={{ width: 64, height: 64, borderRadius: 14, overflow: 'hidden', backgroundColor: clip ? '#FFFFFF' : c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
-      {clip ? <MoveClip source={clip} thumb={THUMBS[key]} /> : (
-        <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}>
-          <Play size={12} color="#fff" fill="#fff" style={{ marginLeft: 1 }} />
-        </View>
-      )}
+    <Pressy accessibilityRole="button" accessibilityLabel="Watch the clip" disabled={!key} onPress={onOpen} scaleTo={0.94} style={{ width: 64, height: 64, borderRadius: 14, overflow: 'hidden', backgroundColor: still ? '#FFFFFF' : c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+      {still ? <Image source={still} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} /> : null}
+      <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}>
+        <Play size={12} color="#fff" fill="#fff" style={{ marginLeft: 1 }} />
+      </View>
     </Pressy>
   );
 }
@@ -178,13 +172,14 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
   s: Session; list: ListItem[]; now: number; cool: boolean; onToggle: (id: string, on: boolean) => void; onMain: () => void; onFinishNow: () => void; onMinimise: () => void;
 }) {
   const { c } = useTheme();
-  const { openSheet } = useOverlay();
+  const [clip, setClip] = useState<number | null>(null);
   const insets = useSafeAreaInsets();
   const [t0] = useState(() => Date.now());
   const left = Math.max(0, TOTAL_SEC - (now - t0) / 1000);
   const allDone = list.every((it) => !!s.listDone[it.id]);
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
+      {clip != null && <ClipPopup source={clip} onClose={() => setClip(null)} />}
       <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 10, justifyContent: 'flex-start' }}>
         <Pressy accessibilityRole="button" accessibilityLabel="Minimise workout" onPress={onMinimise} scaleTo={0.92} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
           <X size={20} color={c.ink} />
@@ -201,7 +196,7 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
             return (
               <Pressy key={it.id} accessibilityRole="button" accessibilityLabel={`${on ? 'Undo' : 'Done'}: ${it.n}`} onPress={() => onToggle(it.id, !on)} scaleTo={0.98}
                 style={{ flexDirection: 'row', alignItems: 'center', gap: 12, minHeight: 80, paddingVertical: 8, paddingHorizontal: 2, borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-                <MoveThumb id={it.id} onOpen={() => { const k = LIST_THUMB[it.id]; if (k) openSheet(<MoveSheet name={it.n} source={CLIPS[k]} on={on} onToggle={() => onToggle(it.id, !on)} />, { label: it.n }); }} />
+                <MoveThumb id={it.id} onOpen={() => { const k = LIST_THUMB[it.id]; if (k) setClip(CLIPS[k]); }} />
                 <View style={{ flex: 1, gap: 2 }}>
                   <Txt style={{ fontFamily: font.medium, color: on ? c.muted : c.ink, textDecorationLine: on ? 'line-through' : 'none' }}>{it.n}</Txt>
                 </View>
