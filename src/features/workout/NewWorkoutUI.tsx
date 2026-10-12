@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { ScrollView, View, useWindowDimensions } from 'react-native';
+import { Image, ScrollView, View, useWindowDimensions } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronLeft, Ellipsis, X } from '@/lib/icons';
+import { ChevronLeft, Ellipsis, Play, X } from '@/lib/icons';
 import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle } from '@/components/bits';
 import { Ex, ListItem } from '@/lib/data';
@@ -13,6 +13,22 @@ import { font } from '@/theme/tokens';
 import { mmss } from '@/lib/useNow';
 import { ClipStage } from './ClipStage';
 import { RestPanel } from './RestPanel';
+import { THUMBS } from './clips';
+
+// The only clips we have are the main-lift ones, so a move gets a still only where it is the same movement; the rest show a plain tile.
+const LIST_THUMB: Record<string, string> = { w2: 'dfs', c3: 'dbe' };
+function MoveThumb({ id }: { id: string }) {
+  const { c } = useTheme();
+  const src = THUMBS[LIST_THUMB[id]];
+  return (
+    <View style={{ width: 64, height: 64, borderRadius: 14, overflow: 'hidden', backgroundColor: src ? '#FFFFFF' : c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+      {src ? <Image source={src} resizeMode="cover" style={{ width: '100%', height: '100%' }} /> : null}
+      <View style={{ position: 'absolute', width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}>
+        <Play size={12} color="#fff" fill="#fff" style={{ marginLeft: 1 }} />
+      </View>
+    </View>
+  );
+}
 
 const INK = '#0B0E14'; // text drawn straight on the white clip stage
 
@@ -158,10 +174,15 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
           {list.map((it, i) => {
             const on = !!s.listDone[it.id];
             return (
-              <Row key={it.id} style={{ gap: 12, minHeight: 58, paddingVertical: 8, paddingHorizontal: 2, borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-                <CheckCircle on={on} label={`${on ? 'Undo' : 'Done'}: ${it.n}`} onPress={() => onToggle(it.id, !on)} />
-                <Txt style={{ flex: 1, fontFamily: font.medium, color: on ? c.muted : c.ink, textDecorationLine: on ? 'line-through' : 'none' }}>{it.n}</Txt>
-              </Row>
+              <Pressy key={it.id} accessibilityRole="button" accessibilityLabel={`${on ? 'Undo' : 'Done'}: ${it.n}`} onPress={() => onToggle(it.id, !on)} scaleTo={0.98}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 12, minHeight: 80, paddingVertical: 8, paddingHorizontal: 2, borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
+                <MoveThumb id={it.id} />
+                <View style={{ flex: 1, gap: 2 }}>
+                  <Txt style={{ fontFamily: font.medium, color: on ? c.muted : c.ink, textDecorationLine: on ? 'line-through' : 'none' }}>{it.n}</Txt>
+                  {!!it.sub && <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{it.sub}</Txt>}
+                </View>
+                <View pointerEvents="none"><CheckCircle on={on} label="" /></View>
+              </Pressy>
             );
           })}
         </Card>
