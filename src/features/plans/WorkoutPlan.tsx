@@ -126,7 +126,7 @@ export function WorkoutPlan() {
             </Row>
             {!!plan.done && <Txt v="caption" style={{ paddingHorizontal: 4, marginTop: 4 }}>{plan.done}</Txt>}
           </E>
-          {!!plan.wu?.length && <E i={2}><ListCard dot={c.cAct} title={`Warm-up · ${plan.wu.length} moves · no weights`} rows={plan.wu} /></E>}
+          {!!plan.wu?.length && <E i={2}><ListCard dot={c.cAct} title="Warm-up" rows={plan.wu} /></E>}
           <E i={3}><Txt v="label" style={{ paddingHorizontal: 6 }}>Main workout</Txt></E>
           <E i={3}>
             <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
@@ -150,7 +150,7 @@ export function WorkoutPlan() {
               })}
             </Card>
           </E>
-          {!!plan.cd?.length && <E i={4}><ListCard dot={c.cNutri} title={`Cool-down · ${plan.cd.length} stretches · counts are a guide`} rows={plan.cd} /></E>}
+          {!!plan.cd?.length && <E i={4}><ListCard dot={c.cNutri} title="Cool-down" rows={plan.cd} /></E>}
           {rel > 0 && <Txt muted style={{ textAlign: 'center', fontSize: 13 }}>You can start this on {DAYL[p.day]}. Plans open on today by default.</Txt>}
           {!!plan.done && <Button kind="secondary" small label="View in workout history" onPress={() => router.push('/plans/history')} />}
           {rel < 0 && !plan.done && <Txt muted style={{ textAlign: 'center', fontSize: 13 }}>Not logged on {DAYL[p.day]}.</Txt>}
