@@ -37,12 +37,12 @@ export function WTile({ colors, onPress, label, Icon, a11y, children, right, add
     : <View accessible accessibilityLabel={a11y} style={style}>{inner}</View>;
 }
 
-// Round + in the bottom right corner of a water or weight tile: logs from the tile without opening it.
+// Round + in the top right corner (same place as on the steps card) of a water or weight tile: logs from the tile without opening it.
 function AddButton({ label, onPress }: { label: string; onPress?: () => void }) {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} disabled={!onPress} hitSlop={6} scaleTo={0.9}
-      style={{ position: 'absolute', right: 12, bottom: 12, width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.22)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.35)', alignItems: 'center', justifyContent: 'center' }}>
-      <Plus size={19} color="#fff" strokeWidth={2.4} />
+      style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, backgroundColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center', zIndex: 3 }}>
+      <Plus size={17} color="#fff" />
     </Pressy>
   );
 }
@@ -92,7 +92,7 @@ export function WaterDot({ litres, onPress, onAdd }: { litres: number; onPress?:
       <View style={{ marginTop: 12 }}><DotText text={fmt1(litres)} maxW={W_IN - 6} on="#7CC8FF" /></View>
       <View style={{ marginTop: 'auto', gap: 6 }}>
         <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)' }}>{left > 0 ? 'of 3 L' : 'Goal reached'}</Txt>
-        <Segments n={10} on={Math.min(10, Math.round((litres / 3) * 10))} color="#7CC8FF" h={6} gap={3} width={W_IN - 46} />
+        <Segments n={10} on={Math.min(10, Math.round((litres / 3) * 10))} color="#7CC8FF" h={6} gap={3} />
       </View>
     </WTile>
   );
@@ -103,7 +103,7 @@ export function WaterGlasses({ litres, onPress, onAdd }: { litres: number; onPre
     <WTile colors={['#0B2A4A', '#061424']} label="Drink water" a11y={`${glasses} of 12 glasses`} onPress={onPress} add={{ label: 'Add a glass, 250 millilitres', onPress: onAdd }}>
       <Txt style={{ ...cap, marginTop: 2 }}>Glasses</Txt>
       <Txt style={{ fontFamily: font.displayBold, fontSize: 32, lineHeight: 40, color: '#fff', marginTop: 8 }}>{glasses}<Txt style={{ fontFamily: font.medium, fontSize: 15, color: 'rgba(255,255,255,0.6)' }}> / 12</Txt></Txt>
-      <View style={{ marginTop: 'auto' }}><Segments n={12} on={glasses} color="#27A9FF" h={12} gap={3} width={W_IN - 46} /></View>
+      <View style={{ marginTop: 'auto' }}><Segments n={12} on={glasses} color="#27A9FF" h={12} gap={3} /></View>
     </WTile>
   );
 }
@@ -121,9 +121,9 @@ export function WeightDot({ kg, delta, onPress, onAdd }: { kg: number; delta: nu
 export function WeightRuler({ kg, onPress, onAdd }: { kg: number; onPress?: () => void; onAdd?: () => void }) {
   const n = 25;
   return (
-    <WTile colors={['#1FB5A6', '#0A6F78', '#0A4A55']} label="Weight" a11y={`Weight ${fmt1(kg)} kilograms`} onPress={onPress} add={{ label: 'Log weight', onPress: onAdd }}
-      right={<Txt style={{ fontFamily: font.displayBold, fontSize: 20, lineHeight: 26, color: '#fff' }}>{fmt1(kg)}<Txt style={{ fontFamily: font.medium, fontSize: 12 }}> kg</Txt></Txt>}>
-      <View style={{ position: 'absolute', left: 14, right: 14, bottom: 52, height: 44, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+    <WTile colors={['#1FB5A6', '#0A6F78', '#0A4A55']} label="Weight" a11y={`Weight ${fmt1(kg)} kilograms`} onPress={onPress} add={{ label: 'Log weight', onPress: onAdd }}>
+      <Txt style={{ fontFamily: font.displayBold, fontSize: 26, lineHeight: 34, color: '#fff', marginTop: 8 }}>{fmt1(kg)}<Txt style={{ fontFamily: font.medium, fontSize: 13 }}> kg</Txt></Txt>
+      <View style={{ position: 'absolute', left: 14, right: 14, bottom: 34, height: 44, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         {Array.from({ length: n }, (_, i) => <View key={i} style={{ width: 2, height: i % 5 === 0 ? 34 : 20, borderRadius: 1, backgroundColor: i === 12 ? '#fff' : 'rgba(255,255,255,0.5)' }} />)}
       </View>
       <Txt style={{ ...cap, position: 'absolute', left: 14, bottom: 12 }}>Goal 68 kg</Txt>
