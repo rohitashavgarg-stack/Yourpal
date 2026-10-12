@@ -193,7 +193,7 @@ function Peek({ x, rot, dy, k, children }: { x: number; rot: number; dy: number;
 function DashedLine({ color }: { color: string }) {
   return (
     <Svg width="100%" height={2}>
-      <Line x1="0" y1="1" x2="100%" y2="1" stroke={color} strokeOpacity={0.55} strokeWidth={1.5} strokeDasharray="6 5" />
+      <Line x1="0" y1="1" x2="100%" y2="1" stroke={color} strokeOpacity={0.3} strokeWidth={1.5} strokeDasharray="6 5" />
     </Svg>
   );
 }
