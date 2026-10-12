@@ -9,7 +9,8 @@ import { Crosshair, LocateOff, MapPin, RefreshCw, X } from '@/lib/icons';
 import { Button, Chip, Row, Txt } from '@/components/ui';
 import { RoundBtn } from '@/components/bits';
 import { useOverlay, useToastLift } from '@/components/Overlay';
-import { CheckInScenario, nowMin, useDomain } from '@/lib/domain';
+import { CheckInScenario, nowMin, useDomain, workoutState } from '@/lib/domain';
+import { newSession } from '@/features/workout/session';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
 import { elapsedMin, isIn, LIMIT_MIN } from '@/features/checkin/logic';
 import { useNow } from '@/lib/useNow';
@@ -55,8 +56,10 @@ export default function CheckIn() {
     setBusy(true); haptic.medium();
     t.current = setTimeout(() => {
       const at = nowMin(d);
-      CI.checkIn(); haptic.success(); close();
+      CI.checkIn(); haptic.success();
       toast(`Checked in ${fmtT(at).full} · counted in your attendance`);
+      // Workout still to do today: go straight to the workout instead of back to Today.
+      if (workoutState(d) === 'todo') { set({ session: newSession() }); router.replace('/workout'); } else close();
     }, 700);
   };
 
