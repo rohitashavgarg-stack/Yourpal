@@ -139,7 +139,8 @@ function Slide({ name, bottom, children }: { name: string; bottom: boolean; chil
       {/* On the phone the X screens are drawn over the page underneath (transparent modal), so the dim is drawn here. */}
       {!isWeb && <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: '#000' }, dim]} />}
       <GestureDetector gesture={pan}>
-        <Animated.View style={[{ flex: 1, backgroundColor: c.bg }, style]}>{children}</Animated.View>
+        {/* On the phone these screens are native modals, which sit above the app's own sheet and toast layer, so they carry their own. */}
+        <Animated.View style={[{ flex: 1, backgroundColor: c.bg }, style]}>{isWeb ? children : <OverlayProvider>{children}</OverlayProvider>}</Animated.View>
       </GestureDetector>
     </View>
   );

@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { ScrollView, View, useWindowDimensions } from 'react-native';
-import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft, Ellipsis, X } from '@/lib/icons';
@@ -48,14 +48,12 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
   const MIN = Math.round(H * 0.56), MAX = Math.round(H * 0.88);
   const h = useSharedValue(MIN);
   const from = useSharedValue(MIN);
-  const [stageBottom, setStageBottom] = useState(MIN);
   const pan = Gesture.Pan()
     .onStart(() => { from.value = h.value; })
     .onUpdate((g) => { h.value = Math.max(MIN, Math.min(MAX, from.value - g.translationY)); })
     .onEnd((g) => {
       const to = h.value - g.velocityY * 0.12 > (MIN + MAX) / 2 ? MAX : MIN;
       h.value = withTiming(to, { duration: 220, easing: Easing.out(Easing.cubic) });
-      runOnJS(setStageBottom)(to);
     });
   const sheet = useAnimatedStyle(() => ({ height: h.value }));
 
@@ -67,7 +65,8 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
 
   return (
     <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-      <ClipStage id={e.id} bottom={stageBottom} />
+      {/* the clip stays where it is: the sheet slides over it instead of pushing it */}
+      <ClipStage id={e.id} top={insets.top + 92} bottom={MIN} />
 
       <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, paddingTop: insets.top + 8, paddingHorizontal: 16, gap: 10 }}>
         <View style={{ flexDirection: 'row', gap: 4 }}>
@@ -102,7 +101,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
         <View style={{ paddingHorizontal: 16, paddingBottom: 10, gap: 6 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 16, letterSpacing: 1, color: c.muted }}>MUSCLES FOCUSED</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>
-            {e.muscles.split('·').map((m) => m.trim()).filter(Boolean).map((m) => <Chip key={m} label={m} />)}
+            {e.muscles.split('·').map((m) => m.trim()).filter(Boolean).map((m) => <Chip key={m} label={m.charAt(0).toUpperCase() + m.slice(1)} />)}
           </Row>
         </View>
         <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 12 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
@@ -136,8 +135,8 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
 }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
-  const t0 = useRef(Date.now());
-  const left = Math.max(0, TOTAL_SEC - (now - t0.current) / 1000);
+  const [t0] = useState(() => Date.now());
+  const left = Math.max(0, TOTAL_SEC - (now - t0) / 1000);
   const allDone = list.every((it) => !!s.listDone[it.id]);
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
