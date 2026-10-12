@@ -37,7 +37,7 @@ export function WTile({ colors, onPress, label, Icon, a11y, children, right, add
 }
 
 // Round + in the top right corner (same place as on the steps card) of a water or weight tile: logs from the tile without opening it.
-export const ADD_STYLE = { position: 'absolute', top: 10, right: 10, width: 34, height: 34, borderRadius: 17, backgroundColor: 'rgba(255,255,255,0.22)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.4)', alignItems: 'center', justifyContent: 'center', zIndex: 3, shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 6, shadowOffset: { width: 0, height: 2 } } as const;
+export const ADD_STYLE = { position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, backgroundColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center', zIndex: 3 } as const;
 // variant 'glass': the pill with a glass and a plus (add a glass of water). 'small': a smaller round +.
 export function AddButton({ label, onPress, variant = 'round' }: { label: string; onPress?: () => void; variant?: 'round' | 'small' | 'glass' }) {
   if (variant === 'glass') {
@@ -49,10 +49,9 @@ export function AddButton({ label, onPress, variant = 'round' }: { label: string
       </Pressy>
     );
   }
-  const small = variant === 'small';
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} disabled={!onPress} hitSlop={small ? 12 : 8} scaleTo={0.88} style={small ? { ...ADD_STYLE, width: 26, height: 26, borderRadius: 13, top: 12, right: 12 } : ADD_STYLE}>
-      <Plus size={small ? 15 : 18} color="#fff" strokeWidth={2.6} />
+    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} disabled={!onPress} hitSlop={10} scaleTo={0.88} style={ADD_STYLE}>
+      <Plus size={17} color="#fff" />
     </Pressy>
   );
 }

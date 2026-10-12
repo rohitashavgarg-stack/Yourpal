@@ -174,7 +174,7 @@ export function WeightCard() {
   const diff = Math.round((d.weight - SPARK[0]) * 10) / 10;
   return (
     <Tile bg={c.surface} shadow={!isDark} label="Weight" a11y={`Weight ${fmt1(d.weight)} kg, ${diff <= 0 ? 'down' : 'up'} ${Math.abs(diff)} kg this week. Log weight`} onPress={() => router.push('/log-weight')}
-      right={<View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: c.accentSoft, borderWidth: 1, borderColor: c.accentText + '33', alignItems: 'center', justifyContent: 'center', marginRight: -6, marginTop: -4 }}><Plus size={18} color={c.accentText} strokeWidth={2.6} /></View>}>
+      right={<View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center', marginRight: -4, marginTop: -2 }}><Plus size={17} color={c.accentText} /></View>}>
       <Txt style={{ ...NUM, color: c.ink }}>{fmt1(d.weight)}<Txt muted style={UNIT_TXT}> kg</Txt></Txt>
       <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: diff <= 0 ? c.good : c.warn }}>{diff <= 0 ? '↓' : '↑'} {Math.abs(diff)} kg this week</Txt>
       <View style={{ marginTop: 'auto', marginHorizontal: -6, marginBottom: -6 }}>
