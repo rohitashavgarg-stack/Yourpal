@@ -314,7 +314,7 @@ export function WaterSheet() {
       <Row style={{ justifyContent: 'space-between' }}>
         <Txt style={{ fontFamily: font.semibold, fontSize: 26, lineHeight: 34, letterSpacing: -0.6 }}>Water</Txt>
         <Pressy accessibilityRole="button" accessibilityLabel="See water trend" onPress={() => closeSheet(() => router.push({ pathname: '/progress/metric', params: { k: 'water' } }))} scaleTo={0.92}
-          style={{ height: 44, paddingHorizontal: 16, borderRadius: 22, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1, borderColor: c.line }}>
+          style={{ height: 44, paddingHorizontal: 16, borderRadius: 22, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <GlassBackdrop radius={22} tint={isDark ? 'rgba(255,255,255,0.10)' : 'rgba(11,14,20,0.05)'} />
           <ChartNoAxesColumn size={18} color={c.ink} />
           <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20 }}>Trends</Txt>
