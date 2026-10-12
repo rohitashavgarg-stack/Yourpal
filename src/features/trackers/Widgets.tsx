@@ -14,7 +14,7 @@ const W_IN = TILE - 28;
 
 type Icon = React.ComponentType<{ size?: number; color?: string; strokeWidth?: number }>;
 
-export function WTile({ colors, onPress, label, Icon, a11y, children, right, add }: { colors: [string, string, ...string[]]; onPress?: () => void; label?: string; Icon?: Icon; a11y: string; children: React.ReactNode; right?: React.ReactNode; add?: { label: string; onPress?: () => void; variant?: 'round' | 'small' | 'glass' } }) {
+export function WTile({ colors, onPress, label, Icon, a11y, children, right, add }: { colors: [string, string, ...string[]]; onPress?: () => void; label?: string; Icon?: Icon; a11y: string; children: React.ReactNode; right?: React.ReactNode; add?: { label: string; onPress?: () => void; variant?: 'round' | 'glass' } }) {
   const inner = (
     <>
       <LinearGradient colors={colors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
@@ -38,8 +38,8 @@ export function WTile({ colors, onPress, label, Icon, a11y, children, right, add
 
 // Round + in the top right corner (same place as on the steps card) of a water or weight tile: logs from the tile without opening it.
 export const ADD_STYLE = { position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, backgroundColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center', zIndex: 3 } as const;
-// variant 'glass': the pill with a glass and a plus (add a glass of water). 'small': a smaller round +.
-export function AddButton({ label, onPress, variant = 'round' }: { label: string; onPress?: () => void; variant?: 'round' | 'small' | 'glass' }) {
+// variant 'glass': the pill with a glass and a plus (add a glass of water).
+export function AddButton({ label, onPress, variant = 'round' }: { label: string; onPress?: () => void; variant?: 'round' | 'glass' }) {
   if (variant === 'glass') {
     return (
       <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} disabled={!onPress} scaleTo={0.92}
@@ -97,12 +97,9 @@ export function EnergyStack({ onPress }: { onPress?: () => void }) {
 export function WaterDot({ litres, onPress, onAdd }: { litres: number; onPress?: () => void; onAdd?: () => void }) {
   const left = Math.max(0, 3 - litres);
   return (
-    <WTile colors={['#0E4A8A', '#07192F']} label="Water" Icon={Droplet} a11y={`Water ${fmt1(litres)} of 3 litres, ${fmt1(left)} left`} onPress={onPress} add={{ label: 'Add a glass, 250 millilitres', onPress: onAdd, variant: 'small' }}>
-      <View style={{ marginTop: 12 }}><DotText text={fmt1(litres)} maxW={W_IN - 6} on="#CBE9FF" off="rgba(255,255,255,0.07)" maxDot={9} /></View>
-      <View style={{ marginTop: 'auto', gap: 6 }}>
-        <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)' }}>{left > 0 ? 'of 3 L' : 'Goal reached'}</Txt>
-        <Segments n={10} on={Math.min(10, Math.round((litres / 3) * 10))} color="#7CC8FF" h={6} gap={3} />
-      </View>
+    <WTile colors={['#0E4A8A', '#07192F']} label="Water" Icon={Droplet} a11y={`Water ${fmt1(litres)} of 3 litres, ${fmt1(left)} left`} onPress={onPress} add={{ label: 'Add a glass, 250 millilitres', onPress: onAdd, variant: 'glass' }}>
+      <View style={{ marginTop: 20 }}><DotText text={fmt1(litres)} maxW={W_IN - 6} on="#CBE9FF" off="rgba(255,255,255,0.07)" maxDot={9} /></View>
+      <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)', marginTop: 'auto' }}>{left > 0 ? 'of 3 L' : 'Goal reached'}</Txt>
     </WTile>
   );
 }
