@@ -120,8 +120,9 @@ export function WaterCard() {
     <View style={{ width: 164, height: 164 }}>
       <Pressy accessibilityRole="button" accessibilityLabel={`Water ${ml} of 3,000 millilitres. Open details`} onPress={() => openSheet(<WaterSheet />, { label: 'Water', glow: '#2F6BEA' })} scaleTo={0.97} style={SQ}>
         <LinearGradient colors={['#070B2E', '#1C2BC0']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
-        <View style={{ position: 'absolute', left: 14, top: 8, bottom: 8, justifyContent: 'center' }}>
-          <BottleArt litres={water} w={56} h={148} id="bottleCard" />
+        <Txt style={{ position: 'absolute', left: 14, top: 17, fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>Water</Txt>
+        <View style={{ position: 'absolute', left: 14, top: 48, bottom: 10, justifyContent: 'center' }}>
+          <BottleArt litres={water} w={44} h={106} id="bottleCard" />
           {hit > 0 && <Ripple key={hit} size={40} color="#7FB4FF" width={2} />}
         </View>
         <View style={{ position: 'absolute', right: 14, bottom: 12, alignItems: 'flex-end' }}>
