@@ -83,3 +83,4 @@ export { default as PersonStanding } from 'lucide-react-native/icons/person-stan
 export { default as Zap } from 'lucide-react-native/icons/zap';
 export { default as ArrowRight } from 'lucide-react-native/icons/arrow-right';
 export { default as Droplet } from 'lucide-react-native/icons/droplet';
+export { default as Maximize2 } from 'lucide-react-native/icons/maximize-2';

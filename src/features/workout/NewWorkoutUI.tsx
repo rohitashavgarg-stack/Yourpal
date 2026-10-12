@@ -68,7 +68,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
       {/* the clip stays where it is: the sheet slides over it instead of pushing it */}
       <ClipStage id={e.id} top={insets.top + 92} bottom={MIN} />
 
-      <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, paddingTop: insets.top + 8, paddingHorizontal: 16, gap: 10 }}>
+      <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, paddingTop: insets.top + 8, paddingHorizontal: 16, gap: 10, zIndex: 10 }}>
         <View style={{ flexDirection: 'row', gap: 4 }}>
           {Array.from({ length: n }, (_, i) => <View key={i} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: i <= pos ? INK : '#D5DBE5' }} />)}
         </View>
@@ -82,7 +82,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
         </Row>
       </View>
 
-      <Animated.View style={[{ position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: c.bg, borderTopLeftRadius: 28, borderTopRightRadius: 28, borderTopWidth: 1, borderColor: c.line, overflow: 'hidden',
+      <Animated.View style={[{ position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 20, backgroundColor: c.bg, borderTopLeftRadius: 28, borderTopRightRadius: 28, borderTopWidth: 1, borderColor: c.line, overflow: 'hidden',
         shadowColor: '#000', shadowOpacity: isDark ? 0.5 : 0.16, shadowRadius: 24, shadowOffset: { width: 0, height: -6 }, elevation: 18 }, sheet]}>
         <GestureDetector gesture={pan}>
           <View style={{ alignItems: 'center', paddingTop: 8, paddingBottom: 6 }}>
