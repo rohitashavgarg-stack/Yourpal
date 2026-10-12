@@ -37,6 +37,14 @@ if (!(router as any).__slideBack) {
     if (top && router.canGoBack()) top.close(realBack); else realBack();
   };
 }
+// Web only: icons are inline SVGs, which are not positioned, so any glass / blur layer (position: absolute) drawn earlier in the same button paints over them.
+// Making every icon positioned puts it back above the glass layer, wherever one is used.
+if (Platform.OS === 'web' && typeof document !== 'undefined' && !document.getElementById('yp-icons-above-glass')) {
+  const st = document.createElement('style');
+  st.id = 'yp-icons-above-glass';
+  st.textContent = 'svg.lucide{position:relative}';
+  document.head.appendChild(st);
+}
 function Transition({ name, children }: { name: string; children: React.ReactNode }) {
   if (NO_TRANSITION.includes(name)) return <>{children}</>;
   const bottom = FROM_BOTTOM.includes(name);
