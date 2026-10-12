@@ -4,7 +4,7 @@ import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft, Ellipsis, X } from '@/lib/icons';
-import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
+import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle } from '@/components/bits';
 import { Ex, ListItem } from '@/lib/data';
 import { Session } from '@/lib/domain';
@@ -45,7 +45,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
   const { c, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const { height: H } = useWindowDimensions();
-  const MIN = Math.round(H * 0.5), MAX = Math.round(H * 0.86);
+  const MIN = Math.round(H * 0.56), MAX = Math.round(H * 0.88);
   const h = useSharedValue(MIN);
   const from = useSharedValue(MIN);
   const [stageBottom, setStageBottom] = useState(MIN);
@@ -64,7 +64,6 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
   const none = cur < 0 || marked;
   const left = e.sets.filter((x) => x.st === 'todo').length;
   const n = s.ex.length + 2, pos = s.exIdx + 1;
-  const setNo = cur >= 0 ? cur + 1 : e.sets.length;
 
   return (
     <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
@@ -78,7 +77,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
           <RoundLight label="Minimise workout" onPress={onMinimise}><X size={20} color={INK} /></RoundLight>
           <View style={{ flex: 1, alignItems: 'center' }}>
             <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22, color: INK }}>{e.name}</Txt>
-            <Txt numberOfLines={1} style={{ fontSize: 12, lineHeight: 17, color: '#5B6577' }}>{elapsed} · Next: {nextName}</Txt>
+            <Txt numberOfLines={1} style={{ fontSize: 12, lineHeight: 17, color: '#5B6577' }}>{elapsed}</Txt>
           </View>
           <FinishPill onPress={onFinish} />
         </Row>
@@ -94,13 +93,18 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
         <Row style={{ paddingHorizontal: 16, gap: 8, paddingBottom: 8 }}>
           <View style={{ flex: 1, minWidth: 0 }}>
             <Txt numberOfLines={1} style={{ fontFamily: font.display, fontSize: 24, lineHeight: 31 }}>{e.name}</Txt>
-            <Txt v="caption">{e.muscles} · set {setNo} of {e.sets.length}</Txt>
           </View>
           <Pressy accessibilityRole="button" accessibilityLabel="Exercise options: swap, ask coach, form tips, skip" onPress={onMenu} scaleTo={0.92}
             style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
             <Ellipsis size={20} color={c.ink} />
           </Pressy>
         </Row>
+        <View style={{ paddingHorizontal: 16, paddingBottom: 10, gap: 6 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 16, letterSpacing: 1, color: c.muted }}>MUSCLES FOCUSED</Txt>
+          <Row style={{ gap: 6, flexWrap: 'wrap' }}>
+            {e.muscles.split('·').map((m) => m.trim()).filter(Boolean).map((m) => <Chip key={m} label={m} />)}
+          </Row>
+        </View>
         <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 12 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           {sets}
           {note}
