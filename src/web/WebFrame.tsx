@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useRef} from 'react';
 import { useShell } from '@/features/shell/state';
 import { router } from 'expo-router';
 import { Dimensions, Platform, Pressable, ScrollView, Text, View } from 'react-native';
@@ -107,7 +107,11 @@ function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number
 }
 
 // Kept deliberately small: goal type, member type, light / dark, steps tracker design and the time of day.
-function PanelBody() {
+// onDone: called after a Redo so the sheet version can close itself and show a toast.
+function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
+  const [note, setNote] = useState('');
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const said = (msg: string) => { setNote(msg); clearTimeout(timer.current); timer.current = setTimeout(() => setNote(''), 3500); onDone?.(msg); };
   const { state, setSc, set: setApp, setProfile } = useStore();
   const shell = useShell();
   const { isDark } = useTheme();
@@ -138,15 +142,16 @@ function PanelBody() {
     { label: 'Gym choice in onboarding', options: ['Shown', 'Hidden'], value: d.askGym ? 'Shown' : 'Hidden', onPick: (v: string) => set({ askGym: v === 'Shown' }) },
     // Undo one thing so it can be tried again.
     { label: 'Redo today', options: ['Workout', 'Meals', 'Steps', 'Check-in'], value: '', onPick: (v: string) => {
-      if (v === 'Workout') set({ wkScenario: 'Not started', wkDone: null, session: null });
-      else if (v === 'Meals') set({ meals: mealsFor(d.time), openMeal: null });
-      else if (v === 'Steps') stepsStore.set({ manual: [] });
-      else set({ ci: 'Away', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null });
+      if (v === 'Workout') { set({ wkScenario: 'Not started', wkDone: null, session: null }); said('Workout reset · ready to start again'); }
+      else if (v === 'Meals') { set({ meals: mealsFor(d.time), openMeal: null }); said('Meals reset · back to the start of the day'); }
+      else if (v === 'Steps') { stepsStore.set({ manual: [] }); said('Steps reset · manual steps removed'); }
+      else { set({ ci: 'At the gym', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null }); said('Check-in reset · you can check in again'); }
     } },
     { label: 'Redo onboarding', options: ['Start over', 'Gym', 'Goal', 'Experience', 'Schedule', 'Age', 'Height', 'Weight', 'Basics', 'Health', 'Privacy'], value: '', onPick: (v: string) => {
       const at = ({ 'Start over': 'welcome', Gym: 'facility', Goal: 'goal', Experience: 'exp', Schedule: 'sched', Age: 'age', Height: 'height', Weight: 'weight', Basics: 'basics', Health: 'health', Privacy: 'consent' } as Record<string, string>)[v];
       if (v === 'Start over') setProfile({ goal: '', exp: '', injury: 'No', injuryNote: '', skipBody: false });
       setApp({ onboarded: false, onboardingStep: at });
+      said(v === 'Start over' ? 'Restarting onboarding from the beginning' : `Onboarding reopened at ${v}`);
       router.replace('/onboarding');
     } },
     // Steps need Health. Heart rate, sleep and energy also need a watch or band, which a member may not have.
@@ -156,6 +161,7 @@ function PanelBody() {
   return (
     <View style={{ gap: 14 }}>
       <Text style={{ fontFamily: font.bold, fontSize: 16, lineHeight: 21, color: '#12151C' }}>Edge cases</Text>
+      {!!note && <View style={{ backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
       {rows.map((r) => (
         <View key={r.label} style={{ gap: 6 }}>
           <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: '#5C6370' }}>{r.label}</Text>
@@ -192,16 +198,16 @@ function SidePanel({ height }: { height: number }) {
 
 // Opens the same edge-case controls as a sheet. Used by the slim edge tab and by Profile → Demo controls, so they work in Expo Go too.
 export function useOpenEdgeCases() {
-  const { openSheet } = useOverlay();
-  return () => openSheet(<View style={{ backgroundColor: '#fff', borderRadius: 20, padding: 12 }}><PanelBody /></View>, { label: 'Edge cases' });
+  const { openSheet, closeSheet, toast } = useOverlay();
+  return () => openSheet(<View style={{ backgroundColor: '#fff', borderRadius: 20, padding: 12 }}><PanelBody onDone={(m) => closeSheet(() => toast(m))} /></View>, { label: 'Edge cases' });
 }
 
 // Slim tab on the right edge (phones / narrow web) — opens the same panel as a sheet.
 export function EdgeTab() {
-  const { openSheet } = useOverlay();
+  const { openSheet, closeSheet, toast } = useOverlay();
   const { c } = useTheme();
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel="Scenarios and edge cases" onPress={() => openSheet(<View style={{ backgroundColor: '#fff', borderRadius: 20, padding: 12 }}><PanelBody /></View>, { label: 'Edge cases' })}
+    <Pressable accessibilityRole="button" accessibilityLabel="Scenarios and edge cases" onPress={() => openSheet(<View style={{ backgroundColor: '#fff', borderRadius: 20, padding: 12 }}><PanelBody onDone={(m) => closeSheet(() => toast(m))} /></View>, { label: 'Edge cases' })}
       style={{ position: 'absolute', right: 0, top: '46%', width: 22, height: 52, borderTopLeftRadius: 12, borderBottomLeftRadius: 12, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', opacity: 0.9 }}>
       <SlidersHorizontal size={13} color="#fff" />
     </Pressable>
