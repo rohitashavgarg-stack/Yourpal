@@ -193,8 +193,8 @@ function BigFooter() {
   return (
     <View style={{ marginTop: 14, paddingTop: 18, borderTopWidth: 2, borderTopColor: c.surface3, borderStyle: 'dotted', gap: 14 }}>
       <Row style={{ justifyContent: 'space-between' }}>
-        <YourPalLogo height={22} color={c.muted} />
-        <Txt style={{ fontFamily: font.mono, fontSize: 9, lineHeight: 13, color: c.muted, opacity: 0.8 }}>v1.0</Txt>
+        <YourPalLogo height={28} color={c.muted} />
+        <Txt style={{ fontFamily: font.mono, fontSize: 12, lineHeight: 17, color: c.muted, opacity: 0.85 }}>v1.0</Txt>
       </Row>
       <View style={{ borderTopWidth: 2, borderTopColor: c.surface3, borderStyle: 'dotted' }} />
       <Txt style={{ fontFamily: font.semibold, fontSize: 50, lineHeight: 56, letterSpacing: -2.2, color: isDark ? 'rgba(255,255,255,0.13)' : 'rgba(10,20,40,0.10)' }}>{'your health,\nevery day.'}</Txt>
