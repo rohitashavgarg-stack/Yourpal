@@ -8,6 +8,7 @@ import { useGoalV2 } from '@/features/goalv2/model';
 import { HEALTH_NAME } from '@/lib/health';
 import { useOpenEdgeCases } from '@/web/WebFrame';
 import { View } from 'react-native';
+import Svg, { Line } from 'react-native-svg';
 import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { ArrowRight, Check, ChevronRight, LogOut } from '@/lib/icons';
@@ -188,6 +189,15 @@ function Peek({ x, rot, dy, k, children }: { x: number; rot: number; dy: number;
 }
 
 // Logo and version, a dotted line, the big translucent line, then the small print.
+// A dashed line drawn with SVG: a dashed border does not draw on every phone.
+function DashedLine({ color }: { color: string }) {
+  return (
+    <Svg width="100%" height={2}>
+      <Line x1="0" y1="1" x2="100%" y2="1" stroke={color} strokeOpacity={0.55} strokeWidth={1.5} strokeDasharray="6 5" />
+    </Svg>
+  );
+}
+
 function BigFooter() {
   const { c, isDark } = useTheme();
   return (
@@ -196,7 +206,7 @@ function BigFooter() {
         <YourPalLogo height={28} color={c.muted} />
         <Txt style={{ fontFamily: font.mono, fontSize: 12, lineHeight: 17, color: c.muted, opacity: 0.85 }}>v1.0</Txt>
       </Row>
-      <View style={{ borderTopWidth: 1.5, borderTopColor: c.surface3, borderStyle: 'dashed' }} />
+      <DashedLine color={c.muted} />
       <Txt style={{ fontFamily: font.semibold, fontSize: 50, lineHeight: 56, letterSpacing: -2.2, color: isDark ? 'rgba(255,255,255,0.13)' : 'rgba(10,20,40,0.10)' }}>{'your health,\nevery day.'}</Txt>
       <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted, paddingBottom: 18 }}>Built for you · Made in India</Txt>
     </View>
