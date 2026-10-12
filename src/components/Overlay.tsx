@@ -104,7 +104,7 @@ function Sheet({ children, label, glow, onClosed, registerClose }: { children: R
   const backStyle = useAnimatedStyle(() => ({ opacity: back.value }));
 
   return (
-    <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
+    <View style={[StyleSheet.absoluteFill, { zIndex: 100, elevation: 100 }]} pointerEvents="box-none">
       <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor: c.scrim }, backStyle]}>
         <Pressable accessibilityLabel="Close sheet" style={StyleSheet.absoluteFill} onPress={() => close()} />
       </Animated.View>
@@ -155,7 +155,7 @@ function Toast({ msg, undo, onGone, raised, lift }: { msg: string; undo?: () => 
   const a = useAnimatedStyle(() => ({ opacity: o.value, transform: [{ translateY: y.value }] }));
   return (
     <Animated.View accessibilityLiveRegion="polite" accessibilityRole="alert" pointerEvents="box-none"
-      style={[{ position: 'absolute', left: 16, right: 16, ...(raised ? { top: 58 } : { bottom: lift || 104 }), zIndex: 30, minHeight: 52, borderRadius: 18, backgroundColor: c.ink, flexDirection: 'row', alignItems: 'center', paddingLeft: 16, paddingRight: 6, gap: 8, shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 20, shadowOffset: { width: 0, height: 10 } }, a]}>
+      style={[{ position: 'absolute', left: 16, right: 16, ...(raised ? { top: 58 } : { bottom: lift || 104 }), zIndex: 200, elevation: 200, minHeight: 52, borderRadius: 18, backgroundColor: c.ink, flexDirection: 'row', alignItems: 'center', paddingLeft: 16, paddingRight: 6, gap: 8, shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 20, shadowOffset: { width: 0, height: 10 } }, a]}>
       <Text style={{ flex: 1, fontFamily: font.medium, fontSize: 14, lineHeight: 18, color: c.bg, paddingVertical: 12 }}>{msg}</Text>
       {undo && (
         <Pressable accessibilityRole="button" onPress={() => { haptic.light(); undo(); onGone(); }} style={{ height: 40, paddingHorizontal: 14, borderRadius: 14, backgroundColor: 'rgba(255,255,255,0.16)', justifyContent: 'center' }}>
