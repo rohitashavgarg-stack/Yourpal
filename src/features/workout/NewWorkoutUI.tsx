@@ -26,13 +26,14 @@ function ClipPopup({ source, onClose }: { source: number; onClose: () => void })
   return (
     // Drawn inside the screen (not a Modal) so on the web it stays inside the phone frame.
     <Animated.View entering={fade()} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, zIndex: 100, elevation: 100 }}>
-      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.92)', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
         <Pressable accessibilityLabel="Close clip" onPress={onClose} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
         <View style={{ width: '100%', maxHeight: '75%', gap: 12, alignItems: 'flex-end' }}>
           <Pressy accessibilityRole="button" accessibilityLabel="Close" onPress={onClose} scaleTo={0.92}
             style={{ width: 44, height: 44, borderRadius: 22, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.35)' }}>
             <GlassBackdrop radius={22} tint="rgba(255,255,255,0.22)" />
-            <X size={20} color="#fff" />
+            {/* in a View so on the web it is drawn above the glass layer */}
+            <View><X size={20} color="#fff" /></View>
           </Pressy>
           <View style={{ width: '100%', aspectRatio: 1, borderRadius: 24, overflow: 'hidden', backgroundColor: '#FFFFFF' }}>
             <VideoView player={player} nativeControls={false} contentFit="contain" allowsPictureInPicture={false} pointerEvents="none" style={{ width: '100%', height: '100%' }} />
