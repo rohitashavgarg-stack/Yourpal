@@ -13,19 +13,31 @@ import { font } from '@/theme/tokens';
 import { mmss } from '@/lib/useNow';
 import { ClipStage } from './ClipStage';
 import { RestPanel } from './RestPanel';
-import { THUMBS } from './clips';
+import { VideoView, useVideoPlayer } from 'expo-video';
+import { CLIPS, THUMBS } from './clips';
 
 // The only clips we have are the main-lift ones, so a move gets a still only where it is the same movement; the rest show a plain tile.
 const LIST_THUMB: Record<string, string> = { w2: 'dfs', c3: 'dbe' };
+function MoveClip({ source, thumb }: { source: number; thumb?: number }) {
+  const player = useVideoPlayer(source, (p) => { p.loop = true; p.muted = true; p.play(); });
+  return (
+    <>
+      <VideoView player={player} nativeControls={false} contentFit="cover" allowsPictureInPicture={false} pointerEvents="none" style={{ width: '100%', height: '100%' }} />
+      {!!thumb && <Image source={thumb} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%', opacity: 0 }} />}
+    </>
+  );
+}
 function MoveThumb({ id }: { id: string }) {
   const { c } = useTheme();
-  const src = THUMBS[LIST_THUMB[id]];
+  const key = LIST_THUMB[id];
+  const clip = key ? CLIPS[key] : undefined;
   return (
-    <View style={{ width: 64, height: 64, borderRadius: 14, overflow: 'hidden', backgroundColor: src ? '#FFFFFF' : c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
-      {src ? <Image source={src} resizeMode="cover" style={{ width: '100%', height: '100%' }} /> : null}
-      <View style={{ position: 'absolute', width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}>
-        <Play size={12} color="#fff" fill="#fff" style={{ marginLeft: 1 }} />
-      </View>
+    <View style={{ width: 64, height: 64, borderRadius: 14, overflow: 'hidden', backgroundColor: clip ? '#FFFFFF' : c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+      {clip ? <MoveClip source={clip} thumb={THUMBS[key]} /> : (
+        <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}>
+          <Play size={12} color="#fff" fill="#fff" style={{ marginLeft: 1 }} />
+        </View>
+      )}
     </View>
   );
 }
@@ -161,14 +173,9 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
           <X size={20} color={c.ink} />
         </Pressy>
       </Row>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 10, paddingBottom: 200, gap: 16 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 10, paddingBottom: 270, gap: 16 }}>
         <View style={{ gap: 4 }}>
           <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 48, lineHeight: 56, letterSpacing: -1.6 }}>{cool ? 'Cool-down' : 'Warm-up'}</Txt>
-          <Txt muted style={{ fontSize: 16, lineHeight: 23 }}>{list.length} {cool ? 'stretches' : 'moves'} · {cool ? 'slow and easy' : 'no weights'}</Txt>
-          <Row style={{ gap: 8, marginTop: 10 }}>
-            <Txt accessibilityLabel={`Total time left ${mmss(left)}`} style={{ fontFamily: font.monoBold, fontSize: 26, lineHeight: 34 }}>{mmss(left).padStart(5, '0')}</Txt>
-            <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>total time</Txt>
-          </Row>
         </View>
         <Card style={{ paddingVertical: 4, paddingHorizontal: 12 }}>
           {list.map((it, i) => {
@@ -179,7 +186,6 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
                 <MoveThumb id={it.id} />
                 <View style={{ flex: 1, gap: 2 }}>
                   <Txt style={{ fontFamily: font.medium, color: on ? c.muted : c.ink, textDecorationLine: on ? 'line-through' : 'none' }}>{it.n}</Txt>
-                  {!!it.sub && <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{it.sub}</Txt>}
                 </View>
                 <View pointerEvents="none"><CheckCircle on={on} label="" /></View>
               </Pressy>
@@ -188,6 +194,10 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
         </Card>
       </ScrollView>
       <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12) + 4, gap: 4, backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>
+        <Row style={{ justifyContent: 'center', gap: 8, paddingBottom: 6 }}>
+          <Txt accessibilityLabel={`Total time left ${mmss(left)}`} style={{ fontFamily: font.monoBold, fontSize: 34, lineHeight: 44 }}>{mmss(left).padStart(5, '0')}</Txt>
+          <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>total time</Txt>
+        </Row>
         <Button kind={allDone || cool ? 'accent' : 'primary'} label={cool ? 'Finish workout' : 'Start main workout'} onPress={cool ? onFinishNow : onMain} />
         {!cool && (
           <Pressy accessibilityRole="button" onPress={onMain} scaleTo={0.96} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}>
