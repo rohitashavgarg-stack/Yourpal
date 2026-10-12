@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import Svg, { Rect } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Droplet, Flame, Heart, Moon, Scale } from '@/lib/icons';
+import { Droplet, Flame, Heart, Moon, Plus, Scale } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { font } from '@/theme/tokens';
 import { fmt1 } from '@/lib/useNow';
@@ -14,7 +14,7 @@ const W_IN = TILE - 28;
 
 type Icon = React.ComponentType<{ size?: number; color?: string; strokeWidth?: number }>;
 
-export function WTile({ colors, onPress, label, Icon, a11y, children, right }: { colors: [string, string, ...string[]]; onPress?: () => void; label?: string; Icon?: Icon; a11y: string; children: React.ReactNode; right?: React.ReactNode }) {
+export function WTile({ colors, onPress, label, Icon, a11y, children, right, add }: { colors: [string, string, ...string[]]; onPress?: () => void; label?: string; Icon?: Icon; a11y: string; children: React.ReactNode; right?: React.ReactNode; add?: { label: string; onPress?: () => void } }) {
   const inner = (
     <>
       <LinearGradient colors={colors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
@@ -28,6 +28,7 @@ export function WTile({ colors, onPress, label, Icon, a11y, children, right }: {
         </Row>
       ) : null}
       {children}
+      {add ? <AddButton label={add.label} onPress={add.onPress} /> : null}
     </>
   );
   const style = { width: TILE, height: TILE, borderRadius: 28, overflow: 'hidden', padding: 14 } as const;
@@ -36,12 +37,22 @@ export function WTile({ colors, onPress, label, Icon, a11y, children, right }: {
     : <View accessible accessibilityLabel={a11y} style={style}>{inner}</View>;
 }
 
+// Round + in the bottom right corner of a water or weight tile: logs from the tile without opening it.
+function AddButton({ label, onPress }: { label: string; onPress?: () => void }) {
+  return (
+    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} disabled={!onPress} hitSlop={6} scaleTo={0.9}
+      style={{ position: 'absolute', right: 12, bottom: 12, width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.22)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.35)', alignItems: 'center', justifyContent: 'center' }}>
+      <Plus size={19} color="#fff" strokeWidth={2.4} />
+    </Pressy>
+  );
+}
+
 const cap = { fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.7)' } as const;
 
-function Segments({ n, on, color, off = 'rgba(255,255,255,0.14)', h = 6, gap = 4 }: { n: number; on: number; color: string; off?: string; h?: number; gap?: number }) {
-  const w = (W_IN - gap * (n - 1)) / n;
+function Segments({ n, on, color, off = 'rgba(255,255,255,0.14)', h = 6, gap = 4, width = W_IN }: { n: number; on: number; color: string; off?: string; h?: number; gap?: number; width?: number }) {
+  const w = (width - gap * (n - 1)) / n;
   return (
-    <Svg width={W_IN} height={h}>
+    <Svg width={width} height={h}>
       {Array.from({ length: n }, (_, i) => <Rect key={i} x={i * (w + gap)} width={w} height={h} rx={Math.min(3, h / 2)} fill={i < on ? color : off} />)}
     </Svg>
   );
@@ -74,43 +85,43 @@ export function EnergyStack({ onPress }: { onPress?: () => void }) {
 }
 
 // ---- Water ----
-export function WaterDot({ litres, onPress }: { litres: number; onPress?: () => void }) {
+export function WaterDot({ litres, onPress, onAdd }: { litres: number; onPress?: () => void; onAdd?: () => void }) {
   const left = Math.max(0, 3 - litres);
   return (
-    <WTile colors={['#0E4A8A', '#07192F']} label="Water" Icon={Droplet} a11y={`Water ${fmt1(litres)} of 3 litres`} onPress={onPress}
+    <WTile colors={['#0E4A8A', '#07192F']} label="Water" Icon={Droplet} a11y={`Water ${fmt1(litres)} of 3 litres`} onPress={onPress} add={{ label: 'Add a glass, 250 millilitres', onPress: onAdd }}
       right={<Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.7)' }}>{fmt1(left)} L left</Txt>}>
       <View style={{ marginTop: 12 }}><DotText text={fmt1(litres)} maxW={W_IN - 30} on="#7CC8FF" /></View>
       <Txt style={{ ...cap, marginTop: 8 }}>litres · goal 3 L</Txt>
     </WTile>
   );
 }
-export function WaterGlasses({ litres, onPress }: { litres: number; onPress?: () => void }) {
+export function WaterGlasses({ litres, onPress, onAdd }: { litres: number; onPress?: () => void; onAdd?: () => void }) {
   const glasses = Math.round(litres / 0.25);
   return (
-    <WTile colors={['#0B2A4A', '#061424']} label="Drink water" a11y={`${glasses} of 12 glasses`} onPress={onPress}>
+    <WTile colors={['#0B2A4A', '#061424']} label="Drink water" a11y={`${glasses} of 12 glasses`} onPress={onPress} add={{ label: 'Add a glass, 250 millilitres', onPress: onAdd }}>
       <Txt style={{ ...cap, marginTop: 2 }}>Glasses</Txt>
       <Txt style={{ fontFamily: font.displayBold, fontSize: 32, lineHeight: 40, color: '#fff', marginTop: 8 }}>{glasses}<Txt style={{ fontFamily: font.medium, fontSize: 15, color: 'rgba(255,255,255,0.6)' }}> / 12</Txt></Txt>
-      <View style={{ marginTop: 'auto' }}><Segments n={12} on={glasses} color="#27A9FF" h={12} gap={3} /></View>
+      <View style={{ marginTop: 'auto' }}><Segments n={12} on={glasses} color="#27A9FF" h={12} gap={3} width={W_IN - 46} /></View>
     </WTile>
   );
 }
 
 // ---- Weight ----
-export function WeightDot({ kg, delta, onPress }: { kg: number; delta: number; onPress?: () => void }) {
+export function WeightDot({ kg, delta, onPress, onAdd }: { kg: number; delta: number; onPress?: () => void; onAdd?: () => void }) {
   return (
-    <WTile colors={['#14595F', '#061A1D']} label="Weight" Icon={Scale} a11y={`Weight ${fmt1(kg)} kilograms`} onPress={onPress}>
+    <WTile colors={['#14595F', '#061A1D']} label="Weight" Icon={Scale} a11y={`Weight ${fmt1(kg)} kilograms`} onPress={onPress} add={{ label: 'Log weight', onPress: onAdd }}>
       <View style={{ marginTop: 12 }}><DotText text={fmt1(kg)} maxW={W_IN - 6} on="#7FE3D6" /></View>
       <Txt style={{ ...cap, marginTop: 8 }}>kg</Txt>
       <Txt style={{ fontSize: 12, lineHeight: 17, color: '#7FE3D6', marginTop: 'auto' }}>{delta <= 0 ? '↘' : '↗'} {Math.abs(delta)} kg this week</Txt>
     </WTile>
   );
 }
-export function WeightRuler({ kg, onPress }: { kg: number; onPress?: () => void }) {
+export function WeightRuler({ kg, onPress, onAdd }: { kg: number; onPress?: () => void; onAdd?: () => void }) {
   const n = 25;
   return (
-    <WTile colors={['#1FB5A6', '#0A6F78', '#0A4A55']} label="Weight" a11y={`Weight ${fmt1(kg)} kilograms`} onPress={onPress}
+    <WTile colors={['#1FB5A6', '#0A6F78', '#0A4A55']} label="Weight" a11y={`Weight ${fmt1(kg)} kilograms`} onPress={onPress} add={{ label: 'Log weight', onPress: onAdd }}
       right={<Txt style={{ fontFamily: font.displayBold, fontSize: 20, lineHeight: 26, color: '#fff' }}>{fmt1(kg)}<Txt style={{ fontFamily: font.medium, fontSize: 12 }}> kg</Txt></Txt>}>
-      <View style={{ position: 'absolute', left: 14, right: 14, bottom: 34, height: 44, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+      <View style={{ position: 'absolute', left: 14, right: 14, bottom: 52, height: 44, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         {Array.from({ length: n }, (_, i) => <View key={i} style={{ width: 2, height: i % 5 === 0 ? 34 : 20, borderRadius: 1, backgroundColor: i === 12 ? '#fff' : 'rgba(255,255,255,0.5)' }} />)}
       </View>
       <Txt style={{ ...cap, position: 'absolute', left: 14, bottom: 12 }}>Goal 68 kg</Txt>

@@ -262,7 +262,7 @@ function ConnectCard() {
 // One tracker in one design. interactive: false is for the designs page and the Profile card (looks only, no taps).
 export function TileFor({ tracker, design, interactive = true }: { tracker: TrackerKey; design: string; interactive?: boolean }) {
   const { d } = useDomain();
-  const { water } = useWater();
+  const { water, change } = useWater();
   const { openSheet } = useOverlay();
   const press = (fn: () => void) => (interactive ? fn : undefined);
   const health = (k: HK) => press(() => openSheet(<HealthSheet k={k} />, { label: 'Health data' }));
@@ -270,12 +270,12 @@ export function TileFor({ tracker, design, interactive = true }: { tracker: Trac
   switch (tracker) {
     case 'steps': return interactive ? <StepsTile /> : <StepsPreview design={design as StepsDesign} />;
     case 'water':
-      if (design === 'Dot matrix') return <WaterDot litres={water} onPress={press(() => openSheet(<WaterSheet />, { label: 'Water', glow: '#2F6BEA' }))} />;
-      if (design === 'Glasses') return <WaterGlasses litres={water} onPress={press(() => openSheet(<WaterSheet />, { label: 'Water', glow: '#2F6BEA' }))} />;
+      if (design === 'Dot matrix') return <WaterDot litres={water} onAdd={press(() => change(0.25))} onPress={press(() => openSheet(<WaterSheet />, { label: 'Water', glow: '#2F6BEA' }))} />;
+      if (design === 'Glasses') return <WaterGlasses litres={water} onAdd={press(() => change(0.25))} onPress={press(() => openSheet(<WaterSheet />, { label: 'Water', glow: '#2F6BEA' }))} />;
       return <WaterCard />;
     case 'weight':
-      if (design === 'Dot matrix') return <WeightDot kg={d.weight} delta={diff} onPress={press(() => router.push('/log-weight'))} />;
-      if (design === 'Ruler') return <WeightRuler kg={d.weight} onPress={press(() => router.push('/log-weight'))} />;
+      if (design === 'Dot matrix') return <WeightDot kg={d.weight} delta={diff} onAdd={press(() => router.push('/log-weight'))} onPress={press(() => router.push('/log-weight'))} />;
+      if (design === 'Ruler') return <WeightRuler kg={d.weight} onAdd={press(() => router.push('/log-weight'))} onPress={press(() => router.push('/log-weight'))} />;
       return <WeightCard />;
     case 'hr': return design === 'Dot matrix' ? <HrDot onPress={health('hr')} /> : <HealthCards only="hr" />;
     case 'sleep':
