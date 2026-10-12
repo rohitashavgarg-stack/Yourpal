@@ -118,7 +118,7 @@ export function WaterCard() {
   const ml = Math.round(water * 1000);
   return (
     <View style={{ width: 164, height: 164 }}>
-      <Pressy accessibilityRole="button" accessibilityLabel={`Water ${ml} of 3,000 millilitres. Open details`} onPress={() => openSheet(<WaterSheet />, { label: 'Water', glow: '#2F6BEA' })} scaleTo={0.97} style={SQ}>
+      <Pressy accessibilityRole="button" accessibilityLabel={`Water ${ml} of 3,000 millilitres. Open details`} onPress={() => openSheet(<WaterSheet />, { label: 'Water' })} scaleTo={0.97} style={SQ}>
         <LinearGradient colors={['#070B2E', '#1C2BC0']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
         <Txt style={{ position: 'absolute', left: 14, top: 17, fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>Water</Txt>
         <View style={{ position: 'absolute', left: 14, top: 48, bottom: 10, justifyContent: 'center' }}>
@@ -267,8 +267,8 @@ export function TileFor({ tracker, design, interactive = true }: { tracker: Trac
   switch (tracker) {
     case 'steps': return interactive ? <StepsTile /> : <StepsPreview design={design as StepsDesign} />;
     case 'water':
-      if (design === 'Dot matrix') return <WaterDot litres={water} onAdd={press(() => change(0.25))} onPress={press(() => openSheet(<WaterSheet />, { label: 'Water', glow: '#2F6BEA' }))} />;
-      if (design === 'Glasses') return <WaterGlasses litres={water} onAdd={press(() => change(0.25))} onPress={press(() => openSheet(<WaterSheet />, { label: 'Water', glow: '#2F6BEA' }))} />;
+      if (design === 'Dot matrix') return <WaterDot litres={water} onAdd={press(() => change(0.25))} onPress={press(() => openSheet(<WaterSheet />, { label: 'Water' }))} />;
+      if (design === 'Glasses') return <WaterGlasses litres={water} onAdd={press(() => change(0.25))} onPress={press(() => openSheet(<WaterSheet />, { label: 'Water' }))} />;
       return <WaterCard />;
     case 'weight':
       if (design === 'Dot matrix') return <WeightDot kg={d.weight} delta={diff} onAdd={press(() => router.push('/log-weight'))} onPress={press(() => router.push('/log-weight'))} />;
