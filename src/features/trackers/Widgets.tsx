@@ -21,7 +21,6 @@ export function WTile({ colors, onPress, label, Icon, a11y, children, right, add
       {label ? (
         <Row style={{ gap: 8, minHeight: 26, justifyContent: 'space-between' }}>
           <Row style={{ gap: 8 }}>
-            {Icon ? <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(255,255,255,0.16)', alignItems: 'center', justifyContent: 'center' }}><Icon size={14} color="#fff" strokeWidth={2} /></View> : null}
             <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>{label}</Txt>
           </Row>
           {right}

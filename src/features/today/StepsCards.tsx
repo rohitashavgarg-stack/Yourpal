@@ -137,7 +137,6 @@ function DotFace({ s }: { s: S }) {
   return (
     <LinearGradient colors={['#1F7A52', '#0E3B2C', '#07130F']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14 }}>
       <Row style={{ gap: 8 }}>
-        <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(255,255,255,0.16)', alignItems: 'center', justifyContent: 'center' }}><Footprints size={14} color="#fff" strokeWidth={2} /></View>
         <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>Steps</Txt>
       </Row>
       <View style={{ marginTop: 12 }}><DotText text={String(s.total)} maxW={132} /></View>
