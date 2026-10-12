@@ -107,15 +107,15 @@ export default function Profile() {
       </View>
 
       <TrackerPromo onPress={go('/profile/tracker-designs')} />
+      {group('ACCOUNT', [
+        { l: 'My details', s: 'Date of birth, height, weight, diet, injuries', go: go('/profile/details') },
+        ...(d.hasGym ? [{ l: 'Membership pauses', s: d.onBreak ? 'Paused by the front desk' : 'History and pauses left', go: go('/gym/break') }] : []),
+      ])}
       {group('PREFERENCES AND SETTINGS', [
         { l: 'Appearance', s: state.sc.theme, go: go('/profile/appearance') },
         { l: 'Units & diet detail level', s: `${s.unitsW} · ${s.unitsL} · ${s.detail}`, go: go('/profile/units') },
         { l: 'Connected apps', s: d.hc ? `${HEALTH_NAME} · connected` : `${HEALTH_NAME} · not connected`, go: go('/profile/health') },
         { l: 'Quick trackers to show', s: trackers, go: go('/profile/trackers') },
-      ])}
-      {group('ACCOUNT', [
-        { l: 'My details', s: 'Date of birth, height, weight, diet, injuries', go: go('/profile/details') },
-        ...(d.hasGym ? [{ l: 'Membership pauses', s: d.onBreak ? 'Paused by the front desk' : 'History and pauses left', go: go('/gym/break') }] : []),
       ])}
       {group('PRIVACY AND ALERTS', [
         { l: 'Privacy & what each provider sees', go: go('/profile/privacy') },
