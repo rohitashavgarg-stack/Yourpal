@@ -110,8 +110,7 @@ export function WaterGlasses({ litres, onPress, onAdd }: { litres: number; onPre
   const glasses = Math.round(litres / 0.25);
   return (
     <WTile colors={['#0B2A4A', '#061424']} label="Water" a11y={`${glasses} of 12 glasses`} onPress={onPress} add={{ label: 'Add a glass, 250 millilitres', onPress: onAdd, variant: 'glass' }}>
-      <Txt style={{ ...cap, marginTop: 2 }}>Glasses</Txt>
-      <Txt style={{ fontFamily: font.displayBold, fontSize: 32, lineHeight: 40, color: '#fff', marginTop: 8 }}>{glasses}<Txt style={{ fontFamily: font.medium, fontSize: 15, color: 'rgba(255,255,255,0.6)' }}> / 12</Txt></Txt>
+      <Txt style={{ fontFamily: font.displayBold, fontSize: 32, lineHeight: 40, color: '#fff', marginTop: 10 }}>{glasses}<Txt style={{ fontFamily: font.medium, fontSize: 15, color: 'rgba(255,255,255,0.6)' }}> / 12 </Txt><Txt style={{ fontFamily: font.medium, fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>glasses</Txt></Txt>
       <View style={{ marginTop: 'auto' }}><Segments n={12} on={glasses} color="#27A9FF" h={12} gap={3} /></View>
     </WTile>
   );
