@@ -4,8 +4,8 @@ import Animated, { cancelAnimation, Easing, useAnimatedProps, useAnimatedStyle, 
 import { fade } from '@/theme/motion';
 import Svg, { Circle, ClipPath, Defs, G, Line, LinearGradient as SvgGradient, Path, Polyline, Rect, Stop } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
-import { GlassBackdrop } from '@/components/Glass';
-import { ChartNoAxesColumn, Footprints, Plus } from '@/lib/icons';
+import { TrendsButton } from '@/components/TrendsButton';
+import { Footprints, Plus } from '@/lib/icons';
 import { router } from 'expo-router';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Beat, HeartIcon, Ring, Tag } from '@/components/bits';
@@ -313,12 +313,7 @@ export function WaterSheet() {
     <>
       <Row style={{ justifyContent: 'space-between' }}>
         <Txt style={{ fontFamily: font.semibold, fontSize: 26, lineHeight: 34, letterSpacing: -0.6 }}>Water</Txt>
-        <Pressy accessibilityRole="button" accessibilityLabel="See water trend" onPress={() => closeSheet(() => router.push({ pathname: '/progress/metric', params: { k: 'water' } }))} scaleTo={0.92}
-          style={{ height: 44, paddingHorizontal: 16, borderRadius: 22, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <GlassBackdrop radius={22} tint={isDark ? 'rgba(255,255,255,0.10)' : 'rgba(11,14,20,0.05)'} />
-          <ChartNoAxesColumn size={18} color={c.ink} />
-          <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20 }}>Trends</Txt>
-        </Pressy>
+        <TrendsButton label="See water trend" onPress={() => closeSheet(() => router.push({ pathname: '/progress/metric', params: { k: 'water' } }))} />
       </Row>
       <Row style={{ gap: 20 }}>
         <View style={{ width: 84, height: 200, alignItems: 'center', justifyContent: 'center' }}>

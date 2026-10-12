@@ -8,6 +8,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { CalendarDays, ChevronRight, X } from '@/lib/icons';
 import { Button, Card, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { RoundBtn, UnitPill } from '@/components/bits';
+import { TrendsButton } from '@/components/TrendsButton';
 import { Wheel } from '@/components/Wheel';
 import { Ruler } from '@/components/Ruler';
 import { useOverlay } from '@/components/Overlay';
@@ -128,14 +129,15 @@ export function DobPicker({ dob, onChange }: { dob: string; onChange: (dob: stri
 }
 
 // ---------- full-screen chrome: X, title, content, Save pinned at the bottom ----------
-function BodyScreen({ title, saveLabel, onSave, children }: { title: string; saveLabel: string; onSave: () => void; children: React.ReactNode }) {
+function BodyScreen({ title, saveLabel, onSave, children, trend }: { title: string; saveLabel: string; onSave: () => void; children: React.ReactNode; trend?: () => void }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }}>
         <RoundBtn label="Close" onPress={back} glass><X size={20} color={c.ink} /></RoundBtn>
-        <Txt accessibilityRole="header" style={{ flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: 17, marginRight: 44 }}>{title}</Txt>
+        <Txt accessibilityRole="header" style={trend ? { flex: 1, fontFamily: font.semibold, fontSize: 17, marginLeft: 4 } : { flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: 17, marginRight: 44 }}>{title}</Txt>
+        {trend ? <TrendsButton label="See weight trend" onPress={trend} /> : null}
       </Row>
       <Animated.View entering={fade()} style={{ flex: 1, paddingHorizontal: 16 }}>{children}</Animated.View>
       <View style={{ paddingHorizontal: 16, paddingTop: 12, paddingBottom: Math.max(insets.bottom, 16) + 8, backgroundColor: c.bg }}>
@@ -206,7 +208,7 @@ export function WeightScreen() {
   };
 
   return (
-    <BodyScreen title="Log weight" saveLabel="Save" onSave={save}>
+    <BodyScreen title="Log weight" saveLabel="Save" onSave={save} trend={() => router.push({ pathname: '/progress/metric', params: { k: 'weight' } })}>
       <WeightPicker kg={kg} onChange={setKg}>
         {onboarding ? (
           <Txt v="caption" style={{ textAlign: 'center' }}>Your trend line starts after your first few weigh-ins.</Txt>
