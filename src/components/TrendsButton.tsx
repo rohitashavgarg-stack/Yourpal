@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { ChartNoAxesColumn } from '@/lib/icons';
 import { Pressy, Txt } from '@/components/ui';
 import { GlassBackdrop } from '@/components/Glass';
@@ -12,7 +13,8 @@ export function TrendsButton({ label, onPress }: { label: string; onPress: () =>
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} scaleTo={0.92}
       style={{ height: 44, paddingHorizontal: 16, borderRadius: 22, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
       <GlassBackdrop radius={22} tint={isDark ? 'rgba(255,255,255,0.10)' : 'rgba(11,14,20,0.05)'} />
-      <ChartNoAxesColumn size={18} color={c.ink} />
+      {/* in a View so on the web it is drawn above the glass layer (a bare svg is not positioned and ends up underneath) */}
+      <View><ChartNoAxesColumn size={18} color={c.ink} /></View>
       <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20 }}>Trends</Txt>
     </Pressy>
   );
