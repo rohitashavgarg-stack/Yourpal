@@ -29,8 +29,21 @@
       "expo-font",
       "expo-asset",
       "expo-audio",
-      ["expo-camera", { "cameraPermission": "YourPal uses the camera to scan your plate and estimate what you ate.", "recordAudioAndroid": false }],
-      ["expo-image-picker", { "photosPermission": "YourPal uses your photos so you can send them to your coach.", "cameraPermission": "YourPal uses the camera so you can send a photo to your coach." }]
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "YourPal uses the camera to scan your plate and estimate what you ate.",
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "YourPal uses your photos so you can send them to your coach.",
+          "cameraPermission": "YourPal uses the camera so you can send a photo to your coach."
+        }
+      ],
+      "expo-video"
     ]
   }
 }

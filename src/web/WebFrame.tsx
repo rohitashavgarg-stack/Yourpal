@@ -1,6 +1,9 @@
 import React, { useEffect, useState , useRef} from 'react';
 import { useShell } from '@/features/shell/state';
 import { router } from 'expo-router';
+import { workoutUiStore } from '@/features/workout/ui';
+import { newSession } from '@/features/workout/session';
+import { clipDemoExercises } from '@/features/workout/clips';
 import { Dimensions, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useStore } from '@/lib/store';
@@ -117,6 +120,7 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
   const { isDark } = useTheme();
   const { d, set } = useDomain();
   const steps = stepsStore.use();
+  const wk = workoutUiStore.use();
   const type = d.goal.type;
   const GOAL_TARGET: Record<string, number> = { 'Weight loss': 6, 'Muscle gain': 3, 'Lean body': 3, Strength: 80, Flexibility: 0, Agility: 0, 'General fitness': WEEK_TARGET, 'Not sure yet': 0 };
   const pickGoal = (v: string) => {
@@ -153,6 +157,14 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
       setApp({ onboarded: false, onboardingStep: at });
       said(v === 'Start over' ? 'Restarting onboarding from the beginning' : `Onboarding reopened at ${v}`);
       router.replace('/onboarding');
+    } },
+    // The workout screen has two designs. New = full-screen clip with the sets in a bottom sheet.
+    { label: 'Workout design', options: ['Current', 'New'], value: wk.design, onPick: (v: string) => { workoutUiStore.set({ design: v as 'Current' | 'New' }); said(`Workout design: ${v}`); } },
+    { label: 'Open a workout', options: ['Leg day', 'Clip demo'], value: '', onPick: (v: string) => {
+      const base = newSession();
+      set({ session: v === 'Clip demo' ? { ...base, ex: clipDemoExercises(), phase: 'main' } : base });
+      said(v === 'Clip demo' ? 'Opened the clip demo workout (7 exercises with clips)' : 'Opened Leg day');
+      router.push('/workout');
     } },
     // Steps need Health. Heart rate, sleep and energy also need a watch or band, which a member may not have.
     { label: 'Health (steps)', options: ['Connected', 'Not connected'], value: d.hc ? 'Connected' : 'Not connected', onPick: (v: string) => set({ hc: v === 'Connected' }) },

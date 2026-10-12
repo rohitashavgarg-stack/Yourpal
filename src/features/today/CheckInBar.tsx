@@ -18,7 +18,7 @@ import { haptic } from '@/lib/haptics';
 import { mmss, useNow } from '@/lib/useNow';
 import { ciTime } from './WeekCard';
 import { useCheckIn } from '@/features/checkin/useCheckIn';
-import { elapsedMin } from '@/features/checkin/logic';
+import { elapsedMin, limitOf } from '@/features/checkin/logic';
 
 export type CiMode = 'none' | 'here' | 'near' | 'in' | 'out' | 'off';
 export function useCiMode(): CiMode {
@@ -75,6 +75,8 @@ export function CheckInBar() {
   const at = ciTime(d);
   let bg: string = c.surface, fg: string = c.ink, icBg: string = c.surface2, title = '', sub = '', btn = '', act: (() => void) | null = null, border = true;
   let icon = <MapPin size={17} color={fg} />;
+  let chip = '';
+  let progress: number | null = null;
   let open: (() => void) | null = () => router.push('/checkin');
   let pillTone: 'ink' | 'white' | 'soft' = 'ink';
   if (mode === 'here' || mode === 'near') {
@@ -88,7 +90,9 @@ export function CheckInBar() {
   } else if (mode === 'in') {
     icBg = c.goodSoft; pillTone = 'soft';
     const mins = Math.max(0, Math.floor(elapsedMin(d, now)));
-    title = `Checked in ${mins} min`;
+    title = 'Checked in';
+    chip = `${mins} min`;
+    progress = Math.min(1, mins / limitOf(d));
     sub = `Since ${fmtT(at!).full} · ${st === 'todo' ? 'Leg day is next' : st === 'done' ? 'Workout done' : 'Rest day'}`;
     if (st === 'todo') { btn = 'Start workout'; act = () => startWorkout(); }
     else { btn = 'Check out'; act = A.checkOut; }
@@ -104,18 +108,30 @@ export function CheckInBar() {
     act = () => { set({ ci: 'At the gym' }); haptic.success(); toast('Location on · we only check it while the app is open'); };
     icon = <LocateOff size={17} color={fg} />;
   }
-  const label = `${title}. ${sub}`;
+  const label = `${title}${chip ? ` ${chip}` : ""}. ${sub}`;
   return (
     <Floating>
       <View accessibilityRole="summary" style={[BAR, { backgroundColor: bg }, border && { borderWidth: 1, borderColor: c.line }]}>
         <Pressy accessibilityRole={open ? 'button' : undefined} accessibilityLabel={label} disabled={!open} onPress={open ?? undefined} scaleTo={0.98} haptics={false} style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 10, height: 52 }}>
           <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: icBg, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
           <View style={{ flex: 1, minWidth: 0 }}>
-            <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 14, color: fg }}>{title}</Txt>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 14, color: fg, flexShrink: 1 }}>{title}</Txt>
+              {!!chip && (
+                <View style={{ height: 20, paddingHorizontal: 8, borderRadius: 10, backgroundColor: c.goodSoft, justifyContent: 'center' }}>
+                  <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, color: c.good }}>{chip}</Txt>
+                </View>
+              )}
+            </View>
             <Txt numberOfLines={1} style={{ fontSize: 12, color: fg, opacity: 0.72 }}>{sub}</Txt>
           </View>
         </Pressy>
         {btn && act ? <PillBtn h={36} label={btn} tone={pillTone} onPress={act} style={{ paddingHorizontal: 14 }} /> : null}
+        {progress != null && (
+          <View pointerEvents="none" style={{ position: 'absolute', left: 18, right: 18, bottom: 0, height: 3, borderRadius: 2, backgroundColor: c.goodSoft, overflow: 'hidden' }}>
+            <View style={{ width: `${Math.round(progress * 100)}%`, height: '100%', backgroundColor: c.good }} />
+          </View>
+        )}
       </View>
     </Floating>
   );

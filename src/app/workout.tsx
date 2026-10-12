@@ -24,6 +24,8 @@ import { RestPanel } from '@/features/workout/RestPanel';
 import { ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { askCoach, coachStore } from '@/features/coach/coach';
 import { FinishScreen, FinishStats } from '@/features/workout/FinishScreen';
+import { workoutUiStore } from '@/features/workout/ui';
+import { NewExercise, NewList } from '@/features/workout/NewWorkoutUI';
 import { FinishConfirmSheet, FormTipsSheet, SetMenuSheet, SwapSheet, WkApi, WkMenuSheet } from '@/features/workout/WorkoutSheets';
 
 function Bars({ n, pos, light }: { n: number; pos: number; light?: boolean }) {
@@ -69,6 +71,7 @@ export default function Workout() {
   const scroll = useRef<ScrollView>(null);
   const [dockH, setDockH] = useState(0);
   useToastLift(dockH ? dockH + 12 : 24 + insets.bottom);
+  const newUi = workoutUiStore.use().design === 'New';
 
   const e = s ? s.ex[s.exIdx] : null;
   // Demo card colours: the illustration is light, so in dark mode the text on it must be dark.
@@ -181,6 +184,74 @@ export default function Workout() {
   const isList = s.phase !== 'main';
   const list = s.phase === 'cooldown' ? COOLDOWN : WARMUP;
 
+  const setsBlock = (
+    <View style={{ gap: 6 }}>
+      <Row style={{ gap: 8, paddingHorizontal: 10 }}>
+        <Txt v="caption" style={{ width: 32 }}>Set</Txt><Txt v="caption" style={{ flex: 1 }}>{COL_LABEL[e.mode]}</Txt><Txt v="caption">Done</Txt>
+      </Row>
+      {e.sets.map((x, i) => {
+        const timing = s.setTimer && s.setTimer.exIdx === s.exIdx && s.setTimer.i === i;
+        return (
+          <SetRow key={`${e.id}-${i}`} e={e} i={i} active={i === activeIdx} revealed={reveal === i} justDone={justDone === i} back={backRow?.i === i ? !!backRow.n : false}
+            draft={draft} setDraft={(p) => setDraftS((v) => ({ ...v, ...p }))}
+            timerLeft={timing ? Math.max(0, Math.ceil((s.setTimer!.endAt - now) / 1000)) : null}
+            onCheck={() => { if (x.st === 'done') A.unlogSet(s.exIdx, i); else logSet(i, i === activeIdx ? draft : null); }}
+            onActivate={() => setActiveRow(i)}
+            onReveal={(on) => setReveal(on ? i : null)}
+            onSkip={() => skipSet(i)}
+            onSwap={() => api.current.openSwap()}
+            onMenu={() => api.current.openSetMenu(i)}
+            onTimer={() => {
+              if (timing) { const el = Math.max(1, Math.round((Date.now() - (s.setTimer!.endAt - s.setTimer!.total * 1000)) / 1000)); logSet(i, { r: 0, k: draft.k, t: el }); }
+              else { haptic.medium(); A.upd((xs) => ({ setTimer: { exIdx: xs.exIdx, i, endAt: Date.now() + draft.t * 1000, total: draft.t } })); }
+            }} />
+        );
+      })}
+      {s.rest && (
+        <Animated.View entering={fade()} style={{ gap: 8, padding: 12, borderRadius: 18, backgroundColor: c.surface2 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20 }}>How was that set? <Txt muted style={{ fontSize: 13 }}>Optional</Txt></Txt>
+          <Row style={{ gap: 6 }}>
+            {(['Too easy', 'Too hard', 'Pain'] as const).map((l, i) => <Pill key={l} label={l} on={fb === i} onPress={() => setFb(fb === i ? null : (i as 0 | 1 | 2))} />)}
+          </Row>
+          {fb === 2 && (
+            <Animated.View entering={fade()} style={{ borderRadius: 14, padding: 12, backgroundColor: c.warnSoft, gap: 8 }}>
+              <Txt style={{ fontFamily: font.bold, color: c.warn }}>Pain reported</Txt>
+              <Txt style={{ fontSize: 14, color: c.warn }}>Stop this exercise. Ask a floor trainer before continuing.</Txt>
+              <Button kind="secondary" small label="Ask Coach Vikram" onPress={() => askCoach('Pain during workout', 'I felt pain in my ')} style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,255,255,0.55)' }} />
+            </Animated.View>
+          )}
+        </Animated.View>
+      )}
+      <Pressy accessibilityRole="button" onPress={() => A.addSet(s.exIdx)} style={{ height: 48, borderRadius: 24, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+        <Plus size={17} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: 14 }}>Add set</Txt>
+      </Pressy>
+      <Txt v="caption" style={{ textAlign: 'center', paddingHorizontal: 6, paddingTop: 4 }}>Adjust the highlighted set and tick it · tap a set to edit · swipe right = done, left = swap/skip · hold for options</Txt>
+    </View>
+  );
+  const noteBlock = noteFor != null ? (
+    <Animated.View entering={fade()}>
+      <Card style={{ padding: 14, gap: 10 }}>
+        <Txt v="label">Note for {e.sets[noteFor]?.w ? 'warm-up set' : `set ${setLabel(e, noteFor)}`}</Txt>
+        <NoteField value={noteDraft} onChangeText={setNoteDraft} placeholder="e.g. felt it in the lower back on the last two reps" autoFocus accessibilityLabel="Set note" minHeight={96} />
+        <Row style={{ gap: 8, justifyContent: 'flex-end' }}>
+          <Button kind="secondary" small label="Cancel" onPress={() => setNoteFor(null)} />
+          <Button small label="Save note" onPress={() => { A.setNote(s.exIdx, noteFor, noteDraft.trim()); setNoteFor(null); haptic.light(); }} />
+        </Row>
+      </Card>
+    </Animated.View>
+  ) : null;
+
+  // The new design: full-screen clip with the sets in a bottom sheet (exercises); a simple list with a big timer (warm-up and cool-down).
+  if (newUi) {
+    if (isList) {
+      return <NewList key={s.phase} s={s} list={list} now={now} cool={s.phase === 'cooldown'} onToggle={(id, on) => A.upd((x) => ({ listDone: { ...x.listDone, [id]: on } }))}
+        onMain={() => A.phase('main')} onFinishNow={finishNow} onMinimise={minimise} onFinish={askFinish} />;
+    }
+    return <NewExercise key={s.exIdx} s={s} e={e} cur={cur} elapsed={elapsed} now={now} onMinimise={minimise} onFinish={askFinish}
+      onMenu={() => openSheet(<WkMenuSheet api={api} />, { label: 'Workout options' })} prevEx={prevEx} nextEx={nextEx} prevName={prevName} nextName={nextName}
+      sets={setsBlock} note={noteBlock} onAdd30={A.add30} onSkipRest={A.skipRest} />;
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }}>
@@ -257,61 +328,9 @@ export default function Workout() {
               </View>
             </View>
 
-            <View style={{ gap: 6 }}>
-              <Row style={{ gap: 8, paddingHorizontal: 10 }}>
-                <Txt v="caption" style={{ width: 32 }}>Set</Txt><Txt v="caption" style={{ flex: 1 }}>{COL_LABEL[e.mode]}</Txt><Txt v="caption">Done</Txt>
-              </Row>
-              {e.sets.map((x, i) => {
-                const timing = s.setTimer && s.setTimer.exIdx === s.exIdx && s.setTimer.i === i;
-                return (
-                  <SetRow key={`${e.id}-${i}`} e={e} i={i} active={i === activeIdx} revealed={reveal === i} justDone={justDone === i} back={backRow?.i === i ? !!backRow.n : false}
-                    draft={draft} setDraft={(p) => setDraftS((v) => ({ ...v, ...p }))}
-                    timerLeft={timing ? Math.max(0, Math.ceil((s.setTimer!.endAt - now) / 1000)) : null}
-                    onCheck={() => { if (x.st === 'done') A.unlogSet(s.exIdx, i); else logSet(i, i === activeIdx ? draft : null); }}
-                    onActivate={() => setActiveRow(i)}
-                    onReveal={(on) => setReveal(on ? i : null)}
-                    onSkip={() => skipSet(i)}
-                    onSwap={() => api.current.openSwap()}
-                    onMenu={() => api.current.openSetMenu(i)}
-                    onTimer={() => {
-                      if (timing) { const el = Math.max(1, Math.round((Date.now() - (s.setTimer!.endAt - s.setTimer!.total * 1000)) / 1000)); logSet(i, { r: 0, k: draft.k, t: el }); }
-                      else { haptic.medium(); A.upd((xs) => ({ setTimer: { exIdx: xs.exIdx, i, endAt: Date.now() + draft.t * 1000, total: draft.t } })); }
-                    }} />
-                );
-              })}
-              {s.rest && (
-                <Animated.View entering={fade()} style={{ gap: 8, padding: 12, borderRadius: 18, backgroundColor: c.surface2 }}>
-                  <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20 }}>How was that set? <Txt muted style={{ fontSize: 13 }}>Optional</Txt></Txt>
-                  <Row style={{ gap: 6 }}>
-                    {(['Too easy', 'Too hard', 'Pain'] as const).map((l, i) => <Pill key={l} label={l} on={fb === i} onPress={() => setFb(fb === i ? null : (i as 0 | 1 | 2))} />)}
-                  </Row>
-                  {fb === 2 && (
-                    <Animated.View entering={fade()} style={{ borderRadius: 14, padding: 12, backgroundColor: c.warnSoft, gap: 8 }}>
-                      <Txt style={{ fontFamily: font.bold, color: c.warn }}>Pain reported</Txt>
-                      <Txt style={{ fontSize: 14, color: c.warn }}>Stop this exercise. Ask a floor trainer before continuing.</Txt>
-                      <Button kind="secondary" small label="Ask Coach Vikram" onPress={() => askCoach('Pain during workout', 'I felt pain in my ')} style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,255,255,0.55)' }} />
-                    </Animated.View>
-                  )}
-                </Animated.View>
-              )}
-              <Pressy accessibilityRole="button" onPress={() => A.addSet(s.exIdx)} style={{ height: 48, borderRadius: 24, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                <Plus size={17} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: 14 }}>Add set</Txt>
-              </Pressy>
-              <Txt v="caption" style={{ textAlign: 'center', paddingHorizontal: 6, paddingTop: 4 }}>Adjust the highlighted set and tick it · tap a set to edit · swipe right = done, left = swap/skip · hold for options</Txt>
-            </View>
+            {setsBlock}
 
-            {noteFor != null && (
-              <Animated.View entering={fade()}>
-                <Card style={{ padding: 14, gap: 10 }}>
-                  <Txt v="label">Note for {e.sets[noteFor]?.w ? 'warm-up set' : `set ${setLabel(e, noteFor)}`}</Txt>
-                  <NoteField value={noteDraft} onChangeText={setNoteDraft} placeholder="e.g. felt it in the lower back on the last two reps" autoFocus accessibilityLabel="Set note" minHeight={96} />
-                  <Row style={{ gap: 8, justifyContent: 'flex-end' }}>
-                    <Button kind="secondary" small label="Cancel" onPress={() => setNoteFor(null)} />
-                    <Button small label="Save note" onPress={() => { A.setNote(s.exIdx, noteFor, noteDraft.trim()); setNoteFor(null); haptic.light(); }} />
-                  </Row>
-                </Card>
-              </Animated.View>
-            )}
+            {noteBlock}
 
           </Animated.View>
         )}
