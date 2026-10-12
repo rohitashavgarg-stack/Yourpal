@@ -139,7 +139,7 @@ function DotFace({ s }: { s: S }) {
       <Row style={{ gap: 8 }}>
         <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>Steps</Txt>
       </Row>
-      <View style={{ marginTop: 12 }}><DotText text={String(s.total)} maxW={132} /></View>
+      <View style={{ marginTop: 22 }}><DotText text={String(s.total)} maxW={132} /></View>
       <Row style={{ marginTop: 'auto', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.7)' }}>of {fmt(s.goal)}</Txt>
         <View style={{ gap: 3, alignItems: 'flex-end' }}>

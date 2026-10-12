@@ -71,7 +71,7 @@ function Segments({ n, on, color, off = 'rgba(255,255,255,0.14)', h = 6, gap = 4
 export function EnergyDot({ onPress }: { onPress?: () => void }) {
   return (
     <WTile colors={['#8A3A12', '#1A0D06']} label="Active energy" Icon={Flame} a11y="Active energy 320 of 450 kilocalories" onPress={onPress}>
-      <View style={{ marginTop: 12 }}><DotText text="320" maxW={W_IN - 6} on="#FFB072" /></View>
+      <View style={{ marginTop: 22 }}><DotText text="320" maxW={W_IN - 6} on="#FFB072" /></View>
       <Txt style={{ ...cap, marginTop: 8 }}>kcal · goal 450</Txt>
       <View style={{ marginTop: 'auto' }}><Segments n={14} on={10} color="#FF8A3D" h={6} gap={3} /></View>
     </WTile>
@@ -98,7 +98,7 @@ export function WaterDot({ litres, onPress, onAdd }: { litres: number; onPress?:
   const left = Math.max(0, 3 - litres);
   return (
     <WTile colors={['#0E4A8A', '#07192F']} label="Water" Icon={Droplet} a11y={`Water ${fmt1(litres)} of 3 litres, ${fmt1(left)} left`} onPress={onPress} add={{ label: 'Add a glass, 250 millilitres', onPress: onAdd, variant: 'glass' }}>
-      <View style={{ marginTop: 20 }}><DotText text={fmt1(litres)} maxW={W_IN - 6} on="#CBE9FF" off="rgba(255,255,255,0.07)" maxDot={9} /></View>
+      <View style={{ marginTop: 22 }}><DotText text={fmt1(litres)} maxW={W_IN - 6} on="#CBE9FF" off="rgba(255,255,255,0.07)" maxDot={9} /></View>
       <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)', marginTop: 'auto' }}>{left > 0 ? 'of 3 L' : 'Goal reached'}</Txt>
     </WTile>
   );
@@ -117,7 +117,7 @@ export function WaterGlasses({ litres, onPress, onAdd }: { litres: number; onPre
 export function WeightDot({ kg, delta, onPress, onAdd }: { kg: number; delta: number; onPress?: () => void; onAdd?: () => void }) {
   return (
     <WTile colors={['#14595F', '#061A1D']} label="Weight" Icon={Scale} a11y={`Weight ${fmt1(kg)} kilograms`} onPress={onPress} add={{ label: 'Log weight', onPress: onAdd }}>
-      <View style={{ marginTop: 12 }}><DotText text={fmt1(kg)} maxW={W_IN - 6} on="#7FE3D6" /></View>
+      <View style={{ marginTop: 22 }}><DotText text={fmt1(kg)} maxW={W_IN - 6} on="#7FE3D6" /></View>
       <Txt style={{ ...cap, marginTop: 8 }}>kg</Txt>
       <Txt style={{ fontSize: 12, lineHeight: 17, color: '#7FE3D6', marginTop: 'auto' }}>{delta <= 0 ? '↘' : '↗'} {Math.abs(delta)} kg this week</Txt>
     </WTile>
@@ -140,7 +140,7 @@ export function WeightRuler({ kg, onPress, onAdd }: { kg: number; onPress?: () =
 export function HrDot({ onPress }: { onPress?: () => void }) {
   return (
     <WTile colors={['#7A1828', '#1A0A10']} label="Heart rate" Icon={Heart} a11y="Heart rate 72 beats per minute" onPress={onPress}>
-      <View style={{ marginTop: 12 }}><DotText text="72" maxW={W_IN - 50} on="#FF8A96" /></View>
+      <View style={{ marginTop: 22 }}><DotText text="72" maxW={W_IN - 50} on="#FF8A96" /></View>
       <Txt style={{ ...cap, marginTop: 8 }}>bpm · resting 64</Txt>
       <View style={{ marginTop: 'auto' }}><Segments n={5} on={2} color="#FF5A6E" h={6} gap={4} /></View>
     </WTile>
@@ -163,7 +163,7 @@ export function SleepStages({ onPress }: { onPress?: () => void }) {
 export function SleepDot({ onPress }: { onPress?: () => void }) {
   return (
     <WTile colors={['#35288F', '#0D0B24']} label="Sleep" Icon={Moon} a11y="Sleep 7 hours 10 minutes" onPress={onPress}>
-      <View style={{ marginTop: 12 }}><DotText text="7:10" maxW={W_IN - 6} on="#B3A8FF" /></View>
+      <View style={{ marginTop: 22 }}><DotText text="7:10" maxW={W_IN - 6} on="#B3A8FF" /></View>
       <Txt style={{ ...cap, marginTop: 8 }}>hours · goal 8</Txt>
       <View style={{ marginTop: 'auto' }}><Segments n={8} on={7} color="#8C7DFF" h={6} gap={4} /></View>
     </WTile>
