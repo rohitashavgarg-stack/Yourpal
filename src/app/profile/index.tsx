@@ -198,7 +198,8 @@ function BigFooter() {
       </Row>
       <View style={{ borderTopWidth: 2, borderTopColor: c.surface3, borderStyle: 'dotted' }} />
       <Txt style={{ fontFamily: font.semibold, fontSize: 50, lineHeight: 56, letterSpacing: -2.2, color: isDark ? 'rgba(255,255,255,0.13)' : 'rgba(10,20,40,0.10)' }}>{'your health,\nevery day.'}</Txt>
-      <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted, paddingBottom: 18 }}>Built for you · Made in India</Txt>
+      <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>Built for you · Made in India</Txt>
+      <View style={{ borderTopWidth: 1.5, borderTopColor: c.surface3, borderStyle: 'dashed', marginBottom: 18 }} />
     </View>
   );
 }
