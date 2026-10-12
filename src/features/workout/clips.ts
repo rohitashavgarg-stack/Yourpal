@@ -26,7 +26,7 @@ const S = (r: number, k: number, t = 0, w = false): SetT => ({ r, k, t, w, st: '
 // A demo workout made of exactly the exercises we have clips for. Opened from the edge-case panel.
 export function clipDemoExercises(): Ex[] {
   return [
-    { id: 'dbp', name: 'Barbell bench press', mode: 'rw', step: 2.5, last: 'Last time: 3 × 8 · 47.5 kg', muscles: 'Chest · shoulders · triceps', cue: 'Shoulder blades back and down, bar to mid-chest, press up.', alts: [], sets: [S(8, 50, 0, true), S(8, 50), S(8, 50)] },
+    { id: 'dbp', name: 'Barbell bench press', mode: 'rw', step: 2.5, last: 'Last time: 3 × 8 · 47.5 kg', muscles: 'Chest · shoulders · triceps', cue: 'Shoulder blades back and down, bar to mid-chest, press up.', alts: [], sets: [S(8, 50), S(8, 50), S(8, 50)] },
     { id: 'dfs', name: 'Barbell front squat', mode: 'rw', step: 2.5, last: 'Last time: 3 × 8 · 37.5 kg', muscles: 'Quads · glutes · core', cue: 'Elbows high, chest up, sit down between your hips.', alts: [], sets: [S(8, 40), S(8, 40), S(8, 40)] },
     { id: 'dcr', name: 'Crunch', mode: 'r', step: 1, muscles: 'Abs', cue: 'Hands behind your head, curl up with your abs, lower slowly.', alts: [], sets: [S(15, 0), S(15, 0), S(15, 0)] },
     { id: 'dlr', name: 'Lying leg-raise crunch', mode: 'r', step: 1, muscles: 'Abs · hip flexors', cue: 'Knees and chest meet in the middle. Do not swing.', alts: [], sets: [S(12, 0), S(12, 0), S(12, 0)] },
