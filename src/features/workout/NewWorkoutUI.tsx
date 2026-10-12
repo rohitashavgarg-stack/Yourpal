@@ -30,8 +30,8 @@ function ClipPopup({ source, onClose }: { source: number; onClose: () => void })
         <Pressable accessibilityLabel="Close clip" onPress={onClose} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
         <View style={{ width: '100%', maxHeight: '75%', gap: 12, alignItems: 'flex-end' }}>
           <Pressy accessibilityRole="button" accessibilityLabel="Close" onPress={onClose} scaleTo={0.92}
-            style={{ width: 44, height: 44, borderRadius: 22, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.35)' }}>
-            <GlassBackdrop radius={22} tint="rgba(255,255,255,0.22)" />
+            style={{ width: 44, height: 44, borderRadius: 22, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
+            <GlassBackdrop radius={22} tint="rgba(255,255,255,0.3)" />
             {/* in a View so on the web it is drawn above the glass layer */}
             <View><X size={20} color="#fff" /></View>
           </Pressy>
