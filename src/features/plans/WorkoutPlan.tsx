@@ -24,18 +24,20 @@ const E = ({ i, children }: { i: number; children: React.ReactNode }) => <Animat
 
 function ListCard({ dot, title, rows }: { dot: string; title: string; rows: { n: string; s: string }[] }) {
   return (
-    <Card style={{ paddingVertical: 12, paddingHorizontal: 16 }}>
-      <Row style={{ gap: 6, paddingBottom: 4 }}>
+    <View style={{ gap: 8 }}>
+      <Row style={{ gap: 6, paddingHorizontal: 6 }}>
         <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: dot }} />
         <Txt v="label">{title}</Txt>
       </Row>
-      {rows.map((w) => (
-        <Row key={w.n} style={{ justifyContent: 'space-between', gap: 10, minHeight: 36 }}>
-          <Txt style={{ fontFamily: font.medium, flexShrink: 1 }}>{w.n}</Txt>
-          <Txt v="caption">{w.s}</Txt>
-        </Row>
-      ))}
-    </Card>
+      <Card style={{ paddingVertical: 6, paddingHorizontal: 16 }}>
+        {rows.map((w) => (
+          <Row key={w.n} style={{ justifyContent: 'space-between', gap: 10, minHeight: 40 }}>
+            <Txt style={{ fontFamily: font.medium, flexShrink: 1 }}>{w.n}</Txt>
+            <Txt v="caption">{w.s}</Txt>
+          </Row>
+        ))}
+      </Card>
+    </View>
   );
 }
 
