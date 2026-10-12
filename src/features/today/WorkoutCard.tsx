@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { Flame } from '@/lib/icons';
+import { Check, Flame } from '@/lib/icons';
 import { Chip, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { coachStore } from '@/features/coach/coach';
@@ -43,6 +43,7 @@ export function WorkoutCard() {
   const chips = st === 'rest' ? ['Recovery day', 'Next: Pull · Thu 6:30 pm'] : ['6 exercises', `~${WORKOUT_MIN} min`, ...(d.hc && d.wearable ? ['~350 kcal'] : [])];
   const did = st === 'done' ? `${fmtT(done.a).hm} – ${fmtT(done.b).full}` : st === 'live' ? `Started · ${elapsed}` : st === 'rest' ? 'A walk counts' : 'Not yet';
   const cta = st === 'todo' ? 'Start workout' : st === 'live' ? 'Resume workout' : null;
+  const mins = Math.max(1, Math.round(done.b - done.a));
   const onCta = () => (st === 'live' ? router.push('/workout') : startWorkout());
 
   return (
@@ -60,12 +61,32 @@ export function WorkoutCard() {
         </Pressy>
         <Chip label={chip} onDark tone={live ? 'live' : 'default'} style={live ? { borderColor: 'rgba(124,240,200,0.5)' } : undefined} />
       </Row>
-      <Txt style={{ fontFamily: font.regular, fontSize: 40, letterSpacing: -1.8, lineHeight: 42, color: '#fff' }}>{st === 'rest' ? 'Rest day' : 'Leg day'}</Txt>
-      <Row style={{ gap: 6, flexWrap: 'wrap' }}>{chips.map((t) => <Chip key={t} label={t} onDark />)}</Row>
-      <Row style={{ gap: 8 }}>
-        <Tile k="Planned" v={st === 'rest' ? 'No workout' : '6:30 pm'} />
-        <Tile k="You did it" v={did} color={live ? '#7CF0C8' : 'rgba(255,255,255,0.6)'} />
-      </Row>
+      {st === 'done' ? (
+        <>
+          <Row style={{ gap: 14 }}>
+            <View style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: '#7CF0C8', alignItems: 'center', justifyContent: 'center' }}>
+              <Check size={26} strokeWidth={3} color="#0B0E14" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Txt style={{ fontFamily: font.regular, fontSize: 28, letterSpacing: -1, lineHeight: 36, color: '#fff' }}>Workout complete</Txt>
+              <Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)' }}>Leg day · nice work</Txt>
+            </View>
+          </Row>
+          <Row style={{ gap: 8 }}>
+            <Tile k="Time" v={`${mins} min`} color="#7CF0C8" />
+            <Tile k="Finished" v={fmtT(done.b).full} color="#7CF0C8" />
+          </Row>
+        </>
+      ) : (
+        <>
+          <Txt style={{ fontFamily: font.regular, fontSize: 40, letterSpacing: -1.8, lineHeight: 42, color: '#fff' }}>{st === 'rest' ? 'Rest day' : 'Leg day'}</Txt>
+          <Row style={{ gap: 6, flexWrap: 'wrap' }}>{chips.map((t) => <Chip key={t} label={t} onDark />)}</Row>
+          <Row style={{ gap: 8 }}>
+            <Tile k="Planned" v={st === 'rest' ? 'No workout' : '6:30 pm'} />
+            <Tile k="You did it" v={did} color={live ? '#7CF0C8' : 'rgba(255,255,255,0.6)'} />
+          </Row>
+        </>
+      )}
       {cta && (
         <Pressy accessibilityRole="button" onPress={onCta} style={{ height: 50, borderRadius: 25, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 15, color: '#0B0E14' }}>{cta}</Txt>
