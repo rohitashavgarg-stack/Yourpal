@@ -212,7 +212,6 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
       <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: c.bg }}>
         <Row style={{ justifyContent: 'center', gap: 8, paddingVertical: 8 }}>
           <Txt accessibilityLabel={`Total time left ${mmss(left)}`} style={{ fontFamily: font.monoBold, fontSize: 34, lineHeight: 44 }}>{mmss(left).padStart(5, '0')}</Txt>
-          <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>total time</Txt>
         </Row>
       <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12) + 4, gap: 4, borderTopWidth: 1, borderTopColor: c.line }}>
         <Button kind={allDone || cool ? 'accent' : 'primary'} label={cool ? 'Finish workout' : 'Start main workout'} onPress={cool ? onFinishNow : onMain} />
