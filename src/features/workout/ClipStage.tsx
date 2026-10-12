@@ -1,15 +1,20 @@
 import React, { useRef, useState } from 'react';
-import { Image, View } from 'react-native';
+import { Image, Platform, View } from 'react-native';
 import { useEvent } from 'expo';
 import { VideoView, useVideoPlayer } from 'expo-video';
-import { Maximize2, Pause, Play } from '@/lib/icons';
+import { Maximize2, Minimize2, Pause, Play } from '@/lib/icons';
 import { Pressy } from '@/components/ui';
 import { CLIPS, THUMBS } from './clips';
 
 // The clips have a white background, so on a white stage the video reads as filling the whole screen.
 export const STAGE_BG = '#FFFFFF';
 
-function Clip({ source, thumb, top, bottom }: { source: number; thumb?: number; top: number; bottom: number }) {
+const IS_WEB = Platform.OS === 'web';
+
+function Clip({ source, thumb, top: top0, bottom: bottom0, wide, setWide }: { source: number; thumb?: number; top: number; bottom: number; wide: boolean; setWide: (v: boolean) => void }) {
+  // On the web the browser's full screen would leave the phone frame, so there the clip just grows to fill the screen inside it.
+  const top = IS_WEB && wide ? 0 : top0;
+  const bottom = IS_WEB && wide ? 0 : bottom0;
   const player = useVideoPlayer(source, (p) => { p.loop = true; p.muted = true; p.play(); });
   const view = useRef<VideoView>(null);
   // The player's own controls (with the exit-fullscreen button) are only on while the clip is full screen.
@@ -29,9 +34,9 @@ function Clip({ source, thumb, top, bottom }: { source: number; thumb?: number; 
           {isPlaying ? <Pause size={26} color="#fff" fill="#fff" /> : <Play size={26} color="#fff" fill="#fff" style={{ marginLeft: 3 }} />}
         </Pressy>
         {/* full screen: the clip in landscape */}
-        <Pressy accessibilityRole="button" accessibilityLabel="Full screen" onPress={() => { player.play(); setFull(true); setTimeout(() => view.current?.enterFullscreen(), 60); }} scaleTo={0.92}
+        <Pressy accessibilityRole="button" accessibilityLabel={IS_WEB && wide ? 'Exit full screen' : 'Full screen'} onPress={() => { player.play(); if (IS_WEB) { setWide(!wide); return; } setFull(true); setTimeout(() => view.current?.enterFullscreen(), 60); }} scaleTo={0.92}
           style={{ position: 'absolute', right: 14, bottom: 12, width: 44, height: 44, borderRadius: 22, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
-          <Maximize2 size={19} color="#0B0E14" />
+          {IS_WEB && wide ? <Minimize2 size={19} color="#0B0E14" /> : <Maximize2 size={19} color="#0B0E14" />}
         </Pressy>
       </View>
     </>
@@ -41,9 +46,10 @@ function Clip({ source, thumb, top, bottom }: { source: number; thumb?: number; 
 // Full-screen background for an exercise. top / bottom = the strips covered by the top bar and the sheet, so the clip sits in what is visible.
 export function ClipStage({ id, top, bottom }: { id: string; top: number; bottom: number }) {
   const source = CLIPS[id];
+  const [wide, setWide] = useState(false);
   return (
-    <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: STAGE_BG }}>
-      {source ? <Clip key={id} source={source} thumb={THUMBS[id]} top={top} bottom={bottom} /> : null}
+    <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: STAGE_BG, zIndex: IS_WEB && wide ? 40 : 0 }}>
+      {source ? <Clip key={id} source={source} thumb={THUMBS[id]} top={top} bottom={bottom} wide={wide} setWide={setWide} /> : null}
     </View>
   );
 }
