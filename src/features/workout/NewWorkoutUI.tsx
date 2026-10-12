@@ -193,6 +193,7 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 10, paddingBottom: 270, gap: 16 }}>
         <View style={{ gap: 4 }}>
           <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 48, lineHeight: 56, letterSpacing: -1.6 }}>{cool ? 'Cool-down' : 'Warm-up'}</Txt>
+          <Txt muted style={{ fontSize: 16, lineHeight: 23 }}>{list.length} {cool ? 'stretches' : 'moves'} · {cool ? 'slow and easy' : 'no weights'}</Txt>
         </View>
         <Card style={{ paddingVertical: 4, paddingHorizontal: 12 }}>
           {list.map((it, i) => {
