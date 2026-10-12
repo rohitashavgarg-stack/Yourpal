@@ -323,8 +323,8 @@ export function WaterSheet() {
         </View>
       </Row>
       <Row style={{ gap: 8 }}>
-        <Button kind="secondary" label="−" accessibilityLabel="Remove 250 ml" onPress={() => add(-0.25)} style={{ width: 64, paddingHorizontal: 0 }} />
-        <Button kind="accent" label="+ 250 ml glass" onPress={() => add(0.25)} style={{ flex: 1, backgroundColor: c.water }} />
+        <Button kind="secondary" label="− 250 ml" accessibilityLabel="Remove 250 ml" onPress={() => add(-0.25)} style={{ flex: 1 }} />
+        <Button kind="accent" label="+ 250 ml" accessibilityLabel="Add 250 ml" onPress={() => add(0.25)} style={{ flex: 1, backgroundColor: c.water }} />
       </Row>
       <Button kind="outline" small label="See water trend" onPress={() => closeSheet(() => router.push({ pathname: '/progress/metric', params: { k: 'water' } }))} />
       {log.length > 0 && (
