@@ -191,15 +191,14 @@ function Peek({ x, rot, dy, k, children }: { x: number; rot: number; dy: number;
 function BigFooter() {
   const { c, isDark } = useTheme();
   return (
-    <View style={{ marginTop: 14, paddingTop: 18, borderTopWidth: 2, borderTopColor: c.surface3, borderStyle: 'dotted', gap: 14 }}>
+    <View style={{ marginTop: 14, gap: 14 }}>
       <Row style={{ justifyContent: 'space-between' }}>
         <YourPalLogo height={28} color={c.muted} />
         <Txt style={{ fontFamily: font.mono, fontSize: 12, lineHeight: 17, color: c.muted, opacity: 0.85 }}>v1.0</Txt>
       </Row>
-      <View style={{ borderTopWidth: 2, borderTopColor: c.surface3, borderStyle: 'dotted' }} />
+      <View style={{ borderTopWidth: 1.5, borderTopColor: c.surface3, borderStyle: 'dashed' }} />
       <Txt style={{ fontFamily: font.semibold, fontSize: 50, lineHeight: 56, letterSpacing: -2.2, color: isDark ? 'rgba(255,255,255,0.13)' : 'rgba(10,20,40,0.10)' }}>{'your health,\nevery day.'}</Txt>
-      <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>Built for you · Made in India</Txt>
-      <View style={{ borderTopWidth: 1.5, borderTopColor: c.surface3, borderStyle: 'dashed', marginBottom: 18 }} />
+      <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted, paddingBottom: 18 }}>Built for you · Made in India</Txt>
     </View>
   );
 }
