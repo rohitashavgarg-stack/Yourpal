@@ -88,10 +88,12 @@ export function EnergyStack({ onPress }: { onPress?: () => void }) {
 export function WaterDot({ litres, onPress, onAdd }: { litres: number; onPress?: () => void; onAdd?: () => void }) {
   const left = Math.max(0, 3 - litres);
   return (
-    <WTile colors={['#0E4A8A', '#07192F']} label="Water" Icon={Droplet} a11y={`Water ${fmt1(litres)} of 3 litres`} onPress={onPress} add={{ label: 'Add a glass, 250 millilitres', onPress: onAdd }}
-      right={<Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.7)' }}>{fmt1(left)} L left</Txt>}>
-      <View style={{ marginTop: 12 }}><DotText text={fmt1(litres)} maxW={W_IN - 30} on="#7CC8FF" /></View>
-      <Txt style={{ ...cap, marginTop: 8 }}>litres · goal 3 L</Txt>
+    <WTile colors={['#0E4A8A', '#07192F']} label="Water" Icon={Droplet} a11y={`Water ${fmt1(litres)} of 3 litres, ${fmt1(left)} left`} onPress={onPress} add={{ label: 'Add a glass, 250 millilitres', onPress: onAdd }}>
+      <View style={{ marginTop: 12 }}><DotText text={fmt1(litres)} maxW={W_IN - 6} on="#7CC8FF" /></View>
+      <View style={{ marginTop: 'auto', gap: 6 }}>
+        <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)' }}>{left > 0 ? `of 3 L · ${fmt1(left)} to go` : 'Goal reached'}</Txt>
+        <Segments n={10} on={Math.min(10, Math.round((litres / 3) * 10))} color="#7CC8FF" h={6} gap={3} width={W_IN - 46} />
+      </View>
     </WTile>
   );
 }
