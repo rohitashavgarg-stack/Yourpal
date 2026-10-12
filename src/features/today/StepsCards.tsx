@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
+import { AddButton, ADD_STYLE } from '@/features/trackers/Widgets';
 import { ArrowRightLeft, Flame, Footprints, Plus, X } from '@/lib/icons';
 import { Button, Field, Pressy, Row, Txt } from '@/components/ui';
 import { Ring } from '@/components/bits';
@@ -50,10 +51,7 @@ export function StepsTile() {
       <Pressy accessibilityRole="button" accessibilityLabel={a11y} onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'steps' } })} scaleTo={0.97} style={{ width: SQ, height: SQ, borderRadius: 28, overflow: 'hidden' }}>
         <Face design={design} s={s} />
       </Pressy>
-      <Pressy accessibilityRole="button" accessibilityLabel="Add steps manually" onPress={() => openSheet(<StepsSheet />, { label: 'Add steps' })} hitSlop={10}
-        style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: dark ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.22)', zIndex: 3 }}>
-        <Plus size={17} color="#fff" />
-      </Pressy>
+      <AddButton label="Add steps manually" onPress={() => openSheet(<StepsSheet />, { label: 'Add steps' })} />
     </View>
   );
 }
@@ -77,9 +75,7 @@ export function StepsPreview({ design }: { design: StepsDesign }) {
   return (
     <View pointerEvents="none" style={{ width: SQ, height: SQ, borderRadius: 28, overflow: 'hidden' }}>
       <Face design={design} s={s} />
-      <View style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: design === 'Ruler' ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.22)' }}>
-        <Plus size={17} color="#fff" />
-      </View>
+      <View pointerEvents="none" style={ADD_STYLE}><Plus size={18} color="#fff" strokeWidth={2.6} /></View>
     </View>
   );
 }

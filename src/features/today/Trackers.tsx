@@ -4,7 +4,7 @@ import Animated, { cancelAnimation, Easing, useAnimatedProps, useAnimatedStyle, 
 import { fade } from '@/theme/motion';
 import Svg, { Circle, ClipPath, Defs, G, Line, LinearGradient as SvgGradient, Path, Polyline, Rect, Stop } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
-import { CirclePlus, Footprints, GlassWater, Plus } from '@/lib/icons';
+import { Footprints, Plus } from '@/lib/icons';
 import { router } from 'expo-router';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Beat, HeartIcon, Ring, Tag } from '@/components/bits';
@@ -17,7 +17,7 @@ import { fmt1 } from '@/lib/useNow';
 import { HEALTH_NAME } from '@/lib/health';
 import { StepsDesign, StepsPreview, StepsTile } from './StepsCards';
 import { TrackerKey } from '@/features/trackers/designs';
-import { EnergyDot, EnergyStack, HrDot, SleepDot, SleepStages, WaterDot, WaterGlasses, WeightDot, WeightRuler } from '@/features/trackers/Widgets';
+import { AddButton, EnergyDot, EnergyStack, HrDot, SleepDot, SleepStages, WaterDot, WaterGlasses, WeightDot, WeightRuler } from '@/features/trackers/Widgets';
 
 const APath = Animated.createAnimatedComponent(Path);
 const ALine = Animated.createAnimatedComponent(Line);
@@ -130,11 +130,7 @@ export function WaterCard() {
         </View>
       </Pressy>
       {/* Sits above the card press target so tapping it only adds a glass. */}
-      <Pressy accessibilityRole="button" accessibilityLabel="Add a glass, 250 millilitres" onPress={() => change(0.25)} scaleTo={0.92}
-        style={{ position: 'absolute', top: 10, right: 10, height: 44, minWidth: 74, paddingHorizontal: 12, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.16)', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-        <GlassWater size={18} color="#fff" />
-        <CirclePlus size={18} color="#fff" />
-      </Pressy>
+      <AddButton label="Add a glass, 250 millilitres" onPress={() => change(0.25)} />
     </View>
   );
 }
@@ -178,7 +174,7 @@ export function WeightCard() {
   const diff = Math.round((d.weight - SPARK[0]) * 10) / 10;
   return (
     <Tile bg={c.surface} shadow={!isDark} label="Weight" a11y={`Weight ${fmt1(d.weight)} kg, ${diff <= 0 ? 'down' : 'up'} ${Math.abs(diff)} kg this week. Log weight`} onPress={() => router.push('/log-weight')}
-      right={<View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center', marginRight: -4, marginTop: -2 }}><Plus size={17} color={c.accentText} /></View>}>
+      right={<View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: c.accentSoft, borderWidth: 1, borderColor: c.accentText + '33', alignItems: 'center', justifyContent: 'center', marginRight: -6, marginTop: -4 }}><Plus size={18} color={c.accentText} strokeWidth={2.6} /></View>}>
       <Txt style={{ ...NUM, color: c.ink }}>{fmt1(d.weight)}<Txt muted style={UNIT_TXT}> kg</Txt></Txt>
       <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: diff <= 0 ? c.good : c.warn }}>{diff <= 0 ? '↓' : '↑'} {Math.abs(diff)} kg this week</Txt>
       <View style={{ marginTop: 'auto', marginHorizontal: -6, marginBottom: -6 }}>

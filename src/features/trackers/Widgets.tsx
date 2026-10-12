@@ -38,11 +38,11 @@ export function WTile({ colors, onPress, label, Icon, a11y, children, right, add
 }
 
 // Round + in the top right corner (same place as on the steps card) of a water or weight tile: logs from the tile without opening it.
-function AddButton({ label, onPress }: { label: string; onPress?: () => void }) {
+export const ADD_STYLE = { position: 'absolute', top: 10, right: 10, width: 34, height: 34, borderRadius: 17, backgroundColor: 'rgba(255,255,255,0.22)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.4)', alignItems: 'center', justifyContent: 'center', zIndex: 3, shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 6, shadowOffset: { width: 0, height: 2 } } as const;
+export function AddButton({ label, onPress }: { label: string; onPress?: () => void }) {
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} disabled={!onPress} hitSlop={6} scaleTo={0.9}
-      style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, backgroundColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center', zIndex: 3 }}>
-      <Plus size={17} color="#fff" />
+    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} disabled={!onPress} hitSlop={8} scaleTo={0.88} style={ADD_STYLE}>
+      <Plus size={18} color="#fff" strokeWidth={2.6} />
     </Pressy>
   );
 }
