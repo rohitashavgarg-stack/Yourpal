@@ -48,7 +48,11 @@ export function GoalLine() {
   );
 }
 
-export function GoalCard() {
+// calm: the same card without the blue wash, so it reads as context and not as the loudest thing on the page.
+const Wrap: any = (p: any) => (p.colors ? <LinearGradient {...p} /> : <View {...p} />);
+
+export function GoalCard({ calm = false }: { calm?: boolean } = {}) {
+  const { c, isDark } = useTheme();
   const { d } = useDomain();
   const t = totals(d);
   // Name, numbers and status come from the goal itself, so every kind of goal reads differently (weight, strength, flexibility, weekly workouts...).
@@ -71,34 +75,34 @@ export function GoalCard() {
     <Pressy accessibilityRole="link" scaleTo={0.98}
       accessibilityLabel={`Your goal: ${goal.toLowerCase()}. ${sub}, ${statusLine(g2).toLowerCase()}. Eaten ${t.k} of ${KCAL_TARGET} kcal.${d.hc && d.wearable ? ` Burned ${burned(d)}.` : ""} Open goal details`}
       onPress={() => router.push('/goal-detail')}>
-      <LinearGradient colors={['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-        style={{ borderRadius: 28, paddingVertical: 18, paddingLeft: 16, paddingRight: 18, flexDirection: 'row', alignItems: 'center', gap: 18, overflow: 'hidden' }}>
-        <Svg width={260} height={260} viewBox="0 0 260 260" style={{ position: 'absolute', right: -90, top: -80, opacity: 0.16 }}>
-          <Circle cx={130} cy={130} r={120} fill="none" stroke="#fff" strokeWidth={18} /><Circle cx={130} cy={130} r={78} fill="none" stroke="#fff" strokeWidth={12} />
+      <Wrap {...(calm ? {} : { colors: ['#2F6BEA', '#3E8FEA', '#5CC2E6'], locations: [0, 0.55, 1], start: { x: 0, y: 0 }, end: { x: 1, y: 1 } })}
+        style={[{ borderRadius: 28, paddingVertical: 18, paddingLeft: 16, paddingRight: 18, flexDirection: 'row', alignItems: 'center', gap: 18, overflow: 'hidden' }, calm && { backgroundColor: c.surface }, calm && cardShadow(isDark)]}>
+        <Svg width={260} height={260} viewBox="0 0 260 260" style={{ position: 'absolute', right: -90, top: -80, opacity: calm ? 0.06 : 0.16 }}>
+          <Circle cx={130} cy={130} r={120} fill="none" stroke={calm ? c.accent : '#fff'} strokeWidth={18} /><Circle cx={130} cy={130} r={78} fill="none" stroke={calm ? c.accent : '#fff'} strokeWidth={12} />
         </Svg>
-        <View style={{ width: 132, height: 132, borderRadius: 66, backgroundColor: 'rgba(255,255,255,0.1)' }}>
+        <View style={{ width: 132, height: 132, borderRadius: 66, backgroundColor: calm ? c.surface2 : 'rgba(255,255,255,0.1)' }}>
           <Svg width={132} height={132} viewBox="0 0 132 132">
-            <Circle cx={66} cy={66} r={R} stroke="rgba(255,255,255,0.22)" strokeWidth={12} fill="none" />
-            <ACircle cx={66} cy={66} r={R} stroke="#fff" strokeWidth={12} fill="none" strokeLinecap="round" strokeDasharray={`${CIRC}`} animatedProps={props} transform="rotate(-90 66 66)" />
+            <Circle cx={66} cy={66} r={R} stroke={calm ? c.surface3 : 'rgba(255,255,255,0.22)'} strokeWidth={12} fill="none" />
+            <ACircle cx={66} cy={66} r={R} stroke={calm ? c.accent : '#fff'} strokeWidth={12} fill="none" strokeLinecap="round" strokeDasharray={`${CIRC}`} animatedProps={props} transform="rotate(-90 66 66)" />
           </Svg>
           <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
-            {centre.check ? <Check size={52} color="#fff" strokeWidth={3} /> : g2.kind === 'consistency' ? (
+            {centre.check ? <Check size={52} color={calm ? c.accent : '#fff'} strokeWidth={3} /> : g2.kind === 'consistency' ? (
               <View style={{ alignItems: 'center' }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: 34, letterSpacing: -1, color: '#fff' }}>{centre.big}</Txt>
-                <Txt style={{ fontSize: 12, lineHeight: 16, color: 'rgba(255,255,255,0.75)' }}>this week</Txt>
+                <Txt style={{ fontFamily: font.semibold, fontSize: 34, letterSpacing: -1, color: calm ? c.ink : '#fff' }}>{centre.big}</Txt>
+                <Txt style={{ fontSize: 12, lineHeight: 16, color: calm ? c.muted : 'rgba(255,255,255,0.75)' }}>this week</Txt>
               </View>
             ) : (
-              <Txt style={{ fontFamily: font.semibold, fontSize: 34, letterSpacing: -1, color: '#fff' }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: 18, color: 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
+              <Txt style={{ fontFamily: font.semibold, fontSize: 34, letterSpacing: -1, color: calm ? c.ink : '#fff' }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: 18, color: calm ? c.muted : 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
             )}
           </View>
         </View>
         <View style={{ flex: 1, gap: 6, minWidth: 0 }}>
-          <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)' }}>Your goal</Txt><ChevronRight size={18} color="#fff" /></Row>
-          <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: 30, lineHeight: 34, color: '#fff' }}>{goal}</Txt>
-          <Txt style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>{sub}</Txt>
-          <StatusChip g={g2} fg="#1B3FB8" />
+          <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: 13, color: calm ? c.muted : 'rgba(255,255,255,0.8)' }}>Your goal</Txt><ChevronRight size={18} color={calm ? c.muted : '#fff'} /></Row>
+          <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: 30, lineHeight: 34, color: calm ? c.ink : '#fff' }}>{goal}</Txt>
+          <Txt style={{ fontSize: 14, color: calm ? c.muted : 'rgba(255,255,255,0.8)' }}>{sub}</Txt>
+          <StatusChip g={g2} fg={calm ? c.accentText : '#1B3FB8'} />
         </View>
-      </LinearGradient>
+      </Wrap>
     </Pressy>
   );
 }

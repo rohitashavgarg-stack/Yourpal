@@ -17,7 +17,7 @@ import { WorkoutCard } from '@/features/today/WorkoutCard';
 import { MealsCard } from '@/features/today/MealsCard';
 import { WeekCard } from '@/features/today/WeekCard';
 import { useRightNowFocus } from '@/features/today/timeline';
-import { ForYouStack, GoalStrip } from '@/features/today/ForYou';
+import { ForYouStack } from '@/features/today/ForYou';
 import { todayUiStore, TodayLayout } from '@/features/today/ui';
 import { Txt } from '@/components/ui';
 import { PaymentBanner } from '@/features/today/PaymentBanner';
@@ -106,7 +106,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
         ) : isNew ? (
           <>
             {d.todayVariant === 'Comeback' && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>{`We missed you these ${d.awayDays} days. Let's start with an easy comeback plan.`}</Txt></Enter>}
-            <Enter i={0}><GoalStrip /></Enter>
+            <Enter i={0}><GoalCard calm /></Enter>
             <Enter i={1}><ForYouStack /></Enter>
             {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}
             {primary === 'restart' && <Enter i={1}><WorkoutCard restart /></Enter>}
