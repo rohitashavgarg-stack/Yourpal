@@ -73,7 +73,7 @@ export function WebFrame({ children }: { children: React.ReactNode }) {
           </View>
         </View>
       </View>
-      <SidePanel height={(PHONE_H + 24) * scale} />
+      <SidePanel height={(PHONE_H + 24) * scale} phoneW={(PHONE_W + 24) * scale} />
     </View>
   );
 }
@@ -118,7 +118,7 @@ function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number
 
 // Kept deliberately small: goal type, member type, light / dark, steps tracker design and the time of day.
 // onDone: called after a Redo so the sheet version can close itself and show a toast.
-function PanelBody({ onDone, version }: { onDone?: (msg: string) => void; version?: 'Classic' | 'Structured' } = {}) {
+function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; columns?: 1 | 2 | 3 } = {}) {
   const [note, setNote] = useState('');
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const said = (msg: string) => { setNote(msg); clearTimeout(timer.current); timer.current = setTimeout(() => setNote(''), 3500); onDone?.(msg); };
@@ -208,74 +208,83 @@ function PanelBody({ onDone, version }: { onDone?: (msg: string) => void; versio
     { label: 'Check-in', icon: Flag, to: '/checkin', match: (p) => p.startsWith('/checkin') },
     { label: 'Login', icon: LogIn, to: '/login', match: (p) => p.startsWith('/login') || p.startsWith('/welcome') },
   ];
-  const structured = (
-    <View style={{ gap: 12 }}>
-          <PanelCard icon={House} title="Situation" pill={{ label: sit.current }}>
-            {seg('Today layout')}
-            {seg('Situation')}
-            <Text style={{ fontFamily: font.regular, fontSize: 12, lineHeight: 17, color: P.muted }}>{SITUATION_HINT[sit.current]}</Text>
-            {sit.current === 'Comeback' && seg('Days away (Comeback)')}
-            {!!d.autoNote && <View style={{ backgroundColor: '#FFF4E0', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 17, color: '#9A5A00' }}>{d.autoNote}</Text></View>}
-            {act('Redo today')}
-          </PanelCard>
-
-          <PanelCard icon={UserRound} title="Member" pill={{ label: state.sc.member }}>
-            {seg('Member type')}
-            {seg('Workout time')}
-            {seg('Membership')}
-            {seg('Goal type')}
-            {seg('Gym')}
-            {seg('Health (steps)')}
-            {seg('Wearable (heart rate, sleep, energy)')}
-          </PanelCard>
-
-          <PanelCard icon={Dumbbell} title="Workout">
-            {seg('Workout design')}
-            {act('Open a workout')}
-          </PanelCard>
-
-          <PanelCard icon={Sun} title="Look" pill={{ label: isDark ? 'Dark' : 'Light' }}>
-            {seg('Theme')}
-            {seg('Steps tracker design')}
-          </PanelCard>
-
-          <PanelCard icon={LogIn} title="Login and onboarding">
-            {seg('Programme choice screen (login)')}
-            {seg('Gym choice in onboarding')}
-            {act('Redo onboarding')}
-          </PanelCard>
-
-          <PanelCard icon={Flag} title="Screen">
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
-              {SCREENS.map((sc) => <ScreenItem key={sc.label} icon={sc.icon} label={sc.label} on={sc.match(path)} onPress={() => go(sc.to, sc.label)} />)}
-            </View>
-          </PanelCard>
-    </View>
-  );
-  // Same design language as the structured version: the same card, chips, switches and buttons, just one flat list.
-  const classic = (
-    <PanelCard icon={SlidersHorizontal} title="All controls">
-      {rows.map((r) => (r.value === '' && r.options.length > 0 && ['Redo today', 'Redo onboarding', 'Open a workout'].includes(r.label)
-        ? <Actions key={r.label} label={r.label} options={r.options} onPick={r.onPick} />
-        : <Choice key={r.label} label={r.label} options={r.options} value={r.value} onPick={r.onPick} />))}
+  const timeCard = (
+    <PanelCard icon={period.icon} title={period.label}>
+      <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
+        <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: P.muted }}>Time of day</Text>
+        <Text style={{ fontFamily: font.bold, fontSize: 28, lineHeight: 34, letterSpacing: -0.6, color: P.ink }}>{hourLabel(d.min)}</Text>
+      </View>
+      <TimeSlider minutes={d.min} onPick={pickMinute} />
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        <QuickTime icon={Dumbbell} label="Workout" time={fmtT(plannedMin(state.profile.time)).full.toUpperCase()} onPress={() => pickMinute(plannedMin(state.profile.time))} />
+        <QuickTime icon={Sunrise} label="Breakfast" time="7:00 AM" onPress={() => pickMinute(420)} />
+        <QuickTime icon={Sun} label="Lunch" time="1:00 PM" onPress={() => pickMinute(780)} />
+        <QuickTime icon={Sunset} label="Snack" time="3:30 PM" onPress={() => pickMinute(930)} />
+        <QuickTime icon={UtensilsCrossed} label="Dinner" time="8:00 PM" onPress={() => pickMinute(1200)} />
+        <QuickTime icon={Moon} label="Night" time="10:30 PM" onPress={() => pickMinute(1350)} />
+      </View>
     </PanelCard>
   );
-  const picked = panelUiStore.use().version;
-  const ver = version ?? picked;
+  const situationCard = (
+    <PanelCard icon={House} title="Situation" pill={{ label: sit.current }}>
+      {seg('Today layout')}
+      {seg('Situation')}
+      <Text style={{ fontFamily: font.regular, fontSize: 12, lineHeight: 17, color: P.muted }}>{SITUATION_HINT[sit.current]}</Text>
+      {sit.current === 'Comeback' && seg('Days away (Comeback)')}
+      {!!d.autoNote && <View style={{ backgroundColor: '#FFF4E0', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 17, color: '#9A5A00' }}>{d.autoNote}</Text></View>}
+      {act('Redo today')}
+    </PanelCard>
+  );
+  const memberCard = (
+    <PanelCard icon={UserRound} title="Member" pill={{ label: state.sc.member }}>
+      {seg('Member type')}
+      {seg('Workout time')}
+      {seg('Membership')}
+      {seg('Goal type')}
+      {seg('Gym')}
+      {seg('Health (steps)')}
+      {seg('Wearable (heart rate, sleep, energy)')}
+    </PanelCard>
+  );
+  const workoutCard = (
+    <PanelCard icon={Dumbbell} title="Workout">
+      {seg('Workout design')}
+      {act('Open a workout')}
+    </PanelCard>
+  );
+  const lookCard = (
+    <PanelCard icon={Sun} title="Look" pill={{ label: isDark ? 'Dark' : 'Light' }}>
+      {seg('Theme')}
+      {seg('Steps tracker design')}
+    </PanelCard>
+  );
+  const loginCard = (
+    <PanelCard icon={LogIn} title="Login and onboarding">
+      {seg('Programme choice screen (login)')}
+      {seg('Gym choice in onboarding')}
+      {act('Redo onboarding')}
+    </PanelCard>
+  );
+  const screenCard = (
+    <PanelCard icon={Flag} title="Screen">
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
+        {SCREENS.map((sc) => <ScreenItem key={sc.label} icon={sc.icon} label={sc.label} on={sc.match(path)} onPress={() => go(sc.to, sc.label)} />)}
+      </View>
+    </PanelCard>
+  );
+  // One panel. Wide: three columns side by side, so most of it is in view without scrolling. Narrow (and the phone sheet): one column.
+  const col = (...items: React.ReactNode[]) => items;
+  const columnsOf: React.ReactNode[][] = columns >= 3
+    ? [col(timeCard, situationCard), col(memberCard, workoutCard), col(lookCard, loginCard, screenCard)]
+    : columns === 2
+      ? [col(timeCard, situationCard, workoutCard), col(memberCard, lookCard, loginCard, screenCard)]
+      : [col(timeCard, situationCard, memberCard, workoutCard, lookCard, loginCard, screenCard)];
   return (
     <View style={{ gap: 12 }}>
-      {!version && <View style={{ flexDirection: 'row', padding: 3, borderRadius: 20, backgroundColor: P.tint }}>
-        {(['Classic', 'Structured'] as const).map((v) => (
-          <Pressable key={v} accessibilityRole="tab" accessibilityState={{ selected: ver === v }} onPress={() => panelUiStore.set({ version: v })}
-            style={{ flex: 1, minHeight: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: ver === v ? P.ink : 'transparent' }}>
-            <Text style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: ver === v ? '#fff' : P.muted }}>{v}</Text>
-          </Pressable>
-        ))}
-      </View>}
       <View style={{ backgroundColor: '#fff', borderRadius: 24, borderWidth: 1, borderColor: P.line, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: P.ink, alignItems: 'center', justifyContent: 'center' }}><SlidersHorizontal size={20} color="#fff" /></View>
         <View style={{ flex: 1 }}>
-          <Text style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 23, letterSpacing: -0.3, color: P.ink }}>Demo controls · {version ?? picked}</Text>
+          <Text style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 23, letterSpacing: -0.3, color: P.ink }}>Demo controls</Text>
           <Text style={{ fontFamily: font.regular, fontSize: 12.5, lineHeight: 17, color: P.muted }}>Drive the prototype</Text>
         </View>
         <Pressable accessibilityRole="button" accessibilityLabel={open ? 'Collapse the controls' : 'Expand the controls'} onPress={() => setOpen((o) => !o)} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: P.tint, alignItems: 'center', justifyContent: 'center' }}>
@@ -284,48 +293,23 @@ function PanelBody({ onDone, version }: { onDone?: (msg: string) => void; versio
       </View>
       {!!note && <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, zIndex: 20, backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12, shadowColor: '#101828', shadowOpacity: 0.15, shadowRadius: 8 }}><Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
       {open && (
-        <>
-          <PanelCard icon={period.icon} title={period.label}>
-            <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
-              <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: P.muted }}>Time of day</Text>
-              <Text style={{ fontFamily: font.bold, fontSize: 28, lineHeight: 34, letterSpacing: -0.6, color: P.ink }}>{hourLabel(d.min)}</Text>
-            </View>
-            <TimeSlider minutes={d.min} onPick={pickMinute} />
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-              <QuickTime icon={Dumbbell} label="Workout" time={fmtT(plannedMin(state.profile.time)).full.toUpperCase()} onPress={() => pickMinute(plannedMin(state.profile.time))} />
-              <QuickTime icon={Sunrise} label="Breakfast" time="7:00 AM" onPress={() => pickMinute(420)} />
-              <QuickTime icon={Sun} label="Lunch" time="1:00 PM" onPress={() => pickMinute(780)} />
-              <QuickTime icon={Sunset} label="Snack" time="3:30 PM" onPress={() => pickMinute(930)} />
-              <QuickTime icon={UtensilsCrossed} label="Dinner" time="8:00 PM" onPress={() => pickMinute(1200)} />
-              <QuickTime icon={Moon} label="Night" time="10:30 PM" onPress={() => pickMinute(1350)} />
-            </View>
-          </PanelCard>
-          {ver === 'Structured' ? structured : classic}
-        </>
+        <View style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
+          {columnsOf.map((items, i) => <View key={i} style={{ flex: 1, gap: 12, minWidth: 0 }}>{items.map((x, k) => <React.Fragment key={k}>{x}</React.Fragment>)}</View>)}
+        </View>
       )}
     </View>
   );
 }
 
-// A wide window has room for both versions of the panel side by side (each scrolls on its own). A narrower one shows one panel with the Classic | Structured switch.
-function SidePanel({ height }: { height: number }) {
+// One panel. The wider the window, the more columns it uses (up to three), so it needs little or no scrolling.
+function SidePanel({ height, phoneW }: { height: number; phoneW: number }) {
   const win = useWindow();
-  const both = win.width >= 1180;
-  const box = { backgroundColor: P.bg, borderRadius: 28, borderWidth: 1, borderColor: P.line } as const;
-  if (!both) {
-    return (
-      <View style={{ width: 320, maxHeight: height, flexGrow: 0, flexShrink: 0 }}>
-        <ScrollView accessibilityLabel="Edge cases and scenarios" style={box} contentContainerStyle={{ padding: 14 }}><PanelBody /></ScrollView>
-      </View>
-    );
-  }
+  const room = win.width - phoneW - 28 - 32; // what is left beside the phone
+  const columns = room >= 3 * 300 + 24 + 28 ? 3 : room >= 2 * 300 + 12 + 28 ? 2 : 1;
+  const width = columns * 300 + (columns - 1) * 12 + 28;
   return (
-    <View style={{ flexDirection: 'row', gap: 12, maxHeight: height, flexGrow: 0, flexShrink: 0 }}>
-      {(['Classic', 'Structured'] as const).map((v) => (
-        <View key={v} style={{ width: 316, maxHeight: height }}>
-          <ScrollView accessibilityLabel={`Edge cases, ${v} version`} style={box} contentContainerStyle={{ padding: 14 }}><PanelBody version={v} /></ScrollView>
-        </View>
-      ))}
+    <View style={{ width, maxHeight: Math.max(height, win.height - 48), flexGrow: 0, flexShrink: 0 }}>
+      <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: 28, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 14 }}><PanelBody columns={columns} /></ScrollView>
     </View>
   );
 }
