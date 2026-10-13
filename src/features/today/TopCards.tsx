@@ -236,34 +236,37 @@ export function UpdatesCard() {
         </Pressy>
       </Row>
       <GestureDetector gesture={swipe}>
-        <Animated.View onLayout={(e) => setBoxW(e.nativeEvent.layout.width)} style={[{ gap: 12 }, slide]}>
-          <Animated.View style={[{ overflow: 'hidden', alignSelf: fromRight ? 'flex-end' : 'flex-start' }, wipe]}>
-            <View style={{ width: boxW || undefined, gap: 12, alignSelf: fromRight ? 'flex-end' : 'flex-start' }}>
-      <Animated.View key={u.key} style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
-        <UpdIcon u={u} />
-        <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
-          <Txt style={{ fontFamily: font.semibold }}>{u.title}</Txt>
-          <Txt muted style={{ fontSize: 14 }}>{u.body}</Txt>
-        </View>
-        <Pressy accessibilityRole="button" accessibilityLabel="Dismiss this update" onPress={() => { if (u.isPlan) setPlanOpen(false); dismiss(u.key); }} style={{ width: 44, height: 44, marginTop: -4, marginRight: -6, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
+          {/* The update itself (icon, text, button) follows the finger, slides out and is wiped in. */}
+          <Animated.View onLayout={(e) => setBoxW(e.nativeEvent.layout.width)} style={[slide]}>
+            <Animated.View style={[{ overflow: 'hidden', alignSelf: fromRight ? 'flex-end' : 'flex-start' }, wipe]}>
+              <View style={{ width: boxW || undefined, gap: 12, alignSelf: fromRight ? 'flex-end' : 'flex-start' }}>
+                <View style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start', paddingRight: 38 }}>
+                  <UpdIcon u={u} />
+                  <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
+                    <Txt style={{ fontFamily: font.semibold }}>{u.title}</Txt>
+                    <Txt muted style={{ fontSize: 14 }}>{u.body}</Txt>
+                  </View>
+                </View>
+                {u.isPlan && planOpen && <PlanChanges />}
+                <View style={{ paddingLeft: 52, minHeight: 44, flexDirection: 'row', alignItems: 'center' }}>
+                  {btn ? <PillBtn label={btn} onPress={act} /> : null}
+                </View>
+              </View>
+            </Animated.View>
+          </Animated.View>
+          {/* The cross and the dots stay where they are and keep their own fade; they never swipe. */}
+          <Animated.View key={u.key} entering={fade()} pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}>
+            <Pressy accessibilityRole="button" accessibilityLabel="Dismiss this update" onPress={() => { if (u.isPlan) setPlanOpen(false); dismiss(u.key); }} style={{ position: 'absolute', top: -4, right: -6, width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
           <X size={17} color={c.muted} />
         </Pressy>
-      </Animated.View>
-      {u.isPlan && planOpen && <PlanChanges />}
-      <Row style={{ gap: 8, paddingLeft: 52 }}>
-        {btn ? <PillBtn label={btn} onPress={act} /> : null}
-        <View style={{ flex: 1 }} />
-        {live.length > 1 && (
-          <>
-            <Row style={{ gap: 4 }}>
-              {live.map((_, k) => <View key={k} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: 3, backgroundColor: k === i ? c.ink : c.surface3 }} />)}
-            </Row>
-          </>
-        )}
-      </Row>
-            </View>
+            {live.length > 1 && (
+              <View pointerEvents="none" style={{ position: 'absolute', right: 0, bottom: 0, height: 44, flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                {live.map((_, k) => <View key={k} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: 3, backgroundColor: k === i ? c.ink : c.surface3 }} />)}
+              </View>
+            )}
           </Animated.View>
-        </Animated.View>
+        </View>
       </GestureDetector>
     </Card>
   );
