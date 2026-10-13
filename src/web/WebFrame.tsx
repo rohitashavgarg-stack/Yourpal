@@ -118,7 +118,7 @@ function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number
 
 // Kept deliberately small: goal type, member type, light / dark, steps tracker design and the time of day.
 // onDone: called after a Redo so the sheet version can close itself and show a toast.
-function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; columns?: 1 | 2 | 3 | 4 } = {}) {
+function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; columns?: 1 | 2 | 3 } = {}) {
   const [note, setNote] = useState('');
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const said = (msg: string) => { setNote(msg); clearTimeout(timer.current); timer.current = setTimeout(() => setNote(''), 3500); onDone?.(msg); };
@@ -232,7 +232,6 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       <Text style={{ fontFamily: font.regular, fontSize: 12, lineHeight: 17, color: P.muted }}>{SITUATION_HINT[sit.current]}</Text>
       {sit.current === 'Comeback' && seg('Days away (Comeback)')}
       {!!d.autoNote && <View style={{ backgroundColor: '#FFF4E0', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 17, color: '#9A5A00' }}>{d.autoNote}</Text></View>}
-      {act('Redo today')}
     </PanelCard>
   );
   const memberCard = (
@@ -241,46 +240,27 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       {seg('Workout time')}
       {seg('Membership')}
       {seg('Goal type')}
-      {seg('Gym')}
       {seg('Health (steps)')}
       {seg('Wearable (heart rate, sleep, energy)')}
-    </PanelCard>
-  );
-  const workoutCard = (
-    <PanelCard icon={Dumbbell} title="Workout">
-      {seg('Workout design')}
-      {act('Open a workout')}
-    </PanelCard>
-  );
-  const lookCard = (
-    <PanelCard icon={Sun} title="Look" pill={{ label: isDark ? 'Dark' : 'Light' }}>
       {seg('Theme')}
-      {seg('Steps tracker design')}
     </PanelCard>
   );
-  const loginCard = (
-    <PanelCard icon={LogIn} title="Login and onboarding">
-      {seg('Programme choice screen (login)')}
-      {seg('Gym choice in onboarding')}
-      {act('Redo onboarding')}
-    </PanelCard>
-  );
-  const screenCard = (
-    <PanelCard icon={Flag} title="Screen">
+  // Only what a demo needs: the time, one situation, who the member is, and where to go.
+  const goCard = (
+    <PanelCard icon={Flag} title="Go to">
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
         {SCREENS.map((sc) => <ScreenItem key={sc.label} icon={sc.icon} label={sc.label} on={sc.match(path)} onPress={() => go(sc.to, sc.label)} />)}
       </View>
+      {act('Open a workout')}
     </PanelCard>
   );
-  // One panel. Wide: three columns side by side, so most of it is in view without scrolling. Narrow (and the phone sheet): one column.
+  // One panel: three columns on a wide window, two or one when it is narrower (and in the phone sheet).
   const col = (...items: React.ReactNode[]) => items;
-  const columnsOf: React.ReactNode[][] = columns >= 4
-    ? [col(timeCard, lookCard), col(situationCard, workoutCard), col(memberCard), col(loginCard, screenCard)]
-    : columns === 3
-    ? [col(timeCard, situationCard), col(memberCard, workoutCard), col(lookCard, loginCard, screenCard)]
+  const columnsOf: React.ReactNode[][] = columns >= 3
+    ? [col(timeCard, goCard), col(situationCard), col(memberCard)]
     : columns === 2
-      ? [col(timeCard, situationCard, workoutCard), col(memberCard, lookCard, loginCard, screenCard)]
-      : [col(timeCard, situationCard, memberCard, workoutCard, lookCard, loginCard, screenCard)];
+      ? [col(timeCard, situationCard, goCard), col(memberCard)]
+      : [col(timeCard, situationCard, memberCard, goCard)];
   return (
     <View style={{ gap: 12 }}>
       <View style={{ backgroundColor: '#fff', borderRadius: 24, borderWidth: 1, borderColor: P.line, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
@@ -307,12 +287,11 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
 function SidePanel({ height, phoneW }: { height: number; phoneW: number }) {
   const win = useWindow();
   const room = win.width - phoneW - 28 - 32; // what is left beside the phone
-  // columns at least 250 wide: four when the window is wide enough, so the panel fits the height without scrolling
-  const columns = room >= 4 * 250 + 3 * 12 + 28 ? 4 : room >= 3 * 270 + 24 + 28 ? 3 : room >= 2 * 280 + 12 + 28 ? 2 : 1;
-  const width = Math.min(room, columns * 330 + (columns - 1) * 12 + 28);
+  const columns = room >= 3 * 280 + 24 + 28 ? 3 : room >= 2 * 290 + 12 + 28 ? 2 : 1;
+  const width = Math.min(room, columns * 340 + (columns - 1) * 12 + 28);
   return (
     <View style={{ width, maxHeight: Math.max(height, win.height - 48), flexGrow: 0, flexShrink: 0 }}>
-      <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: 28, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 14 }}><PanelBody columns={columns as 1 | 2 | 3 | 4} /></ScrollView>
+      <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: 28, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 14 }}><PanelBody columns={columns as 1 | 2 | 3} /></ScrollView>
     </View>
   );
 }
