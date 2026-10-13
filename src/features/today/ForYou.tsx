@@ -5,7 +5,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import { router } from 'expo-router';
 import Svg, { Circle } from 'react-native-svg';
-import { CreditCard, Dumbbell, X } from '@/lib/icons';
+import { CreditCard, Flame, X } from '@/lib/icons';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
@@ -20,7 +20,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { fade } from '@/theme/motion';
 import { haptic } from '@/lib/haptics';
-import { cardShadow } from '@/features/progress/parts';
+import { cardShadow, CornerGlow } from '@/features/progress/parts';
+import { FLAME } from '@/features/streak/StreakChip';
 import { usePaymentNotice } from './PaymentBanner';
 import { useUpdates } from './TopCards';
 
@@ -68,12 +69,9 @@ export function useForYou(): Item[] {
   const pay = usePaymentNotice();
   const ptPending = usePtPending();
   const { live } = useUpdates();
-  const start = useStartWorkout();
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
   if (pay) out.push({ key: 'pay', title: pay.title, body: pay.sub, critical: d.membership !== 'Expiring', tone: pay.tone === 'accent' ? 'accent' : pay.tone === 'warn' ? 'warn' : 'muted', icon: CreditCard, btn: 'View membership', act: () => router.push('/gym/membership') });
-  // After a break the way back is one stack item: the workout card (and the member's plan) stays exactly as it was, nothing is renamed or hidden-then-replaced.
-  if (d.todayVariant === 'Comeback') out.push({ key: 'comeback', title: 'Your comeback plan with lighter weights', body: '', chips: ['30 min', '5 exercises'], full: true, critical: true, tone: 'accent', icon: Dumbbell, btn: 'Start easy session', act: start });
   if (ptPending && d.hasGym) out.push({ key: 'pt', title: 'Confirm your PT session', body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', critical: true, tone: 'accent', who: true, two: true });
   const order = ['reassess', 'reply', 'plan', 'log'];
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
@@ -191,5 +189,26 @@ export function ForYouStack() {
         </View>
       )}
     </View>
+  );
+}
+
+// After a break: its own warm card (a flame, a soft orange glow), not a note in the stack, so the way back is clearly not "updates".
+export function ComebackPlan() {
+  const { c, isDark } = useTheme();
+  const start = useStartWorkout();
+  return (
+    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 18, gap: 14, overflow: 'hidden' }, cardShadow(isDark)]}>
+      <CornerGlow color={FLAME} size={520} />
+      <Row style={{ gap: 12 }}>
+        <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}><Flame size={22} color={FLAME} fill={FLAME} /></View>
+        <View style={{ flex: 1, gap: 6 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 27, letterSpacing: -0.5 }}>Your comeback plan with lighter weights</Txt>
+          <Row style={{ gap: 6, flexWrap: 'wrap' }}>
+            {['30 min', '5 exercises'].map((t) => <View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 18 }}>{t}</Txt></View>)}
+          </Row>
+        </View>
+      </Row>
+      <Button label="Start easy session" onPress={() => start()} />
+    </Animated.View>
   );
 }
