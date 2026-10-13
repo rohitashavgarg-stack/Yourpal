@@ -87,8 +87,8 @@ export function GoalCard({ soft: compact = false }: { soft?: boolean } = {}) {
           <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
             {centre.check ? <Check size={52} color="#fff" strokeWidth={3} /> : g2.kind === 'consistency' ? (
               <View style={{ alignItems: 'center' }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: 34, letterSpacing: -1, color: '#fff' }}>{centre.big}</Txt>
-                <Txt style={{ fontSize: 12, lineHeight: 16, color: 'rgba(255,255,255,0.75)' }}>this week</Txt>
+                <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 18 : 34, lineHeight: soft ? 22 : undefined, letterSpacing: soft ? -0.4 : -1, color: '#fff' }}>{centre.big}</Txt>
+                <Txt style={{ fontSize: soft ? 9 : 12, lineHeight: soft ? 11 : 16, color: 'rgba(255,255,255,0.75)' }}>this week</Txt>
               </View>
             ) : (
               <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 19 : 34, letterSpacing: -0.6, color: '#fff' }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: soft ? 11 : 18, color: 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
