@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -103,6 +103,14 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
 
   const done = e.sets.filter((x) => x.st === 'done').length;
   const marked = done > 0;
+  // Ticking the first set lifts the sheet so the sets still to do are in view (it can still be dragged back down).
+  const prevDone = React.useRef(done);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/immutability -- reanimated shared value
+    if (prevDone.current === 0 && done > 0) h.value = withTiming(MAX, { duration: 280, easing: Easing.out(Easing.cubic) });
+    prevDone.current = done;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done]);
   const none = cur < 0 || marked;
   const left = e.sets.filter((x) => x.st === 'todo').length;
   const n = s.ex.length + 2, pos = s.exIdx + 1;
