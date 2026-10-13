@@ -7,6 +7,7 @@ import { Check, ChevronRight } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { Ring } from '@/components/bits';
 import { font } from '@/theme/tokens';
+import { useTheme } from '@/theme/ThemeProvider';
 import { fmtDay, Goal2, progressLine, statusLine, timeLeft, useGoalV2 } from './model';
 import { useEarlySigns } from './signs';
 import { useStreak } from '@/features/streak/useStreak';
@@ -29,17 +30,18 @@ export function GoalRing({ g, size = 88, onDark = true }: { g: Goal2; size?: num
   const stroke = size >= 110 ? 12 : Math.round(size * 0.105);
   const r = (size - stroke) / 2 - 1;
   const c = ringCentre(g);
-  const ink = onDark ? '#fff' : '#12151C';
+  const { c: th } = useTheme(); // off the gradient the ring follows the theme, so it reads in dark mode too
+  const ink = onDark ? '#fff' : th.ink;
   return (
     <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
-      <Ring size={size} r={r} stroke={stroke} pct={g.kind === 'consistency' ? g.pct : g.status === 'reached' ? 1 : g.pct} color={onDark ? '#fff' : '#2F6BEA'} track={onDark ? 'rgba(255,255,255,0.25)' : 'rgba(47,107,234,0.15)'} />
+      <Ring size={size} r={r} stroke={stroke} pct={g.kind === 'consistency' ? g.pct : g.status === 'reached' ? 1 : g.pct} color={onDark ? '#fff' : th.accent} track={onDark ? 'rgba(255,255,255,0.25)' : th.surface3} />
       <View style={{ position: 'absolute', alignItems: 'center', justifyContent: 'center' }}>
         {c.check ? <Check size={size * 0.4} color={ink} strokeWidth={3} /> : (
           <Txt style={{ fontFamily: font.semibold, fontSize: g.kind === 'consistency' ? size * 0.26 : size * 0.26, lineHeight: size * 0.34, letterSpacing: -0.8, color: ink }}>
-            {c.big}{g.kind !== 'consistency' ? <Txt style={{ fontFamily: font.semibold, fontSize: size * 0.14, lineHeight: size * 0.2, color: onDark ? 'rgba(255,255,255,0.7)' : '#5C6370' }}>{c.small}</Txt> : null}
+            {c.big}{g.kind !== 'consistency' ? <Txt style={{ fontFamily: font.semibold, fontSize: size * 0.14, lineHeight: size * 0.2, color: onDark ? 'rgba(255,255,255,0.7)' : th.muted }}>{c.small}</Txt> : null}
           </Txt>
         )}
-        {g.kind === 'consistency' && !c.check ? <Txt style={{ fontSize: 10, lineHeight: 14, color: onDark ? 'rgba(255,255,255,0.75)' : '#5C6370' }}>this week</Txt> : null}
+        {g.kind === 'consistency' && !c.check ? <Txt style={{ fontSize: 10, lineHeight: 14, color: onDark ? 'rgba(255,255,255,0.75)' : th.muted }}>this week</Txt> : null}
       </View>
     </View>
   );

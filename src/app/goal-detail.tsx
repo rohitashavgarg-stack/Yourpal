@@ -11,8 +11,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { cardShadow, SubPage } from '@/features/progress/parts';
-import { GoalCard2 } from '@/features/goalv2/GoalCard2';
-import { daysBetween, EXTEND_DAYS, fmtDay, fmtVal, Goal2, goalV2Store, useGoalV2 } from '@/features/goalv2/model';
+import { GoalRing } from '@/features/goalv2/GoalCard2';
+import { daysBetween, EXTEND_DAYS, fmtDay, fmtVal, Goal2, goalV2Store, progressLine, statusLine, timeLeft, useGoalV2 } from '@/features/goalv2/model';
 import { useEarlySigns, useGoalV2Rows } from '@/features/goalv2/signs';
 import { TODAY } from '@/features/progress/trends';
 import { useStreak } from '@/features/streak/useStreak';
@@ -31,6 +31,45 @@ const Label = ({ children }: { children: string }) => {
   const { c } = useTheme();
   return <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, letterSpacing: 1.3, color: c.muted }}>{children}</Txt>;
 };
+
+// The top of the page: not the gradient card from Today, but a calm editorial header. The name large and light, one quiet line,
+// then the ring and the numbers on a plain card, and the dates in a strip.
+function GoalHeader({ g }: { g: Goal2 }) {
+  const { c } = useTheme();
+  const st = useStreak();
+  const left = timeLeft(g);
+  const sub = g.kind === 'consistency' ? `${st.weeks ? `${st.weeks}-week streak` : 'Start your streak'} · standing goal` : g.status === 'reached' ? 'Goal reached' : progressLine(g);
+  const chip = g.kind === 'consistency' ? (g.status === 'reached' ? 'Week complete' : `${g.weeklyTarget - g.currentValue} to go this week`) : left ? `${statusLine(g)} · ${left}` : statusLine(g);
+  const strip: [string, string][] = [['Start', fmtDay(g.startDate)], ['End', g.endDate ? fmtDay(g.endDate) : 'No end date'], ['Status', statusLine(g)]];
+  return (
+    <View style={{ gap: 18 }}>
+      <View style={{ gap: 6, paddingHorizontal: 4 }}>
+        <Label>YOUR GOAL</Label>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 38, lineHeight: 46, letterSpacing: -1.2 }}>{g.name}</Txt>
+      </View>
+      <Card gap={18}>
+        <Row style={{ gap: 20 }}>
+          <GoalRing g={g} size={116} onDark={false} />
+          <View style={{ flex: 1, gap: 8 }}>
+            <Txt style={{ fontSize: 16, lineHeight: 23 }}>{sub}</Txt>
+            <View style={{ alignSelf: 'flex-start', height: 30, paddingHorizontal: 12, borderRadius: 15, backgroundColor: c.accentSoft, justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: c.accentText }}>{chip}</Txt>
+            </View>
+          </View>
+        </Row>
+        <View style={{ height: 1, backgroundColor: c.line }} />
+        <Row style={{ justifyContent: 'space-between' }}>
+          {strip.map(([l, v], i) => (
+            <View key={l} style={{ flex: 1, gap: 2, alignItems: i === 0 ? 'flex-start' : i === 2 ? 'flex-end' : 'center' }}>
+              <Txt v="caption">{l}</Txt>
+              <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{v}</Txt>
+            </View>
+          ))}
+        </Row>
+      </Card>
+    </View>
+  );
+}
 
 // Start, now and target side by side.
 function ThreeUp({ g }: { g: Goal2 }) {
@@ -134,7 +173,7 @@ export default function GoalDetail() {
       <Pressy accessibilityRole="button" accessibilityLabel="Edit goal" onPress={() => router.push('/goal')} style={{ height: 44, paddingHorizontal: 14, justifyContent: 'center' }}>
         <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.accentText }}>Edit</Txt>
       </Pressy>}>
-      <GoalCard2 size="hero" />
+      <GoalHeader g={g} />
 
       {soon && !s.finished && (
         <Card gap={12}>
