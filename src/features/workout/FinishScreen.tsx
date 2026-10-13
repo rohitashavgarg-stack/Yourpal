@@ -80,7 +80,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
         <View style={{ paddingTop: 22, paddingHorizontal: 18, paddingBottom: 18, gap: 14 }}>
           <View style={{ gap: 4 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: 13, color: c.muted }}>Workout done · Leg day</Txt>
-            <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 38, lineHeight: 36 }}>Nice work, Jyotsana</Txt>
+            <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 38, lineHeight: 36 }}>Nice work, Rohitashav</Txt>
           </View>
           <Row style={{ backgroundColor: c.tile, borderRadius: 20, paddingVertical: 12, paddingHorizontal: 4 }}>
             {[[String(s.mins), ' min', 'Time'], [String(s.sets), '', s.sets === 1 ? 'Set done' : 'Sets done'], [`${s.exercises}/${s.totalEx}`, '', 'Exercises']].map(([v, u, l], i) => (

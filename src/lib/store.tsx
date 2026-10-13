@@ -46,7 +46,7 @@ export type AppState = {
 };
 
 export const defaultProfile: Profile = {
-  name: 'Jyotsana Rankawat',
+  name: 'Rohitashav Garg',
   goal: '',
   goalTarget: 6,
   goal2: 'None',
@@ -91,7 +91,7 @@ function load(): AppState {
   if (typeof location !== 'undefined' && /[?&]signedin=1/.test(location.search)) return { ...defaultState, loggedIn: true, onboarded: true, sc: { ...defaultState.sc, member: 'PT member' } }; // TEMP-SHOT
   try {
     const raw = (globalThis as any).localStorage?.getItem(KEY);
-    if (raw) { const o = JSON.parse(raw); if (o?.sc?.theme === 'System') o.sc.theme = 'Dark'; if (o?.profile?.name === 'Ankit' || o?.profile?.name === 'Rohitashav Garg') o.profile.name = 'Jyotsana Rankawat'; return { ...defaultState, ...o }; }
+    if (raw) { const o = JSON.parse(raw); if (o?.sc?.theme === 'System') o.sc.theme = 'Dark'; if (o?.profile?.name === 'Ankit' || o?.profile?.name === 'Jyotsana Rankawat') o.profile.name = 'Rohitashav Garg'; return { ...defaultState, ...o }; }
   } catch {}
   return defaultState;
 }

@@ -23,7 +23,7 @@ export const TOPICS: { l: string; ctx: string; draft: string }[] = [
 
 export const WEEKLY = {
   when: 'Week of 22 Sep',
-  note: "Good consistency, Jyotsana. Keep squats at 60 kg until the last rep looks as clean as the first, and add a 20-minute walk on rest days.",
+  note: "Good consistency, Rohitashav. Keep squats at 60 kg until the last rep looks as clean as the first, and add a 20-minute walk on rest days.",
   focus: ['Squat depth', 'Protein 90 g', 'Sleep 7 h'],
 };
 

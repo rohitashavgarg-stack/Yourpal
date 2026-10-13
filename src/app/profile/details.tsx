@@ -124,7 +124,7 @@ export default function MyDetails() {
   useScenarios({
     title: 'My details',
     rows: [
-      { label: 'Name', options: ['Filled', 'Empty'], value: name.trim() ? 'Filled' : 'Empty', onPick: (v) => { setName(v === 'Empty' ? '' : p.name || 'Jyotsana Rankawat'); setErr(0); } },
+      { label: 'Name', options: ['Filled', 'Empty'], value: name.trim() ? 'Filled' : 'Empty', onPick: (v) => { setName(v === 'Empty' ? '' : p.name || 'Rohitashav Garg'); setErr(0); } },
       { label: 'Injuries', options: ['No', 'Yes'], value: inj, onPick: (v) => setInj(v as any) },
     ],
     actions: [{ label: 'Try saving', run: () => save() }],

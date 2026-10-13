@@ -79,7 +79,7 @@ export default function Today() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <TabScreen title={`${greet},
-Jyotsana`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186 : 112}
+Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186 : 112}
         refreshControl={<RefreshControl refreshing={refreshing} tintColor={c.accentText} onRefresh={() => { setRefreshing(true); load(1000); }} />}>
         {d.loading ? (
           <>

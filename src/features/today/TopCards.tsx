@@ -128,7 +128,7 @@ export function ComebackCard() {
           <Animated.View style={[{ position: 'absolute' }, flame]}><Flame size={22} color={FLAME} fill={FLAME} /></Animated.View>
         </View>
         <View style={{ flex: 1 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.6 }}>Welcome back, Jyotsana</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.6 }}>Welcome back, Rohitashav</Txt>
           {isPT && <Txt v="caption">From Coach Vikram</Txt>}
         </View>
       </Row>

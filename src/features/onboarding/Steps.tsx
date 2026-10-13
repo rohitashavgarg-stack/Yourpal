@@ -260,7 +260,7 @@ export function ReadyContent({ assess }: { assess: string }) {
         </Animated.View>
         <View style={{ alignItems: 'center' }}>
           <Txt style={{ fontFamily: font.light, fontSize: 26, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>You're all set,</Txt>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 26, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>{p.name || 'Jyotsana Rankawat'}.</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 26, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>{p.name || 'Rohitashav Garg'}.</Txt>
         </View>
         <Row style={{ gap: 8 }}>
           <PersonAvatar who="coach" size={28} />

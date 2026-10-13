@@ -72,7 +72,7 @@ export default function Profile() {
         <Row style={{ gap: 14, alignItems: 'flex-start' }}>
           <Avatar size={84} />
           <View style={{ flex: 1, gap: 4, paddingTop: 4 }}>
-            <Txt style={{ fontFamily: font.light, fontSize: 28, lineHeight: 36, letterSpacing: -0.8 }} numberOfLines={2}>{p.name || 'Jyotsana Rankawat'}</Txt>
+            <Txt style={{ fontFamily: font.light, fontSize: 28, lineHeight: 36, letterSpacing: -0.8 }} numberOfLines={2}>{p.name || 'Rohitashav Garg'}</Txt>
             <Txt v="mono" muted>{maskPhone(state.phone)}</Txt>
             {state.sc.member === 'PT member' && <View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, borderRadius: 12, backgroundColor: '#F5B301', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: '#3A2A00' }}>Premium · PT</Txt></View>}
           </View>
