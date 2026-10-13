@@ -35,3 +35,9 @@ export function clipDemoExercises(): Ex[] {
     { id: 'dtd', name: 'Triceps dip', mode: 'r', step: 1, muscles: 'Triceps · chest · shoulders', cue: 'Lower until your elbows are at 90 degrees, press back up.', alts: [], sets: [S(10, 0), S(10, 0), S(10, 0)] },
   ];
 }
+
+// The clip id for an exercise name, when we have a video of it.
+export function clipIdFor(name: string): string | undefined {
+  const n = name.trim().toLowerCase();
+  return clipDemoExercises().find((e) => e.name.toLowerCase() === n)?.id;
+}

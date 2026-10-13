@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Image, ScrollView, View } from 'react-native';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import Animated, { cancelAnimation, Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,6 +16,19 @@ import { font } from '@/theme/tokens';
 import { histFor, tipFor } from '@/features/plans/content';
 import { ExTile, PageHeader } from '@/features/plans/parts';
 import { artIdFor, ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
+import { CLIPS, THUMBS, clipIdFor } from '@/features/workout/clips';
+
+// The real clip of the exercise: shows its still until played, then loops silently.
+function PlanClip({ source, thumb, playing }: { source: number; thumb?: number; playing: boolean }) {
+  const player = useVideoPlayer(source, (p) => { p.loop = true; p.muted = true; });
+  useEffect(() => { if (playing) player.play(); else player.pause(); }, [playing, player]);
+  return (
+    <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: '#FFFFFF' }}>
+      <VideoView player={player} nativeControls={false} contentFit="contain" allowsPictureInPicture={false} style={{ width: '100%', height: '100%' }} />
+      {!playing && !!thumb && <Image source={thumb} resizeMode="contain" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }} />}
+    </View>
+  );
+}
 
 function PlayBar({ dark }: { dark?: boolean }) {
   const w = useSharedValue(0);
@@ -32,7 +46,8 @@ export default function ExerciseDetail() {
   const insets = useSafeAreaInsets();
   const { d, set } = useDomain();
   const { name = 'Exercise', sub } = useLocalSearchParams<{ name?: string; sub?: string }>();
-  const artId = artIdFor(name);
+  const clipId = clipIdFor(name);
+  const artId = clipId ? undefined : artIdFor(name);
   const lightBg = artId && hasPhoto(artId) && isDark ? '#F4F6FA' : c.surface;
   const [playing, setPlaying] = useState(false);
 
@@ -48,8 +63,8 @@ export default function ExerciseDetail() {
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title={name} />
       <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
-        <View style={{ height: artId ? 250 : 210, borderRadius: 26, overflow: 'hidden', backgroundColor: artId ? lightBg : undefined }}>
-          {artId ? (
+        <View style={{ height: artId || clipId ? 250 : 210, borderRadius: 26, overflow: 'hidden', backgroundColor: clipId ? '#FFFFFF' : artId ? lightBg : undefined }}>
+          {clipId ? <PlanClip source={CLIPS[clipId]} thumb={THUMBS[clipId]} playing={playing} /> : artId ? (
             <View pointerEvents="none" style={{ position: 'absolute', top: 44, left: 12, right: 12, bottom: 18 }}>
               <ExerciseArt id={artId} fill />
             </View>
@@ -61,16 +76,16 @@ export default function ExerciseDetail() {
             <Circle cx={270} cy={40} r={90} fill="#FFFFFF" opacity={0.14} />
           </Svg>
           </>)}
-          <View style={{ position: 'absolute', top: 12, left: 12, paddingHorizontal: 10, paddingVertical: 3, borderRadius: 999, backgroundColor: artId ? 'rgba(11,11,13,0.72)' : 'rgba(255,255,255,0.14)' }}>
+          <View style={{ position: 'absolute', top: 12, left: 12, paddingHorizontal: 10, paddingVertical: 3, borderRadius: 999, backgroundColor: artId || clipId ? 'rgba(11,11,13,0.72)' : 'rgba(255,255,255,0.14)' }}>
             <Txt style={{ fontFamily: font.medium, fontSize: 12, color: '#fff' }}>{d.offline ? 'Downloaded · plays offline' : 'Licensed form video'}</Txt>
           </View>
           <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
             <Pressy accessibilityRole="button" accessibilityLabel={playing ? 'Pause video' : 'Play form video'} onPress={() => setPlaying((v) => !v)} scaleTo={0.92}
-              style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: artId ? 'rgba(11,11,13,0.72)' : 'rgba(255,255,255,0.92)', alignItems: 'center', justifyContent: 'center' }}>
-              {playing ? <Pause size={22} color={artId ? '#fff' : '#0B0B0D'} fill={artId ? '#fff' : '#0B0B0D'} /> : <Play size={24} color={artId ? '#fff' : '#0B0B0D'} fill={artId ? '#fff' : '#0B0B0D'} style={{ marginLeft: 3 }} />}
+              style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: artId || clipId ? 'rgba(11,11,13,0.72)' : 'rgba(255,255,255,0.92)', alignItems: 'center', justifyContent: 'center' }}>
+              {playing ? <Pause size={22} color={artId || clipId ? '#fff' : '#0B0B0D'} fill={artId || clipId ? '#fff' : '#0B0B0D'} /> : <Play size={24} color={artId || clipId ? '#fff' : '#0B0B0D'} fill={artId || clipId ? '#fff' : '#0B0B0D'} style={{ marginLeft: 3 }} />}
             </Pressy>
           </View>
-          {playing && <PlayBar dark={!!artId} />}
+          {playing && !clipId && <PlayBar dark={!!artId} />}
         </View>
         {sub ? (
           <Row style={{ gap: 12, paddingHorizontal: 4 }}>
