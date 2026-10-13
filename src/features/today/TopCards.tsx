@@ -31,6 +31,24 @@ const R = 54, CIRC = 2 * Math.PI * R;
 const GOAL_PCT = 0.35;
 
 // ---------- Goal hero ----------
+// After a break the goal is one quiet line, not a big ring.
+export function GoalLine() {
+  const { c } = useTheme();
+  const g = useGoalV2();
+  return (
+    <Pressy accessibilityRole="button" accessibilityLabel={`Your goal: ${g.name}. ${progressLine(g)}. ${statusLine(g)}`} onPress={() => router.navigate('/(tabs)/progress')} scaleTo={0.98}
+      style={{ backgroundColor: c.surface, borderRadius: 20, paddingVertical: 12, paddingHorizontal: 16 }}>
+      <Row style={{ gap: 12 }}>
+        <View style={{ flex: 1 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{g.name}</Txt>
+          <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{progressLine(g)} · {statusLine(g)}</Txt>
+        </View>
+        <ChevronRight size={18} color={c.muted} />
+      </Row>
+    </Pressy>
+  );
+}
+
 export function GoalCard() {
   const { d } = useDomain();
   const t = totals(d);
@@ -165,24 +183,19 @@ export function ComebackCard() {
           <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{`It has been ${days} days since your last session (${lastSessionLabel(days)})`}</Txt>
         </View>
       </Row>
-      <View style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused at 7 weeks, not lost</Txt>
-      </View>
-      <View style={{ gap: 10 }}>
-        <Fact icon={CalendarClock} title={`${missed} planned ${missed === 1 ? 'workout' : 'workouts'} missed`} sub="One session this week keeps your streak going." />
-        {isPT && <Fact icon={MessageCircle} title="Coach Vikram: “Good to see you back. Keep it light today.”" sub={d.ptLeft ? `${d.ptLeft} PT sessions left · rebook from the Gym tab` : undefined} />}
-        {notice && <Fact icon={CreditCard} title={notice.title} sub={notice.sub} />}
-      </View>
-      <View style={{ backgroundColor: c.surface2, borderRadius: 18, padding: 14, gap: 4 }}>
-        <Row style={{ gap: 8 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{tone.chip}</Txt>
-          <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>· about 30 min · 5 exercises</Txt>
-        </Row>
-        <Txt style={{ fontSize: 14, lineHeight: 20 }}>{tone.line}</Txt>
-        <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Starts with {tone.load}.</Txt>
-      </View>
+      <Row style={{ gap: 6, flexWrap: 'wrap' }}>
+        <View style={{ backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused, not lost</Txt>
+        </View>
+        {notice && (
+          <View style={{ backgroundColor: c.warnSoft, borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: c.warn }}>{notice.title}</Txt>
+          </View>
+        )}
+      </Row>
+      <Txt style={{ fontSize: 15, lineHeight: 22 }}>{tone.chip} · about 30 min · 5 exercises. <Txt muted style={{ fontSize: 15, lineHeight: 22 }}>{tone.line}</Txt></Txt>
       <Button label="Start easy session" onPress={() => { startWorkout(); }} />
-      <Button kind="outline" small label="Re-plan my week" onPress={() => router.navigate('/plans')} />
+      <Pressy accessibilityRole="button" onPress={() => router.navigate('/plans')} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}><Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20, color: c.accentText }}>Re-plan my week</Txt></Pressy>
     </Animated.View>
   );
 }

@@ -19,6 +19,7 @@ import { createStore } from '@/lib/createStore';
 import { usePathname } from 'expo-router';
 import { ChartLine, Dumbbell, Flag, House, LogIn, MapPin, MessageCircle, Minus, Moon, Plus, SlidersHorizontal, Sun, Sunrise, Sunset, UserRound } from '@/lib/icons';
 import { Actions, Choice, PanelCard, QuickTime, ScreenItem, P } from '@/web/ControlParts';
+import { SITUATIONS, SITUATION_HINT, Situation, useSituation } from '@/lib/situations';
 
 const PHONE_W = 390, PHONE_H = 844;
 // Which version of the edge-case panel is showing: the first one (a long list) or the structured one (cards).
@@ -164,16 +165,19 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
     const t = bucketOf(m);
     set(t !== d.time ? { min: m, time: t, meals: mealsFor(t), openMeal: null, ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null } : { min: m });
   };
+  const sit = useSituation();
   const rows = [
+    // One situation at a time: picking it sets everything it implies (and a fitting time of day).
+    { label: 'Situation', options: SITUATIONS as string[], value: sit.current, onPick: (v: string) => { sit.pick(v as Situation); said(`Situation: ${v}`); } },
     { label: 'Goal type', options: ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness', 'Not sure yet'], value: type, onPick: pickGoal },
     // What the member sees at the top of Today: a normal day, the updates card (plan changes, messages), or the welcome-back card after a break.
-    { label: 'Today shows', options: ['Regular', 'With updates', 'Comeback'], value: d.todayVariant, onPick: (v: string) => set({ todayVariant: v as any, dismissed: {} }) },
+    { label: 'Today shows', options: ['Regular', 'With updates', 'Comeback'], value: d.todayVariant, onPick: (v: string) => sit.pick(v === 'Regular' ? 'Normal day' : (v as Situation)) },
     // When the member trains: Today's Right now card, the Workout card and This week follow it. Set in onboarding (Schedule).
     { label: 'Workout time', options: ['Early morning', 'Morning', 'Afternoon', 'Evening'], value: state.profile.time || 'Evening', onPick: (v: string) => setProfile({ time: v }) },
     // Payment: what Today shows above everything when the membership needs attention.
     { label: 'Membership', options: ['Active', 'Expiring', 'Grace', 'Grace over'], value: d.membership, onPick: (v: string) => set({ membership: v as any }) },
     // Comeback: how long the member has been away.
-    { label: 'Days away (Comeback)', options: ['2 days', '4 days', '8 days', '15 days'], value: d.todayVariant === 'Comeback' ? `${d.awayDays} days` : '', onPick: (v: string) => set({ awayDays: parseInt(v, 10), todayVariant: 'Comeback', dismissed: {} }) },
+    { label: 'Days away (Comeback)', options: ['2 days', '4 days', '8 days', '15 days'], value: d.todayVariant === 'Comeback' ? `${d.awayDays} days` : '', onPick: (v: string) => { sit.pick('Comeback'); set({ awayDays: parseInt(v, 10) }); } },
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },
     { label: 'Theme', options: ['Light', 'Dark'], value: isDark ? 'Dark' : 'Light', onPick: (v: string) => setSc({ theme: v as any }) },
     { label: 'Steps tracker design', options: STEPS_DESIGNS as string[], value: steps.design, onPick: (v: string) => stepsStore.set({ design: v as StepsDesign }) },
@@ -254,6 +258,14 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
             </View>
           </PanelCard>
 
+          <PanelCard icon={House} title="Situation" pill={{ label: sit.current }}>
+            {seg('Situation')}
+            <Text style={{ fontFamily: font.regular, fontSize: 12, lineHeight: 17, color: P.muted }}>{SITUATION_HINT[sit.current]}</Text>
+            {sit.current === 'Comeback' && seg('Days away (Comeback)')}
+            {!!d.autoNote && <View style={{ backgroundColor: '#FFF4E0', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 17, color: '#9A5A00' }}>{d.autoNote}</Text></View>}
+            {act('Redo today')}
+          </PanelCard>
+
           <PanelCard icon={UserRound} title="Member" pill={{ label: state.sc.member }}>
             {seg('Member type')}
             {seg('Workout time')}
@@ -262,12 +274,6 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
             {seg('Gym')}
             {seg('Health (steps)')}
             {seg('Wearable (heart rate, sleep, energy)')}
-          </PanelCard>
-
-          <PanelCard icon={House} title="Today" pill={{ label: d.todayVariant }}>
-            {seg('Today shows')}
-            {seg('Days away (Comeback)')}
-            {act('Redo today')}
           </PanelCard>
 
           <PanelCard icon={Dumbbell} title="Workout">

@@ -25,6 +25,7 @@ export type Domain = {
   min: number; // minutes since midnight: the app's "now" (set by the hourly slider in the edge-case panel)
   todayVariant: 'Regular' | 'With updates' | 'Comeback';
   awayDays: number; // Comeback: days since the last session
+  autoNote: string; // what the app switched off by itself on the last change, so conflicting states never show together
   loading: boolean;
   hc: boolean; // the phone's health store is connected (steps)
   hasGym: boolean; // the member belongs to a gym: Gym tab, check-in, coach, facility step in onboarding
@@ -69,9 +70,29 @@ export function mealsFor(t: TimeOfDay): Partial<Record<MealId, MealLog>> {
   return m;
 }
 
+// Keeps the state believable. A comeback means no workout, no check-in and nothing running today; starting or finishing a workout ends the comeback;
+// a workout cannot run on a rest day. Whatever it had to switch off is named in autoNote.
+function settle(prev: Domain, next: Domain): Domain {
+  let n = next;
+  const notes: string[] = [];
+  if (n.todayVariant === 'Comeback' && prev.todayVariant !== 'Comeback') {
+    const off: string[] = [];
+    if (n.wkDone || n.wkScenario !== 'Not started') off.push('workout');
+    if (n.session) off.push('running workout');
+    if (n.ci !== 'Away') off.push('check-in');
+    if (off.length) { n = { ...n, wkScenario: 'Not started', wkDone: null, session: null, ci: 'Away', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null }; notes.push(`Comeback turned off: ${off.join(', ')}`); }
+  } else if (n.todayVariant === 'Comeback' && (n.wkDone || n.wkScenario === 'Done' || n.session)) {
+    n = { ...n, todayVariant: 'Regular' };
+    notes.push('Comeback ended: the workout started');
+  }
+  if (n.session && n.wkScenario === 'Rest day') { n = { ...n, wkScenario: 'Not started' }; notes.push('Rest day turned off: a workout is running'); }
+  const note = notes.join(' · ');
+  return note === n.autoNote ? n : { ...n, autoNote: note };
+}
+
 export function initialDomain(): Domain {
   return {
-    time: 'Evening', min: 1100, todayVariant: 'Regular', awayDays: 4, loading: false, hc: false, wearable: false, hasGym: true, askGym: false,
+    time: 'Evening', min: 1100, todayVariant: 'Regular', awayDays: 4, autoNote: '', loading: false, hc: false, wearable: false, hasGym: true, askGym: false,
     water: 1.8, weight: 72.4, weightLog: [{ t: 'Mon 22', v: 72.6 }, { t: 'Tue 23', v: 72.5 }],
     meals: mealsFor('Evening'), wkScenario: 'Not started', wkDone: null, session: null,
     ci: 'At the gym', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null, scanFails: false, dismissed: {}, plans: basePlans(), planReq: 'none', coachUpdated: false,
@@ -86,7 +107,7 @@ const DomainCtx = createContext<Ctx | null>(null);
 
 export function DomainProvider({ children }: { children: React.ReactNode }) {
   const [d, setD] = useState<Domain>(initialDomain);
-  const set = useCallback<Ctx['set']>((p) => setD((s) => ({ ...s, ...(typeof p === 'function' ? p(s) : p) })), []);
+  const set = useCallback<Ctx['set']>((p) => setD((s) => settle(s, { ...s, ...(typeof p === 'function' ? p(s) : p) })), []);
   const reset = useCallback(() => setD(initialDomain()), []);
   const v = useMemo(() => ({ d, set, reset }), [d, set, reset]);
   return <DomainCtx.Provider value={v}>{children}</DomainCtx.Provider>;

@@ -10,7 +10,7 @@ import { CheckInScenario, mealsFor, NOWS, TimeOfDay, useDomain } from '@/lib/dom
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ComebackCard, GoalCard, PtConfirmCard, UpdatesCard } from '@/features/today/TopCards';
+import { ComebackCard, GoalCard, GoalLine, PtConfirmCard, UpdatesCard } from '@/features/today/TopCards';
 import { usePtPending } from '@/features/shell/notifs';
 import { Trackers } from '@/features/today/Trackers';
 import { WorkoutCard } from '@/features/today/WorkoutCard';
@@ -98,9 +98,10 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
             {d.todayVariant === 'Comeback' && <Enter i={1}><ComebackCard /></Enter>}
             <Enter i={1}><RightNow /></Enter>
-            <Enter i={1}><StreakChip /></Enter>
-            <Enter i={1}>{gv.version === 'Version 2' ? <GoalCard2 size="compact" /> : <GoalSwitch />}</Enter>
             <Enter i={2}><Trackers /></Enter>
+            {/* Goal and streak are progress, not an action: they sit under Right now and the quick trackers. After a break the goal is one quiet line. */}
+            <Enter i={2}><StreakChip /></Enter>
+            <Enter i={2}>{d.todayVariant === 'Comeback' ? <GoalLine /> : gv.version === 'Version 2' ? <GoalCard2 size="compact" /> : <GoalSwitch />}</Enter>
             <Enter i={3}><WorkoutCard /></Enter>
             <Enter i={4}><MealsCard /></Enter>
             <Enter i={5}><WeekCard /></Enter>
