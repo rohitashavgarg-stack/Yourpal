@@ -74,8 +74,9 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
 
       <Animated.View entering={fade()} style={{ position: 'absolute', left: 12, right: 12, bottom: Math.max(insets.bottom, 14), borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: c.glassLine,
         shadowColor: '#0F0E3C', shadowOpacity: 0.28, shadowRadius: 60, shadowOffset: { width: 0, height: 24 } }}>
-        <BlurView intensity={40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
-        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: c.glass }} />
+        {/* own radius: on the web a backdrop blur is not clipped by the parent's rounded corners, which left a square showing behind the card */}
+        <BlurView intensity={40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: 32 }} />
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: c.glass, borderRadius: 32 }} />
         <View style={{ paddingTop: 22, paddingHorizontal: 18, paddingBottom: 18, gap: 14 }}>
           <View style={{ gap: 4 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: 13, color: c.muted }}>Workout done · Leg day</Txt>
