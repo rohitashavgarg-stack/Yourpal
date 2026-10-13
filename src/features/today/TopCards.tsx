@@ -10,7 +10,6 @@ import { scheduleOnRN } from 'react-native-worklets';
 import { CalendarClock, Check, ChevronRight, CircleCheck, ClipboardList, CreditCard, MessageCircle, Pause, Flame, X } from '@/lib/icons';
 import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
 import { PillBtn } from '@/components/bits';
-import { usePaymentNotice } from '@/features/today/PaymentBanner';
 import { PersonAvatar } from '@/components/Brand';
 import { FlagSheet } from '@/features/gym/sheets';
 import { useOverlay } from '@/components/Overlay';
@@ -128,44 +127,11 @@ export function PtConfirmCard() {
 }
 
 // ---------- Comeback (after a break) ----------
-// Gap since the last session decides the tone of the restart.
-function comebackTone(days: number) {
-  if (days <= 3) return { chip: 'Quick restart', line: 'You are only a few days off, so pick up where you left off.', load: 'about 90% of your usual weights' };
-  if (days <= 7) return { chip: 'Easy restart', line: 'An easy session to get moving again.', load: 'about 80% of your usual weights' };
-  if (days <= 14) return { chip: 'Gentle comeback', line: 'A lighter session to ease back in. Your coach has been told you are back.', load: 'about 70% of your usual weights' };
-  return { chip: 'Fresh start', line: 'A short, light session. Worth a quick re-check with your coach this week.', load: 'light weights and a slow build-up' };
-}
-const DAYS_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-function lastSessionLabel(days: number) {
-  const idx = (((2 - days) % 7) + 7) % 7; // today is Wed 24 Sep
-  const date = 24 - days;
-  return `${DAYS_SHORT[idx]} ${date > 0 ? date : date + 31} ${date > 0 ? 'Sep' : 'Aug'}`;
-}
-
-function Fact({ icon: I, title, sub }: { icon: any; title: string; sub?: string }) {
-  const { c } = useTheme();
-  return (
-    <Row style={{ gap: 10, alignItems: 'flex-start' }}>
-      <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', marginTop: 1 }}><I size={14} color={c.muted} /></View>
-      <View style={{ flex: 1 }}>
-        <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20 }}>{title}</Txt>
-        {sub ? <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{sub}</Txt> : null}
-      </View>
-    </Row>
-  );
-}
-
 export function ComebackCard() {
   const { c, isDark } = useTheme();
-  const { state } = useStore();
   const { d } = useDomain();
-  const { toast } = useOverlay();
   const startWorkout = useStartWorkout();
-  const notice = usePaymentNotice();
-  const isPT = state.sc.member === 'PT member';
   const days = d.awayDays;
-  const tone = comebackTone(days);
-  const missed = Math.max(1, Math.round((days * state.profile.days) / 7));
   const a = useSharedValue(0);
   useEffect(() => { a.value = withDelay(1200, withTiming(1, { duration: 700 })); }, []);
   const pause = useAnimatedStyle(() => ({ opacity: 1 - a.value, transform: [{ scale: 1 - 0.4 * a.value }] }));
@@ -180,20 +146,9 @@ export function ComebackCard() {
         </View>
         <View style={{ flex: 1 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.6 }}>Welcome back, Rohitashav</Txt>
-          <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{`It has been ${days} days since your last session (${lastSessionLabel(days)})`}</Txt>
+          <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{`Great to have you back after ${days} days`}</Txt>
         </View>
       </Row>
-      <Row style={{ gap: 6, flexWrap: 'wrap' }}>
-        <View style={{ backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused, not lost</Txt>
-        </View>
-        {notice && (
-          <View style={{ backgroundColor: c.warnSoft, borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: c.warn }}>{notice.title}</Txt>
-          </View>
-        )}
-      </Row>
-      <Txt style={{ fontSize: 15, lineHeight: 22 }}>{tone.chip} · about 30 min · 5 exercises. <Txt muted style={{ fontSize: 15, lineHeight: 22 }}>{tone.line}</Txt></Txt>
       <Button label="Start easy session" onPress={() => { startWorkout(); }} />
       <Pressy accessibilityRole="button" onPress={() => router.navigate('/plans')} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}><Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20, color: c.accentText }}>Re-plan my week</Txt></Pressy>
     </Animated.View>
