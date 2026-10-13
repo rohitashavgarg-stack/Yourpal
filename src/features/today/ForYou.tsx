@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, interpolate, SharedValue, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import { router } from 'expo-router';
@@ -80,112 +80,119 @@ export function useForYou(): Item[] {
   return out.filter((i) => i.critical || !d.dismissed[i.key]);
 }
 
-// One card of the stack. The dots are not in here (they sit under the stack), so a card behind the front one shows only its edge.
-function ItemCard({ it, i, n, onDismiss }: { it: Item; i: number; n: number; onDismiss: () => void }) {
+// ---------- The stack ----------
+// Every card stays mounted for good, keyed by its id (never by position), and one shared value, `prog`, says which card is in front.
+// Each card works out where it sits from (its index - prog): 0 is the front, 1 and 2 are the cards behind (a little smaller, a little lower, no text),
+// and -1 is a card that has just left to the side. Nothing remounts and no React state changes while a finger is moving, so there is no refresh and no flicker.
+const wrapD = (i: number, p: number, n: number) => {
+  'worklet';
+  return ((((i - p) + 1) % n) + n) % n - 1; // in [-1, n - 1)
+};
+
+const StackCard = React.memo(function StackCard({ it, i, n, prog, minH, onNatural, onDismiss }: { it: Item; i: number; n: number; prog: SharedValue<number>; minH: number; onNatural: (k: string, h: number) => void; onDismiss: () => void }) {
   const { c, isDark } = useTheme();
   const { openSheet } = useOverlay();
   const fg = it.tone === 'warn' ? c.warn : it.tone === 'muted' ? c.ink : c.accentText;
   const bg = it.tone === 'warn' ? c.warnSoft : it.tone === 'good' ? c.goodSoft : c.accentSoft;
   const I = it.icon;
+  const card = useAnimatedStyle(() => {
+    const d = wrapD(i, prog.value, n);
+    return {
+      zIndex: 10 - Math.round(Math.abs(d)),
+      opacity: interpolate(d, [-1, 0, 2, 3], [0, 1, 1, 0], 'clamp'),
+      transform: [
+        { translateX: interpolate(d, [-1, 0], [-360, 0], 'clamp') },
+        { translateY: interpolate(d, [0, 2], [0, 26], 'clamp') },
+        { scale: interpolate(d, [0, 2], [1, 0.9], 'clamp') },
+      ],
+    };
+  });
+  // the cards behind are empty shells: the text fades in only as the card comes forward
+  const content = useAnimatedStyle(() => ({ opacity: interpolate(wrapD(i, prog.value, n), [-1, 0, 1], [1, 1, 0], 'clamp') }));
   return (
-    <View style={[{ backgroundColor: c.surface, borderRadius: 24, padding: 16, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
-      {(n > 1 || !it.critical) && (
-        <Row style={{ justifyContent: 'space-between' }}>
-          <Row style={{ gap: 8 }}>
-            {n > 1 && <View style={{ paddingHorizontal: 8, paddingVertical: 1, borderRadius: 999, backgroundColor: c.surface2 }}><Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 16, color: c.muted }}>{i + 1} of {n}</Txt></View>}
-          </Row>
-          {!it.critical && (
-            <Pressy accessibilityRole="button" accessibilityLabel="Dismiss this" onPress={onDismiss} style={{ width: 44, height: 44, marginTop: -12, marginRight: -10, alignItems: 'center', justifyContent: 'center' }}>
-              <X size={17} color={c.muted} />
-            </Pressy>
-          )}
-        </Row>
-      )}
-      <Row style={{ gap: 12, alignItems: 'flex-start' }}>
-        {it.who ? <PersonAvatar who="coach" size={40} /> : <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}>{I ? <I size={19} color={fg} /> : null}</View>}
-        <View style={{ flex: 1, gap: 2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{it.title}</Txt>
-          {!!it.body && <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{it.body}</Txt>}
-          {!!it.chips && <Row style={{ gap: 6, flexWrap: 'wrap', paddingTop: 6 }}>{it.chips.map((t) => <View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 18 }}>{t}</Txt></View>)}</Row>}
-        </View>
-      </Row>
-      {it.two ? (
-        <Row style={{ gap: 10 }}>
-          <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => openSheet(<FlagSheet />, { label: 'Flag session' })} /></View>
-          <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} /></View>
-        </Row>
-      ) : it.btn && it.full ? (
-        <Button label={it.btn} onPress={() => it.act?.()} />
-      ) : it.btn ? (
-        <Row><Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.bg }}>{it.btn}</Txt></Pressy></Row>
-      ) : null}
-    </View>
+    <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0 }, card]}>
+      <View style={[{ backgroundColor: c.surface, borderRadius: 24, padding: 16, minHeight: minH, overflow: 'hidden', borderWidth: 1, borderColor: c.line }, cardShadow(isDark)]}>
+        <Animated.View style={content} onLayout={(e) => onNatural(it.key, e.nativeEvent.layout.height)}>
+          <View style={{ gap: 12 }}>
+            <Row style={{ gap: 12, alignItems: 'flex-start', paddingRight: it.critical ? 0 : 28 }}>
+              {it.who ? <PersonAvatar who="coach" size={40} /> : <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}>{I ? <I size={19} color={fg} /> : null}</View>}
+              <View style={{ flex: 1, gap: 2 }}>
+                <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{it.title}</Txt>
+                {!!it.body && <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{it.body}</Txt>}
+              </View>
+            </Row>
+            {it.two ? (
+              <Row style={{ gap: 10 }}>
+                <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => openSheet(<FlagSheet />, { label: 'Flag session' })} /></View>
+                <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} /></View>
+              </Row>
+            ) : it.btn ? (
+              <Row><Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.bg }}>{it.btn}</Txt></Pressy></Row>
+            ) : null}
+          </View>
+        </Animated.View>
+        {!it.critical && (
+          <Pressy accessibilityRole="button" accessibilityLabel="Dismiss this" onPress={onDismiss} style={{ position: 'absolute', top: 2, right: 2, width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+            <X size={17} color={c.muted} />
+          </Pressy>
+        )}
+      </View>
+    </Animated.View>
   );
+}, (a, b) => a.it.key === b.it.key && a.it.title === b.it.title && a.it.body === b.it.body && a.it.btn === b.it.btn && a.it.critical === b.it.critical && a.i === b.i && a.n === b.n && a.minH === b.minH && a.prog === b.prog);
+
+// A dot that stretches and darkens as its card comes to the front, in step with the cards.
+function Dot({ k, n, prog }: { k: number; n: number; prog: SharedValue<number> }) {
+  const { c } = useTheme();
+  const st = useAnimatedStyle(() => {
+    const near = 1 - Math.min(1, Math.abs(wrapD(k, prog.value, n)));
+    return { width: 6 + 10 * near, opacity: 0.35 + 0.65 * near };
+  });
+  return <Animated.View style={[{ height: 6, borderRadius: 3, backgroundColor: c.ink }, st]} />;
 }
 
-// The stack: the front card follows the finger, the cards behind rise as it leaves (scale up, move forward), and the front card goes to the back of the stack.
 export function ForYouStack() {
-  const { c } = useTheme();
   const { set } = useDomain();
-  const items = useForYou();
-  const [idx, setIdx] = useState(0);
-  const [h, setH] = useState(0);
+  const raw = useForYou();
+  const items = raw; // cards are keyed by id and memoised below, so a rebuilt list does not re-render them
   const n = items.length;
   const many = n > 1;
-  const i = n ? idx % n : 0;
-  const tx = useSharedValue(0);
-  const p = useSharedValue(0); // 0 = resting, 1 = the front card has left
-  const advance = () => {
-    haptic.light();
-    setIdx((i + 1) % n);
-    tx.value = 0; // the next card is already in front's place (scale 1), so resetting is invisible
-    p.value = 0;
-  };
-  const swipe = Gesture.Pan().enabled(many).activeOffsetX([-18, 18]).failOffsetY([-14, 14])
-    .onUpdate((e) => { tx.value = e.translationX; p.value = Math.min(1, Math.abs(e.translationX) / 140); })
+  const prog = useSharedValue(0);
+  const base = useSharedValue(0);
+  const [front, setFront] = useState(0);
+  const [nat, setNat] = useState<Record<string, number>>({});
+  const onNatural = (k: string, h: number) => setNat((m) => (Math.abs((m[k] ?? 0) - h) < 1 ? m : { ...m, [k]: h }));
+  const settle = (target: number) => { haptic.light(); setFront(((Math.round(target) % n) + n) % n); };
+  const swipe = Gesture.Pan().enabled(many).activeOffsetX([-14, 14]).failOffsetY([-14, 14])
+    .onStart(() => { base.value = prog.value; })
+    .onUpdate((e) => { prog.value = base.value + Math.max(-1, Math.min(1, -e.translationX / 280)); })
     .onEnd((e) => {
-      const go = Math.abs(e.translationX) > 70 || Math.abs(e.velocityX) > 700;
-      if (!go) { tx.value = withTiming(0, { duration: 200, easing: Easing.out(Easing.cubic) }); p.value = withTiming(0, { duration: 200 }); return; }
-      const dir = e.translationX < 0 || (e.translationX === 0 && e.velocityX < 0) ? -1 : 1;
-      p.value = withTiming(1, { duration: 220, easing: Easing.out(Easing.cubic) });
-      tx.value = withTiming(dir * 420, { duration: 220, easing: Easing.in(Easing.quad) }, (fin) => { if (fin) scheduleOnRN(advance); });
+      const move = -e.translationX / 280 - e.velocityX / 4000;
+      const target = base.value + (move > 0.3 ? 1 : move < -0.3 ? -1 : 0);
+      prog.value = withTiming(target, { duration: 280, easing: Easing.out(Easing.cubic) }, (fin) => { if (fin && target !== base.value) scheduleOnRN(settle, target); });
     });
-  const front = useAnimatedStyle(() => ({ transform: [{ translateX: tx.value }, { rotate: `${tx.value / 40}deg` }] }));
-  const second = useAnimatedStyle(() => ({ transform: [{ translateY: 18 * (1 - p.value) }, { scale: 0.93 + 0.07 * p.value }] }));
-  const third = useAnimatedStyle(() => ({ transform: [{ translateY: 34 - 16 * p.value }, { scale: 0.86 + 0.07 * p.value }] }));
-  // The cards behind show no text while they wait (only their edge); the text fades in as the front card leaves and they move up.
-  const contentSecond = useAnimatedStyle(() => ({ opacity: Math.max(0, (p.value - 0.35) / 0.65) }));
-  const contentThird = useAnimatedStyle(() => ({ opacity: 0 }));
-  const washSecond = useAnimatedStyle(() => ({ opacity: 0.6 * (1 - p.value) }));
-  const washThird = useAnimatedStyle(() => ({ opacity: 0.85 - 0.4 * p.value }));
   if (!n) return null;
-  const dismiss = (k: string) => { haptic.light(); set((s) => ({ dismissed: { ...s.dismissed, [k]: true } })); };
-  const peek = (k: number) => items[(i + k) % n];
+  const maxH = Math.max(0, ...items.map((x) => (nat[x.key] ?? 0))) + 32; // content height plus the card's padding
+  const cur = items[Math.min(front, n - 1)];
+  const dismiss = () => {
+    if (!cur) return;
+    haptic.light();
+    const next = Math.min(front, Math.max(0, n - 2));
+    prog.value = next; // the next card takes the front at once; the dismissed one is gone from the list
+    setFront(next);
+    set((s) => ({ dismissed: { ...s.dismissed, [cur.key]: true } }));
+  };
+  const deckH = maxH + (many ? (n > 2 ? 42 : 28) : 0);
   return (
-    <View style={{ paddingBottom: many ? (n > 2 ? 56 : 40) : 0 }}>
-      <View>
-        {/* behind the front card: real cards, the same size, squeezed and pushed down so only their edges show */}
-        {n > 2 && (
-          <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, height: h || undefined, overflow: 'hidden', borderRadius: 24, borderWidth: 1, borderColor: c.line, backgroundColor: c.surface }, third]}>
-            <Animated.View style={contentThird}><ItemCard it={peek(2)} i={(i + 2) % n} n={n} onDismiss={() => {}} /></Animated.View>
-            <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: c.surface3 }, washThird]} />
-          </Animated.View>
-        )}
-        {many && (
-          <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, height: h || undefined, overflow: 'hidden', borderRadius: 24, borderWidth: 1, borderColor: c.line, backgroundColor: c.surface }, second]}>
-            <Animated.View style={contentSecond}><ItemCard it={peek(1)} i={(i + 1) % n} n={n} onDismiss={() => {}} /></Animated.View>
-            <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: c.surface3 }, washSecond]} />
-          </Animated.View>
-        )}
-        <GestureDetector gesture={swipe}>
-          <Animated.View onLayout={(e) => setH(e.nativeEvent.layout.height)} style={many ? front : undefined}>
-            <ItemCard it={items[i]} i={i} n={n} onDismiss={() => dismiss(items[i].key)} />
-          </Animated.View>
-        </GestureDetector>
-      </View>
+    <View>
+      <GestureDetector gesture={swipe}>
+        <View style={{ height: deckH }}>
+          {items.map((it, i) => <StackCard key={it.key} it={it} i={i} n={n} prog={prog} minH={maxH} onNatural={onNatural} onDismiss={dismiss} />)}
+        </View>
+      </GestureDetector>
       {many && (
-        <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, flexDirection: 'row', gap: 4, justifyContent: 'center', alignItems: 'center', height: 14 }}>
-          {items.map((x, k) => <View key={x.key} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: 3, backgroundColor: k === i ? c.ink : c.surface3 }} />)}
+        <View pointerEvents="none" style={{ flexDirection: 'row', gap: 4, justifyContent: 'center', alignItems: 'center', height: 14, marginTop: 2 }}>
+          {items.map((x, k) => <Dot key={x.key} k={k} n={n} prog={prog} />)}
         </View>
       )}
     </View>

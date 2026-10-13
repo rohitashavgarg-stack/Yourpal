@@ -110,10 +110,10 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {/* after a break the way back (the comeback plan is the first item of the stack) comes before the goal */}
             {comebackNew && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>Welcome back, Rohitashav. Check your comeback session.</Txt></Enter>}
             {comebackNew && <Enter i={0}><ComebackPlan /></Enter>}
-            {comebackNew && <Enter i={0}><ForYouStack /></Enter>}
-            <Enter i={0}><GoalCard soft /></Enter>
+            {/* updates always come before the goal */}
+            <Enter i={0}><ForYouStack /></Enter>
+            <Enter i={1}><GoalCard soft /></Enter>
             <Enter i={1}><Trackers /></Enter>
-            {!comebackNew && <Enter i={1}><ForYouStack /></Enter>}
             {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}
             {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
             {primary === 'meals' && <Enter i={1}><MealsCard timeline /></Enter>}

@@ -42,7 +42,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   if (st === 'hidden') return null;
   const done = wkDoneInfo(d);
   const elapsed = d.session ? mmss((now - d.session.startAt) / 1000).padStart(5, '0') : '';
-  const chip = st === 'done' ? 'Done' : st === 'rest' ? 'Rest' : st === 'live' ? 'In progress' : restart && st0 === 'hidden' ? 'Today' : rel(d, WKT).t;
+  const chip = st === 'done' ? 'Done' : st === 'rest' ? 'Rest' : st === 'live' ? 'In progress' : restart && st0 === 'hidden' ? 'Today' : d.min - WKT > 120 ? 'Still on for today' : rel(d, WKT).t;
   const live = st === 'done' || st === 'live';
   const chips = st === 'rest' ? ['Recovery day', `Next: Pull · Thu ${fmtT(WKT).full}`] : restart && st0 === 'hidden' ? ['5 exercises', '~30 min', 'Lighter weights'] : [`${buildExercises().length} exercises`, `~${WORKOUT_MIN} min`, ...(d.hc && d.wearable ? ['~350 kcal'] : [])];
   const did = st === 'done' ? `${fmtT(done.a).hm} – ${fmtT(done.b).full}` : st === 'live' ? `Started · ${elapsed}` : st === 'rest' ? 'A walk counts' : 'Not yet';

@@ -52,7 +52,7 @@ export function GoalLine() {
 export function GoalCard({ soft: compact = false }: { soft?: boolean } = {}) {
   const soft = compact;
   const { d } = useDomain();
-  const SZ = soft ? 68 : 132, RR = soft ? 27 : R, CC = 2 * Math.PI * RR, SW = soft ? 7 : 12;
+  const SZ = soft ? 84 : 132, RR = soft ? 33 : R, CC = 2 * Math.PI * RR, SW = soft ? 8 : 12;
   const t = totals(d);
   // Name, numbers and status come from the goal itself, so every kind of goal reads differently (weight, strength, flexibility, weekly workouts...).
   const g2 = useGoalV2();
@@ -75,7 +75,7 @@ export function GoalCard({ soft: compact = false }: { soft?: boolean } = {}) {
       accessibilityLabel={`Your goal: ${goal.toLowerCase()}. ${sub}, ${statusLine(g2).toLowerCase()}. Eaten ${t.k} of ${KCAL_TARGET} kcal.${d.hc && d.wearable ? ` Burned ${burned(d)}.` : ""} Open goal details`}
       onPress={() => router.push('/goal-detail')}>
       <LinearGradient colors={['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-        style={{ borderRadius: soft ? 24 : 28, paddingVertical: soft ? 10 : 18, paddingLeft: soft ? 12 : 16, paddingRight: soft ? 12 : 18, flexDirection: 'row', alignItems: 'center', gap: soft ? 12 : 18, overflow: 'hidden' }}>
+        style={{ borderRadius: soft ? 24 : 28, paddingVertical: soft ? 16 : 18, paddingLeft: soft ? 16 : 16, paddingRight: soft ? 16 : 18, flexDirection: 'row', alignItems: 'center', gap: soft ? 16 : 18, overflow: 'hidden' }}>
         <Svg width={260} height={260} viewBox="0 0 260 260" style={{ position: 'absolute', right: -90, top: -80, opacity: 0.16 }}>
           <Circle cx={130} cy={130} r={120} fill="none" stroke="#fff" strokeWidth={18} /><Circle cx={130} cy={130} r={78} fill="none" stroke="#fff" strokeWidth={12} />
         </Svg>
@@ -87,18 +87,18 @@ export function GoalCard({ soft: compact = false }: { soft?: boolean } = {}) {
           <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
             {centre.check ? <Check size={52} color="#fff" strokeWidth={3} /> : g2.kind === 'consistency' ? (
               <View style={{ alignItems: 'center' }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 18 : 34, lineHeight: soft ? 22 : undefined, letterSpacing: soft ? -0.4 : -1, color: '#fff' }}>{centre.big}</Txt>
-                <Txt style={{ fontSize: soft ? 9 : 12, lineHeight: soft ? 11 : 16, color: 'rgba(255,255,255,0.75)' }}>this week</Txt>
+                <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 22 : 34, lineHeight: soft ? 26 : undefined, letterSpacing: soft ? -0.5 : -1, color: '#fff' }}>{centre.big}</Txt>
+                <Txt style={{ fontSize: soft ? 10 : 12, lineHeight: soft ? 13 : 16, color: 'rgba(255,255,255,0.75)' }}>this week</Txt>
               </View>
             ) : (
-              <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 19 : 34, letterSpacing: -0.6, color: '#fff' }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: soft ? 11 : 18, color: 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
+              <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 24 : 34, letterSpacing: -0.6, color: '#fff' }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: soft ? 13 : 18, color: 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
             )}
           </View>
         </View>
-        <View style={{ flex: 1, gap: soft ? 2 : 6, minWidth: 0 }}>
-          <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: soft ? 12 : 13, color: 'rgba(255,255,255,0.8)' }}>Your goal</Txt><ChevronRight size={18} color="#fff" /></Row>
-          <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: soft ? 20 : 30, lineHeight: soft ? 24 : 34, color: '#fff' }}>{goal}</Txt>
-          <Txt style={{ fontSize: soft ? 13 : 14, color: 'rgba(255,255,255,0.8)' }}>{sub}</Txt>
+        <View style={{ flex: 1, gap: soft ? 4 : 6, minWidth: 0 }}>
+          <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)' }}>Your goal</Txt><ChevronRight size={18} color="#fff" /></Row>
+          <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: soft ? 24 : 30, lineHeight: soft ? 29 : 34, color: '#fff' }}>{goal}</Txt>
+          <Txt style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>{sub}</Txt>
           <StatusChip g={g2} fg="#1B3FB8" />
         </View>
       </LinearGradient>
