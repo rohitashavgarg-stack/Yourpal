@@ -7,7 +7,8 @@ import { newSession } from '@/features/workout/session';
 import { Dimensions, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useStore } from '@/lib/store';
-import { bucketOf, mealsFor, useDomain } from '@/lib/domain';
+import { bucketOf, mealsAt, plannedMin, useDomain } from '@/lib/domain';
+import { fmtT, MEALS } from '@/lib/data';
 import { STEPS_DESIGNS, StepsDesign, stepsStore } from '@/features/today/StepsCards';
 import { goalV2Store } from '@/features/goalv2/model';
 import { WEEK_TARGET } from '@/features/streak/data';
@@ -17,7 +18,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { LinearGradient } from 'expo-linear-gradient';
 import { createStore } from '@/lib/createStore';
 import { usePathname } from 'expo-router';
-import { ChartLine, Dumbbell, Flag, House, LogIn, MapPin, MessageCircle, Minus, Moon, Plus, SlidersHorizontal, Sun, Sunrise, Sunset, UserRound } from '@/lib/icons';
+import { ChartLine, Dumbbell, Flag, House, LogIn, MapPin, MessageCircle, Minus, Moon, Plus, SlidersHorizontal, Sun, Sunrise, Sunset, UserRound, UtensilsCrossed } from '@/lib/icons';
 import { Actions, Choice, PanelCard, QuickTime, ScreenItem, P } from '@/web/ControlParts';
 import { todayUiStore, TodayLayout } from '@/features/today/ui';
 import { SITUATIONS, SITUATION_HINT, Situation, useSituation } from '@/lib/situations';
@@ -114,35 +115,6 @@ function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number
   );
 }
 
-// The first version of the panel keeps its own slider.
-const classicHour = (m: number) => { const h = Math.floor(m / 60); return `${((h + 11) % 12) + 1}:${String(m % 60).padStart(2, '0')} ${h >= 12 ? 'pm' : 'am'}`; };
-// Hourly slider: 0 to 23, drag or tap anywhere on the track. The whole app follows the hour.
-function ClassicTimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number) => void }) {
-  const [w, setW] = useState(0);
-  const hour = Math.max(0, Math.min(23, Math.floor(minutes / 60)));
-  const from = (x: number) => { if (w <= 0) return; const h = Math.max(0, Math.min(23, Math.round((x / w) * 23))); if (h !== hour) onPick(h * 60); };
-  const pct = (hour / 23) * 100;
-  return (
-    <View style={{ gap: 8 }}>
-      <View accessibilityRole="adjustable" accessibilityLabel={`Time of day, ${classicHour(minutes)}`} accessibilityValue={{ text: classicHour(minutes) }}
-        onLayout={(e) => setW(e.nativeEvent.layout.width)}
-        onStartShouldSetResponder={() => true} onMoveShouldSetResponder={() => true}
-        onResponderGrant={(e) => from(e.nativeEvent.locationX)} onResponderMove={(e) => from(e.nativeEvent.locationX)}
-        style={{ height: 32, justifyContent: 'center' }}>
-        <View pointerEvents="none" style={{ height: 4, borderRadius: 2, backgroundColor: '#DCE1E8' }}>
-          <View style={{ width: `${pct}%`, height: 4, borderRadius: 2, backgroundColor: '#12151C' }} />
-        </View>
-        {[0, 6, 12, 18, 23].map((h) => <View key={h} pointerEvents="none" style={{ position: 'absolute', left: `${(h / 23) * 100}%`, marginLeft: -3, top: 14, width: 6, height: 6, borderRadius: 3, backgroundColor: h <= hour ? '#12151C' : '#C3CAD5' }} />)}
-        <View pointerEvents="none" style={{ position: 'absolute', left: `${pct}%`, marginLeft: -11, top: 5, width: 22, height: 22, borderRadius: 11, backgroundColor: '#fff', borderWidth: 2, borderColor: '#12151C', shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } }} />
-      </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        {['12 am', '6 am', '12 pm', '6 pm', '11 pm'].map((l) => <Text key={l} style={{ fontFamily: font.regular, fontSize: 11, lineHeight: 15, color: '#5C6370' }}>{l}</Text>)}
-      </View>
-      <Text style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 19, color: '#12151C' }}>{classicHour(minutes)}</Text>
-    </View>
-  );
-}
-
 // Kept deliberately small: goal type, member type, light / dark, steps tracker design and the time of day.
 // onDone: called after a Redo so the sheet version can close itself and show a toast.
 function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
@@ -161,10 +133,13 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
     set({ goal: { type: v, target: GOAL_TARGET[v] ?? 0, by: v === 'General fitness' || v === 'Not sure yet' ? '—' : d.goal.by && d.goal.by !== '—' ? d.goal.by : '30 Nov' } });
     goalV2Store.set({ extendDays: 0, lowerBy: 0, finished: false, kept: false });
   };
-  // Move "now" to a minute of the day. Meals and the check-in reset only when the part of the day changes.
+  // Move "now" to a minute of the day. The meals eaten so far follow the clock (everything due more than 90 minutes ago is done) and are redone only when
+  // a meal slot changes, so ticking things by hand survives small moves. The check-in resets when the part of the day changes. A comeback has eaten nothing.
+  const slot = (m: number) => MEALS.filter((q) => q.t + 90 <= m).length;
   const pickMinute = (m: number) => {
     const t = bucketOf(m);
-    set(t !== d.time ? { min: m, time: t, meals: mealsFor(t), openMeal: null, ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null } : { min: m });
+    const meals = slot(m) !== slot(d.min) ? { meals: d.todayVariant === 'Comeback' ? {} : mealsAt(m), openMeal: null } : {};
+    set(t !== d.time ? { min: m, time: t, ...meals, ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null } : { min: m, ...meals });
   };
   const sit = useSituation();
   const rows = [
@@ -192,7 +167,7 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
     // Undo one thing so it can be tried again.
     { label: 'Redo today', options: ['Workout', 'Meals', 'Steps', 'Check-in'], value: '', onPick: (v: string) => {
       if (v === 'Workout') { set({ wkScenario: 'Not started', wkDone: null, session: null }); said('Workout reset · ready to start again'); }
-      else if (v === 'Meals') { set({ meals: mealsFor(d.time), openMeal: null }); said('Meals reset · back to the start of the day'); }
+      else if (v === 'Meals') { set({ meals: mealsAt(d.min), openMeal: null }); said('Meals reset · back to the start of the day'); }
       else if (v === 'Steps') { stepsStore.set({ manual: [] }); said('Steps reset · manual steps removed'); }
       else { set({ ci: 'At the gym', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null }); said('Check-in reset · you can check in again'); }
     } },
@@ -234,33 +209,6 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
   ];
   const structured = (
     <View style={{ gap: 12 }}>
-      <View style={{ backgroundColor: '#fff', borderRadius: 22, borderWidth: 1, borderColor: P.line, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: P.accent, alignItems: 'center', justifyContent: 'center' }}><SlidersHorizontal size={20} color="#fff" /></View>
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontFamily: font.bold, fontSize: 16, lineHeight: 21, color: P.ink }}>Demo controls</Text>
-          <Text style={{ fontFamily: font.regular, fontSize: 12.5, lineHeight: 17, color: P.muted }}>Drive the prototype</Text>
-        </View>
-        <Pressable accessibilityRole="button" accessibilityLabel={open ? 'Collapse the controls' : 'Expand the controls'} onPress={() => setOpen((o) => !o)} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: P.tint, alignItems: 'center', justifyContent: 'center' }}>
-          {open ? <Minus size={18} color={P.muted} /> : <Plus size={18} color={P.muted} />}
-        </Pressable>
-      </View>
-      {!!note && <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, zIndex: 20, backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12, shadowColor: '#101828', shadowOpacity: 0.15, shadowRadius: 8 }}><Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
-      {open && (
-        <>
-          <PanelCard icon={period.icon} title={period.label}>
-            <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
-              <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: P.muted }}>Time of day</Text>
-              <Text style={{ fontFamily: font.bold, fontSize: 28, lineHeight: 34, letterSpacing: -0.6, color: P.ink }}>{hourLabel(d.min)}</Text>
-            </View>
-            <TimeSlider minutes={d.min} onPick={pickMinute} />
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-              <QuickTime icon={Sunrise} label="Breakfast" time="8:00 AM" onPress={() => pickMinute(480)} />
-              <QuickTime icon={Sun} label="Lunch" time="1:30 PM" onPress={() => pickMinute(810)} />
-              <QuickTime icon={Dumbbell} label="Workout" time="6:30 PM" onPress={() => pickMinute(1110)} />
-              <QuickTime icon={Moon} label="Night" time="9:30 PM" onPress={() => pickMinute(1290)} />
-            </View>
-          </PanelCard>
-
           <PanelCard icon={House} title="Situation" pill={{ label: sit.current }}>
             {seg('Today layout')}
             {seg('Situation')}
@@ -301,35 +249,15 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
               {SCREENS.map((sc) => <ScreenItem key={sc.label} icon={sc.icon} label={sc.label} on={sc.match(path)} onPress={() => go(sc.to, sc.label)} />)}
             </View>
           </PanelCard>
-        </>
-      )}
     </View>
   );
+  // Same design language as the structured version: the same card, chips, switches and buttons, just one flat list.
   const classic = (
-    <View style={{ gap: 14 }}>
-      <Text style={{ fontFamily: font.bold, fontSize: 16, lineHeight: 21, color: '#12151C' }}>Edge cases</Text>
-      {!!note && <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, zIndex: 20, backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12, shadowColor: '#101828', shadowOpacity: 0.15, shadowRadius: 8 }}><Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
-      {rows.map((r) => (
-        <View key={r.label} style={{ gap: 6 }}>
-          <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: '#5C6370' }}>{r.label}</Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-            {r.options.map((o) => {
-              const on = o === r.value;
-              return (
-                <Pressable key={o} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => r.onPick(o)}
-                  style={{ height: 32, paddingHorizontal: 12, borderRadius: 16, borderWidth: 1, borderColor: on ? '#12151C' : '#CBD2DC', backgroundColor: on ? '#12151C' : '#fff', justifyContent: 'center' }}>
-                  <Text style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 16, color: on ? '#fff' : '#12151C' }}>{o}</Text>
-                </Pressable>
-              );
-            })}
-          </View>
-        </View>
-      ))}
-      <View style={{ gap: 6 }}>
-        <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: '#5C6370' }}>Time of day</Text>
-        <ClassicTimeSlider minutes={d.min} onPick={pickMinute} />
-      </View>
-    </View>
+    <PanelCard icon={SlidersHorizontal} title="All controls">
+      {rows.map((r) => (r.value === '' && r.options.length > 0 && ['Redo today', 'Redo onboarding', 'Open a workout'].includes(r.label)
+        ? <Actions key={r.label} label={r.label} options={r.options} onPick={r.onPick} />
+        : <Choice key={r.label} label={r.label} options={r.options} value={r.value} onPick={r.onPick} />))}
+    </PanelCard>
   );
   const ver = panelUiStore.use().version;
   return (
@@ -342,7 +270,37 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
           </Pressable>
         ))}
       </View>
-      {ver === 'Structured' ? structured : classic}
+      <View style={{ backgroundColor: '#fff', borderRadius: 22, borderWidth: 1, borderColor: P.line, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: P.accent, alignItems: 'center', justifyContent: 'center' }}><SlidersHorizontal size={20} color="#fff" /></View>
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontFamily: font.bold, fontSize: 16, lineHeight: 21, color: P.ink }}>Demo controls</Text>
+          <Text style={{ fontFamily: font.regular, fontSize: 12.5, lineHeight: 17, color: P.muted }}>Drive the prototype</Text>
+        </View>
+        <Pressable accessibilityRole="button" accessibilityLabel={open ? 'Collapse the controls' : 'Expand the controls'} onPress={() => setOpen((o) => !o)} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: P.tint, alignItems: 'center', justifyContent: 'center' }}>
+          {open ? <Minus size={18} color={P.muted} /> : <Plus size={18} color={P.muted} />}
+        </Pressable>
+      </View>
+      {!!note && <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, zIndex: 20, backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12, shadowColor: '#101828', shadowOpacity: 0.15, shadowRadius: 8 }}><Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
+      {open && (
+        <>
+          <PanelCard icon={period.icon} title={period.label}>
+            <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
+              <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: P.muted }}>Time of day</Text>
+              <Text style={{ fontFamily: font.bold, fontSize: 28, lineHeight: 34, letterSpacing: -0.6, color: P.ink }}>{hourLabel(d.min)}</Text>
+            </View>
+            <TimeSlider minutes={d.min} onPick={pickMinute} />
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+              <QuickTime icon={Dumbbell} label="Workout" time={fmtT(plannedMin(state.profile.time)).full.toUpperCase()} onPress={() => pickMinute(plannedMin(state.profile.time))} />
+              <QuickTime icon={Sunrise} label="Breakfast" time="7:00 AM" onPress={() => pickMinute(420)} />
+              <QuickTime icon={Sun} label="Lunch" time="1:00 PM" onPress={() => pickMinute(780)} />
+              <QuickTime icon={Sunset} label="Snack" time="3:30 PM" onPress={() => pickMinute(930)} />
+              <QuickTime icon={UtensilsCrossed} label="Dinner" time="8:00 PM" onPress={() => pickMinute(1200)} />
+              <QuickTime icon={Moon} label="Night" time="10:30 PM" onPress={() => pickMinute(1350)} />
+            </View>
+          </PanelCard>
+          {ver === 'Structured' ? structured : classic}
+        </>
+      )}
     </View>
   );
 }

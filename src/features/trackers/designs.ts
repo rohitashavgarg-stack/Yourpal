@@ -10,8 +10,8 @@ export const CATALOG: { category: string; trackers: { key: TrackerKey; title: st
     { key: 'energy', title: 'Active energy', designs: ['Current', 'Dot matrix', 'Stack'] },
   ] },
   { category: 'Hydration and body', trackers: [
-    { key: 'water', title: 'Water', designs: ['Current', 'Dot matrix', 'Glasses'] },
     { key: 'weight', title: 'Weight', designs: ['Current', 'Dot matrix', 'Ruler'] },
+    { key: 'water', title: 'Water', designs: ['Current', 'Dot matrix', 'Glasses'] },
   ] },
   { category: 'Heart and recovery', trackers: [
     { key: 'hr', title: 'Heart rate', designs: ['Current', 'Dot matrix'] },

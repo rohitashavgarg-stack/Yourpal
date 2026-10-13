@@ -9,22 +9,22 @@ export const KCAL_TARGET = 1800;
 export const MACRO_TARGET = { p: 90, c: 230, f: 60 };
 
 export const MEALS: Meal[] = [
-  { id: 'bf', n: 'Breakfast', t: 480, items: [
+  { id: 'bf', n: 'Breakfast', t: 420, items: [
     { n: 'Poha with peanuts', q: '1 plate', k: 310, p: 8, c: 52, f: 11, type: 'veg' },
     { n: 'Curd', q: '1 katori', k: 100, p: 6, c: 7, f: 5, type: 'veg' },
   ] },
-  { id: 'lu', n: 'Lunch', t: 810, items: [
+  { id: 'lu', n: 'Lunch', t: 780, items: [
     { n: 'Roti', q: '2', k: 140, p: 4, c: 26, f: 1, type: 'veg' },
     { n: 'Dal tadka', q: '1 katori', k: 160, p: 9, c: 20, f: 4, type: 'veg' },
     { n: 'Mixed sabzi', q: '1 katori', k: 120, p: 3, c: 14, f: 6, type: 'veg' },
     { n: 'Curd', q: '1 katori', k: 100, p: 6, c: 7, f: 5, type: 'veg' },
   ] },
-  { id: 'sn', n: 'Evening snack', t: 1020, items: [
+  { id: 'sn', n: 'Evening snack', t: 930, items: [
     { n: 'Sprouts chaat', q: '1 bowl', k: 180, p: 10, c: 26, f: 2, type: 'veg' },
     { n: 'Almonds', q: '5', k: 35, p: 1, c: 1, f: 3, type: 'veg' },
     { n: 'Green tea', q: '1 cup', k: 5, p: 0, c: 1, f: 0, type: 'veg' },
   ] },
-  { id: 'dn', n: 'Dinner', t: 1230, items: [
+  { id: 'dn', n: 'Dinner', t: 1200, items: [
     { n: 'Paneer bhurji', q: '100 g', k: 290, p: 18, c: 8, f: 22, type: 'veg' },
     { n: 'Roti', q: '2', k: 140, p: 4, c: 26, f: 1, type: 'veg' },
     { n: 'Dal', q: '1 katori', k: 160, p: 9, c: 20, f: 4, type: 'veg' },

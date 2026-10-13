@@ -1,4 +1,4 @@
-import { bucketOf, Domain, mealsFor, useDomain } from '@/lib/domain';
+import { bucketOf, Domain, mealsAt, useDomain } from '@/lib/domain';
 import { streakStore, StreakMode } from '@/features/streak/data';
 
 // What can be true at the same time.
@@ -25,12 +25,12 @@ const clean = { wkScenario: 'Not started' as const, wkDone: null, session: null,
 
 // The full set of values a situation implies, plus a fitting time of day.
 export function situationPatch(s: Situation, d: Domain): { patch: Partial<Domain>; streak: { mode: StreakMode; earlier: number } } {
-  const at = (min: number): Partial<Domain> => ({ min, time: bucketOf(min), meals: mealsFor(bucketOf(min)), openMeal: null });
+  const at = (min: number): Partial<Domain> => ({ min, time: bucketOf(min), meals: mealsAt(min), openMeal: null });
   switch (s) {
     case 'With updates':
       return { patch: { ...clean, ...at(1100), todayVariant: 'With updates', water: 1.8 }, streak: { mode: 'Active', earlier: 1 } };
     case 'Comeback':
-      return { patch: { ...clean, ...NOT_AT_GYM, ...at(480), todayVariant: 'Comeback', water: 0, planReq: 'none' }, streak: { mode: 'Active', earlier: 0 } };
+      return { patch: { ...clean, ...NOT_AT_GYM, ...at(480), meals: {}, todayVariant: 'Comeback', water: 0, planReq: 'none' }, streak: { mode: 'Active', earlier: 0 } };
     case 'Workout done': {
       // checked in earlier and finished: the check-in times match the default workout (6:18 to 7:28 pm)
       return { patch: { ...clean, ...at(1230), todayVariant: 'Regular', wkScenario: 'Done', ci: 'Checked in', ciAt: 1098, ciStart: Date.now() - 132 * 60000, ciOut: { at: 1168, mins: 70 }, ciExtend: 0, ciHold: null, water: 2.2 }, streak: { mode: 'Active', earlier: 2 } };
@@ -38,7 +38,7 @@ export function situationPatch(s: Situation, d: Domain): { patch: Partial<Domain
     case 'Rest day':
       return { patch: { ...clean, ...NOT_AT_GYM, ...at(600), todayVariant: 'Regular', wkScenario: 'Rest day', water: 0.5 }, streak: { mode: 'Active', earlier: 1 } };
     case 'New member':
-      return { patch: { ...clean, ...NOT_AT_GYM, ...at(540), todayVariant: 'Regular', water: 0, weightLog: [] }, streak: { mode: 'New member', earlier: 0 } };
+      return { patch: { ...clean, ...NOT_AT_GYM, ...at(540), meals: {}, todayVariant: 'Regular', water: 0, weightLog: [] }, streak: { mode: 'New member', earlier: 0 } };
     default:
       return { patch: { ...clean, ...at(1100), todayVariant: 'Regular', ci: d.ci === 'Away' ? 'At the gym' : d.ci, water: 1.8 }, streak: { mode: 'Active', earlier: 1 } };
   }

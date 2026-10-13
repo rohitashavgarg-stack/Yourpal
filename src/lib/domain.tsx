@@ -63,13 +63,15 @@ export type Domain = {
 export const NOWS: Record<TimeOfDay, number> = { Morning: 520, Afternoon: 800, Evening: 1100 };
 export const ACTIVE_KCAL: Record<TimeOfDay, number> = { Morning: 60, Afternoon: 180, Evening: 320 };
 
-export function mealsFor(t: TimeOfDay): Partial<Record<MealId, MealLog>> {
-  // Morning: nothing eaten yet, so breakfast is what Today asks for. Later in the day the earlier meals are done.
-  const m: Partial<Record<MealId, MealLog>> = t === 'Morning' ? {} : { bf: { eaten: [0, 1], extra: [], repl: {}, at: 490 } };
-  if (t === 'Evening') m.lu = { eaten: [0, 1, 2], extra: [], repl: {}, at: 830 };
+// What has been eaten by a given minute of the day: every meal that was due more than 90 minutes ago, logged on time.
+export function mealsAt(min: number): Partial<Record<MealId, MealLog>> {
+  const m: Partial<Record<MealId, MealLog>> = {};
+  for (const q of MEALS) if (q.t + 90 <= min) m[q.id] = { eaten: q.items.map((_, i) => i), extra: [], repl: {}, at: q.t + 10 };
   return m;
 }
-
+export function mealsFor(t: TimeOfDay): Partial<Record<MealId, MealLog>> {
+  return mealsAt(NOWS[t]);
+}
 // Keeps the state believable. A comeback means no workout, no check-in and nothing running today; starting or finishing a workout ends the comeback;
 // a workout cannot run on a rest day. Whatever it had to switch off is named in autoNote.
 function settle(prev: Domain, next: Domain): Domain {
@@ -94,7 +96,7 @@ export function initialDomain(): Domain {
   return {
     time: 'Evening', min: 1100, todayVariant: 'Regular', awayDays: 4, autoNote: '', loading: false, hc: false, wearable: false, hasGym: true, askGym: false,
     water: 1.8, weight: 72.4, weightLog: [{ t: 'Mon 22', v: 72.6 }, { t: 'Tue 23', v: 72.5 }],
-    meals: mealsFor('Evening'), wkScenario: 'Not started', wkDone: null, session: null,
+    meals: mealsAt(1100), wkScenario: 'Not started', wkDone: null, session: null,
     ci: 'At the gym', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null, scanFails: false, dismissed: {}, plans: basePlans(), planReq: 'none', coachUpdated: false,
     goal: { type: 'Weight loss', target: 6, by: '30 Nov' }, membership: 'Active', assess: 'Two done', ptLeft: 8, onBreak: false,
     chat: [{ me: true, t: 'Is my squat depth ok?', ctx: 'Squat', meta: 'Yesterday · Seen' }, { me: false, t: 'Go to parallel. Film one set and send it.', meta: '2 hours ago' }],
@@ -121,7 +123,8 @@ export function useDomain() {
 
 // ---------- Derived helpers used by several screens ----------
 // When the member trains, from the time of day they chose in onboarding (minutes since midnight).
-export const PLAN_MIN: Record<string, number> = { 'Early morning': 390, Morning: 420, Afternoon: 780, Evening: 1110, 'Changes a lot': 1110 };
+// Early morning 6:00 am, Morning 9:30 am, Afternoon 4:30 pm, Evening 6:30 pm: each sits between the meal times (7:00, 1:00, 3:30, 8:00).
+export const PLAN_MIN: Record<string, number> = { 'Early morning': 360, Morning: 570, Afternoon: 990, Evening: 1110, 'Changes a lot': 1110 };
 export const plannedMin = (time?: string) => PLAN_MIN[time ?? ''] ?? PLAN_MIN.Evening;
 export const bucketOf = (m: number): TimeOfDay => (m < 720 ? 'Morning' : m < 1020 ? 'Afternoon' : 'Evening');
 export const nowMin = (d: Domain) => d.min;

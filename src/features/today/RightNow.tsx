@@ -29,6 +29,9 @@ type Focus =
 
 const open = (d: ReturnType<typeof useDomain>['d'], m: Meal) => { const x = mealLog(d, m.id); return !x.skip && x.eaten.length === 0 && x.extra.length === 0; };
 
+// The day as a timeline: workout at the member's time, then breakfast 7:00, lunch 1:00, evening snack 3:30, dinner 8:00.
+// Right now is the event that has just started (from 30 min before it): at 6 the workout, at 7 breakfast, at 1 lunch, at 3 to 4 the snack, at 8 dinner.
+// When two overlap, the later one wins. Between events it says what is next; a workout that was skipped stays as a gentle nudge.
 function pickFocus(d: ReturnType<typeof useDomain>['d'], plan: number, restart: boolean): Focus {
   const now = d.min;
   const st = workoutState(d);
@@ -37,15 +40,15 @@ function pickFocus(d: ReturnType<typeof useDomain>['d'], plan: number, restart: 
   if (restart && d.todayVariant === 'Comeback') return { kind: 'restart' };
   if (st === 'live') return { kind: 'live' };
   const wkTodo = st === 'todo';
-  if (wkTodo && now >= plan - 60 && now <= plan + 120) return { kind: 'workout', diff: plan - now };
-  const meal = MEALS.find((m) => open(d, m) && now >= m.t - 60 && now <= m.t + 180);
-  if (meal) return { kind: 'meal', meal };
-  if (wkTodo && now > plan + 120 && now < 1380) return { kind: 'late', diff: plan - now };
-  const upcoming: { what: 'workout' | 'meal'; label: string; at: number }[] = [];
-  if (wkTodo && plan > now) upcoming.push({ what: 'workout', label: 'Workout', at: plan });
-  MEALS.forEach((m) => { if (open(d, m) && m.t > now) upcoming.push({ what: 'meal', label: m.n, at: m.t }); });
-  upcoming.sort((a, b) => a.at - b.at);
-  if (upcoming.length) return { kind: 'next', ...upcoming[0] };
+  type Ev = { t: number; end: number; wk?: true; meal?: Meal };
+  const evs: Ev[] = [];
+  if (wkTodo) evs.push({ t: plan, end: plan + 120, wk: true });
+  MEALS.forEach((m) => { if (open(d, m)) evs.push({ t: m.t, end: m.t + 90, meal: m }); });
+  const now_ = evs.filter((e) => now >= e.t - 30 && now <= e.end).sort((a, b) => b.t - a.t)[0];
+  if (now_) return now_.wk ? { kind: 'workout', diff: plan - now } : { kind: 'meal', meal: now_.meal! };
+  const upcoming = evs.filter((e) => e.t > now).sort((a, b) => a.t - b.t)[0];
+  if (wkTodo && now > plan + 120 && now < 1380 && !(upcoming && upcoming.t - now <= 90)) return { kind: 'late', diff: plan - now };
+  if (upcoming) return { kind: 'next', what: upcoming.wk ? 'workout' : 'meal', label: upcoming.wk ? 'Workout' : upcoming.meal!.n, at: upcoming.t };
   return { kind: 'wrap' };
 }
 

@@ -6,7 +6,7 @@ import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Skeleton } from '@/components/bits';
 import { useToastLift } from '@/components/Overlay';
-import { CheckInScenario, mealsFor, NOWS, TimeOfDay, useDomain } from '@/lib/domain';
+import { CheckInScenario, mealsAt, mealsFor, NOWS, TimeOfDay, useDomain } from '@/lib/domain';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -80,7 +80,7 @@ export default function Today() {
     actions: [
       ...ciActions,
       { label: 'Show loading state', run: () => load(1400) },
-      { label: 'Reset meals for this time of day', run: () => set({ meals: mealsFor(d.time), openMeal: null }) },
+      { label: 'Reset meals for this time of day', run: () => set({ meals: mealsAt(d.min), openMeal: null }) },
     ],
   }, [layout, d.todayVariant, d.hc, d.time, d.wkScenario, d.wkDone, d.ci, d.scanFails, d.session, d.ciStart, d.ciOut, d.ciExtend, gs.design, gs.pace, st.design, gv.version, gv.scenario, d.goal]);
 
