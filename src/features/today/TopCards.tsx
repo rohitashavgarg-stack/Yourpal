@@ -194,15 +194,36 @@ export function UpdatesCard() {
   const { live, dismiss } = useUpdates();
   const [idx, setIdx] = useState(0);
   const [planOpen, setPlanOpen] = useState(false);
-  if (!live.length) return null;
-  const i = Math.min(idx, live.length - 1);
+  const i = Math.min(idx, Math.max(0, live.length - 1));
   const u = live[i];
+  // Swipe left for the next update, right for the previous one. The card follows the finger and fades; on release it slides out,
+  // then the next update is wiped in from the side the finger came from. One light tap of haptic per change, no arrow button.
+  const tx = useSharedValue(0);
+  const reveal = useSharedValue(1);
+  const [boxW, setBoxW] = useState(0);
+  const [fromRight, setFromRight] = useState(true);
+  const commit = (dir: 1 | -1) => {
+    setPlanOpen(false);
+    haptic.light();
+    setIdx((i + dir + live.length) % live.length);
+    setFromRight(dir === 1);
+    tx.value = 0;
+    reveal.value = 0; // the new update is uncovered from the edge it came in from
+    reveal.value = withTiming(1, { duration: 260, easing: Easing.out(Easing.cubic) });
+  };
+  const many = live.length > 1;
+  const swipe = Gesture.Pan().enabled(many).activeOffsetX([-18, 18]).failOffsetY([-14, 14])
+    .onUpdate((e) => { tx.value = e.translationX * 0.8; })
+    .onEnd((e) => {
+      const dir = e.translationX < -45 || e.velocityX < -600 ? 1 : e.translationX > 45 || e.velocityX > 600 ? -1 : 0;
+      if (dir === 0) { tx.value = withTiming(0, { duration: 180, easing: Easing.out(Easing.cubic) }); return; }
+      tx.value = withTiming(-dir * 90, { duration: 140, easing: Easing.in(Easing.cubic) }, (fin) => { if (fin) scheduleOnRN(commit, dir); });
+    });
+  const slide = useAnimatedStyle(() => ({ transform: [{ translateX: tx.value }], opacity: 1 - Math.min(1, Math.abs(tx.value) / 120) }));
+  const wipe = useAnimatedStyle(() => ({ width: boxW ? boxW * reveal.value : undefined }));
+  if (!u) return null;
   const btn = u.isPlan ? (planOpen ? 'Hide changes' : 'See changes') : u.btn;
   const act = u.isPlan ? () => setPlanOpen((o) => !o) : u.act;
-  // Swipe the update left for the next one, right for the previous one (no arrow button).
-  const go = (dir: 1 | -1) => { if (live.length < 2) return; setPlanOpen(false); haptic.light(); setIdx((i + dir + live.length) % live.length); };
-  const swipe = Gesture.Pan().activeOffsetX([-18, 18]).failOffsetY([-14, 14])
-    .onEnd((e) => { if (e.translationX < -45 || e.velocityX < -600) scheduleOnRN(go, 1); else if (e.translationX > 45 || e.velocityX > 600) scheduleOnRN(go, -1); });
   return (
     <Card style={{ paddingTop: 16, paddingHorizontal: 16, paddingBottom: 12, gap: 12 }}>
       <Row style={{ justifyContent: 'space-between' }}>
@@ -215,8 +236,10 @@ export function UpdatesCard() {
         </Pressy>
       </Row>
       <GestureDetector gesture={swipe}>
-        <View style={{ gap: 12 }}>
-      <Animated.View key={u.key} entering={fade()} style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
+        <Animated.View onLayout={(e) => setBoxW(e.nativeEvent.layout.width)} style={[{ gap: 12 }, slide]}>
+          <Animated.View style={[{ overflow: 'hidden', alignSelf: fromRight ? 'flex-end' : 'flex-start' }, wipe]}>
+            <View style={{ width: boxW || undefined, gap: 12, alignSelf: fromRight ? 'flex-end' : 'flex-start' }}>
+      <Animated.View key={u.key} style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
         <UpdIcon u={u} />
         <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold }}>{u.title}</Txt>
@@ -238,7 +261,9 @@ export function UpdatesCard() {
           </>
         )}
       </Row>
-        </View>
+            </View>
+          </Animated.View>
+        </Animated.View>
       </GestureDetector>
     </Card>
   );
