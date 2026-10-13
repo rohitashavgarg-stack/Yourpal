@@ -86,3 +86,8 @@ export { default as ArrowRight } from 'lucide-react-native/icons/arrow-right';
 export { default as Droplet } from 'lucide-react-native/icons/droplet';
 export { default as Maximize2 } from 'lucide-react-native/icons/maximize-2';
 export { default as Minimize2 } from 'lucide-react-native/icons/minimize-2';
+export { default as Sunrise } from 'lucide-react-native/icons/sunrise';
+export { default as Sunset } from 'lucide-react-native/icons/sunset';
+export { default as UserRound } from 'lucide-react-native/icons/user-round';
+export { default as LogIn } from 'lucide-react-native/icons/log-in';
+export { default as Flag } from 'lucide-react-native/icons/flag';

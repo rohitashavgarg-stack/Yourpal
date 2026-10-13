@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs -- the panel passes its handlers (which use a ref for the note timer) straight to its buttons */
 import React, { useEffect, useState , useRef} from 'react';
 import { useShell } from '@/features/shell/state';
 import { router } from 'expo-router';
@@ -13,9 +14,15 @@ import { WEEK_TARGET } from '@/features/streak/data';
 import { font } from '@/theme/tokens';
 import { useOverlay } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
-import { SlidersHorizontal } from '@/lib/icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { createStore } from '@/lib/createStore';
+import { usePathname } from 'expo-router';
+import { ChartLine, Dumbbell, Flag, House, LogIn, MapPin, MessageCircle, Minus, Moon, Plus, SlidersHorizontal, Sun, Sunrise, Sunset, UserRound } from '@/lib/icons';
+import { Actions, Choice, PanelCard, QuickTime, ScreenItem, P } from '@/web/ControlParts';
 
 const PHONE_W = 390, PHONE_H = 844;
+// Which version of the edge-case panel is showing: the first one (a long list) or the structured one (cards).
+export const panelUiStore = createStore(() => ({ version: 'Classic' as 'Classic' | 'Structured' }));
 
 export function useIsWideWeb() {
   const w = useWindow();
@@ -79,17 +86,43 @@ function StatusBarMock() {
   );
 }
 
-// A three-stop slider for the time of day (Morning, Afternoon, Evening). Tap or drag along the track.
-const hourLabel = (m: number) => { const h = Math.floor(m / 60); return `${((h + 11) % 12) + 1}:${String(m % 60).padStart(2, '0')} ${h >= 12 ? 'pm' : 'am'}`; };
-// Hourly slider: 0 to 23, drag or tap anywhere on the track. The whole app follows the hour.
+const hourLabel = (m: number) => { const h = Math.floor(m / 60); return `${((h + 11) % 12) + 1}:${String(m % 60).padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`; };
+// Hourly slider on a day-colour track: drag or tap anywhere. The whole app follows the time.
 function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number) => void }) {
+  const [w, setW] = useState(0);
+  const hour = Math.max(0, Math.min(23, Math.floor(minutes / 60)));
+  const from = (x: number) => { if (w <= 0) return; const h = Math.max(0, Math.min(23, Math.round((x / w) * 23))); if (h !== hour) onPick(h * 60); };
+  const pct = Math.min(100, (minutes / 1380) * 100);
+  return (
+    <View style={{ gap: 6 }}>
+      <View accessibilityRole="adjustable" accessibilityLabel={`Time of day, ${hourLabel(minutes)}`} accessibilityValue={{ text: hourLabel(minutes) }}
+        onLayout={(e) => setW(e.nativeEvent.layout.width)}
+        onStartShouldSetResponder={() => true} onMoveShouldSetResponder={() => true}
+        onResponderGrant={(e) => from(e.nativeEvent.locationX)} onResponderMove={(e) => from(e.nativeEvent.locationX)}
+        style={{ height: 30, justifyContent: 'center' }}>
+        <View pointerEvents="none" style={{ height: 8, borderRadius: 4, overflow: 'hidden' }}>
+          <LinearGradient colors={['#3B3F9E', '#F6B58B', '#BFD9F4', '#6C7BD6', '#3B3F9E']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ height: 8 }} />
+        </View>
+        <View pointerEvents="none" style={{ position: 'absolute', left: `${pct}%`, marginLeft: -11, top: 4, width: 22, height: 22, borderRadius: 11, backgroundColor: '#fff', borderWidth: 2, borderColor: P.ink, shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } }} />
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        {['12a', '6a', '12p', '6p', '12a'].map((l, i) => <Text key={l + i} style={{ fontFamily: font.regular, fontSize: 11, lineHeight: 15, color: P.muted }}>{l}</Text>)}
+      </View>
+    </View>
+  );
+}
+
+// The first version of the panel keeps its own slider.
+const classicHour = (m: number) => { const h = Math.floor(m / 60); return `${((h + 11) % 12) + 1}:${String(m % 60).padStart(2, '0')} ${h >= 12 ? 'pm' : 'am'}`; };
+// Hourly slider: 0 to 23, drag or tap anywhere on the track. The whole app follows the hour.
+function ClassicTimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number) => void }) {
   const [w, setW] = useState(0);
   const hour = Math.max(0, Math.min(23, Math.floor(minutes / 60)));
   const from = (x: number) => { if (w <= 0) return; const h = Math.max(0, Math.min(23, Math.round((x / w) * 23))); if (h !== hour) onPick(h * 60); };
   const pct = (hour / 23) * 100;
   return (
     <View style={{ gap: 8 }}>
-      <View accessibilityRole="adjustable" accessibilityLabel={`Time of day, ${hourLabel(minutes)}`} accessibilityValue={{ text: hourLabel(minutes) }}
+      <View accessibilityRole="adjustable" accessibilityLabel={`Time of day, ${classicHour(minutes)}`} accessibilityValue={{ text: classicHour(minutes) }}
         onLayout={(e) => setW(e.nativeEvent.layout.width)}
         onStartShouldSetResponder={() => true} onMoveShouldSetResponder={() => true}
         onResponderGrant={(e) => from(e.nativeEvent.locationX)} onResponderMove={(e) => from(e.nativeEvent.locationX)}
@@ -103,7 +136,7 @@ function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         {['12 am', '6 am', '12 pm', '6 pm', '11 pm'].map((l) => <Text key={l} style={{ fontFamily: font.regular, fontSize: 11, lineHeight: 15, color: '#5C6370' }}>{l}</Text>)}
       </View>
-      <Text style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 19, color: '#12151C' }}>{hourLabel(minutes)}</Text>
+      <Text style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 19, color: '#12151C' }}>{classicHour(minutes)}</Text>
     </View>
   );
 }
@@ -168,7 +201,92 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
     { label: 'Health (steps)', options: ['Connected', 'Not connected'], value: d.hc ? 'Connected' : 'Not connected', onPick: (v: string) => set({ hc: v === 'Connected' }) },
     { label: 'Wearable (heart rate, sleep, energy)', options: ['Has a wearable', 'No wearable'], value: d.wearable ? 'Has a wearable' : 'No wearable', onPick: (v: string) => set({ wearable: v === 'Has a wearable' }) },
   ];
-  return (
+  const row = (label: string) => rows.find((r) => r.label === label)!;
+  const seg = (label: string) => { const r = row(label); return <Choice key={label} label={r.label} options={r.options} value={r.value} onPick={r.onPick} />; };
+  const act = (label: string) => { const r = row(label); return <Actions key={label} label={r.label} options={r.options} onPick={r.onPick} />; };
+  const path = usePathname();
+  const [open, setOpen] = useState(true);
+  const hour = Math.floor(d.min / 60);
+  const period = hour >= 21 || hour < 5 ? { label: 'Night', icon: Moon } : hour < 12 ? { label: 'Morning', icon: Sunrise } : hour < 17 ? { label: 'Afternoon', icon: Sun } : { label: 'Evening', icon: Sunset };
+  const go = (to: string, name: string) => { router.navigate(to as any); said(`Opened ${name}`); };
+  const SCREENS: { label: string; icon: any; to: string; match: (p: string) => boolean }[] = [
+    { label: 'Dashboard', icon: House, to: '/(tabs)', match: (p) => p === '/' || p === '/index' || p === '/(tabs)' },
+    { label: 'Plans', icon: Dumbbell, to: '/(tabs)/plans', match: (p) => p.startsWith('/plans') },
+    { label: 'Progress', icon: ChartLine, to: '/(tabs)/progress', match: (p) => p.startsWith('/progress') },
+    { label: 'Gym', icon: MapPin, to: '/(tabs)/gym', match: (p) => p.startsWith('/gym') },
+    { label: 'Coach', icon: MessageCircle, to: '/coach', match: (p) => p.startsWith('/coach') },
+    { label: 'Profile', icon: UserRound, to: '/profile', match: (p) => p.startsWith('/profile') },
+    { label: 'Check-in', icon: Flag, to: '/checkin', match: (p) => p.startsWith('/checkin') },
+    { label: 'Login', icon: LogIn, to: '/login', match: (p) => p.startsWith('/login') || p.startsWith('/welcome') },
+  ];
+  const structured = (
+    <View style={{ gap: 12 }}>
+      <View style={{ backgroundColor: '#fff', borderRadius: 22, borderWidth: 1, borderColor: P.line, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: P.accent, alignItems: 'center', justifyContent: 'center' }}><SlidersHorizontal size={20} color="#fff" /></View>
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontFamily: font.bold, fontSize: 16, lineHeight: 21, color: P.ink }}>Demo controls</Text>
+          <Text style={{ fontFamily: font.regular, fontSize: 12.5, lineHeight: 17, color: P.muted }}>Drive the prototype</Text>
+        </View>
+        <Pressable accessibilityRole="button" accessibilityLabel={open ? 'Collapse the controls' : 'Expand the controls'} onPress={() => setOpen((o) => !o)} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: P.tint, alignItems: 'center', justifyContent: 'center' }}>
+          {open ? <Minus size={18} color={P.muted} /> : <Plus size={18} color={P.muted} />}
+        </Pressable>
+      </View>
+      {!!note && <View style={{ backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
+      {open && (
+        <>
+          <PanelCard icon={period.icon} title={period.label}>
+            <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
+              <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: P.muted }}>Time of day</Text>
+              <Text style={{ fontFamily: font.bold, fontSize: 28, lineHeight: 34, letterSpacing: -0.6, color: P.ink }}>{hourLabel(d.min)}</Text>
+            </View>
+            <TimeSlider minutes={d.min} onPick={pickMinute} />
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+              <QuickTime icon={Sunrise} label="Breakfast" time="8:00 AM" onPress={() => pickMinute(480)} />
+              <QuickTime icon={Sun} label="Lunch" time="1:30 PM" onPress={() => pickMinute(810)} />
+              <QuickTime icon={Dumbbell} label="Workout" time="6:30 PM" onPress={() => pickMinute(1110)} />
+              <QuickTime icon={Moon} label="Night" time="9:30 PM" onPress={() => pickMinute(1290)} />
+            </View>
+          </PanelCard>
+
+          <PanelCard icon={UserRound} title="Member" pill={{ label: state.sc.member }}>
+            {seg('Member type')}
+            {seg('Goal type')}
+            {seg('Gym')}
+            {seg('Health (steps)')}
+            {seg('Wearable (heart rate, sleep, energy)')}
+          </PanelCard>
+
+          <PanelCard icon={House} title="Today" pill={{ label: d.todayVariant }}>
+            {seg('Today shows')}
+            {act('Redo today')}
+          </PanelCard>
+
+          <PanelCard icon={Dumbbell} title="Workout">
+            {seg('Workout design')}
+            {act('Open a workout')}
+          </PanelCard>
+
+          <PanelCard icon={Sun} title="Look" pill={{ label: isDark ? 'Dark' : 'Light' }}>
+            {seg('Theme')}
+            {seg('Steps tracker design')}
+          </PanelCard>
+
+          <PanelCard icon={LogIn} title="Login and onboarding">
+            {seg('Programme choice screen (login)')}
+            {seg('Gym choice in onboarding')}
+            {act('Redo onboarding')}
+          </PanelCard>
+
+          <PanelCard icon={Flag} title="Screen">
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
+              {SCREENS.map((sc) => <ScreenItem key={sc.label} icon={sc.icon} label={sc.label} on={sc.match(path)} onPress={() => go(sc.to, sc.label)} />)}
+            </View>
+          </PanelCard>
+        </>
+      )}
+    </View>
+  );
+  const classic = (
     <View style={{ gap: 14 }}>
       <Text style={{ fontFamily: font.bold, fontSize: 16, lineHeight: 21, color: '#12151C' }}>Edge cases</Text>
       {!!note && <View style={{ backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
@@ -190,8 +308,22 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
       ))}
       <View style={{ gap: 6 }}>
         <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: '#5C6370' }}>Time of day</Text>
-        <TimeSlider minutes={d.min} onPick={pickMinute} />
+        <ClassicTimeSlider minutes={d.min} onPick={pickMinute} />
       </View>
+    </View>
+  );
+  const ver = panelUiStore.use().version;
+  return (
+    <View style={{ gap: 12 }}>
+      <View style={{ flexDirection: 'row', padding: 3, borderRadius: 14, backgroundColor: P.tint, gap: 2 }}>
+        {(['Classic', 'Structured'] as const).map((v) => (
+          <Pressable key={v} accessibilityRole="tab" accessibilityState={{ selected: ver === v }} onPress={() => panelUiStore.set({ version: v })}
+            style={[{ flex: 1, minHeight: 34, borderRadius: 11, alignItems: 'center', justifyContent: 'center' }, ver === v && { backgroundColor: '#fff' }]}>
+            <Text style={{ fontFamily: ver === v ? font.semibold : font.medium, fontSize: 12.5, lineHeight: 17, color: ver === v ? P.accent : P.muted }}>{v}</Text>
+          </Pressable>
+        ))}
+      </View>
+      {ver === 'Structured' ? structured : classic}
     </View>
   );
 }
