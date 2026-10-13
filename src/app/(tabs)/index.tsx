@@ -111,7 +111,6 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             <Enter i={0}><GoalCard soft /></Enter>
             <Enter i={1}><ForYouStack /></Enter>
             {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}
-            {primary === 'restart' && <Enter i={1}><WorkoutCard restart /></Enter>}
             {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
             {primary === 'meals' && <Enter i={1}><MealsCard timeline /></Enter>}
             {primary === 'wrap' && <Enter i={1}><WeekCard /></Enter>}

@@ -5,7 +5,8 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import { router } from 'expo-router';
 import Svg, { Circle } from 'react-native-svg';
-import { CreditCard, X } from '@/lib/icons';
+import { CreditCard, Dumbbell, X } from '@/lib/icons';
+import { useStartWorkout } from '@/features/workout/StartSheet';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { useOverlay } from '@/components/Overlay';
@@ -66,9 +67,12 @@ export function useForYou(): Item[] {
   const pay = usePaymentNotice();
   const ptPending = usePtPending();
   const { live } = useUpdates();
+  const start = useStartWorkout();
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
   if (pay) out.push({ key: 'pay', title: pay.title, body: pay.sub, critical: d.membership !== 'Expiring', tone: pay.tone === 'accent' ? 'accent' : pay.tone === 'warn' ? 'warn' : 'muted', icon: CreditCard, btn: 'View membership', act: () => router.push('/gym/membership') });
+  // After a break the way back is one stack item: the workout card (and the member's plan) stays exactly as it was, nothing is renamed or hidden-then-replaced.
+  if (d.todayVariant === 'Comeback') out.push({ key: 'comeback', title: 'Your easy comeback plan', body: 'About 30 min · 5 exercises · lighter weights. Your usual plan is right where you left it.', critical: true, tone: 'accent', icon: Dumbbell, btn: 'Start easy session', act: start });
   if (ptPending && d.hasGym) out.push({ key: 'pt', title: 'Confirm your PT session', body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', critical: true, tone: 'accent', who: true, two: true });
   const order = ['reassess', 'reply', 'plan', 'log'];
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {

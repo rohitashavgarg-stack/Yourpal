@@ -98,7 +98,7 @@ export function GoalCard({ soft = false }: { soft?: boolean } = {}) {
           <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)' }}>Your goal</Txt><ChevronRight size={18} color="#fff" /></Row>
           <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: soft ? 26 : 30, lineHeight: soft ? 30 : 34, color: '#fff' }}>{goal}</Txt>
           <Txt style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>{sub}</Txt>
-          <StatusChip g={g2} fg={soft ? '#2A4A8A' : '#1B3FB8'} />
+          <StatusChip g={g2} fg={soft ? '#1F3F86' : '#1B3FB8'} />
         </View>
       </LinearGradient>
     </Pressy>
