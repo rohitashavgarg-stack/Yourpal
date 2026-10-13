@@ -46,7 +46,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   const live = st === 'done' || st === 'live';
   const chips = st === 'rest' ? ['Recovery day', `Next: Pull · Thu ${fmtT(WKT).full}`] : restart && st0 === 'hidden' ? ['5 exercises', '~30 min', 'Lighter weights'] : [`${buildExercises().length} exercises`, `~${WORKOUT_MIN} min`, ...(d.hc && d.wearable ? ['~350 kcal'] : [])];
   const did = st === 'done' ? `${fmtT(done.a).hm} – ${fmtT(done.b).full}` : st === 'live' ? `Started · ${elapsed}` : st === 'rest' ? 'A walk counts' : 'Not yet';
-  const cta = st === 'todo' ? (restart && st0 === 'hidden' ? 'Start easy session' : 'Start workout') : st === 'live' ? 'Resume workout' : null;
+  const cta = st === 'todo' ? (restart && st0 === 'hidden' ? 'Start my comeback plan' : 'Start workout') : st === 'live' ? 'Resume workout' : null;
   const mins = Math.max(1, Math.round(done.b - done.a));
   const onCta = () => (st === 'live' ? router.push('/workout') : startWorkout());
 
@@ -83,7 +83,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
         </>
       ) : (
         <>
-          <Txt style={{ fontFamily: font.regular, fontSize: 40, letterSpacing: -1.8, lineHeight: 42, color: '#fff' }}>{st === 'rest' ? 'Rest day' : restart && st0 === 'hidden' ? 'Easy restart' : 'Leg day'}</Txt>
+          <Txt style={{ fontFamily: font.regular, fontSize: 40, letterSpacing: -1.8, lineHeight: 42, color: '#fff' }}>{st === 'rest' ? 'Rest day' : restart && st0 === 'hidden' ? 'Easy comeback plan' : 'Leg day'}</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>{chips.map((t) => <Chip key={t} label={t} onDark />)}</Row>
           <Row style={{ gap: 8 }}>
             <Tile k="Planned" v={st === 'rest' ? 'No workout' : restart && st0 === 'hidden' ? 'Whenever you are ready' : fmtT(WKT).full} />

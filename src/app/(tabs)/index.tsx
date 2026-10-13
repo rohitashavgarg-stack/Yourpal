@@ -105,7 +105,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           </>
         ) : isNew ? (
           <>
-            {d.todayVariant === 'Comeback' && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>{`Great to have you back after ${d.awayDays} days.`}</Txt></Enter>}
+            {d.todayVariant === 'Comeback' && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>{`We missed you these ${d.awayDays} days. Let's start with an easy comeback plan.`}</Txt></Enter>}
             <Enter i={0}><GoalStrip /></Enter>
             <Enter i={1}><ForYouStack /></Enter>
             {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}

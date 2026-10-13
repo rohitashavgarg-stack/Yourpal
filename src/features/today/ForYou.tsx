@@ -146,6 +146,9 @@ export function ForYouStack() {
   const front = useAnimatedStyle(() => ({ transform: [{ translateX: tx.value }, { rotate: `${tx.value / 40}deg` }] }));
   const second = useAnimatedStyle(() => ({ transform: [{ translateY: 18 * (1 - p.value) }, { scale: 0.93 + 0.07 * p.value }] }));
   const third = useAnimatedStyle(() => ({ transform: [{ translateY: 34 - 16 * p.value }, { scale: 0.86 + 0.07 * p.value }] }));
+  // The cards behind show no text while they wait (only their edge); the text fades in as the front card leaves and they move up.
+  const contentSecond = useAnimatedStyle(() => ({ opacity: Math.max(0, (p.value - 0.35) / 0.65) }));
+  const contentThird = useAnimatedStyle(() => ({ opacity: 0 }));
   const washSecond = useAnimatedStyle(() => ({ opacity: 0.6 * (1 - p.value) }));
   const washThird = useAnimatedStyle(() => ({ opacity: 0.85 - 0.4 * p.value }));
   if (!n) return null;
@@ -156,14 +159,14 @@ export function ForYouStack() {
       <View>
         {/* behind the front card: real cards, the same size, squeezed and pushed down so only their edges show */}
         {n > 2 && (
-          <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, height: h || undefined, overflow: 'hidden', borderRadius: 24, borderWidth: 1, borderColor: c.line }, third]}>
-            <ItemCard it={peek(2)} i={(i + 2) % n} n={n} onDismiss={() => {}} />
+          <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, height: h || undefined, overflow: 'hidden', borderRadius: 24, borderWidth: 1, borderColor: c.line, backgroundColor: c.surface }, third]}>
+            <Animated.View style={contentThird}><ItemCard it={peek(2)} i={(i + 2) % n} n={n} onDismiss={() => {}} /></Animated.View>
             <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: c.surface3 }, washThird]} />
           </Animated.View>
         )}
         {many && (
-          <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, height: h || undefined, overflow: 'hidden', borderRadius: 24, borderWidth: 1, borderColor: c.line }, second]}>
-            <ItemCard it={peek(1)} i={(i + 1) % n} n={n} onDismiss={() => {}} />
+          <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, height: h || undefined, overflow: 'hidden', borderRadius: 24, borderWidth: 1, borderColor: c.line, backgroundColor: c.surface }, second]}>
+            <Animated.View style={contentSecond}><ItemCard it={peek(1)} i={(i + 1) % n} n={n} onDismiss={() => {}} /></Animated.View>
             <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: c.surface3 }, washSecond]} />
           </Animated.View>
         )}
