@@ -168,6 +168,12 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
     { label: 'Goal type', options: ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness', 'Not sure yet'], value: type, onPick: pickGoal },
     // What the member sees at the top of Today: a normal day, the updates card (plan changes, messages), or the welcome-back card after a break.
     { label: 'Today shows', options: ['Regular', 'With updates', 'Comeback'], value: d.todayVariant, onPick: (v: string) => set({ todayVariant: v as any, dismissed: {} }) },
+    // When the member trains: Today's Right now card, the Workout card and This week follow it. Set in onboarding (Schedule).
+    { label: 'Workout time', options: ['Early morning', 'Morning', 'Afternoon', 'Evening'], value: state.profile.time || 'Evening', onPick: (v: string) => setProfile({ time: v }) },
+    // Payment: what Today shows above everything when the membership needs attention.
+    { label: 'Membership', options: ['Active', 'Expiring', 'Grace', 'Grace over'], value: d.membership, onPick: (v: string) => set({ membership: v as any }) },
+    // Comeback: how long the member has been away.
+    { label: 'Days away (Comeback)', options: ['2 days', '4 days', '8 days', '15 days'], value: d.todayVariant === 'Comeback' ? `${d.awayDays} days` : '', onPick: (v: string) => set({ awayDays: parseInt(v, 10), todayVariant: 'Comeback', dismissed: {} }) },
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },
     { label: 'Theme', options: ['Light', 'Dark'], value: isDark ? 'Dark' : 'Light', onPick: (v: string) => setSc({ theme: v as any }) },
     { label: 'Steps tracker design', options: STEPS_DESIGNS as string[], value: steps.design, onPick: (v: string) => stepsStore.set({ design: v as StepsDesign }) },
@@ -250,6 +256,8 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
 
           <PanelCard icon={UserRound} title="Member" pill={{ label: state.sc.member }}>
             {seg('Member type')}
+            {seg('Workout time')}
+            {seg('Membership')}
             {seg('Goal type')}
             {seg('Gym')}
             {seg('Health (steps)')}
@@ -258,6 +266,7 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
 
           <PanelCard icon={House} title="Today" pill={{ label: d.todayVariant }}>
             {seg('Today shows')}
+            {seg('Days away (Comeback)')}
             {act('Redo today')}
           </PanelCard>
 

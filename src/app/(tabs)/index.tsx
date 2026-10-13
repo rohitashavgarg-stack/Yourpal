@@ -16,6 +16,8 @@ import { Trackers } from '@/features/today/Trackers';
 import { WorkoutCard } from '@/features/today/WorkoutCard';
 import { MealsCard } from '@/features/today/MealsCard';
 import { WeekCard } from '@/features/today/WeekCard';
+import { RightNow } from '@/features/today/RightNow';
+import { PaymentBanner } from '@/features/today/PaymentBanner';
 import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
 
@@ -91,11 +93,13 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           </>
         ) : (
           <>
+            <Enter i={0}><PaymentBanner /></Enter>
             {ptPending && d.hasGym && <Enter i={0}><PtConfirmCard /></Enter>}
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
+            {d.todayVariant === 'Comeback' && <Enter i={1}><ComebackCard /></Enter>}
+            <Enter i={1}><RightNow /></Enter>
             <Enter i={1}><StreakChip /></Enter>
             <Enter i={1}>{gv.version === 'Version 2' ? <GoalCard2 size="compact" /> : <GoalSwitch />}</Enter>
-            {d.todayVariant === 'Comeback' && <Enter i={2}><ComebackCard /></Enter>}
             <Enter i={2}><Trackers /></Enter>
             <Enter i={3}><WorkoutCard /></Enter>
             <Enter i={4}><MealsCard /></Enter>

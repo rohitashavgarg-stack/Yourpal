@@ -24,6 +24,7 @@ export type Domain = {
   time: TimeOfDay; // the part of the day, derived from min
   min: number; // minutes since midnight: the app's "now" (set by the hourly slider in the edge-case panel)
   todayVariant: 'Regular' | 'With updates' | 'Comeback';
+  awayDays: number; // Comeback: days since the last session
   loading: boolean;
   hc: boolean; // the phone's health store is connected (steps)
   hasGym: boolean; // the member belongs to a gym: Gym tab, check-in, coach, facility step in onboarding
@@ -62,14 +63,15 @@ export const NOWS: Record<TimeOfDay, number> = { Morning: 520, Afternoon: 800, E
 export const ACTIVE_KCAL: Record<TimeOfDay, number> = { Morning: 60, Afternoon: 180, Evening: 320 };
 
 export function mealsFor(t: TimeOfDay): Partial<Record<MealId, MealLog>> {
-  const m: Partial<Record<MealId, MealLog>> = { bf: { eaten: [0, 1], extra: [], repl: {}, at: 490 } };
+  // Morning: nothing eaten yet, so breakfast is what Today asks for. Later in the day the earlier meals are done.
+  const m: Partial<Record<MealId, MealLog>> = t === 'Morning' ? {} : { bf: { eaten: [0, 1], extra: [], repl: {}, at: 490 } };
   if (t === 'Evening') m.lu = { eaten: [0, 1, 2], extra: [], repl: {}, at: 830 };
   return m;
 }
 
 export function initialDomain(): Domain {
   return {
-    time: 'Evening', min: 1100, todayVariant: 'Regular', loading: false, hc: false, wearable: false, hasGym: true, askGym: false,
+    time: 'Evening', min: 1100, todayVariant: 'Regular', awayDays: 4, loading: false, hc: false, wearable: false, hasGym: true, askGym: false,
     water: 1.8, weight: 72.4, weightLog: [{ t: 'Mon 22', v: 72.6 }, { t: 'Tue 23', v: 72.5 }],
     meals: mealsFor('Evening'), wkScenario: 'Not started', wkDone: null, session: null,
     ci: 'At the gym', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null, scanFails: false, dismissed: {}, plans: basePlans(), planReq: 'none', coachUpdated: false,
@@ -97,6 +99,9 @@ export function useDomain() {
 }
 
 // ---------- Derived helpers used by several screens ----------
+// When the member trains, from the time of day they chose in onboarding (minutes since midnight).
+export const PLAN_MIN: Record<string, number> = { 'Early morning': 390, Morning: 420, Afternoon: 780, Evening: 1110, 'Changes a lot': 1110 };
+export const plannedMin = (time?: string) => PLAN_MIN[time ?? ''] ?? PLAN_MIN.Evening;
 export const bucketOf = (m: number): TimeOfDay => (m < 720 ? 'Morning' : m < 1020 ? 'Afternoon' : 'Evening');
 export const nowMin = (d: Domain) => d.min;
 // Heart rate, sleep, active energy and burned kcal come from a wearable through the health store.

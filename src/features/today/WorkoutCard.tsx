@@ -9,14 +9,14 @@ import { coachStore } from '@/features/coach/coach';
 import { useOverlay } from '@/components/Overlay';
 import { Pressy } from '@/components/ui';
 import { fmtT } from '@/lib/data';
-import { burned, useDomain, wkDoneInfo, workoutState } from '@/lib/domain';
+import { burned, plannedMin, useDomain, wkDoneInfo, workoutState } from '@/lib/domain';
+import { useStore } from '@/lib/store';
 import { font } from '@/theme/tokens';
 import { mmss, useNow } from '@/lib/useNow';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { WORKOUT_MIN } from '@/features/workout/session';
 import { rel } from './meals';
 
-const WKT = 1110; // planned 6:30 pm
 
 function Tile({ k, v, color }: { k: string; v: string; color?: string }) {
   return (
@@ -30,6 +30,8 @@ function Tile({ k, v, color }: { k: string; v: string; color?: string }) {
 // Dark card, same layout in every state: Now / late / In progress / Done / Rest day.
 export function WorkoutCard() {
   const { d } = useDomain();
+  const { state } = useStore();
+  const WKT = plannedMin(state.profile.time); // from the time of day chosen in onboarding
   const { openSheet } = useOverlay();
   const startWorkout = useStartWorkout();
   const st = workoutState(d);
@@ -40,7 +42,7 @@ export function WorkoutCard() {
   const elapsed = d.session ? mmss((now - d.session.startAt) / 1000).padStart(5, '0') : '';
   const chip = st === 'done' ? 'Done' : st === 'rest' ? 'Rest' : st === 'live' ? 'In progress' : rel(d, WKT).t;
   const live = st === 'done' || st === 'live';
-  const chips = st === 'rest' ? ['Recovery day', 'Next: Pull · Thu 6:30 pm'] : ['6 exercises', `~${WORKOUT_MIN} min`, ...(d.hc && d.wearable ? ['~350 kcal'] : [])];
+  const chips = st === 'rest' ? ['Recovery day', `Next: Pull · Thu ${fmtT(WKT).full}`] : ['6 exercises', `~${WORKOUT_MIN} min`, ...(d.hc && d.wearable ? ['~350 kcal'] : [])];
   const did = st === 'done' ? `${fmtT(done.a).hm} – ${fmtT(done.b).full}` : st === 'live' ? `Started · ${elapsed}` : st === 'rest' ? 'A walk counts' : 'Not yet';
   const cta = st === 'todo' ? 'Start workout' : st === 'live' ? 'Resume workout' : null;
   const mins = Math.max(1, Math.round(done.b - done.a));
@@ -82,7 +84,7 @@ export function WorkoutCard() {
           <Txt style={{ fontFamily: font.regular, fontSize: 40, letterSpacing: -1.8, lineHeight: 42, color: '#fff' }}>{st === 'rest' ? 'Rest day' : 'Leg day'}</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>{chips.map((t) => <Chip key={t} label={t} onDark />)}</Row>
           <Row style={{ gap: 8 }}>
-            <Tile k="Planned" v={st === 'rest' ? 'No workout' : '6:30 pm'} />
+            <Tile k="Planned" v={st === 'rest' ? 'No workout' : fmtT(WKT).full} />
             <Tile k="You did it" v={did} color={live ? '#7CF0C8' : 'rgba(255,255,255,0.6)'} />
           </Row>
         </>

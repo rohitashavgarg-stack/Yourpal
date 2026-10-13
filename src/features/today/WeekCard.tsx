@@ -5,7 +5,8 @@ import { Dumbbell, MapPin, UtensilsCrossed } from '@/lib/icons';
 import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { fmtT } from '@/lib/data';
-import { Domain, totals, useDomain, wkDoneInfo, workoutState } from '@/lib/domain';
+import { Domain, plannedMin, totals, useDomain, wkDoneInfo, workoutState } from '@/lib/domain';
+import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 
@@ -14,7 +15,7 @@ export const ciTime = (d: Domain) => d.ciAt ?? (d.ci === 'Checked in' ? 1098 : n
 type Day = { num: number; let: string; wk: 'done' | 'rest' | ''; w: string; ws?: string; m: string; ms?: string; c: string; cs?: string; mealW: number; fut?: boolean; today?: boolean };
 const DN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-function days(d: Domain): Day[] {
+function days(d: Domain, planAt: string): Day[] {
   const st = workoutState(d);
   const t = totals(d);
   const done = wkDoneInfo(d);
@@ -22,8 +23,8 @@ function days(d: Domain): Day[] {
   const today: Day = {
     num: 24, let: 'W', today: true,
     wk: st === 'done' ? 'done' : st === 'rest' ? 'rest' : '',
-    w: st === 'done' ? `Leg day · ${fmtT(done.a).full} – ${fmtT(done.b).full}` : st === 'rest' ? 'Rest day' : st === 'live' ? 'Leg day · in progress' : 'Leg day · planned 6:30 pm',
-    ws: st === 'done' ? `Planned 6:30 pm${d.hc && d.wearable ? ` · ${done.k} kcal` : ''}` : st === 'rest' ? 'Recovery day' : 'Planned 6:30 pm',
+    w: st === 'done' ? `Leg day · ${fmtT(done.a).full} – ${fmtT(done.b).full}` : st === 'rest' ? 'Rest day' : st === 'live' ? 'Leg day · in progress' : `Leg day · planned ${planAt}`,
+    ws: st === 'done' ? `Planned ${planAt}${d.hc && d.wearable ? ` · ${done.k} kcal` : ''}` : st === 'rest' ? 'Recovery day' : `Planned ${planAt}`,
     m: `${t.done} of 4 meals done · ${t.onPlan} on plan`, ms: `${t.k} kcal so far · protein ${t.p} g`,
     c: ci != null ? `Checked in ${fmtT(ci).full}${d.ciOut ? ` · out ${fmtT(d.ciOut.at).hm}` : ''}` : 'Not checked in yet', cs: d.ciOut ? `${d.ciOut.mins} min at the gym` : ci != null ? 'Counted in your attendance' : 'Check in when you reach the gym',
     mealW: Math.round((t.onPlan / 4) * 100),
@@ -52,8 +53,9 @@ function Bar({ w }: { w: number }) {
 export function WeekCard() {
   const { c } = useTheme();
   const { d } = useDomain();
+  const { state } = useStore();
   const { openSheet } = useOverlay();
-  const list = days(d);
+  const list = days(d, fmtT(plannedMin(state.profile.time)).full);
   const t = totals(d);
   const doneN = 1 + (workoutState(d) === 'done' ? 1 : 0);
   return (
@@ -89,8 +91,9 @@ export function WeekCard() {
 export function DaySheet({ i }: { i: number }) {
   const { c } = useTheme();
   const { d } = useDomain();
+  const { state } = useStore();
   const { closeSheet } = useOverlay();
-  const x = days(d)[i];
+  const x = days(d, fmtT(plannedMin(state.profile.time)).full)[i];
   const rows: [any, string, string | undefined][] = [[Dumbbell, x.w, x.ws], [UtensilsCrossed, x.m, x.ms], [MapPin, x.c, x.cs]];
   return (
     <>

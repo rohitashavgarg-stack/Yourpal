@@ -10,6 +10,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 import { CalendarClock, Check, ChevronRight, CircleCheck, ClipboardList, CreditCard, MessageCircle, Pause, Flame, X } from '@/lib/icons';
 import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
 import { PillBtn } from '@/components/bits';
+import { usePaymentNotice } from '@/features/today/PaymentBanner';
 import { PersonAvatar } from '@/components/Brand';
 import { FlagSheet } from '@/features/gym/sheets';
 import { useOverlay } from '@/components/Overlay';
@@ -109,18 +110,50 @@ export function PtConfirmCard() {
 }
 
 // ---------- Comeback (after a break) ----------
+// Gap since the last session decides the tone of the restart.
+function comebackTone(days: number) {
+  if (days <= 3) return { chip: 'Quick restart', line: 'You are only a few days off, so pick up where you left off.', load: 'about 90% of your usual weights' };
+  if (days <= 7) return { chip: 'Easy restart', line: 'An easy session to get moving again.', load: 'about 80% of your usual weights' };
+  if (days <= 14) return { chip: 'Gentle comeback', line: 'A lighter session to ease back in. Your coach has been told you are back.', load: 'about 70% of your usual weights' };
+  return { chip: 'Fresh start', line: 'A short, light session. Worth a quick re-check with your coach this week.', load: 'light weights and a slow build-up' };
+}
+const DAYS_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+function lastSessionLabel(days: number) {
+  const idx = (((2 - days) % 7) + 7) % 7; // today is Wed 24 Sep
+  const date = 24 - days;
+  return `${DAYS_SHORT[idx]} ${date > 0 ? date : date + 31} ${date > 0 ? 'Sep' : 'Aug'}`;
+}
+
+function Fact({ icon: I, title, sub }: { icon: any; title: string; sub?: string }) {
+  const { c } = useTheme();
+  return (
+    <Row style={{ gap: 10, alignItems: 'flex-start' }}>
+      <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', marginTop: 1 }}><I size={14} color={c.muted} /></View>
+      <View style={{ flex: 1 }}>
+        <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20 }}>{title}</Txt>
+        {sub ? <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{sub}</Txt> : null}
+      </View>
+    </Row>
+  );
+}
+
 export function ComebackCard() {
   const { c, isDark } = useTheme();
   const { state } = useStore();
-  const { openSheet, toast } = useOverlay();
+  const { d } = useDomain();
+  const { toast } = useOverlay();
   const startWorkout = useStartWorkout();
+  const notice = usePaymentNotice();
   const isPT = state.sc.member === 'PT member';
+  const days = d.awayDays;
+  const tone = comebackTone(days);
+  const missed = Math.max(1, Math.round((days * state.profile.days) / 7));
   const a = useSharedValue(0);
   useEffect(() => { a.value = withDelay(1200, withTiming(1, { duration: 700 })); }, []);
   const pause = useAnimatedStyle(() => ({ opacity: 1 - a.value, transform: [{ scale: 1 - 0.4 * a.value }] }));
   const flame = useAnimatedStyle(() => ({ opacity: a.value, transform: [{ scale: 0.5 + 0.5 * a.value }] }));
   return (
-    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 20, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 20, gap: 14, overflow: 'hidden' }, cardShadow(isDark)]}>
       <CornerGlow color={FLAME} size={520} />
       <Row style={{ gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}>
@@ -129,16 +162,26 @@ export function ComebackCard() {
         </View>
         <View style={{ flex: 1 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.6 }}>Welcome back, Rohitashav</Txt>
-          {isPT && <Txt v="caption">From Coach Vikram</Txt>}
+          <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{`It has been ${days} days since your last session (${lastSessionLabel(days)})`}</Txt>
         </View>
       </Row>
-      <View style={{ gap: 8 }}>
-        <Txt style={{ fontSize: 16, lineHeight: 23 }}>Here's an easy restart session.</Txt>
-        <View style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused, not lost</Txt>
-        </View>
+      <View style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
+        <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused at 7 weeks, not lost</Txt>
       </View>
-      <Button label="Start session" onPress={() => { startWorkout(); }} />
+      <View style={{ gap: 10 }}>
+        <Fact icon={CalendarClock} title={`${missed} planned ${missed === 1 ? 'workout' : 'workouts'} missed`} sub="One session this week keeps your streak going." />
+        {isPT && <Fact icon={MessageCircle} title="Coach Vikram: “Good to see you back. Keep it light today.”" sub={d.ptLeft ? `${d.ptLeft} PT sessions left · rebook from the Gym tab` : undefined} />}
+        {notice && <Fact icon={CreditCard} title={notice.title} sub={notice.sub} />}
+      </View>
+      <View style={{ backgroundColor: c.surface2, borderRadius: 18, padding: 14, gap: 4 }}>
+        <Row style={{ gap: 8 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{tone.chip}</Txt>
+          <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>· about 30 min · 5 exercises</Txt>
+        </Row>
+        <Txt style={{ fontSize: 14, lineHeight: 20 }}>{tone.line}</Txt>
+        <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Starts with {tone.load}.</Txt>
+      </View>
+      <Button label="Start easy session" onPress={() => { startWorkout(); }} />
       <Button kind="outline" small label="Re-plan my week" onPress={() => router.navigate('/plans')} />
     </Animated.View>
   );
