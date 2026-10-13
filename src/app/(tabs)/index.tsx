@@ -108,13 +108,13 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
         ) : isNew ? (
           <>
             {d.todayVariant === 'Comeback' && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>Check your easy comeback plan.</Txt></Enter>}
-            <Enter i={0}><GoalCard /></Enter>
+            <Enter i={0}><GoalCard soft /></Enter>
+            <Enter i={1}><Trackers /></Enter>
             <Enter i={1}><ForYouStack /></Enter>
             {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}
             {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
             {primary === 'meals' && <Enter i={1}><MealsCard timeline /></Enter>}
             {primary === 'wrap' && <Enter i={1}><WeekCard /></Enter>}
-            <Enter i={2}><Trackers /></Enter>
             <Enter i={2}><StreakChip /></Enter>
             {primary !== 'workout' && primary !== 'restart' && <Enter i={3}><WorkoutCard /></Enter>}
             {primary !== 'meals' && <Enter i={4}><MealsCard timeline /></Enter>}

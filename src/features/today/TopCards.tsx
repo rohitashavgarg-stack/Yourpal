@@ -49,9 +49,10 @@ export function GoalLine() {
 }
 
 // soft: the same card with a quieter colour and a smaller ring (used in the new Today layout, where the card is context, not the loudest thing).
-export function GoalCard({ soft = false }: { soft?: boolean } = {}) {
+export function GoalCard({ soft: compact = false }: { soft?: boolean } = {}) {
+  const soft = compact;
   const { d } = useDomain();
-  const SZ = soft ? 104 : 132, RR = soft ? 42 : R, CC = 2 * Math.PI * RR, SW = soft ? 10 : 12;
+  const SZ = soft ? 88 : 132, RR = soft ? 35 : R, CC = 2 * Math.PI * RR, SW = soft ? 9 : 12;
   const t = totals(d);
   // Name, numbers and status come from the goal itself, so every kind of goal reads differently (weight, strength, flexibility, weekly workouts...).
   const g2 = useGoalV2();
@@ -73,8 +74,8 @@ export function GoalCard({ soft = false }: { soft?: boolean } = {}) {
     <Pressy accessibilityRole="link" scaleTo={0.98}
       accessibilityLabel={`Your goal: ${goal.toLowerCase()}. ${sub}, ${statusLine(g2).toLowerCase()}. Eaten ${t.k} of ${KCAL_TARGET} kcal.${d.hc && d.wearable ? ` Burned ${burned(d)}.` : ""} Open goal details`}
       onPress={() => router.push('/goal-detail')}>
-      <LinearGradient colors={soft ? ['#3A5FB0', '#3F72AE', '#4F8FB0'] : ['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-        style={{ borderRadius: 28, paddingVertical: 18, paddingLeft: 16, paddingRight: 18, flexDirection: 'row', alignItems: 'center', gap: 18, overflow: 'hidden' }}>
+      <LinearGradient colors={['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+        style={{ borderRadius: soft ? 24 : 28, paddingVertical: soft ? 12 : 18, paddingLeft: soft ? 14 : 16, paddingRight: soft ? 14 : 18, flexDirection: 'row', alignItems: 'center', gap: soft ? 14 : 18, overflow: 'hidden' }}>
         <Svg width={260} height={260} viewBox="0 0 260 260" style={{ position: 'absolute', right: -90, top: -80, opacity: 0.16 }}>
           <Circle cx={130} cy={130} r={120} fill="none" stroke="#fff" strokeWidth={18} /><Circle cx={130} cy={130} r={78} fill="none" stroke="#fff" strokeWidth={12} />
         </Svg>
@@ -90,15 +91,15 @@ export function GoalCard({ soft = false }: { soft?: boolean } = {}) {
                 <Txt style={{ fontSize: 12, lineHeight: 16, color: 'rgba(255,255,255,0.75)' }}>this week</Txt>
               </View>
             ) : (
-              <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 28 : 34, letterSpacing: -1, color: '#fff' }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: soft ? 15 : 18, color: 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
+              <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 24 : 34, letterSpacing: -1, color: '#fff' }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: soft ? 13 : 18, color: 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
             )}
           </View>
         </View>
         <View style={{ flex: 1, gap: 6, minWidth: 0 }}>
           <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)' }}>Your goal</Txt><ChevronRight size={18} color="#fff" /></Row>
-          <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: soft ? 26 : 30, lineHeight: soft ? 30 : 34, color: '#fff' }}>{goal}</Txt>
+          <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: soft ? 24 : 30, lineHeight: soft ? 28 : 34, color: '#fff' }}>{goal}</Txt>
           <Txt style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>{sub}</Txt>
-          <StatusChip g={g2} fg={soft ? '#1F3F86' : '#1B3FB8'} />
+          <StatusChip g={g2} fg="#1B3FB8" />
         </View>
       </LinearGradient>
     </Pressy>
@@ -135,6 +136,7 @@ export function ComebackCard() {
   const { openSheet, toast } = useOverlay();
   const startWorkout = useStartWorkout();
   const isPT = state.sc.member === 'PT member';
+  const { d } = useDomain();
   const a = useSharedValue(0);
   useEffect(() => { a.value = withDelay(1200, withTiming(1, { duration: 700 })); }, []);
   const pause = useAnimatedStyle(() => ({ opacity: 1 - a.value, transform: [{ scale: 1 - 0.4 * a.value }] }));
@@ -148,18 +150,20 @@ export function ComebackCard() {
           <Animated.View style={[{ position: 'absolute' }, flame]}><Flame size={22} color={FLAME} fill={FLAME} /></Animated.View>
         </View>
         <View style={{ flex: 1 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.6 }}>Welcome back, Rohitashav</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.6 }}>{`We missed you these ${d.awayDays} days`}</Txt>
           {isPT && <Txt v="caption">From Coach Vikram</Txt>}
         </View>
       </Row>
       <View style={{ gap: 8 }}>
-        <Txt style={{ fontSize: 16, lineHeight: 23 }}>Here's an easy restart session.</Txt>
+        <Txt style={{ fontSize: 16, lineHeight: 23 }}>Check your easy comeback plan.</Txt>
         <View style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused, not lost</Txt>
         </View>
       </View>
-      <Button label="Start session" onPress={() => { startWorkout(); }} />
-      <Button kind="outline" small label="Re-plan my week" onPress={() => router.navigate('/plans')} />
+      <Row style={{ gap: 10 }}>
+        <View style={{ flex: 1.3 }}><Button label="Start session" onPress={() => { startWorkout(); }} /></View>
+        <View style={{ flex: 1 }}><Button kind="outline" label="Re-plan week" onPress={() => router.navigate('/plans')} /></View>
+      </Row>
     </Animated.View>
   );
 }
