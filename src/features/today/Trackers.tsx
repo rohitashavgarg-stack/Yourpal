@@ -168,8 +168,8 @@ export function WeightCard() {
   const { d } = useDomain();
   const series = [...SPARK, d.weight];
   const lo = Math.min(...series) - 0.15, hi = Math.max(...series) + 0.15;
-  const W = 136, H = 46;
-  const pts = series.map((v, i) => [(i / (series.length - 1)) * (W - 8) + 4, 6 + ((hi - v) / (hi - lo)) * (H - 14)] as const);
+  const W = 148, H = 46; // the drawing is as wide as the box it sits in, so nothing is stretched and the end dot has room
+  const pts = series.map((v, i) => [12 + (i / (series.length - 1)) * (W - 24), 8 + ((hi - v) / (hi - lo)) * (H - 20)] as const);
   const line = pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`).join(' ');
   const area = `${line} L${pts[pts.length - 1][0]} ${H} L${pts[0][0]} ${H} Z`;
   const last = pts[pts.length - 1];
@@ -180,7 +180,7 @@ export function WeightCard() {
       <Txt style={{ ...NUM, color: c.ink }}>{fmt1(d.weight)}<Txt muted style={UNIT_TXT}> kg</Txt></Txt>
       <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: diff <= 0 ? c.good : c.warn }}>{diff <= 0 ? '↓' : '↑'} {Math.abs(diff)} kg this week</Txt>
       <View style={{ marginTop: 'auto', marginHorizontal: -6, marginBottom: -6 }}>
-        <Svg width={W + 12} height={H} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
+        <Svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
           <Defs><SvgGradient id="wArea" x1="0" y1="0" x2="0" y2="1"><Stop offset="0" stopColor={c.accent} stopOpacity={0.28} /><Stop offset="1" stopColor={c.accent} stopOpacity={0} /></SvgGradient></Defs>
           <AArea d={area} fill="url(#wArea)" />
           <Path d={line} fill="none" stroke={c.accent} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
