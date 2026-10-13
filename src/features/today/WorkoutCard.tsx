@@ -83,7 +83,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
         </>
       ) : (
         <>
-          <Txt style={{ fontFamily: font.regular, fontSize: 40, letterSpacing: -1.8, lineHeight: 42, color: '#fff' }}>{st === 'rest' ? 'Rest day' : restart && st0 === 'hidden' ? 'Easy comeback plan' : 'Leg day'}</Txt>
+          <Txt style={{ fontFamily: font.regular, fontSize: 40, letterSpacing: -1.8, lineHeight: 42, color: '#fff' }}>{st === 'rest' ? 'Rest day' : restart && st0 === 'hidden' ? 'Comeback plan' : 'Leg day'}</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>{chips.map((t) => <Chip key={t} label={t} onDark />)}</Row>
           <Row style={{ gap: 8 }}>
             <Tile k="Planned" v={st === 'rest' ? 'No workout' : restart && st0 === 'hidden' ? 'Whenever you are ready' : fmtT(WKT).full} />

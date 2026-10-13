@@ -89,10 +89,12 @@ export default function Today() {
   }, [layout, d.todayVariant, d.hc, d.time, d.wkScenario, d.wkDone, d.ci, d.scanFails, d.session, d.ciStart, d.ciOut, d.ciExtend, gs.design, gs.pace, st.design, gv.version, gv.scenario, d.goal]);
 
   // After a break the greeting itself says welcome back (new layout); the days away sit right under the title.
-  const greet = isNew && d.todayVariant === 'Comeback' ? 'Welcome back' : { Morning: 'Good morning', Afternoon: 'Good afternoon', Evening: 'Good evening' }[d.time];
+  const greet = { Morning: 'Good morning', Afternoon: 'Good afternoon', Evening: 'Good evening' }[d.time];
+  const comebackNew = isNew && d.todayVariant === 'Comeback';
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
-      <TabScreen title={`${greet},
+      <TabScreen title={comebackNew ? `We missed you
+these ${d.awayDays} days` : `${greet},
 Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186 : 112}
         refreshControl={<RefreshControl refreshing={refreshing} tintColor={c.accentText} onRefresh={() => { setRefreshing(true); load(1000); }} />}>
         {d.loading ? (
@@ -105,8 +107,8 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           </>
         ) : isNew ? (
           <>
-            {d.todayVariant === 'Comeback' && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>{`We missed you these ${d.awayDays} days. Let's start with an easy comeback plan.`}</Txt></Enter>}
-            <Enter i={0}><GoalCard calm /></Enter>
+            {d.todayVariant === 'Comeback' && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>Check your easy comeback plan.</Txt></Enter>}
+            <Enter i={0}><GoalCard soft /></Enter>
             <Enter i={1}><ForYouStack /></Enter>
             {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}
             {primary === 'restart' && <Enter i={1}><WorkoutCard restart /></Enter>}
