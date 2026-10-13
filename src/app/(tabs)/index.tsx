@@ -17,6 +17,7 @@ import { WorkoutCard } from '@/features/today/WorkoutCard';
 import { MealsCard } from '@/features/today/MealsCard';
 import { WeekCard } from '@/features/today/WeekCard';
 import { useRightNowFocus } from '@/features/today/timeline';
+import { Txt } from '@/components/ui';
 import { ForYouStack } from '@/features/today/ForYou';
 import { todayUiStore, TodayLayout } from '@/features/today/ui';
 import { PaymentBanner } from '@/features/today/PaymentBanner';
@@ -93,7 +94,7 @@ export default function Today() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <TabScreen title={comebackNew ? `We missed you
-these ${d.awayDays} days` : `${greet},
+the last ${d.awayDays} days` : `${greet},
 Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186 : 112}
         refreshControl={<RefreshControl refreshing={refreshing} tintColor={c.accentText} onRefresh={() => { setRefreshing(true); load(1000); }} />}>
         {d.loading ? (
@@ -107,6 +108,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
         ) : isNew ? (
           <>
             {/* after a break the way back (the comeback plan is the first item of the stack) comes before the goal */}
+            {comebackNew && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>Welcome back, Rohitashav. Check your comeback session.</Txt></Enter>}
             {comebackNew && <Enter i={0}><ForYouStack /></Enter>}
             <Enter i={0}><GoalCard soft /></Enter>
             <Enter i={1}><Trackers /></Enter>

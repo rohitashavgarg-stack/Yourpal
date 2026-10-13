@@ -73,7 +73,7 @@ export function useForYou(): Item[] {
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
   if (pay) out.push({ key: 'pay', title: pay.title, body: pay.sub, critical: d.membership !== 'Expiring', tone: pay.tone === 'accent' ? 'accent' : pay.tone === 'warn' ? 'warn' : 'muted', icon: CreditCard, btn: 'View membership', act: () => router.push('/gym/membership') });
   // After a break the way back is one stack item: the workout card (and the member's plan) stays exactly as it was, nothing is renamed or hidden-then-replaced.
-  if (d.todayVariant === 'Comeback') out.push({ key: 'comeback', title: 'Your easy comeback plan', body: '', chips: ['30 min', '5 exercises', 'Lighter weights'], full: true, critical: true, tone: 'accent', icon: Dumbbell, btn: 'Start easy session', act: start });
+  if (d.todayVariant === 'Comeback') out.push({ key: 'comeback', title: 'Your comeback plan with lighter weights', body: '', chips: ['30 min', '5 exercises'], full: true, critical: true, tone: 'accent', icon: Dumbbell, btn: 'Start easy session', act: start });
   if (ptPending && d.hasGym) out.push({ key: 'pt', title: 'Confirm your PT session', body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', critical: true, tone: 'accent', who: true, two: true });
   const order = ['reassess', 'reply', 'plan', 'log'];
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
@@ -91,17 +91,18 @@ function ItemCard({ it, i, n, onDismiss }: { it: Item; i: number; n: number; onD
   const I = it.icon;
   return (
     <View style={[{ backgroundColor: c.surface, borderRadius: 24, padding: 16, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
-      <Row style={{ justifyContent: 'space-between' }}>
-        <Row style={{ gap: 8 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 17, letterSpacing: 0.4, color: c.muted }}>FOR YOU</Txt>
-          {n > 1 && <View style={{ paddingHorizontal: 8, paddingVertical: 1, borderRadius: 999, backgroundColor: c.surface2 }}><Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 16, color: c.muted }}>{i + 1} of {n}</Txt></View>}
+      {(n > 1 || !it.critical) && (
+        <Row style={{ justifyContent: 'space-between' }}>
+          <Row style={{ gap: 8 }}>
+            {n > 1 && <View style={{ paddingHorizontal: 8, paddingVertical: 1, borderRadius: 999, backgroundColor: c.surface2 }}><Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 16, color: c.muted }}>{i + 1} of {n}</Txt></View>}
+          </Row>
+          {!it.critical && (
+            <Pressy accessibilityRole="button" accessibilityLabel="Dismiss this" onPress={onDismiss} style={{ width: 44, height: 44, marginTop: -12, marginRight: -10, alignItems: 'center', justifyContent: 'center' }}>
+              <X size={17} color={c.muted} />
+            </Pressy>
+          )}
         </Row>
-        {!it.critical && (
-          <Pressy accessibilityRole="button" accessibilityLabel="Dismiss this" onPress={onDismiss} style={{ width: 44, height: 44, marginTop: -12, marginRight: -10, alignItems: 'center', justifyContent: 'center' }}>
-            <X size={17} color={c.muted} />
-          </Pressy>
-        )}
-      </Row>
+      )}
       <Row style={{ gap: 12, alignItems: 'flex-start' }}>
         {it.who ? <PersonAvatar who="coach" size={40} /> : <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}>{I ? <I size={19} color={fg} /> : null}</View>}
         <View style={{ flex: 1, gap: 2 }}>
