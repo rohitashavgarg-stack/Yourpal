@@ -5,6 +5,8 @@ import { fade } from '@/theme/motion';
 import Svg, { Circle } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { scheduleOnRN } from 'react-native-worklets';
 import { CalendarClock, Check, ChevronRight, CircleCheck, ClipboardList, CreditCard, MessageCircle, Pause, Flame, X } from '@/lib/icons';
 import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
 import { PillBtn } from '@/components/bits';
@@ -197,6 +199,10 @@ export function UpdatesCard() {
   const u = live[i];
   const btn = u.isPlan ? (planOpen ? 'Hide changes' : 'See changes') : u.btn;
   const act = u.isPlan ? () => setPlanOpen((o) => !o) : u.act;
+  // Swipe the update left for the next one, right for the previous one (no arrow button).
+  const go = (dir: 1 | -1) => { if (live.length < 2) return; setPlanOpen(false); haptic.light(); setIdx((i + dir + live.length) % live.length); };
+  const swipe = Gesture.Pan().activeOffsetX([-18, 18]).failOffsetY([-14, 14])
+    .onEnd((e) => { if (e.translationX < -45 || e.velocityX < -600) scheduleOnRN(go, 1); else if (e.translationX > 45 || e.velocityX > 600) scheduleOnRN(go, -1); });
   return (
     <Card style={{ paddingTop: 16, paddingHorizontal: 16, paddingBottom: 12, gap: 12 }}>
       <Row style={{ justifyContent: 'space-between' }}>
@@ -208,6 +214,8 @@ export function UpdatesCard() {
           <Txt style={{ fontFamily: font.semibold, fontSize: 13, color: c.accentText }}>See all</Txt>
         </Pressy>
       </Row>
+      <GestureDetector gesture={swipe}>
+        <View style={{ gap: 12 }}>
       <Animated.View key={u.key} entering={fade()} style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
         <UpdIcon u={u} />
         <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
@@ -227,13 +235,11 @@ export function UpdatesCard() {
             <Row style={{ gap: 4 }}>
               {live.map((_, k) => <View key={k} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: 3, backgroundColor: k === i ? c.ink : c.surface3 }} />)}
             </Row>
-            <Pressy accessibilityRole="button" accessibilityLabel="Next update" onPress={() => { setPlanOpen(false); setIdx((i + 1) % live.length); }}
-              style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
-              <ChevronRight size={17} color={c.ink} />
-            </Pressy>
           </>
         )}
       </Row>
+        </View>
+      </GestureDetector>
     </Card>
   );
 }
