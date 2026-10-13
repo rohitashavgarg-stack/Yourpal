@@ -60,6 +60,7 @@ export function GoalStrip() {
 type Item = {
   key: string; title: string; body: string; critical?: boolean; tone: 'accent' | 'warn' | 'good' | 'muted';
   who?: boolean; icon?: any; btn?: string; act?: () => void; two?: boolean;
+  chips?: string[]; full?: boolean; // small chips instead of a sentence, and a full-width button
 };
 
 export function useForYou(): Item[] {
@@ -72,7 +73,7 @@ export function useForYou(): Item[] {
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
   if (pay) out.push({ key: 'pay', title: pay.title, body: pay.sub, critical: d.membership !== 'Expiring', tone: pay.tone === 'accent' ? 'accent' : pay.tone === 'warn' ? 'warn' : 'muted', icon: CreditCard, btn: 'View membership', act: () => router.push('/gym/membership') });
   // After a break the way back is one stack item: the workout card (and the member's plan) stays exactly as it was, nothing is renamed or hidden-then-replaced.
-  if (d.todayVariant === 'Comeback') out.push({ key: 'comeback', title: 'Your easy comeback plan', body: 'About 30 min · 5 exercises · lighter weights. Your usual plan is right where you left it.', critical: true, tone: 'accent', icon: Dumbbell, btn: 'Start easy session', act: start });
+  if (d.todayVariant === 'Comeback') out.push({ key: 'comeback', title: 'Your easy comeback plan', body: '', chips: ['30 min', '5 exercises', 'Lighter weights'], full: true, critical: true, tone: 'accent', icon: Dumbbell, btn: 'Start easy session', act: start });
   if (ptPending && d.hasGym) out.push({ key: 'pt', title: 'Confirm your PT session', body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', critical: true, tone: 'accent', who: true, two: true });
   const order = ['reassess', 'reply', 'plan', 'log'];
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
@@ -105,7 +106,8 @@ function ItemCard({ it, i, n, onDismiss }: { it: Item; i: number; n: number; onD
         {it.who ? <PersonAvatar who="coach" size={40} /> : <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}>{I ? <I size={19} color={fg} /> : null}</View>}
         <View style={{ flex: 1, gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{it.title}</Txt>
-          <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{it.body}</Txt>
+          {!!it.body && <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{it.body}</Txt>}
+          {!!it.chips && <Row style={{ gap: 6, flexWrap: 'wrap', paddingTop: 6 }}>{it.chips.map((t) => <View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 18 }}>{t}</Txt></View>)}</Row>}
         </View>
       </Row>
       {it.two ? (
@@ -113,6 +115,8 @@ function ItemCard({ it, i, n, onDismiss }: { it: Item; i: number; n: number; onD
           <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => openSheet(<FlagSheet />, { label: 'Flag session' })} /></View>
           <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} /></View>
         </Row>
+      ) : it.btn && it.full ? (
+        <Button label={it.btn} onPress={() => it.act?.()} />
       ) : it.btn ? (
         <Row><Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.bg }}>{it.btn}</Txt></Pressy></Row>
       ) : null}
