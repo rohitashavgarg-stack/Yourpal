@@ -103,13 +103,14 @@ function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number
         onStartShouldSetResponder={() => true} onMoveShouldSetResponder={() => true}
         onResponderGrant={(e) => from(e.nativeEvent.locationX)} onResponderMove={(e) => from(e.nativeEvent.locationX)}
         style={{ height: 30, justifyContent: 'center' }}>
-        <View pointerEvents="none" style={{ height: 8, borderRadius: 4, overflow: 'hidden' }}>
-          <LinearGradient colors={['#3B3F9E', '#F6B58B', '#BFD9F4', '#6C7BD6', '#3B3F9E']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ height: 8 }} />
+        <View pointerEvents="none" style={{ height: 4, borderRadius: 2, backgroundColor: P.track }}>
+          <View style={{ width: `${pct}%`, height: 4, borderRadius: 2, backgroundColor: P.ink }} />
         </View>
-        <View pointerEvents="none" style={{ position: 'absolute', left: `${pct}%`, marginLeft: -11, top: 4, width: 22, height: 22, borderRadius: 11, backgroundColor: '#fff', borderWidth: 2, borderColor: P.ink, shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } }} />
+        {[0, 6, 12, 18, 23].map((h) => <View key={h} pointerEvents="none" style={{ position: 'absolute', left: `${(h / 23) * 100}%`, marginLeft: -3, top: 12, width: 6, height: 6, borderRadius: 3, backgroundColor: h <= hour ? P.ink : P.chip }} />)}
+        <View pointerEvents="none" style={{ position: 'absolute', left: `${pct}%`, marginLeft: -11, top: 4, width: 22, height: 22, borderRadius: 11, backgroundColor: '#fff', borderWidth: 2, borderColor: P.ink, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } }} />
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        {['12a', '6a', '12p', '6p', '12a'].map((l, i) => <Text key={l + i} style={{ fontFamily: font.regular, fontSize: 11, lineHeight: 15, color: P.muted }}>{l}</Text>)}
+        {['12 am', '6 am', '12 pm', '6 pm', '11 pm'].map((l) => <Text key={l} style={{ fontFamily: font.regular, fontSize: 11, lineHeight: 15, color: P.muted }}>{l}</Text>)}
       </View>
     </View>
   );
@@ -117,7 +118,7 @@ function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number
 
 // Kept deliberately small: goal type, member type, light / dark, steps tracker design and the time of day.
 // onDone: called after a Redo so the sheet version can close itself and show a toast.
-function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
+function PanelBody({ onDone, version }: { onDone?: (msg: string) => void; version?: 'Classic' | 'Structured' } = {}) {
   const [note, setNote] = useState('');
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const said = (msg: string) => { setNote(msg); clearTimeout(timer.current); timer.current = setTimeout(() => setNote(''), 3500); onDone?.(msg); };
@@ -259,21 +260,22 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
         : <Choice key={r.label} label={r.label} options={r.options} value={r.value} onPick={r.onPick} />))}
     </PanelCard>
   );
-  const ver = panelUiStore.use().version;
+  const picked = panelUiStore.use().version;
+  const ver = version ?? picked;
   return (
     <View style={{ gap: 12 }}>
-      <View style={{ flexDirection: 'row', padding: 3, borderRadius: 14, backgroundColor: P.tint, gap: 2 }}>
+      {!version && <View style={{ flexDirection: 'row', padding: 3, borderRadius: 20, backgroundColor: P.tint }}>
         {(['Classic', 'Structured'] as const).map((v) => (
           <Pressable key={v} accessibilityRole="tab" accessibilityState={{ selected: ver === v }} onPress={() => panelUiStore.set({ version: v })}
-            style={[{ flex: 1, minHeight: 34, borderRadius: 11, alignItems: 'center', justifyContent: 'center' }, ver === v && { backgroundColor: '#fff' }]}>
-            <Text style={{ fontFamily: ver === v ? font.semibold : font.medium, fontSize: 12.5, lineHeight: 17, color: ver === v ? P.accent : P.muted }}>{v}</Text>
+            style={{ flex: 1, minHeight: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: ver === v ? P.ink : 'transparent' }}>
+            <Text style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: ver === v ? '#fff' : P.muted }}>{v}</Text>
           </Pressable>
         ))}
-      </View>
-      <View style={{ backgroundColor: '#fff', borderRadius: 22, borderWidth: 1, borderColor: P.line, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: P.accent, alignItems: 'center', justifyContent: 'center' }}><SlidersHorizontal size={20} color="#fff" /></View>
+      </View>}
+      <View style={{ backgroundColor: '#fff', borderRadius: 24, borderWidth: 1, borderColor: P.line, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: P.ink, alignItems: 'center', justifyContent: 'center' }}><SlidersHorizontal size={20} color="#fff" /></View>
         <View style={{ flex: 1 }}>
-          <Text style={{ fontFamily: font.bold, fontSize: 16, lineHeight: 21, color: P.ink }}>Demo controls</Text>
+          <Text style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 23, letterSpacing: -0.3, color: P.ink }}>Demo controls · {version ?? picked}</Text>
           <Text style={{ fontFamily: font.regular, fontSize: 12.5, lineHeight: 17, color: P.muted }}>Drive the prototype</Text>
         </View>
         <Pressable accessibilityRole="button" accessibilityLabel={open ? 'Collapse the controls' : 'Expand the controls'} onPress={() => setOpen((o) => !o)} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: P.tint, alignItems: 'center', justifyContent: 'center' }}>
@@ -305,12 +307,25 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
   );
 }
 
+// A wide window has room for both versions of the panel side by side (each scrolls on its own). A narrower one shows one panel with the Classic | Structured switch.
 function SidePanel({ height }: { height: number }) {
+  const win = useWindow();
+  const both = win.width >= 1180;
+  const box = { backgroundColor: P.bg, borderRadius: 28, borderWidth: 1, borderColor: P.line } as const;
+  if (!both) {
+    return (
+      <View style={{ width: 320, maxHeight: height, flexGrow: 0, flexShrink: 0 }}>
+        <ScrollView accessibilityLabel="Edge cases and scenarios" style={box} contentContainerStyle={{ padding: 14 }}><PanelBody /></ScrollView>
+      </View>
+    );
+  }
   return (
-    <View style={{ width: 320, maxHeight: height, flexGrow: 0, flexShrink: 0 }}>
-    <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: '#fff', borderRadius: 22, borderWidth: 1, borderColor: '#E1E6EC' }} contentContainerStyle={{ padding: 16 }}>
-      <PanelBody />
-    </ScrollView>
+    <View style={{ flexDirection: 'row', gap: 12, maxHeight: height, flexGrow: 0, flexShrink: 0 }}>
+      {(['Classic', 'Structured'] as const).map((v) => (
+        <View key={v} style={{ width: 316, maxHeight: height }}>
+          <ScrollView accessibilityLabel={`Edge cases, ${v} version`} style={box} contentContainerStyle={{ padding: 14 }}><PanelBody version={v} /></ScrollView>
+        </View>
+      ))}
     </View>
   );
 }
