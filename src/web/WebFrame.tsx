@@ -118,7 +118,7 @@ function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number
 
 // Kept deliberately small: goal type, member type, light / dark, steps tracker design and the time of day.
 // onDone: called after a Redo so the sheet version can close itself and show a toast.
-function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; columns?: 1 | 2 | 3 } = {}) {
+function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; columns?: 1 | 2 | 3 | 4 } = {}) {
   const [note, setNote] = useState('');
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const said = (msg: string) => { setNote(msg); clearTimeout(timer.current); timer.current = setTimeout(() => setNote(''), 3500); onDone?.(msg); };
@@ -274,7 +274,9 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
   );
   // One panel. Wide: three columns side by side, so most of it is in view without scrolling. Narrow (and the phone sheet): one column.
   const col = (...items: React.ReactNode[]) => items;
-  const columnsOf: React.ReactNode[][] = columns >= 3
+  const columnsOf: React.ReactNode[][] = columns >= 4
+    ? [col(timeCard, lookCard), col(situationCard, workoutCard), col(memberCard), col(loginCard, screenCard)]
+    : columns === 3
     ? [col(timeCard, situationCard), col(memberCard, workoutCard), col(lookCard, loginCard, screenCard)]
     : columns === 2
       ? [col(timeCard, situationCard, workoutCard), col(memberCard, lookCard, loginCard, screenCard)]
@@ -305,11 +307,12 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
 function SidePanel({ height, phoneW }: { height: number; phoneW: number }) {
   const win = useWindow();
   const room = win.width - phoneW - 28 - 32; // what is left beside the phone
-  const columns = room >= 3 * 300 + 24 + 28 ? 3 : room >= 2 * 300 + 12 + 28 ? 2 : 1;
-  const width = columns * 300 + (columns - 1) * 12 + 28;
+  // columns at least 250 wide: four when the window is wide enough, so the panel fits the height without scrolling
+  const columns = room >= 4 * 250 + 3 * 12 + 28 ? 4 : room >= 3 * 270 + 24 + 28 ? 3 : room >= 2 * 280 + 12 + 28 ? 2 : 1;
+  const width = Math.min(room, columns * 330 + (columns - 1) * 12 + 28);
   return (
     <View style={{ width, maxHeight: Math.max(height, win.height - 48), flexGrow: 0, flexShrink: 0 }}>
-      <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: 28, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 14 }}><PanelBody columns={columns} /></ScrollView>
+      <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: 28, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 14 }}><PanelBody columns={columns as 1 | 2 | 3 | 4} /></ScrollView>
     </View>
   );
 }
