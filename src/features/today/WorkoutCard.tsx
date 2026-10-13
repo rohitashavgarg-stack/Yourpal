@@ -14,7 +14,7 @@ import { useStore } from '@/lib/store';
 import { font } from '@/theme/tokens';
 import { mmss, useNow } from '@/lib/useNow';
 import { useStartWorkout } from '@/features/workout/StartSheet';
-import { WORKOUT_MIN } from '@/features/workout/session';
+import { buildExercises, WORKOUT_MIN } from '@/features/workout/session';
 import { rel } from './meals';
 
 
@@ -28,23 +28,25 @@ function Tile({ k, v, color }: { k: string; v: string; color?: string }) {
 }
 
 // Dark card, same layout in every state: Now / late / In progress / Done / Rest day.
-export function WorkoutCard() {
+// restart: after a break the card is still there (it is otherwise hidden) and offers the easy restart session.
+export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   const { d } = useDomain();
   const { state } = useStore();
   const WKT = plannedMin(state.profile.time); // from the time of day chosen in onboarding
   const { openSheet } = useOverlay();
   const startWorkout = useStartWorkout();
-  const st = workoutState(d);
+  const st0 = workoutState(d);
+  const st = restart && st0 === 'hidden' ? 'todo' : st0;
   const cs = coachStore.use();
   const now = useNow(st === 'live', 1000);
   if (st === 'hidden') return null;
   const done = wkDoneInfo(d);
   const elapsed = d.session ? mmss((now - d.session.startAt) / 1000).padStart(5, '0') : '';
-  const chip = st === 'done' ? 'Done' : st === 'rest' ? 'Rest' : st === 'live' ? 'In progress' : rel(d, WKT).t;
+  const chip = st === 'done' ? 'Done' : st === 'rest' ? 'Rest' : st === 'live' ? 'In progress' : restart && st0 === 'hidden' ? 'Today' : rel(d, WKT).t;
   const live = st === 'done' || st === 'live';
-  const chips = st === 'rest' ? ['Recovery day', `Next: Pull · Thu ${fmtT(WKT).full}`] : ['6 exercises', `~${WORKOUT_MIN} min`, ...(d.hc && d.wearable ? ['~350 kcal'] : [])];
+  const chips = st === 'rest' ? ['Recovery day', `Next: Pull · Thu ${fmtT(WKT).full}`] : restart && st0 === 'hidden' ? ['5 exercises', '~30 min', 'Lighter weights'] : [`${buildExercises().length} exercises`, `~${WORKOUT_MIN} min`, ...(d.hc && d.wearable ? ['~350 kcal'] : [])];
   const did = st === 'done' ? `${fmtT(done.a).hm} – ${fmtT(done.b).full}` : st === 'live' ? `Started · ${elapsed}` : st === 'rest' ? 'A walk counts' : 'Not yet';
-  const cta = st === 'todo' ? 'Start workout' : st === 'live' ? 'Resume workout' : null;
+  const cta = st === 'todo' ? (restart && st0 === 'hidden' ? 'Start easy session' : 'Start workout') : st === 'live' ? 'Resume workout' : null;
   const mins = Math.max(1, Math.round(done.b - done.a));
   const onCta = () => (st === 'live' ? router.push('/workout') : startWorkout());
 
@@ -81,10 +83,10 @@ export function WorkoutCard() {
         </>
       ) : (
         <>
-          <Txt style={{ fontFamily: font.regular, fontSize: 40, letterSpacing: -1.8, lineHeight: 42, color: '#fff' }}>{st === 'rest' ? 'Rest day' : 'Leg day'}</Txt>
+          <Txt style={{ fontFamily: font.regular, fontSize: 40, letterSpacing: -1.8, lineHeight: 42, color: '#fff' }}>{st === 'rest' ? 'Rest day' : restart && st0 === 'hidden' ? 'Easy restart' : 'Leg day'}</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>{chips.map((t) => <Chip key={t} label={t} onDark />)}</Row>
           <Row style={{ gap: 8 }}>
-            <Tile k="Planned" v={st === 'rest' ? 'No workout' : fmtT(WKT).full} />
+            <Tile k="Planned" v={st === 'rest' ? 'No workout' : restart && st0 === 'hidden' ? 'Whenever you are ready' : fmtT(WKT).full} />
             <Tile k="You did it" v={did} color={live ? '#7CF0C8' : 'rgba(255,255,255,0.6)'} />
           </Row>
         </>

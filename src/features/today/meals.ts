@@ -38,3 +38,18 @@ export function mealView(d: Domain, m: Meal): MealView {
   const r = rel(d, m.t);
   return { meal: m, full, any, kcal: mealKcal(m), status: r.t, tone: r.late ? 'warn' : 'muted', badge: null, isNext };
 }
+
+// What the day looks like from now: meals that were due and are still not logged (missed), what is due now, and what comes next.
+export function mealTimeline(d: Domain): string {
+  const now = nowMin(d);
+  const unlogged = MEALS.filter((m) => { const x = mealLog(d, m.id); return !x.skip && x.eaten.length === 0 && x.extra.length === 0; });
+  const missed = unlogged.filter((m) => m.t + 10 < now);
+  const current = unlogged.find((m) => m.t - 30 <= now && now <= m.t + 10);
+  const next = unlogged.find((m) => m.t > now && m !== current);
+  const bits: string[] = [];
+  if (missed.length) bits.push(`You missed ${missed.map((m) => `${m.n.toLowerCase()} at ${fmtT(m.t).full}`).join(' and ')}`);
+  if (current) bits.push(`${current.n} is now`);
+  if (next) bits.push(`Next: ${next.n.toLowerCase()} at ${fmtT(next.t).full}`);
+  else if (!current) bits.push('That was the last meal planned for today');
+  return bits.join(' · ');
+}

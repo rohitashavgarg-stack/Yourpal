@@ -12,7 +12,7 @@ import { mealLog, totals, useDomain, useMeals } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { inr } from '@/lib/useNow';
-import { mealById, mealKcal, mealView, nextMeal } from './meals';
+import { mealById, mealKcal, mealTimeline, mealView, nextMeal } from './meals';
 import { QuickLogSheet } from './QuickLogSheet';
 
 function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | 'part' | 'off' | null }) {
@@ -124,7 +124,7 @@ function MealRow({ id, open }: { id: MealId; open: boolean }) {
   );
 }
 
-export function MealsCard() {
+export function MealsCard({ timeline = false }: { timeline?: boolean } = {}) {
   const { c } = useTheme();
   const { d } = useDomain();
   const t = totals(d);
@@ -139,6 +139,7 @@ export function MealsCard() {
         <Txt style={{ fontFamily: font.regular, fontSize: 30, letterSpacing: -1.3 }} accessibilityRole="header">Meals</Txt>
         <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
       </Row>
+      {timeline && <Txt style={{ fontSize: 14, lineHeight: 20, paddingHorizontal: 4, paddingBottom: 12, color: c.ink }}>{mealTimeline(d)}</Txt>}
       <View accessible accessibilityLabel={`Eaten today ${t.k} of ${KCAL_TARGET} kcal, protein ${t.p} of ${MACRO_TARGET.p} grams`} style={{ gap: 6, paddingVertical: 12, paddingHorizontal: 14, borderRadius: 20, backgroundColor: c.tAct, marginBottom: 6 }}>
         <Row style={{ justifyContent: 'space-between' }}>
           <Txt style={{ fontFamily: font.medium, fontSize: 12, color: c.cAct }}>Eaten today</Txt>

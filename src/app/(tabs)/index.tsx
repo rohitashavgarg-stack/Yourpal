@@ -16,7 +16,7 @@ import { Trackers } from '@/features/today/Trackers';
 import { WorkoutCard } from '@/features/today/WorkoutCard';
 import { MealsCard } from '@/features/today/MealsCard';
 import { WeekCard } from '@/features/today/WeekCard';
-import { RightNow, useRightNowKind } from '@/features/today/RightNow';
+import { useRightNowFocus } from '@/features/today/timeline';
 import { ForYouStack, GoalStrip } from '@/features/today/ForYou';
 import { todayUiStore, TodayLayout } from '@/features/today/ui';
 import { Txt } from '@/components/ui';
@@ -56,7 +56,11 @@ export default function Today() {
   const ptPending = usePtPending();
   const layout = todayUiStore.use().layout;
   const isNew = layout === 'New';
-  const rnKind = useRightNowKind(isNew);
+  const focus = useRightNowFocus(isNew);
+  // New layout: the section for what is happening now floats to the top, the others follow.
+  const primary: 'restart' | 'workout' | 'meals' | 'wrap' = focus.kind === 'restart' ? 'restart' : focus.kind === 'live' || focus.kind === 'workout' || focus.kind === 'late' ? 'workout' : focus.kind === 'meal' ? 'meals' : focus.kind === 'next' ? (focus.what === 'workout' ? 'workout' : 'meals') : 'wrap';
+  const focusMeal = focus.kind === 'meal' ? focus.meal.id : null;
+  useEffect(() => { if (focusMeal) set({ openMeal: focusMeal }); }, [focusMeal]); // eslint-disable-line react-hooks/exhaustive-deps
   const gs = goalStore.use();
   const st = stepsStore.use();
   const gv = goalV2Store.use();
@@ -104,13 +108,16 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {d.todayVariant === 'Comeback' && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>{`Great to have you back after ${d.awayDays} days.`}</Txt></Enter>}
             <Enter i={0}><GoalStrip /></Enter>
             <Enter i={1}><ForYouStack /></Enter>
-            <Enter i={1}><RightNow restart /></Enter>
+            {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}
+            {primary === 'restart' && <Enter i={1}><WorkoutCard restart /></Enter>}
+            {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
+            {primary === 'meals' && <Enter i={1}><MealsCard timeline /></Enter>}
+            {primary === 'wrap' && <Enter i={1}><WeekCard /></Enter>}
             <Enter i={2}><Trackers /></Enter>
             <Enter i={2}><StreakChip /></Enter>
-            {/* the full plan: the Workout card steps aside while Right now already is the workout */}
-            {!(rnKind === 'live' || rnKind === 'restart' || rnKind === 'workout' || rnKind === 'late') && <Enter i={3}><WorkoutCard /></Enter>}
-            <Enter i={4}><MealsCard /></Enter>
-            <Enter i={5}><WeekCard /></Enter>
+            {primary !== 'workout' && primary !== 'restart' && <Enter i={3}><WorkoutCard /></Enter>}
+            {primary !== 'meals' && <Enter i={4}><MealsCard timeline /></Enter>}
+            {primary !== 'wrap' && <Enter i={5}><WeekCard /></Enter>}
           </>
         ) : (
           <>
@@ -118,7 +125,6 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {ptPending && d.hasGym && <Enter i={0}><PtConfirmCard /></Enter>}
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
             {d.todayVariant === 'Comeback' && <Enter i={1}><ComebackCard /></Enter>}
-            <Enter i={1}><RightNow /></Enter>
             <Enter i={2}><Trackers /></Enter>
             {/* Goal and streak are progress, not an action: they sit under Right now and the quick trackers. After a break the goal is one quiet line. */}
             <Enter i={2}><StreakChip /></Enter>
