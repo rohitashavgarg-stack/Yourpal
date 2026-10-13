@@ -20,6 +20,7 @@ import { mealKcal } from './meals';
 // "Right now": the one thing that matters at this hour. The full plan (Workout, Meals, This week) stays below it.
 type Focus =
   | { kind: 'live' }
+  | { kind: 'restart' }
   | { kind: 'workout'; diff: number }
   | { kind: 'meal'; meal: Meal }
   | { kind: 'late'; diff: number }
@@ -28,9 +29,12 @@ type Focus =
 
 const open = (d: ReturnType<typeof useDomain>['d'], m: Meal) => { const x = mealLog(d, m.id); return !x.skip && x.eaten.length === 0 && x.extra.length === 0; };
 
-function pickFocus(d: ReturnType<typeof useDomain>['d'], plan: number): Focus {
+function pickFocus(d: ReturnType<typeof useDomain>['d'], plan: number, restart: boolean): Focus {
   const now = d.min;
   const st = workoutState(d);
+  if (d.session) return { kind: 'live' };
+  // After a break the one action is the easy restart session (only where the layout has no Comeback card of its own).
+  if (restart && d.todayVariant === 'Comeback') return { kind: 'restart' };
   if (st === 'live') return { kind: 'live' };
   const wkTodo = st === 'todo';
   if (wkTodo && now >= plan - 60 && now <= plan + 120) return { kind: 'workout', diff: plan - now };
@@ -47,16 +51,23 @@ function pickFocus(d: ReturnType<typeof useDomain>['d'], plan: number): Focus {
 
 const partOfDay = (min: number) => (min >= 1260 || min < 300 ? { n: 'Night', I: Moon } : min < 720 ? { n: 'Morning', I: Sunrise } : min < 1020 ? { n: 'Afternoon', I: Sun } : { n: 'Evening', I: Sunset });
 
-export function RightNow() {
+// The kind of thing Right now is showing, so the layout can avoid repeating it (for example hide the Workout card while Right now is the workout).
+export function useRightNowKind(restart = false) {
+  const { d } = useDomain();
+  const { state } = useStore();
+  return pickFocus(d, plannedMin(state.profile.time), restart).kind;
+}
+
+export function RightNow({ restart = false }: { restart?: boolean } = {}) {
   const { d } = useDomain();
   const { state } = useStore();
   const plan = plannedMin(state.profile.time);
-  const f = pickFocus(d, plan);
+  const f = pickFocus(d, plan, restart);
   if (d.loading) return null;
   const when = partOfDay(d.min);
   return (
     <Animated.View key={f.kind + (f.kind === 'meal' ? f.meal.id : '')} entering={fade()}>
-      {f.kind === 'live' || f.kind === 'workout' || f.kind === 'late'
+      {f.kind === 'live' || f.kind === 'restart' || f.kind === 'workout' || f.kind === 'late'
         ? <WorkoutFocus f={f} plan={plan} part={when} />
         : f.kind === 'meal' ? <MealFocus meal={f.meal} part={when} />
         : f.kind === 'next' ? <NextRow f={f} part={when} />
@@ -75,13 +86,13 @@ function Label({ part, color }: { part: ReturnType<typeof partOfDay>; color: str
   );
 }
 
-function WorkoutFocus({ f, plan, part }: { f: Extract<Focus, { kind: 'live' | 'workout' | 'late' }>; plan: number; part: ReturnType<typeof partOfDay> }) {
+function WorkoutFocus({ f, plan, part }: { f: Extract<Focus, { kind: 'live' | 'restart' | 'workout' | 'late' }>; plan: number; part: ReturnType<typeof partOfDay> }) {
   const { d } = useDomain();
   const start = useStartWorkout();
   const n = buildExercises().length;
   const name = plan < 720 ? 'Morning workout' : plan < 1020 ? 'Afternoon workout' : 'Evening workout';
-  const head = f.kind === 'live' ? 'Workout in progress' : f.kind === 'late' ? `${name} is still open` : f.diff > 10 ? `${name} in ${dur(f.diff)}` : f.diff >= -10 ? `Time for your ${name.toLowerCase()}` : `${name} · ${dur(-f.diff)} late`;
-  const sub = f.kind === 'live' ? 'Pick up where you left off.' : f.kind === 'late' ? `Planned for ${fmtT(plan).full}. A shorter session still counts.` : `Planned ${fmtT(plan).full} · Leg day · ${n} exercises · about ${WORKOUT_MIN} min`;
+  const head = f.kind === 'restart' ? 'Your easy restart session' : f.kind === 'live' ? 'Workout in progress' : f.kind === 'late' ? `${name} is still open` : f.diff > 10 ? `${name} in ${dur(f.diff)}` : f.diff >= -10 ? `Time for your ${name.toLowerCase()}` : `${name} · ${dur(-f.diff)} late`;
+  const sub = f.kind === 'restart' ? 'About 30 min · 5 exercises · lighter weights to ease back in.' : f.kind === 'live' ? 'Pick up where you left off.' : f.kind === 'late' ? `Planned for ${fmtT(plan).full}. A shorter session still counts.` : `Planned ${fmtT(plan).full} · Leg day · ${n} exercises · about ${WORKOUT_MIN} min`;
   const arrive = d.hasGym && f.kind === 'workout' && d.ci !== 'Checked in' && d.ci !== 'At the gym';
   return (
     <View accessibilityLabel="Right now: your workout" style={{ borderRadius: 24, overflow: 'hidden', padding: 16, gap: 10, backgroundColor: '#0B0E14' }}>
@@ -96,7 +107,7 @@ function WorkoutFocus({ f, plan, part }: { f: Extract<Focus, { kind: 'live' | 'w
       </Row>
       {arrive && <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.7)' }}>Check in when you arrive and your workout opens from the bar below.</Txt>}
       <Pressy accessibilityRole="button" onPress={() => (f.kind === 'live' ? router.push('/workout') : start())} style={{ height: 50, borderRadius: 25, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', marginTop: 4 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 15, color: '#0B0E14' }}>{f.kind === 'live' ? 'Resume workout' : 'Start workout'}</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: 15, color: '#0B0E14' }}>{f.kind === 'live' ? 'Resume workout' : f.kind === 'restart' ? 'Start easy session' : 'Start workout'}</Txt>
       </Pressy>
     </View>
   );

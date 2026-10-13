@@ -16,7 +16,10 @@ import { Trackers } from '@/features/today/Trackers';
 import { WorkoutCard } from '@/features/today/WorkoutCard';
 import { MealsCard } from '@/features/today/MealsCard';
 import { WeekCard } from '@/features/today/WeekCard';
-import { RightNow } from '@/features/today/RightNow';
+import { RightNow, useRightNowKind } from '@/features/today/RightNow';
+import { ForYouStack, GoalStrip } from '@/features/today/ForYou';
+import { todayUiStore, TodayLayout } from '@/features/today/ui';
+import { Txt } from '@/components/ui';
 import { PaymentBanner } from '@/features/today/PaymentBanner';
 import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
@@ -51,6 +54,9 @@ export default function Today() {
   useToastLift(anyBar ? navBottom + 74 + 68 : 0);
 
   const ptPending = usePtPending();
+  const layout = todayUiStore.use().layout;
+  const isNew = layout === 'New';
+  const rnKind = useRightNowKind(isNew);
   const gs = goalStore.use();
   const st = stepsStore.use();
   const gv = goalV2Store.use();
@@ -58,6 +64,7 @@ export default function Today() {
   useScenarios({
     title: 'Today',
     rows: [
+      { label: 'Today layout', options: ['Current', 'New'], value: layout, onPick: (v) => todayUiStore.set({ layout: v as TodayLayout }) },
       { label: 'Today variant', options: ['Regular', 'With updates', 'Comeback'], value: d.todayVariant, onPick: (v) => set({ todayVariant: v as any, dismissed: {} }) },
       ...goalRows,
       ...(gv.version === 'Version 1' ? [{ label: 'Goal card design', options: DESIGNS, value: gs.design, onPick: (v: string) => goalStore.set({ design: v as GoalDesign }) }] : []),
@@ -75,9 +82,10 @@ export default function Today() {
       { label: 'Show loading state', run: () => load(1400) },
       { label: 'Reset meals for this time of day', run: () => set({ meals: mealsFor(d.time), openMeal: null }) },
     ],
-  }, [d.todayVariant, d.hc, d.time, d.wkScenario, d.wkDone, d.ci, d.scanFails, d.session, d.ciStart, d.ciOut, d.ciExtend, gs.design, gs.pace, st.design, gv.version, gv.scenario, d.goal]);
+  }, [layout, d.todayVariant, d.hc, d.time, d.wkScenario, d.wkDone, d.ci, d.scanFails, d.session, d.ciStart, d.ciOut, d.ciExtend, gs.design, gs.pace, st.design, gv.version, gv.scenario, d.goal]);
 
-  const greet = { Morning: 'Good morning', Afternoon: 'Good afternoon', Evening: 'Good evening' }[d.time];
+  // After a break the greeting itself says welcome back (new layout); the days away sit right under the title.
+  const greet = isNew && d.todayVariant === 'Comeback' ? 'Welcome back' : { Morning: 'Good morning', Afternoon: 'Good afternoon', Evening: 'Good evening' }[d.time];
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <TabScreen title={`${greet},
@@ -90,6 +98,19 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             <View style={{ flexDirection: 'row', gap: 12 }}><Skeleton h={176} style={{ flex: 1 }} /><Skeleton h={176} style={{ flex: 1 }} /></View>
             <Skeleton h={64} />
             <Skeleton h={250} />
+          </>
+        ) : isNew ? (
+          <>
+            {d.todayVariant === 'Comeback' && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>{`Great to have you back after ${d.awayDays} days.`}</Txt></Enter>}
+            <Enter i={0}><GoalStrip /></Enter>
+            <Enter i={1}><ForYouStack /></Enter>
+            <Enter i={1}><RightNow restart /></Enter>
+            <Enter i={2}><Trackers /></Enter>
+            <Enter i={2}><StreakChip /></Enter>
+            {/* the full plan: the Workout card steps aside while Right now already is the workout */}
+            {!(rnKind === 'live' || rnKind === 'restart' || rnKind === 'workout' || rnKind === 'late') && <Enter i={3}><WorkoutCard /></Enter>}
+            <Enter i={4}><MealsCard /></Enter>
+            <Enter i={5}><WeekCard /></Enter>
           </>
         ) : (
           <>

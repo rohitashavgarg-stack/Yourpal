@@ -129,15 +129,16 @@ export function PtConfirmCard() {
 // ---------- Comeback (after a break) ----------
 export function ComebackCard() {
   const { c, isDark } = useTheme();
-  const { d } = useDomain();
+  const { state } = useStore();
+  const { openSheet, toast } = useOverlay();
   const startWorkout = useStartWorkout();
-  const days = d.awayDays;
+  const isPT = state.sc.member === 'PT member';
   const a = useSharedValue(0);
   useEffect(() => { a.value = withDelay(1200, withTiming(1, { duration: 700 })); }, []);
   const pause = useAnimatedStyle(() => ({ opacity: 1 - a.value, transform: [{ scale: 1 - 0.4 * a.value }] }));
   const flame = useAnimatedStyle(() => ({ opacity: a.value, transform: [{ scale: 0.5 + 0.5 * a.value }] }));
   return (
-    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 20, gap: 14, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 20, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
       <CornerGlow color={FLAME} size={520} />
       <Row style={{ gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}>
@@ -146,19 +147,25 @@ export function ComebackCard() {
         </View>
         <View style={{ flex: 1 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.6 }}>Welcome back, Rohitashav</Txt>
-          <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{`Great to have you back after ${days} days`}</Txt>
+          {isPT && <Txt v="caption">From Coach Vikram</Txt>}
         </View>
       </Row>
-      <Button label="Start easy session" onPress={() => { startWorkout(); }} />
-      <Pressy accessibilityRole="button" onPress={() => router.navigate('/plans')} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}><Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20, color: c.accentText }}>Re-plan my week</Txt></Pressy>
+      <View style={{ gap: 8 }}>
+        <Txt style={{ fontSize: 16, lineHeight: 23 }}>Here's an easy restart session.</Txt>
+        <View style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused, not lost</Txt>
+        </View>
+      </View>
+      <Button label="Start session" onPress={() => { startWorkout(); }} />
+      <Button kind="outline" small label="Re-plan my week" onPress={() => router.navigate('/plans')} />
     </Animated.View>
   );
 }
 
 // ---------- Updates: one compact card with a pager ----------
-type Upd = { key: string; title: string; body: string; btn?: string; act?: () => void; isPlan?: boolean; icon: any; tone: 'accent' | 'warn' | 'good' };
+export type Upd = { key: string; title: string; body: string; btn?: string; act?: () => void; isPlan?: boolean; icon: any; tone: 'accent' | 'warn' | 'good' };
 
-function useUpdates() {
+export function useUpdates() {
   const { state } = useStore();
   const { d, set } = useDomain();
   const { openSheet, toast } = useOverlay();

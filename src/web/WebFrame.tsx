@@ -19,6 +19,7 @@ import { createStore } from '@/lib/createStore';
 import { usePathname } from 'expo-router';
 import { ChartLine, Dumbbell, Flag, House, LogIn, MapPin, MessageCircle, Minus, Moon, Plus, SlidersHorizontal, Sun, Sunrise, Sunset, UserRound } from '@/lib/icons';
 import { Actions, Choice, PanelCard, QuickTime, ScreenItem, P } from '@/web/ControlParts';
+import { todayUiStore, TodayLayout } from '@/features/today/ui';
 import { SITUATIONS, SITUATION_HINT, Situation, useSituation } from '@/lib/situations';
 
 const PHONE_W = 390, PHONE_H = 844;
@@ -168,6 +169,8 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
   const sit = useSituation();
   const rows = [
     // One situation at a time: picking it sets everything it implies (and a fitting time of day).
+    // Which Today layout: the current cards, or the new one (greeting, goal strip, one "For you" stack, Right now, trackers, plan).
+    { label: 'Today layout', options: ['Current', 'New'], value: todayUiStore.use().layout, onPick: (v: string) => { todayUiStore.set({ layout: v as TodayLayout }); said(`Today layout: ${v}`); } },
     { label: 'Situation', options: SITUATIONS as string[], value: sit.current, onPick: (v: string) => { sit.pick(v as Situation); said(`Situation: ${v}`); } },
     { label: 'Goal type', options: ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness', 'Not sure yet'], value: type, onPick: pickGoal },
     // What the member sees at the top of Today: a normal day, the updates card (plan changes, messages), or the welcome-back card after a break.
@@ -241,7 +244,7 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
           {open ? <Minus size={18} color={P.muted} /> : <Plus size={18} color={P.muted} />}
         </Pressable>
       </View>
-      {!!note && <View style={{ backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
+      {!!note && <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, zIndex: 20, backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12, shadowColor: '#101828', shadowOpacity: 0.15, shadowRadius: 8 }}><Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
       {open && (
         <>
           <PanelCard icon={period.icon} title={period.label}>
@@ -259,6 +262,7 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
           </PanelCard>
 
           <PanelCard icon={House} title="Situation" pill={{ label: sit.current }}>
+            {seg('Today layout')}
             {seg('Situation')}
             <Text style={{ fontFamily: font.regular, fontSize: 12, lineHeight: 17, color: P.muted }}>{SITUATION_HINT[sit.current]}</Text>
             {sit.current === 'Comeback' && seg('Days away (Comeback)')}
@@ -304,7 +308,7 @@ function PanelBody({ onDone }: { onDone?: (msg: string) => void } = {}) {
   const classic = (
     <View style={{ gap: 14 }}>
       <Text style={{ fontFamily: font.bold, fontSize: 16, lineHeight: 21, color: '#12151C' }}>Edge cases</Text>
-      {!!note && <View style={{ backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
+      {!!note && <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, zIndex: 20, backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12, shadowColor: '#101828', shadowOpacity: 0.15, shadowRadius: 8 }}><Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
       {rows.map((r) => (
         <View key={r.label} style={{ gap: 6 }}>
           <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: '#5C6370' }}>{r.label}</Text>
