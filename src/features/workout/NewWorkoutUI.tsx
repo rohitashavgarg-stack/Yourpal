@@ -3,7 +3,7 @@ import { Image, Platform, Pressable, ScrollView, View } from 'react-native';
 import { useEvent } from 'expo';
 import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronLeft, Ellipsis, Maximize2, Play, X } from '@/lib/icons';
+import { ChevronDown, ChevronLeft, ChevronUp, Ellipsis, Maximize2, Play, X } from '@/lib/icons';
 import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle } from '@/components/bits';
 import { Ex, ListItem } from '@/lib/data';
@@ -73,7 +73,7 @@ function FinishPill({ onPress }: { onPress: () => void }) {
 // A main exercise: a normal page. The name, a small clip card (a still with a play button, so the clip only plays when you ask), the muscles,
 // then the sets with their steppers, and Next at the bottom. Nothing plays on its own and nothing sits over the sets.
 // ---------------------------------------------------------------------------------------------
-function ClipCardInner({ source, thumb, onFull }: { source: number; thumb?: number; onFull: () => void }) {
+function ClipCardInner({ source, thumb, onFull, onHide }: { source: number; thumb?: number; onFull: () => void; onHide?: () => void }) {
   const player = useVideoPlayer(source, (p) => { p.loop = true; p.muted = true; });
   const view = useRef<VideoView>(null);
   const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
@@ -94,11 +94,34 @@ function ClipCardInner({ source, thumb, onFull }: { source: number; thumb?: numb
           </View>
         )}
       </Pressy>
+      {onHide && (
+        <Pressy accessibilityRole="button" accessibilityLabel="Hide the clip" onPress={onHide} scaleTo={0.94}
+          style={{ position: 'absolute', left: 10, top: 10, height: 32, paddingHorizontal: 12, borderRadius: 16, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#C9D1DD', flexDirection: 'row', alignItems: 'center', gap: 4, justifyContent: 'center' }}>
+          <ChevronUp size={15} color={INK} />
+          <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: INK }}>Hide</Txt>
+        </Pressy>
+      )}
       <Pressy accessibilityRole="button" accessibilityLabel="Full screen" onPress={goFull} scaleTo={0.92}
         style={{ position: 'absolute', right: 10, bottom: 10, width: 40, height: 40, borderRadius: 20, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
         <Maximize2 size={18} color={INK} />
       </Pressy>
     </View>
+  );
+}
+
+// The clip, once it has been seen: a single quiet row. Tap it to bring the card back.
+function ClipRow({ thumb, onOpen }: { thumb?: number; onOpen: () => void }) {
+  const { c } = useTheme();
+  return (
+    <Pressy accessibilityRole="button" accessibilityLabel="Show the clip" onPress={onOpen} scaleTo={0.98}
+      style={{ flexDirection: 'row', alignItems: 'center', gap: 12, minHeight: 56, paddingVertical: 6, paddingLeft: 6, paddingRight: 14, borderRadius: 20, backgroundColor: c.surface }}>
+      <View style={{ width: 44, height: 44, borderRadius: 14, overflow: 'hidden', backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center' }}>
+        {!!thumb && <Image source={thumb} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} />}
+        <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}><Play size={10} color="#fff" fill="#fff" style={{ marginLeft: 1 }} /></View>
+      </View>
+      <Txt style={{ flex: 1, fontFamily: font.medium, fontSize: 15, lineHeight: 21 }}>Watch form</Txt>
+      <ChevronDown size={18} color={c.muted} />
+    </Pressy>
   );
 }
 
@@ -109,9 +132,11 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const [pop, setPop] = useState(false);
+  const [shown, setShown] = useState<boolean | null>(null); // null = follow the sets: the clip is there until a set is ticked, then it shrinks
   const source = CLIPS[e.id];
   const done = e.sets.filter((x) => x.st === 'done').length;
   const marked = done > 0;
+  const clipOpen = shown ?? !marked;
   const none = cur < 0 || marked;
   const left = e.sets.filter((x) => x.st === 'todo').length;
   const n = s.ex.length + 2, pos = s.exIdx + 1;
@@ -142,7 +167,9 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
             <Ellipsis size={20} color={c.ink} />
           </Pressy>
         </Row>
-        {source != null && <ClipCardInner key={e.id} source={source} thumb={THUMBS[e.id]} onFull={() => setPop(true)} />}
+        {source != null && (clipOpen
+          ? <ClipCardInner key={e.id} source={source} thumb={THUMBS[e.id]} onFull={() => setPop(true)} onHide={marked ? () => setShown(false) : undefined} />
+          : <ClipRow thumb={THUMBS[e.id]} onOpen={() => setShown(true)} />)}
         <View style={{ gap: 8 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 16, letterSpacing: 1.2, color: c.muted }}>MUSCLES FOCUSED</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>
