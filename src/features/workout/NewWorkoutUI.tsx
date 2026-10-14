@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Image, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import React, { useRef, useState } from 'react';
+import { Image, Platform, Pressable, ScrollView, View } from 'react-native';
+import { useEvent } from 'expo';
+import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronLeft, Ellipsis, Play, X } from '@/lib/icons';
+import { ChevronLeft, Ellipsis, Maximize2, Play, X } from '@/lib/icons';
 import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle } from '@/components/bits';
 import { Ex, ListItem } from '@/lib/data';
@@ -12,7 +12,6 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { fade } from '@/theme/motion';
 import { mmss } from '@/lib/useNow';
-import { ClipStage } from './ClipStage';
 import { RestPanel } from './RestPanel';
 import { GlassBackdrop } from '@/components/Glass';
 import { VideoView, useVideoPlayer } from 'expo-video';
@@ -70,110 +69,103 @@ function FinishPill({ onPress }: { onPress: () => void }) {
   );
 }
 
-function RoundLight({ label, onPress, children }: { label: string; onPress: () => void; children: React.ReactNode }) {
+// ---------------------------------------------------------------------------------------------
+// A main exercise: a normal page. The name, a small clip card (a still with a play button, so the clip only plays when you ask), the muscles,
+// then the sets with their steppers, and Next at the bottom. Nothing plays on its own and nothing sits over the sets.
+// ---------------------------------------------------------------------------------------------
+function ClipCardInner({ source, thumb, onFull }: { source: number; thumb?: number; onFull: () => void }) {
+  const player = useVideoPlayer(source, (p) => { p.loop = true; p.muted = true; });
+  const view = useRef<VideoView>(null);
+  const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
+  const [full, setFull] = useState(false);
+  const toggle = () => (isPlaying ? player.pause() : player.play());
+  const goFull = () => {
+    if (Platform.OS === 'web') { onFull(); return; } // the browser's full screen would leave the phone frame
+    player.play(); setFull(true); setTimeout(() => view.current?.enterFullscreen(), 60);
+  };
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} scaleTo={0.92}
-      style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E1E6EC', alignItems: 'center', justifyContent: 'center' }}>
-      {children}
-    </Pressy>
+    <View style={{ height: 212, borderRadius: 24, overflow: 'hidden', backgroundColor: '#FFFFFF' }}>
+      <VideoView ref={view} player={player} nativeControls={full} contentFit="contain" allowsPictureInPicture={false} fullscreenOptions={{ enable: true, orientation: 'landscape' }} onFullscreenExit={() => setFull(false)} pointerEvents="none" style={{ width: '100%', height: '100%' }} />
+      {!isPlaying && !!thumb && <Image source={thumb} resizeMode="contain" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }} />}
+      <Pressy accessibilityRole="button" accessibilityLabel={isPlaying ? 'Pause the clip' : 'Play the clip'} onPress={toggle} scaleTo={1} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
+        {!isPlaying && (
+          <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}>
+            <Play size={26} color="#fff" fill="#fff" style={{ marginLeft: 3 }} />
+          </View>
+        )}
+      </Pressy>
+      <Pressy accessibilityRole="button" accessibilityLabel="Full screen" onPress={goFull} scaleTo={0.92}
+        style={{ position: 'absolute', right: 10, bottom: 10, width: 40, height: 40, borderRadius: 20, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
+        <Maximize2 size={18} color={INK} />
+      </Pressy>
+    </View>
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-// A main exercise: the clip fills the screen, the sets sit in a bottom sheet over it.
-// ---------------------------------------------------------------------------------------------
 export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onMenu, prevEx, nextEx, prevName, nextName, sets, note, onAdd30, onSkipRest }: {
   s: Session; e: Ex; cur: number; elapsed: string; now: number; onMinimise: () => void; onFinish: () => void; onMenu: () => void;
   prevEx: () => void; nextEx: () => void; prevName: string; nextName: string; sets: React.ReactNode; note: React.ReactNode; onAdd30: () => void; onSkipRest: () => void;
 }) {
-  const { c, isDark } = useTheme();
+  const { c } = useTheme();
   const insets = useSafeAreaInsets();
-  const { height: H } = useWindowDimensions();
-  const MIN = Math.round(H * 0.56), MAX = Math.round(H * 0.88);
-  const h = useSharedValue(MIN);
-  const from = useSharedValue(MIN);
-  const pan = Gesture.Pan()
-    .onStart(() => { from.value = h.value; })
-    .onUpdate((g) => { h.value = Math.max(MIN, Math.min(MAX, from.value - g.translationY)); })
-    .onEnd((g) => {
-      const to = h.value - g.velocityY * 0.12 > (MIN + MAX) / 2 ? MAX : MIN;
-      h.value = withTiming(to, { duration: 220, easing: Easing.out(Easing.cubic) });
-    });
-  const sheet = useAnimatedStyle(() => ({ height: h.value }));
-
+  const [pop, setPop] = useState(false);
+  const source = CLIPS[e.id];
   const done = e.sets.filter((x) => x.st === 'done').length;
   const marked = done > 0;
-  // Ticking the first set lifts the sheet so the sets still to do are in view (it can still be dragged back down).
-  const prevDone = React.useRef(done);
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/immutability -- reanimated shared value
-    if (prevDone.current === 0 && done > 0) h.value = withTiming(MAX, { duration: 280, easing: Easing.out(Easing.cubic) });
-    prevDone.current = done;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [done]);
   const none = cur < 0 || marked;
   const left = e.sets.filter((x) => x.st === 'todo').length;
   const n = s.ex.length + 2, pos = s.exIdx + 1;
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-      {/* the clip stays where it is: the sheet slides over it instead of pushing it */}
-      <ClipStage id={e.id} top={insets.top + 92} bottom={MIN} />
-
-      <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, paddingTop: insets.top + 8, paddingHorizontal: 16, gap: 10, zIndex: 10 }}>
+    <View style={{ flex: 1, backgroundColor: c.bg }}>
+      {pop && source != null && <ClipPopup source={source} onClose={() => setPop(false)} />}
+      <View style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, gap: 12, paddingBottom: 8 }}>
         <View style={{ flexDirection: 'row', gap: 4 }}>
-          {Array.from({ length: n }, (_, i) => <View key={i} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: i <= pos ? INK : '#D5DBE5' }} />)}
+          {Array.from({ length: n }, (_, i) => <View key={i} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: i <= pos ? c.accent : c.surface3 }} />)}
         </View>
         <Row style={{ gap: 10 }}>
-          <RoundLight label="Minimise workout" onPress={onMinimise}><X size={20} color={INK} /></RoundLight>
+          <Pressy accessibilityRole="button" accessibilityLabel="Minimise workout" onPress={onMinimise} scaleTo={0.92} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+            <X size={20} color={c.ink} />
+          </Pressy>
           <View style={{ flex: 1, alignItems: 'center' }}>
-            <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22, color: INK }}>{e.name}</Txt>
-            <Txt numberOfLines={1} style={{ fontSize: 12, lineHeight: 17, color: '#5B6577' }}>{elapsed}</Txt>
+            <Txt accessibilityLabel={`Workout time ${elapsed}`} style={{ fontFamily: font.monoBold, fontSize: 20, lineHeight: 28 }}>{elapsed}</Txt>
           </View>
           <FinishPill onPress={onFinish} />
         </Row>
       </View>
 
-      <Animated.View style={[{ position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 20, backgroundColor: c.bg, borderTopLeftRadius: 28, borderTopRightRadius: 28, borderTopWidth: 1, borderColor: c.line, overflow: 'hidden',
-        shadowColor: '#000', shadowOpacity: isDark ? 0.5 : 0.16, shadowRadius: 24, shadowOffset: { width: 0, height: -6 }, elevation: 18 }, sheet]}>
-        <GestureDetector gesture={pan}>
-          <View style={{ alignItems: 'center', paddingTop: 8, paddingBottom: 6 }}>
-            <View style={{ width: 44, height: 5, borderRadius: 3, backgroundColor: c.surface3 }} />
-          </View>
-        </GestureDetector>
-        <Row style={{ paddingHorizontal: 16, gap: 8, paddingBottom: 8 }}>
-          <View style={{ flex: 1, minWidth: 0 }}>
-            <Txt numberOfLines={1} style={{ fontFamily: font.display, fontSize: 24, lineHeight: 31 }}>{e.name}</Txt>
-          </View>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 16 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+        <Row style={{ gap: 8, alignItems: 'flex-start' }}>
+          <Txt accessibilityRole="header" style={{ flex: 1, fontFamily: font.display, fontSize: 32, lineHeight: 40, letterSpacing: -0.8 }}>{e.name}</Txt>
           <Pressy accessibilityRole="button" accessibilityLabel="Exercise options: swap, ask coach, form tips, skip" onPress={onMenu} scaleTo={0.92}
-            style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+            style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
             <Ellipsis size={20} color={c.ink} />
           </Pressy>
         </Row>
-        <View style={{ paddingHorizontal: 16, paddingBottom: 10, gap: 6 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 16, letterSpacing: 1, color: c.muted }}>MUSCLES FOCUSED</Txt>
+        {source != null && <ClipCardInner key={e.id} source={source} thumb={THUMBS[e.id]} onFull={() => setPop(true)} />}
+        <View style={{ gap: 8 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 16, letterSpacing: 1.2, color: c.muted }}>MUSCLES FOCUSED</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>
             {e.muscles.split('·').map((m) => m.trim()).filter(Boolean).map((m) => <Chip key={m} label={m.charAt(0).toUpperCase() + m.slice(1)} />)}
           </Row>
         </View>
-        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 12 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-          {sets}
-          {note}
-        </ScrollView>
-        <View style={{ paddingHorizontal: 12, paddingTop: 8, paddingBottom: Math.max(insets.bottom, 12) + 4, gap: 8, borderTopWidth: 1, borderTopColor: c.line, backgroundColor: c.bg }}>
-          {s.rest && <RestPanel docked rest={s.rest} now={now} onAdd30={onAdd30} onSkip={onSkipRest} onDone={onSkipRest} />}
-          {cur >= 0 && marked && <Txt v="caption" style={{ textAlign: 'center' }}>{left} set{left === 1 ? '' : 's'} not done · you can come back to them</Txt>}
-          <Row style={{ gap: 10 }}>
-            {s.exIdx > 0 && (
-              <Pressy accessibilityRole="button" accessibilityLabel={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92}
-                style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
-                <ChevronLeft size={22} color={c.ink} />
-              </Pressy>
-            )}
-            <Button kind={none ? 'accent' : 'secondary'} label={none ? `Next: ${nextName}` : `Skip to ${nextName}`} onPress={nextEx} style={{ flex: 1 }} />
-          </Row>
-        </View>
-      </Animated.View>
+        {sets}
+        {note}
+      </ScrollView>
+
+      <View style={{ paddingHorizontal: 12, paddingTop: 8, paddingBottom: Math.max(insets.bottom, 12) + 4, gap: 8, borderTopWidth: 1, borderTopColor: c.line, backgroundColor: c.bg }}>
+        {s.rest && <RestPanel docked rest={s.rest} now={now} onAdd30={onAdd30} onSkip={onSkipRest} onDone={onSkipRest} />}
+        {cur >= 0 && marked && <Txt v="caption" style={{ textAlign: 'center' }}>{left} set{left === 1 ? '' : 's'} not done · you can come back to them</Txt>}
+        <Row style={{ gap: 10 }}>
+          {s.exIdx > 0 && (
+            <Pressy accessibilityRole="button" accessibilityLabel={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92}
+              style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+              <ChevronLeft size={22} color={c.ink} />
+            </Pressy>
+          )}
+          <Button kind={none ? 'accent' : 'secondary'} label={none ? `Next: ${nextName}` : `Skip to ${nextName}`} onPress={nextEx} style={{ flex: 1 }} />
+        </Row>
+      </View>
     </View>
   );
 }
