@@ -126,7 +126,7 @@ export function RoundBtn({ label, onPress, children, bg, style, glass }: { label
   const rim = glass ? { shadowColor: '#101828', shadowOpacity: isDark ? 0.35 : 0.1, shadowRadius: 10, shadowOffset: { width: 0, height: 3 }, elevation: 3 } : null;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress}
-      style={[{ width: 44, height: 44, borderRadius: 22, backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center' }, rim, style]}>
+      style={[{ width: 44, height: 44, borderRadius: 22, backgroundColor: glass ? (isDark ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.75)') : bg ?? c.surface2, borderWidth: glass ? 1 : 0, borderColor: isDark ? 'rgba(255,255,255,0.14)' : 'rgba(16,24,40,0.08)', alignItems: 'center', justifyContent: 'center' }, rim, style]}>
       {glass ? (
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: 22, overflow: 'hidden' }}>
           <GlassBackdrop radius={22} tint={Platform.OS === 'web' ? (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.82)') : undefined} />

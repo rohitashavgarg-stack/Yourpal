@@ -24,8 +24,14 @@ import { CheckInEngine } from '@/features/checkin/CheckInEngine';
 // On the phone the native stack does this (see the Stack.Screen options below). The web stack has no transitions, so this wrapper adds them there.
 const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'checkin', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
 const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
-// Every other screen (all the back-arrow pages) opens with a soft zoom and a blur that clears (the reference video):
-// from the card that was tapped if it passed its position (see theme/zoomOrigin), else from the middle.
+// Every other screen opens in one of these ways (the reference video), and closes the same way in reverse:
+//  expand : a card was tapped, the card grows into the page (and the page shrinks back into the card)
+//  reveal : a small icon was tapped (bell, avatar), the page grows out of the icon from a small rounded shape
+//  push   : a drill-down one level deeper (settings, list rows): in from the right with a fade, back out to the right
+//  fade   : nothing to grow from: a soft fade-zoom from the middle
+// All of them carry a blur that clears as the page opens. (Pages in FROM_BOTTOM are sheets and slide up instead.)
+const PUSH = ['login', 'goal', 'profile/details', 'profile/appearance', 'profile/units', 'profile/notifications', 'profile/privacy', 'profile/export', 'profile/delete', 'profile/help', 'profile/health', 'profile/trackers', 'profile/tracker-designs', 'plans/history', 'plans/updated', 'gym/break', 'progress/photos'];
+type ZKind = 'expand' | 'reveal' | 'push' | 'fade';
 // Web only: the stack drops a popped screen at once, so the slide-out is played first, then the real back runs.
 // True for a moment after a back: a screen that mounts then is being revealed, not pushed, so it must not slide in.
 let popping = false;
@@ -171,7 +177,8 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
   const isWeb = Platform.OS === 'web';
   const blur = Platform.OS !== 'android'; // animated blur is too heavy on Android: fade and zoom only there
   const p = useSharedValue(0); // 0 = closed (at the card), 1 = open
-  const geo = useSharedValue({ tx: 0, ty: 0, s: 0.94 });
+  const geo = useSharedValue({ tx: 0, ty: 0, s: 0.94, r: 28, push: 0 });
+  const kindRef = useRef<ZKind>('fade');
   const [origin] = React.useState(() => takeOrigin());
   const busy = useRef(false);
   const box = useRef<any>(null);
@@ -200,10 +207,13 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
   }, [name]);
   const opened = () => { setBlurOn(false); setOpen(true); const u = under.current; if (u) { u.prev.style.display = ''; u.done(); under.current = null; } };
   const start = (cx: number, cy: number, w: number, h: number) => {
-    if (origin && w > 0) {
-      const s = Math.max(0.3, Math.min(1, origin.w / w));
-      geo.value = { tx: origin.x + origin.w / 2 - (cx + w / 2), ty: origin.y + origin.h / 2 - (cy + h / 2), s };
-    }
+    const kind: ZKind = PUSH.includes(name) ? 'push' : origin && w > 0 ? (origin.w >= w * 0.45 ? 'expand' : 'reveal') : 'fade';
+    kindRef.current = kind;
+    const at = origin ? { tx: origin.x + origin.w / 2 - (cx + w / 2), ty: origin.y + origin.h / 2 - (cy + h / 2) } : { tx: 0, ty: 0 };
+    if (kind === 'expand') geo.value = { ...at, s: Math.max(0.3, Math.min(1, origin!.w / w)), r: 28, push: 0 };
+    else if (kind === 'reveal') geo.value = { ...at, s: 0.16, r: Math.max(w, h) / 2, push: 0 };
+    else if (kind === 'push') geo.value = { tx: 0, ty: 0, s: 1, r: 0, push: Math.min(w, 420) * 0.4 };
+    else geo.value = { tx: 0, ty: 0, s: 0.94, r: 28, push: 0 };
     if (isWeb) under.current = underlay(box.current);
     p.value = withTiming(1, ZIN, (fin) => { if (fin) runOnJS(opened)(); });
     // safety net: if no frames ran (a hidden or throttled browser), never leave the page invisible
@@ -225,16 +235,18 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
     const k = p.value, g = geo.value;
     if (k >= 1) return { opacity: 1, borderRadius: 0, transform: [] };
     return {
-      opacity: Math.min(1, k * 2),
-      borderRadius: 28 * (1 - k),
-      transform: [{ translateX: g.tx * (1 - k) }, { translateY: g.ty * (1 - k) }, { scale: g.s + (1 - g.s) * k }],
+      // reveal fades in a little later so the small shape reads as coming out of the icon; push fades in with the slide
+      // a card stays solid while it grows / shrinks and only fades right at the card; an icon reveal fades in a little later
+      opacity: g.push ? k : g.s < 0.3 ? Math.min(1, k * 1.6) : Math.min(1, k * 4),
+      borderRadius: g.r * (1 - k),
+      transform: [{ translateX: g.tx * (1 - k) + g.push * (1 - k) }, { translateY: g.ty * (1 - k) }, { scale: g.s + (1 - g.s) * k }],
     };
   });
   // a fixed blur that fades out as the page opens (animating the blur strength itself does not update on web); removed once open
   const blurFade = useAnimatedStyle(() => ({ opacity: 1 - p.value }));
   const [blurOn, setBlurOn] = React.useState(blur);
   const [open, setOpen] = React.useState(false);
-  const dim = useAnimatedStyle(() => ({ opacity: p.value * 0.3 }));
+  const dim = useAnimatedStyle(() => ({ opacity: p.value * (geo.value.push ? 0.18 : 0.3) }));
   // Swipe from the left edge to go back: the page follows the finger, then closes the usual way.
   const drag = useSharedValue(0);
   const goBack = () => { (router as any).back(); };
