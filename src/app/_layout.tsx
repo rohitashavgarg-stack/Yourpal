@@ -182,6 +182,7 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
   const p = useSharedValue(0); // 0 = closed (at the card), 1 = open
   const geo = useSharedValue({ tx: 0, ty: 0, s: 0.94, r: 28, push: 0 });
   const kindRef = useRef<ZKind>('fade');
+  const closing = useSharedValue(0);
   const [origin] = React.useState(() => takeOrigin());
   const busy = useRef(false);
   const box = useRef<any>(null);
@@ -193,6 +194,7 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
   const close = (done: () => void) => {
     if (busy.current) return;
     busy.current = true;
+    closing.value = 1;
     setOpen(false);
     if (blur) setBlurOn(true);
     if (isWeb) under.current = underlay(box.current);
@@ -241,7 +243,8 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
       // a card stays solid while it grows / shrinks and only fades right at the card; an icon reveal fades in a little later
       // with iOS liquid glass the page never fades (glass does not draw inside a fading view, so the back button would
       // appear late); it grows / slides solid, under the blur that clears
-      opacity: SOLID ? 1 : g.push ? k : g.s < 0.3 ? Math.min(1, k * 1.6) : Math.min(1, k * 4),
+      // closing always fades (an icon page is gone well before it is tiny; a card fades right at the card)
+      opacity: SOLID && !closing.value ? 1 : g.push ? k : g.s < 0.3 ? Math.min(1, k * (closing.value ? 2.5 : 1.6)) : Math.min(1, k * 4),
       borderRadius: g.r * (1 - k),
       transform: [{ translateX: g.tx * (1 - k) + g.push * (1 - k) }, { translateY: g.ty * (1 - k) }, { scale: g.s + (1 - g.s) * k }],
     };
