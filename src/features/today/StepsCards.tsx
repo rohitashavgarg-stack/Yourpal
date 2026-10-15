@@ -20,9 +20,10 @@ import { createStore } from '@/lib/createStore';
 export type StepsDesign = 'Current' | 'Ruler' | 'Day bars' | 'Dot matrix' | 'Bars + details';
 export const STEPS_DESIGNS: StepsDesign[] = ['Current', 'Ruler', 'Day bars', 'Dot matrix', 'Bars + details'];
 type Entry = { id: number; n: number; label: string };
-export const stepsStore = createStore(() => ({ design: 'Current' as StepsDesign, manual: [] as Entry[] }));
+export const stepsStore = createStore(() => ({ design: 'Dot matrix' as StepsDesign, // the green dot-matrix card is the default on Today
+  manual: [] as Entry[] }));
 
-const SENSOR = 5230, GOAL = 8000, SQ = 164;
+const SENSOR = 5230, GOAL = 8000, SQ = 160;
 // Steps through the day so far (12 two-hour buckets up to now).
 const DAY = [0, 120, 640, 1180, 420, 380, 900, 640, 520, 430, 0, 0];
 let seq = 0;
@@ -47,7 +48,7 @@ export function StepsTile() {
   const a11y = `Steps ${fmt(s.total)} of ${fmt(s.goal)}, ${Math.round(s.pct * 100)} percent. From ${NAME(d)}${s.added ? ` plus ${fmt(s.added)} added by you` : ''}. See your steps trend`;
   return (
     <View style={{ width: SQ, height: SQ }}>
-      <Pressy accessibilityRole="button" accessibilityLabel={a11y} onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'steps' } })} scaleTo={0.97} style={{ width: SQ, height: SQ, borderRadius: 28, overflow: 'hidden' }}>
+      <Pressy accessibilityRole="button" accessibilityLabel={a11y} onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'steps' } })} scaleTo={0.97} style={{ width: SQ, height: SQ, borderRadius: 24, overflow: 'hidden' }}>
         <Face design={design} s={s} />
       </Pressy>
       <Pressy accessibilityRole="button" accessibilityLabel="Add steps manually" onPress={() => openSheet(<StepsSheet />, { label: 'Add steps' })} hitSlop={10}
@@ -75,7 +76,7 @@ const kcalOf = (n: number) => Math.round(n * 0.043);
 export function StepsPreview({ design }: { design: StepsDesign }) {
   const s = useSteps();
   return (
-    <View pointerEvents="none" style={{ width: SQ, height: SQ, borderRadius: 28, overflow: 'hidden' }}>
+    <View pointerEvents="none" style={{ width: SQ, height: SQ, borderRadius: 24, overflow: 'hidden' }}>
       <Face design={design} s={s} />
       <View style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: design === 'Ruler' ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.22)' }}>
         <Plus size={17} color="#fff" />

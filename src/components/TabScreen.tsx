@@ -62,7 +62,7 @@ export function TabScreen({ title, header, children, compactTitle = true, bottom
         </Animated.View>
       )}
       <Animated.ScrollView onScroll={onScroll} scrollEventThrottle={16} refreshControl={refreshControl} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: top + 56, paddingBottom: bottomPad, gap: 12 }}>
-        <Animated.Text accessibilityRole="header" style={[{ fontFamily: font.regular, fontSize: 34, lineHeight: 44, letterSpacing: -1.4, color: c.ink, marginTop: 4, marginBottom: 8, marginHorizontal: 4, transformOrigin: 'left' as any }, large]}>{title}</Animated.Text>
+        {!!title && <Animated.Text accessibilityRole="header" style={[{ fontFamily: font.regular, fontSize: 34, lineHeight: 44, letterSpacing: -1.4, color: c.ink, marginTop: 4, marginBottom: 8, marginHorizontal: 4, transformOrigin: 'left' as any }, large]}>{title}</Animated.Text>}
         {children}
       </Animated.ScrollView>
     </View>

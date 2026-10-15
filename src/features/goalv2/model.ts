@@ -71,7 +71,7 @@ const SPEC: Record<Exclude<GoalKind, 'consistency'>, Spec> = {
 
 export type Goal2 = {
   kind: GoalKind;
-  name: string; // "Lose 6 kg", "Squat 80 kg", "Train 4× a week"
+  name: string; // "Lose 6 kg", "Squat 80 kg", "Train 4× weekly"
   startDate: Date;
   endDate: Date | null; // null only for consistency
   startValue: number;
@@ -112,7 +112,7 @@ export function useGoalV2(): Goal2 {
   if (kind === 'consistency') {
     const weeklyTarget = d.goal.type === 'General fitness' && d.goal.target ? d.goal.target : WEEK_TARGET;
     return {
-      kind, name: `Train ${weeklyTarget}× a week`, startDate: START, endDate: null, startValue: 0, currentValue: st.weekDone, targetValue: weeklyTarget,
+      kind, name: `Train ${weeklyTarget}× weekly`, startDate: START, endDate: null, startValue: 0, currentValue: st.weekDone, targetValue: weeklyTarget,
       unit: 'workouts', dp: 0, noun: 'workouts', down: false, weeklyTarget, pct: clamp01(st.weekDone / weeklyTarget), expected: null,
       status: st.weekDone >= weeklyTarget ? 'reached' : 'onTrack', daysLeft: null, reachedWeeks: st.weeks,
     };

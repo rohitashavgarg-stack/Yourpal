@@ -19,6 +19,20 @@ export function useEarlySigns(): string {
   return `Early signs: ${parts.join(' · ')}`;
 }
 
+// The same numbers as structured rows (for a small chart per row instead of a sentence).
+export type Driver = { key: 'workouts' | 'diet' | 'weight'; label: string; value: string; unit: string; pct: number };
+export function useDrivers(): Driver[] {
+  const { d } = useDomain();
+  const st = useStreak();
+  const diet = trend('diet', 'week', TODAY, { weight: d.weight, water: d.water });
+  const down = Math.round((74.5 - d.weight) * 10) / 10;
+  const clamp = (v: number) => Math.max(0, Math.min(1, v));
+  const out: Driver[] = [{ key: 'workouts', label: 'Workouts this week', value: `${st.weekDone}/${st.target}`, unit: '', pct: clamp(st.weekDone / Math.max(1, st.target)) }];
+  if (diet.hasData) out.push({ key: 'diet', label: 'Diet on plan', value: diet.big, unit: diet.unit, pct: clamp((parseFloat(diet.big) || 0) / 100) });
+  if (down > 0) out.push({ key: 'weight', label: 'Weight down', value: down.toFixed(1), unit: ' kg', pct: clamp(down / 6) });
+  return out;
+}
+
 const GOAL_TYPE_OPTIONS = ['Weight loss', 'Strength', 'Flexibility', 'Consistency'];
 const typeLabel = (t: string) => (t === 'General fitness' || t === 'Not sure yet' ? 'Consistency' : GOAL_TYPE_OPTIONS.includes(t) ? t : 'Weight loss');
 

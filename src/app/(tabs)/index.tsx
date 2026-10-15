@@ -10,7 +10,7 @@ import { CheckInScenario, mealsAt, mealsFor, NOWS, TimeOfDay, useDomain } from '
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ComebackCard, GoalCard, GoalLine, PtConfirmCard, UpdatesCard } from '@/features/today/TopCards';
+import { ComebackCard, PtConfirmCard, UpdatesCard } from '@/features/today/TopCards';
 import { usePtPending } from '@/features/shell/notifs';
 import { Trackers } from '@/features/today/Trackers';
 import { WorkoutCard } from '@/features/today/WorkoutCard';
@@ -24,14 +24,15 @@ import { PaymentBanner } from '@/features/today/PaymentBanner';
 import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
 
+const SHOW_GREETING = false; // the big greeting is off for now, the goal sits right under the header
 let firstLoad = true; // the skeleton shows once per app launch, like a real fetch
 
 import { StreakChip } from '@/features/streak/StreakChip';
 import { STEPS_DESIGNS, StepsDesign, stepsStore } from '@/features/today/StepsCards';
-import { GoalCard2 } from '@/features/goalv2/GoalCard2';
+import { GOAL_SIZES, GoalSize, goalSizeStore, GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
 import { useGoalV2Rows } from '@/features/goalv2/signs';
-import { DESIGNS, GoalDesign, GoalPace, goalStore, GoalSwitch, PACES } from '@/features/today/GoalCards';
+import { DESIGNS, GoalDesign, GoalPace, goalStore, PACES } from '@/features/today/GoalCards';
 const Enter = ({ i, children }: { i: number; children: React.ReactNode }) => (
   <Animated.View entering={fade(i * 50)}>{children}</Animated.View>
 );
@@ -64,6 +65,7 @@ export default function Today() {
   const gs = goalStore.use();
   const st = stepsStore.use();
   const gv = goalV2Store.use();
+  const gsz = goalSizeStore.use();
   const goalRows = useGoalV2Rows();
   useScenarios({
     title: 'Today',
@@ -71,6 +73,7 @@ export default function Today() {
       { label: 'Today layout', options: ['Current', 'New'], value: layout, onPick: (v) => todayUiStore.set({ layout: v as TodayLayout }) },
       { label: 'Today variant', options: ['Regular', 'With updates', 'Comeback'], value: d.todayVariant, onPick: (v) => set({ todayVariant: v as any, dismissed: {} }) },
       ...goalRows,
+      { label: 'Goal size', options: GOAL_SIZES, value: gsz.size, onPick: (v) => goalSizeStore.set({ size: v as GoalSize }) },
       ...(gv.version === 'Version 1' ? [{ label: 'Goal card design', options: DESIGNS, value: gs.design, onPick: (v: string) => goalStore.set({ design: v as GoalDesign }) }] : []),
       { label: 'Steps tracker design', options: STEPS_DESIGNS, value: st.design, onPick: (v) => stepsStore.set({ design: v as StepsDesign }) },
       ...(gv.version === 'Version 1' ? [{ label: 'Goal pace', options: PACES, value: gs.pace, onPick: (v: string) => goalStore.set({ pace: v as GoalPace }) }] : []),
@@ -86,14 +89,14 @@ export default function Today() {
       { label: 'Show loading state', run: () => load(1400) },
       { label: 'Reset meals for this time of day', run: () => set({ meals: mealsAt(d.min), openMeal: null }) },
     ],
-  }, [layout, d.todayVariant, d.hc, d.time, d.wkScenario, d.wkDone, d.ci, d.scanFails, d.session, d.ciStart, d.ciOut, d.ciExtend, gs.design, gs.pace, st.design, gv.version, gv.scenario, d.goal]);
+  }, [layout, d.todayVariant, d.hc, d.time, d.wkScenario, d.wkDone, d.ci, d.scanFails, d.session, d.ciStart, d.ciOut, d.ciExtend, gs.design, gs.pace, st.design, gv.version, gsz.size, gv.scenario, d.goal]);
 
   // After a break the greeting itself says welcome back (new layout); the days away sit right under the title.
   const greet = { Morning: 'Good morning', Afternoon: 'Good afternoon', Evening: 'Good evening' }[d.time];
   const comebackNew = isNew && d.todayVariant === 'Comeback';
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
-      <TabScreen title={comebackNew ? `We missed you
+      <TabScreen title={!SHOW_GREETING ? '' : comebackNew ? `We missed you
 the last ${d.awayDays} days` : `${greet},
 Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186 : 112}
         refreshControl={<RefreshControl refreshing={refreshing} tintColor={c.accentText} onRefresh={() => { setRefreshing(true); load(1000); }} />}>
@@ -107,12 +110,12 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           </>
         ) : isNew ? (
           <>
+            <Enter i={0}><GoalTickCard /></Enter>
             {/* after a break the way back (the comeback plan is the first item of the stack) comes before the goal */}
             {comebackNew && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>Welcome back, Rohitashav. Check your comeback session.</Txt></Enter>}
             {comebackNew && <Enter i={0}><ComebackPlan /></Enter>}
             {/* updates always come before the goal */}
             <Enter i={0}><ForYouStack /></Enter>
-            <Enter i={1}><GoalCard soft /></Enter>
             <Enter i={1}><Trackers /></Enter>
             {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}
             {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
@@ -125,14 +128,13 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           </>
         ) : (
           <>
+            <Enter i={0}><GoalTickCard /></Enter>
             <Enter i={0}><PaymentBanner /></Enter>
             {ptPending && d.hasGym && <Enter i={0}><PtConfirmCard /></Enter>}
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
             {d.todayVariant === 'Comeback' && <Enter i={1}><ComebackCard /></Enter>}
             <Enter i={2}><Trackers /></Enter>
-            {/* Goal and streak are progress, not an action: they sit under Right now and the quick trackers. After a break the goal is one quiet line. */}
             <Enter i={2}><StreakChip /></Enter>
-            <Enter i={2}>{d.todayVariant === 'Comeback' ? <GoalLine /> : gv.version === 'Version 2' ? <GoalCard2 size="compact" /> : <GoalSwitch />}</Enter>
             <Enter i={3}><WorkoutCard /></Enter>
             <Enter i={4}><MealsCard /></Enter>
             <Enter i={5}><WeekCard /></Enter>

@@ -30,7 +30,8 @@ import { useStreak } from '@/features/streak/useStreak';
 import { showProgressLoading, useProgressScenarios } from '@/features/progress/scenarios';
 import { GoalCard2 } from '@/features/goalv2/GoalCard2';
 import { goalV2Store, progressLine, statusLine, useGoalV2 } from '@/features/goalv2/model';
-import { useEarlySigns } from '@/features/goalv2/signs';
+import { useDrivers } from '@/features/goalv2/signs';
+import { GoalVisual } from '@/features/goalv2/GoalVisual';
 
 let firstLoad = true;
 
@@ -40,11 +41,10 @@ function GoalHero() {
   const isNew = ps.data === 'New member';
   const g = d.goal;
   const g2 = useGoalV2();
-  const earlyLive = useEarlySigns();
+  const drivers = useDrivers();
   // same numbers as the Today card (one goal model), whatever kind of goal it is
   const pct = isNew ? 0 : Math.round((g2.status === 'reached' && g2.kind !== 'consistency' ? 1 : g2.pct) * 100);
-  const line = isNew ? 'Starting point saved · Week 1' : `${progressLine(g2)} · ${statusLine(g2)}`;
-  const early = isNew ? 'Early signs show up after your first week' : earlyLive;
+
   return (
     <Pressy accessibilityRole="link" accessibilityLabel="Your goal. Open goal details" scaleTo={0.98} onPress={() => router.push('/goal-detail')}>
     <LinearGradient colors={['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
@@ -60,9 +60,30 @@ function GoalHero() {
         </Pressy>
       </Row>
       <Txt style={{ fontFamily: font.display, fontSize: 34, lineHeight: 44, letterSpacing: -0.6, color: '#fff' }}>{g2.name}{g.by && g.by !== '—' && g.by !== 'No date' ? ` by ${g.by}` : ''}</Txt>
-      <GrowBar pct={pct} color="#fff" h={8} track="rgba(255,255,255,0.22)" />
-      <Txt style={{ fontSize: 14, color: '#fff' }}>{line}</Txt>
-      <Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)' }}>{early}</Txt>
+      {isNew ? (
+        <>
+          <GrowBar pct={0} color="#fff" h={8} track="rgba(255,255,255,0.22)" />
+          <Txt style={{ fontSize: 14, lineHeight: 20, color: '#fff' }}>Starting point saved. Your first week starts now.</Txt>
+          <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.85)' }}>Early signs show up after your first week</Txt>
+        </>
+      ) : (
+        <>
+          <View style={{ marginTop: 4 }}><GoalVisual g={g2} onColor /></View>
+          <Row style={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
+            <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 22, color: '#fff' }}>{progressLine(g2)}</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: '#fff' }}>{g2.kind === 'consistency' ? statusLine(g2) : `${pct}%`}</Txt>
+          </Row>
+          <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.22)', marginTop: 2 }} />
+          <Row>
+            {drivers.map((r) => (
+              <View key={r.key} style={{ flex: 1, gap: 1 }}>
+                <Txt style={{ fontFamily: font.displayBold, fontSize: 20, lineHeight: 28, letterSpacing: -0.4, color: '#fff' }}>{r.value}<Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)' }}>{r.unit}</Txt></Txt>
+                <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)' }}>{r.label}</Txt>
+              </View>
+            ))}
+          </Row>
+        </>
+      )}
     </LinearGradient>
     </Pressy>
   );

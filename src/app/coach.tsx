@@ -40,7 +40,7 @@ export default function CoachHub() {
       <View style={{ alignItems: 'center', gap: 6, paddingTop: 4 }}>
         <View>
           <PersonAvatar who="coach" size={96} />
-          {cs.unread && <View accessibilityLabel="Unread reply" style={{ position: 'absolute', right: 2, top: 2, width: 18, height: 18, borderRadius: 9, backgroundColor: c.accent, borderWidth: 3, borderColor: c.bg }} />}
+          {cs.unread && <View accessibilityLabel="Unread reply" style={{ position: 'absolute', right: 5, top: 5, width: 12, height: 12, borderRadius: 6, backgroundColor: c.accent }} />}
         </View>
         <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: 26, lineHeight: 34, letterSpacing: -0.7 }}>Coach Vikram</Txt>
         <Txt muted style={{ fontSize: 14 }}>Your trainer · Wulf Fitness</Txt>

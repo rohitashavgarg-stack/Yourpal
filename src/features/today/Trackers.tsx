@@ -5,7 +5,7 @@ import { fade } from '@/theme/motion';
 import Svg, { Circle, ClipPath, Defs, G, Line, LinearGradient as SvgGradient, Path, Polyline, Rect, Stop } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { TrendsButton } from '@/components/TrendsButton';
-import { Footprints, Plus } from '@/lib/icons';
+import { Footprints, GlassWater, Plus } from '@/lib/icons';
 import { router } from 'expo-router';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Beat, HeartIcon, Ring, Tag } from '@/components/bits';
@@ -77,7 +77,39 @@ function useWater() {
 // ---------- cards ----------
 
 // ---------- Water and Steps: square feature tiles ----------
-const SQ = { width: 164, height: 164, borderRadius: 28, padding: 14, overflow: 'hidden' } as const;
+const SQ = { width: 160, height: 160, borderRadius: 24, padding: 16, overflow: 'hidden' } as const;
+const GLASS = 'rgba(255,255,255,0.16)';
+
+// The glass bottle from Figma (Bottle.svg, 32 x 95): cap, grooves, outline and highlight are the static art; the water is drawn inside the
+// body and its level springs to the new amount. (Fixed 32 x 95 box, so the card and the art always line up.)
+const BOTTLE_BODY = 'M9 10H23V16.5C23 18.4922 32 21.2891 32 29.9219V85.7031C32 88.1688 30.8762 90.5335 28.8758 92.277C26.8754 94.0205 24.1623 95 21.3333 95H10.6667C7.83769 95 5.12458 94.0205 3.12419 92.277C1.12381 90.5335 0 88.1688 0 85.7031V29.9219C0 21.2891 9 18.4922 9 16.5V10Z';
+const BOTTLE_CAP = 'M8 2C8 0.895431 8.89543 0 10 0H22C23.1046 0 24 0.895431 24 2V7.5C24 7.77614 23.7761 8 23.5 8H8.5C8.22386 8 8 7.77614 8 7.5V2Z';
+const ARect = Animated.createAnimatedComponent(Rect);
+function BottleFigma({ litres, id }: { litres: number; id: string }) {
+  const pct = Math.min(1, litres / TARGET);
+  const top = useSharedValue(95 - pct * 65);
+  useEffect(() => { top.value = withSpring(95 - pct * 65, { damping: 14, stiffness: 90 }); }, [pct]);
+  const water = useAnimatedProps(() => ({ y: top.value, height: 95 - top.value }));
+  return (
+    <Svg width={32} height={95} viewBox="0 0 32 95">
+      <Defs>
+        <ClipPath id={`${id}Cap`}><Path d={BOTTLE_CAP} /></ClipPath>
+        <ClipPath id={`${id}Body`}><Path d={BOTTLE_BODY} /></ClipPath>
+        <SvgGradient id={`${id}Water`} x1="0" y1="0" x2="0" y2="1"><Stop offset="0" stopColor="#8CBBFF" stopOpacity={0.95} /><Stop offset="1" stopColor="#3D6BFF" stopOpacity={0.95} /></SvgGradient>
+        <SvgGradient id={`${id}Shine`} x1="10" y1="58.5" x2="5" y2="58.5" gradientUnits="userSpaceOnUse"><Stop offset="0" stopColor="#999999" /><Stop offset="1" stopColor="#FFFFFF" /></SvgGradient>
+      </Defs>
+      <Rect x={7} y={8} width={18} height={2} rx={1} fill="#9294A8" />
+      <Path d={BOTTLE_CAP} fill="#fff" />
+      <G clipPath={`url(#${id}Cap)`}>
+        {Array.from({ length: 12 }, (_, i) => <Rect key={i} x={9 + i * 1.3} y={0} width={0.3} height={8} fill="#EAE6E6" />)}
+      </G>
+      <Path d={BOTTLE_BODY} fill="#D9D9D9" fillOpacity={0.1} />
+      <G clipPath={`url(#${id}Body)`}><ARect animatedProps={water} x={0} width={32} fill={`url(#${id}Water)`} /></G>
+      <Path d={BOTTLE_BODY} fill="none" stroke="#fff" strokeOpacity={0.6} strokeWidth={1} strokeLinejoin="round" />
+      <Path d="M10 29.4878C10 28.6661 8.88071 28 7.5 28C6.11929 28 5 28.6661 5 29.4878V87.5122C5 88.3339 6.11929 89 7.5 89C8.88071 89 10 88.3339 10 87.5122V29.4878Z" fill={`url(#${id}Shine)`} fillOpacity={0.3} />
+    </Svg>
+  );
+}
 
 // Tall capped bottle with a wavy fill; the level springs to the new amount. Same art on the Today card and in the sheet.
 // live: keep the wave moving. Off on the Today card (a path redrawn every frame is costly and runs on every tab); on inside the water sheet.
@@ -118,28 +150,32 @@ export function WaterCard() {
   const { water, change, hit } = useWater();
   const ml = Math.round(water * 1000);
   return (
-    <View style={{ width: 164, height: 164 }}>
+    <View style={{ width: 160, height: 160 }}>
       <Pressy accessibilityRole="button" accessibilityLabel={`Water ${ml} of 3,000 millilitres. Open details`} onPress={() => openSheet(<WaterSheet />, { label: 'Water' })} scaleTo={0.97} style={SQ}>
-        <LinearGradient colors={['#070B2E', '#1C2BC0']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
-        <Txt style={{ position: 'absolute', left: 14, top: 17, fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>Water</Txt>
-        <View style={{ position: 'absolute', left: 14, top: 48, bottom: 10, justifyContent: 'center' }}>
-          <BottleArt litres={water} w={44} h={106} id="bottleCard" />
+        <LinearGradient colors={['#070B2B', '#1C2BC0']} start={{ x: 0.1, y: 0 }} end={{ x: 0.9, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+        <Txt style={{ fontFamily: font.regular, fontSize: 14, lineHeight: 20, color: 'rgba(255,255,255,0.6)', marginTop: 6 }}>Water</Txt>
+        <View style={{ position: 'absolute', left: 16, bottom: 16, width: 32, height: 95 }}>
+          <BottleFigma litres={water} id="bottleCard" />
           {hit > 0 && <Ripple key={hit} size={40} color="#7FB4FF" width={2} />}
         </View>
-        <View style={{ position: 'absolute', right: 14, bottom: 12, alignItems: 'flex-end' }}>
-          <Txt style={{ fontFamily: font.displayBold, fontSize: 30, lineHeight: 38, letterSpacing: -0.8, color: '#fff' }}>{ml.toLocaleString('en-IN')}</Txt>
-          <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 20, color: 'rgba(255,255,255,0.7)' }}>ml</Txt>
+        <View style={{ position: 'absolute', right: 16, bottom: 16, alignItems: 'flex-end' }}>
+          <Txt style={{ fontFamily: font.displayBold, fontSize: 28, lineHeight: 39, letterSpacing: -0.8, color: 'rgba(255,255,255,0.9)' }}>{ml.toLocaleString('en-IN')}</Txt>
+          <Txt style={{ fontFamily: font.regular, fontSize: 20, lineHeight: 26, color: '#fff' }}>ml</Txt>
         </View>
       </Pressy>
-      {/* Sits above the card press target so tapping it only adds a glass. */}
-      <AddButton variant="glass" label="Add a glass, 250 millilitres" onPress={() => change(0.25)} />
+      {/* Sits above the card press target so tapping it only adds a glass: a 32 px pill (glass + plus) with a 44 px touch area. */}
+      <Pressy accessibilityRole="button" accessibilityLabel="Add a glass, 250 millilitres" onPress={() => change(0.25)} scaleTo={0.92} hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+        style={{ position: 'absolute', top: 16, right: 16, height: 32, paddingHorizontal: 8, borderRadius: 24, backgroundColor: GLASS, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4, zIndex: 3 }}>
+        <GlassWater size={20} color="#fff" />
+        <Plus size={16} color="#fff" />
+      </Pressy>
     </View>
   );
 }
 
 function sparkY(v: number, h: number, pad: number) { return pad + ((73.2 - v) / (73.2 - 72.0)) * (h - pad * 2); }
 
-const NUM = { fontFamily: font.displayBold, fontSize: 32, lineHeight: 40, letterSpacing: -0.8 } as const;
+const NUM = { fontFamily: font.displayBold, fontSize: 28, lineHeight: 39, letterSpacing: -0.8 } as const;
 const UNIT_TXT = { fontFamily: font.medium, fontSize: 14, lineHeight: 20 } as const;
 
 // One tile for every tracker: same size, same padding, same label and number style.
@@ -149,8 +185,8 @@ function Tile({ bg, label, labelColor, onPress, a11y, right, children, shadow }:
   const { c } = useTheme();
   const body = (
     <>
-      <Row style={{ justifyContent: 'space-between', minHeight: 24 }}>
-        <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: labelColor ?? c.muted }}>{label}</Txt>
+      <Row style={{ justifyContent: 'space-between', minHeight: 32 }}>
+        <Txt style={{ fontFamily: font.regular, fontSize: 14, lineHeight: 20, color: labelColor ?? c.muted }}>{label}</Txt>
         {right}
       </Row>
       {children}
@@ -168,23 +204,24 @@ export function WeightCard() {
   const { d } = useDomain();
   const series = [...SPARK, d.weight];
   const lo = Math.min(...series) - 0.15, hi = Math.max(...series) + 0.15;
-  const W = 148, H = 46; // the drawing is as wide as the box it sits in, so nothing is stretched and the end dot has room
-  const pts = series.map((v, i) => [12 + (i / (series.length - 1)) * (W - 24), 8 + ((hi - v) / (hi - lo)) * (H - 20)] as const);
+  const W = 160, H = 45; // as wide as the tile (edge to edge), so nothing is stretched and the end dot has room
+  const pts = series.map((v, i) => [(i / (series.length - 1)) * (W - 14), 8 + ((hi - v) / (hi - lo)) * (H - 18)] as const);
   const line = pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`).join(' ');
   const area = `${line} L${pts[pts.length - 1][0]} ${H} L${pts[0][0]} ${H} Z`;
   const last = pts[pts.length - 1];
   const diff = Math.round((d.weight - SPARK[0]) * 10) / 10;
+  const sign = diff <= 0 ? '-' : '+';
   return (
-    <Tile bg={c.surface} shadow={!isDark} label="Weight" a11y={`Weight ${fmt1(d.weight)} kg, ${diff <= 0 ? 'down' : 'up'} ${Math.abs(diff)} kg this week. Log weight`} onPress={() => router.push('/log-weight')}
-      right={<View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center', marginRight: -4, marginTop: -2 }}><Plus size={17} color={c.accentText} /></View>}>
-      <Txt style={{ ...NUM, color: c.ink }}>{fmt1(d.weight)}<Txt muted style={UNIT_TXT}> kg</Txt></Txt>
-      <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: diff <= 0 ? c.good : c.warn }}>{diff <= 0 ? '↓' : '↑'} {Math.abs(diff)} kg this week</Txt>
-      <View style={{ marginTop: 'auto', marginHorizontal: -6, marginBottom: -6 }}>
+    <Tile bg={isDark ? 'rgba(255,255,255,0.05)' : c.surface} shadow={!isDark} label="Weight" a11y={`Weight ${fmt1(d.weight)} kg, ${diff <= 0 ? 'down' : 'up'} ${Math.abs(diff)} kg this week. Log weight`} onPress={() => router.push('/log-weight')}
+      right={<View style={{ height: 32, minWidth: 32, paddingHorizontal: 8, borderRadius: 24, backgroundColor: isDark ? GLASS : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Plus size={16} color={isDark ? '#fff' : c.accentText} /></View>}>
+      <Txt style={{ ...NUM, color: c.ink }}>{fmt1(d.weight)}<Txt style={{ fontFamily: font.regular, fontSize: 16, lineHeight: 22, color: c.muted }}> kg</Txt></Txt>
+      <Txt style={{ fontFamily: font.regular, fontSize: 12, lineHeight: 17, color: diff <= 0 ? c.good : c.warn }}>{sign} {Math.abs(diff)} kg this week</Txt>
+      <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
         <Svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
           <Defs><SvgGradient id="wArea" x1="0" y1="0" x2="0" y2="1"><Stop offset="0" stopColor={c.accent} stopOpacity={0.28} /><Stop offset="1" stopColor={c.accent} stopOpacity={0} /></SvgGradient></Defs>
           <AArea d={area} fill="url(#wArea)" />
-          <Path d={line} fill="none" stroke={c.accent} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-          <Circle cx={last[0]} cy={last[1]} r={4.5} fill={c.surface} stroke={c.accent} strokeWidth={2.4} />
+          <Path d={line} fill="none" stroke={c.accent} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+          <Circle cx={last[0]} cy={last[1]} r={5} fill="#fff" stroke={c.accent} strokeWidth={2} />
         </Svg>
       </View>
     </Tile>
@@ -244,15 +281,15 @@ export function HealthCards({ only }: { only?: 'hr' | 'sleep' | 'kcal' } = {}) {
 }
 
 function ConnectCard() {
-  const { c } = useTheme();
+  const { c, isDark } = useTheme();
   const { set } = useDomain();
   const { toast } = useOverlay();
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`Connect ${HEALTH_NAME} for steps, heart rate, sleep and energy`} onPress={() => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected · steps, heart rate and sleep sync automatically`); }}
-      style={[SQ, { gap: 8, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.surface3, justifyContent: 'center' }]}>
-      <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><HeartIcon size={20} color="#FF6B7A" /></View>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{`Connect ${HEALTH_NAME}`}</Txt>
-      <Txt v="caption">Steps, heart rate, sleep and energy</Txt>
+      style={[SQ, { padding: 12, justifyContent: 'space-between', borderWidth: 1, borderStyle: 'dashed', borderColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface3, backgroundColor: isDark ? '#0E1116' : c.surface }]}>
+      <View style={{ width: 32, height: 32, borderRadius: 20, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface2, alignItems: 'center', justifyContent: 'center' }}><HeartIcon size={20} color="#FF6B7A" /></View>
+      <Txt style={{ fontFamily: font.displayBold, fontSize: 20, lineHeight: 28, color: c.ink }}>{`Connect ${HEALTH_NAME}`}</Txt>
+      <Txt style={{ fontSize: 12, lineHeight: 17, color: c.muted }}>Steps, heart rate, sleep and energy</Txt>
     </Pressy>
   );
 }
@@ -292,7 +329,7 @@ export function Trackers() {
   return (
     <View style={{ marginHorizontal: -16, gap: 6 }}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} decelerationRate="fast" accessibilityLabel="Quick trackers, swipe for more"
-        contentContainerStyle={{ gap: 10, paddingHorizontal: 16, paddingVertical: 2 }}>
+        contentContainerStyle={{ gap: 12, paddingHorizontal: 16, paddingVertical: 2 }}>
         <WeightCard />
         <WaterCard />
         {!d.hc ? <ConnectCard /> : <><StepsTile />{d.wearable && <HealthCards />}</>}

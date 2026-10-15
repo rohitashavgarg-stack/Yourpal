@@ -8,8 +8,9 @@ import { Pressy, Row, Txt } from '@/components/ui';
 import { Ring } from '@/components/bits';
 import { font } from '@/theme/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
-import { fmtDay, Goal2, progressLine, statusLine, timeLeft, useGoalV2 } from './model';
-import { useEarlySigns } from './signs';
+import { fmtDay, Goal2, progressLine, statusLine, useGoalV2 } from './model';
+import { useDrivers } from './signs';
+import { GoalVisual } from './GoalVisual';
 import { useStreak } from '@/features/streak/useStreak';
 
 // Same card on Today (compact) and Progress (expanded): ring on the left, then goal, numbers, status.
@@ -46,12 +47,10 @@ export function GoalRing({ g, size = 88, onDark = true }: { g: Goal2; size?: num
     </View>
   );
 }
-
 export function StatusChip({ g, fg }: { g: Goal2; fg: string }) {
-  const left = timeLeft(g);
   const label = g.kind === 'consistency'
     ? (g.status === 'reached' ? 'Week complete' : `${g.weeklyTarget - g.currentValue} to go this week`)
-    : left ? `${statusLine(g)} · ${left}` : statusLine(g);
+    : statusLine(g);
   return (
     <View style={{ alignSelf: 'flex-start', backgroundColor: '#fff', borderRadius: 999, paddingHorizontal: 11, paddingVertical: 4 }}>
       <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: fg }}>{label}</Txt>
@@ -61,12 +60,11 @@ export function StatusChip({ g, fg }: { g: Goal2; fg: string }) {
 
 export function GoalCard2({ size }: { size: 'compact' | 'expanded' | 'hero' }) {
   const g = useGoalV2();
-  const early = useEarlySigns();
+  const drivers = useDrivers();
   const streakLine = useStreakLine();
   const look = g.status === 'reached' && g.kind !== 'consistency' ? STYLE.reached : g.status === 'endingSoon' ? STYLE.endingSoon : STYLE.normal;
   const highlight = look !== STYLE.normal;
-  const rs = size === 'hero' ? 112 : 132; // same big ring as Version 1
-  const sub = g.kind === 'consistency' ? `${streakLine} · standing goal` : g.status === 'reached' ? `${g.name} · done` : progressLine(g);
+  const sub = g.kind === 'consistency' ? streakLine : g.status === 'reached' ? 'Done' : progressLine(g);
   const Wrap: any = size === 'hero' ? View : Pressy;
   const wrapProps = size === 'hero' ? { accessible: true, accessibilityLabel: `Your goal: ${g.name}. ${sub}. ${statusLine(g)}` } : { accessibilityRole: 'link', scaleTo: 0.98, onPress: () => router.push('/goal-detail'), accessibilityLabel: `Your goal: ${g.name}. ${sub}. ${statusLine(g)}. Open goal` };
   return (
@@ -77,7 +75,6 @@ export function GoalCard2({ size }: { size: 'compact' | 'expanded' | 'hero' }) {
           <Circle cx={120} cy={120} r={110} fill="none" stroke="#fff" strokeWidth={16} /><Circle cx={120} cy={120} r={70} fill="none" stroke="#fff" strokeWidth={10} />
         </Svg>
         <Row style={{ gap: 14, alignItems: 'center' }}>
-          <GoalRing g={g} size={rs} />
           <View style={{ flex: 1, gap: 4, minWidth: 0 }}>
             <Row style={{ justifyContent: 'space-between' }}>
               <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.85)' }}>Your goal</Txt>
@@ -88,6 +85,7 @@ export function GoalCard2({ size }: { size: 'compact' | 'expanded' | 'hero' }) {
             <StatusChip g={g} fg={look.chipFg} />
           </View>
         </Row>
+        <GoalVisual g={g} onColor />
         {size === 'hero' && (
           <>
             <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.22)' }} />
@@ -104,8 +102,15 @@ export function GoalCard2({ size }: { size: 'compact' | 'expanded' | 'hero' }) {
         {size === 'expanded' && (
           <>
             <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.22)' }} />
-            <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>{early}</Txt>
-            <Txt style={{ fontSize: 12, lineHeight: 18, color: 'rgba(255,255,255,0.75)' }}>{`Since ${fmtDay(g.startDate)}${g.endDate ? ` · by ${fmtDay(g.endDate)}` : ' · no end date'}`}</Txt>
+            <Row style={{ justifyContent: 'space-between' }}>
+              {drivers.map((r) => (
+                <View key={r.key} style={{ flex: 1, gap: 1 }}>
+                  <Txt style={{ fontFamily: font.displayBold, fontSize: 22, lineHeight: 30, letterSpacing: -0.4, color: '#fff' }}>{r.value}<Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)' }}>{r.unit}</Txt></Txt>
+                  <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)' }}>{r.label}</Txt>
+                </View>
+              ))}
+            </Row>
+            <Txt style={{ fontSize: 12, lineHeight: 18, color: 'rgba(255,255,255,0.75)' }}>{g.endDate ? `${fmtDay(g.startDate)} to ${fmtDay(g.endDate)}` : `Since ${fmtDay(g.startDate)}, no end date`}</Txt>
           </>
         )}
       </LinearGradient>

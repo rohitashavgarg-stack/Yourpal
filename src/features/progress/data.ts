@@ -44,10 +44,10 @@ export const GOAL_VERB: Record<string, string> = { 'Weight loss': 'Lose (kg)', '
 export const GOAL_DEFAULT: Record<string, number> = { 'Weight loss': 6, 'Muscle gain': 3, 'Lean body': 3, Strength: 80, 'General fitness': 4 };
 
 export function goalTitle(g0: { type: string; target: number; by: string }) {
-  // a numeric goal with no target would read "Train 0× a week": fall back to the default target, or to the goal's own name
+  // a numeric goal with no target would read "Train 0× weekly": fall back to the default target, or to the goal's own name
   const g = NUMERIC_GOALS.includes(g0.type) && !g0.target ? { ...g0, target: GOAL_DEFAULT[g0.type] ?? 0 } : g0;
   let t = g.type === 'Weight loss' ? `Lose ${g.target} kg` : g.type === 'Muscle gain' ? `Gain ${g.target} kg` : g.type === 'Strength' ? `Squat ${g.target} kg`
-    : g.type === 'General fitness' ? `Train ${g.target}× a week` : g.type === 'Lean body' ? `Body fat −${g.target}%` : g.type;
+    : g.type === 'General fitness' ? `Train ${g.target}× weekly` : g.type === 'Lean body' ? `Body fat −${g.target}%` : g.type;
   if (g.by && g.by !== '—') t += ` by ${g.by}`;
   return t;
 }

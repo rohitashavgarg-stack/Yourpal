@@ -116,7 +116,7 @@ function QtyControl({ mid, it, qty, locked }: { mid: MealId; it: DItem; qty: Qty
         </Pressy>
         {b('More', () => go(cur + step), cur >= max, <Plus size={16} color={c.accentText} strokeWidth={2.4} />)}
       </View>
-      {changed && <View accessibilityLabel="Changed from plan" style={{ position: 'absolute', top: -2, right: -2, width: 9, height: 9, borderRadius: 5, backgroundColor: c.warn, borderWidth: 2, borderColor: c.bg }} />}
+      {changed && <View accessibilityLabel="Changed from plan" style={{ position: 'absolute', top: 0, right: 0, width: 8, height: 8, borderRadius: 4, backgroundColor: c.warn }} />}
     </View>
   );
 }
