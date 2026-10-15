@@ -86,13 +86,14 @@ const GLASS = 'rgba(255,255,255,0.16)';
 const BOTTLE_BODY = 'M9 10H23V16.5C23 18.4922 32 21.2891 32 29.9219V85.7031C32 88.1688 30.8762 90.5335 28.8758 92.277C26.8754 94.0205 24.1623 95 21.3333 95H10.6667C7.83769 95 5.12458 94.0205 3.12419 92.277C1.12381 90.5335 0 88.1688 0 85.7031V29.9219C0 21.2891 9 18.4922 9 16.5V10Z';
 const BOTTLE_CAP = 'M8 2C8 0.895431 8.89543 0 10 0H22C23.1046 0 24 0.895431 24 2V7.5C24 7.77614 23.7761 8 23.5 8H8.5C8.22386 8 8 7.77614 8 7.5V2Z';
 const ARect = Animated.createAnimatedComponent(Rect);
-function BottleFigma({ litres, id }: { litres: number; id: string }) {
+// The same bottle art on the Water tile and in the Water sheet (scale it with w; onLight draws the outline and cap for a light background).
+export function BottleFigma({ litres, id, w = 32, onLight = false }: { litres: number; id: string; w?: number; onLight?: boolean }) {
   const pct = Math.min(1, litres / TARGET);
   const top = useSharedValue(95 - pct * 65);
   useEffect(() => { top.value = withSpring(95 - pct * 65, { damping: 14, stiffness: 90 }); }, [pct]);
   const water = useAnimatedProps(() => ({ y: top.value, height: 95 - top.value }));
   return (
-    <Svg width={32} height={95} viewBox="0 0 32 95">
+    <Svg width={w} height={(w * 95) / 32} viewBox="0 0 32 95">
       <Defs>
         <ClipPath id={`${id}Cap`}><Path d={BOTTLE_CAP} /></ClipPath>
         <ClipPath id={`${id}Body`}><Path d={BOTTLE_BODY} /></ClipPath>
@@ -100,13 +101,13 @@ function BottleFigma({ litres, id }: { litres: number; id: string }) {
         <SvgGradient id={`${id}Shine`} x1="10" y1="58.5" x2="5" y2="58.5" gradientUnits="userSpaceOnUse"><Stop offset="0" stopColor="#999999" /><Stop offset="1" stopColor="#FFFFFF" /></SvgGradient>
       </Defs>
       <Rect x={7} y={8} width={18} height={2} rx={1} fill="#9294A8" />
-      <Path d={BOTTLE_CAP} fill="#fff" />
+      <Path d={BOTTLE_CAP} fill={onLight ? '#1B2440' : '#fff'} />
       <G clipPath={`url(#${id}Cap)`}>
         {Array.from({ length: 12 }, (_, i) => <Rect key={i} x={9 + i * 1.3} y={0} width={0.3} height={8} fill="#EAE6E6" />)}
       </G>
-      <Path d={BOTTLE_BODY} fill="#D9D9D9" fillOpacity={0.1} />
+      <Path d={BOTTLE_BODY} fill={onLight ? '#2F6BEA' : '#D9D9D9'} fillOpacity={onLight ? 0.08 : 0.1} />
       <G clipPath={`url(#${id}Body)`}><ARect animatedProps={water} x={0} width={32} fill={`url(#${id}Water)`} /></G>
-      <Path d={BOTTLE_BODY} fill="none" stroke="#fff" strokeOpacity={0.6} strokeWidth={1} strokeLinejoin="round" />
+      <Path d={BOTTLE_BODY} fill="none" stroke={onLight ? '#1B2440' : '#fff'} strokeOpacity={onLight ? 0.45 : 0.6} strokeWidth={1} strokeLinejoin="round" />
       <Path d="M10 29.4878C10 28.6661 8.88071 28 7.5 28C6.11929 28 5 28.6661 5 29.4878V87.5122C5 88.3339 6.11929 89 7.5 89C8.88071 89 10 88.3339 10 87.5122V29.4878Z" fill={`url(#${id}Shine)`} fillOpacity={0.3} />
     </Svg>
   );
@@ -357,7 +358,7 @@ export function WaterSheet() {
       </Row>
       <Row style={{ gap: 20 }}>
         <View style={{ width: 84, height: 200, alignItems: 'center', justifyContent: 'center' }}>
-          <BottleArt litres={water} w={76} h={190} id="bottleSheet" onLight={!isDark} live />
+          <BottleFigma litres={water} w={64} id="bottleSheet" onLight={!isDark} />
           {hit > 0 && <Ripple key={hit} size={70} color="#5B8DFF" width={3} />}
         </View>
         <View style={{ gap: 6 }}>
