@@ -18,7 +18,7 @@ import { fmtDay, fmtVal, Goal2, progressLine, statusLine, useGoalV2 } from '@/fe
 // The glow from Figma (node 40152:13496): a blurred ellipse, #0C307E, tilted 16 deg, hugging the left edge, with a second copy blended
 // "plus-lighter" that brightens its middle. SVG blur filters do not run in Expo Go, so the same shape is one tilted ellipse with a soft
 // radial gradient (bright blue middle, #0C307E shoulders, fading to nothing).
-const GW = 320, GH = 200;
+const GW = 360, GH = 260;
 
 // Demo panel: the smaller Today goal (default) or the current, taller one.
 export type GoalSize = 'Smaller' | 'Current';
@@ -27,22 +27,25 @@ export const goalSizeStore = createStore(() => ({ size: 'Smaller' as GoalSize })
 
 function Glow({ small = false }: { small?: boolean }) {
   const { isDark } = useTheme();
-  const k2 = small ? 0.7 : 1; // the smaller goal gets a smaller glow
+  // Same Figma ellipse (tilted 16 deg, on the left edge), sized for each version and centred behind its heading: no scaling, so it never drifts.
+  // Figma blurs a 184 x 68 ellipse by 27 px, so the light reaches ~50 px past it on every side: the ellipse here is that blurred size, with a long, even falloff.
+  const g = small ? { rx: 140, ry: 62, cx: 24, cy: 52 } : { rx: 160, ry: 80, cx: 30, cy: 72 }; // centred on the heading, fading out before the header row
   const k = isDark ? 1 : 0.4; // on a light page the glow is a tint, not a light source
   const core = isDark ? '#1F5FDB' : '#2F6BEA';
   const edge = isDark ? '#0C307E' : '#5C8DF0';
   return (
-    <View pointerEvents="none" style={{ position: 'absolute', left: 40 - GW / 2, top: (small ? 30 : 65) - GH / 2, width: GW, height: GH, transform: [{ scale: k2 }] }}>
+    <View pointerEvents="none" style={{ position: 'absolute', left: g.cx - GW / 2, top: g.cy - GH / 2, width: GW, height: GH }}>
       <Svg width={GW} height={GH}>
         <Defs>
           <RadialGradient id="goalGlow" cx="50%" cy="50%" r="50%">
             <Stop offset="0" stopColor={core} stopOpacity={k} />
-            <Stop offset="0.4" stopColor={core} stopOpacity={0.75 * k} />
-            <Stop offset="0.7" stopColor={edge} stopOpacity={0.4 * k} />
+            <Stop offset="0.3" stopColor={core} stopOpacity={0.8 * k} />
+            <Stop offset="0.55" stopColor={edge} stopOpacity={0.45 * k} />
+            <Stop offset="0.8" stopColor={edge} stopOpacity={0.14 * k} />
             <Stop offset="1" stopColor={edge} stopOpacity={0} />
           </RadialGradient>
         </Defs>
-        <Ellipse cx={GW / 2} cy={GH / 2} rx={125} ry={52} fill="url(#goalGlow)" transform={`rotate(16 ${GW / 2} ${GH / 2})`} />
+        <Ellipse cx={GW / 2} cy={GH / 2} rx={g.rx} ry={g.ry} fill="url(#goalGlow)" transform={`rotate(16 ${GW / 2} ${GH / 2})`} />
       </Svg>
     </View>
   );
@@ -123,7 +126,7 @@ export function GoalTickCard({ flat = false }: { flat?: boolean } = {}) {
           <View style={{ flexShrink: 1 }}>
             {!flat && !small && <Txt style={{ fontSize: 16, lineHeight: 24, color: c.ink }}>Your goal</Txt>}
             <Txt numberOfLines={2} style={small
-              ? { fontFamily: font.displayBold, fontSize: 20, lineHeight: 26, letterSpacing: -0.4, color: c.ink }
+              ? { fontFamily: font.displayBold, fontSize: 24, lineHeight: 32, letterSpacing: -0.6, color: c.ink }
               : { fontFamily: font.displayBold, fontSize: long ? 26 : 32, lineHeight: long ? 34 : 42, letterSpacing: long ? -0.8 : -1.2, color: c.ink }}>
               {g.name}{inlineBy ? ' ' : ''}{inlineBy && <Txt style={{ fontFamily: font.regular, fontSize: small ? 12 : 16, lineHeight: small ? 17 : 24, letterSpacing: small ? 0 : -0.4, color: c.muted }}>{by}</Txt>}
             </Txt>
