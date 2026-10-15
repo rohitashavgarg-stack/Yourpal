@@ -22,6 +22,7 @@ import { ChartLine, Dumbbell, Flag, House, LogIn, MapPin, MessageCircle, Minus, 
 import { Actions, Choice, PanelCard, QuickTime, ScreenItem, P } from '@/web/ControlParts';
 import { todayUiStore, TodayLayout } from '@/features/today/ui';
 import { SITUATIONS, SITUATION_HINT, Situation, useSituation } from '@/lib/situations';
+import { GOAL_SIZES, GoalSize, goalSizeStore } from '@/features/today/GoalTickCard';
 
 const PHONE_W = 390, PHONE_H = 844;
 // Which version of the edge-case panel is showing: the first one (a long list) or the structured one (cards).
@@ -147,6 +148,8 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     // One situation at a time: picking it sets everything it implies (and a fitting time of day).
     // Which Today layout: the current cards, or the new one (greeting, goal strip, one "For you" stack, Right now, trackers, plan).
     { label: 'Today layout', options: ['Current', 'New'], value: todayUiStore.use().layout, onPick: (v: string) => { todayUiStore.set({ layout: v as TodayLayout }); said(`Today layout: ${v}`); } },
+    // The goal at the top of Today: the smaller version (default) or the current, taller one.
+    { label: 'Goal size', options: GOAL_SIZES as string[], value: goalSizeStore.use().size, onPick: (v: string) => { goalSizeStore.set({ size: v as GoalSize }); said(`Goal size: ${v}`); } },
     { label: 'Situation', options: SITUATIONS as string[], value: sit.current, onPick: (v: string) => { sit.pick(v as Situation); said(`Situation: ${v}`); } },
     { label: 'Goal type', options: ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness', 'Not sure yet'], value: type, onPick: pickGoal },
     // What the member sees at the top of Today: a normal day, the updates card (plan changes, messages), or the welcome-back card after a break.
@@ -228,6 +231,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
   const situationCard = (
     <PanelCard icon={House} title="Situation" pill={{ label: sit.current }}>
       {seg('Today layout')}
+      {seg('Goal size')}
       {seg('Situation')}
       <Text style={{ fontFamily: font.regular, fontSize: 12, lineHeight: 17, color: P.muted }}>{SITUATION_HINT[sit.current]}</Text>
       {sit.current === 'Comeback' && seg('Days away (Comeback)')}
