@@ -7,6 +7,7 @@ import { useStore } from '@/lib/store';
 import Svg, { Circle, Defs, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button, Pressy, Txt } from '@/components/ui';
+import { RevealText } from '@/components/Motion';
 import { fade, fadeOut } from '@/theme/motion';
 import { YourPalLogo } from '@/components/YourPalLogo';
 import { font } from '@/theme/tokens';
@@ -183,7 +184,7 @@ export default function Welcome() {
       </View>
       <View style={{ paddingHorizontal: 24, paddingBottom: insets.bottom + 20, gap: 14 }}>
         <Animated.View key={'t' + i} entering={fade()} style={{ gap: 6, minHeight: 124 }}>
-          <Txt style={{ fontFamily: font.displayBold, fontSize: 30, lineHeight: 38, letterSpacing: -0.9, color: '#fff' }}>{title}</Txt>
+          <RevealText key={'h' + i} text={title} style={{ fontFamily: font.displayBold, fontSize: 30, lineHeight: 38, letterSpacing: -0.9, color: '#fff' }} />
           <Txt style={{ fontSize: 15, lineHeight: 22, color: 'rgba(255,255,255,0.7)' }}>{sub}</Txt>
         </Animated.View>
         <View style={{ flexDirection: 'row', gap: 6, alignItems: 'center' }}>

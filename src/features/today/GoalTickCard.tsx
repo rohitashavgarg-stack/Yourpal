@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { zoomFrom } from '@/theme/zoomOrigin';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
 import { Flame } from '@/lib/icons';
 import { GoalVisual, goalShare, markerX, VisualSize } from '@/features/goalv2/GoalVisual';
+import { SwapText, useCount } from '@/components/Motion';
 import { useStreak } from '@/features/streak/useStreak';
 import { FLAME } from '@/features/streak/StreakChip';
 import { createStore } from '@/features/progress/store';
@@ -98,7 +100,9 @@ export function GoalTickCard({ flat = false }: { flat?: boolean } = {}) {
   const { c, isDark } = useTheme();
   const g = useGoalV2();
   const small = !flat && goalSizeStore.use().size === 'Smaller';
+  const cardRef = useRef<any>(null);
   const pct = goalShare(g);
+  const shownPct = useCount(pct * 100, 900); // counts up to the share done
   const done = Math.abs(g.currentValue - g.startValue);
   const total = Math.abs(g.targetValue - g.startValue);
   const st = useStreak();
@@ -118,9 +122,9 @@ export function GoalTickCard({ flat = false }: { flat?: boolean } = {}) {
   const pill = !flat ? { bg: isDark ? '#fff' : c.accentSoft, fg: isDark ? '#2034E6' : c.accentText }
     : tone === 'good' ? { bg: c.goodSoft, fg: c.good } : tone === 'warn' ? { bg: c.warnSoft, fg: c.warn } : { bg: c.accentSoft, fg: c.accentText };
   return (
-    <Pressy accessibilityRole={flat ? undefined : 'link'} scaleTo={flat ? 1 : 0.98} onPress={flat ? undefined : () => router.push('/goal-detail')}
+    <Pressy accessibilityRole={flat ? undefined : 'link'} scaleTo={flat ? 1 : 0.98} onPress={flat ? undefined : () => { zoomFrom(cardRef.current).then(() => router.push('/goal-detail')); }}
       accessibilityLabel={`Your goal: ${g.name}, ${by}. ${progressLine(g)}. ${statusLine(g)}. ${right}.${flat ? '' : ' Open goal details'}`}>
-      <View style={{ paddingHorizontal: 4, paddingTop: flat ? 4 : 24, paddingBottom: flat ? 4 : 0, gap: small ? 12 : 16 }}>
+      <View ref={cardRef} collapsable={false} style={{ paddingHorizontal: 4, paddingTop: flat ? 4 : 24, paddingBottom: flat ? 4 : 0, gap: small ? 12 : 16 }}>
         {!flat && <Glow small={small} />}
         <Row style={{ justifyContent: 'space-between', alignItems: small ? 'center' : 'flex-end', gap: 8 }}>
           <View style={{ flexShrink: 1 }}>
@@ -131,10 +135,10 @@ export function GoalTickCard({ flat = false }: { flat?: boolean } = {}) {
               {g.name}{inlineBy ? ' ' : ''}{inlineBy && <Txt style={{ fontFamily: font.regular, fontSize: small ? 12 : 16, lineHeight: small ? 17 : 24, letterSpacing: small ? 0 : -0.4, color: c.muted }}>{by}</Txt>}
             </Txt>
             {!flat && (standing || (by && !inlineBy)) ? <Txt style={{ fontSize: small ? 12 : 14, lineHeight: small ? 17 : 20, color: c.muted }}>{standing ?? by}</Txt> : null}
-            {flat && <Txt style={{ fontSize: 15, lineHeight: 22, color: c.muted }}>{g.status === 'reached' ? 'All the way there' : `${Math.round(pct * 100)}% of the way there`}</Txt>}
+            {flat && <Txt style={{ fontSize: 15, lineHeight: 22, color: c.muted }}>{g.status === 'reached' ? 'All the way there' : `${Math.round(shownPct)}% of the way there`}</Txt>}
           </View>
           <View style={{ height: small ? 28 : 40, paddingHorizontal: small ? 12 : 16, borderRadius: 22, backgroundColor: pill.bg, alignItems: 'center', justifyContent: 'center', marginBottom: small ? 0 : 4 }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: small ? 12 : 14, lineHeight: small ? 17 : 20, color: pill.fg }}>{pillText}</Txt>
+            <SwapText value={pillText} style={{ fontFamily: font.medium, fontSize: small ? 12 : 14, lineHeight: small ? 17 : 20, color: pill.fg }} />
           </View>
         </Row>
         {flat ? <Journey g={g} /> : (
@@ -150,7 +154,7 @@ export function GoalTickCard({ flat = false }: { flat?: boolean } = {}) {
                   <Flame size={small ? 14 : 15} color={FLAME} fill={st.weeks ? FLAME : 'transparent'} />
                   <Txt style={{ fontFamily: font.medium, fontSize: small ? 13 : 14, lineHeight: small ? 19 : 20, color: st.weeks ? FLAME : c.muted }}>{st.weeks ? `${st.weeks} ${st.weeks === 1 ? 'week' : 'weeks'}` : 'No streak yet'}</Txt>
                 </Row>
-              ) : <Txt style={{ fontFamily: font.medium, fontSize: small ? 13 : 14, lineHeight: small ? 19 : 20, color: c.muted }}>{right}</Txt>}
+              ) : <Txt style={{ fontFamily: font.medium, fontSize: small ? 13 : 14, lineHeight: small ? 19 : 20, color: c.muted }}>{g.status === 'reached' ? right : `${Math.round(shownPct)}%`}</Txt>}
             </Row>
             </View>
           </>
