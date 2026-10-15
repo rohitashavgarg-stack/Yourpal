@@ -13,9 +13,9 @@ export function usePaymentNotice() {
   const { d } = useDomain();
   if (!d.hasGym) return null;
   switch (d.membership) {
-    case 'Expiring': return { tone: 'accent' as const, title: 'Membership expires in 12 days', sub: 'Annual · ends 6 Oct · renew at the front desk' };
-    case 'Grace': return { tone: 'warn' as const, title: 'Membership expired 3 days ago', sub: 'Logging stays open 11 more days · renew at the front desk' };
-    case 'Grace over': return { tone: 'muted' as const, title: 'Logging is paused', sub: 'Your history is safe · renew at the front desk to log again' };
+    case 'Expiring': return { tone: 'accent' as const, title: 'Membership expires in 12 days', sub: 'Annual plan ends 6 Oct. Renew at the front desk.' };
+    case 'Grace': return { tone: 'warn' as const, title: 'Membership expired 3 days ago', sub: 'Logging stays open 11 more days. Renew at the front desk.' };
+    case 'Grace over': return { tone: 'muted' as const, title: 'Logging is paused', sub: 'Your history is safe. Renew at the front desk to log again.' };
     default: return null;
   }
 }

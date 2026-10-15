@@ -180,9 +180,9 @@ export function useUpdates() {
   const all: Upd[] = [
     { key: 'plan', title: 'Coach Vikram updated your plan', body: 'Leg day: lunges added, leg extension removed', isPlan: true, icon: ClipboardList, tone: 'accent' },
     { key: 'reply', title: 'Coach Vikram replied', body: '“Keep your back straight on rows.”', btn: 'Reply', act: () => toast('Chat with Coach Vikram opens in the Gym tab'), icon: MessageCircle, tone: 'accent' },
-    { key: 'reassess', title: 'Reassessment due', body: 'This week · book with front desk', icon: CalendarClock, tone: 'warn' },
-    { key: 'member', title: 'Membership', body: 'Expires in 12 days · renew at the front desk', icon: CreditCard, tone: 'warn' },
-    { key: 'log', title: 'Checked in 6:42 pm (location)', body: "Log today's workout?", btn: 'Log workout', act: () => startWorkout(), icon: CircleCheck, tone: 'good' },
+    { key: 'reassess', title: 'Reassessment due', body: 'Book it at the front desk this week.', icon: CalendarClock, tone: 'warn' },
+    { key: 'member', title: 'Membership', body: 'Expires in 12 days. Renew at the front desk.', icon: CreditCard, tone: 'warn' },
+    { key: 'log', title: 'Checked in at 6:42 pm', body: "Log today's workout?", btn: 'Log workout', act: () => startWorkout(), icon: CircleCheck, tone: 'good' },
   ];
   const live = d.todayVariant === 'With updates' ? all.filter((u) => !d.dismissed[u.key]) : [];
   const dismiss = (k: string) => { haptic.light(); set((s) => ({ dismissed: { ...s.dismissed, [k]: true } })); };

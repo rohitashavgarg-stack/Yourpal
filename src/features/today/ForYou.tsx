@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Animated, { Easing, interpolate, SharedValue, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -84,12 +84,20 @@ export function useForYou(): Item[] {
 // Every card stays mounted for good, keyed by its id (never by position), and one shared value, `prog`, says which card is in front.
 // Each card works out where it sits from (its index - prog): 0 is the front, 1 and 2 are the cards behind (a little smaller, a little lower, no text),
 // and -1 is a card that has just left to the side. Nothing remounts and no React state changes while a finger is moving, so there is no refresh and no flicker.
+const frontH = (hs: number[], p: number) => {
+  'worklet';
+  const n = hs.length;
+  if (!n) return 0;
+  const q = ((p % n) + n) % n, i0 = Math.floor(q), i1 = (i0 + 1) % n, t = q - i0;
+  return hs[i0] * (1 - t) + hs[i1] * t;
+};
+
 const wrapD = (i: number, p: number, n: number) => {
   'worklet';
   return ((((i - p) + 1) % n) + n) % n - 1; // in [-1, n - 1)
 };
 
-const StackCard = React.memo(function StackCard({ it, i, n, prog, minH, onNatural, onDismiss }: { it: Item; i: number; n: number; prog: SharedValue<number>; minH: number; onNatural: (k: string, h: number) => void; onDismiss: () => void }) {
+const StackCard = React.memo(function StackCard({ it, i, n, prog, hs, onNatural, onDismiss }: { it: Item; i: number; n: number; prog: SharedValue<number>; hs: SharedValue<number[]>; onNatural: (k: string, h: number) => void; onDismiss: () => void }) {
   const { c, isDark } = useTheme();
   const { openSheet } = useOverlay();
   const fg = it.tone === 'warn' ? c.warn : it.tone === 'muted' ? c.ink : c.accentText;
@@ -98,6 +106,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, minH, onNatura
   const card = useAnimatedStyle(() => {
     const d = wrapD(i, prog.value, n);
     return {
+      height: frontH(hs.value, prog.value),
       zIndex: 10 - Math.round(Math.abs(d)),
       opacity: interpolate(d, [-1, 0, 2, 3], [0, 1, 1, 0], 'clamp'),
       transform: [
@@ -111,7 +120,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, minH, onNatura
   const content = useAnimatedStyle(() => ({ opacity: interpolate(wrapD(i, prog.value, n), [-1, 0, 1], [1, 1, 0], 'clamp') }));
   return (
     <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0 }, card]}>
-      <View style={[{ backgroundColor: c.surface, borderRadius: 24, padding: 16, minHeight: minH, overflow: 'hidden', borderWidth: 1, borderColor: c.line }, cardShadow(isDark)]}>
+      <View style={[{ flex: 1, backgroundColor: c.surface, borderRadius: 24, padding: 16, overflow: 'hidden', borderWidth: 1, borderColor: c.line }, cardShadow(isDark)]}>
         <Animated.View style={content} onLayout={(e) => onNatural(it.key, e.nativeEvent.layout.height)}>
           <View style={{ gap: 12 }}>
             <Row style={{ gap: 12, alignItems: 'flex-start', paddingRight: it.critical ? 0 : 28 }}>
@@ -139,7 +148,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, minH, onNatura
       </View>
     </Animated.View>
   );
-}, (a, b) => a.it.key === b.it.key && a.it.title === b.it.title && a.it.body === b.it.body && a.it.btn === b.it.btn && a.it.critical === b.it.critical && a.i === b.i && a.n === b.n && a.minH === b.minH && a.prog === b.prog);
+}, (a, b) => a.it.key === b.it.key && a.it.title === b.it.title && a.it.body === b.it.body && a.it.btn === b.it.btn && a.it.critical === b.it.critical && a.i === b.i && a.n === b.n && a.hs === b.hs && a.prog === b.prog);
 
 // A dot that stretches and darkens as its card comes to the front, in step with the cards.
 function Dot({ k, n, prog }: { k: number; n: number; prog: SharedValue<number> }) {
@@ -149,6 +158,12 @@ function Dot({ k, n, prog }: { k: number; n: number; prog: SharedValue<number> }
     return { width: 6 + 10 * near, opacity: 0.35 + 0.65 * near };
   });
   return <Animated.View style={[{ height: 6, borderRadius: 3, backgroundColor: c.ink }, st]} />;
+}
+
+// The deck is as tall as the card in front plus room for the edges of the cards behind.
+function Deck({ prog, hs, peek, children }: { prog: SharedValue<number>; hs: SharedValue<number[]>; peek: number; children: React.ReactNode }) {
+  const st = useAnimatedStyle(() => ({ height: frontH(hs.value, prog.value) + peek }));
+  return <Animated.View style={st}>{children}</Animated.View>;
 }
 
 export function ForYouStack() {
@@ -162,6 +177,10 @@ export function ForYouStack() {
   const [front, setFront] = useState(0);
   const [nat, setNat] = useState<Record<string, number>>({});
   const onNatural = (k: string, h: number) => setNat((m) => (Math.abs((m[k] ?? 0) - h) < 1 ? m : { ...m, [k]: h }));
+  const hs = useSharedValue<number[]>([]);
+  const heights = items.map((x) => (nat[x.key] ?? 0) + 34);
+  const hKey = heights.join(',');
+  useEffect(() => { hs.value = heights; }, [hKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const settle = (target: number) => { haptic.light(); setFront(((Math.round(target) % n) + n) % n); };
   const swipe = Gesture.Pan().enabled(many).activeOffsetX([-14, 14]).failOffsetY([-14, 14])
     .onStart(() => { base.value = prog.value; })
@@ -172,7 +191,7 @@ export function ForYouStack() {
       prog.value = withTiming(target, { duration: 280, easing: Easing.out(Easing.cubic) }, (fin) => { if (fin && target !== base.value) scheduleOnRN(settle, target); });
     });
   if (!n) return null;
-  const maxH = Math.max(0, ...items.map((x) => (nat[x.key] ?? 0))) + 32; // content height plus the card's padding
+  // each card's own height (content plus the card's padding and border); the deck follows the one in front
   const cur = items[Math.min(front, n - 1)];
   const dismiss = () => {
     if (!cur) return;
@@ -182,13 +201,12 @@ export function ForYouStack() {
     setFront(next);
     set((s) => ({ dismissed: { ...s.dismissed, [cur.key]: true } }));
   };
-  const deckH = maxH + (many ? (n > 2 ? 42 : 28) : 0);
   return (
     <View>
       <GestureDetector gesture={swipe}>
-        <View style={{ height: deckH }}>
-          {items.map((it, i) => <StackCard key={it.key} it={it} i={i} n={n} prog={prog} minH={maxH} onNatural={onNatural} onDismiss={dismiss} />)}
-        </View>
+        <Deck prog={prog} hs={hs} peek={n > 2 ? 26 : n > 1 ? 14 : 0}>
+          {items.map((it, i) => <StackCard key={it.key} it={it} i={i} n={n} prog={prog} hs={hs} onNatural={onNatural} onDismiss={dismiss} />)}
+        </Deck>
       </GestureDetector>
       {many && (
         <View pointerEvents="none" style={{ flexDirection: 'row', gap: 4, justifyContent: 'center', alignItems: 'center', height: 14, marginTop: 2 }}>
