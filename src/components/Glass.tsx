@@ -4,6 +4,7 @@ import { BlurView } from 'expo-blur';
 import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@/theme/ThemeProvider';
+import { useScreenOpen } from '@/theme/screenOpen';
 
 // Real iOS 26 "liquid glass" where the phone supports it; the existing blur + tint everywhere else (older iOS, Android, web).
 // Use it only for chrome that floats over scrolling content (the tab bar). Content cards stay solid.
@@ -14,8 +15,11 @@ export const hasLiquidGlass = native;
 
 export function GlassBackdrop({ radius, tint }: { radius: number; tint?: string }) {
   const { c, isDark } = useTheme();
+  const open = useScreenOpen();
   if (native) {
-    return <GlassView glassEffectStyle="regular" tintColor={tint} colorScheme={isDark ? 'dark' : 'light'} style={[StyleSheet.absoluteFill, { borderRadius: radius }]} pointerEvents="none" />;
+    // drawn (again) once its page has opened: liquid glass that first appears on a page still fading in stays invisible
+    if (!open) return null;
+    return <GlassView key="open" glassEffectStyle="regular" tintColor={tint} colorScheme={isDark ? 'dark' : 'light'} style={[StyleSheet.absoluteFill, { borderRadius: radius }]} pointerEvents="none" />;
   }
   if (Platform.OS === 'web') {
     // A single CSS backdrop blur. (Stacked expo-blur layers multiply their saturation on the web and smear colours.)

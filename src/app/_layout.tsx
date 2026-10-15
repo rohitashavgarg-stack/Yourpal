@@ -5,6 +5,7 @@ import Animated, { Easing, runOnJS, useAnimatedReaction, useAnimatedStyle, useSh
 import { BlurView } from 'expo-blur';
 import { SCREEN_IN, SCREEN_OUT } from '@/theme/motion';
 import { takeOrigin } from '@/theme/zoomOrigin';
+import { ScreenOpen } from '@/theme/screenOpen';
 import { Stack, router, useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -265,7 +266,7 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
       {!isWeb && <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: '#000' }, dim]} />}
       <Animated.View style={follow}>
       <Animated.View style={[{ flex: 1, backgroundColor: c.bg, overflow: open ? 'visible' : 'hidden' }, page, open ? { opacity: 1, borderRadius: 0, transform: [] } : null]}>
-        {isWeb ? children : <OverlayProvider>{children}</OverlayProvider>}
+        <ScreenOpen.Provider value={open}>{isWeb ? children : <OverlayProvider>{children}</OverlayProvider>}</ScreenOpen.Provider>
         {blurOn && (
           <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }, blurFade]}>
             <BlurView intensity={30} tint={isDark ? 'dark' : 'light'} style={{ flex: 1 }} />
