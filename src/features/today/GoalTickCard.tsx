@@ -120,7 +120,7 @@ export function GoalTickCard({ flat = false }: { flat?: boolean } = {}) {
   return (
     <Pressy accessibilityRole={flat ? undefined : 'link'} scaleTo={flat ? 1 : 0.98} onPress={flat ? undefined : () => router.push('/goal-detail')}
       accessibilityLabel={`Your goal: ${g.name}, ${by}. ${progressLine(g)}. ${statusLine(g)}. ${right}.${flat ? '' : ' Open goal details'}`}>
-      <View style={{ paddingHorizontal: 4, paddingTop: flat ? 4 : 24, paddingBottom: 4, gap: small ? 12 : 16 }}>
+      <View style={{ paddingHorizontal: 4, paddingTop: flat ? 4 : 24, paddingBottom: flat ? 4 : 0, gap: small ? 12 : 16 }}>
         {!flat && <Glow small={small} />}
         <Row style={{ justifyContent: 'space-between', alignItems: small ? 'center' : 'flex-end', gap: 8 }}>
           <View style={{ flexShrink: 1 }}>

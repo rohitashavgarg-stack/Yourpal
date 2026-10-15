@@ -18,9 +18,9 @@ import { MealNowCard } from '@/features/today/MealsCard';
 import { WeekCard } from '@/features/today/WeekCard';
 import { useRightNowFocus } from '@/features/today/timeline';
 import { Txt } from '@/components/ui';
-import { ComebackPlan, ForYouStack } from '@/features/today/ForYou';
+import { ComebackPlan, ForYouStack, useForYou } from '@/features/today/ForYou';
 import { todayUiStore, TodayLayout } from '@/features/today/ui';
-import { PaymentBanner } from '@/features/today/PaymentBanner';
+import { PaymentBanner, usePaymentNotice } from '@/features/today/PaymentBanner';
 import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
 
@@ -55,6 +55,9 @@ export default function Today() {
   useToastLift(anyBar ? navBottom + 74 + 68 : 0);
 
   const ptPending = usePtPending();
+  // cards that would render nothing get no slot at all, so an empty slot never adds an extra gap
+  const forYou = useForYou();
+  const payNotice = usePaymentNotice();
   const layout = todayUiStore.use().layout;
   const isNew = layout === 'New';
   const focus = useRightNowFocus(isNew);
@@ -115,7 +118,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {comebackNew && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>Welcome back, Rohitashav. Check your comeback session.</Txt></Enter>}
             {comebackNew && <Enter i={0}><ComebackPlan /></Enter>}
             {/* updates always come before the goal */}
-            <Enter i={0}><ForYouStack /></Enter>
+            {forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
             <Enter i={1}><Trackers /></Enter>
             {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}
             {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
@@ -129,7 +132,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
         ) : (
           <>
             <Enter i={0}><GoalTickCard /></Enter>
-            <Enter i={0}><PaymentBanner /></Enter>
+            {!!payNotice && <Enter i={0}><PaymentBanner /></Enter>}
             {ptPending && d.hasGym && <Enter i={0}><PtConfirmCard /></Enter>}
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
             {d.todayVariant === 'Comeback' && <Enter i={1}><ComebackCard /></Enter>}

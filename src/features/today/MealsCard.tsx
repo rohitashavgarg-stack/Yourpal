@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import Animated, { LinearTransition, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { fade } from '@/theme/motion';
 import { router } from 'expo-router';
-import { Check, ChevronDown, Clock, Minus, Plus, UtensilsCrossed, X } from '@/lib/icons';
+import { Check, ChevronDown, Clock, Flame, Minus, Plus, UtensilsCrossed, X } from '@/lib/icons';
 import { Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -235,12 +235,13 @@ export function MealNowCard() {
         <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
       </Row>
       <View accessible accessibilityLabel={`Eaten today ${t.k} of ${KCAL_TARGET} kcal, protein ${t.p} of ${MACRO_TARGET.p} grams`} style={{ gap: 8, paddingVertical: 10, paddingHorizontal: 12, borderRadius: 16, backgroundColor: c.tAct, marginTop: -4 }}>
-        {/* compact: kcal eaten and one thin bar */}
-        <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <View>
-            <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17, color: c.cAct }}>Eaten today</Txt>
-            <Txt style={{ fontFamily: font.display, fontSize: 20, lineHeight: 26 }}>{inr(t.k)}<Txt muted style={{ fontFamily: font.display, fontSize: 12, lineHeight: 17 }}>{` / ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
-          </View>
+        {/* one line over the bar: "Eaten today" at its left end, the kcal at its right end */}
+        <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          <Row style={{ gap: 6 }}>
+            <Flame size={15} color={c.cAct} fill={c.cAct} />
+            <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: c.cAct }}>Eaten today</Txt>
+          </Row>
+          <Txt style={{ fontFamily: font.display, fontSize: 18, lineHeight: 24 }}>{inr(t.k)}<Txt muted style={{ fontFamily: font.display, fontSize: 12, lineHeight: 17 }}>{` / ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
         </Row>
         <View style={{ height: 4, borderRadius: 2, backgroundColor: `${c.cAct}26`, overflow: 'hidden' }}>
           <View style={{ width: `${Math.min(100, (t.k / KCAL_TARGET) * 100)}%`, height: '100%', borderRadius: 2, backgroundColor: c.cAct }} />
