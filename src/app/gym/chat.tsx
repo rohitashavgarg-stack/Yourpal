@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { Keyboard, Platform, ScrollView, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft, ChevronRight, Ellipsis, X } from '@/lib/icons';
@@ -33,6 +33,18 @@ function Dot({ i }: { i: number }) {
   useEffect(() => { o.value = withDelay(i * 150, withRepeat(withSequence(withTiming(1, { duration: 350 }), withTiming(0.3, { duration: 650 })), -1, false)); }, []);
   const a = useAnimatedStyle(() => ({ opacity: o.value }));
   return <Animated.View style={[{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.muted, marginHorizontal: 2 }, a]} />;
+}
+
+// How far the keyboard covers the screen (iOS only; Android resizes the window itself). The chat adds it as bottom padding.
+function useKeyboardLift() {
+  const [h, setH] = React.useState(0);
+  React.useEffect(() => {
+    if (Platform.OS !== 'ios') return;
+    const a = Keyboard.addListener('keyboardWillShow', (e) => setH(e.endCoordinates.height));
+    const b = Keyboard.addListener('keyboardWillHide', () => setH(0));
+    return () => { a.remove(); b.remove(); };
+  }, []);
+  return h;
 }
 
 export default function CoachChat() {
@@ -85,9 +97,10 @@ export default function CoachChat() {
     deliver(m.t);
   };
 
+  const kb = useKeyboardLift();
   const lastMine = d.chat.length > 0 && d.chat[d.chat.length - 1].me;
   const footer = g.blocked ? (
-    <View style={{ paddingTop: 14, paddingHorizontal: 16, paddingBottom: insets.bottom + 16, gap: 8 }}>
+    <View style={{ paddingTop: 14, paddingHorizontal: 16, paddingBottom: (kb ? 0 : insets.bottom) + 16, gap: 8 }}>
       <Txt muted style={{ textAlign: 'center', fontSize: 14 }}>You blocked this chat. Coach Vikram can’t message you.</Txt>
       <Button kind="secondary" label="Unblock" onPress={() => gymStore.set({ blocked: false })} style={{ height: 48, borderRadius: 24 }} />
     </View>
@@ -98,12 +111,12 @@ export default function CoachChat() {
           <Txt style={{ fontFamily: font.medium, fontSize: 12, color: c.accentText }}>About: {ctx}</Txt><X size={14} color={c.accentText} />
         </Pressy>
       ) : null}
-      <Composer draft={draft} setDraft={setDraft} onSend={send} bottomInset={insets.bottom} />
+      <Composer draft={draft} setDraft={setDraft} onSend={send} bottomInset={kb ? 0 : insets.bottom} />
     </View>
   );
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
+    <View style={{ flex: 1, backgroundColor: c.bg, paddingBottom: kb }}>
       <View style={{ paddingTop: insets.top + 8, paddingBottom: 10, alignItems: 'center' }}>
         <Pressy accessibilityRole="button" accessibilityLabel="Coach Vikram. View profile" onPress={() => router.push('/coach')} scaleTo={0.97} style={{ alignItems: 'center' }}>
           <PersonAvatar who="coach" size={58} />
@@ -164,6 +177,6 @@ export default function CoachChat() {
         {d.offline && <Txt v="caption" style={{ textAlign: 'center', color: c.warn, fontFamily: font.medium }}>You’re offline · tap a message that didn’t send to retry once you’re back</Txt>}
       </ScrollView>
       {footer}
-    </KeyboardAvoidingView>
+    </View>
   );
 }

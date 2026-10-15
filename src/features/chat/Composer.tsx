@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Image, Platform, ScrollView, TextInput, View } from 'react-native';
+import { Image, Keyboard, Platform, ScrollView, TextInput, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { ArrowUp, Camera, Image as ImageIcon, Mic, Plus, Send, Smile, Trash2, X } from '@/lib/icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -88,6 +88,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
   const canSend = !!draft.trim() || !!img;
   const send = () => {
     if (!canSend) return;
+    Keyboard.dismiss(); // sending closes the keyboard
     onSend({ text: draft.trim() || undefined, img });
     setImg(undefined);
     setEmoji(false);
@@ -115,6 +116,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
   };
 
   const startRec = async () => {
+    Keyboard.dismiss();
     try {
       const { granted } = await requestRecordingPermissionsAsync();
       if (!granted) { setMicOff(true); haptic.error(); return; }
@@ -170,7 +172,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
           </Animated.View>
         ) : (
           <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8 }}>
-            <Pressy accessibilityRole="button" accessibilityLabel="Attach a photo" onPress={() => openSheet(<AttachSheet onPick={pick} />, { label: 'Send a photo' })} scaleTo={0.9} style={[circle, { width: 46, height: 46, borderRadius: 23, overflow: 'hidden' }, lift]}>
+            <Pressy accessibilityRole="button" accessibilityLabel="Attach a photo" onPress={() => { Keyboard.dismiss(); openSheet(<AttachSheet onPick={pick} />, { label: 'Send a photo' }); }} scaleTo={0.9} style={[circle, { width: 46, height: 46, borderRadius: 23, overflow: 'hidden' }, lift]}>
               <GlassBackdrop radius={23} />
               <View style={{ zIndex: 2 }}><Plus size={22} color={c.ink} /></View>
             </Pressy>

@@ -6,6 +6,7 @@ import { BlurView } from 'expo-blur';
 import { SCREEN_IN, SCREEN_OUT } from '@/theme/motion';
 import { takeOrigin } from '@/theme/zoomOrigin';
 import { ScreenOpen } from '@/theme/screenOpen';
+import { hasLiquidGlass } from '@/components/Glass';
 import { Stack, router, useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -33,6 +34,7 @@ const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
 // All of them carry a blur that clears as the page opens. (Pages in FROM_BOTTOM are sheets and slide up instead.)
 const PUSH = ['login', 'goal', 'profile/details', 'profile/appearance', 'profile/units', 'profile/notifications', 'profile/privacy', 'profile/export', 'profile/delete', 'profile/help', 'profile/health', 'profile/trackers', 'profile/tracker-designs', 'plans/history', 'plans/updated', 'gym/break', 'progress/photos'];
 type ZKind = 'expand' | 'reveal' | 'push' | 'fade';
+const SOLID = hasLiquidGlass;
 // Web only: the stack drops a popped screen at once, so the slide-out is played first, then the real back runs.
 // True for a moment after a back: a screen that mounts then is being revealed, not pushed, so it must not slide in.
 let popping = false;
@@ -237,7 +239,9 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
     if (k >= 1) return { opacity: 1, borderRadius: 0, transform: [] };
     return {
       // a card stays solid while it grows / shrinks and only fades right at the card; an icon reveal fades in a little later
-      opacity: g.push ? k : g.s < 0.3 ? Math.min(1, k * 1.6) : Math.min(1, k * 4),
+      // with iOS liquid glass the page never fades (glass does not draw inside a fading view, so the back button would
+      // appear late); it grows / slides solid, under the blur that clears
+      opacity: SOLID ? 1 : g.push ? k : g.s < 0.3 ? Math.min(1, k * 1.6) : Math.min(1, k * 4),
       borderRadius: g.r * (1 - k),
       transform: [{ translateX: g.tx * (1 - k) + g.push * (1 - k) }, { translateY: g.ty * (1 - k) }, { scale: g.s + (1 - g.s) * k }],
     };
