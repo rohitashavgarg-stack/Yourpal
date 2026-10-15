@@ -235,16 +235,21 @@ export function MealNowCard() {
         <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
         <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
       </Row>
-      <View accessible accessibilityLabel={`Eaten today ${t.k} of ${KCAL_TARGET} kcal, protein ${t.p} of ${MACRO_TARGET.p} grams`} style={{ gap: 6, paddingVertical: 12, paddingHorizontal: 14, borderRadius: 20, backgroundColor: c.tAct, marginTop: -4 }}>
-        <Row style={{ justifyContent: 'space-between' }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17, color: c.cAct }}>Eaten today</Txt>
-          <Txt style={{ fontSize: 12, lineHeight: 17, color: over ? c.warn : c.muted }}>{over ? `${t.k - KCAL_TARGET} kcal over` : `${inr(KCAL_TARGET - t.k)} kcal left`}</Txt>
+      <View accessible accessibilityLabel={`Eaten today ${t.k} of ${KCAL_TARGET} kcal, protein ${t.p} of ${MACRO_TARGET.p} grams`} style={{ gap: 8, paddingVertical: 10, paddingHorizontal: 12, borderRadius: 16, backgroundColor: c.tAct, marginTop: -4 }}>
+        {/* compact: kcal on the left, what is left and protein on the right, one thin bar */}
+        <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <View>
+            <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17, color: c.cAct }}>Eaten today</Txt>
+            <Txt style={{ fontFamily: font.display, fontSize: 20, lineHeight: 26 }}>{inr(t.k)}<Txt muted style={{ fontFamily: font.display, fontSize: 12, lineHeight: 17 }}>{` / ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
+          </View>
+          <View style={{ alignItems: 'flex-end' }}>
+            <Txt style={{ fontSize: 12, lineHeight: 17, color: over ? c.warn : c.muted }}>{over ? `${t.k - KCAL_TARGET} kcal over` : `${inr(KCAL_TARGET - t.k)} kcal left`}</Txt>
+            <Txt style={{ fontSize: 12, lineHeight: 17, color: c.muted }}>{`Protein ${t.p} / ${MACRO_TARGET.p} g`}</Txt>
+          </View>
         </Row>
-        <Txt style={{ fontFamily: font.display, fontSize: 26, lineHeight: 34 }}>{inr(t.k)}<Txt muted style={{ fontFamily: font.display, fontSize: 14, lineHeight: 20 }}>{` / ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
-        <View style={{ height: 5, borderRadius: 3, backgroundColor: `${c.cAct}26`, overflow: 'hidden' }}>
-          <View style={{ width: `${Math.min(100, (t.k / KCAL_TARGET) * 100)}%`, height: '100%', borderRadius: 3, backgroundColor: c.cAct }} />
+        <View style={{ height: 4, borderRadius: 2, backgroundColor: `${c.cAct}26`, overflow: 'hidden' }}>
+          <View style={{ width: `${Math.min(100, (t.k / KCAL_TARGET) * 100)}%`, height: '100%', borderRadius: 2, backgroundColor: c.cAct }} />
         </View>
-        <Txt v="caption">{`Protein ${t.p} / ${MACRO_TARGET.p} g`}</Txt>
       </View>
       {ask && <MissedRow id={ask} more={missed.length - 1} />}
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
