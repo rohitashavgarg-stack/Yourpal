@@ -228,7 +228,6 @@ export function MealNowCard() {
     if (id === now) return { t: 'Now', col: c.accentText, bg: c.accentSoft };
     return { t: fmtT(mealById(id).t).full, col: c.muted, bg: c.surface2 };
   };
-  const over = t.k > KCAL_TARGET;
   return (
     <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
@@ -236,15 +235,11 @@ export function MealNowCard() {
         <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
       </Row>
       <View accessible accessibilityLabel={`Eaten today ${t.k} of ${KCAL_TARGET} kcal, protein ${t.p} of ${MACRO_TARGET.p} grams`} style={{ gap: 8, paddingVertical: 10, paddingHorizontal: 12, borderRadius: 16, backgroundColor: c.tAct, marginTop: -4 }}>
-        {/* compact: kcal on the left, what is left and protein on the right, one thin bar */}
+        {/* compact: kcal eaten and one thin bar */}
         <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
           <View>
             <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17, color: c.cAct }}>Eaten today</Txt>
             <Txt style={{ fontFamily: font.display, fontSize: 20, lineHeight: 26 }}>{inr(t.k)}<Txt muted style={{ fontFamily: font.display, fontSize: 12, lineHeight: 17 }}>{` / ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
-          </View>
-          <View style={{ alignItems: 'flex-end' }}>
-            <Txt style={{ fontSize: 12, lineHeight: 17, color: over ? c.warn : c.muted }}>{over ? `${t.k - KCAL_TARGET} kcal over` : `${inr(KCAL_TARGET - t.k)} kcal left`}</Txt>
-            <Txt style={{ fontSize: 12, lineHeight: 17, color: c.muted }}>{`Protein ${t.p} / ${MACRO_TARGET.p} g`}</Txt>
           </View>
         </Row>
         <View style={{ height: 4, borderRadius: 2, backgroundColor: `${c.cAct}26`, overflow: 'hidden' }}>
