@@ -152,7 +152,7 @@ export function MealsCard({ timeline = false }: { timeline?: boolean } = {}) {
           <Animated.View style={[{ height: '100%', borderRadius: 3, backgroundColor: c.cAct }, bar]} />
         </View>
         <Txt v="caption">Protein {t.p} / {MACRO_TARGET.p} g</Txt>
-        {over && <Txt style={{ fontSize: 12, lineHeight: 18, color: c.warn }}>Above today's target. A lighter next meal evens it out.</Txt>}
+        {over && <Txt style={{ fontSize: 12, lineHeight: 18, color: c.warn }}>{"Above today's target. A lighter next meal evens it out."}</Txt>}
       </View>
       {MEALS.map((m) => <MealRow key={m.id} id={m.id} open={openId === m.id} />)}
     </Card>
@@ -228,12 +228,28 @@ export function MealNowCard() {
     if (id === now) return { t: 'Now', col: c.accentText, bg: c.accentSoft };
     return { t: fmtT(mealById(id).t).full, col: c.muted, bg: c.surface2 };
   };
+  const over = t.k > KCAL_TARGET;
   return (
-    <Card style={{ paddingTop: 18, paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
+    <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
+      <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
+        <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
+      </Row>
+      <View accessible accessibilityLabel={`Eaten today ${t.k} of ${KCAL_TARGET} kcal, protein ${t.p} of ${MACRO_TARGET.p} grams`} style={{ gap: 6, paddingVertical: 12, paddingHorizontal: 14, borderRadius: 20, backgroundColor: c.tAct, marginTop: -4 }}>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17, color: c.cAct }}>Eaten today</Txt>
+          <Txt style={{ fontSize: 12, lineHeight: 17, color: over ? c.warn : c.muted }}>{over ? `${t.k - KCAL_TARGET} kcal over` : `${inr(KCAL_TARGET - t.k)} kcal left`}</Txt>
+        </Row>
+        <Txt style={{ fontFamily: font.display, fontSize: 26, lineHeight: 34 }}>{inr(t.k)}<Txt muted style={{ fontFamily: font.display, fontSize: 14, lineHeight: 20 }}>{` / ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
+        <View style={{ height: 5, borderRadius: 3, backgroundColor: `${c.cAct}26`, overflow: 'hidden' }}>
+          <View style={{ width: `${Math.min(100, (t.k / KCAL_TARGET) * 100)}%`, height: '100%', borderRadius: 3, backgroundColor: c.cAct }} />
+        </View>
+        <Txt v="caption">{`Protein ${t.p} / ${MACRO_TARGET.p} g`}</Txt>
+      </View>
       {ask && <MissedRow id={ask} more={missed.length - 1} />}
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <View>
-          <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 30, letterSpacing: -0.4 }}>{m.n}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 27, letterSpacing: -0.4 }}>{m.n}</Txt>
           <Txt v="caption">{v.any ? `${v.kcal} kcal eaten` : `${mealKcal(m)} kcal planned`}</Txt>
         </View>
         <View style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, backgroundColor: c.surface2, justifyContent: 'center' }}>
@@ -255,15 +271,6 @@ export function MealNowCard() {
           );
         })}
       </Row>
-      <View accessible accessibilityLabel={`Eaten today ${t.k} of ${KCAL_TARGET} kcal`} style={{ gap: 6, paddingHorizontal: 4 }}>
-        <Row style={{ justifyContent: 'space-between' }}>
-          <Txt v="caption">Eaten today</Txt>
-          <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17 }}>{inr(t.k)}<Txt v="caption">{` of ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
-        </Row>
-        <View style={{ height: 4, borderRadius: 2, backgroundColor: c.surface3, overflow: 'hidden' }}>
-          <View style={{ width: `${Math.min(100, (t.k / KCAL_TARGET) * 100)}%`, height: '100%', borderRadius: 2, backgroundColor: c.cAct }} />
-        </View>
-      </View>
     </Card>
   );
 }

@@ -121,7 +121,8 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, hs, onNatural,
   return (
     <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0 }, card]}>
       <View style={[{ flex: 1, backgroundColor: c.surface, borderRadius: 24, padding: 16, overflow: 'hidden', borderWidth: 1, borderColor: c.line }, cardShadow(isDark)]}>
-        <Animated.View style={content} onLayout={(e) => onNatural(it.key, e.nativeEvent.layout.height)}>
+        {/* placed absolutely so it always measures at its natural height (on the phone a fixed-height parent squeezes it); the card follows that height */}
+        <Animated.View style={[{ position: 'absolute', top: 16, left: 16, right: 16 }, content]} onLayout={(e) => onNatural(it.key, e.nativeEvent.layout.height)}>
           <View style={{ gap: 12 }}>
             <Row style={{ gap: 12, alignItems: 'flex-start', paddingRight: it.critical ? 0 : 28 }}>
               {it.who ? <PersonAvatar who="coach" size={40} /> : <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}>{I ? <I size={19} color={fg} /> : null}</View>}
