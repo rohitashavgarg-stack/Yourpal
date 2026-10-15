@@ -235,7 +235,6 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
     const k = p.value, g = geo.value;
     if (k >= 1) return { opacity: 1, borderRadius: 0, transform: [] };
     return {
-      // reveal fades in a little later so the small shape reads as coming out of the icon; push fades in with the slide
       // a card stays solid while it grows / shrinks and only fades right at the card; an icon reveal fades in a little later
       opacity: g.push ? k : g.s < 0.3 ? Math.min(1, k * 1.6) : Math.min(1, k * 4),
       borderRadius: g.r * (1 - k),
