@@ -16,6 +16,7 @@ import { useStartWorkout } from '@/features/workout/StartSheet';
 import { buildExercises, WORKOUT_MIN } from '@/features/workout/session';
 import { rel } from './meals';
 import { createStore } from '@/features/progress/store';
+import { zoomFrom } from '@/theme/zoomOrigin';
 
 // What the member said about a missed workout (kept for the day): moved to tomorrow or skipped. "I did it" logs it as done instead.
 export const missedWkStore = createStore(() => ({ answer: null as null | 'moved' | 'skipped' }));
@@ -64,9 +65,9 @@ const SmallBtn = ({ label, onPress, solid = false }: { label: string; onPress: (
 );
 const LiveDot = () => <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: MINT }} />;
 
-function Shell({ colors, edge, children, compact = false, label }: { colors: string[]; edge?: string; children: React.ReactNode; compact?: boolean; label: string }) {
+function Shell({ colors, edge, children, compact = false, label, boxRef }: { colors: string[]; edge?: string; children: React.ReactNode; compact?: boolean; label: string; boxRef?: React.Ref<any> }) {
   return (
-    <View accessibilityLabel={label} style={{ borderRadius: 24, padding: 16, paddingVertical: compact ? 14 : 16, gap: 12, overflow: 'hidden', borderWidth: edge ? 1.5 : 0, borderColor: edge }}>
+    <View ref={boxRef} collapsable={false} accessibilityLabel={label} style={{ borderRadius: 24, padding: 16, paddingVertical: compact ? 14 : 16, gap: 12, overflow: 'hidden', borderWidth: edge ? 1.5 : 0, borderColor: edge }}>
       <LinearGradient colors={colors as any} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
       {!compact && <View pointerEvents="none" style={{ position: 'absolute', right: -70, top: -80, width: 220, height: 220, borderRadius: 110, borderWidth: 14, borderColor: 'rgba(255,255,255,0.05)' }} />}
       {children}
@@ -84,6 +85,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   const st0 = workoutState(d);
   const ms = missedWkStore.use();
   const { toast } = useOverlay();
+  const cardRef = React.useRef<any>(null);
   const st = restart && st0 === 'hidden' ? 'todo' : st0;
   const now = useNow(st === 'live', 1000);
   if (st === 'hidden') return null;
@@ -171,7 +173,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
     const next = ex.find((e) => e.sets.some((x) => x.st === 'todo'));
     const elapsed = mmss((now - d.session.startAt) / 1000).padStart(5, '0');
     return (
-      <Shell label={`Workout running, ${elapsed} elapsed, ${doneEx} of ${ex.length} exercises`} colors={['#06231B', '#0B3A2C', '#0F5A42']}>
+      <Shell boxRef={cardRef} label={`Workout running, ${elapsed} elapsed, ${doneEx} of ${ex.length} exercises`} colors={['#06231B', '#0B3A2C', '#0F5A42']}>
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <Row style={{ gap: 8 }}><LiveDot /><Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: MINT }}>Running</Txt></Row>
           <Chip label={name} onDark tone="live" />
@@ -189,7 +191,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
             {ex.map((_, i) => <View key={i} style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: i < doneEx ? MINT : 'rgba(255,255,255,0.18)' }} />)}
           </Row>
         </View>
-        <Btn label="Resume workout" onPress={() => router.push('/workout')} />
+        <Btn label="Resume workout" onPress={() => { zoomFrom(cardRef.current).then(() => router.push('/workout')); }} />
       </Shell>
     );
   }
@@ -221,7 +223,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   // 1. upcoming / 2. due now (a thin mint edge and a "Now" chip; the button stays white)
   const due = !comeback && d.min >= WKT - 15;
   return (
-    <Shell label={`Today's workout, ${name}`} colors={['#0B0E14', '#0E1B45', '#13327A']} edge={due ? 'rgba(124,240,200,0.45)' : undefined}>
+    <Shell boxRef={cardRef} label={`Today's workout, ${name}`} colors={['#0B0E14', '#0E1B45', '#13327A']} edge={due ? 'rgba(124,240,200,0.45)' : undefined}>
       <Row style={{ justifyContent: 'space-between', gap: 8 }}>
         <Coach />
         {due ? (
@@ -232,7 +234,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
       </Row>
       <Title name={name} time={time} />
       <Row style={{ gap: 6, flexWrap: 'wrap' }}>{chips.map((t) => <Chip key={t} label={t} onDark />)}</Row>
-      <Btn label={comeback ? 'Start my comeback plan' : 'Start workout'} onPress={() => startWorkout()} />
+      <Btn label={comeback ? 'Start my comeback plan' : 'Start workout'} onPress={() => { zoomFrom(cardRef.current).then(() => startWorkout()); }} />
       {burnedRow}
     </Shell>
   );

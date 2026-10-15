@@ -22,10 +22,10 @@ import { CheckInEngine } from '@/features/checkin/CheckInEngine';
 
 // Screens with an X (close) open from the bottom and close back down. Screens with a back arrow come in from the right and leave to the right.
 // On the phone the native stack does this (see the Stack.Screen options below). The web stack has no transitions, so this wrapper adds them there.
-const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
+const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'checkin', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
 const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
-// Screens that open with a soft zoom and a blur that clears (the reference video): from the card that was tapped, if any (see theme/zoomOrigin).
-const ZOOM = ['goal-detail', 'coach', 'notifications'];
+// Every other screen (all the back-arrow pages) opens with a soft zoom and a blur that clears (the reference video):
+// from the card that was tapped if it passed its position (see theme/zoomOrigin), else from the middle.
 // Web only: the stack drops a popped screen at once, so the slide-out is played first, then the real back runs.
 // True for a moment after a back: a screen that mounts then is being revealed, not pushed, so it must not slide in.
 let popping = false;
@@ -52,8 +52,8 @@ if (Platform.OS === 'web' && typeof document !== 'undefined' && !document.getEle
 }
 function Transition({ name, children }: { name: string; children: React.ReactNode }) {
   if (NO_TRANSITION.includes(name)) return <>{children}</>;
-  if (ZOOM.includes(name)) return <Zoom name={name}>{children}</Zoom>;
   const bottom = FROM_BOTTOM.includes(name);
+  if (!bottom) return <Zoom name={name}>{children}</Zoom>;
   if (Platform.OS !== 'web' && !bottom) return <>{children}</>; // phone: back screens use the native push
   return <Slide name={name} bottom={bottom}>{children}</Slide>;
 }
@@ -183,6 +183,7 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
   const close = (done: () => void) => {
     if (busy.current) return;
     busy.current = true;
+    setOpen(false);
     if (blur) setBlurOn(true);
     if (isWeb) under.current = underlay(box.current);
     let left = false;
@@ -197,7 +198,7 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
     return () => { const i = closers.indexOf(e); if (i >= 0) closers.splice(i, 1); under.current?.done(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name]);
-  const opened = () => { setBlurOn(false); const u = under.current; if (u) { u.prev.style.display = ''; u.done(); under.current = null; } };
+  const opened = () => { setBlurOn(false); setOpen(true); const u = under.current; if (u) { u.prev.style.display = ''; u.done(); under.current = null; } };
   const start = (cx: number, cy: number, w: number, h: number) => {
     if (origin && w > 0) {
       const s = Math.max(0.3, Math.min(1, origin.w / w));
@@ -209,7 +210,7 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
     setTimeout(() => { if (p.value < 1 && !busy.current) { p.value = 1; opened(); } }, SCREEN_IN + 300);
   };
   useEffect(() => {
-    if (popping) { p.value = 1; setBlurOn(false); return; }
+    if (popping) { p.value = 1; setBlurOn(false); setOpen(true); return; }
     const t = setTimeout(() => { // after the first paint, so the page has its size
       const n = root.current;
       box.current = n;
@@ -222,6 +223,7 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
   }, []);
   const page = useAnimatedStyle(() => {
     const k = p.value, g = geo.value;
+    if (k >= 1) return { opacity: 1, borderRadius: 0, transform: [] };
     return {
       opacity: Math.min(1, k * 2),
       borderRadius: 28 * (1 - k),
@@ -231,11 +233,27 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
   // a fixed blur that fades out as the page opens (animating the blur strength itself does not update on web); removed once open
   const blurFade = useAnimatedStyle(() => ({ opacity: 1 - p.value }));
   const [blurOn, setBlurOn] = React.useState(blur);
+  const [open, setOpen] = React.useState(false);
   const dim = useAnimatedStyle(() => ({ opacity: p.value * 0.3 }));
+  // Swipe from the left edge to go back: the page follows the finger, then closes the usual way.
+  const drag = useSharedValue(0);
+  const goBack = () => { (router as any).back(); };
+  const edge = Gesture.Pan()
+    .hitSlop({ left: 0, width: 24 })
+    .activeOffsetX(12)
+    .failOffsetY([-20, 20])
+    .onUpdate((e) => { drag.value = Math.max(0, e.translationX); })
+    .onEnd((e) => {
+      if (e.translationX > 110 || e.velocityX > 800) runOnJS(goBack)();
+      else drag.value = withTiming(0, ZIN);
+    });
+  const follow = useAnimatedStyle(() => ({ flex: 1, transform: [{ translateX: drag.value }] }));
   return (
+    <GestureDetector gesture={edge}>
     <View ref={root} collapsable={false} style={{ flex: 1 }}>
       {!isWeb && <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: '#000' }, dim]} />}
-      <Animated.View style={[{ flex: 1, backgroundColor: c.bg, overflow: 'hidden' }, page]}>
+      <Animated.View style={follow}>
+      <Animated.View style={[{ flex: 1, backgroundColor: c.bg, overflow: open ? 'visible' : 'hidden' }, page, open ? { opacity: 1, borderRadius: 0, transform: [] } : null]}>
         {isWeb ? children : <OverlayProvider>{children}</OverlayProvider>}
         {blurOn && (
           <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }, blurFade]}>
@@ -243,7 +261,9 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
           </Animated.View>
         )}
       </Animated.View>
+      </Animated.View>
     </View>
+    </GestureDetector>
   );
 }
 
@@ -255,20 +275,16 @@ function Shell() {
       <View style={{ flex: 1, backgroundColor: c.bg }}>
         <OverlayProvider>
           <StatusBar style={isDark ? 'light' : 'dark'} />
-          <Stack screenLayout={({ route, children }: any) => <Transition name={route.name}>{children}</Transition>} screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg }, animation: 'slide_from_right', gestureEnabled: true, fullScreenGestureEnabled: true } as any}>
+          <Stack screenLayout={({ route, children }: any) => <Transition name={route.name}>{children}</Transition>} screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg }, presentation: 'transparentModal', animation: 'none', gestureEnabled: false, fullScreenGestureEnabled: false } as any}>
             {/* Root screens: nothing to swipe back to once you are in. */}
-            {['(tabs)', 'onboarding'].map((n) => (
-              <Stack.Screen key={n} name={n} options={{ gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
+            {['(tabs)', 'onboarding', 'index'].map((n) => (
+              <Stack.Screen key={n} name={n} options={{ presentation: 'card', animation: 'fade', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
             ))}
             {/* Going back by replace (login to welcome, onboarding to login) should look like a back move, not a push. */}
             <Stack.Screen name="login" options={{ animationTypeForReplace: 'pop' } as any} />
             {/* The first screen has nothing behind it, so no back swipe. */}
-            <Stack.Screen name="welcome" options={{ animationTypeForReplace: 'pop', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
+            <Stack.Screen name="welcome" options={{ presentation: 'card', animation: 'fade', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
             {/* Close-button (X) screens open from the bottom. */}
-            {/* Zoom screens are drawn over the page underneath too, and play their own open / close. */}
-            {ZOOM.map((n) => (
-              <Stack.Screen key={n} name={n} options={{ presentation: 'transparentModal', animation: 'none', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
-            ))}
             {FROM_BOTTOM.map((n) => (
               <Stack.Screen key={n} name={n} options={{ presentation: 'transparentModal', animation: 'none', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
             ))}

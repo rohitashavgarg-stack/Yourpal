@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { LayoutChangeEvent, Pressable, PressableProps, StyleProp, StyleSheet, Text, TextInput, TextInputProps, TextProps, TextStyle, View, ViewStyle } from 'react-native';
+import { notePress } from '@/theme/zoomOrigin'; // a page opened from here grows out of this button
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, radius, spring } from '@/theme/tokens';
@@ -35,7 +36,7 @@ export function Pressy({ style, children, haptics = true, scaleTo = 0.97, onPres
   return (
     <APressable
       {...rest}
-      onPressIn={(e) => { s.value = withSpring(scaleTo, spring.snappy); rest.onPressIn?.(e); }}
+      onPressIn={(e) => { s.value = withSpring(scaleTo, spring.snappy); notePress((e as any).currentTarget); rest.onPressIn?.(e); }}
       onPressOut={(e) => { s.value = withSpring(1, spring.bouncy); rest.onPressOut?.(e); }}
       onPress={(e) => { if (haptics) haptic.tap(); onPress?.(e); }}
       style={[style as any, a]}
