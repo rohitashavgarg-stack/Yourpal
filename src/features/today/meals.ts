@@ -32,9 +32,9 @@ export function mealView(d: Domain, m: Meal): MealView {
   x.extra.forEach((e) => (kcal += e.k));
   const at = fmtT(x.at ?? m.t).full;
   const isNext = nextMeal(d) === m.id;
-  if (x.skip) return { meal: m, full, any, kcal, status: `Skipped · planned ${mealKcal(m)} kcal`, tone: 'muted', badge: 'off', isNext };
+  if (x.skip) return { meal: m, full, any, kcal, status: 'Skipped', tone: 'muted', badge: 'off', isNext };
   if (full && !x.extra.length) return { meal: m, full, any, kcal, status: `Eaten ${at}`, tone: 'good', badge: 'done', isNext };
-  if (any) return { meal: m, full, any, kcal, status: `Eaten ${at} · ${x.eaten.length}/${m.items.length}${x.extra.length ? ` +${x.extra.length}` : ''}`, tone: 'good', badge: full ? 'done' : 'part', isNext };
+  if (any) return { meal: m, full, any, kcal, status: `Eaten ${at}`, tone: 'good', badge: full ? 'done' : 'part', isNext };
   const r = rel(d, m.t);
   return { meal: m, full, any, kcal: mealKcal(m), status: r.t, tone: r.late ? 'warn' : 'muted', badge: null, isNext };
 }

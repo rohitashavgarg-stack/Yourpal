@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import Animated, { LinearTransition, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { fade } from '@/theme/motion';
 import { router } from 'expo-router';
-import { Check, ChevronDown, Minus, Plus, UtensilsCrossed, X } from '@/lib/icons';
+import { Check, ChevronDown, Clock, Minus, Plus, UtensilsCrossed, X } from '@/lib/icons';
 import { Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -40,7 +40,7 @@ function Chevron({ open }: { open: boolean }) {
   return <Animated.View style={a}><ChevronDown size={18} color={c.muted} /></Animated.View>;
 }
 
-function MealRow({ id, open }: { id: MealId; open: boolean }) {
+function MealRow({ id, open, bare = false }: { id: MealId; open: boolean; bare?: boolean }) {
   const { c } = useTheme();
   const { d, set } = useDomain();
   const { toggleItem, patch } = useMeals();
@@ -52,7 +52,7 @@ function MealRow({ id, open }: { id: MealId; open: boolean }) {
 
   const toggle = (k: number) => {
     const willFull = !x.eaten.includes(k) && x.eaten.length + 1 === m.items.length;
-    if (willFull) withUndo(`${m.n} done · +${mealKcal(m)} kcal`, () => toggleItem(id, k));
+    if (willFull) withUndo(`${m.n} done, +${mealKcal(m)} kcal`, () => toggleItem(id, k));
     else toggleItem(id, k);
   };
   const removeExtra = (j: number) => {
@@ -69,8 +69,8 @@ function MealRow({ id, open }: { id: MealId; open: boolean }) {
   const openFood = (k: number, extra: boolean) => router.push({ pathname: '/food', params: { mid: id, k: String(k), extra: extra ? '1' : '0' } });
 
   return (
-    <Animated.View layout={LinearTransition.duration(180)} style={{ borderTopWidth: 1, borderTopColor: c.line }}>
-      <Pressy accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel={`${m.n}, ${v.status}`} scaleTo={0.985}
+    <Animated.View layout={LinearTransition.duration(180)} style={bare ? undefined : { borderTopWidth: 1, borderTopColor: c.line }}>
+      {!bare && <Pressy accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel={`${m.n}, ${v.status}`} scaleTo={0.985}
         onPress={() => set({ openMeal: open ? 'none' : id })} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10 }}>
         <Capsule t={m.t} now={v.isNext && !v.any && !x.skip} badge={v.badge} />
         <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
@@ -79,9 +79,9 @@ function MealRow({ id, open }: { id: MealId; open: boolean }) {
         </View>
         <Txt v="mono" muted style={{ fontSize: 12 }}>{v.kcal} kcal</Txt>
         <Chevron open={open} />
-      </Pressy>
-      {open && (
-        <Animated.View entering={fade()} style={{ gap: 4, paddingBottom: 12 }}>
+      </Pressy>}
+      {(open || bare) && (
+        <Animated.View entering={fade()} style={{ gap: 4, paddingBottom: bare ? 0 : 12 }}>
           {m.items.map((it, k) => {
             const on = x.eaten.includes(k);
             const r = x.repl[k];
@@ -90,8 +90,9 @@ function MealRow({ id, open }: { id: MealId; open: boolean }) {
                 <FoodMark type={it.type} />
                 <Pressy accessibilityRole="button" accessibilityLabel={`${r ? r.n : it.n}: nutrition, recipe and swap`} onPress={() => openFood(k, false)} scaleTo={0.98} style={{ flex: 1, minWidth: 0, paddingVertical: 4 }}>
                   <Txt style={{ fontFamily: font.medium, color: x.skip ? c.muted : c.ink, textDecorationLine: x.skip ? 'line-through' : 'none' }}>{r ? r.n : it.n}</Txt>
-                  <Txt v="caption">{r ? `Instead of ${it.n.toLowerCase()} · ${r.k} kcal${r.est ? ' · est.' : ''}` : `${it.q} · ${it.k} kcal`}</Txt>
+                  <Txt v="caption">{r ? `Instead of ${it.n.toLowerCase()}` : it.q}</Txt>
                 </Pressy>
+                <Txt v="caption" style={{ alignSelf: 'center' }}>{`${r ? r.k : it.k} kcal${r?.est ? '*' : ''}`}</Txt>
                 {!!r && <Chip label="Yours" style={{ height: 22, borderColor: c.accentSoft, alignSelf: 'center' }} />}
                 <CheckCircle on={on} size={28} tone="good" label={`${on ? 'Unmark' : 'Mark'} ${r ? r.n : it.n} as eaten`} onPress={() => toggle(k)} />
               </Row>
@@ -102,13 +103,14 @@ function MealRow({ id, open }: { id: MealId; open: boolean }) {
               <FoodMark type={e.type ?? 'veg'} />
               <Pressy accessibilityRole="button" accessibilityLabel={`${e.n}: details`} onPress={() => openFood(j, true)} scaleTo={0.98} style={{ flex: 1, minWidth: 0, paddingVertical: 4 }}>
                 <Txt style={{ fontFamily: font.medium }}>{e.n}</Txt>
-                <Txt v="caption">{e.k} kcal{e.est ? ' · estimated' : ''}</Txt>
+                {e.est ? <Txt v="caption">Estimated</Txt> : null}
               </Pressy>
+              <Txt v="caption" style={{ alignSelf: 'center' }}>{`${e.k} kcal`}</Txt>
               <Chip label="Yours" style={{ height: 22, borderColor: c.accentSoft, alignSelf: 'center' }} />
               <CheckCircle on size={28} tone="good" label={`Remove ${e.n}`} onPress={() => removeExtra(j)} />
             </Row>
           ))}
-          <Txt v="caption" style={{ paddingHorizontal: 4, paddingTop: 2 }}>Tap a food for nutrition, recipe or to swap it</Txt>
+          {!bare && <Txt v="caption" style={{ paddingHorizontal: 4, paddingTop: 2 }}>Tap a food for nutrition, recipe or to swap it</Txt>}
           <Row style={{ gap: 8, marginTop: 4 }}>
             <Pressy accessibilityRole="button" onPress={() => openSheet(<QuickLogSheet mealId={id} mode="scan" />, { label: 'Log a meal' })}
               style={{ flex: 1.7, height: 46, borderRadius: 23, backgroundColor: c.surface2, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
@@ -153,6 +155,115 @@ export function MealsCard({ timeline = false }: { timeline?: boolean } = {}) {
         {over && <Txt style={{ fontSize: 12, lineHeight: 18, color: c.warn }}>Above today's target. A lighter next meal evens it out.</Txt>}
       </View>
       {MEALS.map((m) => <MealRow key={m.id} id={m.id} open={openId === m.id} />)}
+    </Card>
+  );
+}
+
+// ---------- Today: only the meal for right now ----------
+// Each meal "owns" the time from 90 min before it until 90 min before the next one. Today shows that one meal only, with a small strip
+// of the whole day under it. A meal whose time has passed with nothing logged is "missed": the card asks about it first, with one-tap answers.
+const LEAD = 90;
+export function currentMealId(min: number): MealId {
+  let cur = MEALS[0].id;
+  MEALS.forEach((m) => { if (min >= m.t - LEAD) cur = m.id; });
+  return cur;
+}
+const untouched = (d: ReturnType<typeof useDomain>['d'], id: MealId) => { const x = mealLog(d, id); return !x.skip && x.eaten.length === 0 && x.extra.length === 0; };
+export function missedMeals(d: ReturnType<typeof useDomain>['d']): MealId[] {
+  const cur = currentMealId(d.min);
+  const ci = MEALS.findIndex((m) => m.id === cur);
+  return MEALS.slice(0, ci).filter((m) => untouched(d, m.id)).map((m) => m.id);
+}
+
+function MissedRow({ id, more }: { id: MealId; more: number }) {
+  const { c } = useTheme();
+  const { d, set } = useDomain();
+  const { patch } = useMeals();
+  const { openSheet, toast } = useOverlay();
+  const m = mealById(id);
+  const answer = (msg: string, p: Parameters<typeof patch>[1]) => { const prev = d.meals; patch(id, p); set({ openMeal: null }); toast(msg, { undo: () => set({ meals: prev }) }); };
+  return (
+    <Animated.View entering={fade()} style={{ borderRadius: 18, backgroundColor: c.warnSoft, padding: 12, gap: 10 }}>
+      <Row style={{ gap: 10 }}>
+        <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}><Clock size={18} color={c.warn} /></View>
+        <View style={{ flex: 1 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{`${m.n} wasn't logged`}</Txt>
+          <Txt v="caption">{more ? `Planned for ${fmtT(m.t).full}. ${more} more to catch up.` : `Planned for ${fmtT(m.t).full}`}</Txt>
+        </View>
+      </Row>
+      <Row style={{ gap: 8 }}>
+        <Pressy accessibilityRole="button" accessibilityLabel={`I ate ${m.n.toLowerCase()} as planned`} onPress={() => answer(`${m.n} logged as planned`, { eaten: m.items.map((_, k) => k), skip: false, at: m.t })}
+          style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.ink, justifyContent: 'center' }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: c.bg }}>I ate it</Txt>
+        </Pressy>
+        <Pressy accessibilityRole="button" accessibilityLabel={`I ate something else for ${m.n.toLowerCase()}`} onPress={() => openSheet(<QuickLogSheet mealId={id} mode="scan" />, { label: 'Log a meal' })}
+          style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.surface, justifyContent: 'center' }}>
+          <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18 }}>Something else</Txt>
+        </Pressy>
+        <Pressy accessibilityRole="button" accessibilityLabel={`I skipped ${m.n.toLowerCase()}`} onPress={() => answer(`${m.n} skipped`, { skip: true, eaten: [] })}
+          style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.surface, justifyContent: 'center' }}>
+          <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18 }}>Skipped</Txt>
+        </Pressy>
+      </Row>
+    </Animated.View>
+  );
+}
+
+export function MealNowCard() {
+  const { c } = useTheme();
+  const { d, set } = useDomain();
+  const t = totals(d);
+  const now = currentMealId(d.min);
+  // tapping another meal in the strip shows it here; tapping the current one (or a fresh day) goes back to "now"
+  const shown = d.openMeal && d.openMeal !== 'none' && MEALS.some((q) => q.id === d.openMeal) ? (d.openMeal as MealId) : now;
+  const m = mealById(shown);
+  const v = mealView(d, m);
+  const missed = missedMeals(d);
+  const ask = missed.length ? missed[missed.length - 1] : null; // the most recent one first
+  const status = (id: MealId) => {
+    const x = mealLog(d, id); const mv = mealView(d, mealById(id));
+    if (x.skip) return { t: 'Skipped', col: c.muted, bg: c.surface2 };
+    if (mv.any) return { t: 'Logged', col: c.good, bg: c.surface2 };
+    if (missed.includes(id)) return { t: 'Not logged', col: c.warn, bg: c.warnSoft };
+    if (id === now) return { t: 'Now', col: c.accentText, bg: c.accentSoft };
+    return { t: fmtT(mealById(id).t).full, col: c.muted, bg: c.surface2 };
+  };
+  return (
+    <Card style={{ paddingTop: 18, paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
+      {ask && <MissedRow id={ask} more={missed.length - 1} />}
+      <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
+        <View>
+          <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 30, letterSpacing: -0.4 }}>{m.n}</Txt>
+          <Txt v="caption">{v.any ? `${v.kcal} kcal eaten` : `${mealKcal(m)} kcal planned`}</Txt>
+        </View>
+        <View style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, backgroundColor: c.surface2, justifyContent: 'center' }}>
+          <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17 }}>{shown === now ? fmtT(m.t).full : status(shown).t}</Txt>
+        </View>
+      </Row>
+      <MealRow id={shown} open bare />
+      <Row style={{ gap: 6 }}>
+        {MEALS.map((q) => {
+          const st = status(q.id);
+          const on = q.id === shown;
+          return (
+            <Pressy key={q.id} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={`${q.n}, ${st.t}`} scaleTo={0.96}
+              onPress={() => set({ openMeal: q.id === now ? null : q.id })}
+              style={{ flex: 1, minHeight: 48, borderRadius: 14, paddingHorizontal: 8, paddingVertical: 7, backgroundColor: st.bg, borderWidth: on ? 1.5 : 0, borderColor: c.accent, justifyContent: 'center' }}>
+              <Txt numberOfLines={1} style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17 }}>{q.n === 'Evening snack' ? 'Snack' : q.n}</Txt>
+              <Txt numberOfLines={1} style={{ fontSize: 11, lineHeight: 15, color: st.col }}>{st.t}</Txt>
+            </Pressy>
+          );
+        })}
+      </Row>
+      <View accessible accessibilityLabel={`Eaten today ${t.k} of ${KCAL_TARGET} kcal`} style={{ gap: 6, paddingHorizontal: 4 }}>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <Txt v="caption">Eaten today</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17 }}>{inr(t.k)}<Txt v="caption">{` of ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
+        </Row>
+        <View style={{ height: 4, borderRadius: 2, backgroundColor: c.surface3, overflow: 'hidden' }}>
+          <View style={{ width: `${Math.min(100, (t.k / KCAL_TARGET) * 100)}%`, height: '100%', borderRadius: 2, backgroundColor: c.cAct }} />
+        </View>
+      </View>
     </Card>
   );
 }

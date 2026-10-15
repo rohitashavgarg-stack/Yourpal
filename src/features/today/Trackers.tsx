@@ -334,7 +334,6 @@ export function Trackers() {
         <WaterCard />
         {!d.hc ? <ConnectCard /> : <><StepsTile />{d.wearable && <HealthCards />}</>}
       </ScrollView>
-      <Txt v="caption" style={{ paddingHorizontal: 20 }}>{!d.hc ? `Swipe for more · connect ${HEALTH_NAME} for steps` : d.wearable ? `Swipe for heart rate, sleep and energy from your watch` : `Steps from ${HEALTH_NAME} · heart rate and sleep need a watch or band`}</Txt>
     </View>
   );
 }

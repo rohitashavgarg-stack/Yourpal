@@ -16,7 +16,12 @@ import { mmss, useNow } from '@/lib/useNow';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { buildExercises, WORKOUT_MIN } from '@/features/workout/session';
 import { rel } from './meals';
+import { createStore } from '@/features/progress/store';
 
+
+// What the member said about a missed workout (kept for the day): moved to tomorrow or skipped. "I did it" logs it as done instead.
+export const missedWkStore = createStore(() => ({ answer: null as null | 'moved' | 'skipped' }));
+export const MISSED_AFTER = 120;
 
 function Tile({ k, v, color }: { k: string; v: string; color?: string }) {
   return (
@@ -30,23 +35,29 @@ function Tile({ k, v, color }: { k: string; v: string; color?: string }) {
 // Dark card, same layout in every state: Now / late / In progress / Done / Rest day.
 // restart: after a break the card is still there (it is otherwise hidden) and offers the easy restart session.
 export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
-  const { d } = useDomain();
+  const { d, set } = useDomain();
   const { state } = useStore();
   const WKT = plannedMin(state.profile.time); // from the time of day chosen in onboarding
-  const { openSheet } = useOverlay();
   const startWorkout = useStartWorkout();
   const st0 = workoutState(d);
+  const ms = missedWkStore.use();
+  const { toast } = useOverlay();
   const st = restart && st0 === 'hidden' ? 'todo' : st0;
   const cs = coachStore.use();
   const now = useNow(st === 'live', 1000);
   if (st === 'hidden') return null;
+  const missed = st === 'todo' && !restart && d.min - WKT > MISSED_AFTER;
+  const answered = missed ? ms.answer : null;
+  const ask = missed && !answered;
+  const didIt = () => { set({ wkDone: { a: WKT, b: WKT + WORKOUT_MIN, k: 350 } }); toast('Logged as done', { undo: () => set({ wkDone: null }) }); };
+  const answer = (a: 'moved' | 'skipped') => { missedWkStore.set({ answer: a }); toast(a === 'moved' ? 'Moved to tomorrow. Coach Vikram is told.' : 'Skipped today', { undo: () => missedWkStore.set({ answer: null }) }); };
   const done = wkDoneInfo(d);
   const elapsed = d.session ? mmss((now - d.session.startAt) / 1000).padStart(5, '0') : '';
-  const chip = st === 'done' ? 'Done' : st === 'rest' ? 'Rest' : st === 'live' ? 'In progress' : restart && st0 === 'hidden' ? 'Today' : d.min - WKT > 120 ? 'Still on for today' : rel(d, WKT).t;
+  const chip = answered === 'moved' ? 'Moved' : answered === 'skipped' ? 'Skipped' : missed ? 'Missed' : st === 'done' ? 'Done' : st === 'rest' ? 'Rest' : st === 'live' ? 'In progress' : restart && st0 === 'hidden' ? 'Today' : d.min - WKT > 120 ? 'Still on for today' : rel(d, WKT).t;
   const live = st === 'done' || st === 'live';
   const chips = st === 'rest' ? ['Recovery day', `Next: Pull · Thu ${fmtT(WKT).full}`] : restart && st0 === 'hidden' ? ['5 exercises', '~30 min', 'Lighter weights'] : [`${buildExercises().length} exercises`, `~${WORKOUT_MIN} min`, ...(d.hc && d.wearable ? ['~350 kcal'] : [])];
-  const did = st === 'done' ? `${fmtT(done.a).hm} – ${fmtT(done.b).full}` : st === 'live' ? `Started · ${elapsed}` : st === 'rest' ? 'A walk counts' : 'Not yet';
-  const cta = st === 'todo' ? (restart && st0 === 'hidden' ? 'Start my comeback plan' : 'Start workout') : st === 'live' ? 'Resume workout' : null;
+  const did = answered === 'moved' ? 'Moved to tomorrow' : answered === 'skipped' ? 'Skipped today' : st === 'done' ? `${fmtT(done.a).hm} – ${fmtT(done.b).full}` : st === 'live' ? `Started · ${elapsed}` : st === 'rest' ? 'A walk counts' : 'Not yet';
+  const cta = answered ? null : ask ? null : st === 'todo' ? (restart && st0 === 'hidden' ? 'Start my comeback plan' : 'Start workout') : st === 'live' ? 'Resume workout' : null;
   const mins = Math.max(1, Math.round(done.b - done.a));
   const onCta = () => (st === 'live' ? router.push('/workout') : startWorkout());
 
@@ -63,7 +74,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
             {st !== 'rest' && <Txt style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>Planned by Coach Vikram</Txt>}
           </View>
         </Pressy>
-        <Chip label={chip} onDark tone={live ? 'live' : 'default'} style={live ? { borderColor: 'rgba(124,240,200,0.5)' } : undefined} />
+        <Chip label={chip} onDark tone={live ? 'live' : missed && !answered ? 'warn' : 'default'} style={live ? { borderColor: 'rgba(124,240,200,0.5)' } : undefined} />
       </Row>
       {st === 'done' ? (
         <>
@@ -90,6 +101,25 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
             <Tile k="You did it" v={did} color={live ? '#7CF0C8' : 'rgba(255,255,255,0.6)'} />
           </Row>
         </>
+      )}
+      {ask && (
+        <View style={{ gap: 10 }}>
+          <Txt style={{ fontSize: 14, lineHeight: 20, color: 'rgba(255,255,255,0.85)' }}>Did you train without the app, or should it move?</Txt>
+          <Row style={{ gap: 8, flexWrap: 'wrap' }}>
+            <Pressy accessibilityRole="button" onPress={didIt} style={{ height: 40, paddingHorizontal: 16, borderRadius: 20, backgroundColor: '#fff', justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: '#0B0E14' }}>I did it</Txt>
+            </Pressy>
+            <Pressy accessibilityRole="button" onPress={() => answer('moved')} style={{ height: 40, paddingHorizontal: 16, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20, color: '#fff' }}>Move to tomorrow</Txt>
+            </Pressy>
+            <Pressy accessibilityRole="button" onPress={() => answer('skipped')} style={{ height: 40, paddingHorizontal: 16, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20, color: '#fff' }}>Skip today</Txt>
+            </Pressy>
+          </Row>
+          <Pressy accessibilityRole="button" onPress={onCta} hitSlop={8} style={{ alignSelf: 'flex-start', paddingVertical: 4 }}>
+            <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.7)', textDecorationLine: 'underline' }}>Start it now anyway</Txt>
+          </Pressy>
+        </View>
       )}
       {cta && (
         <Pressy accessibilityRole="button" onPress={onCta} style={{ height: 50, borderRadius: 25, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
