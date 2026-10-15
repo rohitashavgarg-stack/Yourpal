@@ -67,7 +67,7 @@ One goal model (`useGoalV2`, `src/features/goalv2/model.ts`) feeds every surface
 
 ## 7. Motion and interaction
 
-- Screens and cards enter with a plain short fade (`fade()` from `@/theme/motion`, ≤ 200 ms, no spring / bounce / overshoot). Press scale, sheet drag, toasts and progress fills keep their springs.
+- Motion follows the designer's reference video: calm, soft, never bouncy. Cards settle in with `rise()` (fade + 14 px rise, staggered ~60 ms); headlines write in word by word with `RevealText`; changing labels use `SwapText`, changing numbers `useCount`; small in-place things `fade()`. Pages in `ZOOM` (app/_layout) open with a soft zoom + blur that clears (380 / 300 ms) and grow out of the tapped card via `zoomFrom(ref)`; no blur on Android. Press scale, sheet drag, toasts and progress fills keep their springs.
 - iOS feel: `Pressy` press scale + haptics, drag-to-dismiss sheets (`useOverlay().openSheet`), undo toasts.
 - Status pills, chips and markers never animate position on every render; animate the fill, not the layout.
 
