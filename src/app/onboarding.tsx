@@ -547,14 +547,15 @@ function SwipeToStart({ onDone }: { onDone: () => void }) {
     });
   const thumb = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   const label = useAnimatedStyle(() => ({ opacity: max ? 1 - Math.min(1, x.value / (max * 0.55)) : 1 }));
-  // Frosted liquid-glass track like the iOS "slide to answer" slider: milky translucent fill and a thin bright rim, no glow or drop shadow.
+  // Frosted liquid-glass track like the iOS "slide to answer" slider: milky translucent fill and a thin bright rim, inner white glow only, no outer glow or drop shadow.
   // iOS 26 gets the real glass (GlassBackdrop); web gets a CSS/SVG imitation.
   const R = (TH + PAD * 2) / 2;
   const web = Platform.OS === 'web';
   const white = (a: number) => `rgba(255,255,255,${a})`;
-  // thin specular edge along the top
+  // thin specular edge along the top, plus a soft white glow that sits inside the edge (nothing outside the track)
   const rim = [
     { offsetX: 0, offsetY: 1, blurRadius: 0, spreadDistance: 0, color: white(0.45), inset: true },
+    { offsetX: 0, offsetY: 0, blurRadius: 18, spreadDistance: 0, color: white(isDark ? 0.5 : 0.35), inset: true },
   ];
   return (
     <View onLayout={(e) => setW(e.nativeEvent.layout.width)} accessibilityRole="button" accessibilityLabel="Swipe to start your journey" accessibilityHint="Double tap to start" accessible
