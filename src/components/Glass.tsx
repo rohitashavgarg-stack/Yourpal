@@ -37,16 +37,16 @@ function canRefract() {
 }
 export function WebLiquidGlass({ radius }: { radius: number }) {
   const refract = canRefract();
-  const base = 'blur(14px) saturate(190%) brightness(1.12)';
-  const filter = refract ? `url(#${LIQUID_ID}) blur(6px) saturate(190%) brightness(1.12)` : base;
+  const base = 'blur(16px) saturate(160%) brightness(1.25)';
+  const filter = refract ? `url(#${LIQUID_ID}) blur(5px) saturate(160%) brightness(1.25)` : base;
   return (
     <>
       {refract && React.createElement('svg', { width: 0, height: 0, style: { position: 'absolute' }, 'aria-hidden': true },
         React.createElement('filter', { id: LIQUID_ID, x: '0', y: '0', width: '100%', height: '100%', colorInterpolationFilters: 'sRGB' },
           React.createElement('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.012 0.03', numOctaves: 2, seed: 3, result: 'noise' }),
           React.createElement('feGaussianBlur', { in: 'noise', stdDeviation: 3, result: 'map' }),
-          React.createElement('feDisplacementMap', { in: 'SourceGraphic', in2: 'map', scale: 38, xChannelSelector: 'R', yChannelSelector: 'G' })))}
-      <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius, backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.1))', backdropFilter: filter, WebkitBackdropFilter: filter } as any} />
+          React.createElement('feDisplacementMap', { in: 'SourceGraphic', in2: 'map', scale: 22, xChannelSelector: 'R', yChannelSelector: 'G' })))}
+      <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius, backdropFilter: filter, WebkitBackdropFilter: filter } as any} />
     </>
   );
 }

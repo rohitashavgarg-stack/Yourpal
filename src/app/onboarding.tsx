@@ -547,43 +547,30 @@ function SwipeToStart({ onDone }: { onDone: () => void }) {
     });
   const thumb = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   const label = useAnimatedStyle(() => ({ opacity: max ? 1 - Math.min(1, x.value / (max * 0.55)) : 1 }));
-  // Liquid-glass track with a heavy white glow. iOS 26 gets the real glass (GlassBackdrop); web gets a CSS/SVG imitation.
+  // Frosted liquid-glass track like the iOS "slide to answer" slider: milky translucent fill and a thin bright rim, no glow or drop shadow.
+  // iOS 26 gets the real glass (GlassBackdrop); web gets a CSS/SVG imitation.
   const R = (TH + PAD * 2) / 2;
   const web = Platform.OS === 'web';
   const white = (a: number) => `rgba(255,255,255,${a})`;
-  const k = isDark ? 1 : 0.55; // the glow reads softer on a light page
-  const outer = [
-    { offsetX: 0, offsetY: 0, blurRadius: 14, spreadDistance: 0, color: white(0.45 * k) },
-    { offsetX: 0, offsetY: 0, blurRadius: 40, spreadDistance: 2, color: white(0.25 * k) },
-    { offsetX: 0, offsetY: 10, blurRadius: 28, spreadDistance: 0, color: 'rgba(0,0,0,0.35)' },
-  ];
-  // specular rim on top, light bounce at the bottom, milky inner glow
+  // thin specular edge along the top
   const rim = [
-    { offsetX: 0, offsetY: 1.5, blurRadius: 1, spreadDistance: 0, color: white(0.75), inset: true },
-    { offsetX: 0, offsetY: -2, blurRadius: 8, spreadDistance: 0, color: white(0.2), inset: true },
-    { offsetX: 0, offsetY: 0, blurRadius: 24, spreadDistance: 0, color: white(0.12), inset: true },
-  ];
-  const thumbGlow = [
-    { offsetX: 0, offsetY: 0, blurRadius: 18, spreadDistance: 0, color: white(0.9) },
-    { offsetX: 0, offsetY: 0, blurRadius: 40, spreadDistance: 0, color: white(0.5) },
-    { offsetX: 0, offsetY: 4, blurRadius: 12, spreadDistance: 0, color: 'rgba(0,0,0,0.3)' },
+    { offsetX: 0, offsetY: 1, blurRadius: 0, spreadDistance: 0, color: white(0.45), inset: true },
   ];
   return (
     <View onLayout={(e) => setW(e.nativeEvent.layout.width)} accessibilityRole="button" accessibilityLabel="Swipe to start your journey" accessibilityHint="Double tap to start" accessible
       onAccessibilityTap={onDone}
-      style={{ height: TH + PAD * 2, borderRadius: R, boxShadow: outer } as any}>
-      <View style={{ flex: 1, borderRadius: R, justifyContent: 'center', overflow: 'hidden', borderWidth: 1, borderColor: white(0.4) }}>
+      style={{ height: TH + PAD * 2, borderRadius: R }}>
+      <View style={{ flex: 1, borderRadius: R, justifyContent: 'center', overflow: 'hidden', borderWidth: 1, borderColor: white(0.38) }}>
         {web ? <WebLiquidGlass radius={R} /> : <GlassBackdrop radius={R} />}
-        {!hasLiquidGlass && !web && <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: white(0.08) }} />}
-        {/* curved reflection across the top */}
-        <LinearGradient pointerEvents="none" colors={[white(0.4), white(0)]} style={{ position: 'absolute', top: 3, left: R * 0.5, right: R * 0.5, height: '45%', borderRadius: R }} />
+        {/* milky body so the track reads light grey over a dark page, like the reference */}
+        {!hasLiquidGlass && <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: white(isDark ? 0.2 : 0.35) }} />}
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: R, boxShadow: rim } as any} />
         <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: TH + PAD * 2, right: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 6 }, label]}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, color: c.ink, ...(isDark ? { textShadowColor: white(0.55), textShadowRadius: 10, textShadowOffset: { width: 0, height: 0 } } : null) }}>Swipe to start</Txt>
-          <ChevronsRight size={20} color={c.ink} />
+          <Txt style={{ fontFamily: font.medium, fontSize: 17, lineHeight: 24, color: isDark ? white(0.85) : c.ink }}>Swipe to start</Txt>
+          <ChevronsRight size={20} color={isDark ? white(0.85) : c.ink} />
         </Animated.View>
         <GestureDetector gesture={pan}>
-          <Animated.View style={[{ marginLeft: PAD, width: TH, height: TH, borderRadius: TH / 2, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', boxShadow: thumbGlow } as any, thumb]}>
+          <Animated.View style={[{ marginLeft: PAD, width: TH, height: TH, borderRadius: TH / 2, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }, thumb]}>
             <ChevronRight size={26} color="#0B0E14" />
           </Animated.View>
         </GestureDetector>
