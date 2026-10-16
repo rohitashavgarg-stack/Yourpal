@@ -6,7 +6,8 @@ import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Skeleton } from '@/components/bits';
 import { useToastLift } from '@/components/Overlay';
-import { CheckInScenario, mealsAt, mealsFor, NOWS, TimeOfDay, useDomain } from '@/lib/domain';
+import { CheckInScenario, mealsAt, mealsFor, NOWS, TimeOfDay, useDomain, workoutState } from '@/lib/domain';
+import { nextMeal } from '@/features/today/meals';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -63,6 +64,19 @@ export default function Today() {
   const focus = useRightNowFocus(isNew);
   // New layout: the section for what is happening now floats to the top, the others follow.
   const primary: 'restart' | 'workout' | 'meals' | 'wrap' = focus.kind === 'restart' ? 'restart' : focus.kind === 'live' || focus.kind === 'workout' || focus.kind === 'late' ? 'workout' : focus.kind === 'meal' ? 'meals' : focus.kind === 'next' ? (focus.what === 'workout' ? 'workout' : 'meals') : 'wrap';
+  // What matters most right now floats up (the goal and anything that needs an answer stay pinned at the top):
+  //  workout time: workout, then meals. Meal time: meals first, and the workout drops lower once it is done or it is a rest day.
+  //  End of the day: the week and the streak first. In between: trackers and streak, then whatever comes next.
+  const wkSettled = ['done', 'rest', 'hidden'].includes(workoutState(d));
+  const mealsSettled = nextMeal(d) === null;
+  type Slot = 'workout' | 'meals' | 'trackers' | 'streak' | 'week';
+  const order: Slot[] = primary === 'workout' ? ['workout', 'meals', 'trackers', 'streak', 'week']
+    : primary === 'meals' ? (wkSettled ? ['meals', 'trackers', 'streak', 'workout', 'week'] : ['meals', 'workout', 'trackers', 'streak', 'week'])
+    : primary === 'wrap' ? (wkSettled ? ['week', 'streak', 'meals', 'workout', 'trackers'] : ['week', 'streak', 'workout', 'meals', 'trackers'])
+    : ['trackers', 'workout', 'meals', 'streak', 'week'];
+  // every meal is already logged: the meals card has nothing to ask, so it moves below the streak
+  if (mealsSettled && primary !== 'wrap') { order.splice(order.indexOf('meals'), 1); order.splice(order.indexOf('streak') + 1, 0, 'meals'); }
+  const slots: Record<Slot, React.ReactNode> = { workout: <WorkoutCard />, meals: <MealNowCard />, trackers: <Trackers />, streak: <StreakChip />, week: <WeekCard /> };
   const focusMeal = focus.kind === 'meal' ? focus.meal.id : null;
   useEffect(() => { if (focusMeal) set({ openMeal: focusMeal }); }, [focusMeal]); // eslint-disable-line react-hooks/exhaustive-deps
   const gs = goalStore.use();
@@ -136,11 +150,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {ptPending && d.hasGym && <Enter i={0}><PtConfirmCard /></Enter>}
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
             {d.todayVariant === 'Comeback' && <Enter i={1}><ComebackCard /></Enter>}
-            <Enter i={2}><Trackers /></Enter>
-            <Enter i={2}><StreakChip /></Enter>
-            <Enter i={3}><WorkoutCard /></Enter>
-            <Enter i={4}><MealNowCard /></Enter>
-            <Enter i={5}><WeekCard /></Enter>
+            {order.map((k, i) => <Enter key={k} i={2 + i}>{slots[k]}</Enter>)}
           </>
         )}
       </TabScreen>
