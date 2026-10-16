@@ -15,7 +15,6 @@ export const hasLiquidGlass = native;
 export function GlassBackdrop({ radius, tint }: { radius: number; tint?: string }) {
   const { c, isDark } = useTheme();
   if (native) {
-    // (pages never fade on liquid-glass iPhones, see Zoom in app/_layout, so the glass draws from the first frame)
     return <GlassView glassEffectStyle="regular" tintColor={tint} colorScheme={isDark ? 'dark' : 'light'} style={[StyleSheet.absoluteFill, { borderRadius: radius }]} pointerEvents="none" />;
   }
   if (Platform.OS === 'web') {

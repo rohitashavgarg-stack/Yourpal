@@ -5,7 +5,6 @@ import { TODAY } from '@/features/progress/trends';
 import { WEEK_TARGET } from '@/features/streak/data';
 import { ageFrom, defaultDob } from '@/lib/dob';
 import { RoundBtn } from '@/components/bits';
-import { RevealText } from '@/components/Motion';
 import { PersonAvatar } from '@/components/Brand';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
 import { Switch } from '@/features/shell/parts';
@@ -210,7 +209,7 @@ function Progress({ n, total }: { n: number; total: number }) {
 function Title({ t, s }: { t: string; s?: string }) {
   return (
     <View style={{ gap: 6, marginBottom: 4 }}>
-      <RevealText key={t} text={t} style={{ fontFamily: font.regular, fontSize: 28, lineHeight: 37, letterSpacing: -1 }} />
+      <Txt v="title">{t}</Txt>
       {s ? <Txt muted>{s}</Txt> : null}
     </View>
   );
@@ -222,7 +221,7 @@ function Welcome({ isPT, assess, hasGym }: { isPT: boolean; assess: string; hasG
     <>
       <View style={{ gap: 12, paddingTop: 8, paddingBottom: 6 }}>
         {hasGym ? <GymLogoMark size={64} /> : <YourPalLogo height={34} color={c.ink} />}
-        <RevealText text={hasGym ? 'Hi Rohitashav, welcome to Wulf Fitness' : 'Hi Rohitashav, welcome to YourPal'} style={{ fontFamily: font.regular, fontSize: 32, lineHeight: 42, letterSpacing: -1.2 }} />
+        <Txt style={{ fontFamily: font.regular, fontSize: 32, lineHeight: 42, letterSpacing: -1.2 }}>{hasGym ? 'Hi Rohitashav, welcome to Wulf Fitness' : 'Hi Rohitashav, welcome to YourPal'}</Txt>
         <Txt muted>{!hasGym ? 'Answer a few quick questions and your plan is ready.' : isPT ? 'Your PT package is active. Coach Vikram will build your plan.' : 'Your membership is active. Here is how your first week works.'}</Txt>
       </View>
       <Card style={{ gap: 0, padding: 6 }}>

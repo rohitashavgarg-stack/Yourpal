@@ -54,5 +54,5 @@ Order on the page: Updates card (only in the "With updates" variant) → Goal ca
 
 ## Motion and text rules (apply to every new screen)
 
-- Motion follows the reference video the designer shared: calm and soft, never bouncy (no springs, bounce, overshoot or wiggle on anything entering or leaving). Use `@/theme/motion` and `@/components/Motion`: cards settle in with `rise()` (fade + 14 px rise, ~60 ms apart), headlines write in with `RevealText`, changing labels use `SwapText`, changing numbers use `useCount`, small in-place things use `fade()`. Pushed pages in `ZOOM` (app/_layout) open with a soft zoom and a blur that clears (380 ms in, 300 ms out); a card can pass its position with `zoomFrom(ref)` so the page grows out of it. Android skips the blur. Press scale, sheet drag, tab pill, toasts and progress fills keep their springs.
+- Screen and card entering/exiting: no springs, bounce, overshoot or wiggle. Use a plain short fade (max 150-200 ms, ease-out, optional tiny slide, no overshoot). All other animations (press scale, sheet drag, tab pill, toasts, progress) stay as they are.
 - Every `fontSize` needs a `lineHeight` of about 1.3x (34→44, 28→37, 17→25, 15→23, 13→19, 12→18). Geist crops at the top when lineHeight is tight. Prefer the `Txt` variants in `src/components/ui.tsx`; for raw `Text`/`Animated.Text` set lineHeight yourself.

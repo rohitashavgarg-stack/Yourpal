@@ -16,7 +16,6 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fmt1 } from '@/lib/useNow';
 import { HEALTH_NAME } from '@/lib/health';
-import { useCount } from '@/components/Motion';
 import { StepsDesign, StepsPreview, StepsTile } from './StepsCards';
 import { TrackerKey } from '@/features/trackers/designs';
 import { AddButton, EnergyDot, EnergyStack, HrDot, SleepDot, SleepStages, WaterDot, WaterGlasses, WeightDot, WeightRuler } from '@/features/trackers/Widgets';
@@ -151,7 +150,6 @@ export function WaterCard() {
   const { openSheet } = useOverlay();
   const { water, change, hit } = useWater();
   const ml = Math.round(water * 1000);
-  const mlShown = useCount(ml);
   return (
     <View style={{ width: 160, height: 160 }}>
       <Pressy accessibilityRole="button" accessibilityLabel={`Water ${ml} of 3,000 millilitres. Open details`} onPress={() => openSheet(<WaterSheet />, { label: 'Water' })} scaleTo={0.97} style={SQ}>
@@ -162,7 +160,7 @@ export function WaterCard() {
           {hit > 0 && <Ripple key={hit} size={40} color="#7FB4FF" width={2} />}
         </View>
         <View style={{ position: 'absolute', right: 16, bottom: 16, alignItems: 'flex-end' }}>
-          <Txt style={{ fontFamily: font.displayBold, fontSize: 28, lineHeight: 39, letterSpacing: -0.8, color: 'rgba(255,255,255,0.9)' }}>{Math.round(mlShown).toLocaleString('en-IN')}</Txt>
+          <Txt style={{ fontFamily: font.displayBold, fontSize: 28, lineHeight: 39, letterSpacing: -0.8, color: 'rgba(255,255,255,0.9)' }}>{ml.toLocaleString('en-IN')}</Txt>
           <Txt style={{ fontFamily: font.regular, fontSize: 20, lineHeight: 26, color: '#fff' }}>ml</Txt>
         </View>
       </Pressy>

@@ -14,7 +14,6 @@ import { font, spring } from '@/theme/tokens';
 import { inr } from '@/lib/useNow';
 import { mealById, mealKcal, mealTimeline, mealView, nextMeal } from './meals';
 import { QuickLogSheet } from './QuickLogSheet';
-import { SwapText, useCount } from '@/components/Motion';
 
 function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | 'part' | 'off' | null }) {
   const { c } = useTheme();
@@ -215,7 +214,6 @@ export function MealNowCard() {
   const { d, set } = useDomain();
   const t = totals(d);
   const now = currentMealId(d.min);
-  const kcalShown = useCount(t.k);
   // tapping another meal in the strip shows it here; tapping the current one (or a fresh day) goes back to "now"
   const shown = d.openMeal && d.openMeal !== 'none' && MEALS.some((q) => q.id === d.openMeal) ? (d.openMeal as MealId) : now;
   const m = mealById(shown);
@@ -243,7 +241,7 @@ export function MealNowCard() {
             <Flame size={15} color={c.cAct} fill={c.cAct} />
             <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: c.cAct }}>Eaten today</Txt>
           </Row>
-          <Txt style={{ fontFamily: font.display, fontSize: 18, lineHeight: 24 }}>{inr(Math.round(kcalShown))}<Txt muted style={{ fontFamily: font.display, fontSize: 12, lineHeight: 17 }}>{` / ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
+          <Txt style={{ fontFamily: font.display, fontSize: 18, lineHeight: 24 }}>{inr(t.k)}<Txt muted style={{ fontFamily: font.display, fontSize: 12, lineHeight: 17 }}>{` / ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
         </Row>
         <View style={{ height: 4, borderRadius: 2, backgroundColor: `${c.cAct}26`, overflow: 'hidden' }}>
           <View style={{ width: `${Math.min(100, (t.k / KCAL_TARGET) * 100)}%`, height: '100%', borderRadius: 2, backgroundColor: c.cAct }} />
@@ -256,7 +254,7 @@ export function MealNowCard() {
           <Txt v="caption">{v.any ? `${v.kcal} kcal eaten` : `${mealKcal(m)} kcal planned`}</Txt>
         </View>
         <View style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, backgroundColor: c.surface2, justifyContent: 'center' }}>
-          <SwapText value={shown === now ? fmtT(m.t).full : status(shown).t} style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17 }} />
+          <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17 }}>{shown === now ? fmtT(m.t).full : status(shown).t}</Txt>
         </View>
       </Row>
       <MealRow id={shown} open bare />
@@ -269,7 +267,7 @@ export function MealNowCard() {
               onPress={() => set({ openMeal: q.id === now ? null : q.id })}
               style={{ flex: 1, minHeight: 48, borderRadius: 14, paddingHorizontal: 8, paddingVertical: 7, backgroundColor: st.bg, borderWidth: on ? 1.5 : 0, borderColor: c.accent, justifyContent: 'center' }}>
               <Txt numberOfLines={1} style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17 }}>{q.n === 'Evening snack' ? 'Snack' : q.n}</Txt>
-              <SwapText numberOfLines={1} value={st.t} style={{ fontSize: 11, lineHeight: 15, color: st.col }} />
+              <Txt numberOfLines={1} style={{ fontSize: 11, lineHeight: 15, color: st.col }}>{st.t}</Txt>
             </Pressy>
           );
         })}

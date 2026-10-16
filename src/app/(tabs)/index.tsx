@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { rise } from '@/theme/motion';
+import { fade } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Skeleton } from '@/components/bits';
@@ -34,7 +34,7 @@ import { goalV2Store } from '@/features/goalv2/model';
 import { useGoalV2Rows } from '@/features/goalv2/signs';
 import { DESIGNS, GoalDesign, GoalPace, goalStore, PACES } from '@/features/today/GoalCards';
 const Enter = ({ i, children }: { i: number; children: React.ReactNode }) => (
-  <Animated.View entering={rise(i * 60)}>{children}</Animated.View>
+  <Animated.View entering={fade(i * 50)}>{children}</Animated.View>
 );
 
 export default function Today() {
