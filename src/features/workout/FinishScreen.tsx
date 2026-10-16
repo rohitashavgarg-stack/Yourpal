@@ -70,7 +70,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
         <Circle cx={96} cy={170} r={150} fill={c.moon} />
         <Circle cx={114} cy={156} r={150} fill="none" stroke={c.moonRing} strokeWidth={1.5} opacity={0.5} />
       </Svg>
-      <RoundBtn label="Close" onPress={() => onDone(feel, note)} bg={c.glass} style={{ position: 'absolute', top: insets.top + 8, right: 16 }}><X size={20} color={c.ink} /></RoundBtn>
+      <RoundBtn label="Close" onPress={() => onDone(feel, note)} glass style={{ position: 'absolute', top: insets.top + 8, right: 16 }}><X size={20} color={c.ink} /></RoundBtn>
 
       <Animated.View entering={fade()} style={{ position: 'absolute', left: 12, right: 12, bottom: Math.max(insets.bottom, 14), borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: c.glassLine,
         shadowColor: '#0F0E3C', shadowOpacity: 0.28, shadowRadius: 60, shadowOffset: { width: 0, height: 24 } }}>

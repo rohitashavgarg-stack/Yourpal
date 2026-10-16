@@ -5,7 +5,7 @@ import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronDown, ChevronLeft, ChevronUp, Ellipsis, Maximize2, Play, X } from '@/lib/icons';
 import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
-import { CheckCircle } from '@/components/bits';
+import { CheckCircle, RoundBtn } from '@/components/bits';
 import { Ex, ListItem } from '@/lib/data';
 import { Session } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -149,9 +149,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
           {Array.from({ length: n }, (_, i) => <View key={i} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: i <= pos ? c.accent : c.surface3 }} />)}
         </View>
         <Row style={{ gap: 10 }}>
-          <Pressy accessibilityRole="button" accessibilityLabel="Minimise workout" onPress={onMinimise} scaleTo={0.92} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
-            <X size={20} color={c.ink} />
-          </Pressy>
+          <RoundBtn label="Minimise workout" onPress={onMinimise} glass><X size={20} color={c.ink} /></RoundBtn>
           <View style={{ flex: 1, alignItems: 'center' }}>
             <Txt accessibilityLabel={`Workout time ${elapsed}`} style={{ fontFamily: font.monoBold, fontSize: 20, lineHeight: 28 }}>{elapsed}</Txt>
           </View>
@@ -214,9 +212,7 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       {clip != null && <ClipPopup source={clip} onClose={() => setClip(null)} />}
       <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 10, justifyContent: 'flex-start' }}>
-        <Pressy accessibilityRole="button" accessibilityLabel="Minimise workout" onPress={onMinimise} scaleTo={0.92} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
-          <X size={20} color={c.ink} />
-        </Pressy>
+        <RoundBtn label="Minimise workout" onPress={onMinimise} glass><X size={20} color={c.ink} /></RoundBtn>
       </Row>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 10, paddingBottom: 270, gap: 16 }}>
         <View style={{ gap: 4 }}>

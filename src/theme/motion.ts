@@ -16,6 +16,6 @@ export const wordIn = (i: number, base = 0) => FadeInDown.duration(380).delay(ba
 // A value that changes in place (a status, a label): the new one fades in rising 6 px.
 export const swapIn = () => FadeInDown.duration(260).withInitialValues({ opacity: 0, transform: [{ translateY: 6 }] });
 
-// Screen transitions (see ZOOM in app/_layout): open 380 ms, close 300 ms, ease out / ease in, with a blur that clears as it opens.
-export const SCREEN_IN = 380;
-export const SCREEN_OUT = 300;
+// Screen transitions (see Zoom in app/_layout): open 420 ms, close 340 ms, a smooth speed-up / slow-down curve, with a blur that clears as it opens.
+export const SCREEN_IN = 420;
+export const SCREEN_OUT = 340;

@@ -172,16 +172,18 @@ function Slide({ name, bottom, children }: { name: string; bottom: boolean; chil
 
 /* eslint-disable react-hooks/immutability -- reanimated shared values are written from callbacks (re-disabled: the Slide block above turns the rule back on) */
 // ---------- Zoom: open from the tapped card (or from the middle) with a blur that clears; close back into it ----------
-const ZIN = { duration: SCREEN_IN, easing: Easing.out(Easing.cubic) };
-const ZOUT = { duration: SCREEN_OUT, easing: Easing.in(Easing.cubic) };
+// smooth in and out: it speeds up gently and slows down gently (no fast start, no sudden stop)
+const ZIN = { duration: SCREEN_IN, easing: Easing.bezier(0.45, 0, 0.25, 1) };
+const ZOUT = { duration: SCREEN_OUT, easing: Easing.bezier(0.45, 0, 0.25, 1) };
 function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
   const { c, isDark } = useTheme();
   const nav = useNavigation();
   const isWeb = Platform.OS === 'web';
   const blur = Platform.OS !== 'android'; // animated blur is too heavy on Android: fade and zoom only there
   const p = useSharedValue(0); // 0 = closed (at the card), 1 = open
-  const geo = useSharedValue({ tx: 0, ty: 0, s: 0.94, r: 28, push: 0 });
-  const kindRef = useRef<ZKind>('fade');
+  // mode 0: the whole page moves / scales (reveal, push, fade); mode 1: a card's frame grows to the screen and shows the
+  // page inside it at full size (expand)
+  const geo = useSharedValue({ mode: 0, tx: 0, ty: 0, s: 0.94, r: 28, push: 0, ox: 0, oy: 0, ow: 0, oh: 0, W: 0, H: 0 });
   const closing = useSharedValue(0);
   const [origin] = React.useState(() => takeOrigin());
   const busy = useRef(false);
@@ -189,6 +191,9 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
   const under = useRef<Under | null>(null);
   const entry = useRef<Closer | null>(null);
   const root = useRef<any>(null);
+  const rootXY = useRef({ x: 0, y: 0 });
+  const [blurOn, setBlurOn] = React.useState(blur);
+  const [open, setOpen] = React.useState(false);
   const setDim = (v: number) => { if (under.current) under.current.scrim.style.opacity = String(v); };
   useAnimatedReaction(() => p.value, (v) => { if (isWeb) runOnJS(setDim)(v * DIM); });
   const close = (done: () => void) => {
@@ -212,21 +217,23 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
   }, [name]);
   const opened = () => { setBlurOn(false); setOpen(true); const u = under.current; if (u) { u.prev.style.display = ''; u.done(); under.current = null; } };
   const start = (cx: number, cy: number, w: number, h: number) => {
+    rootXY.current = { x: cx, y: cy };
     const kind: ZKind = PUSH.includes(name) ? 'push' : origin && w > 0 ? (origin.w >= w * 0.45 ? 'expand' : 'reveal') : 'fade';
-    kindRef.current = kind;
+    const base = { mode: 0, tx: 0, ty: 0, s: 1, r: 0, push: 0, ox: 0, oy: 0, ow: 0, oh: 0, W: w, H: h };
     const at = origin ? { tx: origin.x + origin.w / 2 - (cx + w / 2), ty: origin.y + origin.h / 2 - (cy + h / 2) } : { tx: 0, ty: 0 };
-    if (kind === 'expand') geo.value = { ...at, s: Math.max(0.3, Math.min(1, origin!.w / w)), r: 28, push: 0 };
-    else if (kind === 'reveal') geo.value = { ...at, s: 0.16, r: Math.max(w, h) / 2, push: 0 };
-    else if (kind === 'push') geo.value = { tx: 0, ty: 0, s: 1, r: 0, push: Math.min(w, 420) * 0.4 };
-    else geo.value = { tx: 0, ty: 0, s: 0.94, r: 28, push: 0 };
+    if (kind === 'expand') geo.value = { ...base, mode: 1, r: 24, ox: origin!.x - cx, oy: origin!.y - cy, ow: origin!.w, oh: origin!.h };
+    else if (kind === 'reveal') geo.value = { ...base, ...at, s: 0.16, r: Math.max(w, h) / 2 };
+    else if (kind === 'push') geo.value = { ...base, push: Math.min(w, 420) * 0.4 };
+    else geo.value = { ...base, s: 0.94, r: 28 };
     if (isWeb) under.current = underlay(box.current);
     p.value = withTiming(1, ZIN, (fin) => { if (fin) runOnJS(opened)(); });
     // safety net: if no frames ran (a hidden or throttled browser), never leave the page invisible
     setTimeout(() => { if (p.value < 1 && !busy.current) { p.value = 1; opened(); } }, SCREEN_IN + 300);
   };
   useEffect(() => {
-    if (popping) { p.value = 1; setBlurOn(false); setOpen(true); return; }
+    const back = popping; // revealed by a back, not opened
     const t = setTimeout(() => { // after the first paint, so the page has its size
+      if (back) { p.value = 1; setBlurOn(false); setOpen(true); return; }
       const n = root.current;
       box.current = n;
       if (n?.getBoundingClientRect) { const r = n.getBoundingClientRect(); start(r.left, r.top, r.width, r.height); }
@@ -236,23 +243,32 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const page = useAnimatedStyle(() => {
+  // The frame: the page itself (mode 0 / 2), or the card's frame growing to the screen (mode 1).
+  const frame = useAnimatedStyle(() => {
     const k = p.value, g = geo.value;
-    if (k >= 1) return { opacity: 1, borderRadius: 0, transform: [] };
+    if (k >= 1) return { position: 'relative', left: 0, top: 0, width: '100%', height: '100%', opacity: 1, borderRadius: 0, transform: [] } as any;
+    if (g.mode === 1) {
+      return {
+        position: 'absolute', left: g.ox * (1 - k), top: g.oy * (1 - k), width: g.ow + (g.W - g.ow) * k, height: g.oh + (g.H - g.oh) * k,
+        borderRadius: g.r * (1 - k), opacity: closing.value ? Math.min(1, k * 5) : 1, transform: [],
+      } as any;
+    }
     return {
-      // a card stays solid while it grows / shrinks and only fades right at the card; an icon reveal fades in a little later
-      // with iOS liquid glass the page never fades (glass does not draw inside a fading view, so the back button would
-      // appear late); it grows / slides solid, under the blur that clears
-      // closing always fades (an icon page is gone well before it is tiny; a card fades right at the card)
+      position: 'relative', left: 0, top: 0, width: '100%', height: '100%',
+      // with iOS liquid glass the page never fades on the way in (glass does not draw inside a fading view); closing always fades
       opacity: SOLID && !closing.value ? 1 : g.push ? k : g.s < 0.3 ? Math.min(1, k * (closing.value ? 2.5 : 1.6)) : Math.min(1, k * 4),
       borderRadius: g.r * (1 - k),
       transform: [{ translateX: g.tx * (1 - k) + g.push * (1 - k) }, { translateY: g.ty * (1 - k) }, { scale: g.s + (1 - g.s) * k }],
-    };
+    } as any;
+  });
+  // In the card expand the page sits at full size behind the growing frame (it does not scale), so it is revealed, not shrunk.
+  const inner = useAnimatedStyle(() => {
+    const k = p.value, g = geo.value;
+    if (g.mode !== 1 || k >= 1) return { position: 'absolute', left: 0, top: 0, right: 0, bottom: 0, width: '100%', height: '100%' } as any;
+    return { position: 'absolute', left: -g.ox * (1 - k), top: -g.oy * (1 - k), width: g.W, height: g.H } as any;
   });
   // a fixed blur that fades out as the page opens (animating the blur strength itself does not update on web); removed once open
   const blurFade = useAnimatedStyle(() => ({ opacity: 1 - p.value }));
-  const [blurOn, setBlurOn] = React.useState(blur);
-  const [open, setOpen] = React.useState(false);
   const dim = useAnimatedStyle(() => ({ opacity: p.value * (geo.value.push ? 0.18 : 0.3) }));
   // Swipe from the left edge to go back: the page follows the finger, then closes the usual way.
   const drag = useSharedValue(0);
@@ -272,8 +288,10 @@ function Zoom({ name, children }: { name: string; children: React.ReactNode }) {
     <View ref={root} collapsable={false} style={{ flex: 1 }}>
       {!isWeb && <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: '#000' }, dim]} />}
       <Animated.View style={follow}>
-      <Animated.View style={[{ flex: 1, backgroundColor: c.bg, overflow: open ? 'visible' : 'hidden' }, page, open ? { opacity: 1, borderRadius: 0, transform: [] } : null]}>
-        <ScreenOpen.Provider value={open}>{isWeb ? children : <OverlayProvider>{children}</OverlayProvider>}</ScreenOpen.Provider>
+      <Animated.View style={[{ backgroundColor: c.bg, overflow: open ? 'visible' : 'hidden' }, frame]}>
+        <Animated.View style={inner}>
+          <ScreenOpen.Provider value={open}>{isWeb ? children : <OverlayProvider>{children}</OverlayProvider>}</ScreenOpen.Provider>
+        </Animated.View>
         {blurOn && (
           <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }, blurFade]}>
             <BlurView intensity={30} tint={isDark ? 'dark' : 'light'} style={{ flex: 1 }} />
