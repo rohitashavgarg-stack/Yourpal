@@ -565,7 +565,7 @@ function SwipeToStart({ onDone }: { onDone: () => void }) {
       <View style={{ flex: 1, borderRadius: R, justifyContent: 'center', overflow: 'hidden', borderWidth: 1, borderColor: white(0.38) }}>
         {web ? <WebLiquidGlass radius={R} /> : <GlassBackdrop radius={R} />}
         {/* milky body so the track reads light grey over a dark page, like the reference */}
-        {!hasLiquidGlass && <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: white(isDark ? 0.2 : 0.35) }} />}
+        {!hasLiquidGlass && <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: white(isDark ? 0.09 : 0.3) }} />}
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: R, boxShadow: rim } as any} />
         <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: TH + PAD * 2, right: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 6 }, label]}>
           <Txt style={{ fontFamily: font.medium, fontSize: 17, lineHeight: 24, color: isDark ? white(0.85) : c.ink }}>Swipe to start</Txt>

@@ -37,8 +37,8 @@ function canRefract() {
 }
 export function WebLiquidGlass({ radius }: { radius: number }) {
   const refract = canRefract();
-  const base = 'blur(16px) saturate(160%) brightness(1.25)';
-  const filter = refract ? `url(#${LIQUID_ID}) blur(5px) saturate(160%) brightness(1.25)` : base;
+  const base = 'blur(16px) saturate(160%) brightness(1.08)';
+  const filter = refract ? `url(#${LIQUID_ID}) blur(5px) saturate(160%) brightness(1.08)` : base;
   return (
     <>
       {refract && React.createElement('svg', { width: 0, height: 0, style: { position: 'absolute' }, 'aria-hidden': true },
