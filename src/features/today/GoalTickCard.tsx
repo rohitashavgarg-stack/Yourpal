@@ -155,6 +155,8 @@ export function GoalTickCard({ flat = false }: { flat?: boolean } = {}) {
             </View>
           </>
         )}
+        {/* a thin line under the goal, so it reads as the header of the page and the cards start below it */}
+        {!flat && <View style={{ height: 1, backgroundColor: c.line, marginTop: small ? 4 : 8 }} />}
       </View>
     </Pressy>
   );
