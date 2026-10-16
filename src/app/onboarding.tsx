@@ -555,7 +555,8 @@ function SwipeToStart({ onDone }: { onDone: () => void }) {
   // thin specular edge along the top, plus a soft white glow that sits inside the edge (nothing outside the track)
   const rim = [
     { offsetX: 0, offsetY: 1, blurRadius: 0, spreadDistance: 0, color: white(0.45), inset: true },
-    { offsetX: 0, offsetY: 0, blurRadius: 18, spreadDistance: 0, color: white(isDark ? 0.5 : 0.35), inset: true },
+    { offsetX: 0, offsetY: 0, blurRadius: 24, spreadDistance: 2, color: white(isDark ? 0.85 : 0.6), inset: true },
+    { offsetX: 0, offsetY: 0, blurRadius: 10, spreadDistance: 0, color: white(isDark ? 0.4 : 0.3), inset: true },
   ];
   return (
     <View onLayout={(e) => setW(e.nativeEvent.layout.width)} accessibilityRole="button" accessibilityLabel="Swipe to start your journey" accessibilityHint="Double tap to start" accessible
