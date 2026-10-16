@@ -29,6 +29,28 @@ export function GlassBackdrop({ radius, tint }: { radius: number; tint?: string 
   );
 }
 
+// Web-only liquid glass: blur + saturation everywhere, plus real refraction (an SVG displacement map used as a backdrop-filter)
+// where the browser allows it (Chromium). Safari and Firefox keep the blur, the glow and the rim, just without the bending.
+const LIQUID_ID = 'yp-liquid-glass';
+function canRefract() {
+  try { return typeof CSS !== 'undefined' && CSS.supports('backdrop-filter', `url(#${LIQUID_ID})`) && !/^((?!chrome|android).)*safari/i.test(navigator.userAgent); } catch { return false; }
+}
+export function WebLiquidGlass({ radius }: { radius: number }) {
+  const refract = canRefract();
+  const base = 'blur(14px) saturate(190%) brightness(1.12)';
+  const filter = refract ? `url(#${LIQUID_ID}) blur(6px) saturate(190%) brightness(1.12)` : base;
+  return (
+    <>
+      {refract && React.createElement('svg', { width: 0, height: 0, style: { position: 'absolute' }, 'aria-hidden': true },
+        React.createElement('filter', { id: LIQUID_ID, x: '0', y: '0', width: '100%', height: '100%', colorInterpolationFilters: 'sRGB' },
+          React.createElement('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.012 0.03', numOctaves: 2, seed: 3, result: 'noise' }),
+          React.createElement('feGaussianBlur', { in: 'noise', stdDeviation: 3, result: 'map' }),
+          React.createElement('feDisplacementMap', { in: 'SourceGraphic', in2: 'map', scale: 38, xChannelSelector: 'R', yChannelSelector: 'G' })))}
+      <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius, backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.1))', backdropFilter: filter, WebkitBackdropFilter: filter } as any} />
+    </>
+  );
+}
+
 // Progressive blur: stacked blur layers that get shorter, so the blur is strongest at the edge and fades to nothing, with only a faint colour wash on top, so the content stays visible, just softly blurred (like the iOS App Library edge).
 // Used behind a header so content blurs more the closer it gets to the top. Android has no real blur, so it gets the fade only.
 export function ProgressiveBlur({ height, layers = 12, edge = 'top' }: { height: number; layers?: number; edge?: 'top' | 'bottom' }) {
