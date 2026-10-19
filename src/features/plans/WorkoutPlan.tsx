@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLogsPaused } from '@/lib/logGate';
 import { View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -47,6 +48,7 @@ export function WorkoutPlan() {
   const { p } = usePlans();
   const { openSheet } = useOverlay();
   const startWorkout = useStartWorkout();
+  const paused = useLogsPaused();
   const plan = dayPlan(d, p, p.day);
 
   if (p.noPlan) {
@@ -64,7 +66,7 @@ export function WorkoutPlan() {
             <Txt v="label">Starter workout</Txt>
             <Txt style={{ fontFamily: font.display, fontSize: 22, letterSpacing: -0.4 }}>Full body basics</Txt>
             <Txt muted style={{ fontSize: 14 }}>35 min · works for any gym floor</Txt>
-            <Button kind="accent" label="Start starter workout" onPress={() => startWorkout()} />
+            {!paused && <Button kind="accent" label="Start starter workout" onPress={() => startWorkout()} />}
           </Card>
         </E>
       </>
@@ -161,7 +163,7 @@ export function WorkoutPlan() {
             <Moon />
             <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 22 }}>Rest day</Txt>
             <Txt muted style={{ textAlign: 'center', maxWidth: 280 }}>Recovery is part of the plan. A walk or a stretch still counts toward your week.</Txt>
-            <Button kind="secondary" small label={`Create a workout for ${DAYL[p.day]}`} onPress={() => startCreate(d)} style={{ marginTop: 6 }} />
+            {!paused && <Button kind="secondary" small label={`Create a workout for ${DAYL[p.day]}`} onPress={() => startCreate(d)} style={{ marginTop: 6 }} />}
           </Card>
         </E>
       )}

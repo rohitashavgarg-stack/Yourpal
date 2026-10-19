@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLogGate, useLogsPaused } from '@/lib/logGate';
 import { View } from 'react-native';
 import Animated, { Easing, interpolateColor, useAnimatedProps, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -148,8 +149,9 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
   const kShown = useCountUp(Math.round(it.k * it.por), 700, Math.round(it.k * it.por));
 
   const markSwipe = () => { swipedAt.current = Date.now(); };
+  const { gate: logGate } = useLogGate();
   const onRight = () => { if (it.st !== 'eaten') A.eat(mid, it, true); };
-  const onLeft = () => { haptic.light(); openSheet(it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode="sugg" replaceIdx={it.idx} /> : <SwapSheet mid={mid} itemKey={it.key} always={false} />, { label: 'Swap item' }); };
+  const onLeft = logGate(() => { haptic.light(); openSheet(it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode="sugg" replaceIdx={it.idx} /> : <SwapSheet mid={mid} itemKey={it.key} always={false} />, { label: 'Swap item' }); });
   const pan = Gesture.Pan().activeOffsetX([-12, 12]).failOffsetY([-10, 10])
     .onStart(() => { scheduleOnRN(markSwipe); })
     .onUpdate((e) => {
@@ -176,7 +178,7 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
 
   const recent = () => Date.now() - swipedAt.current < 400;
   const openFood = () => { if (recent()) return; router.push({ pathname: '/food', params: { mid, k: String(it.idx), extra: it.mine ? '1' : '0' } }); };
-  const menu = () => { if (recent()) return; haptic.medium(); openSheet(<ItemMenuSheet mid={mid} itemKey={it.key} />, { label: 'Item options' }); };
+  const menu = logGate(() => { if (recent()) return; haptic.medium(); openSheet(<ItemMenuSheet mid={mid} itemKey={it.key} />, { label: 'Item options' }); });
   const food = splitFood(it);
   const qtyText = food.qty ? fmtQty(Math.round(food.qty.n * it.por * 100) / 100, food.qty.unit) : '';
   const sub = it.st === 'skipped' ? 'Skipped for today'
@@ -250,6 +252,7 @@ function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
     clearTimeout(tm.current);
     tm.current = setTimeout(() => setP({ openMeal: open ? 'none' : mid }), 260);
   };
+  const paused = useLogsPaused();
   const addElse = () => router.push({ pathname: '/plans/log', params: { meal: mid } });
 
   return (
@@ -270,7 +273,7 @@ function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
       {open && (
         <Animated.View entering={fade()} style={{ gap: 6, paddingHorizontal: 4, paddingTop: 4, paddingBottom: 6 }}>
           {items.map((it) => <ItemRow key={it.key} mid={mid} it={it} simple={simple} />)}
-          <AteElse onPress={addElse} />
+          {!paused && <AteElse onPress={addElse} />}
         </Animated.View>
       )}
     </Card>
@@ -292,6 +295,7 @@ export function DietPlan() {
   const { c } = useTheme();
   const { d } = useDomain();
   const { p } = usePlans();
+  const paused = useLogsPaused();
 
   if (p.noPlan) {
     return (
@@ -300,7 +304,7 @@ export function DietPlan() {
           <Tag label="Diet plan on the way" bg={c.accentSoft} fg={c.accentText} />
           <Txt v="headline">Coach Vikram shares your diet after the assessment</Txt>
           <Txt muted style={{ fontSize: 14 }}>Until then you can log what you eat.</Txt>
-          <Button kind="secondary" small label="Log a meal" onPress={() => router.push({ pathname: '/plans/log', params: { meal: dietOpenMeal(d) } })} style={{ alignSelf: 'flex-start' }} />
+          {!paused && <Button kind="secondary" small label="Log a meal" onPress={() => router.push({ pathname: '/plans/log', params: { meal: dietOpenMeal(d) } })} style={{ alignSelf: 'flex-start' }} />}
         </Card>
       </E>
     );

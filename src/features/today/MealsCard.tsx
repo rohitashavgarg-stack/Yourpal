@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import Animated, { LinearTransition, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { fade } from '@/theme/motion';
 import { router } from 'expo-router';
-import { Check, ChevronDown, Clock, Flame, Minus, Plus, UtensilsCrossed, X } from '@/lib/icons';
+import { Check, ChevronDown, Clock, Flame, Lock, Minus, Plus, UtensilsCrossed, X } from '@/lib/icons';
 import { Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -232,6 +232,31 @@ export function MealNowCard() {
     if (id === now) return { t: 'Now', col: c.accentText, bg: c.accentSoft };
     return { t: fmtT(mealById(id).t).full, col: c.muted, bg: c.surface2 };
   };
+  if (paused) {
+    return (
+      <View accessibilityLabel="Meal logging is paused" style={{ borderRadius: 24, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
+        <Row style={{ gap: 12, alignItems: 'flex-start' }}>
+          <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={18} color={c.muted} /></View>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, letterSpacing: -0.3 }}>Meal logging is paused</Txt>
+            <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Renew at Wulf Fitness reception to log meals again. What you ate stays here.</Txt>
+          </View>
+        </Row>
+        <View style={{ gap: 6, paddingTop: 10, borderTopWidth: 1, borderTopColor: c.line }}>
+          <Row style={{ justifyContent: 'space-between' }}>
+            <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Eaten today</Txt>
+            <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20 }}>{inr(t.k)} <Txt muted style={{ fontSize: 12, lineHeight: 17 }}>{`of ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
+          </Row>
+          {MEALS.map((q) => (
+            <Row key={q.id} style={{ justifyContent: 'space-between' }}>
+              <Txt style={{ fontSize: 14, lineHeight: 20 }}>{q.n}</Txt>
+              <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{status(q.id).t}</Txt>
+            </Row>
+          ))}
+        </View>
+      </View>
+    );
+  }
   return (
     <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>

@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLogsPaused } from '@/lib/logGate';
 import { ScrollView, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useLocalSearchParams } from 'expo-router';
-import { Dumbbell, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
+import { Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
 import { fade } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -125,7 +126,8 @@ export default function Plans() {
     ],
   }, [p.seg, p.noPlan, p.mid, p.diet, p.detail, p.cam, p.day, p.applied, d.coachUpdated, d.planReq, d.offline, d.scanFails]);
 
-  const canStart = useCanStart();
+  const paused = useLogsPaused();
+  const canStart = useCanStart() && !paused;
   return (
     <View style={{ flex: 1 }}>
     <TabScreen title="Plans" header={<GymHeader />} compactTitle={false} bottomPad={canStart ? 190 : 130}>
@@ -134,16 +136,27 @@ export default function Plans() {
           <Txt style={{ fontFamily: font.medium, fontSize: 13, color: c.warn }}>You're offline · changes save on this phone and sync later</Txt>
         </Animated.View>
       )}
+      {paused && (
+        <View accessibilityLabel="Plans are view only" style={{ borderRadius: 20, backgroundColor: c.surface2, padding: 14 }}>
+          <Row style={{ gap: 12, alignItems: 'flex-start' }}>
+            <View style={{ width: 36, height: 36, borderRadius: 12, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={17} color={c.muted} /></View>
+            <View style={{ flex: 1, gap: 2 }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>Plans are view only</Txt>
+              <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Renew at Wulf Fitness reception to start workouts, log meals or change your plan.</Txt>
+            </View>
+          </Row>
+        </View>
+      )}
       <Row style={{ gap: 10 }}>
         <View style={{ flex: 1 }}>
           <Segmented accessibilityLabel="Plan type" value={p.seg} onChange={(v) => setP({ seg: v })}
             options={[{ value: 'workout', label: 'Workout' }, { value: 'diet', label: 'Diet' }]}
             icons={{ workout: (col) => <Dumbbell size={16} color={col} />, diet: (col) => <UtensilsCrossed size={16} color={col} /> }} />
         </View>
-        <Pressy accessibilityRole="button" accessibilityLabel={isW ? 'Plan menu' : 'Diet menu'} onPress={openMenu}
+        {!paused && <Pressy accessibilityRole="button" accessibilityLabel={isW ? 'Plan menu' : 'Diet menu'} onPress={openMenu}
           style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
           <MoreHorizontal size={22} color={c.ink} />
-        </Pressy>
+        </Pressy>}
       </Row>
       <DayStrip />
       <View key={p.seg} style={{ gap: 12 }}>

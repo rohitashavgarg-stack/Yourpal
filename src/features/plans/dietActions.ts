@@ -1,4 +1,5 @@
 import { MealId, MEALS } from '@/lib/data';
+import { useLogGate } from '@/lib/logGate';
 import { Domain, Extra, MealLog, mealLog, useDomain } from '@/lib/domain';
 import { useOverlay } from '@/components/Overlay';
 import { haptic } from '@/lib/haptics';
@@ -81,5 +82,7 @@ export function useDietActions() {
     setP({ por: {}, skip: {}, order: {}, always: {} });
   };
 
-  return { eat, skipItem, mealAll, setPor, applySwap, deleteExtra, addExtra, resetDiet, withUndo, patchMeal };
+  // an expired membership is view-only: every change to the diet says so instead
+  const { gate } = useLogGate();
+  return { eat: gate(eat), skipItem: gate(skipItem), mealAll: gate(mealAll), setPor: gate(setPor), applySwap: gate(applySwap), deleteExtra: gate(deleteExtra), addExtra: gate(addExtra), resetDiet, withUndo, patchMeal };
 }
