@@ -30,7 +30,6 @@ import { useStreak } from '@/features/streak/useStreak';
 import { showProgressLoading, useProgressScenarios } from '@/features/progress/scenarios';
 import { GoalCard2 } from '@/features/goalv2/GoalCard2';
 import { goalV2Store, progressLine, statusLine, useGoalV2 } from '@/features/goalv2/model';
-import { useDrivers } from '@/features/goalv2/signs';
 import { GoalVisual } from '@/features/goalv2/GoalVisual';
 
 let firstLoad = true;
@@ -41,7 +40,6 @@ function GoalHero() {
   const isNew = ps.data === 'New member';
   const g = d.goal;
   const g2 = useGoalV2();
-  const drivers = useDrivers();
   // same numbers as the Today card (one goal model), whatever kind of goal it is
   const pct = isNew ? 0 : Math.round((g2.status === 'reached' && g2.kind !== 'consistency' ? 1 : g2.pct) * 100);
 
@@ -72,15 +70,6 @@ function GoalHero() {
           <Row style={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
             <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 22, color: '#fff' }}>{progressLine(g2)}</Txt>
             <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: '#fff' }}>{g2.kind === 'consistency' ? statusLine(g2) : `${pct}%`}</Txt>
-          </Row>
-          <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.22)', marginTop: 2 }} />
-          <Row>
-            {drivers.map((r) => (
-              <View key={r.key} style={{ flex: 1, gap: 1 }}>
-                <Txt style={{ fontFamily: font.displayBold, fontSize: 20, lineHeight: 28, letterSpacing: -0.4, color: '#fff' }}>{r.value}<Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)' }}>{r.unit}</Txt></Txt>
-                <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)' }}>{r.label}</Txt>
-              </View>
-            ))}
           </Row>
         </>
       )}

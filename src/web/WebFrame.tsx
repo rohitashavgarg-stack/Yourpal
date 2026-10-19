@@ -221,10 +221,10 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     <PanelCard icon={period.icon} title={period.label}>
       <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
         <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: P.muted }}>Time of day</Text>
-        <Text style={{ fontFamily: font.bold, fontSize: 28, lineHeight: 34, letterSpacing: -0.6, color: P.ink }}>{hourLabel(d.min)}</Text>
+        <Text style={{ fontFamily: font.bold, fontSize: 22, lineHeight: 28, letterSpacing: -0.5, color: P.ink }}>{hourLabel(d.min)}</Text>
       </View>
       <TimeSlider minutes={d.min} onPick={pickMinute} />
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
         <QuickTime icon={Dumbbell} label="Workout" time={fmtT(plannedMin(state.profile.time)).full.toUpperCase()} onPress={() => pickMinute(plannedMin(state.profile.time))} />
         <QuickTime icon={Sunrise} label="Breakfast" time="7:00 AM" onPress={() => pickMinute(420)} />
         <QuickTime icon={Sun} label="Lunch" time="1:00 PM" onPress={() => pickMinute(780)} />
@@ -271,21 +271,21 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       ? [col(timeCard, situationCard, goCard), col(memberCard)]
       : [col(timeCard, situationCard, memberCard, goCard)];
   return (
-    <View style={{ gap: 12 }}>
-      <View style={{ backgroundColor: '#fff', borderRadius: 24, borderWidth: 1, borderColor: P.line, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: P.ink, alignItems: 'center', justifyContent: 'center' }}><SlidersHorizontal size={20} color="#fff" /></View>
+    <View style={{ gap: 8 }}>
+      <View style={{ backgroundColor: '#fff', borderRadius: 18, borderWidth: 1, borderColor: P.line, paddingVertical: 8, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: P.ink, alignItems: 'center', justifyContent: 'center' }}><SlidersHorizontal size={15} color="#fff" /></View>
         <View style={{ flex: 1 }}>
-          <Text style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 23, letterSpacing: -0.3, color: P.ink }}>Demo controls</Text>
-          <Text style={{ fontFamily: font.regular, fontSize: 12.5, lineHeight: 17, color: P.muted }}>Drive the prototype</Text>
+          <Text style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 19, letterSpacing: -0.2, color: P.ink }}>Demo controls</Text>
+          <Text style={{ fontFamily: font.regular, fontSize: 11, lineHeight: 15, color: P.muted }}>Drive the prototype</Text>
         </View>
-        <Pressable accessibilityRole="button" accessibilityLabel={open ? 'Collapse the controls' : 'Expand the controls'} onPress={() => setOpen((o) => !o)} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: P.tint, alignItems: 'center', justifyContent: 'center' }}>
+        <Pressable accessibilityRole="button" accessibilityLabel={open ? 'Collapse the controls' : 'Expand the controls'} onPress={() => setOpen((o) => !o)} style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: P.tint, alignItems: 'center', justifyContent: 'center' }}>
           {open ? <Minus size={18} color={P.muted} /> : <Plus size={18} color={P.muted} />}
         </Pressable>
       </View>
       {!!note && <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, zIndex: 20, backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12, shadowColor: '#101828', shadowOpacity: 0.15, shadowRadius: 8 }}><Text style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
       {open && (
-        <View style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
-          {columnsOf.map((items, i) => <View key={i} style={{ flex: 1, gap: 12, minWidth: 0 }}>{items.map((x, k) => <React.Fragment key={k}>{x}</React.Fragment>)}</View>)}
+        <View style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
+          {columnsOf.map((items, i) => <View key={i} style={{ flex: 1, gap: 8, minWidth: 0 }}>{items.map((x, k) => <React.Fragment key={k}>{x}</React.Fragment>)}</View>)}
         </View>
       )}
     </View>
@@ -296,11 +296,11 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
 function SidePanel({ height, phoneW }: { height: number; phoneW: number }) {
   const win = useWindow();
   const room = win.width - phoneW - 28 - 32; // what is left beside the phone
-  const columns = room >= 3 * 280 + 24 + 28 ? 3 : room >= 2 * 290 + 12 + 28 ? 2 : 1;
-  const width = Math.min(room, columns * 340 + (columns - 1) * 12 + 28);
+  const columns = room >= 3 * 230 + 16 + 20 ? 3 : room >= 2 * 240 + 8 + 20 ? 2 : 1;
+  const width = Math.min(room, columns * 270 + (columns - 1) * 8 + 20);
   return (
     <View style={{ width, maxHeight: Math.max(height, win.height - 48), flexGrow: 0, flexShrink: 0 }}>
-      <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: 28, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 14 }}><PanelBody columns={columns as 1 | 2 | 3} /></ScrollView>
+      <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: 20, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 8 }}><PanelBody columns={columns as 1 | 2 | 3} /></ScrollView>
     </View>
   );
 }

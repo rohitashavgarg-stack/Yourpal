@@ -9,7 +9,6 @@ import { Ring } from '@/components/bits';
 import { font } from '@/theme/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fmtDay, Goal2, progressLine, statusLine, useGoalV2 } from './model';
-import { useDrivers } from './signs';
 import { GoalVisual } from './GoalVisual';
 import { useStreak } from '@/features/streak/useStreak';
 
@@ -60,7 +59,6 @@ export function StatusChip({ g, fg }: { g: Goal2; fg: string }) {
 
 export function GoalCard2({ size }: { size: 'compact' | 'expanded' | 'hero' }) {
   const g = useGoalV2();
-  const drivers = useDrivers();
   const streakLine = useStreakLine();
   const look = g.status === 'reached' && g.kind !== 'consistency' ? STYLE.reached : g.status === 'endingSoon' ? STYLE.endingSoon : STYLE.normal;
   const highlight = look !== STYLE.normal;
@@ -101,15 +99,6 @@ export function GoalCard2({ size }: { size: 'compact' | 'expanded' | 'hero' }) {
         )}
         {size === 'expanded' && (
           <>
-            <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.22)' }} />
-            <Row style={{ justifyContent: 'space-between' }}>
-              {drivers.map((r) => (
-                <View key={r.key} style={{ flex: 1, gap: 1 }}>
-                  <Txt style={{ fontFamily: font.displayBold, fontSize: 22, lineHeight: 30, letterSpacing: -0.4, color: '#fff' }}>{r.value}<Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)' }}>{r.unit}</Txt></Txt>
-                  <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)' }}>{r.label}</Txt>
-                </View>
-              ))}
-            </Row>
             <Txt style={{ fontSize: 12, lineHeight: 18, color: 'rgba(255,255,255,0.75)' }}>{g.endDate ? `${fmtDay(g.startDate)} to ${fmtDay(g.endDate)}` : `Since ${fmtDay(g.startDate)}, no end date`}</Txt>
           </>
         )}
