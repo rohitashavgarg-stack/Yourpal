@@ -207,9 +207,9 @@ export default function GoalDetail() {
 
       {behind && !s.finished && (
         <Card gap={12}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25 }}>Want more time?</Txt>
-          <Txt muted style={{ fontSize: 14, lineHeight: 21 }}>{`You are a little behind the pace. Moving the date gives you room, and ${coach} is told either way. Or keep going as you are.`}</Txt>
-          <Button kind="primary" label="Move the date by 4 weeks" onPress={extend} />
+          <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25 }}>What would you like to do?</Txt>
+          <Txt muted style={{ fontSize: 14, lineHeight: 21 }}>{`You are a little behind the pace. Moving the target date by 4 weeks gives you room, and ${coach} is told either way. Or keep going as you are.`}</Txt>
+          <Button kind="primary" label="Move target date" onPress={extend} />
           <Button kind="secondary" label={`Adjust target to ${fmtVal(g, g.targetValue + (g.startValue - g.targetValue) * 0.2)} ${g.unit}`} onPress={adjust} />
         </Card>
       )}
