@@ -5,7 +5,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import { router } from 'expo-router';
 import Svg, { Circle } from 'react-native-svg';
-import { Flame, Footprints, GlassWater, Scale, X } from '@/lib/icons';
+import { Flame, X } from '@/lib/icons';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
@@ -13,8 +13,6 @@ import { useOverlay } from '@/components/Overlay';
 import { FlagSheet } from '@/features/gym/sheets';
 import { usePtPending } from '@/features/shell/notifs';
 import { useDomain, totals } from '@/lib/domain';
-import { reminderStore, useReminders } from '@/features/reminders/reminders';
-import { useLogsPaused } from '@/lib/logGate';
 import { useGoalV2, progressLine, statusLine } from '@/features/goalv2/model';
 import { KCAL_TARGET } from '@/lib/data';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -65,24 +63,15 @@ type Item = {
 };
 
 export function useForYou(): Item[] {
-  const { d, set } = useDomain();
-  const { toast } = useOverlay();
-  const allReminders = useReminders();
-  const reminders = useLogsPaused() ? [] : allReminders; // nothing to log while logging is paused
+  const { d } = useDomain();
   const ptPending = usePtPending();
   const { live } = useUpdates();
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
   if (ptPending && d.hasGym) out.push({ key: 'pt', title: 'Confirm your PT session', body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', critical: true, tone: 'accent', who: true, two: true });
   const order = ['reassess', 'reply', 'plan', 'log'];
-  live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
+  live.filter((u) => u.key !== 'member' && u.key !== 'reassess').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
     out.push({ key: u.key, title: u.title, body: u.body, tone: u.tone, who: ['plan', 'reply'].includes(u.key), icon: u.icon, btn: u.isPlan ? 'See changes' : u.btn, act: u.isPlan ? () => router.navigate('/plans') : u.act });
-  });
-  // Personal reminders (log your water, log your weight, steps behind): a card each, last in the stack; the meals reminder lives in the meals card.
-  reminders.filter((r) => r.key !== 'meals').forEach((r) => {
-    if (r.key === 'water') out.push({ key: 'rem-water', title: 'Log your water', body: r.text, tone: 'accent', icon: GlassWater, btn: r.action, act: () => { set({ water: Math.min(3.5, Math.round((d.water + 0.25) * 100) / 100) }); reminderStore.set({ waterAt: d.min }); toast('Added 250 ml'); } });
-    else if (r.key === 'weight') out.push({ key: 'rem-weight', title: 'Log your weight', body: r.text, tone: 'accent', icon: Scale, btn: r.action, act: () => router.push('/log-weight') });
-    else if (r.key === 'steps') out.push({ key: 'rem-steps', title: 'Steps are behind', body: "A short walk catches you up today.", tone: 'accent', icon: Footprints });
   });
   return out.filter((i) => i.critical || !d.dismissed[i.key]);
 }
