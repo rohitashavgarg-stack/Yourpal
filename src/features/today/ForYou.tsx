@@ -68,12 +68,13 @@ export function useForYou(): Item[] {
   const { d, set } = useDomain();
   const { toast } = useOverlay();
   const allReminders = useReminders();
-  const reminders = useLogsPaused() ? [] : allReminders; // nothing to log while logging is paused
+  const logsPaused = useLogsPaused();
+  const reminders = logsPaused ? [] : allReminders; // nothing to log while logging is paused
   const ptPending = usePtPending();
   const { live } = useUpdates();
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
-  if (ptPending && d.hasGym) out.push({ key: 'pt', title: 'Confirm your PT session', body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', critical: true, tone: 'accent', who: true, two: true });
+  if (ptPending && d.hasGym && !logsPaused) out.push({ key: 'pt', title: 'Confirm your PT session', body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', critical: true, tone: 'accent', who: true, two: true });
   if (d.hasGym && d.membership === 'Expiring') out.push({ key: 'member-exp', title: 'Membership ends in 12 days', body: 'Expires on 6 Oct. Renew at Wulf Fitness reception.', tone: 'warn', icon: Clock, btn: 'View plan', act: () => router.push('/gym/membership') });
   const order = ['reassess', 'reply', 'plan', 'log'];
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
