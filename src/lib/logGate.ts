@@ -7,7 +7,7 @@ import { useOverlay } from '@/components/Overlay';
 // but nothing new can be logged until the gym renews the plan. Every place that logs something goes through useLogGate.
 export function useLogsPaused() {
   const { d } = useDomain();
-  return d.hasGym && d.membership === 'Grace over';
+  return d.hasGym && d.membership === 'Expired';
 }
 
 export const PAUSED_MSG = 'Logging is paused. Renew at Wulf Fitness reception to log again.';

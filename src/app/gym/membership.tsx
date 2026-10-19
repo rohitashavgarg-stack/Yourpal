@@ -45,7 +45,7 @@ export default function Membership() {
         <Txt muted style={{ fontSize: 14 }}>The app shows your membership but can’t renew or pause it. The front desk can renew, freeze or change your plan.</Txt>
         <Button label="Call front desk" icon={<Phone size={18} color={c.bg} />} onPress={call} style={{ height: 48, borderRadius: 24 }} />
       </View>
-      <Hint>After the grace period your history stays visible and logging pauses until you renew.</Hint>
+      <Hint>When it ends, your history stays visible and logging pauses until you renew.</Hint>
     </SubPage>
   );
 }

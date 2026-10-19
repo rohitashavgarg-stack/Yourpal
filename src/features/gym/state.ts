@@ -37,7 +37,7 @@ export function useGymScenarios(title: string, extraRows: ScenarioRow[] = [], ex
     title,
     rows: [
       ...extraRows,
-      { label: 'Membership', options: ['Active', 'Expiring', 'Grace', 'Grace over'], value: d.membership, onPick: (v) => set({ membership: v as any }) },
+      { label: 'Membership', options: ['Active', 'Expiring', 'Expired'], value: d.membership, onPick: (v) => set({ membership: v as any }) },
       { label: 'PT session awaiting confirmation (PT only)', options: ['Yes', 'No'], value: g.awaiting, onPick: (v) => gymStore.set({ awaiting: v as any, sessionState: 'awaiting', rating: 0 }) },
       { label: 'Chat', options: ['Has messages', 'Empty'], value: d.chat.length ? 'Has messages' : 'Empty', onPick: (v) => { set({ chat: v === 'Empty' ? [] : defaultChat() }); gymStore.set({ blocked: false }); } },
       { label: 'Connection (chat sending)', options: ['Online', 'Offline'], value: d.offline ? 'Offline' : 'Online', onPick: (v) => set({ offline: v === 'Offline' }) },

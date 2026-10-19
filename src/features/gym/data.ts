@@ -6,8 +6,7 @@ export function membershipView(m: Domain['membership'], c: Palette) {
   return {
     Active: { t: 'Annual · active', sub: 'Expires 14 Oct 2027', bg: c.surface, fg: c.ink, rt: 'Active till 14 Oct 2027', rs: 'Renew early at the front desk. The new period starts after this one ends.', rbg: c.surface, rfg: c.ink, ends: '14 Oct 2027' },
     Expiring: { t: 'Expires in 12 days', sub: 'Annual · ends 6 Oct · renew at the front desk', bg: c.accent, fg: '#FFFFFF', rt: 'Expires in 12 days', rs: 'Renew at the front desk before 6 Oct to keep your plan and logging without a gap.', rbg: c.accentSoft, rfg: c.accentText, ends: '6 Oct' },
-    Grace: { t: 'Expired 3 days ago', sub: 'Grace period · logging open 11 more days · renew at the front desk', bg: c.warnSoft, fg: c.warn, rt: 'Expired 3 days ago', rs: 'Grace period: history and logging stay open for 11 more days. Renew at the front desk.', rbg: c.warnSoft, rfg: c.warn, ends: '21 Sep' },
-    'Grace over': { t: 'Logging paused', sub: 'History is still here · renew at the front desk to log again', bg: c.surface2, fg: c.ink, rt: 'Grace period ended', rs: 'Your history stays visible. Logging resumes as soon as the front desk renews you.', rbg: c.surface2, rfg: c.ink, ends: '21 Sep' },
+    Expired: { t: 'Membership expired', sub: 'History is still here · renew at the front desk to log again', bg: c.surface2, fg: c.ink, rt: 'Membership expired', rs: 'Your history stays visible. Logging resumes as soon as the front desk renews you.', rbg: c.surface2, rfg: c.ink, ends: '21 Sep' },
   }[m];
 }
 

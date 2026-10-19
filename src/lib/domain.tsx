@@ -50,7 +50,7 @@ export type Domain = {
   planReq: 'none' | 'requested' | 'ready';
   coachUpdated: boolean;
   goal: { type: string; target: number; by: string };
-  membership: 'Active' | 'Expiring' | 'Grace' | 'Grace over';
+  membership: 'Active' | 'Expiring' | 'Expired';
   hold: 'None' | 'Frozen' | 'Paused'; // the gym froze or paused the membership; the goal clock stops and it is never the member's doing
   assess: 'Two done' | 'Only first' | 'Due now' | 'None yet';
   ptLeft: number;

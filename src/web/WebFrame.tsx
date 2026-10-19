@@ -167,7 +167,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     // When the member trains: Today's Right now card, the Workout card and This week follow it. Set in onboarding (Schedule).
     { label: 'Workout time', options: ['Early morning', 'Morning', 'Afternoon', 'Evening'], value: state.profile.time || 'Evening', onPick: (v: string) => setProfile({ time: v }) },
     // Payment: what Today shows above everything when the membership needs attention.
-    { label: 'Membership', options: ['Active', 'Expiring', 'Grace', 'Grace over'], value: d.membership, onPick: (v: string) => set({ membership: v as any }) },
+    { label: 'Membership', options: ['Active', 'Expiring', 'Expired'], value: d.membership, onPick: (v: string) => set({ membership: v as any }) },
     // Comeback: how long the member has been away.
     { label: 'Days away (Comeback)', options: ['2 days', '4 days', '8 days', '15 days'], value: d.todayVariant === 'Comeback' ? `${d.awayDays} days` : '', onPick: (v: string) => { sit.pick('Comeback'); set({ awayDays: parseInt(v, 10) }); } },
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },

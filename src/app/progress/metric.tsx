@@ -34,13 +34,13 @@ export default function MetricDetail() {
   const ps = progressStore.use();
   const raw = useLocalSearchParams<{ k?: string }>().k;
   const k: MetricKey = raw && raw in METRIC_TITLES ? (raw as MetricKey) : 'weight';
-  const paused = d.membership === 'Grace over';
+  const paused = d.membership === 'Expired';
   const anchor = new Date(ps.anchor);
   const t = trend(k, ps.range, anchor, { weight: d.weight, water: d.water });
 
   useProgressScenarios(`Progress · ${METRIC_TITLES[k]}`, [
     { label: 'Period', options: RANGES.map((r) => r.label), value: RANGES.find((r) => r.value === ps.range)!.label, onPick: (v) => progressStore.set({ range: RANGES.find((r) => r.label === v)!.value as Range }) },
-    ...(k === 'weight' ? [{ label: 'Membership (logging)', options: ['Active', 'Grace over'], value: paused ? 'Grace over' : 'Active', onPick: (v: string) => set({ membership: v as any }) }] : []),
+    ...(k === 'weight' ? [{ label: 'Membership (logging)', options: ['Active', 'Expired'], value: paused ? 'Expired' : 'Active', onPick: (v: string) => set({ membership: v as any }) }] : []),
   ], [], [ps.range, paused, k]);
 
   const swipe = (dir: 1 | -1) => {
@@ -78,7 +78,7 @@ export default function MetricDetail() {
       {k === 'weight' && (paused ? (
         <View style={{ padding: 16, borderRadius: 22, backgroundColor: c.surface2, gap: 4 }}>
           <Txt style={{ fontFamily: font.semibold }}>Logging paused</Txt>
-          <Txt muted style={{ fontSize: 14 }}>Your membership grace period ended. History stays here; renew at the front desk to log again.</Txt>
+          <Txt muted style={{ fontSize: 14 }}>Your membership has expired. History stays here; renew at the front desk to log again.</Txt>
         </View>
       ) : (
         <>

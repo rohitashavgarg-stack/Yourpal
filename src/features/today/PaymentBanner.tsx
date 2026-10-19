@@ -19,8 +19,7 @@ export function useMembershipNotice(): Notice {
   const { d } = useDomain();
   switch (d.membership) {
     case 'Expiring': return { icon: 'clock', tone: 'warn', once: true, title: 'Membership ends in 12 days', line: 'Expires on 6 Oct.', act: ACT };
-    case 'Grace': return { icon: 'clock', tone: 'warn', once: true, title: 'Membership expired 3 days ago', line: 'Logging and other features pause in 11 days.', act: ACT };
-    case 'Grace over': return { icon: 'pause', tone: 'warn', title: 'Membership expired', line: 'Logging and other features are paused. Your history is safe.', act: ACT };
+    case 'Expired': return { icon: 'pause', tone: 'warn', title: 'Membership expired', line: 'Logging and other features are paused. Your history is safe.', act: ACT };
     default: return { icon: 'ok', tone: 'plain', title: 'Annual plan is active', line: 'Expires on 14 Oct 2027.', act: 'Renew early at Wulf Fitness reception.' };
   }
 }
