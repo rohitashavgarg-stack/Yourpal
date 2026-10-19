@@ -170,11 +170,13 @@ export function GoalTickCard({ flat = false, state: stateProp, weighDays: weighP
       accessibilityLabel={`${g.name}, ${suffix}. ${leftBold}${leftRest}. ${look.pill.label}.${right ? ` ${right.text}.` : ''} Open goal details`}>
       <View style={{ ...box, backgroundColor: GC.bg, borderColor: GC.border, gap: 12, marginBottom: 4 }}>
         <Glow color={look.glow.color} a={look.glow.a} />
-        <Row style={{ alignItems: 'center', flexWrap: 'wrap', columnGap: 8, rowGap: 8 }}>
-          <Txt style={{ flexShrink: 1, fontFamily: font.display, fontSize: 24, lineHeight: 32, letterSpacing: -0.24, color: GC.title }}>
-            {g.name}{' '}<Txt style={{ fontFamily: font.regular, fontSize: 14, lineHeight: 20, letterSpacing: 0, color: GC.date }}>{suffix}</Txt>
-          </Txt>
-          <View style={{ flexShrink: 0, marginLeft: 'auto', paddingVertical: 6, paddingHorizontal: 13, borderRadius: 999, backgroundColor: look.pill.bg, borderWidth: look.pill.border ? 1 : 0, borderColor: look.pill.border }}>
+        {/* the title with the date as subtext under it, and the pill in front on the same row: the title wraps inside its own space, the pill never moves down or truncates */}
+        <Row style={{ alignItems: 'flex-start', justifyContent: 'space-between', columnGap: 8 }}>
+          <View style={{ flexShrink: 1 }}>
+            <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 32, letterSpacing: -0.24, color: GC.title }}>{g.name}</Txt>
+            <Txt style={{ fontFamily: font.regular, fontSize: 14, lineHeight: 20, color: GC.date }}>{suffix}</Txt>
+          </View>
+          <View style={{ flexShrink: 0, paddingVertical: 6, paddingHorizontal: 13, borderRadius: 999, backgroundColor: look.pill.bg, borderWidth: look.pill.border ? 1 : 0, borderColor: look.pill.border }}>
             <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: look.pill.fg }}>{look.pill.label}</Txt>
           </View>
         </Row>
