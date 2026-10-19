@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLeaveIfPaused } from '@/lib/logGate';
 import { ScrollView, View } from 'react-native';
 import { router, Stack } from 'expo-router';
 import { Minus } from '@/lib/icons';
@@ -17,6 +18,7 @@ import { mealName } from '@/features/plans/openers';
 import { dayPlan, DietRow, exSub, getP, PEx, pk, setP, usePlans } from '@/features/plans/store';
 
 export default function EditPlan() {
+  useLeaveIfPaused();
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { d, set } = useDomain();

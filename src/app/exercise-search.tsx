@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useLeaveIfPaused } from '@/lib/logGate';
 import { ScrollView, View } from 'react-native';
 import { Redirect, router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -20,6 +21,7 @@ const GROUPS = ['All', ...Array.from(new Set(LIBRARY.map((x) => x.g)))];
 
 // Search every exercise and swap the current one for it. Opens from the bottom, like the other X-close pages.
 export default function ExerciseSearch() {
+  useLeaveIfPaused();
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { d } = useDomain();

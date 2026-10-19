@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLeaveIfPaused } from '@/lib/logGate';
 import { ScrollView, TextInput, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { fade } from '@/theme/motion';
@@ -50,6 +51,7 @@ function HeroBg({ h }: { h: number }) {
 }
 
 export default function Workout() {
+  useLeaveIfPaused();
   const { c, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const { d, set } = useDomain();

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLeaveIfPaused } from '@/lib/logGate';
 import { PersonAvatar } from '@/components/Brand';
 import { View } from 'react-native';
 import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withSequence, withTiming } from 'react-native-reanimated';
@@ -42,6 +43,7 @@ function DoneTick() {
 }
 
 export default function ConfirmSession() {
+  useLeaveIfPaused();
   const { c } = useTheme();
   const { d, set } = useDomain();
   const { toast, openSheet } = useOverlay();

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLeaveIfPaused } from '@/lib/logGate';
 import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { fade } from '@/theme/motion';
@@ -25,6 +26,7 @@ import { GymMap, hasRealMap } from '@/features/checkin/GymMap';
 
 // Manual check-in only, only inside the 20 m area. Location is read while this page is open.
 export default function CheckIn() {
+  useLeaveIfPaused();
   const { c, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const { d, set } = useDomain();

@@ -129,7 +129,7 @@ export default function Today() {
       <TabScreen title={!SHOW_GREETING ? '' : comebackNew ? `We missed you
 the last ${d.awayDays} days` : `${greet},
 Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186 : 112}
-        pinned={isNew && !!payNotice ? <View style={{ paddingTop: 10, marginBottom: -8 }}><PaymentBanner /></View> : undefined} pinAfter={Math.max(0, stripY - (insets.top + 8 + 56))}
+        pinned={isNew && !!payNotice && !payNotice.once ? <View style={{ paddingTop: 10, marginBottom: -8 }}><PaymentBanner /></View> : undefined} pinAfter={Math.max(0, stripY - (insets.top + 8 + 56))}
         refreshControl={<RefreshControl refreshing={refreshing} tintColor={c.accentText} onRefresh={() => { setRefreshing(true); load(1000); }} />}>
         {d.loading ? (
           <>
@@ -143,7 +143,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           <>
             {/* top: the membership strip, then the updates; on a comeback day the comeback card comes first and the updates after the goal */}
             {comebackNew && <Enter i={0}><ComebackGreeting /></Enter>}
-            {!!payNotice && <Enter i={0}><View style={{ marginTop: 14, marginBottom: -12 }} onLayout={(e) => setStripY(e.nativeEvent.layout.y)}><PaymentBanner /></View></Enter>}
+            {!!payNotice && <Enter i={0}><View style={{ marginTop: 14, marginBottom: comebackNew ? -12 : 6 }} onLayout={(e) => setStripY(e.nativeEvent.layout.y)}><PaymentBanner /></View></Enter>}
             {comebackNew && <Enter i={0}><WorkoutCard restart /></Enter>}
             {!comebackNew && forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
             {/* then the main card of the moment (workout time: the workout, meal time: the meals, end of the day: the week), then the goal */}

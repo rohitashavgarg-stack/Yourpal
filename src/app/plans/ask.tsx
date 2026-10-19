@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLeaveIfPaused } from '@/lib/logGate';
 import { PersonAvatar } from '@/components/Brand';
 import { ScrollView, TextInput, View } from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -17,6 +18,7 @@ import { BigTitle, InfoBox, PageHeader, ShakeText } from '@/features/plans/parts
 import { setP } from '@/features/plans/store';
 
 export default function AskCoach() {
+  useLeaveIfPaused();
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { d, set } = useDomain();

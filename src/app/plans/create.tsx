@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLeaveIfPaused } from '@/lib/logGate';
 import { ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 import { X } from '@/lib/icons';
@@ -15,6 +16,7 @@ import { PageHeader, ShakeText } from '@/features/plans/parts';
 import { DAYL, dayPlan, exSub, PEx, setP, usePlans } from '@/features/plans/store';
 
 export default function CreateWorkout() {
+  useLeaveIfPaused();
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { d } = useDomain();

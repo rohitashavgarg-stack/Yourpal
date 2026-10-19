@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLeaveIfPaused } from '@/lib/logGate';
 import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
@@ -21,6 +22,7 @@ import { BYS, GDEF, GOAL2, GOALS, goalNote, goalStep, GVERB, isNumeric } from '@
 type Draft = { type: string; target: number; by: string; g2: string };
 
 export default function Goal() {
+  useLeaveIfPaused();
   const { c } = useTheme();
   const { d, set } = useDomain();
   const { state, setProfile } = useStore();

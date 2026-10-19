@@ -15,6 +15,7 @@ import { Composer, Outgoing } from '@/features/chat/Composer';
 import { RoundBtn, Tag } from '@/components/bits';
 import { useOverlay, useToastLift } from '@/components/Overlay';
 import { useDomain } from '@/lib/domain';
+import { useLogsPaused } from '@/lib/logGate';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
@@ -99,7 +100,12 @@ export default function CoachChat() {
 
   const kb = useKeyboardLift();
   const lastMine = d.chat.length > 0 && d.chat[d.chat.length - 1].me;
-  const footer = g.blocked ? (
+  const paused = useLogsPaused();
+  const footer = paused ? (
+    <View style={{ paddingTop: 14, paddingHorizontal: 16, paddingBottom: insets.bottom + 16 }}>
+      <Txt muted style={{ textAlign: 'center', fontSize: 14, lineHeight: 20 }}>Messaging is paused. Renew at Wulf Fitness reception to chat again.</Txt>
+    </View>
+  ) : g.blocked ? (
     <View style={{ paddingTop: 14, paddingHorizontal: 16, paddingBottom: (kb ? 0 : insets.bottom) + 16, gap: 8 }}>
       <Txt muted style={{ textAlign: 'center', fontSize: 14 }}>You blocked this chat. Coach Vikram can’t message you.</Txt>
       <Button kind="secondary" label="Unblock" onPress={() => gymStore.set({ blocked: false })} style={{ height: 48, borderRadius: 24 }} />

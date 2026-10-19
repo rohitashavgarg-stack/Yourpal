@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLeaveIfPaused } from '@/lib/logGate';
 import { View } from 'react-native';
 import { PauseCircle } from '@/lib/icons';
 import { Row, Txt } from '@/components/ui';
@@ -12,6 +13,7 @@ import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
 
 // View-only: pauses are set by the front desk. The member sees status, history and how many are left.
 export default function MembershipPauses() {
+  useLeaveIfPaused();
   const { c, isDark } = useTheme();
   const { d } = useDomain();
   const g = gymStore.use();
