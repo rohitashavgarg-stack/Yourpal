@@ -136,6 +136,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
         ) : isNew ? (
           <>
             {/* above the goal: updates, then the message line; on a comeback day the comeback session (the workout) comes right under the message line and the goal follows it */}
+            {!!payNotice && <Enter i={0}><PaymentBanner /></Enter>}
             {forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
             {comebackNew && <Enter i={0}><ComebackGreeting /></Enter>}
             {comebackNew && <Enter i={0}><ComebackPlan /></Enter>}

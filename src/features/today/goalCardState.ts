@@ -33,8 +33,8 @@ export function useGoalCardState(g: Goal2): GoalCardState {
 
 // Colours of the goal card, as given in the design spec. The card is a dark card in light and dark mode alike (like the workout card).
 export const GC = {
-  bg: '#07080C', border: '#3A3D48', emptyBg: '#0B0C0F', emptyBorder: '#2E3038', emptyTitle: '#8C8E97', emptySub: '#5E6069',
-  title: '#F3F4F6', date: 'rgba(243,244,246,0.55)', rest: '#8C8E97', unfilled: '#363945',
+  bg: '#1A1D22', border: '#3A3D48', emptyBg: '#0B0C0F', emptyBorder: '#2E3038', emptyTitle: '#8C8E97', emptySub: '#5E6069',
+  title: '#F3F4F6', date: 'rgba(243,244,246,0.8)', rest: '#C3C7D0', unfilled: 'rgba(255,255,255,0.2)',
   mint: '#2EE6A8', amber: '#E8A33D', grey: '#5B5D66', pillWhite: '#FFFFFF', pillInk: '#0B0B0D', outline: '#3A3B42',
 };
 const mint20 = 'rgba(46,230,168,0.2)', amber20 = 'rgba(232,163,61,0.2)';

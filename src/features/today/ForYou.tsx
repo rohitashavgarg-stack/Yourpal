@@ -5,7 +5,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import { router } from 'expo-router';
 import Svg, { Circle } from 'react-native-svg';
-import { CreditCard, Flame, X } from '@/lib/icons';
+import { Flame, X } from '@/lib/icons';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
@@ -22,7 +22,6 @@ import { fade } from '@/theme/motion';
 import { haptic } from '@/lib/haptics';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
-import { usePaymentNotice } from './PaymentBanner';
 import { useUpdates } from './TopCards';
 
 // ---------- Slim goal strip: the member's reason for opening the app, in one line ----------
@@ -66,12 +65,10 @@ type Item = {
 
 export function useForYou(): Item[] {
   const { d } = useDomain();
-  const pay = usePaymentNotice();
   const ptPending = usePtPending();
   const { live } = useUpdates();
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
-  if (pay) out.push({ key: 'pay', title: pay.title, body: pay.sub, critical: d.membership !== 'Expiring', tone: pay.tone === 'accent' ? 'accent' : pay.tone === 'warn' ? 'warn' : 'muted', icon: CreditCard, btn: 'View membership', act: () => router.push('/gym/membership') });
   if (ptPending && d.hasGym) out.push({ key: 'pt', title: 'Confirm your PT session', body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', critical: true, tone: 'accent', who: true, two: true });
   const order = ['reassess', 'reply', 'plan', 'log'];
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
