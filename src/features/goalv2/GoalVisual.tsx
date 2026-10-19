@@ -45,14 +45,15 @@ export function markerX(g: Goal2, w: number, size: VisualSize = 'large') {
   return 0;
 }
 
+// `track` and `ring` set the empty segments and the dashed next one (the Today card is always dark, so it passes its own).
 // `color` and `share` let a caller colour the filled segments for a state and fill them by something other than the value done (Today fills by time elapsed).
-export function GoalVisual({ g, size = 'compact', onColor, color, share: shareProp }: { g: Goal2; size?: VisualSize; onColor?: boolean; color?: string; share?: number }) {
+export function GoalVisual({ g, size = 'compact', onColor, color, share: shareProp, track: trackProp, ring: ringProp }: { g: Goal2; size?: VisualSize; onColor?: boolean; color?: string; share?: number; track?: string; ring?: string }) {
   const { c } = useTheme();
   const big = size === 'large';
   const mini = size === 'mini';
   const fill = onColor ? '#fff' : color ?? MINT;
-  const track = onColor ? 'rgba(255,255,255,0.24)' : c.surface3;
-  const ring = onColor ? 'rgba(255,255,255,0.7)' : c.muted;
+  const track = onColor ? 'rgba(255,255,255,0.24)' : trackProp ?? c.surface3;
+  const ring = onColor ? 'rgba(255,255,255,0.7)' : ringProp ?? c.muted;
   const share = shareProp ?? goalShare(g);
 
   if (g.kind === 'weight' || g.kind === 'muscle' || g.kind === 'lean') {
