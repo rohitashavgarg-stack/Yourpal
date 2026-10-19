@@ -184,9 +184,38 @@ export function useUpdates() {
     { key: 'member', title: 'Membership', body: 'Expires in 12 days. Renew at the front desk.', icon: CreditCard, tone: 'warn' },
     { key: 'log', title: 'Checked in at 6:42 pm', body: "Log today's workout?", btn: 'Log workout', act: () => startWorkout(), icon: CircleCheck, tone: 'good' },
   ];
-  const live = d.todayVariant === 'With updates' ? all.filter((u) => !d.dismissed[u.key]) : [];
+  // "Reassessment due" is not a card in the stack: it is a top snackbar (ReassessSnackbar), so it is left out of the updates.
+  const live = d.todayVariant === 'With updates' ? all.filter((u) => u.key !== 'reassess' && !d.dismissed[u.key]) : [];
   const dismiss = (k: string) => { haptic.light(); set((s) => ({ dismissed: { ...s.dismissed, [k]: true } })); };
   return { live, dismiss };
+}
+
+// A reassessment is due: one slim line at the top of Today (under the account banner, above the goal), not a card in the stack. Tap opens the assessments.
+export function useReassessDue() {
+  const { d, set } = useDomain();
+  const show = (d.assess === 'Due now' || d.todayVariant === 'With updates') && !d.dismissed.reassess;
+  const dismiss = () => { haptic.light(); set((s) => ({ dismissed: { ...s.dismissed, reassess: true } })); };
+  return { show, dismiss };
+}
+
+export function ReassessSnackbar() {
+  const { c, isDark } = useTheme();
+  const { show, dismiss } = useReassessDue();
+  if (!show) return null;
+  return (
+    <Animated.View entering={fade()} style={[{ minHeight: 64, flexDirection: 'row', alignItems: 'center', gap: 12, paddingLeft: 12, paddingRight: 2, paddingVertical: 8, borderRadius: 24, borderWidth: 1, borderColor: c.line, backgroundColor: c.surface }, cardShadow(isDark)]}>
+      <Pressy accessibilityRole="link" accessibilityLabel="Reassessment due. Book it at the front desk this week. Open assessments" onPress={() => router.push('/gym/assessments')} scaleTo={0.98} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: c.warnSoft, alignItems: 'center', justifyContent: 'center' }}><CalendarClock size={19} color={c.warn} /></View>
+        <View style={{ flex: 1 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>Reassessment due</Txt>
+          <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Book it at the front desk this week.</Txt>
+        </View>
+      </Pressy>
+      <Pressy accessibilityRole="button" accessibilityLabel="Dismiss reassessment reminder" onPress={dismiss} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+        <X size={17} color={c.muted} />
+      </Pressy>
+    </Animated.View>
+  );
 }
 
 function UpdIcon({ u }: { u: Upd }) {
