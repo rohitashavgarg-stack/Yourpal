@@ -222,24 +222,24 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   // comeback day: this is the day's one workout card, in its comeback form. The greeting is its heading, the easy session is the one big button,
   // today's planned Leg day is the second button, and it says what it replaced so the plan never seems to vanish.
   if (comeback) {
+    const btn = { height: 44, borderRadius: 22, alignItems: 'center' as const, justifyContent: 'center' as const };
     return (
-      <Shell label="Comeback day, your workout" colors={['#0B0E14', '#0E1B45', '#13327A']}>
-        <Row style={{ justifyContent: 'space-between', gap: 8 }}>
-          <Coach />
-          <Chip label="Comeback" onDark />
-        </Row>
+      <Shell label="Comeback day, your workout" colors={['#0B0E14', '#0E1B45', '#13327A']} compact>
         <ComebackGreeting onDark />
-        <Row style={{ gap: 6, flexWrap: 'wrap' }}>{chips.map((t) => <Chip key={t} label={t} onDark />)}</Row>
-        <Txt style={{ fontSize: 12.5, lineHeight: 18, color: W60 }}>{"Replaces today's Leg day. Your plan continues tomorrow."}</Txt>
-        <View style={{ gap: 8 }}>
-          <Btn label="Start easy session" onPress={() => startWorkout()} />
-          <Pressy accessibilityRole="button" onPress={() => startWorkout()} style={{ height: 50, borderRadius: 25, backgroundColor: 'rgba(255,255,255,0.14)', alignItems: 'center', justifyContent: 'center' }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: '#fff' }}>Do Leg day instead</Txt>
+        <Row style={{ gap: 6, flexWrap: 'wrap' }}>
+          {['5 exercises', '~30 min'].map((t) => <Chip key={t} label={t} onDark />)}
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, height: 28, paddingHorizontal: 10, borderRadius: 14, backgroundColor: 'rgba(255,138,61,0.16)' }}>
+            <Flame size={12} color="#FF8A3D" fill="#FF8A3D" /><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 17, color: '#FFB27A' }}>Streak paused, not lost</Txt>
+          </View>
+        </Row>
+        <Row style={{ gap: 8 }}>
+          <Pressy accessibilityRole="button" onPress={() => startWorkout()} style={[btn, { flex: 1.2, backgroundColor: '#fff' }]}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: '#0B0E14' }}>Start easy session</Txt>
           </Pressy>
-        </View>
-        <View style={{ alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 6, height: 26, paddingHorizontal: 10, borderRadius: 13, backgroundColor: 'rgba(255,138,61,0.16)' }}>
-          <Flame size={13} color="#FF8A3D" fill="#FF8A3D" /><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 17, color: '#FFB27A' }}>Streak paused, not lost</Txt>
-        </View>
+          <Pressy accessibilityRole="button" accessibilityLabel="Do today's planned Leg day instead" onPress={() => startWorkout()} style={[btn, { flex: 1, backgroundColor: 'rgba(255,255,255,0.14)' }]}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: '#fff' }}>Do Leg day instead</Txt>
+          </Pressy>
+        </Row>
       </Shell>
     );
   }
