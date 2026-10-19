@@ -158,7 +158,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             <Enter i={1}><GoalTickCard /></Enter>
             {(['workout', 'meals', 'coach', 'trackers', 'week'] as CardSlot[]).filter((k) => !(comebackNew && k === 'workout')).map((k, i) => (
               <Animated.View key={k + (openNow === k ? '-open' : '-row')} entering={fade(i * 40)}>
-                {openNow === k ? full[k] : <CollapsedRow slot={k} coachCount={forYou.length} coachTitle={forYou[0]?.title} onOpen={() => setPick({ auto: autoSlot, slot: k })} />}
+                {openNow === k ? full[k] : <CollapsedRow slot={k} coachCount={forYou.length} onOpen={() => setPick({ auto: autoSlot, slot: k })} />}
               </Animated.View>
             ))}
           </>
