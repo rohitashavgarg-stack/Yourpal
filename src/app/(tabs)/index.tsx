@@ -11,7 +11,7 @@ import { nextMeal } from '@/features/today/meals';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ComebackCard, PtConfirmCard, ReassessSnackbar, UpdatesCard } from '@/features/today/TopCards';
+import { ComebackCard, ComebackGreeting, PtConfirmCard, UpdatesCard } from '@/features/today/TopCards';
 import { usePtPending } from '@/features/shell/notifs';
 import { Trackers } from '@/features/today/Trackers';
 import { WorkoutCard } from '@/features/today/WorkoutCard';
@@ -139,9 +139,8 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
         ) : isNew ? (
           <>
             {/* above the goal: updates, then the message line; on a comeback day the comeback session (the workout) comes right under the message line and the goal follows it */}
-            <ReassessSnackbar />
             {forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
-            {comebackNew && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>Welcome back, Rohitashav. Check your comeback session.</Txt></Enter>}
+            {comebackNew && <Enter i={0}><ComebackGreeting /></Enter>}
             {comebackNew && <Enter i={0}><ComebackPlan /></Enter>}
             <Enter i={0}><GoalTickCard /></Enter>
             <Enter i={1}><Trackers /></Enter>
@@ -158,7 +157,6 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           <>
             {/* account banner and the other things that need an answer come first; on a comeback day the comeback card (the workout) comes right before the goal */}
             {!!payNotice && <Enter i={0}><PaymentBanner /></Enter>}
-            <ReassessSnackbar />
             {ptPending && d.hasGym && <Enter i={0}><PtConfirmCard /></Enter>}
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
             {d.todayVariant === 'Comeback' && <Enter i={0}><ComebackCard /></Enter>}

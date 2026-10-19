@@ -130,13 +130,28 @@ export function PtConfirmCard() {
 }
 
 // ---------- Comeback (after a break) ----------
+// The comeback greeting: one title and one line, used wherever a member is welcomed back (the message line, the comeback card).
+export function ComebackGreeting({ inCard = false }: { inCard?: boolean }) {
+  const { c } = useTheme();
+  const { state } = useStore();
+  const { d } = useDomain();
+  const first = (state.profile.name || 'there').split(' ')[0];
+  const who = state.sc.member === 'PT member' ? 'Coach Vikram' : 'We';
+  const days = `${d.awayDays} ${d.awayDays === 1 ? 'day' : 'days'}`;
+  return (
+    <View style={{ gap: 2, flex: inCard ? 1 : undefined, paddingHorizontal: inCard ? 0 : 4 }}>
+      <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 28, letterSpacing: -0.4, color: c.ink }}>{`Good to see you back, ${first}.`}</Txt>
+      <Txt style={{ fontSize: 15, lineHeight: 22, color: c.muted }}>
+        {"It's been "}<Txt style={{ fontFamily: font.semibold, color: c.ink }}>{days}</Txt>{`. ${who} picked an easy one to ease you in.`}
+      </Txt>
+    </View>
+  );
+}
+
 export function ComebackCard() {
   const { c, isDark } = useTheme();
-  const { state } = useStore();
   const { openSheet, toast } = useOverlay();
   const startWorkout = useStartWorkout();
-  const isPT = state.sc.member === 'PT member';
-  const { d } = useDomain();
   const a = useSharedValue(0);
   useEffect(() => { a.value = withDelay(1200, withTiming(1, { duration: 700 })); }, []);
   const pause = useAnimatedStyle(() => ({ opacity: 1 - a.value, transform: [{ scale: 1 - 0.4 * a.value }] }));
@@ -149,13 +164,9 @@ export function ComebackCard() {
           <Animated.View style={[{ position: 'absolute' }, pause]}><Pause size={20} color={FLAME} fill={FLAME} /></Animated.View>
           <Animated.View style={[{ position: 'absolute' }, flame]}><Flame size={22} color={FLAME} fill={FLAME} /></Animated.View>
         </View>
-        <View style={{ flex: 1 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.6 }}>{`We missed you these ${d.awayDays} days`}</Txt>
-          {isPT && <Txt v="caption">From Coach Vikram</Txt>}
-        </View>
+        <ComebackGreeting inCard />
       </Row>
       <View style={{ gap: 8 }}>
-        <Txt style={{ fontSize: 16, lineHeight: 23 }}>Check your easy comeback plan.</Txt>
         <View style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused, not lost</Txt>
         </View>
@@ -184,38 +195,9 @@ export function useUpdates() {
     { key: 'member', title: 'Membership', body: 'Expires in 12 days. Renew at the front desk.', icon: CreditCard, tone: 'warn' },
     { key: 'log', title: 'Checked in at 6:42 pm', body: "Log today's workout?", btn: 'Log workout', act: () => startWorkout(), icon: CircleCheck, tone: 'good' },
   ];
-  // "Reassessment due" is not a card in the stack: it is a top snackbar (ReassessSnackbar), so it is left out of the updates.
-  const live = d.todayVariant === 'With updates' ? all.filter((u) => u.key !== 'reassess' && !d.dismissed[u.key]) : [];
+  const live = d.todayVariant === 'With updates' ? all.filter((u) => !d.dismissed[u.key]) : [];
   const dismiss = (k: string) => { haptic.light(); set((s) => ({ dismissed: { ...s.dismissed, [k]: true } })); };
   return { live, dismiss };
-}
-
-// A reassessment is due: one slim line at the top of Today (under the account banner, above the goal), not a card in the stack. Tap opens the assessments.
-export function useReassessDue() {
-  const { d, set } = useDomain();
-  const show = (d.assess === 'Due now' || d.todayVariant === 'With updates') && !d.dismissed.reassess;
-  const dismiss = () => { haptic.light(); set((s) => ({ dismissed: { ...s.dismissed, reassess: true } })); };
-  return { show, dismiss };
-}
-
-export function ReassessSnackbar() {
-  const { c, isDark } = useTheme();
-  const { show, dismiss } = useReassessDue();
-  if (!show) return null;
-  return (
-    <Animated.View entering={fade()} style={[{ minHeight: 64, flexDirection: 'row', alignItems: 'center', gap: 12, paddingLeft: 12, paddingRight: 2, paddingVertical: 8, borderRadius: 24, borderWidth: 1, borderColor: c.line, backgroundColor: c.surface }, cardShadow(isDark)]}>
-      <Pressy accessibilityRole="link" accessibilityLabel="Reassessment due. Book it at the front desk this week. Open assessments" onPress={() => router.push('/gym/assessments')} scaleTo={0.98} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: c.warnSoft, alignItems: 'center', justifyContent: 'center' }}><CalendarClock size={19} color={c.warn} /></View>
-        <View style={{ flex: 1 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>Reassessment due</Txt>
-          <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Book it at the front desk this week.</Txt>
-        </View>
-      </Pressy>
-      <Pressy accessibilityRole="button" accessibilityLabel="Dismiss reassessment reminder" onPress={dismiss} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-        <X size={17} color={c.muted} />
-      </Pressy>
-    </Animated.View>
-  );
 }
 
 function UpdIcon({ u }: { u: Upd }) {
