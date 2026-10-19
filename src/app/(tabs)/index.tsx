@@ -24,6 +24,7 @@ import { PaymentBanner, usePaymentNotice } from '@/features/today/PaymentBanner'
 import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
 import { CoachEmpty, CollapsedRow, Slot as CardSlot, TopSnack } from '@/features/today/TodayParts';
+import { acctStore } from '@/lib/acct';
 import { PushBanner } from '@/features/reminders/PushBanner';
 import { GOAL_STATE_OPTIONS, goalCardStore } from '@/features/today/goalCardState';
 
@@ -95,6 +96,7 @@ export default function Today() {
   const gsz = goalSizeStore.use();
   const goalRows = useGoalV2Rows();
   const gcs = goalCardStore.use();
+  const ac = acctStore.use();
   useScenarios({
     title: 'Today',
     rows: [
@@ -107,6 +109,8 @@ export default function Today() {
           // keep the goal page in step, so tapping a Behind card lands on the option to move the date
           if (hit?.[1] === 'behind') goalV2Store.set({ scenario: 'A bit behind', extendDays: 0, lowerBy: 0, finished: false });
         } },
+      { label: 'Account notice', options: ['None', 'Ends in 48 hours', 'Payment overdue', 'Freeze scheduled', 'Suspended'], value: ac.suspended ? 'Suspended' : ac.overdue ? 'Payment overdue' : ac.in48 ? 'Ends in 48 hours' : ac.freezeScheduled ? 'Freeze scheduled' : 'None',
+        onPick: (v) => acctStore.set({ in48: v === 'Ends in 48 hours', overdue: v === 'Payment overdue', freezeScheduled: v === 'Freeze scheduled', suspended: v === 'Suspended' }) },
       { label: 'Membership hold', options: ['None', 'Frozen', 'Paused'], value: d.hold ?? 'None', onPick: (v) => set({ hold: v as any }) },
       { label: 'Last weigh-in', options: ['Today', '3 days ago', '10+ days ago'], value: gcs.weighDays >= 10 ? '10+ days ago' : gcs.weighDays >= 3 ? '3 days ago' : 'Today', onPick: (v) => goalCardStore.set({ weighDays: v === '10+ days ago' ? 12 : v === '3 days ago' ? 3 : 0 }) },
       ...(gv.version === 'Version 1' ? [{ label: 'Goal card design', options: DESIGNS, value: gs.design, onPick: (v: string) => goalStore.set({ design: v as GoalDesign }) }] : []),
@@ -124,7 +128,7 @@ export default function Today() {
       { label: 'Show loading state', run: () => load(1400) },
       { label: 'Reset meals for this time of day', run: () => set({ meals: mealsAt(d.min), openMeal: null }) },
     ],
-  }, [layout, d.todayVariant, d.hc, d.time, d.wkScenario, d.wkDone, d.ci, d.scanFails, d.session, d.ciStart, d.ciOut, d.ciExtend, gs.design, gs.pace, st.design, gv.version, gsz.size, gv.scenario, d.goal, d.hold, gcs.force, gcs.weighDays]);
+  }, [layout, d.todayVariant, d.hc, d.time, d.wkScenario, d.wkDone, d.ci, d.scanFails, d.session, d.ciStart, d.ciOut, d.ciExtend, gs.design, gs.pace, st.design, gv.version, gsz.size, gv.scenario, d.goal, d.hold, gcs.force, gcs.weighDays, ac]);
 
   // After a break the greeting itself says welcome back (new layout); the days away sit right under the title.
   const greet = { Morning: 'Good morning', Afternoon: 'Good afternoon', Evening: 'Good evening' }[d.time];
@@ -147,7 +151,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           <>
             {/* Principle: time changes state, never position. Fixed order: banner, snackbar, message line, goal, workout, meals, coach, trackers, week.
                 One card is open (the one that fits the time of day); the rest are one row and open in place when tapped. */}
-            {!!payNotice && <Enter i={0}><View style={{ marginTop: 4 }}><PaymentBanner /></View></Enter>}
+            {!!payNotice && <Enter i={0}><PaymentBanner /></Enter>}
             <Enter i={0}><TopSnack /></Enter>
             {comebackNew && <Enter i={0}><ComebackGreeting /></Enter>}
             {comebackNew && <Enter i={0}><WorkoutCard restart /></Enter>}

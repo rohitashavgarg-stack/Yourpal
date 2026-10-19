@@ -235,14 +235,15 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
       <View accessibilityLabel="Easy session" style={{ borderRadius: 24, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, letterSpacing: -0.3, color: c.ink }}>Easy session</Txt>
-          <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>5 exercises, about 30 minutes, lighter weights</Txt>
+          <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>20 min</Txt>
         </View>
+        <Row style={{ gap: 8, flexWrap: 'wrap' }}><Chip label="4 exercises" /><Chip label="Half your usual load" /></Row>
         <Row style={{ gap: 8 }}>
           <Pressy accessibilityRole="button" accessibilityLabel="Start the easy session" onPress={() => startWorkout()} style={[btn, { backgroundColor: c.ink }]}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.bg }}>Start</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.bg }}>Start easy session</Txt>
           </Pressy>
-          <Pressy accessibilityRole="button" accessibilityLabel="Do today's regular workout instead" onPress={() => startWorkout()} style={[btn, { backgroundColor: c.surface3 }]}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.ink }}>Do regular instead</Txt>
+          <Pressy accessibilityRole="button" accessibilityLabel="Not today" onPress={() => answer('skipped')} style={[btn, { backgroundColor: c.surface3 }]}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.ink }}>Not today</Txt>
           </Pressy>
         </Row>
       </View>

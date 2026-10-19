@@ -1,13 +1,15 @@
 import { useCallback, useEffect } from 'react';
 import { router } from 'expo-router';
 import { useDomain } from '@/lib/domain';
+import { acctStore } from '@/lib/acct';
 import { useOverlay } from '@/components/Overlay';
 
 // A paused membership (ended, features paused) makes the app view-only: the member can still see every earlier log and number,
 // but nothing new can be logged until the gym renews the plan. Every place that logs something goes through useLogGate.
 export function useLogsPaused() {
   const { d } = useDomain();
-  return d.hasGym && d.membership === 'Grace over';
+  const suspended = acctStore.use().suspended;
+  return d.hasGym && (d.membership === 'Grace over' || suspended);
 }
 
 export const PAUSED_MSG = 'Logging is paused. Renew at Wulf Fitness reception to log again.';

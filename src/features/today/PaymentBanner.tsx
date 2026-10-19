@@ -1,7 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { CircleCheck, Clock, Pause } from '@/lib/icons';
+import { CalendarClock, CircleAlert, CircleCheck, Clock, Lock, Pause } from '@/lib/icons';
+import { acctStore } from '@/lib/acct';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -26,19 +27,28 @@ export function useMembershipNotice(): Notice {
   }
 }
 
-// Every account notice that applies, highest precedence first.
-function useAccountNotices(): Notice[] {
+// Today's banner: one line of information. Colour always comes with an icon and words.
+// red = urgent (48 hours, overdue, expired), amber = expiring in 10 days, blue = freeze scheduled, grey = paused, frozen or suspended.
+type Tone = 'red' | 'amber' | 'blue' | 'grey';
+type Banner = { icon: any; tone: Tone; title: string; link?: string };
+
+// Every account notice that applies, highest precedence first: suspended, expired, overdue, paused, 48 hours, 10 days, freeze scheduled.
+function useAccountNotices(): Banner[] {
   const { d } = useDomain();
-  const m = useMembershipNotice();
+  const a = acctStore.use();
   if (!d.hasGym) return [];
-  const out: Notice[] = [];
-  if (d.membership === 'Grace over' || d.membership === 'Grace') out.push(m);
-  if (d.hold !== 'None') out.push({ icon: 'pause', tone: 'warn', title: d.hold === 'Frozen' ? 'Membership frozen' : 'Membership paused', line: 'Streaks are held. Your end date moves out day for day.' });
-  if (d.membership === 'Expiring') out.push(m);
+  const out: Banner[] = [];
+  if (a.suspended) out.push({ icon: Lock, tone: 'grey', title: 'Your membership is suspended. Contact the gym' });
+  if (d.membership === 'Grace' || d.membership === 'Grace over') out.push({ icon: CircleAlert, tone: 'red', title: 'Membership expired on 30 Nov' });
+  if (a.overdue) out.push({ icon: CircleAlert, tone: 'red', title: 'Payment overdue.', link: 'View invoice' });
+  if (d.hold !== 'None') out.push({ icon: Pause, tone: 'grey', title: 'Membership paused. Resumes 8 Oct' });
+  if (a.in48) out.push({ icon: Clock, tone: 'red', title: 'Membership ends in 48 hours' });
+  if (d.membership === 'Expiring') out.push({ icon: Clock, tone: 'amber', title: 'Membership ends 29 Oct (10 days left)' });
+  if (a.freezeScheduled) out.push({ icon: CalendarClock, tone: 'blue', title: 'Freeze starts 8 Oct, 30 days' });
   return out;
 }
 
-export function usePaymentNotice(): (Notice & { more: number }) | null {
+export function usePaymentNotice(): (Banner & { more: number }) | null {
   const all = useAccountNotices();
   return all.length ? { ...all[0], more: all.length - 1 } : null;
 }
@@ -70,24 +80,21 @@ export function PaymentBanner() {
   const { c } = useTheme();
   const n = usePaymentNotice();
   if (!n) return null;
-  const Icon = n.icon === 'pause' ? Pause : Clock;
+  const col = { red: c.danger, amber: c.warn, blue: c.accentText, grey: c.muted }[n.tone];
+  const Icon = n.icon;
   return (
-    <View style={{ marginHorizontal: -16, backgroundColor: c.warnSoft }}>
-      <Pressy accessibilityRole="button" accessibilityLabel={`${n.title}. ${n.line} View plan`} onPress={() => router.push('/gym/membership')} scaleTo={1}
-        style={{ paddingVertical: 14, paddingHorizontal: 16 }}>
+    <View style={{ borderRadius: 18, backgroundColor: col + '1F', borderWidth: 1, borderColor: col + '4D' }}>
+      <Pressy accessibilityRole="button" accessibilityLabel={n.title + (n.link ? ' ' + n.link : '')} onPress={() => router.push('/gym/membership')} scaleTo={0.99}
+        style={{ minHeight: 52, paddingVertical: 10, paddingHorizontal: 14 }}>
         <Row style={{ gap: 12 }}>
-          <View style={{ width: 40, height: 40, borderRadius: 13, backgroundColor: c.warn + '2E', alignItems: 'center', justifyContent: 'center' }}><Icon size={18} color={c.warn} /></View>
-          <View style={{ flex: 1, gap: 1 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: c.ink }}>{n.title}</Txt>
-            <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{n.line}</Txt>
-          </View>
-          <View style={{ minHeight: 40, paddingHorizontal: 16, borderRadius: 20, borderWidth: 1, borderColor: c.ink + '55', alignItems: 'center', justifyContent: 'center' }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20, color: c.ink }}>View plan</Txt>
-          </View>
+          <Icon size={19} color={col} />
+          <Txt style={{ flex: 1, fontFamily: font.medium, fontSize: 14, lineHeight: 20, color: col }}>
+            {n.title}{n.link ? ' ' : ''}{n.link ? <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: col, textDecorationLine: 'underline' }}>{n.link}</Txt> : null}
+          </Txt>
         </Row>
       </Pressy>
       {n.more > 0 && (
-        <Pressy accessibilityRole="button" onPress={() => router.push('/gym/membership')} scaleTo={1} style={{ minHeight: 44, paddingHorizontal: 16, marginTop: -8, justifyContent: 'center' }}>
+        <Pressy accessibilityRole="button" onPress={() => router.push('/gym/membership')} scaleTo={1} style={{ minHeight: 40, paddingHorizontal: 14, marginTop: -6, justifyContent: 'center' }}>
           <Txt muted style={{ fontSize: 13, lineHeight: 19, textDecorationLine: 'underline' }}>{n.more === 1 ? '1 more account notice' : `${n.more} more account notices`}</Txt>
         </Pressy>
       )}

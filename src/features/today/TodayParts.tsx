@@ -29,8 +29,8 @@ export function TopSnack() {
   const gone = (k: string) => !!d.dismissed['snack-' + k];
   let snack: { key: string; text: string; action: string; go: () => void } | null = null;
   if (live.some((u) => u.key === 'reassess') && !gone('checkin')) snack = { key: 'checkin', text: "Your 8-week check-in is due. See how far you've come.", action: 'Details', go: () => router.push('/progress/assess') };
-  else if (!paused && weighDays >= STALE_WEIGH_DAYS && !gone('weigh')) snack = { key: 'weigh', text: `Your last weigh-in was ${weighDays} days ago.`, action: 'Log weight', go: () => router.push('/log-weight') };
-  else if (goalState === 'behind' && !gone('behind')) snack = { key: 'behind', text: "You're a little behind on your goal.", action: 'Details', go: () => router.push('/goal-detail') };
+  else if (!paused && weighDays >= STALE_WEIGH_DAYS && !gone('weigh')) snack = { key: 'weigh', text: `You haven't logged your weight in ${weighDays} days.`, action: 'Log weight', go: () => router.push('/log-weight') };
+  else if (goalState === 'behind' && !gone('behind')) snack = { key: 'behind', text: "You're 0.9 kg into a 6 kg goal and behind pace. Coach Vikram suggests two extra sessions.", action: 'See plan', go: () => router.push('/goal-detail') };
   if (!snack) return null;
   const s = snack;
   return (
