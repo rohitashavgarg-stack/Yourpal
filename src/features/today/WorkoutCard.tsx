@@ -31,9 +31,12 @@ const W60 = 'rgba(255,255,255,0.65)';
 function Coach({ dim = false }: { dim?: boolean }) {
   const cs = coachStore.use();
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel="Coach Vikram. Open your coach" onPress={() => router.push('/coach')} scaleTo={0.97} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1, opacity: dim ? 0.7 : 1 }}>
-      <View><PersonAvatar who="coach" size={26} />{cs.unread && <View accessibilityLabel="Unread reply" style={{ position: 'absolute', right: -1, top: -1, width: 8, height: 8, borderRadius: 4, backgroundColor: MINT }} />}</View>
-      <Txt style={{ fontSize: 12, lineHeight: 17, color: W60, flexShrink: 1 }}>Planned by Coach Vikram</Txt>
+    <Pressy accessibilityRole="button" accessibilityLabel="Today's workout, planned by Coach Vikram. Open your coach" onPress={() => router.push('/coach')} scaleTo={0.97} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 1, opacity: dim ? 0.7 : 1 }}>
+      <View><PersonAvatar who="coach" size={34} />{cs.unread && <View accessibilityLabel="Unread reply" style={{ position: 'absolute', right: -1, top: -1, width: 9, height: 9, borderRadius: 5, backgroundColor: MINT }} />}</View>
+      <View style={{ flexShrink: 1 }}>
+        <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22, color: '#fff' }}>{"Today's workout"}</Txt>
+        <Txt style={{ fontSize: 12.5, lineHeight: 18, color: W60 }}>Planned by Coach Vikram</Txt>
+      </View>
     </Pressy>
   );
 }

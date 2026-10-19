@@ -52,8 +52,26 @@ export function MembershipCard({ n }: { n: Notice }) {
   );
 }
 
-// The banner at the top of Today.
+// The strip at the top of Today: edge to edge under the header, the title and one sentence on the left, "View plan" on the right.
+// (The "what to do" line stays on the Gym tab card; the strip only says what is happening and what it means.)
 export function PaymentBanner() {
+  const { c } = useTheme();
   const n = usePaymentNotice();
-  return n ? <MembershipCard n={n} /> : null;
+  if (!n) return null;
+  const Icon = n.icon === 'pause' ? Pause : Clock;
+  return (
+    <Pressy accessibilityRole="button" accessibilityLabel={`${n.title}. ${n.line} View plan`} onPress={() => router.push('/gym/membership')} scaleTo={1}
+      style={{ marginHorizontal: -16, backgroundColor: c.warnSoft, paddingVertical: 14, paddingHorizontal: 16 }}>
+      <Row style={{ gap: 12 }}>
+        <View style={{ width: 40, height: 40, borderRadius: 13, backgroundColor: c.warn + '2E', alignItems: 'center', justifyContent: 'center' }}><Icon size={18} color={c.warn} /></View>
+        <View style={{ flex: 1, gap: 1 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: c.ink }}>{n.title}</Txt>
+          <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{n.line}</Txt>
+        </View>
+        <View style={{ minHeight: 40, paddingHorizontal: 16, borderRadius: 20, borderWidth: 1, borderColor: c.ink + '55', alignItems: 'center', justifyContent: 'center' }}>
+          <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20, color: c.ink }}>View plan</Txt>
+        </View>
+      </Row>
+    </Pressy>
+  );
 }

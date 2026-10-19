@@ -209,7 +209,7 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
   );
 }
 
-export function MealNowCard() {
+export function MealNowCard({ lead = false }: { lead?: boolean } = {}) {
   const { c } = useTheme();
   const { d, set } = useDomain();
   const t = totals(d);
@@ -230,6 +230,19 @@ export function MealNowCard() {
   };
   return (
     <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
+      {lead ? (
+        // the main card of the moment: a small title and one slim progress line, so the meal itself comes straight after
+        <View accessible accessibilityLabel={`Eaten today ${t.k} of ${KCAL_TARGET} kcal`} style={{ gap: 12, paddingHorizontal: 4 }}>
+          <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 20, lineHeight: 27, letterSpacing: -0.4 }}>{"Today's Meals"}</Txt>
+          <Row style={{ gap: 12 }}>
+            <View style={{ flex: 1, height: 3, borderRadius: 2, backgroundColor: `${c.cAct}26`, overflow: 'hidden' }}>
+              <View style={{ width: `${Math.min(100, (t.k / KCAL_TARGET) * 100)}%`, height: '100%', borderRadius: 2, backgroundColor: c.cAct }} />
+            </View>
+            <Txt style={{ fontFamily: font.display, fontSize: 14, lineHeight: 19 }}>{inr(t.k)}<Txt muted style={{ fontFamily: font.display, fontSize: 14, lineHeight: 19 }}>{` / ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
+          </Row>
+        </View>
+      ) : (
+        <>
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
         <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
@@ -247,6 +260,8 @@ export function MealNowCard() {
           <View style={{ width: `${Math.min(100, (t.k / KCAL_TARGET) * 100)}%`, height: '100%', borderRadius: 2, backgroundColor: c.cAct }} />
         </View>
       </View>
+        </>
+      )}
       {ask && <MissedRow id={ask} more={missed.length - 1} />}
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <View>

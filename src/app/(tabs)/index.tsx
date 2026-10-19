@@ -64,7 +64,10 @@ export default function Today() {
   const isNew = layout === 'New';
   const focus = useRightNowFocus(isNew);
   // New layout: the section for what is happening now floats to the top, the others follow.
-  const primary: 'restart' | 'workout' | 'meals' | 'wrap' = focus.kind === 'restart' ? 'restart' : focus.kind === 'live' || focus.kind === 'workout' || focus.kind === 'late' ? 'workout' : focus.kind === 'meal' ? 'meals' : focus.kind === 'next' ? (focus.what === 'workout' ? 'workout' : 'meals') : 'wrap';
+  // The main card of the moment comes first, right under the updates; the goal follows it. Workout time: workout. Meal time: meals.
+  // Neither is due: the workout is first (unless it is done or a rest day, then the meals). End of the day: the week.
+  const wkSettledNow = ['done', 'rest', 'hidden'].includes(workoutState(d));
+  const primary: 'restart' | 'workout' | 'meals' | 'wrap' = focus.kind === 'restart' ? 'restart' : focus.kind === 'live' || focus.kind === 'workout' || focus.kind === 'late' ? 'workout' : focus.kind === 'meal' ? 'meals' : focus.kind === 'next' ? (wkSettledNow ? 'meals' : 'workout') : 'wrap';
   // What matters most right now floats up (the goal and anything that needs an answer stay pinned at the top):
   //  workout time: workout, then meals. Meal time: meals first, and the workout drops lower once it is done or it is a rest day.
   //  End of the day: the week first. In between: trackers, then whatever comes next. The streak card sits above the goal.
@@ -136,19 +139,17 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           </>
         ) : isNew ? (
           <>
-            {/* above the goal: updates, then the message line; on a comeback day the comeback session (the workout) comes right under the message line and the goal follows it */}
+            {/* top: the membership strip, then the updates; on a comeback day the comeback card comes first and the updates after the goal */}
             {!!payNotice && <Enter i={0}><PaymentBanner /></Enter>}
-            {/* a comeback day has one hero, the workout card in its comeback form (the greeting is its heading), then the goal; the PT and update cards come after the goal */}
             {comebackNew && <Enter i={0}><WorkoutCard restart /></Enter>}
             {!comebackNew && forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
-            {!comebackNew && <Enter i={0}><StreakChip /></Enter>}
-            <Enter i={0}><GoalTickCard /></Enter>
-            {comebackNew && forYou.length > 0 && <Enter i={1}><ForYouStack /></Enter>}
-            <Enter i={1}><Trackers /></Enter>
-            {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}
+            {/* then the main card of the moment (workout time: the workout, meal time: the meals, end of the day: the week), then the goal */}
             {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
-            {primary === 'meals' && <Enter i={1}><MealNowCard /></Enter>}
+            {primary === 'meals' && <Enter i={1}><MealNowCard lead /></Enter>}
             {primary === 'wrap' && <Enter i={1}><WeekCard /></Enter>}
+            <Enter i={1}><GoalTickCard /></Enter>
+            {comebackNew && forYou.length > 0 && <Enter i={1}><ForYouStack /></Enter>}
+            <Enter i={2}><Trackers /></Enter>
             {primary !== 'workout' && primary !== 'restart' && <Enter i={3}><WorkoutCard /></Enter>}
             {primary !== 'meals' && <Enter i={4}><MealNowCard /></Enter>}
             {primary !== 'wrap' && <Enter i={5}><WeekCard /></Enter>}
