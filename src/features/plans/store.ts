@@ -7,7 +7,7 @@ import { fmtT } from '@/lib/data';
 // its pushed pages and its sheets (rendered in the root overlay) all read the same thing.
 // Shared facts (the weekly plan, meal log, request status, offline) stay in the domain.
 
-export type PEx = { id: string; name: string; sets: number; reps: number; kg: number; mode: Mode; t?: number; by?: 'you' | 'coach' | 'created'; hl?: boolean };
+export type PEx = { id: string; name: string; sets: number; reps: number; kg: number; mode: Mode; t?: number; by?: 'you' | 'coach' | 'created'; hl?: boolean; res?: 'skip' | 'swap'; from?: string };
 export type DayPlan = { name: string; time?: string; wu?: { n: string; s: string }[]; cd?: { n: string; s: string }[]; ex: PEx[]; done?: string; created?: boolean };
 export type Food = { n: string; k: number; p: number; c?: number; f?: number; type?: FoodType; mine?: boolean; est?: boolean; written?: boolean };
 export type DietRow = { key: string; n: string; k: number; p: number; por: number; type: FoodType; mine: boolean; added?: Food };

@@ -3,7 +3,7 @@ import { useLogsPaused } from '@/lib/logGate';
 import { ScrollView, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useLocalSearchParams } from 'expo-router';
-import { Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
+import { Check, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
 import { fade } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -32,6 +32,7 @@ function DayStrip() {
   const { d } = useDomain();
   const { p } = usePlans();
   const isW = p.seg === 'workout';
+  const paused = useLogsPaused();
   const [w, setW] = useState(0);
   const [page, setPage] = useState(THIS);
   const ref = useRef<ScrollView>(null);
@@ -61,15 +62,21 @@ function DayStrip() {
                 const on = i === p.day && wk === p.week;
                 const isToday = wk === 0 && i === TODAY_IDX;
                 const rel = Math.sign(wk * 7 + i - TODAY_IDX);
-                const dot = isW ? (plan ? (rel < 0 && plan.done ? c.good : c.accent) : 'transparent') : rel <= 0 && wk === 0 ? c.good : 'transparent';
+                const dot = isW ? (plan ? c.accent : 'transparent') : rel <= 0 && wk === 0 ? c.good : 'transparent';
+                const logged = isW && !!plan?.done;
+                const locked = isW && paused && !!plan && !plan.done;
+                const missed = isW && !!plan && !plan.done && rel < 0 && wk === 0 && !paused;
                 return (
                   <Pressy key={i} accessibilityRole="button" accessibilityState={{ selected: on }}
-                    accessibilityLabel={`${DAYL[i]} ${dateOf(i, wk)} ${monthOf(i, wk)}${isToday ? ', today' : ''}${isW ? (plan ? `, ${plan.name}` : ', rest day') : ''}`}
+                    accessibilityLabel={`${DAYL[i]} ${dateOf(i, wk)} ${monthOf(i, wk)}${isToday ? ', today' : ''}${isW ? (plan ? `${locked ? "" : ", " + plan.name}${logged ? ', logged' : locked ? ', locked' : missed ? ', not logged' : ''}` : ', rest day') : ''}`}
                     onPress={() => setP({ day: i, week: wk })} scaleTo={0.94}
                     style={{ flex: 1, height: 60, borderRadius: 22, alignItems: 'center', justifyContent: 'center', gap: 1, backgroundColor: on ? c.ink : 'transparent', borderWidth: isToday ? 1.5 : 0, borderColor: c.accent }}>
                     <Txt style={{ fontSize: 11, lineHeight: 14, color: on ? c.bg : c.ink, opacity: 0.7 }}>{l}</Txt>
                     <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 21, color: on ? c.bg : c.ink }}>{dateOf(i, wk)}</Txt>
-                    <View style={{ width: 4, height: 4, borderRadius: 2, backgroundColor: dot }} />
+                    {locked ? <Lock size={11} color={c.muted} />
+                      : logged ? <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={9} color={c.bg} strokeWidth={4} /></View>
+                      : missed ? <View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.warn }} />
+                      : <View style={{ width: 4, height: 4, borderRadius: 2, backgroundColor: dot }} />}
                   </Pressy>
                 );
               })}

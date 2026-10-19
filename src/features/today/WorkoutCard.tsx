@@ -119,13 +119,9 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
           <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={18} color={c.muted} /></View>
           <View style={{ flex: 1, gap: 2 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, letterSpacing: -0.3, color: c.ink }}>Workouts are paused</Txt>
-            <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>Renew at Wulf Fitness reception to start again. Your plan and history stay here.</Txt>
+            <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>Renew at Wulf Fitness reception to see your plan and start again. Your history stays here.</Txt>
           </View>
         </Row>
-        <View style={{ gap: 2, paddingTop: 10, borderTopWidth: 1, borderTopColor: c.line }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 22, color: c.ink }}>{name}</Txt>
-          <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>{chips.join(', ')}</Txt>
-        </View>
       </View>
     );
   }
