@@ -66,17 +66,17 @@ export default function Today() {
   const primary: 'restart' | 'workout' | 'meals' | 'wrap' = focus.kind === 'restart' ? 'restart' : focus.kind === 'live' || focus.kind === 'workout' || focus.kind === 'late' ? 'workout' : focus.kind === 'meal' ? 'meals' : focus.kind === 'next' ? (focus.what === 'workout' ? 'workout' : 'meals') : 'wrap';
   // What matters most right now floats up (the goal and anything that needs an answer stay pinned at the top):
   //  workout time: workout, then meals. Meal time: meals first, and the workout drops lower once it is done or it is a rest day.
-  //  End of the day: the week and the streak first. In between: trackers and streak, then whatever comes next.
+  //  End of the day: the week first. In between: trackers, then whatever comes next. The streak card sits above the goal.
   const wkSettled = ['done', 'rest', 'hidden'].includes(workoutState(d));
   const mealsSettled = nextMeal(d) === null;
-  type Slot = 'workout' | 'meals' | 'trackers' | 'streak' | 'week';
-  const order: Slot[] = primary === 'workout' ? ['workout', 'meals', 'trackers', 'streak', 'week']
-    : primary === 'meals' ? (wkSettled ? ['meals', 'trackers', 'streak', 'workout', 'week'] : ['meals', 'workout', 'trackers', 'streak', 'week'])
-    : primary === 'wrap' ? (wkSettled ? ['week', 'streak', 'meals', 'workout', 'trackers'] : ['week', 'streak', 'workout', 'meals', 'trackers'])
-    : ['trackers', 'workout', 'meals', 'streak', 'week'];
-  // every meal is already logged: the meals card has nothing to ask, so it moves below the streak
-  if (mealsSettled && primary !== 'wrap') { order.splice(order.indexOf('meals'), 1); order.splice(order.indexOf('streak') + 1, 0, 'meals'); }
-  const slots: Record<Slot, React.ReactNode> = { workout: <WorkoutCard />, meals: <MealNowCard />, trackers: <Trackers />, streak: <StreakChip />, week: <WeekCard /> };
+  type Slot = 'workout' | 'meals' | 'trackers' | 'week';
+  const order: Slot[] = primary === 'workout' ? ['workout', 'meals', 'trackers', 'week']
+    : primary === 'meals' ? (wkSettled ? ['meals', 'trackers', 'workout', 'week'] : ['meals', 'workout', 'trackers', 'week'])
+    : primary === 'wrap' ? (wkSettled ? ['week', 'meals', 'workout', 'trackers'] : ['week', 'workout', 'meals', 'trackers'])
+    : ['trackers', 'workout', 'meals', 'week'];
+  // every meal is already logged: the meals card has nothing to ask, so it moves below the trackers
+  if (mealsSettled && primary !== 'wrap') { order.splice(order.indexOf('meals'), 1); order.splice(order.indexOf('trackers') + 1, 0, 'meals'); }
+  const slots: Record<Slot, React.ReactNode> = { workout: <WorkoutCard />, meals: <MealNowCard />, trackers: <Trackers />, week: <WeekCard /> };
   const focusMeal = focus.kind === 'meal' ? focus.meal.id : null;
   useEffect(() => { if (focusMeal) set({ openMeal: focusMeal }); }, [focusMeal]); // eslint-disable-line react-hooks/exhaustive-deps
   const gs = goalStore.use();
@@ -140,13 +140,13 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
             {comebackNew && <Enter i={0}><ComebackGreeting /></Enter>}
             {comebackNew && <Enter i={0}><ComebackPlan /></Enter>}
+            <Enter i={0}><StreakChip /></Enter>
             <Enter i={0}><GoalTickCard /></Enter>
             <Enter i={1}><Trackers /></Enter>
             {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}
             {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
             {primary === 'meals' && <Enter i={1}><MealNowCard /></Enter>}
             {primary === 'wrap' && <Enter i={1}><WeekCard /></Enter>}
-            <Enter i={2}><StreakChip /></Enter>
             {primary !== 'workout' && primary !== 'restart' && <Enter i={3}><WorkoutCard /></Enter>}
             {primary !== 'meals' && <Enter i={4}><MealNowCard /></Enter>}
             {primary !== 'wrap' && <Enter i={5}><WeekCard /></Enter>}
@@ -158,6 +158,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {ptPending && d.hasGym && <Enter i={0}><PtConfirmCard /></Enter>}
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
             {d.todayVariant === 'Comeback' && <Enter i={0}><ComebackCard /></Enter>}
+            <Enter i={1}><StreakChip /></Enter>
             <Enter i={1}><GoalTickCard /></Enter>
             {order.map((k, i) => <Enter key={k} i={2 + i}>{slots[k]}</Enter>)}
           </>

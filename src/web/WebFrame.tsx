@@ -18,8 +18,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { LinearGradient } from 'expo-linear-gradient';
 import { createStore } from '@/lib/createStore';
 import { usePathname } from 'expo-router';
-import { ChartLine, Dumbbell, Flag, House, LogIn, MapPin, MessageCircle, Minus, Moon, Plus, SlidersHorizontal, Sun, Sunrise, Sunset, UserRound, UtensilsCrossed } from '@/lib/icons';
-import { Actions, Choice, PanelCard, QuickTime, ScreenItem, P } from '@/web/ControlParts';
+import { ChartLine, Dumbbell, Flag, House, LogIn, MapPin, MessageCircle, Minus, Moon, Plus, SlidersHorizontal, Sun, Sunrise, Sunset, UserRound } from '@/lib/icons';
+import { ActionChip, Choice, Dropdown, PanelCard, SwitchChip, P } from '@/web/ControlParts';
 import { SITUATIONS, SITUATION_HINT, Situation, useSituation } from '@/lib/situations';
 import { missedWkStore } from '@/features/today/WorkoutCard';
 
@@ -201,7 +201,6 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
   ];
   const row = (label: string) => rows.find((r) => r.label === label)!;
   const seg = (label: string) => { const r = row(label); return <Choice key={label} label={r.label} options={r.options} value={r.value} onPick={r.onPick} />; };
-  const act = (label: string) => { const r = row(label); return <Actions key={label} label={r.label} options={r.options} onPick={r.onPick} />; };
   const path = usePathname();
   const [open, setOpen] = useState(true);
   const hour = Math.floor(d.min / 60);
@@ -217,59 +216,49 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     { label: 'Check-in', icon: Flag, to: '/checkin', match: (p) => p.startsWith('/checkin') },
     { label: 'Login', icon: LogIn, to: '/login', match: (p) => p.startsWith('/login') || p.startsWith('/welcome') },
   ];
+  // Everything with more than a few options is a dropdown, and the yes/no options are switches on one line, so the whole panel is one short column.
+  const QUICK: [string, string, number][] = [
+    ['Workout', fmtT(plannedMin(state.profile.time)).full.toUpperCase(), plannedMin(state.profile.time)], ['Breakfast', '7:00 AM', 420], ['Lunch', '1:00 PM', 780],
+    ['Snack', '3:30 PM', 930], ['Dinner', '8:00 PM', 1200], ['Night', '10:30 PM', 1350],
+  ];
+  const dd = (label: string, shown?: string) => { const r = row(label); return <Dropdown key={label} label={shown ?? r.label} options={r.options} value={r.value} onPick={r.onPick} />; };
   const timeCard = (
-    <PanelCard icon={period.icon} title={period.label}>
-      <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
-        <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: P.muted }}>Time of day</Text>
-        <Text style={{ fontFamily: font.bold, fontSize: 22, lineHeight: 28, letterSpacing: -0.5, color: P.ink }}>{hourLabel(d.min)}</Text>
-      </View>
+    <PanelCard icon={period.icon} title="Time of day" pill={{ label: hourLabel(d.min) }}>
       <TimeSlider minutes={d.min} onPick={pickMinute} />
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
-        <QuickTime icon={Dumbbell} label="Workout" time={fmtT(plannedMin(state.profile.time)).full.toUpperCase()} onPress={() => pickMinute(plannedMin(state.profile.time))} />
-        <QuickTime icon={Sunrise} label="Breakfast" time="7:00 AM" onPress={() => pickMinute(420)} />
-        <QuickTime icon={Sun} label="Lunch" time="1:00 PM" onPress={() => pickMinute(780)} />
-        <QuickTime icon={Sunset} label="Snack" time="3:30 PM" onPress={() => pickMinute(930)} />
-        <QuickTime icon={UtensilsCrossed} label="Dinner" time="8:00 PM" onPress={() => pickMinute(1200)} />
-        <QuickTime icon={Moon} label="Night" time="10:30 PM" onPress={() => pickMinute(1350)} />
-      </View>
+      <Dropdown label="Jump to" options={QUICK.map(([l, t]) => `${l} ${t}`)} value="" placeholder="Workout, meals, night" onPick={(v) => { const hit = QUICK.find(([l, t]) => `${l} ${t}` === v); if (hit) pickMinute(hit[2]); }} />
     </PanelCard>
   );
   const situationCard = (
     <PanelCard icon={House} title="Situation" pill={{ label: sit.current }}>
-      {act('Missed')}
-      {seg('Situation')}
-      <Text style={{ fontFamily: font.regular, fontSize: 12, lineHeight: 17, color: P.muted }}>{SITUATION_HINT[sit.current]}</Text>
-      {sit.current === 'Comeback' && seg('Days away (Comeback)')}
-      {!!d.autoNote && <View style={{ backgroundColor: '#FFF4E0', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 17, color: '#9A5A00' }}>{d.autoNote}</Text></View>}
+      {dd('Situation')}
+      {dd('Missed')}
+      {sit.current === 'Comeback' && dd('Days away (Comeback)', 'Days away')}
+      <Text style={{ fontFamily: font.regular, fontSize: 11.5, lineHeight: 16, color: P.muted }}>{SITUATION_HINT[sit.current]}</Text>
+      {!!d.autoNote && <View style={{ backgroundColor: '#FFF4E0', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: '#9A5A00' }}>{d.autoNote}</Text></View>}
     </PanelCard>
   );
   const memberCard = (
     <PanelCard icon={UserRound} title="Member" pill={{ label: state.sc.member }}>
       {seg('Member type')}
-      {seg('Workout time')}
-      {seg('Membership')}
-      {seg('Goal type')}
-      {seg('Health (steps)')}
-      {seg('Wearable (heart rate, sleep, energy)')}
-      {seg('Theme')}
+      {dd('Membership')}
+      {dd('Goal type')}
+      {dd('Workout time')}
+      <View style={{ flexDirection: 'row', gap: 4 }}>
+        <SwitchChip label="Health" on={d.hc} onPress={() => row('Health (steps)').onPick(d.hc ? 'Not connected' : 'Connected')} />
+        <SwitchChip label="Wearable" on={d.wearable} onPress={() => row('Wearable (heart rate, sleep, energy)').onPick(d.wearable ? 'No wearable' : 'Has a wearable')} />
+        <SwitchChip label="Dark" on={isDark} onPress={() => row('Theme').onPick(isDark ? 'Light' : 'Dark')} />
+      </View>
     </PanelCard>
   );
-  // Only what a demo needs: the time, one situation, who the member is, and where to go.
+  const here = SCREENS.find((sc) => sc.match(path))?.label ?? '';
   const goCard = (
     <PanelCard icon={Flag} title="Go to">
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
-        {SCREENS.map((sc) => <ScreenItem key={sc.label} icon={sc.icon} label={sc.label} on={sc.match(path)} onPress={() => go(sc.to, sc.label)} />)}
-      </View>
-      {act('Open a workout')}
+      <Dropdown label="Screen" options={SCREENS.map((sc) => sc.label)} value={here} onPick={(v) => { const sc = SCREENS.find((x) => x.label === v); if (sc) go(sc.to, sc.label); }} />
+      <View style={{ flexDirection: 'row' }}><ActionChip label="Open a workout" onPress={() => row('Open a workout').onPick('Start')} /></View>
     </PanelCard>
   );
-  // One panel: three columns on a wide window, two or one when it is narrower (and in the phone sheet).
-  const col = (...items: React.ReactNode[]) => items;
-  const columnsOf: React.ReactNode[][] = columns >= 3
-    ? [col(timeCard, goCard), col(situationCard), col(memberCard)]
-    : columns === 2
-      ? [col(timeCard, situationCard, goCard), col(memberCard)]
-      : [col(timeCard, situationCard, memberCard, goCard)];
+  // One column of four short cards (it was three columns of long ones).
+  const columnsOf: React.ReactNode[][] = [[timeCard, situationCard, memberCard, goCard]];
   return (
     <View style={{ gap: 8 }}>
       <View style={{ backgroundColor: '#fff', borderRadius: 18, borderWidth: 1, borderColor: P.line, paddingVertical: 8, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -296,11 +285,10 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
 function SidePanel({ height, phoneW }: { height: number; phoneW: number }) {
   const win = useWindow();
   const room = win.width - phoneW - 28 - 32; // what is left beside the phone
-  const columns = room >= 3 * 230 + 16 + 20 ? 3 : room >= 2 * 240 + 8 + 20 ? 2 : 1;
-  const width = Math.min(room, columns * 270 + (columns - 1) * 8 + 20);
+  const width = Math.min(room, 310);
   return (
     <View style={{ width, maxHeight: Math.max(height, win.height - 48), flexGrow: 0, flexShrink: 0 }}>
-      <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: 20, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 8 }}><PanelBody columns={columns as 1 | 2 | 3} /></ScrollView>
+      <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: 20, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 8 }}><PanelBody /></ScrollView>
     </View>
   );
 }
