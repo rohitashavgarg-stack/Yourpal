@@ -49,7 +49,7 @@ export const LOOK: Record<Exclude<GoalCardState, 'noGoal'>, { glow: { color: str
   complete: { glow: GREY_GLOW, pill: { label: 'Complete', bg: mint20, fg: GC.mint }, seg: GC.mint },
   frozen: { glow: GREY_GLOW, pill: { label: 'Frozen', bg: amber20, fg: GC.amber }, seg: GC.grey },
   paused: { glow: GREY_GLOW, pill: outlined('Paused'), seg: GC.grey },
-  comeback: { glow: GREY_GLOW, pill: outlined('Resumes today'), seg: GC.grey },
+  comeback: { glow: { color: '#2F6BEA', a: 0.8 }, pill: outlined('Resumes today'), seg: GC.mint }, // blue and lit like on track: a returning member is not stalled
   backOn: { glow: { color: GC.mint, a: 0.6 }, pill: { label: 'Back on', bg: mint20, fg: GC.mint }, seg: GC.mint },
 };
 

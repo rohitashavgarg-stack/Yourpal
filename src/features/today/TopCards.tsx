@@ -131,7 +131,7 @@ export function PtConfirmCard() {
 
 // ---------- Comeback (after a break) ----------
 // The comeback greeting: one title and one line, used wherever a member is welcomed back (the message line, the comeback card).
-export function ComebackGreeting({ inCard = false }: { inCard?: boolean }) {
+export function ComebackGreeting({ inCard = false, onDark = false }: { inCard?: boolean; onDark?: boolean }) {
   const { c } = useTheme();
   const { state } = useStore();
   const { d } = useDomain();
@@ -140,9 +140,9 @@ export function ComebackGreeting({ inCard = false }: { inCard?: boolean }) {
   const days = `${d.awayDays} ${d.awayDays === 1 ? 'day' : 'days'}`;
   return (
     <View style={{ gap: 2, flex: inCard ? 1 : undefined, paddingHorizontal: inCard ? 0 : 4 }}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 28, letterSpacing: -0.4, color: c.ink }}>{`Good to see you back, ${first}.`}</Txt>
-      <Txt style={{ fontSize: 15, lineHeight: 22, color: c.muted }}>
-        {"It's been "}<Txt style={{ fontFamily: font.semibold, color: c.ink }}>{days}</Txt>{`. ${who} picked an easy one to ease you in.`}
+      <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 28, letterSpacing: -0.4, color: onDark ? '#fff' : c.ink }}>{`Good to see you back, ${first}.`}</Txt>
+      <Txt style={{ fontSize: 15, lineHeight: 22, color: onDark ? 'rgba(255,255,255,0.75)' : c.muted }}>
+        {"It's been "}<Txt style={{ fontFamily: font.semibold, color: onDark ? '#fff' : c.ink }}>{days}</Txt>{`. ${who} picked an easy one to ease you in.`}
       </Txt>
     </View>
   );

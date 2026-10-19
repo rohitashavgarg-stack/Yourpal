@@ -16,6 +16,7 @@ import { useStartWorkout } from '@/features/workout/StartSheet';
 import { buildExercises, WORKOUT_MIN } from '@/features/workout/session';
 import { rel } from './meals';
 import { createStore } from '@/features/progress/store';
+import { ComebackGreeting } from './TopCards';
 
 // What the member said about a missed workout (kept for the day): moved to tomorrow or skipped. "I did it" logs it as done instead.
 export const missedWkStore = createStore(() => ({ answer: null as null | 'moved' | 'skipped' }));
@@ -214,6 +215,31 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
         <Pressy accessibilityRole="button" onPress={() => startWorkout()} hitSlop={8} style={{ alignSelf: 'flex-start', paddingVertical: 2 }}>
           <Txt style={{ fontSize: 13, lineHeight: 19, color: W60, textDecorationLine: 'underline' }}>Start it now anyway</Txt>
         </Pressy>
+      </Shell>
+    );
+  }
+
+  // comeback day: this is the day's one workout card, in its comeback form. The greeting is its heading, the easy session is the one big button,
+  // today's planned Leg day is the second button, and it says what it replaced so the plan never seems to vanish.
+  if (comeback) {
+    return (
+      <Shell label="Comeback day, your workout" colors={['#0B0E14', '#0E1B45', '#13327A']}>
+        <Row style={{ justifyContent: 'space-between', gap: 8 }}>
+          <Coach />
+          <Chip label="Comeback" onDark />
+        </Row>
+        <ComebackGreeting onDark />
+        <Row style={{ gap: 6, flexWrap: 'wrap' }}>{chips.map((t) => <Chip key={t} label={t} onDark />)}</Row>
+        <Txt style={{ fontSize: 12.5, lineHeight: 18, color: W60 }}>{"Replaces today's Leg day. Your plan continues tomorrow."}</Txt>
+        <View style={{ gap: 8 }}>
+          <Btn label="Start easy session" onPress={() => startWorkout()} />
+          <Pressy accessibilityRole="button" onPress={() => startWorkout()} style={{ height: 50, borderRadius: 25, backgroundColor: 'rgba(255,255,255,0.14)', alignItems: 'center', justifyContent: 'center' }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: '#fff' }}>Do Leg day instead</Txt>
+          </Pressy>
+        </View>
+        <View style={{ alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 6, height: 26, paddingHorizontal: 10, borderRadius: 13, backgroundColor: 'rgba(255,138,61,0.16)' }}>
+          <Flame size={13} color="#FF8A3D" fill="#FF8A3D" /><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 17, color: '#FFB27A' }}>Streak paused, not lost</Txt>
+        </View>
       </Shell>
     );
   }

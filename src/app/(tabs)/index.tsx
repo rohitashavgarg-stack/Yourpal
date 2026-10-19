@@ -11,14 +11,14 @@ import { nextMeal } from '@/features/today/meals';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ComebackCard, ComebackGreeting, PtConfirmCard, UpdatesCard } from '@/features/today/TopCards';
+import { ComebackCard, PtConfirmCard, UpdatesCard } from '@/features/today/TopCards';
 import { usePtPending } from '@/features/shell/notifs';
 import { Trackers } from '@/features/today/Trackers';
 import { WorkoutCard } from '@/features/today/WorkoutCard';
 import { MealNowCard } from '@/features/today/MealsCard';
 import { WeekCard } from '@/features/today/WeekCard';
 import { useRightNowFocus } from '@/features/today/timeline';
-import { ComebackPlan, ForYouStack, useForYou } from '@/features/today/ForYou';
+import { ForYouStack, useForYou } from '@/features/today/ForYou';
 import { todayUiStore } from '@/features/today/ui';
 import { PaymentBanner, usePaymentNotice } from '@/features/today/PaymentBanner';
 import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
@@ -137,11 +137,12 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           <>
             {/* above the goal: updates, then the message line; on a comeback day the comeback session (the workout) comes right under the message line and the goal follows it */}
             {!!payNotice && <Enter i={0}><PaymentBanner /></Enter>}
-            {forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
-            {comebackNew && <Enter i={0}><ComebackGreeting /></Enter>}
-            {comebackNew && <Enter i={0}><ComebackPlan /></Enter>}
-            <Enter i={0}><StreakChip /></Enter>
+            {/* a comeback day has one hero, the workout card in its comeback form (the greeting is its heading), then the goal; the PT and update cards come after the goal */}
+            {comebackNew && <Enter i={0}><WorkoutCard restart /></Enter>}
+            {!comebackNew && forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
+            {!comebackNew && <Enter i={0}><StreakChip /></Enter>}
             <Enter i={0}><GoalTickCard /></Enter>
+            {comebackNew && forYou.length > 0 && <Enter i={1}><ForYouStack /></Enter>}
             <Enter i={1}><Trackers /></Enter>
             {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}
             {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
