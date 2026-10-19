@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLogsPaused } from '@/lib/logGate';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { BlurView } from 'expo-blur';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavHidden } from '@/components/FloatingTabBar';
@@ -38,6 +39,39 @@ function ListCard({ dot, title, rows }: { dot: string; title: string; rows: { n:
           </Row>
         ))}
       </Card>
+    </View>
+  );
+}
+
+// Expired membership: the plan itself is never rendered. Grey placeholder shapes sit under a blur, with the lock on top.
+function LockedPlan({ day }: { day: string }) {
+  const { c, isDark } = useTheme();
+  return (
+    <View accessibilityLabel="This plan is locked" style={{ borderRadius: 24, overflow: 'hidden', minHeight: 440 }}>
+      <View style={{ gap: 14, padding: 4 }}>
+        <View style={{ gap: 8, paddingHorizontal: 4 }}>
+          <View style={{ width: 70, height: 12, borderRadius: 6, backgroundColor: c.surface3 }} />
+          <View style={{ width: 190, height: 30, borderRadius: 10, backgroundColor: c.surface3 }} />
+          <View style={{ width: 230, height: 14, borderRadius: 7, backgroundColor: c.surface2 }} />
+        </View>
+        <View style={{ borderRadius: 24, backgroundColor: c.surface, padding: 14, gap: 12 }}>
+          {[0, 1, 2, 3].map((k) => (
+            <Row key={k} style={{ gap: 12 }}>
+              <View style={{ width: 56, height: 56, borderRadius: 16, backgroundColor: c.surface3 }} />
+              <View style={{ flex: 1, gap: 8 }}>
+                <View style={{ width: 120 + k * 14, height: 14, borderRadius: 7, backgroundColor: c.surface3 }} />
+                <View style={{ width: 80, height: 10, borderRadius: 5, backgroundColor: c.surface2 }} />
+              </View>
+            </Row>
+          ))}
+        </View>
+      </View>
+      <BlurView intensity={isDark ? 45 : 60} tint={isDark ? 'dark' : 'light'} style={StyleSheet.absoluteFill} />
+      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', gap: 10, paddingHorizontal: 28 }}>
+        <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}><Lock size={24} color={c.ink} /></View>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 22, lineHeight: 29 }}>This plan is locked</Txt>
+        <Txt muted style={{ textAlign: 'center', maxWidth: 290, fontSize: 14, lineHeight: 20 }}>{`Renew at Wulf Fitness reception to see what Coach Vikram planned for ${day}. Workouts you logged stay here.`}</Txt>
+      </View>
     </View>
   );
 }
@@ -116,13 +150,7 @@ export function WorkoutPlan() {
       )}
 
       {plan && paused && !plan.done ? (
-        <E i={1}>
-          <Card style={{ paddingVertical: 28, paddingHorizontal: 22, alignItems: 'center', gap: 10 }}>
-            <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={22} color={c.muted} /></View>
-            <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 22, lineHeight: 29 }}>This plan is locked</Txt>
-            <Txt muted style={{ textAlign: 'center', maxWidth: 290, fontSize: 14, lineHeight: 20 }}>{`Renew at Wulf Fitness reception to see what Coach Vikram planned for ${DAYL[p.day]}. Workouts you logged stay here.`}</Txt>
-          </Card>
-        </E>
+        <E i={1}><LockedPlan day={DAYL[p.day]} /></E>
       ) : plan ? (
         <>
           <E i={1}>
