@@ -11,7 +11,7 @@ import { nextMeal } from '@/features/today/meals';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ComebackCard, PtConfirmCard, UpdatesCard } from '@/features/today/TopCards';
+import { ComebackCard, ComebackGreeting, PtConfirmCard, UpdatesCard } from '@/features/today/TopCards';
 import { usePtPending } from '@/features/shell/notifs';
 import { Trackers } from '@/features/today/Trackers';
 import { WorkoutCard } from '@/features/today/WorkoutCard';
@@ -59,6 +59,7 @@ export default function Today() {
   const ptPending = usePtPending();
   // cards that would render nothing get no slot at all, so an empty slot never adds an extra gap
   const forYou = useForYou();
+  const [stripY, setStripY] = useState(0); // where the membership strip sits in the page: it docks under the header once scrolled to
   const payNotice = usePaymentNotice();
   const layout = todayUiStore.use().layout;
   const isNew = layout === 'New';
@@ -128,6 +129,7 @@ export default function Today() {
       <TabScreen title={!SHOW_GREETING ? '' : comebackNew ? `We missed you
 the last ${d.awayDays} days` : `${greet},
 Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186 : 112}
+        pinned={isNew && !!payNotice ? <View style={{ paddingTop: 10, marginBottom: -8 }}><PaymentBanner /></View> : undefined} pinAfter={Math.max(0, stripY - (insets.top + 8 + 56))}
         refreshControl={<RefreshControl refreshing={refreshing} tintColor={c.accentText} onRefresh={() => { setRefreshing(true); load(1000); }} />}>
         {d.loading ? (
           <>
@@ -140,12 +142,13 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
         ) : isNew ? (
           <>
             {/* top: the membership strip, then the updates; on a comeback day the comeback card comes first and the updates after the goal */}
-            {!!payNotice && <Enter i={0}><PaymentBanner /></Enter>}
+            {comebackNew && <Enter i={0}><ComebackGreeting /></Enter>}
+            {!!payNotice && <Enter i={0}><View style={{ marginTop: 14, marginBottom: -12 }} onLayout={(e) => setStripY(e.nativeEvent.layout.y)}><PaymentBanner /></View></Enter>}
             {comebackNew && <Enter i={0}><WorkoutCard restart /></Enter>}
             {!comebackNew && forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
             {/* then the main card of the moment (workout time: the workout, meal time: the meals, end of the day: the week), then the goal */}
             {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
-            {primary === 'meals' && <Enter i={1}><MealNowCard lead /></Enter>}
+            {primary === 'meals' && <Enter i={1}><MealNowCard /></Enter>}
             {primary === 'wrap' && <Enter i={1}><WeekCard /></Enter>}
             <Enter i={1}><GoalTickCard /></Enter>
             {comebackNew && forYou.length > 0 && <Enter i={1}><ForYouStack /></Enter>}

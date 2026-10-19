@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import Animated, { Easing, interpolate, SharedValue, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, interpolate, LinearTransition, SharedValue, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import { router } from 'expo-router';
 import Svg, { Circle } from 'react-native-svg';
-import { Flame, X } from '@/lib/icons';
+import { Flame, Footprints, GlassWater, Scale, X } from '@/lib/icons';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { useOverlay } from '@/components/Overlay';
 import { FlagSheet } from '@/features/gym/sheets';
 import { usePtPending } from '@/features/shell/notifs';
-import { useDomain } from '@/lib/domain';
+import { useDomain, totals } from '@/lib/domain';
+import { reminderStore, useReminders } from '@/features/reminders/reminders';
+import { useLogsPaused } from '@/lib/logGate';
 import { useGoalV2, progressLine, statusLine } from '@/features/goalv2/model';
-import { totals } from '@/lib/domain';
 import { KCAL_TARGET } from '@/lib/data';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
@@ -64,7 +65,10 @@ type Item = {
 };
 
 export function useForYou(): Item[] {
-  const { d } = useDomain();
+  const { d, set } = useDomain();
+  const { toast } = useOverlay();
+  const allReminders = useReminders();
+  const reminders = useLogsPaused() ? [] : allReminders; // nothing to log while logging is paused
   const ptPending = usePtPending();
   const { live } = useUpdates();
   const out: Item[] = [];
@@ -73,6 +77,12 @@ export function useForYou(): Item[] {
   const order = ['reassess', 'reply', 'plan', 'log'];
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
     out.push({ key: u.key, title: u.title, body: u.body, tone: u.tone, who: ['plan', 'reply'].includes(u.key), icon: u.icon, btn: u.isPlan ? 'See changes' : u.btn, act: u.isPlan ? () => router.navigate('/plans') : u.act });
+  });
+  // Personal reminders (log your water, log your weight, steps behind): a card each, last in the stack; the meals reminder lives in the meals card.
+  reminders.filter((r) => r.key !== 'meals').forEach((r) => {
+    if (r.key === 'water') out.push({ key: 'rem-water', title: 'Log your water', body: r.text, tone: 'accent', icon: GlassWater, btn: r.action, act: () => { set({ water: Math.min(3.5, Math.round((d.water + 0.25) * 100) / 100) }); reminderStore.set({ waterAt: d.min }); toast('Added 250 ml'); } });
+    else if (r.key === 'weight') out.push({ key: 'rem-weight', title: 'Log your weight', body: r.text, tone: 'accent', icon: Scale, btn: r.action, act: () => router.push('/log-weight') });
+    else if (r.key === 'steps') out.push({ key: 'rem-steps', title: 'Steps are behind', body: "A short walk catches you up today.", tone: 'accent', icon: Footprints });
   });
   return out.filter((i) => i.critical || !d.dismissed[i.key]);
 }
@@ -167,7 +177,9 @@ export function ForYouStack() {
     .onEnd((e) => {
       const move = -e.translationX / 280 - e.velocityX / 4000;
       const target = base.value + (move > 0.3 ? 1 : move < -0.3 ? -1 : 0);
-      prog.value = withTiming(target, { duration: 280, easing: Easing.out(Easing.cubic) }, (fin) => { if (fin && target !== base.value) scheduleOnRN(settle, target); });
+      // the next card takes its place in the layout right away, so the height change runs with the swipe instead of after it
+      if (target !== base.value) scheduleOnRN(settle, target);
+      prog.value = withTiming(target, { duration: 280, easing: Easing.out(Easing.cubic) });
     });
   if (!n) return null;
   // each card's own height (content plus the card's padding and border); the deck follows the one in front
@@ -183,9 +195,9 @@ export function ForYouStack() {
   return (
     <View>
       <GestureDetector gesture={swipe}>
-        <View style={{ paddingBottom: n > 2 ? 26 : n > 1 ? 14 : 0 }}>
+        <Animated.View layout={LinearTransition.duration(240)} style={{ paddingBottom: n > 2 ? 26 : n > 1 ? 14 : 0 }}>
           {items.map((it, i) => <StackCard key={it.key} it={it} i={i} n={n} prog={prog} inFlow={i === Math.min(front, n - 1)} onDismiss={dismiss} />)}
-        </View>
+        </Animated.View>
       </GestureDetector>
       {many && (
         <View pointerEvents="none" style={{ flexDirection: 'row', gap: 4, justifyContent: 'center', alignItems: 'center', height: 14, marginTop: 2 }}>

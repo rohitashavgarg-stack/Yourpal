@@ -14,6 +14,7 @@ import { font, spring } from '@/theme/tokens';
 import { inr } from '@/lib/useNow';
 import { mealById, mealKcal, mealTimeline, mealView, nextMeal } from './meals';
 import { QuickLogSheet } from './QuickLogSheet';
+import { useLogGate } from '@/lib/logGate';
 
 function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | 'part' | 'off' | null }) {
   const { c } = useTheme();
@@ -50,21 +51,22 @@ function MealRow({ id, open, bare = false }: { id: MealId; open: boolean; bare?:
   const v = mealView(d, m);
   const withUndo = (msg: string, fn: () => void) => { const prev = d.meals; fn(); toast(msg, { undo: () => set({ meals: prev }) }); };
 
-  const toggle = (k: number) => {
+  const { gate } = useLogGate();
+  const toggle = gate((k: number) => {
     const willFull = !x.eaten.includes(k) && x.eaten.length + 1 === m.items.length;
     if (willFull) withUndo(`${m.n} done, +${mealKcal(m)} kcal`, () => toggleItem(id, k));
     else toggleItem(id, k);
-  };
-  const removeExtra = (j: number) => {
+  });
+  const removeExtra = gate((j: number) => {
     const gone = x.extra[j];
     withUndo(`Removed ${gone?.n ?? 'item'}`, () => patch(id, { extra: x.extra.filter((_, i) => i !== j) }));
-  };
-  const all = () => {
+  });
+  const all = gate(() => {
     if (x.skip) patch(id, { skip: false });
     else if (v.full) patch(id, { eaten: [] });
     else if (v.any) withUndo(`${m.n} done`, () => patch(id, { eaten: m.items.map((_, k) => k), at: x.at ?? d.min }));
     else withUndo(`${m.n} skipped`, () => patch(id, { skip: true, eaten: [] }));
-  };
+  });
   const allL = x.skip ? 'Undo skip' : v.full ? 'Unmark all' : v.any ? 'Mark rest eaten' : 'Skip meal';
   const openFood = (k: number, extra: boolean) => router.push({ pathname: '/food', params: { mid: id, k: String(k), extra: extra ? '1' : '0' } });
 
@@ -112,7 +114,7 @@ function MealRow({ id, open, bare = false }: { id: MealId; open: boolean; bare?:
           ))}
           {!bare && <Txt v="caption" style={{ paddingHorizontal: 4, paddingTop: 2 }}>Tap a food for nutrition, recipe or to swap it</Txt>}
           <Row style={{ gap: 8, marginTop: 4 }}>
-            <Pressy accessibilityRole="button" onPress={() => openSheet(<QuickLogSheet mealId={id} mode="scan" />, { label: 'Log a meal' })}
+            <Pressy accessibilityRole="button" onPress={gate(() => openSheet(<QuickLogSheet mealId={id} mode="scan" />, { label: 'Log a meal' }))}
               style={{ flex: 1.7, height: 46, borderRadius: 23, backgroundColor: c.surface2, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
               <Plus size={17} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: 13 }}>Ate something else</Txt>
             </Pressy>
@@ -181,7 +183,8 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
   const { patch } = useMeals();
   const { openSheet, toast } = useOverlay();
   const m = mealById(id);
-  const answer = (msg: string, p: Parameters<typeof patch>[1]) => { const prev = d.meals; patch(id, p); set({ openMeal: null }); toast(msg, { undo: () => set({ meals: prev }) }); };
+  const { gate } = useLogGate();
+  const answer = gate((msg: string, p: Parameters<typeof patch>[1]) => { const prev = d.meals; patch(id, p); set({ openMeal: null }); toast(msg, { undo: () => set({ meals: prev }) }); });
   return (
     <Animated.View entering={fade()} style={{ borderRadius: 18, backgroundColor: c.warnSoft, padding: 12, gap: 10 }}>
       <Row style={{ gap: 10 }}>
@@ -196,7 +199,7 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
           style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.ink, justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: c.bg }}>I ate it</Txt>
         </Pressy>
-        <Pressy accessibilityRole="button" accessibilityLabel={`I ate something else for ${m.n.toLowerCase()}`} onPress={() => openSheet(<QuickLogSheet mealId={id} mode="scan" />, { label: 'Log a meal' })}
+        <Pressy accessibilityRole="button" accessibilityLabel={`I ate something else for ${m.n.toLowerCase()}`} onPress={gate(() => openSheet(<QuickLogSheet mealId={id} mode="scan" />, { label: 'Log a meal' }))}
           style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.surface, justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18 }}>Something else</Txt>
         </Pressy>
@@ -209,7 +212,7 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
   );
 }
 
-export function MealNowCard({ lead = false }: { lead?: boolean } = {}) {
+export function MealNowCard() {
   const { c } = useTheme();
   const { d, set } = useDomain();
   const t = totals(d);
@@ -219,7 +222,8 @@ export function MealNowCard({ lead = false }: { lead?: boolean } = {}) {
   const m = mealById(shown);
   const v = mealView(d, m);
   const missed = missedMeals(d);
-  const ask = missed.length ? missed[missed.length - 1] : null; // the most recent one first
+  const { paused } = useLogGate();
+  const ask = !paused && missed.length ? missed[missed.length - 1] : null; // the most recent one first (nothing to answer while logging is paused)
   const status = (id: MealId) => {
     const x = mealLog(d, id); const mv = mealView(d, mealById(id));
     if (x.skip) return { t: 'Skipped', col: c.muted, bg: c.surface2 };
@@ -230,19 +234,6 @@ export function MealNowCard({ lead = false }: { lead?: boolean } = {}) {
   };
   return (
     <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
-      {lead ? (
-        // the main card of the moment: a small title and one slim progress line, so the meal itself comes straight after
-        <View accessible accessibilityLabel={`Eaten today ${t.k} of ${KCAL_TARGET} kcal`} style={{ gap: 12, paddingHorizontal: 4 }}>
-          <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 20, lineHeight: 27, letterSpacing: -0.4 }}>{"Today's Meals"}</Txt>
-          <Row style={{ gap: 12 }}>
-            <View style={{ flex: 1, height: 3, borderRadius: 2, backgroundColor: `${c.cAct}26`, overflow: 'hidden' }}>
-              <View style={{ width: `${Math.min(100, (t.k / KCAL_TARGET) * 100)}%`, height: '100%', borderRadius: 2, backgroundColor: c.cAct }} />
-            </View>
-            <Txt style={{ fontFamily: font.display, fontSize: 14, lineHeight: 19 }}>{inr(t.k)}<Txt muted style={{ fontFamily: font.display, fontSize: 14, lineHeight: 19 }}>{` / ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
-          </Row>
-        </View>
-      ) : (
-        <>
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
         <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
@@ -260,8 +251,6 @@ export function MealNowCard({ lead = false }: { lead?: boolean } = {}) {
           <View style={{ width: `${Math.min(100, (t.k / KCAL_TARGET) * 100)}%`, height: '100%', borderRadius: 2, backgroundColor: c.cAct }} />
         </View>
       </View>
-        </>
-      )}
       {ask && <MissedRow id={ask} more={missed.length - 1} />}
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <View>

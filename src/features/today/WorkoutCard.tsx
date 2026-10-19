@@ -11,12 +11,13 @@ import { fmtT } from '@/lib/data';
 import { burned, plannedMin, useDomain, wkDoneInfo, workoutState } from '@/lib/domain';
 import { useStore } from '@/lib/store';
 import { font } from '@/theme/tokens';
+import { useTheme } from '@/theme/ThemeProvider';
 import { mmss, useNow } from '@/lib/useNow';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { buildExercises, WORKOUT_MIN } from '@/features/workout/session';
 import { rel } from './meals';
+import { useLogGate } from '@/lib/logGate';
 import { createStore } from '@/features/progress/store';
-import { ComebackGreeting } from './TopCards';
 
 // What the member said about a missed workout (kept for the day): moved to tomorrow or skipped. "I did it" logs it as done instead.
 export const missedWkStore = createStore(() => ({ answer: null as null | 'moved' | 'skipped' }));
@@ -84,10 +85,13 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   const { d, set } = useDomain();
   const { state } = useStore();
   const WKT = plannedMin(state.profile.time); // from the time of day chosen in onboarding
-  const startWorkout = useStartWorkout();
+  const start = useStartWorkout();
+  const { gate, paused } = useLogGate();
+  const startWorkout = gate(() => start());
   const st0 = workoutState(d);
   const ms = missedWkStore.use();
   const { toast } = useOverlay();
+  const { c } = useTheme();
   const st = restart && st0 === 'hidden' ? 'todo' : st0;
   const now = useNow(st === 'live', 1000);
   if (st === 'hidden') return null;
@@ -95,9 +99,10 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   const name = comeback ? 'Comeback plan' : 'Leg day';
   const time = comeback ? undefined : fmtT(WKT).full;
   const chips = comeback ? ['5 exercises', '~30 min', 'Lighter weights'] : [`${buildExercises().length} exercises`, `~${WORKOUT_MIN} min`];
-  const missed = st === 'todo' && !comeback && d.min - WKT > MISSED_AFTER;
-  const didIt = () => { set({ wkDone: { a: WKT, b: WKT + WORKOUT_MIN, k: 350 } }); toast('Logged as done', { undo: () => set({ wkDone: null }) }); };
-  const answer = (a: 'moved' | 'skipped') => { missedWkStore.set({ answer: a }); toast(a === 'moved' ? 'Moved to tomorrow. Coach Vikram is told.' : 'Skipped today', { undo: () => missedWkStore.set({ answer: null }) }); };
+  // while logging is paused nothing can be answered or started: the card just shows the plan
+  const missed = !paused && st === 'todo' && !comeback && d.min - WKT > MISSED_AFTER;
+  const didIt = gate(() => { set({ wkDone: { a: WKT, b: WKT + WORKOUT_MIN, k: 350 } }); toast('Logged as done', { undo: () => set({ wkDone: null }) }); });
+  const answer = gate((a: 'moved' | 'skipped') => { missedWkStore.set({ answer: a }); toast(a === 'moved' ? 'Moved to tomorrow. Coach Vikram is told.' : 'Skipped today', { undo: () => missedWkStore.set({ answer: null }) }); });
   const burnedRow = d.hc && d.wearable ? (
     <Row style={{ gap: 8, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.12)' }}>
       <Flame size={15} color="#fff" />
@@ -222,28 +227,25 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
     );
   }
 
-  // comeback day: this is the day's one workout card, in its comeback form. The greeting is its heading, the easy session is the one big button,
-  // today's planned Leg day is the second button, and it says what it replaced so the plan never seems to vanish.
+  // comeback day: the greeting is plain text above (see ComebackGreeting), and the workout is one small grey card: the easy session,
+  // with Start as the main button and today's planned workout as the quiet one. (Both open the same builder for now.)
   if (comeback) {
-    const btn = { height: 44, borderRadius: 22, alignItems: 'center' as const, justifyContent: 'center' as const };
+    const btn = { flex: 1, height: 44, borderRadius: 22, alignItems: 'center' as const, justifyContent: 'center' as const };
     return (
-      <Shell label="Comeback day, your workout" colors={['#0B0E14', '#0E1B45', '#13327A']} compact>
-        <ComebackGreeting onDark />
-        <Row style={{ gap: 6, flexWrap: 'wrap' }}>
-          {['5 exercises', '~30 min'].map((t) => <Chip key={t} label={t} onDark />)}
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, height: 28, paddingHorizontal: 10, borderRadius: 14, backgroundColor: 'rgba(255,138,61,0.16)' }}>
-            <Flame size={12} color="#FF8A3D" fill="#FF8A3D" /><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 17, color: '#FFB27A' }}>Streak paused, not lost</Txt>
-          </View>
-        </Row>
+      <View accessibilityLabel="Easy session" style={{ borderRadius: 24, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
+        <View style={{ gap: 2 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, letterSpacing: -0.3, color: c.ink }}>Easy session</Txt>
+          <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>5 exercises, about 30 minutes, lighter weights</Txt>
+        </View>
         <Row style={{ gap: 8 }}>
-          <Pressy accessibilityRole="button" onPress={() => startWorkout()} style={[btn, { flex: 1.2, backgroundColor: '#fff' }]}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: '#0B0E14' }}>Start easy session</Txt>
+          <Pressy accessibilityRole="button" accessibilityLabel="Start the easy session" onPress={() => startWorkout()} style={[btn, { backgroundColor: c.ink }]}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.bg }}>Start</Txt>
           </Pressy>
-          <Pressy accessibilityRole="button" accessibilityLabel="Do today's planned Leg day instead" onPress={() => startWorkout()} style={[btn, { flex: 1, backgroundColor: 'rgba(255,255,255,0.14)' }]}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: '#fff' }}>Do Leg day instead</Txt>
+          <Pressy accessibilityRole="button" accessibilityLabel="Do today's regular workout instead" onPress={() => startWorkout()} style={[btn, { backgroundColor: c.surface3 }]}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.ink }}>Do regular instead</Txt>
           </Pressy>
         </Row>
-      </Shell>
+      </View>
     );
   }
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLogGate } from '@/lib/logGate';
 import { PersonAvatar } from '@/components/Brand';
 import { ScrollView, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
@@ -20,6 +21,7 @@ import { QuickLogSheet } from '@/features/today/QuickLogSheet';
 import { askCoach } from '@/features/coach/coach';
 
 export default function FoodDetail() {
+  const { gate: logGate } = useLogGate();
   const { c, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const { d, set } = useDomain();
@@ -76,7 +78,7 @@ export default function FoodDetail() {
     else if (fd!.repl) { const rp = { ...x.repl }; delete rp[k]; patch(mid, { repl: rp }); toast(`Back to ${fd!.planned!.toLowerCase()}`, { undo: () => set({ meals: prev }) }); }
     else setTimeout(() => openSheet(<QuickLogSheet mealId={mid} mode="sugg" replaceIdx={k} />, { label: 'Swap item' }), 250);
   };
-  const main = () => { close(); if (!extra) toggleItem(mid, k); };
+  const main = () => { close(); if (!extra) logGate(() => toggleItem(mid, k))(); };
 
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>

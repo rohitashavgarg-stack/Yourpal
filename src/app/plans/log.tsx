@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView, TextInput, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { router, useLocalSearchParams } from 'expo-router';
+import { useLeaveIfPaused } from '@/lib/logGate';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Ellipse } from 'react-native-svg';
 import { CameraOff, PenLine, ScanLine, Search } from '@/lib/icons';
@@ -47,6 +48,7 @@ function NumField({ label, unit, value, onChange, ph }: { label: string; unit: s
 }
 
 export default function LogFood() {
+  useLeaveIfPaused();
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { d, set } = useDomain();

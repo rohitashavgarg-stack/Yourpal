@@ -12,6 +12,7 @@ import { TrendsButton } from '@/components/TrendsButton';
 import { Wheel } from '@/components/Wheel';
 import { Ruler } from '@/components/Ruler';
 import { useOverlay } from '@/components/Overlay';
+import { useLeaveIfPaused } from '@/lib/logGate';
 import { useDomain } from '@/lib/domain';
 import { useScenarios, useStore } from '@/lib/store';
 import { setShell, useShell } from '@/features/shell/state';
@@ -184,6 +185,7 @@ function Trend({ kg, unit }: { kg: number; unit: 'kg' | 'lb' }) {
 
 // ================= Full screens =================
 export function WeightScreen() {
+  useLeaveIfPaused();
   const { c } = useTheme();
   const { d, set } = useDomain();
   const { state, setProfile } = useStore();
@@ -229,6 +231,7 @@ export function WeightScreen() {
 }
 
 export function HeightScreen() {
+  useLeaveIfPaused();
   const { state, setProfile } = useStore();
   const { from } = useLocalSearchParams<{ from?: string }>();
   const [cm, setCm] = useState(+state.profile.heightCm || 170);
