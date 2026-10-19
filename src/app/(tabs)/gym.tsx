@@ -15,26 +15,14 @@ import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { CardTitle, cardShadow, GrowBar, ListCard, PCard } from '@/features/progress/parts';
-import { membershipView, PT_TOTAL, VISITS } from '@/features/gym/data';
+import { PT_TOTAL, VISITS } from '@/features/gym/data';
+import { MembershipCard as MembershipStrip, useMembershipNotice } from '@/features/today/PaymentBanner';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
 
 const Enter = ({ i, children }: { i: number; children: React.ReactNode }) => <Animated.View entering={fade(i * 40)}>{children}</Animated.View>;
 
 function MembershipCard() {
-  const { c, isDark } = useTheme();
-  const { d } = useDomain();
-  const M = membershipView(d.membership, c);
-  return (
-    <Pressy accessibilityRole="button" accessibilityLabel={`Membership: ${M.t}. ${M.sub}. Details`} onPress={() => router.push('/gym/membership')} scaleTo={0.98}
-      style={[{ borderRadius: 28, padding: 18, gap: 8, backgroundColor: M.bg }, cardShadow(isDark)]}>
-      <Row style={{ justifyContent: 'space-between' }}>
-        <Txt style={{ fontSize: 13, color: M.fg, opacity: 0.85 }}>Membership</Txt>
-        <Txt style={{ fontSize: 13, fontFamily: font.semibold, color: M.fg, opacity: 0.85 }}>Details ›</Txt>
-      </Row>
-      <Txt style={{ fontFamily: font.display, fontSize: 30, lineHeight: 39, letterSpacing: -0.6, color: M.fg }}>{M.t}</Txt>
-      <Txt style={{ fontSize: 14, color: M.fg, opacity: 0.85 }}>{M.sub}</Txt>
-    </Pressy>
-  );
+  return <MembershipStrip n={useMembershipNotice()} />;
 }
 
 function BreakCard() {
