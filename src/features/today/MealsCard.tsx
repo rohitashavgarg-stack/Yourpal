@@ -239,20 +239,12 @@ export function MealNowCard() {
           <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={18} color={c.muted} /></View>
           <View style={{ flex: 1, gap: 2 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, letterSpacing: -0.3 }}>Meal logging is paused</Txt>
-            <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Renew at Wulf Fitness reception to log meals again. What you ate stays here.</Txt>
+            <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Renew at Wulf Fitness reception to log again. Your meals and plan stay here.</Txt>
           </View>
         </Row>
-        <View style={{ gap: 6, paddingTop: 10, borderTopWidth: 1, borderTopColor: c.line }}>
-          <Row style={{ justifyContent: 'space-between' }}>
-            <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Eaten today</Txt>
-            <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20 }}>{inr(t.k)} <Txt muted style={{ fontSize: 12, lineHeight: 17 }}>{`of ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
-          </Row>
-          {MEALS.map((q) => (
-            <Row key={q.id} style={{ justifyContent: 'space-between' }}>
-              <Txt style={{ fontSize: 14, lineHeight: 20 }}>{q.n}</Txt>
-              <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{status(q.id).t}</Txt>
-            </Row>
-          ))}
+        <View style={{ gap: 2, paddingTop: 10, borderTopWidth: 1, borderTopColor: c.line }}>
+          <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 22, color: c.ink }}>Eaten today</Txt>
+          <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>{`${inr(t.k)} of ${inr(KCAL_TARGET)} kcal, ${t.done} of 4 meals logged`}</Txt>
         </View>
       </View>
     );
