@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NudgeCaption } from '@/features/reminders/Nudge';
 import { DotText } from '@/features/trackers/DotText';
 import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -47,6 +48,7 @@ export function StepsTile() {
   const dark = design === 'Ruler';
   const a11y = `Steps ${fmt(s.total)} of ${fmt(s.goal)}, ${Math.round(s.pct * 100)} percent. From ${NAME(d)}${s.added ? ` plus ${fmt(s.added)} added by you` : ''}. See your steps trend`;
   return (
+    <View style={{ width: SQ }}>
     <View style={{ width: SQ, height: SQ }}>
       <Pressy accessibilityRole="button" accessibilityLabel={a11y} onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'steps' } })} scaleTo={0.97} style={{ width: SQ, height: SQ, borderRadius: 24, overflow: 'hidden' }}>
         <Face design={design} s={s} />
@@ -55,6 +57,8 @@ export function StepsTile() {
         style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: dark ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.22)', zIndex: 3 }}>
         <Plus size={17} color="#fff" />
       </Pressy>
+    </View>
+    <NudgeCaption k="steps" width={SQ} />
     </View>
   );
 }

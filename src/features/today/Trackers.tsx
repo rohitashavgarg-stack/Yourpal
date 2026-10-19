@@ -14,6 +14,8 @@ import { useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
+import { NudgeCaption } from '@/features/reminders/Nudge';
+import { reminderStore } from '@/features/reminders/reminders';
 import { fmt1 } from '@/lib/useNow';
 import { HEALTH_NAME } from '@/lib/health';
 import { StepsDesign, StepsPreview, StepsTile } from './StepsCards';
@@ -69,6 +71,7 @@ function useWater() {
     const w = Math.max(0, Math.min(3.5, Math.round((d.water + delta) * 100) / 100));
     if (d.water < TARGET && w >= TARGET) { setHit((h) => h + 1); haptic.success(); } else haptic.light();
     set({ water: w });
+    if (delta > 0) reminderStore.set({ waterAt: d.min }); // the last glass, for the 4-hour water reminder
     return w;
   };
   return { water: d.water, change, hit };
@@ -150,7 +153,10 @@ export function WaterCard() {
   const { openSheet } = useOverlay();
   const { water, change, hit } = useWater();
   const ml = Math.round(water * 1000);
+  const { toast } = useOverlay();
+  const addGlass = () => { change(0.25); toast('Added 250 ml', { undo: () => change(-0.25) }); };
   return (
+    <View style={{ width: 160 }}>
     <View style={{ width: 160, height: 160 }}>
       <Pressy accessibilityRole="button" accessibilityLabel={`Water ${ml} of 3,000 millilitres. Open details`} onPress={() => openSheet(<WaterSheet />, { label: 'Water' })} scaleTo={0.97} style={SQ}>
         <LinearGradient colors={['#070B2B', '#1C2BC0']} start={{ x: 0.1, y: 0 }} end={{ x: 0.9, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
@@ -170,6 +176,8 @@ export function WaterCard() {
         <GlassWater size={20} color="#fff" />
         <Plus size={16} color="#fff" />
       </Pressy>
+    </View>
+    <NudgeCaption k="water" onAct={addGlass} />
     </View>
   );
 }
@@ -213,6 +221,7 @@ export function WeightCard() {
   const diff = Math.round((d.weight - SPARK[0]) * 10) / 10;
   const sign = diff <= 0 ? '-' : '+';
   return (
+    <View style={{ width: 160 }}>
     <Tile bg={isDark ? 'rgba(255,255,255,0.05)' : c.surface} shadow={!isDark} label="Weight" a11y={`Weight ${fmt1(d.weight)} kg, ${diff <= 0 ? 'down' : 'up'} ${Math.abs(diff)} kg this week. Log weight`} onPress={() => router.push('/log-weight')}
       right={<View style={{ height: 32, minWidth: 32, paddingHorizontal: 8, borderRadius: 24, backgroundColor: isDark ? GLASS : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Plus size={16} color={isDark ? '#fff' : c.accentText} /></View>}>
       <Txt style={{ ...NUM, color: c.ink }}>{fmt1(d.weight)}<Txt style={{ fontFamily: font.regular, fontSize: 16, lineHeight: 22, color: c.muted }}> kg</Txt></Txt>
@@ -226,6 +235,8 @@ export function WeightCard() {
         </Svg>
       </View>
     </Tile>
+    <NudgeCaption k="weight" onAct={() => router.push('/log-weight')} />
+    </View>
   );
 }
 

@@ -23,6 +23,7 @@ import { todayUiStore } from '@/features/today/ui';
 import { PaymentBanner, usePaymentNotice } from '@/features/today/PaymentBanner';
 import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
+import { PushBanner } from '@/features/reminders/PushBanner';
 import { GOAL_STATE_OPTIONS, goalCardStore } from '@/features/today/goalCardState';
 
 const SHOW_GREETING = false; // the big greeting is off for now, the goal sits right under the header
@@ -166,6 +167,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
         )}
       </TabScreen>
       {!d.loading && <CheckInBar />}
+      <PushBanner />
     </View>
   );
 }

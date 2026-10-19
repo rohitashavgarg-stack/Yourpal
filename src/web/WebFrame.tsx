@@ -22,6 +22,10 @@ import { ChartLine, Dumbbell, Flag, House, LogIn, MapPin, MessageCircle, Minus, 
 import { ActionChip, Choice, Dropdown, PanelCard, SwitchChip, P } from '@/web/ControlParts';
 import { SITUATIONS, SITUATION_HINT, Situation, useSituation } from '@/lib/situations';
 import { missedWkStore } from '@/features/today/WorkoutCard';
+import { reminderStore, useReminders } from '@/features/reminders/reminders';
+import { sendReminderPush } from '@/features/reminders/push';
+import { goalCardStore } from '@/features/today/goalCardState';
+import { Bell } from '@/lib/icons';
 
 const PHONE_W = 390, PHONE_H = 844;
 // Which version of the edge-case panel is showing: the first one (a long list) or the structured one (cards).
@@ -250,6 +254,27 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       </View>
     </PanelCard>
   );
+  // Reminders: how long ago the last glass and the last weigh-in were, and a preview of the phone notification for what is due now.
+  const rem = useReminders();
+  const rs = reminderStore.use();
+  const gcs = goalCardStore.use();
+  const ago = rs.waterAt == null ? 'Nothing today' : d.min - rs.waterAt < 30 ? 'Just now' : d.min - rs.waterAt < 180 ? '2 hours ago' : '5 hours ago';
+  const reminderCard = (
+    <PanelCard icon={Bell} title="Reminders" pill={{ label: rem.length ? `${rem.length} due` : 'None due' }}>
+      <Dropdown label="Last water" options={['Just now', '2 hours ago', '5 hours ago', 'Nothing today']} value={ago}
+        onPick={(v) => reminderStore.set({ waterAt: v === 'Nothing today' ? null : Math.max(0, d.min - (v === 'Just now' ? 0 : v === '2 hours ago' ? 120 : 300)), snoozed: {} })} />
+      <Dropdown label="Last weigh-in" options={['Today', '6 days ago', '10+ days ago']} value={gcs.weighDays >= 10 ? '10+ days ago' : gcs.weighDays >= 5 ? '6 days ago' : 'Today'}
+        onPick={(v) => { goalCardStore.set({ weighDays: v === '10+ days ago' ? 12 : v === '6 days ago' ? 6 : 0 }); reminderStore.set({ snoozed: {} }); }} />
+      <Dropdown label="Phone notifications" options={['Allowed', 'Blocked', 'Not asked']} value={state.profile.notifications === 'on' ? 'Allowed' : state.profile.notifications === 'off' ? 'Blocked' : 'Not asked'}
+        onPick={(v) => setProfile({ notifications: v === 'Allowed' ? 'on' : v === 'Blocked' ? 'off' : 'unset' })} />
+      <View style={{ flexDirection: 'row' }}>
+        <ActionChip label="Send reminder push" onPress={async () => {
+          const r = await sendReminderPush(rem[0], { min: d.min, quiet: rs.quiet, permission: state.profile.notifications });
+          said(r === 'sent' ? 'Push sent' : r === 'quiet' ? 'Held: quiet hours' : r === 'blocked' ? 'Held: phone notifications are off' : 'Nothing is due right now');
+        }} />
+      </View>
+    </PanelCard>
+  );
   const here = SCREENS.find((sc) => sc.match(path))?.label ?? '';
   const goCard = (
     <PanelCard icon={Flag} title="Go to">
@@ -258,7 +283,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     </PanelCard>
   );
   // One column of four short cards (it was three columns of long ones).
-  const columnsOf: React.ReactNode[][] = [[timeCard, situationCard, memberCard, goCard]];
+  const columnsOf: React.ReactNode[][] = [[timeCard, situationCard, memberCard, reminderCard, goCard]];
   return (
     <View style={{ gap: 8 }}>
       <View style={{ backgroundColor: '#fff', borderRadius: 18, borderWidth: 1, borderColor: P.line, paddingVertical: 8, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
