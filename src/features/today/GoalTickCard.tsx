@@ -178,7 +178,8 @@ export function GoalTickCard({ flat = false, state: stateProp, weighDays: weighP
             <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: look.pill.fg }}>{look.pill.label}</Txt>
           </View>
         </Row>
-        {g.kind === 'consistency' ? <GoalVisual g={g} size="mini" color={look.seg} /> : <Segments filled={filled} color={look.seg} />}
+        {/* the 36-segment bar is for body-weight goals; every other kind keeps its own picture (ticks for body fat, staircase, stopwatch ruler, race lane, workout slots), in the state colour */}
+        {kg ? <Segments filled={filled} color={look.seg} /> : <GoalVisual g={g} size="mini" color={look.seg} share={state === 'complete' && g.kind !== 'consistency' ? 1 : undefined} />}
         <Row style={{ justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', columnGap: 8 }}>
           <Txt style={{ flexShrink: 1, ...small, color: GC.rest }}>
             <Txt style={{ ...small, fontFamily: font.semibold, color: GC.title }}>{leftBold}</Txt>{leftRest}
