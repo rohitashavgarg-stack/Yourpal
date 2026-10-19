@@ -23,6 +23,7 @@ import { todayUiStore } from '@/features/today/ui';
 import { PaymentBanner, usePaymentNotice } from '@/features/today/PaymentBanner';
 import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
+import { ViewOnly } from '@/features/today/ViewOnly';
 import { PushBanner } from '@/features/reminders/PushBanner';
 import { GOAL_STATE_OPTIONS, goalCardStore } from '@/features/today/goalCardState';
 
@@ -81,7 +82,7 @@ export default function Today() {
     : ['trackers', 'workout', 'meals', 'week'];
   // every meal is already logged: the meals card has nothing to ask, so it moves below the trackers
   if (mealsSettled && primary !== 'wrap') { order.splice(order.indexOf('meals'), 1); order.splice(order.indexOf('trackers') + 1, 0, 'meals'); }
-  const slots: Record<Slot, React.ReactNode> = { workout: <WorkoutCard />, meals: <MealNowCard />, trackers: <Trackers />, week: <WeekCard /> };
+  const slots: Record<Slot, React.ReactNode> = { workout: <WorkoutCard />, meals: <ViewOnly><MealNowCard /></ViewOnly>, trackers: <ViewOnly><Trackers /></ViewOnly>, week: <WeekCard /> };
   const focusMeal = focus.kind === 'meal' ? focus.meal.id : null;
   useEffect(() => { if (focusMeal) set({ openMeal: focusMeal }); }, [focusMeal]); // eslint-disable-line react-hooks/exhaustive-deps
   const gs = goalStore.use();
@@ -148,13 +149,13 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {!comebackNew && forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
             {/* then the main card of the moment (workout time: the workout, meal time: the meals, end of the day: the week), then the goal */}
             {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
-            {primary === 'meals' && <Enter i={1}><MealNowCard /></Enter>}
+            {primary === 'meals' && <Enter i={1}><ViewOnly><MealNowCard /></ViewOnly></Enter>}
             {primary === 'wrap' && <Enter i={1}><WeekCard /></Enter>}
             <Enter i={1}><GoalTickCard /></Enter>
             {comebackNew && forYou.length > 0 && <Enter i={1}><ForYouStack /></Enter>}
-            <Enter i={2}><Trackers /></Enter>
+            <Enter i={2}><ViewOnly><Trackers /></ViewOnly></Enter>
             {primary !== 'workout' && primary !== 'restart' && <Enter i={3}><WorkoutCard /></Enter>}
-            {primary !== 'meals' && <Enter i={4}><MealNowCard /></Enter>}
+            {primary !== 'meals' && <Enter i={4}><ViewOnly><MealNowCard /></ViewOnly></Enter>}
             {primary !== 'wrap' && <Enter i={5}><WeekCard /></Enter>}
           </>
         ) : (

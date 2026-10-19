@@ -28,8 +28,8 @@ export function useMembershipNotice(): Notice {
 export function usePaymentNotice() {
   const { d } = useDomain();
   const n = useMembershipNotice();
-  if (!d.hasGym || n.tone !== 'warn') return null;
-  if (n.once && d.dismissed['membership-' + d.membership]) return null; // crossed away once for this state
+  // only an ended membership gets the strip (it stays at the top); "ends in 12 days" is a card in the updates stack
+  if (!d.hasGym || d.membership !== 'Expired') return null;
   return n;
 }
 

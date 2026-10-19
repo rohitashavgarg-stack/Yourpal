@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { CalendarClock, Check, Clock, Flame, Moon, X } from '@/lib/icons';
+import { CalendarClock, Check, Clock, Flame, Lock, Moon, X } from '@/lib/icons';
 import { Chip, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { coachStore } from '@/features/coach/coach';
@@ -110,6 +110,25 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
       <Txt style={{ fontSize: 12, lineHeight: 17, color: W60 }}>From your watch</Txt>
     </Row>
   ) : null;
+
+  // expired membership: no Start and no dark glow, one flat card that says why and still shows the plan
+  if (paused && (st === 'todo' || st === 'live')) {
+    return (
+      <View accessibilityLabel="Workouts are paused" style={{ borderRadius: 24, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
+        <Row style={{ gap: 12, alignItems: 'flex-start' }}>
+          <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={18} color={c.muted} /></View>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, letterSpacing: -0.3, color: c.ink }}>Workouts are paused</Txt>
+            <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>Renew at Wulf Fitness reception to start again. Your plan and history stay here.</Txt>
+          </View>
+        </Row>
+        <View style={{ gap: 2, paddingTop: 10, borderTopWidth: 1, borderTopColor: c.line }}>
+          <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 22, color: c.ink }}>{name}</Txt>
+          <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>{chips.join(', ')}</Txt>
+        </View>
+      </View>
+    );
+  }
 
   // 7. moved or skipped: one small row, so it stops taking space
   if (missed && ms.answer) {

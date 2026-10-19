@@ -5,7 +5,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import { router } from 'expo-router';
 import Svg, { Circle } from 'react-native-svg';
-import { Flame, Footprints, GlassWater, Scale, X } from '@/lib/icons';
+import { Clock, Flame, Footprints, GlassWater, Scale, X } from '@/lib/icons';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
@@ -74,6 +74,7 @@ export function useForYou(): Item[] {
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
   if (ptPending && d.hasGym) out.push({ key: 'pt', title: 'Confirm your PT session', body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', critical: true, tone: 'accent', who: true, two: true });
+  if (d.hasGym && d.membership === 'Expiring') out.push({ key: 'member-exp', title: 'Membership ends in 12 days', body: 'Expires on 6 Oct. Renew at Wulf Fitness reception.', tone: 'warn', icon: Clock, btn: 'View plan', act: () => router.push('/gym/membership') });
   const order = ['reassess', 'reply', 'plan', 'log'];
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
     out.push({ key: u.key, title: u.title, body: u.body, tone: u.tone, who: ['plan', 'reply'].includes(u.key), icon: u.icon, btn: u.isPlan ? 'See changes' : u.btn, act: u.isPlan ? () => router.navigate('/plans') : u.act });
