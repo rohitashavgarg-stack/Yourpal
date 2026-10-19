@@ -33,24 +33,24 @@ export function useGoalCardState(g: Goal2): GoalCardState {
 
 // Colours of the goal card, as given in the design spec. The card is a dark card in light and dark mode alike (like the workout card).
 export const GC = {
-  bg: '#07080C', border: '#26272D', emptyBg: '#0B0C0F', emptyBorder: '#2E3038', emptyTitle: '#8C8E97', emptySub: '#5E6069',
-  title: '#F3F4F6', date: 'rgba(243,244,246,0.55)', rest: '#8C8E97', unfilled: '#22242B',
+  bg: '#07080C', border: '#3A3D48', emptyBg: '#0B0C0F', emptyBorder: '#2E3038', emptyTitle: '#8C8E97', emptySub: '#5E6069',
+  title: '#F3F4F6', date: 'rgba(243,244,246,0.55)', rest: '#8C8E97', unfilled: '#363945',
   mint: '#2EE6A8', amber: '#E8A33D', grey: '#5B5D66', pillWhite: '#FFFFFF', pillInk: '#0B0B0D', outline: '#3A3B42',
 };
 const mint20 = 'rgba(46,230,168,0.2)', amber20 = 'rgba(232,163,61,0.2)';
 type Pill = { label: string; bg: string; fg: string; border?: string };
 const outlined = (label: string): Pill => ({ label, bg: 'transparent', fg: GC.rest, border: GC.outline });
-const GREY_GLOW = { color: '#787E8C', a: 0.3 };
+const GREY_GLOW = { color: '#787E8C', a: 0.4 };
 
 export const LOOK: Record<Exclude<GoalCardState, 'noGoal'>, { glow: { color: string; a: number }; pill: Pill; seg: string }> = {
-  onTrack: { glow: { color: '#2F6BEA', a: 0.42 }, pill: { label: 'On track', bg: GC.pillWhite, fg: GC.pillInk }, seg: GC.mint },
-  behind: { glow: { color: GC.amber, a: 0.4 }, pill: { label: 'Behind', bg: amber20, fg: GC.amber }, seg: GC.amber },
-  almost: { glow: { color: GC.mint, a: 0.4 }, pill: { label: 'Almost there', bg: mint20, fg: GC.mint }, seg: GC.mint },
+  onTrack: { glow: { color: '#2F6BEA', a: 0.8 }, pill: { label: 'On track', bg: GC.pillWhite, fg: GC.pillInk }, seg: GC.mint },
+  behind: { glow: { color: GC.amber, a: 0.6 }, pill: { label: 'Behind', bg: amber20, fg: GC.amber }, seg: GC.amber },
+  almost: { glow: { color: GC.mint, a: 0.6 }, pill: { label: 'Almost there', bg: mint20, fg: GC.mint }, seg: GC.mint },
   complete: { glow: GREY_GLOW, pill: { label: 'Complete', bg: mint20, fg: GC.mint }, seg: GC.mint },
   frozen: { glow: GREY_GLOW, pill: { label: 'Frozen', bg: amber20, fg: GC.amber }, seg: GC.grey },
   paused: { glow: GREY_GLOW, pill: outlined('Paused'), seg: GC.grey },
   comeback: { glow: GREY_GLOW, pill: outlined('Resumes today'), seg: GC.grey },
-  backOn: { glow: { color: GC.mint, a: 0.4 }, pill: { label: 'Back on', bg: mint20, fg: GC.mint }, seg: GC.mint },
+  backOn: { glow: { color: GC.mint, a: 0.6 }, pill: { label: 'Back on', bg: mint20, fg: GC.mint }, seg: GC.mint },
 };
 
 // Sample numbers for the demo panel (kg goals only). A real member sees their own numbers.
