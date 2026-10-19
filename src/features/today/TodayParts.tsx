@@ -47,7 +47,7 @@ export function TopSnack() {
 }
 
 // ---------- The one new component: a card collapsed to a single row that keeps its number or status ----------
-export function CollapsedRow({ slot, onOpen, coachCount = 0 }: { slot: Slot; onOpen: () => void; coachCount?: number }) {
+export function CollapsedRow({ slot, onOpen, coachCount = 0, coachTitle = '' }: { slot: Slot; onOpen: () => void; coachCount?: number; coachTitle?: string }) {
   const { c } = useTheme();
   const { d } = useDomain();
   const t = totals(d);
@@ -56,7 +56,7 @@ export function CollapsedRow({ slot, onOpen, coachCount = 0 }: { slot: Slot; onO
   const title = { workout: 'Workout', meals: 'Meals', coach: 'Coach Vikram', trackers: 'Trackers', week: 'This week' }[slot];
   const status = slot === 'workout' ? (st === 'done' ? 'Done' : st === 'rest' ? 'Rest day' : st === 'live' ? 'In progress' : st === 'hidden' ? 'Easy session' : 'Planned 6:30 pm')
     : slot === 'meals' ? `${t.k.toLocaleString('en-IN')} of ${KCAL_TARGET.toLocaleString('en-IN')} kcal`
-    : slot === 'coach' ? (coachCount ? `${coachCount} new` : 'All caught up')
+    : slot === 'coach' ? (coachCount ? (coachCount > 1 ? `${coachCount} new` : coachTitle) : 'All caught up')
     : slot === 'trackers' ? `${d.water} L water`
     : '3 of 5 workouts';
   return (
