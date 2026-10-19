@@ -18,9 +18,8 @@ import { WorkoutCard } from '@/features/today/WorkoutCard';
 import { MealNowCard } from '@/features/today/MealsCard';
 import { WeekCard } from '@/features/today/WeekCard';
 import { useRightNowFocus } from '@/features/today/timeline';
-import { Txt } from '@/components/ui';
 import { ComebackPlan, ForYouStack, useForYou } from '@/features/today/ForYou';
-import { todayUiStore, TodayLayout } from '@/features/today/ui';
+import { todayUiStore } from '@/features/today/ui';
 import { PaymentBanner, usePaymentNotice } from '@/features/today/PaymentBanner';
 import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
@@ -31,7 +30,7 @@ let firstLoad = true; // the skeleton shows once per app launch, like a real fet
 
 import { StreakChip } from '@/features/streak/StreakChip';
 import { STEPS_DESIGNS, StepsDesign, stepsStore } from '@/features/today/StepsCards';
-import { GOAL_SIZES, GoalSize, goalSizeStore, GoalTickCard } from '@/features/today/GoalTickCard';
+import { goalSizeStore, GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
 import { useGoalV2Rows } from '@/features/goalv2/signs';
 import { DESIGNS, GoalDesign, GoalPace, goalStore, PACES } from '@/features/today/GoalCards';
@@ -89,7 +88,6 @@ export default function Today() {
   useScenarios({
     title: 'Today',
     rows: [
-      { label: 'Today layout', options: ['Current', 'New'], value: layout, onPick: (v) => todayUiStore.set({ layout: v as TodayLayout }) },
       { label: 'Today variant', options: ['Regular', 'With updates', 'Comeback'], value: d.todayVariant, onPick: (v) => set({ todayVariant: v as any, dismissed: {} }) },
       ...goalRows,
       { label: 'Goal card state', options: ['Auto', ...GOAL_STATE_OPTIONS.map(([l]) => l)], value: gcs.force === 'auto' ? 'Auto' : GOAL_STATE_OPTIONS.find(([, k]) => k === gcs.force)![0],
@@ -101,7 +99,6 @@ export default function Today() {
         } },
       { label: 'Membership hold', options: ['None', 'Frozen', 'Paused'], value: d.hold ?? 'None', onPick: (v) => set({ hold: v as any }) },
       { label: 'Last weigh-in', options: ['Today', '3 days ago', '10+ days ago'], value: gcs.weighDays >= 10 ? '10+ days ago' : gcs.weighDays >= 3 ? '3 days ago' : 'Today', onPick: (v) => goalCardStore.set({ weighDays: v === '10+ days ago' ? 12 : v === '3 days ago' ? 3 : 0 }) },
-      { label: 'Goal size', options: GOAL_SIZES, value: gsz.size, onPick: (v) => goalSizeStore.set({ size: v as GoalSize }) },
       ...(gv.version === 'Version 1' ? [{ label: 'Goal card design', options: DESIGNS, value: gs.design, onPick: (v: string) => goalStore.set({ design: v as GoalDesign }) }] : []),
       { label: 'Steps tracker design', options: STEPS_DESIGNS, value: st.design, onPick: (v) => stepsStore.set({ design: v as StepsDesign }) },
       ...(gv.version === 'Version 1' ? [{ label: 'Goal pace', options: PACES, value: gs.pace, onPick: (v: string) => goalStore.set({ pace: v as GoalPace }) }] : []),
