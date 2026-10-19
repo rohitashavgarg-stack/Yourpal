@@ -185,6 +185,7 @@ export default function GoalDetail() {
   const coach = state.sc.member === 'PT member' ? 'Coach Vikram' : 'your trainer';
   const ended = g.status === 'reached';
   const soon = g.status === 'endingSoon';
+  const behind = g.status === 'aBitBehind';
 
   useScenarios({ title: 'Your goal (page)', rows }, [s.version, s.scenario, d.goal, state.sc.member]);
 
@@ -203,6 +204,15 @@ export default function GoalDetail() {
         <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.accentText }}>Change</Txt>
       </Pressy>}>
       <GoalTickCard flat />
+
+      {behind && !s.finished && (
+        <Card gap={12}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25 }}>Want more time?</Txt>
+          <Txt muted style={{ fontSize: 14, lineHeight: 21 }}>{`You are a little behind the pace. Moving the date gives you room, and ${coach} is told either way. Or keep going as you are.`}</Txt>
+          <Button kind="primary" label="Move the date by 4 weeks" onPress={extend} />
+          <Button kind="secondary" label={`Adjust target to ${fmtVal(g, g.targetValue + (g.startValue - g.targetValue) * 0.2)} ${g.unit}`} onPress={adjust} />
+        </Card>
+      )}
 
       {soon && !s.finished && (
         <Card gap={12}>

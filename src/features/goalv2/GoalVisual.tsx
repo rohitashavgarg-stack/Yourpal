@@ -45,14 +45,15 @@ export function markerX(g: Goal2, w: number, size: VisualSize = 'large') {
   return 0;
 }
 
-export function GoalVisual({ g, size = 'compact', onColor }: { g: Goal2; size?: VisualSize; onColor?: boolean }) {
+// `color` and `share` let a caller colour the filled segments for a state and fill them by something other than the value done (Today fills by time elapsed).
+export function GoalVisual({ g, size = 'compact', onColor, color, share: shareProp }: { g: Goal2; size?: VisualSize; onColor?: boolean; color?: string; share?: number }) {
   const { c } = useTheme();
   const big = size === 'large';
   const mini = size === 'mini';
-  const fill = onColor ? '#fff' : MINT;
+  const fill = onColor ? '#fff' : color ?? MINT;
   const track = onColor ? 'rgba(255,255,255,0.24)' : c.surface3;
   const ring = onColor ? 'rgba(255,255,255,0.7)' : c.muted;
-  const share = goalShare(g);
+  const share = shareProp ?? goalShare(g);
 
   if (g.kind === 'weight' || g.kind === 'muscle' || g.kind === 'lean') {
     const n = TICKS, on = Math.round(share * n), h = big ? 32 : mini ? 14 : 24, tw = mini ? 4 : 6;
@@ -105,7 +106,7 @@ export function GoalVisual({ g, size = 'compact', onColor }: { g: Goal2; size?: 
     <Row style={{ gap: mini ? 8 : 10 }}>
       <View style={{ flex: 1, height: h }}>
         <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: h / 2, backgroundColor: track, overflow: 'hidden' }}>
-          <LinearGradient colors={onColor ? ['rgba(255,255,255,0.2)', 'rgba(255,255,255,0.7)'] : ['rgba(60,203,154,0.15)', 'rgba(60,203,154,0.6)']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+          <LinearGradient colors={onColor ? ['rgba(255,255,255,0.2)', 'rgba(255,255,255,0.7)'] : color ? [color + '26', color + '99'] : ['rgba(60,203,154,0.15)', 'rgba(60,203,154,0.6)']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
             style={{ width: `${Math.max(8, share * 100)}%`, height: '100%' }} />
         </View>
         <View style={{ position: 'absolute', left: `${share * 100}%`, marginLeft: -h / 2, top: 0, width: h, height: h, borderRadius: h / 2, backgroundColor: fill, alignItems: 'center', justifyContent: 'center' }}><View style={{ width: h * 0.32, height: h * 0.32, borderRadius: h * 0.16, backgroundColor: onColor ? '#2F6BEA' : '#fff' }} /></View>

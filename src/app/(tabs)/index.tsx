@@ -24,6 +24,7 @@ import { todayUiStore, TodayLayout } from '@/features/today/ui';
 import { PaymentBanner, usePaymentNotice } from '@/features/today/PaymentBanner';
 import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
+import { GOAL_STATE_OPTIONS, goalCardStore } from '@/features/today/goalCardState';
 
 const SHOW_GREETING = false; // the big greeting is off for now, the goal sits right under the header
 let firstLoad = true; // the skeleton shows once per app launch, like a real fetch
@@ -84,12 +85,22 @@ export default function Today() {
   const gv = goalV2Store.use();
   const gsz = goalSizeStore.use();
   const goalRows = useGoalV2Rows();
+  const gcs = goalCardStore.use();
   useScenarios({
     title: 'Today',
     rows: [
       { label: 'Today layout', options: ['Current', 'New'], value: layout, onPick: (v) => todayUiStore.set({ layout: v as TodayLayout }) },
       { label: 'Today variant', options: ['Regular', 'With updates', 'Comeback'], value: d.todayVariant, onPick: (v) => set({ todayVariant: v as any, dismissed: {} }) },
       ...goalRows,
+      { label: 'Goal card state', options: ['Auto', ...GOAL_STATE_OPTIONS.map(([l]) => l)], value: gcs.force === 'auto' ? 'Auto' : GOAL_STATE_OPTIONS.find(([, k]) => k === gcs.force)![0],
+        onPick: (v) => {
+          const hit = GOAL_STATE_OPTIONS.find(([l]) => l === v);
+          goalCardStore.set({ force: hit ? hit[1] : 'auto' });
+          // keep the goal page in step, so tapping a Behind card lands on the option to move the date
+          if (hit?.[1] === 'behind') goalV2Store.set({ scenario: 'A bit behind', extendDays: 0, lowerBy: 0, finished: false });
+        } },
+      { label: 'Membership hold', options: ['None', 'Frozen', 'Paused'], value: d.hold ?? 'None', onPick: (v) => set({ hold: v as any }) },
+      { label: 'Last weigh-in', options: ['Today', '3 days ago', '10+ days ago'], value: gcs.weighDays >= 10 ? '10+ days ago' : gcs.weighDays >= 3 ? '3 days ago' : 'Today', onPick: (v) => goalCardStore.set({ weighDays: v === '10+ days ago' ? 12 : v === '3 days ago' ? 3 : 0 }) },
       { label: 'Goal size', options: GOAL_SIZES, value: gsz.size, onPick: (v) => goalSizeStore.set({ size: v as GoalSize }) },
       ...(gv.version === 'Version 1' ? [{ label: 'Goal card design', options: DESIGNS, value: gs.design, onPick: (v: string) => goalStore.set({ design: v as GoalDesign }) }] : []),
       { label: 'Steps tracker design', options: STEPS_DESIGNS, value: st.design, onPick: (v) => stepsStore.set({ design: v as StepsDesign }) },
@@ -106,7 +117,7 @@ export default function Today() {
       { label: 'Show loading state', run: () => load(1400) },
       { label: 'Reset meals for this time of day', run: () => set({ meals: mealsAt(d.min), openMeal: null }) },
     ],
-  }, [layout, d.todayVariant, d.hc, d.time, d.wkScenario, d.wkDone, d.ci, d.scanFails, d.session, d.ciStart, d.ciOut, d.ciExtend, gs.design, gs.pace, st.design, gv.version, gsz.size, gv.scenario, d.goal]);
+  }, [layout, d.todayVariant, d.hc, d.time, d.wkScenario, d.wkDone, d.ci, d.scanFails, d.session, d.ciStart, d.ciOut, d.ciExtend, gs.design, gs.pace, st.design, gv.version, gsz.size, gv.scenario, d.goal, d.hold, gcs.force, gcs.weighDays]);
 
   // After a break the greeting itself says welcome back (new layout); the days away sit right under the title.
   const greet = { Morning: 'Good morning', Afternoon: 'Good afternoon', Evening: 'Good evening' }[d.time];
@@ -127,12 +138,11 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           </>
         ) : isNew ? (
           <>
-            <Enter i={0}><GoalTickCard /></Enter>
-            {/* after a break the way back (the comeback plan is the first item of the stack) comes before the goal */}
+            {/* above the goal: updates, then the message line; on a comeback day the comeback session (the workout) comes right under the message line and the goal follows it */}
+            {forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
             {comebackNew && <Enter i={0}><Txt muted style={{ fontSize: 15, lineHeight: 22, paddingHorizontal: 4, marginTop: -4 }}>Welcome back, Rohitashav. Check your comeback session.</Txt></Enter>}
             {comebackNew && <Enter i={0}><ComebackPlan /></Enter>}
-            {/* updates always come before the goal */}
-            {forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
+            <Enter i={0}><GoalTickCard /></Enter>
             <Enter i={1}><Trackers /></Enter>
             {/* the same cards as ever, in the order the day asks for: at workout time the workout is first, at a meal time the meals are, at the end of the day the week */}
             {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
@@ -145,11 +155,12 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           </>
         ) : (
           <>
-            <Enter i={0}><GoalTickCard /></Enter>
+            {/* account banner and the other things that need an answer come first; on a comeback day the comeback card (the workout) comes right before the goal */}
             {!!payNotice && <Enter i={0}><PaymentBanner /></Enter>}
             {ptPending && d.hasGym && <Enter i={0}><PtConfirmCard /></Enter>}
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
-            {d.todayVariant === 'Comeback' && <Enter i={1}><ComebackCard /></Enter>}
+            {d.todayVariant === 'Comeback' && <Enter i={0}><ComebackCard /></Enter>}
+            <Enter i={1}><GoalTickCard /></Enter>
             {order.map((k, i) => <Enter key={k} i={2 + i}>{slots[k]}</Enter>)}
           </>
         )}
