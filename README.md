@@ -28,3 +28,10 @@ Every screen registers its scenarios with `useScenarios(...)`. On a wide browser
 
 Login: number not found, wrong code (3 tries → lock), Android SMS auto-read, offline, join code (`GOLD21`).
 Onboarding: jump to any step, assessment not scheduled, offline, required injury note, skip height/weight, notifications allow / not now.
+
+## Docs
+
+- `AGENTS.md` and `CLAUDE.md` (this folder): rules for coding agents working in the repo.
+- `docs/PHASE2_HANDOFF.md`: how the app is built, shared building blocks and the design rules.
+- `docs/SESSION_HANDOFF.md`: where the app is right now and what is open (read this first).
+- `docs/DEPLOY.md`: putting the web preview online (Vercel).

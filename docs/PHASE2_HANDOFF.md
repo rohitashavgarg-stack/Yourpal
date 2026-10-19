@@ -1,6 +1,6 @@
 # YourPal member app — Phase 2 handoff (for Claude Code)
 
-You are continuing a React Native (Expo SDK 57, Expo Router, TypeScript) app for YourPal, a health and fitness app inside a gym programme ("Gold's Gym", member Ankit, Coach Vikram). Phase 1 is done and runs. Read this file fully, then read `AGENTS.md` and `README.md`. Do not trust memory for Expo APIs; check https://docs.expo.dev/llms.txt when unsure.
+You are continuing a React Native (Expo SDK 57, Expo Router, TypeScript) app for YourPal, a health and fitness app inside a gym programme ("Gold's Gym", member Ankit, Coach Vikram). Phase 1 is done and runs. Read this file fully, then read `../AGENTS.md` and `../README.md`. Do not trust memory for Expo APIs; check https://docs.expo.dev/llms.txt when unsure.
 
 ## Status
 - DONE (Phase 1): design tokens (`src/theme/tokens.ts`, light + dark), Geist / Outfit fonts, Lucide icons, `src/components/ui.tsx` (Txt, Button, Card, Chip, Pill, Segmented, Field), bottom sheets + toasts (`Overlay.tsx`), floating pill tab bar that hides on scroll (`FloatingTabBar.tsx`), collapsing large titles (`TabScreen.tsx`), login (phone + OTP + join code, all error states), onboarding (7 steps), web phone frame with the edge-case panel OUTSIDE the phone (`src/web/WebFrame.tsx`), scenario registry (`useScenarios`).

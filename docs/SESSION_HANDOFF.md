@@ -1,6 +1,6 @@
 # Session handoff: where the YourPal app is now (19 Oct)
 
-Read this with `PHASE2_HANDOFF.md`, `AGENTS.md` and the `yourpal-mobile-ui` skill. Everything below is already on `main` and live at https://yourpal-psi.vercel.app.
+Read this with `PHASE2_HANDOFF.md` (same folder), `../AGENTS.md` and the `yourpal-mobile-ui` skill. Everything below is already on `main` and live at https://yourpal-psi.vercel.app.
 
 ## How we work with the designer (Rohitashav)
 - He sends screenshots with a one-line correction. Fold each in at once. He often says "tell me what you will do, then I confirm": do that when he asks, otherwise just build.

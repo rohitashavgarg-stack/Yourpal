@@ -5,7 +5,7 @@ description: How we design and build the YourPal member app (Expo / React Native
 
 # YourPal mobile app — UI and UX playbook
 
-YourPal is a health and fitness app a member gets through their gym (demo: Gold's Gym / Wulf Fitness, member Ankit or Rohitashav, Coach Vikram). It should feel like a **health app, not a gym app**: calm, light-first, data you understand at a glance. Read `AGENTS.md` and `PHASE2_HANDOFF.md` for the stack and shared building blocks; this file is the design and process layer on top.
+YourPal is a health and fitness app a member gets through their gym (demo: Gold's Gym / Wulf Fitness, member Ankit or Rohitashav, Coach Vikram). It should feel like a **health app, not a gym app**: calm, light-first, data you understand at a glance. Read `AGENTS.md` and `docs/PHASE2_HANDOFF.md` for the stack and shared building blocks; this file is the design and process layer on top.
 
 ## 1. Working with the designer
 
@@ -84,4 +84,4 @@ One goal model (`useGoalV2`, `src/features/goalv2/model.ts`) feeds every surface
 3. Build with tokens and shared components; register edge cases with `useScenarios` on new screens.
 4. `npx tsc --noEmit` and `npx expo lint <files>`.
 5. Look at it: dev server (`npx expo start --port 8082`), web preview `http://localhost:8082/?signedin=1` (skips login; append to any route, e.g. `/goal-detail?signedin=1`). Use the Demo controls panel (goal type, time of day, situation, member type) to walk every state. Check light and dark.
-6. Report what changed per surface, what you saw on screen, and anything not checked. Keep `PHASE2_HANDOFF.md` overrides in mind (e.g. no Full / Quick / Low energy selector on the Today workout card).
+6. Report what changed per surface, what you saw on screen, and anything not checked. Keep `docs/PHASE2_HANDOFF.md` overrides in mind (e.g. no Full / Quick / Low energy selector on the Today workout card).
