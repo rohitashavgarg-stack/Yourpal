@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { CircleCheck, Clock, Pause } from '@/lib/icons';
+import { CircleCheck, Clock, Pause, X } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -11,36 +11,27 @@ import { font } from '@/theme/tokens';
 // One card design for the membership everywhere (the Today banner and the Gym tab card), full card width:
 // title = what is happening, line = what it means, act = what to do, as quiet info text on its own line (it is not a button). Never "text · text" in one line.
 // When the membership has ended, logging and the other member features pause, and the card says so.
-// Account banner on Today: information only (members cannot pay or lift a freeze in the app), never dismissible, one at a time.
-// Precedence: expired, paused or frozen, expiring. Colour is always paired with an icon and words.
-type Notice = { icon: 'clock' | 'pause' | 'ok'; tone: 'warn' | 'plain'; title: string; line: string; act?: string };
+// once: a one-time notice (it is ending or has ended): the member can cross it away. A paused membership is never dismissible: it stays at the top.
+type Notice = { icon: 'clock' | 'pause' | 'ok'; tone: 'warn' | 'plain'; title: string; line: string; act?: string; once?: boolean };
 const ACT = 'Renew at Wulf Fitness reception.';
 
 export function useMembershipNotice(): Notice {
   const { d } = useDomain();
   switch (d.membership) {
-    case 'Expiring': return { icon: 'clock', tone: 'warn', title: 'Membership ends in 10 days', line: 'Expires on 6 Oct.', act: ACT };
-    case 'Grace': return { icon: 'clock', tone: 'warn', title: 'Membership expired 3 days ago', line: 'Logging and other features pause in 11 days.', act: ACT };
+    case 'Expiring': return { icon: 'clock', tone: 'warn', once: true, title: 'Membership ends in 12 days', line: 'Expires on 6 Oct.', act: ACT };
+    case 'Grace': return { icon: 'clock', tone: 'warn', once: true, title: 'Membership expired 3 days ago', line: 'Logging and other features pause in 11 days.', act: ACT };
     case 'Grace over': return { icon: 'pause', tone: 'warn', title: 'Membership expired', line: 'Logging and other features are paused. Your history is safe.', act: ACT };
     default: return { icon: 'ok', tone: 'plain', title: 'Annual plan is active', line: 'Expires on 14 Oct 2027.', act: 'Renew early at Wulf Fitness reception.' };
   }
 }
 
-// Every account notice that applies, highest precedence first.
-function useAccountNotices(): Notice[] {
+// Today only shows it when something needs attention.
+export function usePaymentNotice() {
   const { d } = useDomain();
-  const m = useMembershipNotice();
-  if (!d.hasGym) return [];
-  const out: Notice[] = [];
-  if (d.membership === 'Grace over' || d.membership === 'Grace') out.push(m);
-  if (d.hold !== 'None') out.push({ icon: 'pause', tone: 'warn', title: d.hold === 'Frozen' ? 'Membership frozen' : 'Membership paused', line: 'Streaks are held. Your end date moves out day for day.' });
-  if (d.membership === 'Expiring') out.push(m);
-  return out;
-}
-
-export function usePaymentNotice(): (Notice & { more: number }) | null {
-  const all = useAccountNotices();
-  return all.length ? { ...all[0], more: all.length - 1 } : null;
+  const n = useMembershipNotice();
+  if (!d.hasGym || n.tone !== 'warn') return null;
+  if (n.once && d.dismissed['membership-' + d.membership]) return null; // crossed away once for this state
+  return n;
 }
 
 export function MembershipCard({ n }: { n: Notice }) {
@@ -68,13 +59,15 @@ export function MembershipCard({ n }: { n: Notice }) {
 // (The "what to do" line stays on the Gym tab card; the strip only says what is happening and what it means.)
 export function PaymentBanner() {
   const { c } = useTheme();
+  const { d, set } = useDomain();
   const n = usePaymentNotice();
   if (!n) return null;
   const Icon = n.icon === 'pause' ? Pause : Clock;
+  const cross = () => set((x) => ({ dismissed: { ...x.dismissed, ['membership-' + d.membership]: true } }));
   return (
-    <View style={{ marginHorizontal: -16, backgroundColor: c.warnSoft }}>
+    <View style={{ marginHorizontal: -16, backgroundColor: c.warnSoft, flexDirection: 'row', alignItems: 'center' }}>
       <Pressy accessibilityRole="button" accessibilityLabel={`${n.title}. ${n.line} View plan`} onPress={() => router.push('/gym/membership')} scaleTo={1}
-        style={{ paddingVertical: 14, paddingHorizontal: 16 }}>
+        style={{ flex: 1, paddingVertical: 14, paddingLeft: 16, paddingRight: n.once ? 4 : 16 }}>
         <Row style={{ gap: 12 }}>
           <View style={{ width: 40, height: 40, borderRadius: 13, backgroundColor: c.warn + '2E', alignItems: 'center', justifyContent: 'center' }}><Icon size={18} color={c.warn} /></View>
           <View style={{ flex: 1, gap: 1 }}>
@@ -86,9 +79,9 @@ export function PaymentBanner() {
           </View>
         </Row>
       </Pressy>
-      {n.more > 0 && (
-        <Pressy accessibilityRole="button" onPress={() => router.push('/gym/membership')} scaleTo={1} style={{ minHeight: 44, paddingHorizontal: 16, marginTop: -8, justifyContent: 'center' }}>
-          <Txt muted style={{ fontSize: 13, lineHeight: 19, textDecorationLine: 'underline' }}>{n.more === 1 ? '1 more account notice' : `${n.more} more account notices`}</Txt>
+      {n.once && (
+        <Pressy accessibilityRole="button" accessibilityLabel="Dismiss" onPress={cross} scaleTo={0.9} style={{ width: 44, height: 44, marginRight: 4, alignItems: 'center', justifyContent: 'center' }}>
+          <X size={18} color={c.muted} />
         </Pressy>
       )}
     </View>

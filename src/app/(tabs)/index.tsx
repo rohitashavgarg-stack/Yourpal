@@ -23,7 +23,6 @@ import { todayUiStore } from '@/features/today/ui';
 import { PaymentBanner, usePaymentNotice } from '@/features/today/PaymentBanner';
 import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
-import { CoachEmpty, CollapsedRow, Slot as CardSlot, TopSnack } from '@/features/today/TodayParts';
 import { PushBanner } from '@/features/reminders/PushBanner';
 import { GOAL_STATE_OPTIONS, goalCardStore } from '@/features/today/goalCardState';
 
@@ -60,6 +59,7 @@ export default function Today() {
   const ptPending = usePtPending();
   // cards that would render nothing get no slot at all, so an empty slot never adds an extra gap
   const forYou = useForYou();
+  const [stripY, setStripY] = useState(0); // where the membership strip sits in the page: it docks under the header once scrolled to
   const payNotice = usePaymentNotice();
   const layout = todayUiStore.use().layout;
   const isNew = layout === 'New';
@@ -82,11 +82,6 @@ export default function Today() {
   // every meal is already logged: the meals card has nothing to ask, so it moves below the trackers
   if (mealsSettled && primary !== 'wrap') { order.splice(order.indexOf('meals'), 1); order.splice(order.indexOf('trackers') + 1, 0, 'meals'); }
   const slots: Record<Slot, React.ReactNode> = { workout: <WorkoutCard />, meals: <MealNowCard />, trackers: <Trackers />, week: <WeekCard /> };
-  // the open card follows the time of day; a tap on a row opens that one instead, until the time of day moves on
-  const autoSlot: CardSlot = primary === 'meals' ? 'meals' : primary === 'wrap' ? 'week' : 'workout';
-  const [pick, setPick] = useState<{ auto: CardSlot; slot: CardSlot } | null>(null);
-  const openNow: CardSlot = pick && pick.auto === autoSlot ? pick.slot : autoSlot;
-  const full: Record<CardSlot, React.ReactNode> = { workout: <WorkoutCard />, meals: <MealNowCard />, coach: forYou.length ? <ForYouStack /> : <CoachEmpty />, trackers: <Trackers />, week: <WeekCard /> };
   const focusMeal = focus.kind === 'meal' ? focus.meal.id : null;
   useEffect(() => { if (focusMeal) set({ openMeal: focusMeal }); }, [focusMeal]); // eslint-disable-line react-hooks/exhaustive-deps
   const gs = goalStore.use();
@@ -134,6 +129,7 @@ export default function Today() {
       <TabScreen title={!SHOW_GREETING ? '' : comebackNew ? `We missed you
 the last ${d.awayDays} days` : `${greet},
 Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186 : 112}
+        pinned={isNew && !!payNotice && !payNotice.once ? <View style={{ paddingTop: 10, marginBottom: -8 }}><PaymentBanner /></View> : undefined} pinAfter={Math.max(0, stripY - (insets.top + 8 + 56))}
         refreshControl={<RefreshControl refreshing={refreshing} tintColor={c.accentText} onRefresh={() => { setRefreshing(true); load(1000); }} />}>
         {d.loading ? (
           <>
@@ -145,18 +141,21 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
           </>
         ) : isNew ? (
           <>
-            {/* Principle: time changes state, never position. Fixed order: banner, snackbar, message line, goal, workout, meals, coach, trackers, week.
-                One card is open (the one that fits the time of day); the rest are one row and open in place when tapped. */}
-            {!!payNotice && <Enter i={0}><View style={{ marginTop: 4 }}><PaymentBanner /></View></Enter>}
-            <Enter i={0}><TopSnack /></Enter>
+            {/* top: the membership strip, then the updates; on a comeback day the comeback card comes first and the updates after the goal */}
             {comebackNew && <Enter i={0}><ComebackGreeting /></Enter>}
+            {!!payNotice && <Enter i={0}><View style={{ marginTop: 14, marginBottom: comebackNew ? -12 : 6 }} onLayout={(e) => setStripY(e.nativeEvent.layout.y)}><PaymentBanner /></View></Enter>}
             {comebackNew && <Enter i={0}><WorkoutCard restart /></Enter>}
+            {!comebackNew && forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
+            {/* then the main card of the moment (workout time: the workout, meal time: the meals, end of the day: the week), then the goal */}
+            {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
+            {primary === 'meals' && <Enter i={1}><MealNowCard /></Enter>}
+            {primary === 'wrap' && <Enter i={1}><WeekCard /></Enter>}
             <Enter i={1}><GoalTickCard /></Enter>
-            {(['workout', 'meals', 'coach', 'trackers', 'week'] as CardSlot[]).filter((k) => !(comebackNew && k === 'workout')).map((k, i) => (
-              <Animated.View key={k + (openNow === k ? '-open' : '-row')} entering={fade(i * 40)}>
-                {openNow === k ? full[k] : <CollapsedRow slot={k} coachCount={forYou.length} onOpen={() => setPick({ auto: autoSlot, slot: k })} />}
-              </Animated.View>
-            ))}
+            {comebackNew && forYou.length > 0 && <Enter i={1}><ForYouStack /></Enter>}
+            <Enter i={2}><Trackers /></Enter>
+            {primary !== 'workout' && primary !== 'restart' && <Enter i={3}><WorkoutCard /></Enter>}
+            {primary !== 'meals' && <Enter i={4}><MealNowCard /></Enter>}
+            {primary !== 'wrap' && <Enter i={5}><WeekCard /></Enter>}
           </>
         ) : (
           <>
