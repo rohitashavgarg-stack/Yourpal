@@ -58,7 +58,7 @@ export function TodayBudgetCard() {
             <Txt style={{ fontSize: 12, lineHeight: 17, color: GC.rest }}>Goal</Txt>
             <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: GC.title }}>{g.name}</Txt>
           </View>
-          <Txt style={{ fontSize: 13, lineHeight: 19, color: GC.rest }}>{`${Math.round(Math.max(0, Math.min(1, g.pct)) * 100)}%`}</Txt>
+          <Txt style={{ fontSize: 13, lineHeight: 19, color: GC.rest }}>{`${Math.round(Math.max(0, Math.min(1, g.pct)) * 100)}% completed`}</Txt>
           <ChevronRight size={16} color={GC.rest} />
         </Row>
       </Pressy>
