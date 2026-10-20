@@ -17,26 +17,26 @@ export type TodayCtx = {
 // Two wordings per moment; the day of the month picks one, so a line does not change on every render.
 const pick = (day: number, key: number, a: string, b: string) => ((day + key) % 2 === 0 ? a : b);
 
-// One short sentence under the greeting. First rule that fits wins.
-export function todayLine(c: TodayCtx): string {
-  if (c.paused) return 'Your history is all here.';
-  if (c.workout === 'live') return pick(c.day, 1, 'Workout in progress. The rest timer is running.', 'Workout in progress. Take your rest, then the next set.');
+// What sits under the greeting: one fact (line) and, when it helps, the smallest next step or one more number on its own quieter line (hint).
+// Never two sentences joined in one line. First rule that fits wins.
+export type TodayLine = { line: string; hint?: string };
+export function todayLine(c: TodayCtx): TodayLine {
+  if (c.paused) return { line: 'Your history is all here' };
+  if (c.workout === 'live') return { line: 'Workout in progress', hint: pick(c.day, 1, 'The rest timer is running', 'Take your rest, then the next set') };
   if (c.workout === 'done') {
-    if (c.weeks > 0) return pick(c.day, 2, `Leg day is done. ${c.weeks} week streak, keep it going.`, `Leg day is done. That keeps your ${c.weeks} week streak alive.`);
-    return pick(c.day, 2, `Leg day is done. ${c.weekDone} of ${c.target} workouts this week.`, `Leg day is logged. ${c.weekDone} of ${c.target} workouts this week.`);
+    const line = pick(c.day, 2, 'Leg day is done', 'Leg day is logged');
+    return c.weeks > 0 ? { line, hint: `${c.weeks} week streak` } : { line, hint: `${c.weekDone} of ${c.target} workouts this week` };
   }
-  if (c.workout === 'rest') return pick(c.day, 3, 'Rest day. Recovery counts toward your week.', 'Rest day. Sleep and water do the work today.');
-  if (c.workout === 'todo') {
-    const t = c.clock(c.planned);
-    if (c.min < c.planned) {
-      const near = c.planned - c.min <= 180;
-      if (near) return pick(c.day, 4, `Leg day is at ${t}. Warm-up takes about 5 minutes.`, `Leg day is at ${t}. Start with the warm-up.`);
-      return pick(c.day, 4, `Leg day is at ${t}. A light meal two hours before helps.`, `Leg day is at ${t}. Eat something light before you go.`);
-    }
+  if (c.workout === 'rest') return { line: 'Rest day', hint: pick(c.day, 3, 'Recovery counts toward your week', 'Sleep and water do the work today') };
+  if (c.workout === 'todo' && c.min < c.planned) {
+    const line = `Leg day is at ${c.clock(c.planned)}`;
+    return c.planned - c.min <= 180
+      ? { line, hint: pick(c.day, 4, 'Warm-up takes about 5 minutes', 'Start with the warm-up') }
+      : { line, hint: pick(c.day, 4, 'A light meal two hours before helps', 'Eat something light before you go') };
   }
-  if (c.nextMeal) return pick(c.day, 5, `${c.nextMeal} is next. Log it when you eat.`, `${c.nextMeal} is next. Log it as you eat it.`);
-  if (c.weeks > 0) return pick(c.day, 6, `${c.weeks} week streak. ${c.weekDone} of ${c.target} workouts this week.`, `${c.weeks} week streak, ${c.weekDone} of ${c.target} workouts this week.`);
-  return `${c.weekDone} of ${c.target} workouts this week.`;
+  if (c.nextMeal) return { line: `${c.nextMeal} is next`, hint: pick(c.day, 5, 'Log it when you eat', 'Log it as you eat it') };
+  const week = `${c.weekDone} of ${c.target} workouts this week`;
+  return c.weeks > 0 ? { line: week, hint: `${c.weeks} week streak` } : { line: week };
 }
 
 // The heading above the line. It follows what is happening (workout live, soon, done, rest day) and otherwise the time of day, and the day of the month

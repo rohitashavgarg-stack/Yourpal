@@ -258,7 +258,9 @@ export function MealNowCard() {
   const v = mealView(d, m);
   const missed = missedMeals(d);
   const { paused } = useLogGate();
-  const ask = !paused && missed.length ? missed[missed.length - 1] : null; // the most recent one first (nothing to answer while logging is paused)
+  // the most recent missed meal first; nothing to answer while logging is paused, and no "wasn't logged" banner for the meal that is already on screen
+  const lastMissed = missed.length ? missed[missed.length - 1] : null;
+  const ask = !paused && lastMissed && lastMissed !== shown ? lastMissed : null;
   const status = (id: MealId) => {
     const x = mealLog(d, id); const mv = mealView(d, mealById(id));
     if (x.skip) return { t: 'Skipped', col: c.muted, bg: c.surface2 };
@@ -333,7 +335,7 @@ export function MealNowCard() {
           <Txt v="caption">{v.any ? `${v.kcal} kcal eaten` : `${mealKcal(m)} kcal planned`}</Txt>
         </View>
         <View style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, backgroundColor: c.surface2, justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17 }}>{shown === now ? fmtT(m.t).full : status(shown).t}</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17 }}>{shown === now || missed.includes(shown) ? fmtT(m.t).full : status(shown).t}</Txt>
         </View>
       </Row>
       <MealRow id={shown} open bare />
