@@ -4,22 +4,19 @@ import { Image, RefreshControl, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Circle } from 'react-native-svg';
 import { ChevronRight, Flame, Lock } from '@/lib/icons';
 import { useLook } from '@/features/progress/look';
 import { fade } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
-import { Pressy, Row, Txt } from '@/components/ui';
+import { Row, Txt } from '@/components/ui';
 import { Skeleton } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
 import { useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { fmt1 } from '@/lib/useNow';
-import { CardKey, goalTitle, NEW_EMPTY, ORDER } from '@/features/progress/data';
+import { CardKey, NEW_EMPTY, ORDER } from '@/features/progress/data';
 import { MetricKey, trend } from '@/features/progress/trends';
 import { MiniBars, RangeBar, RangeBarSlim } from '@/features/progress/TrendUI';
 import { CardTitle, CornerGlow, GrowBar, PCard, Spark } from '@/features/progress/parts';
@@ -29,54 +26,11 @@ import { FLAME } from '@/features/streak/StreakChip';
 import { useStreak } from '@/features/streak/useStreak';
 import { showProgressLoading, useProgressScenarios } from '@/features/progress/scenarios';
 import { GoalCard2 } from '@/features/goalv2/GoalCard2';
-import { goalV2Store, progressLine, statusLine, useGoalV2 } from '@/features/goalv2/model';
-import { GoalVisual } from '@/features/goalv2/GoalVisual';
+import { GoalTickCard } from '@/features/today/GoalTickCard';
+import { goalV2Store } from '@/features/goalv2/model';
 
 let firstLoad = true;
 
-function GoalHero() {
-  const { d } = useDomain();
-  const ps = progressStore.use();
-  const isNew = ps.data === 'New member';
-  const g = d.goal;
-  const g2 = useGoalV2();
-  // same numbers as the Today card (one goal model), whatever kind of goal it is
-  const pct = isNew ? 0 : Math.round((g2.status === 'reached' && g2.kind !== 'consistency' ? 1 : g2.pct) * 100);
-
-  return (
-    <Pressy accessibilityRole="link" accessibilityLabel="Your goal. Open goal details" scaleTo={0.98} onPress={() => router.push('/goal-detail')}>
-    <LinearGradient colors={['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-      style={{ borderRadius: 28, padding: 20, gap: 10, overflow: 'hidden' }}>
-      <Svg width={240} height={240} viewBox="0 0 240 240" style={{ position: 'absolute', right: -80, top: -90, opacity: 0.15 }}>
-        <Circle cx={120} cy={120} r={110} fill="none" stroke="#fff" strokeWidth={16} /><Circle cx={120} cy={120} r={70} fill="none" stroke="#fff" strokeWidth={10} />
-      </Svg>
-      <Row style={{ justifyContent: 'space-between' }}>
-        <Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)' }}>Goal</Txt>
-        <Pressy accessibilityRole="button" accessibilityLabel="Edit goal" onPress={() => router.push('/progress/goal')} hitSlop={4}
-          style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.18)', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 13, color: '#fff' }}>Edit</Txt>
-        </Pressy>
-      </Row>
-      <Txt style={{ fontFamily: font.display, fontSize: 34, lineHeight: 44, letterSpacing: -0.6, color: '#fff' }}>{g2.name}{g.by && g.by !== '—' && g.by !== 'No date' ? ` by ${g.by}` : ''}</Txt>
-      {isNew ? (
-        <>
-          <GrowBar pct={0} color="#fff" h={8} track="rgba(255,255,255,0.22)" />
-          <Txt style={{ fontSize: 14, lineHeight: 20, color: '#fff' }}>Starting point saved. Your first week starts now.</Txt>
-          <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.85)' }}>Early signs show up after your first week</Txt>
-        </>
-      ) : (
-        <>
-          <View style={{ marginTop: 4 }}><GoalVisual g={g2} onColor /></View>
-          <Row style={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 22, color: '#fff' }}>{progressLine(g2)}</Txt>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: '#fff' }}>{g2.kind === 'consistency' ? statusLine(g2) : `${pct}%`}</Txt>
-          </Row>
-        </>
-      )}
-    </LinearGradient>
-    </Pressy>
-  );
-}
 
 function Big({ big, unit }: { big: string; unit?: string }) {
   const { c } = useTheme();
@@ -241,6 +195,7 @@ export default function Progress() {
       refreshControl={<RefreshControl refreshing={ps.refreshing} tintColor={c.accentText} onRefresh={() => { progressStore.set({ refreshing: true }); showProgressLoading(900); }} />}>
       {v2 && !ps.loading && <Animated.View entering={fade()}><GoalCard2 size="expanded" /></Animated.View>}
       {v2 && ps.loading && <Skeleton h={190} />}
+      {!v2 && (ps.loading ? <Skeleton h={150} /> : <Animated.View entering={fade()}><GoalTickCard /></Animated.View>)}
       <View onLayout={(e) => setBar({ y: e.nativeEvent.layout.y, h: e.nativeEvent.layout.height })}><RangeBar /></View>
       {ps.loading ? (
         <>
@@ -248,7 +203,6 @@ export default function Progress() {
         </>
       ) : (
         <>
-          {!v2 && <Animated.View entering={fade()}><GoalHero /></Animated.View>}
           {!v2 && <Animated.View entering={fade(40)}><StreakEntry /></Animated.View>}
           {cards.map((k, i) => (
             <Animated.View key={k} entering={fade(Math.min(i, 6) * 40)}><ProgressCard k={k} /></Animated.View>
