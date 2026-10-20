@@ -151,13 +151,10 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {comebackNew && <Enter i={0}><WorkoutCard restart /></Enter>}
             {!comebackNew && <Enter i={0}><TodayGreeting /></Enter>}
             {!comebackNew && forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
-            {/* fixed order, time never moves a card: today's numbers, trackers, workout, meals, this week */}
+            {/* today's calories stay at the top, right under the updates; the cards below follow the time of day (the workout at workout time, the meals at meal time, the week at the end of the day) */}
             <Enter i={1}>{topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</Enter>
             {comebackNew && forYou.length > 0 && <Enter i={1}><ForYouStack /></Enter>}
-            <Enter i={2}><ViewOnly><Trackers /></ViewOnly></Enter>
-            <Enter i={3}><WorkoutCard /></Enter>
-            <Enter i={4}><ViewOnly><MealNowCard /></ViewOnly></Enter>
-            <Enter i={5}><WeekCard /></Enter>
+            {order.map((k, i) => <Enter key={k} i={2 + i}>{slots[k]}</Enter>)}
           </>
         ) : (
           <>
