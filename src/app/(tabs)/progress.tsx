@@ -195,8 +195,8 @@ export default function Progress() {
       refreshControl={<RefreshControl refreshing={ps.refreshing} tintColor={c.accentText} onRefresh={() => { progressStore.set({ refreshing: true }); showProgressLoading(900); }} />}>
       {v2 && !ps.loading && <Animated.View entering={fade()}><GoalCard2 size="expanded" /></Animated.View>}
       {v2 && ps.loading && <Skeleton h={190} />}
-      {!v2 && (ps.loading ? <Skeleton h={150} /> : <Animated.View entering={fade()}><GoalTickCard /></Animated.View>)}
       <View onLayout={(e) => setBar({ y: e.nativeEvent.layout.y, h: e.nativeEvent.layout.height })}><RangeBar /></View>
+      {!v2 && (ps.loading ? <Skeleton h={150} /> : <Animated.View entering={fade()}><GoalTickCard /></Animated.View>)}
       {ps.loading ? (
         <>
           <Skeleton h={168} /><Skeleton h={120} /><Skeleton h={120} /><Skeleton h={120} />
