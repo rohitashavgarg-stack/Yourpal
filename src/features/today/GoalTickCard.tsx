@@ -27,7 +27,7 @@ export const goalSizeStore = createStore(() => ({ size: 'Smaller' as GoalSize })
 
 // The glow of the Today card: a radial ellipse (about 300 x 230) behind the content, 50 px past the left edge and 80 px below the bottom, so only part of it
 // shows, clipped by the card's rounded corners. Its colour comes from the state.
-function Glow({ color, a }: { color: string; a: number }) {
+export function Glow({ color, a }: { color: string; a: number }) {
   const W = 340, H = 260;
   return (
     <View pointerEvents="none" style={{ position: 'absolute', left: -60, bottom: -90, width: W, height: H }}>
