@@ -20,8 +20,8 @@ export type TodayCtx = {
 export type Greeting = { top: string; lead: string; hl: string };
 
 const pick = (day: number, key: number, list: string[]) => list[(day + key) % list.length];
-// short, so the first line stays on one line at 32 px even with a long name
-const timeGreet = (_c: TodayCtx) => ['Hey! {n}', 'Hello! {n}'];
+// the time of day first, then the shorter ones; the screen shrinks both lines a little when the first one is long
+const timeGreet = (c: TodayCtx) => [c.min < 12 * 60 ? 'Good morning, {n}' : c.min < 17 * 60 ? 'Good afternoon, {n}' : 'Good evening, {n}', 'Hey! {n}', 'Hello! {n}'];
 const withName = (line: string, first: string) => (first ? line.replace('{n}', first) : line.replace(/! ?\{n\}/, '!').trim());
 
 export function greeting(c: TodayCtx, first: string): Greeting {

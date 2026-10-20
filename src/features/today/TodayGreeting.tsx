@@ -34,7 +34,8 @@ export function TodayGreeting() {
   };
   const ctx = forceCtx(base, g.state);
   const { top, lead, hl } = greeting(ctx, first);
-  const big = { fontFamily: font.regular, fontSize: 32, lineHeight: 40, letterSpacing: -0.6, color: c.muted } as const; // both lines: light, grey; the key phrase is brighter
+  const size = top.length > 19 ? 28 : 32; // "Good afternoon, Rohitashav" would wrap at 32, so both lines step down together
+  const big = { fontFamily: font.regular, fontSize: size, lineHeight: Math.round(size * 1.25), letterSpacing: -0.6, color: c.muted } as const; // both lines: light, grey; the key phrase is brighter
   return (
     <View accessible accessibilityLabel={`${top}. ${lead ? lead + ' ' : ''}${hl}`} style={{ paddingHorizontal: 4, gap: 0 }}>
       <Txt style={big}>{top}</Txt>
