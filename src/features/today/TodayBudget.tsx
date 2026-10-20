@@ -7,7 +7,6 @@ import { useDomain, totals, burned, wkDoneInfo, workoutState } from '@/lib/domai
 import { KCAL_TARGET } from '@/lib/data';
 import { useGoalV2 } from '@/features/goalv2/model';
 import { createStore } from '@/lib/createStore';
-import { Glow } from './GoalTickCard';
 import { GC } from './goalCardState';
 import { font } from '@/theme/tokens';
 
@@ -45,9 +44,6 @@ export function TodayBudgetCard() {
   const burn = live ? burned(d) : done ? wkDoneInfo(d).k : 0;
   return (
     <View style={{ backgroundColor: GC.bg, borderColor: GC.border, borderWidth: 1, borderRadius: 24, overflow: 'hidden', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 0, gap: 12 }}>
-      {/* a light wash of the two colours: mint under Eat on the left, orange under Burn on the right */}
-      <Glow color={GC.mint} a={0.26} side="left" />
-      <Glow color={BURN} a={0.26} side="right" />
       <Row style={{ gap: 16, alignItems: 'flex-start' }}>
         <Half icon={<UtensilsCrossed size={14} color={GC.mint} />} label="Eat today" hint="kcal" value={inr(eaten)} of={inr(KCAL_TARGET)} pct={eaten / KCAL_TARGET} color={GC.mint} />
         <View style={{ width: 1, alignSelf: 'stretch', backgroundColor: 'rgba(255,255,255,0.1)' }} />
