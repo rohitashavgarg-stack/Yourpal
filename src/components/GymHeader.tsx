@@ -60,18 +60,18 @@ export function GymHeader() {
       </Pressy>
       )}
       <View style={{ flex: 1 }} />
-      {/* Bell and profile photo share one glass container. */}
-      <View style={[{ height: 44, borderRadius: 22 }, lift]}>
-        <GlassShell radius={22} style={{ flexDirection: 'row', alignItems: 'center', gap: 2, height: 44, paddingHorizontal: 4 }}>
-          <Pressy accessibilityRole="button" accessibilityLabel={unread ? `Notifications, ${unread} unread` : 'Notifications'} onPress={() => router.push('/notifications')} style={{ width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' }}>
+      {/* The bell has its own round glass button; the profile photo stands on its own beside it. */}
+      <View style={[{ width: 44, height: 44, borderRadius: 22 }, lift]}>
+        <GlassShell radius={22} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+          <Pressy accessibilityRole="button" accessibilityLabel={unread ? `Notifications, ${unread} unread` : 'Notifications'} onPress={() => router.push('/notifications')} style={{ width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' }}>
             <Bell size={19} color={c.ink} />
-            {unread > 0 && <View style={{ position: 'absolute', top: 6, right: 7, width: 8, height: 8, borderRadius: 4, backgroundColor: c.accent }} />}
-          </Pressy>
-          <Pressy accessibilityRole="button" accessibilityLabel="Profile" onPress={() => router.push('/profile')} style={{ width: 36, height: 36, borderRadius: 18 }} hitSlop={4}>
-            <Avatar size={36} />
+            {unread > 0 && <View style={{ position: 'absolute', top: 10, right: 11, width: 8, height: 8, borderRadius: 4, backgroundColor: c.accent }} />}
           </Pressy>
         </GlassShell>
       </View>
+      <Pressy accessibilityRole="button" accessibilityLabel="Profile" onPress={() => router.push('/profile')} style={[{ width: 44, height: 44, borderRadius: 22 }, lift]} hitSlop={4}>
+        <Avatar size={44} />
+      </Pressy>
     </Row>
   );
 }
