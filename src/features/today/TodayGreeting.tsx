@@ -7,6 +7,7 @@ import { forceCtx, greeting, GreetingState } from '@/lib/microcopy';
 import { createStore } from '@/lib/createStore';
 import { useLogsPaused } from '@/lib/logGate';
 import { useStore } from '@/lib/store';
+import { planStore } from '@/lib/planState';
 import { useStreak } from '@/features/streak/useStreak';
 import { nextMeal } from './meals';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -29,7 +30,7 @@ export function TodayGreeting() {
     min: d.min, planned: plannedMin(state.profile.time), workout: workoutState(d),
     nextMeal: nm ? MEALS.find((m) => m.id === nm)?.n ?? null : null,
     weeks: streak.weeks, weekDone: streak.weekDone, target: streak.target, paused,
-    day: new Date().getDate(), clock: (m: number) => fmtT(m).full,
+    day: new Date().getDate(), clock: (m: number) => fmtT(m).full, noPlan: !planStore.use().assigned,
   };
   const ctx = forceCtx(base, g.state);
   const { top, lead, hl } = greeting(ctx, first);

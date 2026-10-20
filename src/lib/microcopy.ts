@@ -10,6 +10,7 @@ export type TodayCtx = {
   weekDone: number;
   target: number;
   paused: boolean;                               // expired membership: view only
+  noPlan?: boolean;                              // no workout or diet plan assigned: tracking only
   day: number;                                   // day of month, rotates the variants
   clock: (min: number) => string;                // "6:30 pm"
 };
@@ -26,6 +27,7 @@ const withName = (line: string, first: string) => (first ? line.replace('{n}', f
 export function greeting(c: TodayCtx, first: string): Greeting {
   const g = (list: string[], key: number, lead: string, hl: string): Greeting => ({ top: withName(pick(c.day, key, list), first), lead, hl });
   if (c.paused) return g(timeGreet(c), 0, '', 'History is safe');
+  if (c.noPlan) return g(timeGreet(c), 7, 'Your plan is', 'on the way');
   if (c.workout === 'live') return g(['Keep going! {n}', 'Hey! {n}'], 1, 'Workout', 'in progress');
   if (c.workout === 'rest') return g(timeGreet(c), 2, "It's your", 'rest day');
   if (c.workout === 'done') return c.weeks > 0 ? g(['Good job! {n}', 'Well done! {n}'], 3, '', `${c.weeks} week streak`) : g(['Good job! {n}', 'Well done! {n}'], 3, 'Workout', 'done');

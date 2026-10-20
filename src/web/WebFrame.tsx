@@ -26,6 +26,8 @@ import { reminderStore, useReminders } from '@/features/reminders/reminders';
 import { sendReminderPush } from '@/features/reminders/push';
 import { goalCardStore } from '@/features/today/goalCardState';
 import { topCardStore } from '@/features/today/TodayBudget';
+import { planStore } from '@/lib/planState';
+import { setP as setPlans } from '@/features/plans/store';
 import { greetStore } from '@/features/today/TodayGreeting';
 import { GREETING_STATES, GreetingState } from '@/lib/microcopy';
 import { Bell } from '@/lib/icons';
@@ -133,6 +135,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
   const shell = useShell();
   const { isDark } = useTheme();
   const topMode = topCardStore.use().mode;
+  const plan = planStore.use();
   const greet = greetStore.use();
   const { d, set } = useDomain();
   const steps = stepsStore.use();
@@ -177,6 +180,8 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     { label: 'Meals today', options: ['By time of day', 'All logged'], value: Object.keys(d.meals).length >= 4 ? 'All logged' : 'By time of day', onPick: (v: string) => set({ meals: mealsAt(v === 'All logged' ? 2000 : d.min), openMeal: null }) },
     // The greeting at the top of Today: every state of the line.
     { label: 'Greeting line', options: GREETING_STATES as unknown as string[], value: greet.state, onPick: (v: string) => greetStore.set({ state: v as GreetingState }) },
+    // Plans: assigned by the coach, or not assigned (the member only tracks weight, water and Health or wearable data).
+    { label: 'Plans', options: ['Assigned', 'Not assigned'], value: plan.assigned ? 'Assigned' : 'Not assigned', onPick: (v: string) => { planStore.set({ assigned: v === 'Assigned' }); setPlans({ noPlan: v !== 'Assigned' }); } },
     // The top card of Today: the whole goal (live goal card) or today's calories with the goal as one line.
     { label: 'Top card', options: ['Goal card', 'Today card'], value: topMode, onPick: (v: string) => topCardStore.set({ mode: v as 'Goal card' | 'Today card' }) },
     // Comeback: how long the member has been away.
@@ -257,6 +262,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       {seg('Member type')}
       {dd('Membership')}
       {dd('Goal type')}
+      {dd('Plans')}
       {dd('Top card')}
       {dd('Meals today')}
       {dd('Greeting line')}

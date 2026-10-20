@@ -26,6 +26,8 @@ import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
 import { ViewOnly } from '@/features/today/ViewOnly';
 import { TodayBudgetCard, topCardStore } from '@/features/today/TodayBudget';
 import { TodayGreeting } from '@/features/today/TodayGreeting';
+import { NoPlanCard } from '@/features/today/NoPlanCard';
+import { planStore } from '@/lib/planState';
 import { PushBanner } from '@/features/reminders/PushBanner';
 import { GOAL_STATE_OPTIONS, goalCardStore } from '@/features/today/goalCardState';
 
@@ -84,6 +86,8 @@ export default function Today() {
     : ['trackers', 'workout', 'meals', 'week'];
   // every meal is already logged: the meals card has nothing to ask, so it moves below the trackers
   if (mealsSettled && primary !== 'wrap') { order.splice(order.indexOf('meals'), 1); order.splice(order.indexOf('trackers') + 1, 0, 'meals'); }
+  const assigned = planStore.use().assigned;
+  if (!assigned) order.splice(0, order.length, 'trackers'); // no plans: only the trackers
   const slots: Record<Slot, React.ReactNode> = { workout: <WorkoutCard />, meals: <ViewOnly><MealNowCard /></ViewOnly>, trackers: <ViewOnly><Trackers /></ViewOnly>, week: <WeekCard /> };
   const focusMeal = focus.kind === 'meal' ? focus.meal.id : null;
   useEffect(() => { if (focusMeal) set({ openMeal: focusMeal }); }, [focusMeal]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -152,7 +156,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {!comebackNew && <Enter i={0}><TodayGreeting /></Enter>}
             {!comebackNew && forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
             {/* today's calories stay at the top, right under the updates; the cards below follow the time of day (the workout at workout time, the meals at meal time, the week at the end of the day) */}
-            <Enter i={1}>{topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</Enter>
+            <Enter i={1}>{!assigned ? <NoPlanCard /> : topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</Enter>
             {comebackNew && forYou.length > 0 && <Enter i={1}><ForYouStack /></Enter>}
             {order.map((k, i) => <Enter key={k} i={2 + i}>{slots[k]}</Enter>)}
           </>
@@ -164,7 +168,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
             {d.todayVariant === 'Comeback' && <Enter i={0}><ComebackCard /></Enter>}
             <Enter i={1}><StreakChip /></Enter>
-            <Enter i={1}>{topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</Enter>
+            <Enter i={1}>{!assigned ? <NoPlanCard /> : topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</Enter>
             {order.map((k, i) => <Enter key={k} i={2 + i}>{slots[k]}</Enter>)}
           </>
         )}

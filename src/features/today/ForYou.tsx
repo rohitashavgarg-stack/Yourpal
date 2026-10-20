@@ -14,6 +14,7 @@ import { FlagSheet } from '@/features/gym/sheets';
 import { usePtPending } from '@/features/shell/notifs';
 import { plannedMin, useDomain, totals, workoutState } from '@/lib/domain';
 import { useStore } from '@/lib/store';
+import { planStore } from '@/lib/planState';
 import { nextMeal } from './meals';
 import { QuickLogSheet } from './QuickLogSheet';
 import { MISSED_AFTER, missedWkStore } from './WorkoutCard';
@@ -80,6 +81,7 @@ export function useForYou(): Item[] {
   const { state } = useStore();
   const startWorkout = useStartWorkout();
   const missedWk = missedWkStore.use();
+  const plansOn = planStore.use().assigned;
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
   if (ptPending && d.hasGym && !logsPaused) out.push({ key: 'pt', title: 'Confirm your PT session', body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', critical: true, tone: 'accent', who: true, two: true });
@@ -89,7 +91,7 @@ export function useForYou(): Item[] {
     out.push({ key: u.key, title: u.title, body: u.body, tone: u.tone, who: ['plan', 'reply'].includes(u.key), icon: u.icon, btn: u.isPlan ? 'See changes' : u.btn, act: u.isPlan ? () => router.navigate('/plans') : u.act });
   });
   // Log prompts: a meal that is due or overdue, and a workout that was planned and has not been logged. Never while logging is paused.
-  if (!logsPaused) {
+  if (!logsPaused && plansOn) {
     const nm = nextMeal(d);
     const meal = nm ? MEALS.find((m) => m.id === nm) : undefined;
     if (meal && d.min >= meal.t - 30) {
