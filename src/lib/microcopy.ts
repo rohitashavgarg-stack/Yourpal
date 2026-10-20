@@ -1,5 +1,5 @@
 // Every line the app says to the member that is not a label lives here, so the voice can be read and changed in one place.
-// Voice: a coach who noticed something. Fact first, then the smallest next step. No emoji, no exclamation marks, no guilt, no fake cheer. English only.
+// Voice: a coach who noticed something. Fact first. No emoji, no exclamation marks, no guilt, no fake cheer. English only.
 
 export type TodayCtx = {
   min: number;                                   // minutes since midnight
@@ -14,34 +14,50 @@ export type TodayCtx = {
   clock: (min: number) => string;                // "6:30 pm"
 };
 
-// The greeting is one heading and nothing else. It follows what is happening (workout live, soon, done, rest day, the next meal) and otherwise the time
-// of day, and the day of the month rotates the wording so it is not the same line on every open. {n} is the first name; without one the name is dropped.
-const HEAD: Record<string, string[]> = {
+// The top of Today is two lines. The small one greets the member by name ("Good job, Rohitashav"); the big one is the fact ("3 week streak").
+// The name is only ever in the small line. The day of the month rotates the wording so it is not the same on every open.
+
+const slotOf = (c: TodayCtx): 'live' | 'soon' | 'done' | 'rest' | 'morning' | 'afternoon' | 'evening' =>
+  c.paused ? (c.min < 12 * 60 ? 'morning' : c.min < 17 * 60 ? 'afternoon' : 'evening')
+  : c.workout === 'live' ? 'live'
+  : c.workout === 'done' ? 'done'
+  : c.workout === 'rest' ? 'rest'
+  : c.workout === 'todo' && c.min < c.planned && c.planned - c.min <= 120 ? 'soon'
+  : c.min < 12 * 60 ? 'morning' : c.min < 17 * 60 ? 'afternoon' : 'evening';
+
+const SMALL: Record<string, string[]> = {
   live: ['Keep going, {n}', 'Strong set, {n}'],
   soon: ['Almost time, {n}', 'Get ready, {n}'],
-  done: ['Workout done, {n}', 'Well done, {n}'],
-  rest: ['Rest day, {n}', 'Easy day, {n}'],
+  done: ['Good job, {n}', 'Well done, {n}'],
+  rest: ['Easy day, {n}', 'Rest up, {n}'],
   morning: ['Good morning, {n}', 'Morning, {n}', 'Hey {n}'],
   afternoon: ['Good afternoon, {n}', 'Hey {n}', 'Afternoon, {n}'],
   evening: ['Good evening, {n}', 'Evening, {n}', 'Hey {n}'],
 };
-export function greetHeading(c: TodayCtx, first: string): string {
-  const key = c.paused ? null
-    : c.workout === 'live' ? 'live'
-    : c.workout === 'done' ? 'done'
-    : c.workout === 'rest' ? 'rest'
-    : c.workout === 'todo' && c.min < c.planned && c.planned - c.min <= 120 ? 'soon'
-    : null;
-  const time = c.min < 12 * 60 ? 'morning' : c.min < 17 * 60 ? 'afternoon' : 'evening';
-  const slot = key ?? time;
-  let list = HEAD[slot];
-  if (slot === 'done' && c.weeks > 0) list = [...list, `${c.weeks} week streak, {n}`];                  // the streak is one of the headings after a workout
-  if (!key && !c.paused && c.nextMeal) list = [`${c.nextMeal} is next, {n}`, ...list];                  // at meal time, the meal can be the heading
+
+// The small greeting line, with the name. Without a first name the name is dropped.
+export function greetSmall(c: TodayCtx, first: string): string {
+  const slot = slotOf(c);
+  const list = SMALL[slot];
   const line = list[(c.day + slot.length) % list.length];
   return first ? line.replace('{n}', first) : line.replace(/,? ?\{n\}/, '').trim() || 'Hey';
 }
 
-// The demo panel previews every state of the line. Each one is a context that makes todayLine return that moment's text.
+// The big line: what is going on, as a plain fact. No name here.
+export function greetBig(c: TodayCtx): string {
+  if (c.paused) return 'Your history is all here';
+  if (c.workout === 'live') return 'Workout in progress';
+  if (c.workout === 'done') {
+    if (c.weeks > 0) return `${c.weeks} week streak`;
+    return `${c.weekDone} of ${c.target} workouts this week`;
+  }
+  if (c.workout === 'rest') return 'Rest day';
+  if (c.workout === 'todo' && c.min < c.planned) return `Leg day is at ${c.clock(c.planned)}`;
+  if (c.nextMeal) return `${c.nextMeal} is next`;
+  return `${c.weekDone} of ${c.target} workouts this week`;
+}
+
+// The demo panel previews every state of the greeting. Each one is a context that makes it return that moment's text.
 export const GREETING_STATES = ['Auto', 'Workout live', 'Workout soon', 'Workout later today', 'Workout done with streak', 'Workout done, no streak', 'Rest day', 'Meal next', 'Week progress with streak', 'Week progress, no streak', 'Membership expired'] as const;
 export type GreetingState = (typeof GREETING_STATES)[number];
 export function forceCtx(c: TodayCtx, k: GreetingState): TodayCtx {
