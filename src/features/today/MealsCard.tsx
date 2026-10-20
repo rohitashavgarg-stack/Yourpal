@@ -14,6 +14,7 @@ import { font, spring } from '@/theme/tokens';
 import { inr } from '@/lib/useNow';
 import { mealById, mealKcal, mealTimeline, mealView, nextMeal } from './meals';
 import { QuickLogSheet } from './QuickLogSheet';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useLogGate } from '@/lib/logGate';
 
 function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | 'part' | 'off' | null }) {
@@ -212,6 +213,20 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
   );
 }
 
+// Behind the meals card: an orange gradient that starts in the top right corner and fades out toward the bottom left (like the workout card's gradient),
+// with a big, faint knife and fork. Both sit under the content, so chips and text keep their own contrast.
+function MealsBackdrop() {
+  const { c, isDark } = useTheme();
+  return (
+    <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', borderRadius: 24 }}>
+      <LinearGradient colors={[isDark ? '#FF9A4D40' : '#FF9A4D33', '#FF9A4D00']} start={{ x: 1, y: 0 }} end={{ x: 0.2, y: 0.75 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      <View style={{ position: 'absolute', right: -40, top: 36, transform: [{ rotate: '-12deg' }] }}>
+        <UtensilsCrossed size={190} color={c.cAct + (isDark ? '1A' : '16')} strokeWidth={1.4} />
+      </View>
+    </View>
+  );
+}
+
 export function MealNowCard() {
   const { c } = useTheme();
   const { d, set } = useDomain();
@@ -252,7 +267,8 @@ export function MealNowCard() {
   const picked = !!d.openMeal && d.openMeal !== 'none' && MEALS.some((q) => q.id === d.openMeal);
   if (t.done === MEALS.length && !picked) {
     return (
-      <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 8, gap: 12 }}>
+      <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 8, gap: 12, overflow: 'hidden' }}>
+        <MealsBackdrop />
         <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
           <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
           <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={16} color={c.bg} strokeWidth={3} /></View>
@@ -280,7 +296,8 @@ export function MealNowCard() {
     );
   }
   return (
-    <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
+    <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 16, gap: 14, overflow: 'hidden' }}>
+      <MealsBackdrop />
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
         <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />

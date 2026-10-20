@@ -21,7 +21,7 @@ const BURN = '#FF9A4D';
 // One half of the card: a label, the number big, and a thin bar.
 function Half({ icon, label, hint, value, of, pct, color }: { icon: React.ReactNode; label: string; hint: string; value: string; of: string; pct: number; color: string }) {
   return (
-    <View accessible accessibilityLabel={`${label}, ${value} of ${of}, ${hint}`} style={{ flex: 1, gap: 4 }}>
+    <View accessible accessibilityLabel={`${label}, ${value} of ${of} ${hint}`} style={{ flex: 1, gap: 4 }}>
       <Row style={{ gap: 6 }}>
         {icon}
         <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: GC.rest }}>{label}</Txt>
@@ -43,16 +43,15 @@ export function TodayBudgetCard() {
   const live = d.hc && d.wearable; // a real burned number needs a watch; without one the card shows the plan, not a measurement
   const done = workoutState(d) === 'done';
   const burn = live ? burned(d) : done ? wkDoneInfo(d).k : 0;
-  const left = Math.max(0, KCAL_TARGET - eaten);
   return (
     <View style={{ backgroundColor: GC.bg, borderColor: GC.border, borderWidth: 1, borderRadius: 24, overflow: 'hidden', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 0, gap: 12 }}>
       {/* a light wash of the two colours: mint under Eat on the left, orange under Burn on the right */}
       <Glow color={GC.mint} a={0.26} side="left" />
       <Glow color={BURN} a={0.26} side="right" />
       <Row style={{ gap: 16, alignItems: 'flex-start' }}>
-        <Half icon={<UtensilsCrossed size={14} color={GC.mint} />} label="Eat today" hint={left > 0 ? `${inr(left)} left` : 'Reached'} value={inr(eaten)} of={`${inr(KCAL_TARGET)} kcal`} pct={eaten / KCAL_TARGET} color={GC.mint} />
+        <Half icon={<UtensilsCrossed size={14} color={GC.mint} />} label="Eat today" hint="kcal" value={inr(eaten)} of={inr(KCAL_TARGET)} pct={eaten / KCAL_TARGET} color={GC.mint} />
         <View style={{ width: 1, alignSelf: 'stretch', backgroundColor: 'rgba(255,255,255,0.1)' }} />
-        <Half icon={<Flame size={14} color={BURN} />} label="Burn today" hint={live ? 'watch' : done ? 'done' : 'planned'} value={inr(burn)} of={`${inr(PLANNED_BURN)} kcal`} pct={burn / PLANNED_BURN} color={BURN} />
+        <Half icon={<Flame size={14} color={BURN} />} label="Burn today" hint="kcal" value={inr(burn)} of={`${inr(PLANNED_BURN)} ${live ? 'watch' : done ? 'done' : 'planned'}`} pct={burn / PLANNED_BURN} color={BURN} />
       </Row>
       {/* the whole goal sits apart at the bottom: a strip that runs edge to edge, touching the card's border on the left, right and bottom */}
       <Pressy accessibilityRole="link" accessibilityLabel={`Your goal: ${g.name}, ${Math.round(Math.max(0, Math.min(1, g.pct)) * 100)} percent. Open`} onPress={() => router.push('/goal-detail')} scaleTo={0.98}
