@@ -14,7 +14,7 @@ import { font, spring } from '@/theme/tokens';
 import { inr } from '@/lib/useNow';
 import { mealById, mealKcal, mealTimeline, mealView, nextMeal } from './meals';
 import { QuickLogSheet } from './QuickLogSheet';
-import { LinearGradient } from 'expo-linear-gradient';
+import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
 import { BlurView } from 'expo-blur';
 import { useLogGate } from '@/lib/logGate';
 
@@ -218,9 +218,20 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
 // It sits under the content, so chips and text keep their own contrast.
 function MealsBackdrop() {
   const { isDark } = useTheme();
+  const W = 230, H = 170; // a small round fade: it only reaches about a third of the way across and the heading height
   return (
     <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', borderRadius: 24 }}>
-      <LinearGradient colors={[isDark ? '#FF9A4D40' : '#FF9A4D33', '#FF9A4D00']} start={{ x: 1, y: 0 }} end={{ x: 0.55, y: 0.32 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      <View style={{ position: 'absolute', top: -70, right: -70, width: W, height: H }}>
+        <Svg width={W} height={H}>
+          <Defs>
+            <RadialGradient id="mealsGlow" cx="50%" cy="50%" r="50%">
+              <Stop offset="0" stopColor="#FF9A4D" stopOpacity={isDark ? 0.42 : 0.34} />
+              <Stop offset="1" stopColor="#FF9A4D" stopOpacity={0} />
+            </RadialGradient>
+          </Defs>
+          <Ellipse cx={W / 2} cy={H / 2} rx={W / 2} ry={H / 2} fill="url(#mealsGlow)" />
+        </Svg>
+      </View>
     </View>
   );
 }
