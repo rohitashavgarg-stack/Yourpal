@@ -14,7 +14,7 @@ import { font, spring } from '@/theme/tokens';
 import { inr } from '@/lib/useNow';
 import { mealById, mealKcal, mealTimeline, mealView, nextMeal } from './meals';
 import { QuickLogSheet } from './QuickLogSheet';
-import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useLogGate } from '@/lib/logGate';
 
 function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | 'part' | 'off' | null }) {
@@ -213,24 +213,13 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
   );
 }
 
-// Behind the meals card: an orange gradient that starts in the top right corner and fades out toward the bottom left (like the workout card's gradient).
-// It sits under the content, so chips and text keep their own contrast.
+// Behind the meals card: a soft orange wash in the top right corner. It is a fixed 150 px tall band that fades out going down and to the left, so it
+// colours the heading row and nothing else, whatever the card's height. It sits under everything (the content is drawn after it).
 function MealsBackdrop() {
   const { isDark } = useTheme();
-  const W = 340, H = 260; // a round fade from the top right corner: big enough to colour the heading and the first rows, gone before the middle of the card
   return (
-    <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', borderRadius: 24 }}>
-      <View style={{ position: 'absolute', top: -70, right: -70, width: W, height: H }}>
-        <Svg width={W} height={H}>
-          <Defs>
-            <RadialGradient id="mealsGlow" cx="50%" cy="50%" r="50%">
-              <Stop offset="0" stopColor="#FF9A4D" stopOpacity={isDark ? 0.6 : 0.45} />
-              <Stop offset="1" stopColor="#FF9A4D" stopOpacity={0} />
-            </RadialGradient>
-          </Defs>
-          <Ellipse cx={W / 2} cy={H / 2} rx={W / 2} ry={H / 2} fill="url(#mealsGlow)" />
-        </Svg>
-      </View>
+    <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 150, overflow: 'hidden', borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
+      <LinearGradient colors={[isDark ? '#FF9A4D40' : '#FF9A4D30', '#FF9A4D00']} start={{ x: 1, y: 0 }} end={{ x: 0.25, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
     </View>
   );
 }
