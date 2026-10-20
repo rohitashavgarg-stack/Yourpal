@@ -15,6 +15,7 @@ import { inr } from '@/lib/useNow';
 import { mealById, mealKcal, mealTimeline, mealView, nextMeal } from './meals';
 import { QuickLogSheet } from './QuickLogSheet';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BlurView } from 'expo-blur';
 import { useLogGate } from '@/lib/logGate';
 
 function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | 'part' | 'off' | null }) {
@@ -43,7 +44,7 @@ function Chevron({ open }: { open: boolean }) {
 }
 
 function MealRow({ id, open, bare = false }: { id: MealId; open: boolean; bare?: boolean }) {
-  const { c } = useTheme();
+  const { c, isDark } = useTheme();
   const { d, set } = useDomain();
   const { toggleItem, patch } = useMeals();
   const { openSheet, toast } = useOverlay();
@@ -89,7 +90,7 @@ function MealRow({ id, open, bare = false }: { id: MealId; open: boolean; bare?:
             const on = x.eaten.includes(k);
             const r = x.repl[k];
             return (
-              <Row key={k} style={{ gap: 10, minHeight: 52, paddingLeft: 12, paddingRight: 4, paddingVertical: 4, borderRadius: 18, backgroundColor: on ? c.goodSoft : c.surface2 }}>
+              <Row key={k} style={{ gap: 10, minHeight: 52, paddingLeft: 12, paddingRight: 4, paddingVertical: 4, borderRadius: 18, backgroundColor: on ? (isDark ? '#1E4A3F' : c.goodSoft) : c.surface2, borderWidth: on ? 1 : 0, borderColor: c.good + '66' }}>
                 <FoodMark type={it.type} />
                 <Pressy accessibilityRole="button" accessibilityLabel={`${r ? r.n : it.n}: nutrition, recipe and swap`} onPress={() => openFood(k, false)} scaleTo={0.98} style={{ flex: 1, minWidth: 0, paddingVertical: 4 }}>
                   <Txt style={{ fontFamily: font.medium, color: x.skip ? c.muted : c.ink, textDecorationLine: x.skip ? 'line-through' : 'none' }}>{r ? r.n : it.n}</Txt>
@@ -213,22 +214,19 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
   );
 }
 
-// Behind the meals card: an orange gradient that starts in the top right corner and fades out toward the bottom left (like the workout card's gradient),
-// with a big, faint knife and fork. Both sit under the content, so chips and text keep their own contrast.
+// Behind the meals card: an orange gradient that starts in the top right corner and fades out toward the bottom left (like the workout card's gradient).
+// It sits under the content, so chips and text keep their own contrast.
 function MealsBackdrop() {
-  const { c, isDark } = useTheme();
+  const { isDark } = useTheme();
   return (
     <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', borderRadius: 24 }}>
-      <LinearGradient colors={[isDark ? '#FF9A4D40' : '#FF9A4D33', '#FF9A4D00']} start={{ x: 1, y: 0 }} end={{ x: 0.2, y: 0.75 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
-      <View style={{ position: 'absolute', right: -40, top: 36, transform: [{ rotate: '-12deg' }] }}>
-        <UtensilsCrossed size={190} color={c.cAct + (isDark ? '1A' : '16')} strokeWidth={1.4} />
-      </View>
+      <LinearGradient colors={[isDark ? '#FF9A4D40' : '#FF9A4D33', '#FF9A4D00']} start={{ x: 1, y: 0 }} end={{ x: 0.55, y: 0.32 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
     </View>
   );
 }
 
 export function MealNowCard() {
-  const { c } = useTheme();
+  const { c, isDark } = useTheme();
   const { d, set } = useDomain();
   const t = totals(d);
   const now = currentMealId(d.min);
@@ -274,6 +272,7 @@ export function MealNowCard() {
           <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={16} color={c.bg} strokeWidth={3} /></View>
         </Row>
         <Txt muted style={{ paddingHorizontal: 4, marginTop: -6, fontSize: 14, lineHeight: 20 }}>{`All ${MEALS.length} meals logged. Protein ${t.p} of ${MACRO_TARGET.p} g.`}</Txt>
+        <View style={{ height: 1, backgroundColor: c.line, marginHorizontal: 4, marginTop: -2 }} />
         <View>
           {MEALS.map((q, i) => {
             const x = mealLog(d, q.id);
@@ -300,8 +299,14 @@ export function MealNowCard() {
       <MealsBackdrop />
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
-        <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
+        <View style={{ borderRadius: 999, overflow: 'hidden' }}>
+          <BlurView intensity={isDark ? 30 : 40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+          <View style={{ backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.5)' }}>
+            <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
+          </View>
+        </View>
       </Row>
+      <View style={{ height: 1, backgroundColor: c.line, marginHorizontal: 4, marginTop: -4 }} />
       {ask && <MissedRow id={ask} more={missed.length - 1} />}
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <View>
