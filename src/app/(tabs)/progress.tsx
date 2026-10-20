@@ -26,7 +26,7 @@ import { FLAME } from '@/features/streak/StreakChip';
 import { useStreak } from '@/features/streak/useStreak';
 import { showProgressLoading, useProgressScenarios } from '@/features/progress/scenarios';
 import { GoalCard2 } from '@/features/goalv2/GoalCard2';
-import { GoalTickCard } from '@/features/today/GoalTickCard';
+import { GoalStrip } from '@/features/today/GoalStrip';
 import { goalV2Store } from '@/features/goalv2/model';
 
 let firstLoad = true;
@@ -191,11 +191,11 @@ export default function Progress() {
   const cards = order.filter((k) => !hidden.includes(k));
 
   return (
-    <TabScreen title="Progress" header={<GymHeader />} compactTitle={false} pinned={v2 ? <RangeBarSlim /> : undefined} pinAfter={v2 && bar.h > 0 && !ps.loading ? bar.y + bar.h - (insets.top + 8 + 56) : undefined}
+    <TabScreen title="" header={<GymHeader />} compactTitle={false} pinned={v2 ? <RangeBarSlim /> : undefined} pinAfter={v2 && bar.h > 0 && !ps.loading ? bar.y + bar.h - (insets.top + 8 + 56) : undefined}
       refreshControl={<RefreshControl refreshing={ps.refreshing} tintColor={c.accentText} onRefresh={() => { progressStore.set({ refreshing: true }); showProgressLoading(900); }} />}>
       {v2 && !ps.loading && <Animated.View entering={fade()}><GoalCard2 size="expanded" /></Animated.View>}
       {v2 && ps.loading && <Skeleton h={190} />}
-      {!v2 && (ps.loading ? <Skeleton h={150} /> : <Animated.View entering={fade()}><GoalTickCard /></Animated.View>)}
+      {!v2 && (ps.loading ? <Skeleton h={150} /> : <Animated.View entering={fade()}><GoalStrip /></Animated.View>)}
       <View onLayout={(e) => setBar({ y: e.nativeEvent.layout.y, h: e.nativeEvent.layout.height })}><RangeBar /></View>
       {ps.loading ? (
         <>
