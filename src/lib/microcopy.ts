@@ -14,47 +14,28 @@ export type TodayCtx = {
   clock: (min: number) => string;                // "6:30 pm"
 };
 
-// The top of Today is two lines. The small one greets the member by name ("Good job, Rohitashav"); the big one is the fact ("3 week streak").
-// The name is only ever in the small line. The day of the month rotates the wording so it is not the same on every open.
+// The top of Today is one big line with the name in it, whatever the state: "It's your rest day, Rohitashav", "3 week streak, Rohitashav".
+// The day of the month rotates the wording so it is not the same on every open. Without a first name the name is dropped.
+export type Greeting = { big: string };
 
-const slotOf = (c: TodayCtx): 'live' | 'soon' | 'done' | 'rest' | 'morning' | 'afternoon' | 'evening' =>
-  c.paused ? (c.min < 12 * 60 ? 'morning' : c.min < 17 * 60 ? 'afternoon' : 'evening')
-  : c.workout === 'live' ? 'live'
-  : c.workout === 'done' ? 'done'
-  : c.workout === 'rest' ? 'rest'
-  : c.workout === 'todo' && c.min < c.planned && c.planned - c.min <= 120 ? 'soon'
-  : c.min < 12 * 60 ? 'morning' : c.min < 17 * 60 ? 'afternoon' : 'evening';
+const pick = (day: number, key: number, list: string[]) => list[(day + key) % list.length];
+const timeGreet = (c: TodayCtx) => (c.min < 12 * 60 ? ['Good morning, {n}', 'Morning, {n}', 'Hey {n}'] : c.min < 17 * 60 ? ['Good afternoon, {n}', 'Hey {n}', 'Afternoon, {n}'] : ['Good evening, {n}', 'Evening, {n}', 'Hey {n}']);
+const withName = (line: string, first: string) => (first ? line.replace('{n}', first) : line.replace(/,? ?\{n\}/, '').trim() || 'Hey');
 
-const SMALL: Record<string, string[]> = {
-  live: ['Keep going, {n}', 'Strong set, {n}'],
-  soon: ['Almost time, {n}', 'Get ready, {n}'],
-  done: ['Good job, {n}', 'Well done, {n}'],
-  rest: ['Easy day, {n}', 'Rest up, {n}'],
-  morning: ['Good morning, {n}', 'Morning, {n}', 'Hey {n}'],
-  afternoon: ['Good afternoon, {n}', 'Hey {n}', 'Afternoon, {n}'],
-  evening: ['Good evening, {n}', 'Evening, {n}', 'Hey {n}'],
-};
-
-// The small greeting line, with the name. Without a first name the name is dropped.
-export function greetSmall(c: TodayCtx, first: string): string {
-  const slot = slotOf(c);
-  const list = SMALL[slot];
-  const line = list[(c.day + slot.length) % list.length];
-  return first ? line.replace('{n}', first) : line.replace(/,? ?\{n\}/, '').trim() || 'Hey';
-}
-
-// The big line: what is going on, as a plain fact. No name here.
-export function greetBig(c: TodayCtx): string {
-  if (c.paused) return 'Your history is all here';
-  if (c.workout === 'live') return 'Workout in progress';
+export function greeting(c: TodayCtx, first: string): Greeting {
+  const n = (line: string) => ({ big: withName(line, first) });
+  if (c.paused) return n(pick(c.day, 0, timeGreet(c)));                                                       // expired: just the greeting
+  if (c.workout === 'live') return n(pick(c.day, 1, ['Keep going, {n}', 'Strong set, {n}']));
+  if (c.workout === 'rest') return n(pick(c.day, 2, ["It's your rest day, {n}", 'Easy day today, {n}']));
   if (c.workout === 'done') {
-    if (c.weeks > 0) return `${c.weeks} week streak`;
-    return `${c.weekDone} of ${c.target} workouts this week`;
+    return c.weeks > 0 ? n(pick(c.day, 3, [`${c.weeks} week streak, {n}`, 'Good job, {n}', 'Workout done, {n}']))
+      : n(pick(c.day, 3, ['Workout done, {n}', 'Good job, {n}']));
   }
-  if (c.workout === 'rest') return 'Rest day';
-  if (c.workout === 'todo' && c.min < c.planned) return `Leg day is at ${c.clock(c.planned)}`;
-  if (c.nextMeal) return `${c.nextMeal} is next`;
-  return `${c.weekDone} of ${c.target} workouts this week`;
+  if (c.workout === 'todo' && c.min < c.planned) {
+    return c.planned - c.min <= 120 ? n(pick(c.day, 4, ['Almost time, {n}', 'Get ready, {n}'])) : n(pick(c.day, 4, ['Leg day today, {n}', ...timeGreet(c)]));
+  }
+  if (c.nextMeal) return n(pick(c.day, 5, [`${c.nextMeal} is next, {n}`, ...timeGreet(c)]));
+  return n(pick(c.day, 6, timeGreet(c)));
 }
 
 // The demo panel previews every state of the greeting. Each one is a context that makes it return that moment's text.
