@@ -67,7 +67,7 @@ export function JoinConsentSheet() {
     const n = joinProgramme(j);
     haptic.success();
     goHome();
-    if (n) toast(`Joined · switched to ${n}`);
+    if (n) toast(`Joined. Switched to ${n}`);
   });
   return (
     <>

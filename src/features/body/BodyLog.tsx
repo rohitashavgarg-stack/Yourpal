@@ -206,7 +206,7 @@ export function WeightScreen() {
     else set((x) => ({ ...(day === 0 ? { weight: v } : {}), weightLog: [...x.weightLog.filter((w) => w.t !== DAYS[day].log), { t: DAYS[day].log, v }] }));
     haptic.success();
     back();
-    if (!onboarding) toast(`Weight saved · ${unit === 'kg' ? v : r1(v * KG_LB)} ${unit}`);
+    if (!onboarding) toast(`Weight saved. ${unit === 'kg' ? v : r1(v * KG_LB)} ${unit}`);
   };
 
   return (

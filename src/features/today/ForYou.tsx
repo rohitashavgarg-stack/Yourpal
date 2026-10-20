@@ -5,18 +5,22 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import { router } from 'expo-router';
 import Svg, { Circle } from 'react-native-svg';
-import { Clock, Flame, Footprints, GlassWater, Scale, X } from '@/lib/icons';
+import { Clock, Dumbbell, Flame, Footprints, GlassWater, Scale, UtensilsCrossed, X } from '@/lib/icons';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { useOverlay } from '@/components/Overlay';
 import { FlagSheet } from '@/features/gym/sheets';
 import { usePtPending } from '@/features/shell/notifs';
-import { useDomain, totals } from '@/lib/domain';
+import { plannedMin, useDomain, totals, workoutState } from '@/lib/domain';
+import { useStore } from '@/lib/store';
+import { nextMeal } from './meals';
+import { QuickLogSheet } from './QuickLogSheet';
+import { MISSED_AFTER, missedWkStore } from './WorkoutCard';
 import { reminderStore, useReminders } from '@/features/reminders/reminders';
 import { useLogsPaused } from '@/lib/logGate';
 import { useGoalV2, progressLine, statusLine } from '@/features/goalv2/model';
-import { KCAL_TARGET } from '@/lib/data';
+import { fmtT, KCAL_TARGET, MEALS } from '@/lib/data';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { fade } from '@/theme/motion';
@@ -72,6 +76,10 @@ export function useForYou(): Item[] {
   const reminders = logsPaused ? [] : allReminders; // nothing to log while logging is paused
   const ptPending = usePtPending();
   const { live } = useUpdates();
+  const { openSheet } = useOverlay();
+  const { state } = useStore();
+  const startWorkout = useStartWorkout();
+  const missedWk = missedWkStore.use();
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
   if (ptPending && d.hasGym && !logsPaused) out.push({ key: 'pt', title: 'Confirm your PT session', body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', critical: true, tone: 'accent', who: true, two: true });
@@ -80,6 +88,19 @@ export function useForYou(): Item[] {
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
     out.push({ key: u.key, title: u.title, body: u.body, tone: u.tone, who: ['plan', 'reply'].includes(u.key), icon: u.icon, btn: u.isPlan ? 'See changes' : u.btn, act: u.isPlan ? () => router.navigate('/plans') : u.act });
   });
+  // Log prompts: a meal that is due or overdue, and a workout that was planned and has not been logged. Never while logging is paused.
+  if (!logsPaused) {
+    const nm = nextMeal(d);
+    const meal = nm ? MEALS.find((m) => m.id === nm) : undefined;
+    if (meal && d.min >= meal.t - 30) {
+      const late = d.min > meal.t + 60;
+      out.push({ key: 'log-meal', title: 'Log your ' + meal.n.toLowerCase(), body: late ? 'It was due at ' + fmtT(meal.t).full + '. Log it, or skip it if you missed it.' : 'It is time for ' + meal.n.toLowerCase() + '. Log it when you eat.', tone: 'accent', icon: UtensilsCrossed, btn: 'Log meal', act: () => openSheet(<QuickLogSheet mealId={meal.id} mode="scan" />, { label: 'Log a meal' }) });
+    }
+    const planned = plannedMin(state.profile.time);
+    if (workoutState(d) === 'todo' && d.min - planned > MISSED_AFTER && !missedWk.answer && !live.some((u) => u.key === 'log')) {
+      out.push({ key: 'log-workout', title: 'Log your workout', body: 'Leg day was planned for ' + fmtT(planned).full + '. Log it if you trained, or skip it.', tone: 'accent', icon: Dumbbell, btn: 'Log workout', act: () => startWorkout() });
+    }
+  }
   // Personal reminders (log your water, log your weight, steps behind): a card each, last in the stack; the meals reminder lives in the meals card.
   reminders.filter((r) => r.key !== 'meals').forEach((r) => {
     if (r.key === 'water') out.push({ key: 'rem-water', title: 'Log your water', body: r.text, tone: 'accent', icon: GlassWater, btn: r.action, act: () => { set({ water: Math.min(3.5, Math.round((d.water + 0.25) * 100) / 100) }); reminderStore.set({ waterAt: d.min }); toast('Added 250 ml'); } });

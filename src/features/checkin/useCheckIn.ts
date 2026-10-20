@@ -19,12 +19,12 @@ export function useCheckIn() {
       const patch = checkOutPatch(d, now);
       set(patch);
       haptic.success();
-      toast(`Checked out · ${patch.ciOut!.mins} min at the gym`, { undo: () => set((s) => undoCheckOutPatch(s, Date.now())) });
+      toast(`Checked out. ${patch.ciOut!.mins} min at the gym`, { undo: () => set((s) => undoCheckOutPatch(s, Date.now())) });
     },
     keepGoing() {
       set((s) => keepGoingPatch(s, Date.now()));
       haptic.light();
-      toast('Keep going · 30 more minutes');
+      toast('Keep going. 30 more minutes');
     },
     // ----- edge-case panel -----
     pickCi(v: Parameters<typeof ciPatch>[1]) { set((s) => ciPatch(s, v, Date.now())); },

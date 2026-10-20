@@ -128,14 +128,14 @@ export default function LogFood() {
     if (forEdit) {
       setP((s) => (s.draft?.kind === 'diet' ? { draft: { ...s.draft, rows: [...s.draft.rows, { key: `n${Date.now()}`, n: item.n, k: item.k, p: item.p, por: 1, type: item.type ?? 'veg', mine: true, added: { ...cur } }] } } : {}));
       router.back();
-      toast(`Added ${item.n} · save to keep it`);
+      toast(`Added ${item.n}. Save to keep it`);
       return;
     }
     if (replaceIt) { A.applySwap(meal, replaceIt, item, false); router.back(); return; }
     A.addExtra(meal, item);
     setP({ seg: 'diet', openMeal: meal });
     router.back();
-    toast(`Logged ${cur.n}${saveMine ? ' · saved to your foods' : ''}`);
+    toast(`Logged ${cur.n}${saveMine ? '. Saved to your foods' : ''}`);
   };
   const logL = cur ? (replaceIt ? 'Swap it' : forEdit ? 'Add to the meal' : 'Log it') : mode === 'scan' ? 'Scan first' : mode === 'write' ? 'Write what you ate' : 'Pick what you ate';
   const cap = { idle: 'Fit the whole plate in the frame', busy: 'Looking at your plate…', done: 'Here is our guess', fail: 'Try again' }[scan];

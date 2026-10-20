@@ -112,7 +112,7 @@ function ProgressCard({ k }: { k: CardKey }) {
     photos: 'Photos · Private', water: 'Water', hr: `Resting heart rate · ${HEALTH_NAME}`, sleep: `Sleep · ${HEALTH_NAME}`,
   };
   const open = () => {
-    if (connect) { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected · steps sync automatically`); return; }
+    if (connect) { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. Steps sync automatically`); return; }
     if (k === 'lifts') { progressStore.set({ lift: 'Leg press' }); router.push('/progress/lift'); }
     else if (k === 'assess') router.push('/progress/assess');
     else if (k === 'photos') router.push('/progress/photos');

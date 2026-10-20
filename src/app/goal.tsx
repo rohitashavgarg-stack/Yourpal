@@ -53,12 +53,12 @@ export default function Goal() {
     goalV2Store.set({ extendDays: 0, lowerBy: 0, finished: false, kept: false });
     setProfile({ goal: g.type, goalTarget: g.target, goal2: g.g2 });
   };
-  const save = () => { commit(); haptic.success(); goBack('/profile'); toast('Goal saved · Coach Vikram notified'); };
+  const save = () => { commit(); haptic.success(); goBack('/profile'); toast('Goal saved. Coach Vikram notified'); };
   const askPlan = () => {
     commit(); haptic.success();
     set({ planReq: 'requested' });
     router.navigate('/plans');
-    toast('Goal saved · new plan requested from Coach Vikram');
+    toast('Goal saved. New plan requested from Coach Vikram');
   };
 
   return (

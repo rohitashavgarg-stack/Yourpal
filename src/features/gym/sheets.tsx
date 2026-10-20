@@ -27,7 +27,7 @@ export function FlagSheet() {
         gymStore.set({ sessionState: 'flagged' });
         haptic.medium();
         if (router.canGoBack()) router.back();
-        toast('Flagged to the gym admin · not counted');
+        toast('Flagged to the gym admin. Not counted');
       })} />
       <Button kind="secondary" label="Cancel" onPress={() => closeSheet()} />
     </>
@@ -42,7 +42,7 @@ export function ChatOptionsSheet() {
       <Txt v="caption" style={{ fontSize: 13 }}>Chat stays in the app · no phone numbers are shared</Txt>
       <ListCard style={{ paddingHorizontal: 0, shadowOpacity: 0, elevation: 0 }} rows={[
         { l: 'View profile', onPress: () => closeSheet(() => router.push('/coach')) },
-        { l: 'Report', onPress: () => closeSheet(() => toast('Reported · the gym admin will review this chat')) },
+        { l: 'Report', onPress: () => closeSheet(() => toast('Reported. The gym admin will review this chat')) },
         { l: 'Block', warn: true, onPress: () => closeSheet(() => { gymStore.set({ blocked: true }); haptic.medium(); }) },
       ]} />
     </>

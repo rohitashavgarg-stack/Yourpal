@@ -32,7 +32,7 @@ export default function EditGoal() {
     set({ goal: g });
     haptic.success();
     router.back();
-    toast('Goal saved · Coach Vikram notified');
+    toast('Goal saved. Coach Vikram notified');
   };
   return (
     <SubPage title="Edit goal" fallback="/progress">

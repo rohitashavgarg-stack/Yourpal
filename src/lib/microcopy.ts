@@ -1,6 +1,5 @@
 // Every line the app says to the member that is not a label lives here, so the voice can be read and changed in one place.
-// Voice: a coach who noticed something. Fact first, then the smallest next step. No emoji, no exclamation marks, no guilt, no fake cheer.
-// Some lines are in Hinglish (an English line and a Hinglish one are alternated by day), the way people actually talk at an Indian gym.
+// Voice: a coach who noticed something. Fact first, then the smallest next step. No emoji, no exclamation marks, no guilt, no fake cheer. English only.
 
 export type TodayCtx = {
   min: number;                                   // minutes since midnight
@@ -13,34 +12,55 @@ export type TodayCtx = {
   paused: boolean;                               // expired membership: view only
   day: number;                                   // day of month, rotates the variants
   clock: (min: number) => string;                // "6:30 pm"
-  lang?: 'mixed' | 'en' | 'hi';                   // mixed alternates English and Hinglish by day
 };
 
-export const greetWord = (min: number) => (min < 12 * 60 ? 'Good morning' : min < 17 * 60 ? 'Good afternoon' : 'Good evening');
-
-// Two variants per moment: English first, Hinglish second. The day picks one, so a line does not change on every render.
-const pick = (day: number, key: number, en: string, hi: string, lang: TodayCtx['lang'] = 'mixed') => (lang === 'en' ? en : lang === 'hi' ? hi : (day + key) % 2 === 0 ? en : hi);
+// Two wordings per moment; the day of the month picks one, so a line does not change on every render.
+const pick = (day: number, key: number, a: string, b: string) => ((day + key) % 2 === 0 ? a : b);
 
 // One short sentence under the greeting. First rule that fits wins.
 export function todayLine(c: TodayCtx): string {
   if (c.paused) return 'Your history is all here.';
-  if (c.workout === 'live') return pick(c.day, 1, 'Workout in progress. The rest timer is running.', 'Workout chal raha hai. Rest timer on hai.', c.lang);
+  if (c.workout === 'live') return pick(c.day, 1, 'Workout in progress. The rest timer is running.', 'Workout in progress. Take your rest, then the next set.');
   if (c.workout === 'done') {
-    if (c.weeks > 0) return pick(c.day, 2, `Leg day is done. ${c.weeks} week streak, keep it going.`, `Leg day ho gaya. ${c.weeks} hafte ki streak, banaye rakho.`, c.lang);
-    return pick(c.day, 2, `Leg day is done. ${c.weekDone} of ${c.target} workouts this week.`, `Leg day ho gaya. Is hafte ${c.weekDone} of ${c.target} workouts.`, c.lang);
+    if (c.weeks > 0) return pick(c.day, 2, `Leg day is done. ${c.weeks} week streak, keep it going.`, `Leg day is done. That keeps your ${c.weeks} week streak alive.`);
+    return pick(c.day, 2, `Leg day is done. ${c.weekDone} of ${c.target} workouts this week.`, `Leg day is logged. ${c.weekDone} of ${c.target} workouts this week.`);
   }
-  if (c.workout === 'rest') return pick(c.day, 3, 'Rest day. Recovery counts toward your week.', 'Aaj rest day hai. Recovery bhi plan ka hissa hai.', c.lang);
+  if (c.workout === 'rest') return pick(c.day, 3, 'Rest day. Recovery counts toward your week.', 'Rest day. Sleep and water do the work today.');
   if (c.workout === 'todo') {
     const t = c.clock(c.planned);
     if (c.min < c.planned) {
       const near = c.planned - c.min <= 180;
-      if (near) return pick(c.day, 4, `Leg day is at ${t}. Warm-up takes about 5 minutes.`, `Leg day ${t} par hai. Pehle warm-up kar lena.`, c.lang);
-      return pick(c.day, 4, `Leg day is at ${t}. A light meal two hours before helps.`, `Leg day ${t} par hai. Do ghante pehle halka khana kha lo.`, c.lang);
+      if (near) return pick(c.day, 4, `Leg day is at ${t}. Warm-up takes about 5 minutes.`, `Leg day is at ${t}. Start with the warm-up.`);
+      return pick(c.day, 4, `Leg day is at ${t}. A light meal two hours before helps.`, `Leg day is at ${t}. Eat something light before you go.`);
     }
   }
-  if (c.nextMeal) return pick(c.day, 5, `${c.nextMeal} is next. Log it when you eat.`, `${c.nextMeal} next hai. Khaate hi log kar lena.`, c.lang);
-  if (c.weeks > 0) return pick(c.day, 6, `${c.weeks} week streak. ${c.weekDone} of ${c.target} workouts this week.`, `${c.weeks} hafte ki streak. Is hafte ${c.weekDone} of ${c.target} workouts.`, c.lang);
-  return pick(c.day, 6, `${c.weekDone} of ${c.target} workouts this week.`, `Is hafte ${c.weekDone} of ${c.target} workouts ho chuke hain.`, c.lang);
+  if (c.nextMeal) return pick(c.day, 5, `${c.nextMeal} is next. Log it when you eat.`, `${c.nextMeal} is next. Log it as you eat it.`);
+  if (c.weeks > 0) return pick(c.day, 6, `${c.weeks} week streak. ${c.weekDone} of ${c.target} workouts this week.`, `${c.weeks} week streak, ${c.weekDone} of ${c.target} workouts this week.`);
+  return `${c.weekDone} of ${c.target} workouts this week.`;
+}
+
+// The heading above the line. It follows what is happening (workout live, soon, done, rest day) and otherwise the time of day, and the day of the month
+// rotates the wording, so it is not "Good afternoon, Name" on every open. {n} is the first name; without one the name is dropped.
+const HEAD: Record<string, string[]> = {
+  live: ['Keep going, {n}', 'Strong set, {n}'],
+  soon: ['Almost time, {n}', 'Get ready, {n}'],
+  done: ['Workout done, {n}', 'Well done, {n}'],
+  rest: ['Rest day, {n}', 'Easy day, {n}'],
+  morning: ['Good morning, {n}', 'Morning, {n}', 'Hey {n}'],
+  afternoon: ['Good afternoon, {n}', 'Hey {n}', 'Afternoon, {n}'],
+  evening: ['Good evening, {n}', 'Evening, {n}', 'Hey {n}'],
+};
+export function greetHeading(c: TodayCtx, first: string): string {
+  const key = c.paused ? null
+    : c.workout === 'live' ? 'live'
+    : c.workout === 'done' ? 'done'
+    : c.workout === 'rest' ? 'rest'
+    : c.workout === 'todo' && c.min < c.planned && c.planned - c.min <= 120 ? 'soon'
+    : null;
+  const slot = key ?? (c.min < 12 * 60 ? 'morning' : c.min < 17 * 60 ? 'afternoon' : 'evening');
+  const list = HEAD[slot];
+  const line = list[(c.day + slot.length) % list.length];
+  return first ? line.replace('{n}', first) : line.replace(/,? ?\{n\}/, '').trim() || 'Hey';
 }
 
 // The demo panel previews every state of the line. Each one is a context that makes todayLine return that moment's text.
@@ -61,31 +81,4 @@ export function forceCtx(c: TodayCtx, k: GreetingState): TodayCtx {
     case 'Membership expired': return { ...b, paused: true };
     default: return c;
   }
-}
-
-// The heading above the line. It follows what is happening (workout live, soon, done, rest day) and otherwise the time of day, and the day of the month
-// rotates the wording, so it is not "Good afternoon, Name" on every open. {n} is the first name; without one the name is dropped.
-type HeadVariants = { en: string[]; hi: string[] };
-const HEAD: Record<string, HeadVariants> = {
-  live: { en: ['Keep going, {n}', 'Strong set, {n}'], hi: ['Lage raho, {n}', 'Chalte raho, {n}'] },
-  soon: { en: ['Almost time, {n}', 'Get ready, {n}'], hi: ['Chalo {n}, time ho raha hai', 'Taiyaar ho jao, {n}'] },
-  done: { en: ['Workout done, {n}', 'Well done, {n}'], hi: ['Shabash, {n}', 'Ho gaya, {n}'] },
-  rest: { en: ['Rest day, {n}', 'Easy day, {n}'], hi: ['Aaj aaram, {n}', 'Aaj rest, {n}'] },
-  morning: { en: ['Good morning, {n}', 'Morning, {n}', 'Hey {n}'], hi: ['Subah ho gayi, {n}', 'Uth gaye, {n}', 'Namaste, {n}'] },
-  afternoon: { en: ['Good afternoon, {n}', 'Hey {n}', 'Afternoon, {n}'], hi: ['Dopahar ho gayi, {n}', 'Kaise ho, {n}', 'Namaste, {n}'] },
-  evening: { en: ['Good evening, {n}', 'Evening, {n}', 'Hey {n}'], hi: ['Shaam ho gayi, {n}', 'Kaisa raha din, {n}', 'Namaste, {n}'] },
-};
-export function greetHeading(c: TodayCtx, first: string): string {
-  const key = c.paused ? null
-    : c.workout === 'live' ? 'live'
-    : c.workout === 'done' ? 'done'
-    : c.workout === 'rest' ? 'rest'
-    : c.workout === 'todo' && c.min < c.planned && c.planned - c.min <= 120 ? 'soon'
-    : null;
-  const slot = key ?? (c.min < 12 * 60 ? 'morning' : c.min < 17 * 60 ? 'afternoon' : 'evening');
-  const v = HEAD[slot];
-  const useHi = c.lang === 'hi' || (c.lang !== 'en' && (c.day + slot.length) % 2 === 1);
-  const list = useHi ? v.hi : v.en;
-  const line = list[(c.day + slot.length) % list.length];
-  return first ? line.replace('{n}', first) : line.replace(/,? ?\{n\}/, '').replace(/^\s+|\s+$/g, '') || 'Hey';
 }

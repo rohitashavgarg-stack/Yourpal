@@ -175,9 +175,8 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     { label: 'Membership', options: ['Active', 'Expiring', 'Expired'], value: d.membership, onPick: (v: string) => set({ membership: v as any }) },
     // Meals: what the member has logged so far, or every meal of the day logged (the summary card).
     { label: 'Meals today', options: ['By time of day', 'All logged'], value: Object.keys(d.meals).length >= 4 ? 'All logged' : 'By time of day', onPick: (v: string) => set({ meals: mealsAt(v === 'All logged' ? 2000 : d.min), openMeal: null }) },
-    // The greeting at the top of Today: every state of the line, and the language.
+    // The greeting at the top of Today: every state of the line.
     { label: 'Greeting line', options: GREETING_STATES as unknown as string[], value: greet.state, onPick: (v: string) => greetStore.set({ state: v as GreetingState }) },
-    { label: 'Greeting language', options: ['Mixed', 'English', 'Hinglish'], value: greet.lang, onPick: (v: string) => greetStore.set({ lang: v as 'Mixed' | 'English' | 'Hinglish' }) },
     // The top card of Today: the whole goal (live goal card) or today's calories with the goal as one line.
     { label: 'Top card', options: ['Goal card', 'Today card'], value: topMode, onPick: (v: string) => topCardStore.set({ mode: v as 'Goal card' | 'Today card' }) },
     // Comeback: how long the member has been away.
@@ -261,7 +260,6 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       {dd('Top card')}
       {dd('Meals today')}
       {dd('Greeting line')}
-      {dd('Greeting language')}
       {dd('Workout time')}
       <View style={{ flexDirection: 'row', gap: 4 }}>
         <SwitchChip label="Health" on={d.hc} onPress={() => row('Health (steps)').onPick(d.hc ? 'Not connected' : 'Connected')} />

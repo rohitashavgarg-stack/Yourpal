@@ -27,7 +27,7 @@ export default function ConnectedApps() {
   const [metrics, setMetrics] = useState<Record<string, boolean>>({ Steps: true, 'Heart rate': true, Sleep: true, 'Active energy': true });
   const count = READS.filter((r) => metrics[r.t]).length;
 
-  const connect = () => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected · ${count} things sync automatically`); };
+  const connect = () => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. ${count} things sync automatically`); };
   const disconnect = () => openSheet(
     <View style={{ gap: 12 }}>
       <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29 }}>{`Disconnect ${HEALTH_NAME}?`}</Txt>

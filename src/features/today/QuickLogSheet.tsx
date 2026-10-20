@@ -101,7 +101,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
         toast(`Swapped ${repl.n.toLowerCase()} for ${label}`, { undo: () => set({ meals: prev }) });
       } else {
         set({ meals: { ...d.meals, [mealId]: { ...cur, extra: [...cur.extra, ...items.map((x) => ({ n: x.n, k: x.k, p: x.p, est: x.est, type: x.type ?? 'veg' }))], at, skip: false } }, openMeal: mealId });
-        toast(`Added to ${meal.n.toLowerCase()} · Coach sees what changed`, { undo: () => set({ meals: prev }) });
+        toast(`Added to ${meal.n.toLowerCase()}. Coach sees what changed`, { undo: () => set({ meals: prev }) });
       }
       haptic.success();
     });

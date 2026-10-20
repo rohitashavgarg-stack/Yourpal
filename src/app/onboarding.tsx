@@ -84,7 +84,7 @@ export default function Onboarding() {
     if (step === 'height' && !p.heightCm) setProfile({ heightCm: '170', skipBody: false });
     if (step === 'weight' && !p.weightKg) setProfile({ weightKg: '70', skipBody: false });
     if (step === 'basics' && p.injury === 'Yes' && p.injuryNote.trim().length < 3) { setTried(true); haptic.error(); return; }
-    if (step === 'health') { setDomain({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected · steps, heart rate and sleep sync automatically`); go(flow[idx + 1]); return; }
+    if (step === 'health') { setDomain({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. Steps, heart rate and sleep sync automatically`); go(flow[idx + 1]); return; }
     if (step === 'consent') { askNotifications(); return; }
     haptic.light();
     go(flow[Math.min(idx + 1, flow.length - 1)]);
@@ -93,7 +93,7 @@ export default function Onboarding() {
   const skipAll = () => {
     if (!p.goal) setProfile({ goal: 'Not sure yet' });
     finishGoal(); set({ onboarded: true }); haptic.success(); router.replace('/(tabs)');
-    toast('Skipped · you can fill these in any time from Profile');
+    toast('Skipped. You can fill these in any time from Profile');
   };
   // One quiet skip per step, worded for that step.
   const skipBody = () => { setProfile({ skipBody: true, heightCm: '', weightKg: '' }); go('basics'); };
@@ -182,7 +182,7 @@ export default function Onboarding() {
       <View style={{ paddingHorizontal: 20, paddingBottom: insets.bottom + 12, paddingTop: 8, gap: 6, backgroundColor: c.bg }}>
         {sc.net === 'Offline' && showChrome && <Txt v="caption" style={{ textAlign: 'center' }}>You're offline. Answers are saved on this phone and sync later.</Txt>}
         {step === 'ready' ? (
-          <SwipeToStart onDone={() => { finishGoal(); set({ onboarded: true }); haptic.success(); router.replace('/(tabs)'); toast("You're all set · your plan fills in after the assessment"); }} />
+          <SwipeToStart onDone={() => { finishGoal(); set({ onboarded: true }); haptic.success(); router.replace('/(tabs)'); toast("You're all set. Your plan fills in after the assessment"); }} />
         ) : step !== 'building' && <Button label={primaryLabel} onPress={next} />}
         {skip && (
           <Pressy accessibilityRole="button" accessibilityLabel={skip.label} onPress={skip.run} scaleTo={0.96} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}>

@@ -12,8 +12,8 @@ import { nextMeal } from './meals';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 
-// Demo panel: preview any state of the line and the language (Mixed alternates English and Hinglish by day).
-export const greetStore = createStore(() => ({ state: 'Auto' as GreetingState, lang: 'Mixed' as 'Mixed' | 'English' | 'Hinglish' }));
+// Demo panel: preview any state of the line.
+export const greetStore = createStore(() => ({ state: 'Auto' as GreetingState }));
 
 // The top of Today: "Good evening, Rohitashav" and one line about what is going on right now. No container.
 export function TodayGreeting() {
@@ -30,7 +30,6 @@ export function TodayGreeting() {
     nextMeal: nm ? MEALS.find((m) => m.id === nm)?.n ?? null : null,
     weeks: streak.weeks, weekDone: streak.weekDone, target: streak.target, paused,
     day: new Date().getDate(), clock: (m: number) => fmtT(m).full,
-    lang: (g.lang === 'English' ? 'en' : g.lang === 'Hinglish' ? 'hi' : 'mixed') as 'en' | 'hi' | 'mixed',
   };
   const ctx = forceCtx(base, g.state);
   const line = todayLine(ctx);

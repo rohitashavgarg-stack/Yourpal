@@ -109,7 +109,7 @@ export default function Login() {
     }, 700);
   };
 
-  const openJoin = () => openSheet(<JoinCode onDone={() => { toast("Code accepted · you're joining Wulf Fitness"); }} />, { label: 'Join with a code' });
+  const openJoin = () => openSheet(<JoinCode onDone={() => { toast("Code accepted. You're joining Wulf Fitness"); }} />, { label: 'Join with a code' });
   const masked = phone ? `+91 ${phone.slice(0, 2)}xxx x${phone.slice(-4)}` : '';
 
   return (

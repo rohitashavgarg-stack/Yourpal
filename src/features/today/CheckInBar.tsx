@@ -107,7 +107,7 @@ export function CheckInBar() {
     icon = <Check size={17} strokeWidth={2.6} color={c.good} />;
   } else {
     title = 'Location is off'; sub = 'Turn it on to check in · front desk can also mark you'; btn = 'Turn on'; open = null;
-    act = () => { set({ ci: 'At the gym' }); haptic.success(); toast('Location on · we only check it while the app is open'); };
+    act = () => { set({ ci: 'At the gym' }); haptic.success(); toast('Location on. We only check it while the app is open'); };
     icon = <LocateOff size={17} color={fg} />;
   }
   const label = `${title}${chip ? ` ${chip}` : ""}. ${sub}`;

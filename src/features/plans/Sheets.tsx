@@ -26,7 +26,7 @@ export function PlanMenuSheet() {
     <>
       <BigTitle>{plan ? plan.name : 'Rest day'}</BigTitle>
       <View>
-        <ListRow label="Edit plan" onPress={() => go(() => { if (!startWorkoutEdit(d)) toast('Rest day · create a workout instead'); })} />
+        <ListRow label="Edit plan" onPress={() => go(() => { if (!startWorkoutEdit(d)) toast('Rest day. Create a workout instead'); })} />
         <ListRow label="Create a workout" onPress={() => go(() => startCreate(d))} />
         <ListRow label="Ask Coach to change the plan" onPress={() => go(() => router.push({ pathname: '/plans/ask', params: { kind: 'workout' } }))} />
         <ListRow label="Reset to Coach's version" onPress={() => openSheet(<ResetSheet kind="workout" />, { label: 'Reset plan' })} />

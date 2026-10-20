@@ -144,7 +144,7 @@ export default function MyDetails() {
     if (!name.trim()) { setErr((n) => n + 1); return; }
     setProfile({ name: name.trim(), days, diet, injury: inj, injuryNote: inj === 'Yes' ? note : '', ...(photo !== undefined ? { photo: photo ?? undefined } : {}) });
     goBack('/profile');
-    toast('Saved · Coach Vikram sees the update');
+    toast('Saved. Coach Vikram sees the update');
   };
 
   return (

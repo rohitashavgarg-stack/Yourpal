@@ -59,7 +59,7 @@ export default function CheckIn() {
     t.current = setTimeout(() => {
       const at = nowMin(d);
       CI.checkIn(); haptic.success();
-      toast(`Checked in ${fmtT(at).full} · counted in your attendance`);
+      toast(`Checked in ${fmtT(at).full}. Counted in your attendance`);
       // Workout still to do today: go straight to the workout instead of back to Today.
       if (workoutState(d) === 'todo') { set({ session: newSession() }); router.replace('/workout'); } else close();
     }, 700);
@@ -135,7 +135,7 @@ export default function CheckIn() {
         ) : d.ciOut ? (
           <Button kind="secondary" label="Checked out" disabled />
         ) : off ? (
-          <Button kind="accent" label="Turn on location" onPress={() => { set({ ci: 'At the gym' }); refresh(); toast('Location on · we only check it while the app is open'); }} />
+          <Button kind="accent" label="Turn on location" onPress={() => { set({ ci: 'At the gym' }); refresh(); toast('Location on. We only check it while the app is open'); }} />
         ) : (
           <Button kind="accent" label={busy ? 'Checking you in…' : inside ? 'Check in now' : 'Not in range yet'} disabled={!inside || refreshing || busy} onPress={checkIn} />
         )}

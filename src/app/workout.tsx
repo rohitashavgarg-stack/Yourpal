@@ -294,7 +294,7 @@ export default function Workout() {
             <Txt v="caption" style={{ textAlign: 'center' }}>Tick each move when you are done.</Txt>
             <Button label={s.phase === 'cooldown' ? 'Finish workout' : 'Start main workout'} onPress={() => (s.phase === 'cooldown' ? finishNow() : A.phase('main'))} />
             <Button kind="outline" label={s.phase === 'cooldown' ? 'Skip cool-down' : 'Skip warm-up'} onPress={() => {
-              if (s.phase === 'cooldown') finishNow(); else { A.phase('main'); toast('Warm-up skipped · take the first set light'); }
+              if (s.phase === 'cooldown') finishNow(); else { A.phase('main'); toast('Warm-up skipped. Take the first set light'); }
             }} />
           </Animated.View>
         ) : (

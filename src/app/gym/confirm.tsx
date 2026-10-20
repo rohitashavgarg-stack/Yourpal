@@ -69,7 +69,7 @@ export default function ConfirmSession() {
       gymStore.set({ sessionState: 'confirmed', rating });
       set({ ptLeft: left });
       if (router.canGoBack()) router.back(); else router.replace('/gym/attendance');
-      toast(`Session confirmed · ${left} of ${PT_TOTAL} left in your package`);
+      toast(`Session confirmed. ${left} of ${PT_TOTAL} left in your package`);
     }, 900);
   };
 

@@ -296,7 +296,7 @@ function ConnectCard() {
   const { set } = useDomain();
   const { toast } = useOverlay();
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={`Connect ${HEALTH_NAME} for steps, heart rate, sleep and energy`} onPress={() => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected · steps, heart rate and sleep sync automatically`); }}
+    <Pressy accessibilityRole="button" accessibilityLabel={`Connect ${HEALTH_NAME} for steps, heart rate, sleep and energy`} onPress={() => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. Steps, heart rate and sleep sync automatically`); }}
       style={[SQ, { padding: 12, justifyContent: 'space-between', borderWidth: 1, borderStyle: 'dashed', borderColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface3, backgroundColor: isDark ? '#0E1116' : c.surface }]}>
       <View style={{ width: 32, height: 32, borderRadius: 20, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface2, alignItems: 'center', justifyContent: 'center' }}><HeartIcon size={20} color="#FF6B7A" /></View>
       <Txt style={{ fontFamily: font.displayBold, fontSize: 20, lineHeight: 28, color: c.ink }}>{`Connect ${HEALTH_NAME}`}</Txt>
