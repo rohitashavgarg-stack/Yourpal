@@ -45,21 +45,25 @@ export function TodayBudgetCard() {
   const burn = live ? burned(d) : done ? wkDoneInfo(d).k : 0;
   const left = Math.max(0, KCAL_TARGET - eaten);
   return (
-    <View style={{ backgroundColor: GC.bg, borderColor: GC.border, borderWidth: 1, borderRadius: 24, overflow: 'hidden', paddingHorizontal: 16, paddingTop: 12, paddingBottom: 16, gap: 8 }}>
+    <View style={{ backgroundColor: GC.bg, borderColor: GC.border, borderWidth: 1, borderRadius: 24, overflow: 'hidden', padding: 16, gap: 12 }}>
       <Glow color="#2F6BEA" a={0.55} />
-      <Pressy accessibilityRole="link" accessibilityLabel={`Your goal: ${g.name}. Open`} onPress={() => router.push('/goal-detail')} scaleTo={0.98} style={{ minHeight: 44, justifyContent: 'center', marginTop: -6, marginBottom: -4 }}>
+      <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 24, lineHeight: 32, letterSpacing: -0.24, color: GC.title }}>Today</Txt>
+      <Row style={{ gap: 16, alignItems: 'flex-start' }}>
+        <Half icon={<UtensilsCrossed size={14} color={GC.mint} />} label="Eat" hint={left > 0 ? `${inr(left)} left` : 'Reached'} value={inr(eaten)} of={`${inr(KCAL_TARGET)} kcal`} pct={eaten / KCAL_TARGET} color={GC.mint} />
+        <View style={{ width: 1, alignSelf: 'stretch', backgroundColor: 'rgba(255,255,255,0.1)' }} />
+        <Half icon={<Flame size={14} color={BURN} />} label="Burn" hint={live ? 'watch' : done ? 'done' : 'planned'} value={inr(burn)} of={`${inr(PLANNED_BURN)} kcal`} pct={burn / PLANNED_BURN} color={BURN} />
+      </Row>
+      {/* the whole goal sits apart at the bottom, in its own bordered strip */}
+      <Pressy accessibilityRole="link" accessibilityLabel={`Your goal: ${g.name}, ${Math.round(Math.max(0, Math.min(1, g.pct)) * 100)} percent. Open`} onPress={() => router.push('/goal-detail')} scaleTo={0.98}
+        style={{ minHeight: 44, borderRadius: 14, borderWidth: 1, borderColor: 'rgba(255,255,255,0.16)', backgroundColor: 'rgba(255,255,255,0.05)', paddingHorizontal: 12, justifyContent: 'center' }}>
         <Row style={{ gap: 8 }}>
-          <Target size={15} color={GC.rest} />
-          <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: GC.title }}>{g.name}</Txt>
+          <Target size={16} color={GC.rest} />
+          <Txt style={{ fontSize: 12, lineHeight: 17, color: GC.rest }}>Goal</Txt>
+          <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: GC.title }}>{g.name}</Txt>
           <Txt style={{ fontSize: 13, lineHeight: 19, color: GC.rest }}>{`${Math.round(Math.max(0, Math.min(1, g.pct)) * 100)}%`}</Txt>
-          <ChevronRight size={15} color={GC.rest} />
+          <ChevronRight size={16} color={GC.rest} />
         </Row>
       </Pressy>
-      <Row style={{ gap: 16, alignItems: 'flex-start' }}>
-        <Half icon={<UtensilsCrossed size={14} color={GC.mint} />} label="Eat today" hint={left > 0 ? `${inr(left)} left` : 'Reached'} value={inr(eaten)} of={`${inr(KCAL_TARGET)} kcal`} pct={eaten / KCAL_TARGET} color={GC.mint} />
-        <View style={{ width: 1, alignSelf: 'stretch', backgroundColor: 'rgba(255,255,255,0.1)' }} />
-        <Half icon={<Flame size={14} color={BURN} />} label="Burn today" hint={live ? 'watch' : done ? 'done' : 'planned'} value={inr(burn)} of={`${inr(PLANNED_BURN)} kcal`} pct={burn / PLANNED_BURN} color={BURN} />
-      </Row>
     </View>
   );
 }
