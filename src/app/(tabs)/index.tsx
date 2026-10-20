@@ -149,16 +149,13 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {!!payNotice && <Enter i={0}><View style={{ marginTop: 14, marginBottom: comebackNew ? -12 : 6 }} onLayout={(e) => setStripY(e.nativeEvent.layout.y)}><PaymentBanner /></View></Enter>}
             {comebackNew && <Enter i={0}><WorkoutCard restart /></Enter>}
             {!comebackNew && forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
-            {/* then the main card of the moment (workout time: the workout, meal time: the meals, end of the day: the week), then the goal */}
-            {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
-            {primary === 'meals' && <Enter i={1}><ViewOnly><MealNowCard /></ViewOnly></Enter>}
-            {primary === 'wrap' && <Enter i={1}><WeekCard /></Enter>}
+            {/* fixed order, time never moves a card: today's numbers, trackers, workout, meals, this week */}
             <Enter i={1}>{topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</Enter>
             {comebackNew && forYou.length > 0 && <Enter i={1}><ForYouStack /></Enter>}
             <Enter i={2}><ViewOnly><Trackers /></ViewOnly></Enter>
-            {primary !== 'workout' && primary !== 'restart' && <Enter i={3}><WorkoutCard /></Enter>}
-            {primary !== 'meals' && <Enter i={4}><ViewOnly><MealNowCard /></ViewOnly></Enter>}
-            {primary !== 'wrap' && <Enter i={5}><WeekCard /></Enter>}
+            <Enter i={3}><WorkoutCard /></Enter>
+            <Enter i={4}><ViewOnly><MealNowCard /></ViewOnly></Enter>
+            <Enter i={5}><WeekCard /></Enter>
           </>
         ) : (
           <>

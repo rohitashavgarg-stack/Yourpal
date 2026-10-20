@@ -170,6 +170,8 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     { label: 'Workout time', options: ['Early morning', 'Morning', 'Afternoon', 'Evening'], value: state.profile.time || 'Evening', onPick: (v: string) => setProfile({ time: v }) },
     // Payment: what Today shows above everything when the membership needs attention.
     { label: 'Membership', options: ['Active', 'Expiring', 'Expired'], value: d.membership, onPick: (v: string) => set({ membership: v as any }) },
+    // Meals: what the member has logged so far, or every meal of the day logged (the summary card).
+    { label: 'Meals today', options: ['By time of day', 'All logged'], value: Object.keys(d.meals).length >= 4 ? 'All logged' : 'By time of day', onPick: (v: string) => set({ meals: mealsAt(v === 'All logged' ? 2000 : d.min), openMeal: null }) },
     // The top card of Today: the whole goal (live goal card) or today's calories with the goal as one line.
     { label: 'Top card', options: ['Goal card', 'Today card'], value: topMode, onPick: (v: string) => topCardStore.set({ mode: v as 'Goal card' | 'Today card' }) },
     // Comeback: how long the member has been away.
@@ -251,6 +253,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       {dd('Membership')}
       {dd('Goal type')}
       {dd('Top card')}
+      {dd('Meals today')}
       {dd('Workout time')}
       <View style={{ flexDirection: 'row', gap: 4 }}>
         <SwitchChip label="Health" on={d.hc} onPress={() => row('Health (steps)').onPick(d.hc ? 'Not connected' : 'Connected')} />

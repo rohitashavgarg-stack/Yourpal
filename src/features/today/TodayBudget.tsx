@@ -12,7 +12,7 @@ import { GC } from './goalCardState';
 import { font } from '@/theme/tokens';
 
 // Which card sits at the top of Today: the whole goal (the live goal card) or today's calories. Demo panel only for now.
-export const topCardStore = createStore(() => ({ mode: 'Goal card' as 'Goal card' | 'Today card' }));
+export const topCardStore = createStore(() => ({ mode: 'Today card' as 'Goal card' | 'Today card' }));
 
 const PLANNED_BURN = 350;
 const inr = (n: number) => Math.round(n).toLocaleString('en-IN');

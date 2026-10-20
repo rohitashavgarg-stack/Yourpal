@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import Animated, { LinearTransition, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { fade } from '@/theme/motion';
 import { router } from 'expo-router';
-import { Check, ChevronDown, Clock, Flame, Lock, Minus, Plus, UtensilsCrossed, X } from '@/lib/icons';
+import { Check, ChevronDown, ChevronRight, Clock, Flame, Lock, Minus, Plus, UtensilsCrossed, X } from '@/lib/icons';
 import { Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -249,25 +249,42 @@ export function MealNowCard() {
       </View>
     );
   }
+  const picked = !!d.openMeal && d.openMeal !== 'none' && MEALS.some((q) => q.id === d.openMeal);
+  if (t.done === MEALS.length && !picked) {
+    return (
+      <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 8, gap: 12 }}>
+        <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
+          <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
+          <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={16} color={c.bg} strokeWidth={3} /></View>
+        </Row>
+        <Txt muted style={{ paddingHorizontal: 4, marginTop: -6, fontSize: 14, lineHeight: 20 }}>{`All ${MEALS.length} meals logged. Protein ${t.p} of ${MACRO_TARGET.p} g.`}</Txt>
+        <View>
+          {MEALS.map((q, i) => {
+            const x = mealLog(d, q.id);
+            const mv = mealView(d, q);
+            return (
+              <Pressy key={q.id} accessibilityRole="button" accessibilityLabel={`${q.n}, ${x.skip ? 'skipped' : 'logged'}. Open`} scaleTo={0.98} onPress={() => set({ openMeal: q.id })}
+                style={{ minHeight: 56, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 4, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
+                {x.skip ? <View style={{ width: 24, height: 24, borderRadius: 12, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.muted }} />
+                  : <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={14} color={c.bg} strokeWidth={3} /></View>}
+                <View style={{ flex: 1 }}>
+                  <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 22 }}>{q.n}</Txt>
+                  <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{x.skip ? 'Skipped' : `${mv.kcal} kcal${x.at != null ? ', ' + fmtT(x.at).full : ''}`}</Txt>
+                </View>
+                <ChevronRight size={16} color={c.muted} />
+              </Pressy>
+            );
+          })}
+        </View>
+      </Card>
+    );
+  }
   return (
     <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
         <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
       </Row>
-      <View accessible accessibilityLabel={`Eaten today ${t.k} of ${KCAL_TARGET} kcal, protein ${t.p} of ${MACRO_TARGET.p} grams`} style={{ gap: 8, paddingVertical: 10, paddingHorizontal: 12, borderRadius: 16, backgroundColor: c.tAct, marginTop: -4 }}>
-        {/* one line over the bar: "Eaten today" at its left end, the kcal at its right end */}
-        <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-          <Row style={{ gap: 6 }}>
-            <Flame size={15} color={c.cAct} fill={c.cAct} />
-            <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: c.cAct }}>Eaten today</Txt>
-          </Row>
-          <Txt style={{ fontFamily: font.display, fontSize: 18, lineHeight: 24 }}>{inr(t.k)}<Txt muted style={{ fontFamily: font.display, fontSize: 12, lineHeight: 17 }}>{` / ${inr(KCAL_TARGET)} kcal`}</Txt></Txt>
-        </Row>
-        <View style={{ height: 4, borderRadius: 2, backgroundColor: `${c.cAct}26`, overflow: 'hidden' }}>
-          <View style={{ width: `${Math.min(100, (t.k / KCAL_TARGET) * 100)}%`, height: '100%', borderRadius: 2, backgroundColor: c.cAct }} />
-        </View>
-      </View>
       {ask && <MissedRow id={ask} more={missed.length - 1} />}
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <View>
