@@ -323,7 +323,7 @@ export function MealNowCard() {
       <MealsBackdrop />
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
-        <View style={{ borderRadius: 999, backgroundColor: isDark ? 'rgba(14,17,22,0.55)' : 'rgba(255,255,255,0.7)' }}>
+        <View style={{ borderRadius: 999, backgroundColor: isDark ? 'rgba(14,17,22,0.88)' : 'rgba(255,255,255,0.92)' }}>
           <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
         </View>
       </Row>
