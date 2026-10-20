@@ -15,7 +15,7 @@ import { font } from '@/theme/tokens';
 // Demo panel: preview any state of the line.
 export const greetStore = createStore(() => ({ state: 'Auto' as GreetingState }));
 
-// The top of Today: one big line with the name in it ("It's your rest day, Rohitashav"). No container, no second line.
+// The top of Today: one big line with the name in it ("It's your rest day, Rohitashav"), or a small greeting with the name over a big fact ("Good job, Rohitashav" over "3 week streak"). No container.
 export function TodayGreeting() {
   const { c } = useTheme();
   const { d } = useDomain();
@@ -32,9 +32,10 @@ export function TodayGreeting() {
     day: new Date().getDate(), clock: (m: number) => fmtT(m).full,
   };
   const ctx = forceCtx(base, g.state);
-  const { big } = greeting(ctx, first);
+  const { small, big } = greeting(ctx, first);
   return (
-    <View accessible accessibilityLabel={big} style={{ paddingHorizontal: 4, gap: 0 }}>
+    <View accessible accessibilityLabel={small ? `${small}. ${big}` : big} style={{ paddingHorizontal: 4, gap: 0 }}>
+      {!!small && <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 22, color: c.muted }}>{small}</Txt>}
       <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 28, lineHeight: 36, letterSpacing: -0.6, color: c.ink }}>{big}</Txt>
     </View>
   );

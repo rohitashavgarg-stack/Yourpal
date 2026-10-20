@@ -14,28 +14,30 @@ export type TodayCtx = {
   clock: (min: number) => string;                // "6:30 pm"
 };
 
-// The top of Today is one big line with the name in it, whatever the state: "It's your rest day, Rohitashav", "3 week streak, Rohitashav".
-// The day of the month rotates the wording so it is not the same on every open. Without a first name the name is dropped.
-export type Greeting = { big: string };
+// The top of Today has two shapes. When the state is just a mood it is one big line with the name in it ("It's your rest day, Rohitashav").
+// When there is a fact worth its own line it is a small greeting with the name over a big fact ("Good job, Rohitashav" over "3 week streak").
+// The name is never in both lines. The day of the month rotates the wording so it is not the same on every open. Without a first name the name is dropped.
+export type Greeting = { small?: string; big: string };
 
 const pick = (day: number, key: number, list: string[]) => list[(day + key) % list.length];
 const timeGreet = (c: TodayCtx) => (c.min < 12 * 60 ? ['Good morning, {n}', 'Morning, {n}', 'Hey {n}'] : c.min < 17 * 60 ? ['Good afternoon, {n}', 'Hey {n}', 'Afternoon, {n}'] : ['Good evening, {n}', 'Evening, {n}', 'Hey {n}']);
 const withName = (line: string, first: string) => (first ? line.replace('{n}', first) : line.replace(/,? ?\{n\}/, '').trim() || 'Hey');
 
 export function greeting(c: TodayCtx, first: string): Greeting {
-  const n = (line: string) => ({ big: withName(line, first) });
-  if (c.paused) return n(pick(c.day, 0, timeGreet(c)));                                                       // expired: just the greeting
-  if (c.workout === 'live') return n(pick(c.day, 1, ['Keep going, {n}', 'Strong set, {n}']));
-  if (c.workout === 'rest') return n(pick(c.day, 2, ["It's your rest day, {n}", 'Easy day today, {n}']));
-  if (c.workout === 'done') {
-    return c.weeks > 0 ? n(pick(c.day, 3, [`${c.weeks} week streak, {n}`, 'Good job, {n}', 'Workout done, {n}']))
-      : n(pick(c.day, 3, ['Workout done, {n}', 'Good job, {n}']));
-  }
+  const one = (list: string[], key: number): Greeting => ({ big: withName(pick(c.day, key, list), first) });
+  const two = (small: string[], key: number, big: string): Greeting => ({ small: withName(pick(c.day, key, small), first), big });
+  // one line: moods
+  if (c.paused) return one(timeGreet(c), 0);                                                                 // expired: just the greeting
+  if (c.workout === 'live') return one(['Keep going, {n}', 'Strong set, {n}'], 1);
+  if (c.workout === 'rest') return one(["It's your rest day, {n}", 'Easy day today, {n}'], 2);
+  // two lines: a greeting over a fact
+  if (c.workout === 'done') return c.weeks > 0 ? two(['Good job, {n}', 'Well done, {n}'], 3, `${c.weeks} week streak`) : one(['Workout done, {n}', 'Good job, {n}'], 3);
   if (c.workout === 'todo' && c.min < c.planned) {
-    return c.planned - c.min <= 120 ? n(pick(c.day, 4, ['Almost time, {n}', 'Get ready, {n}'])) : n(pick(c.day, 4, ['Leg day today, {n}', ...timeGreet(c)]));
+    const soon = c.planned - c.min <= 120;
+    return two(soon ? ['Almost time, {n}', 'Get ready, {n}'] : timeGreet(c), 4, `Leg day is at ${c.clock(c.planned)}`);
   }
-  if (c.nextMeal) return n(pick(c.day, 5, [`${c.nextMeal} is next, {n}`, ...timeGreet(c)]));
-  return n(pick(c.day, 6, timeGreet(c)));
+  if (c.nextMeal) return two(timeGreet(c), 5, `${c.nextMeal} is next`);
+  return two(timeGreet(c), 6, `${c.weekDone} of ${c.target} workouts this week`);
 }
 
 // The demo panel previews every state of the greeting. Each one is a context that makes it return that moment's text.
