@@ -218,10 +218,10 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
 // It sits under the content, so chips and text keep their own contrast.
 function MealsBackdrop() {
   const { isDark } = useTheme();
-  const W = 230, H = 170; // a small round fade: it only reaches about a third of the way across and the heading height
+  const W = 340, H = 260; // a round fade from the top right corner: big enough to colour the heading and the first rows, gone before the middle of the card
   return (
     <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', borderRadius: 24 }}>
-      <View style={{ position: 'absolute', top: -70, right: -70, width: W, height: H }}>
+      <View style={{ position: 'absolute', top: -90, right: -90, width: W, height: H }}>
         <Svg width={W} height={H}>
           <Defs>
             <RadialGradient id="mealsGlow" cx="50%" cy="50%" r="50%">
