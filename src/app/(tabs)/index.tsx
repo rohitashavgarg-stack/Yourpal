@@ -24,6 +24,7 @@ import { PaymentBanner, usePaymentNotice } from '@/features/today/PaymentBanner'
 import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
 import { ViewOnly } from '@/features/today/ViewOnly';
+import { TodayBudgetCard, topCardStore } from '@/features/today/TodayBudget';
 import { PushBanner } from '@/features/reminders/PushBanner';
 import { GOAL_STATE_OPTIONS, goalCardStore } from '@/features/today/goalCardState';
 
@@ -91,6 +92,7 @@ export default function Today() {
   const gsz = goalSizeStore.use();
   const goalRows = useGoalV2Rows();
   const gcs = goalCardStore.use();
+  const topMode = topCardStore.use().mode;
   useScenarios({
     title: 'Today',
     rows: [
@@ -151,7 +153,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {primary === 'workout' && <Enter i={1}><WorkoutCard /></Enter>}
             {primary === 'meals' && <Enter i={1}><ViewOnly><MealNowCard /></ViewOnly></Enter>}
             {primary === 'wrap' && <Enter i={1}><WeekCard /></Enter>}
-            <Enter i={1}><GoalTickCard /></Enter>
+            <Enter i={1}>{topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</Enter>
             {comebackNew && forYou.length > 0 && <Enter i={1}><ForYouStack /></Enter>}
             <Enter i={2}><ViewOnly><Trackers /></ViewOnly></Enter>
             {primary !== 'workout' && primary !== 'restart' && <Enter i={3}><WorkoutCard /></Enter>}
@@ -166,7 +168,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
             {d.todayVariant === 'Comeback' && <Enter i={0}><ComebackCard /></Enter>}
             <Enter i={1}><StreakChip /></Enter>
-            <Enter i={1}><GoalTickCard /></Enter>
+            <Enter i={1}>{topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</Enter>
             {order.map((k, i) => <Enter key={k} i={2 + i}>{slots[k]}</Enter>)}
           </>
         )}

@@ -25,6 +25,7 @@ import { missedWkStore } from '@/features/today/WorkoutCard';
 import { reminderStore, useReminders } from '@/features/reminders/reminders';
 import { sendReminderPush } from '@/features/reminders/push';
 import { goalCardStore } from '@/features/today/goalCardState';
+import { topCardStore } from '@/features/today/TodayBudget';
 import { Bell } from '@/lib/icons';
 
 const PHONE_W = 390, PHONE_H = 844;
@@ -129,6 +130,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
   const { state, setSc, set: setApp, setProfile } = useStore();
   const shell = useShell();
   const { isDark } = useTheme();
+  const topMode = topCardStore.use().mode;
   const { d, set } = useDomain();
   const steps = stepsStore.use();
   const wk = workoutUiStore.use();
@@ -168,6 +170,8 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     { label: 'Workout time', options: ['Early morning', 'Morning', 'Afternoon', 'Evening'], value: state.profile.time || 'Evening', onPick: (v: string) => setProfile({ time: v }) },
     // Payment: what Today shows above everything when the membership needs attention.
     { label: 'Membership', options: ['Active', 'Expiring', 'Expired'], value: d.membership, onPick: (v: string) => set({ membership: v as any }) },
+    // The top card of Today: the whole goal (live goal card) or today's calories with the goal as one line.
+    { label: 'Top card', options: ['Goal card', 'Today card'], value: topMode, onPick: (v: string) => topCardStore.set({ mode: v as 'Goal card' | 'Today card' }) },
     // Comeback: how long the member has been away.
     { label: 'Days away (Comeback)', options: ['2 days', '4 days', '8 days', '15 days'], value: d.todayVariant === 'Comeback' ? `${d.awayDays} days` : '', onPick: (v: string) => { sit.pick('Comeback'); set({ awayDays: parseInt(v, 10) }); } },
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },
@@ -246,6 +250,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       {seg('Member type')}
       {dd('Membership')}
       {dd('Goal type')}
+      {dd('Top card')}
       {dd('Workout time')}
       <View style={{ flexDirection: 'row', gap: 4 }}>
         <SwitchChip label="Health" on={d.hc} onPress={() => row('Health (steps)').onPick(d.hc ? 'Not connected' : 'Connected')} />
