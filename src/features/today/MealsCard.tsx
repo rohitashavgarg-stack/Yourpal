@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import Animated, { LinearTransition, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { fade } from '@/theme/motion';
 import { router } from 'expo-router';
-import { Check, ChevronDown, ChevronRight, Clock, Flame, Lock, Minus, Plus, UtensilsCrossed, X } from '@/lib/icons';
+import { Check, ChevronDown, ChevronRight, Clock, Lock, Minus, Plus, UtensilsCrossed, X } from '@/lib/icons';
 import { Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
