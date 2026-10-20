@@ -62,3 +62,30 @@ export function forceCtx(c: TodayCtx, k: GreetingState): TodayCtx {
     default: return c;
   }
 }
+
+// The heading above the line. It follows what is happening (workout live, soon, done, rest day) and otherwise the time of day, and the day of the month
+// rotates the wording, so it is not "Good afternoon, Name" on every open. {n} is the first name; without one the name is dropped.
+type HeadVariants = { en: string[]; hi: string[] };
+const HEAD: Record<string, HeadVariants> = {
+  live: { en: ['Keep going, {n}', 'Strong set, {n}'], hi: ['Lage raho, {n}', 'Chalte raho, {n}'] },
+  soon: { en: ['Almost time, {n}', 'Get ready, {n}'], hi: ['Chalo {n}, time ho raha hai', 'Taiyaar ho jao, {n}'] },
+  done: { en: ['Workout done, {n}', 'Well done, {n}'], hi: ['Shabash, {n}', 'Ho gaya, {n}'] },
+  rest: { en: ['Rest day, {n}', 'Easy day, {n}'], hi: ['Aaj aaram, {n}', 'Aaj rest, {n}'] },
+  morning: { en: ['Good morning, {n}', 'Morning, {n}', 'Hey {n}'], hi: ['Subah ho gayi, {n}', 'Uth gaye, {n}', 'Namaste, {n}'] },
+  afternoon: { en: ['Good afternoon, {n}', 'Hey {n}', 'Afternoon, {n}'], hi: ['Dopahar ho gayi, {n}', 'Kaise ho, {n}', 'Namaste, {n}'] },
+  evening: { en: ['Good evening, {n}', 'Evening, {n}', 'Hey {n}'], hi: ['Shaam ho gayi, {n}', 'Kaisa raha din, {n}', 'Namaste, {n}'] },
+};
+export function greetHeading(c: TodayCtx, first: string): string {
+  const key = c.paused ? null
+    : c.workout === 'live' ? 'live'
+    : c.workout === 'done' ? 'done'
+    : c.workout === 'rest' ? 'rest'
+    : c.workout === 'todo' && c.min < c.planned && c.planned - c.min <= 120 ? 'soon'
+    : null;
+  const slot = key ?? (c.min < 12 * 60 ? 'morning' : c.min < 17 * 60 ? 'afternoon' : 'evening');
+  const v = HEAD[slot];
+  const useHi = c.lang === 'hi' || (c.lang !== 'en' && (c.day + slot.length) % 2 === 1);
+  const list = useHi ? v.hi : v.en;
+  const line = list[(c.day + slot.length) % list.length];
+  return first ? line.replace('{n}', first) : line.replace(/,? ?\{n\}/, '').replace(/^\s+|\s+$/g, '') || 'Hey';
+}

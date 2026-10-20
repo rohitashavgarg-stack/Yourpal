@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Txt } from '@/components/ui';
 import { MEALS, fmtT } from '@/lib/data';
 import { plannedMin, useDomain, workoutState } from '@/lib/domain';
-import { forceCtx, greetWord, GreetingState, todayLine } from '@/lib/microcopy';
+import { forceCtx, greetHeading, GreetingState, todayLine } from '@/lib/microcopy';
 import { createStore } from '@/lib/createStore';
 import { useLogsPaused } from '@/lib/logGate';
 import { useStore } from '@/lib/store';
@@ -32,11 +32,12 @@ export function TodayGreeting() {
     day: new Date().getDate(), clock: (m: number) => fmtT(m).full,
     lang: (g.lang === 'English' ? 'en' : g.lang === 'Hinglish' ? 'hi' : 'mixed') as 'en' | 'hi' | 'mixed',
   };
-  const line = todayLine(forceCtx(base, g.state));
-  const word = greetWord(d.min);
+  const ctx = forceCtx(base, g.state);
+  const line = todayLine(ctx);
+  const head = greetHeading(ctx, first);
   return (
-    <View accessible accessibilityLabel={`${word}${first ? ', ' + first : ''}. ${line}`} style={{ paddingHorizontal: 4, gap: 2 }}>
-      <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 26, lineHeight: 34, letterSpacing: -0.5, color: c.ink }}>{first ? `${word}, ${first}` : word}</Txt>
+    <View accessible accessibilityLabel={`${head}. ${line}`} style={{ paddingHorizontal: 4, gap: 2 }}>
+      <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 26, lineHeight: 34, letterSpacing: -0.5, color: c.ink }}>{head}</Txt>
       <Txt muted style={{ fontSize: 15, lineHeight: 22 }}>{line}</Txt>
     </View>
   );
