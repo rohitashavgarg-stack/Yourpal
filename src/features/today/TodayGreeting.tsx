@@ -32,11 +32,12 @@ export function TodayGreeting() {
     day: new Date().getDate(), clock: (m: number) => fmtT(m).full,
   };
   const ctx = forceCtx(base, g.state);
-  const { small, big } = greeting(ctx, first);
+  const { top, lead, hl } = greeting(ctx, first);
+  const big = { fontFamily: font.regular, fontSize: 32, lineHeight: 40, letterSpacing: -0.6, color: c.muted } as const; // both lines: light, grey; the key phrase is brighter
   return (
-    <View accessible accessibilityLabel={small ? `${small}. ${big}` : big} style={{ paddingHorizontal: 4, gap: 0 }}>
-      {!!small && <Txt style={{ fontFamily: font.display, fontSize: 32, lineHeight: 40, letterSpacing: -0.8, color: c.ink }}>{small}</Txt>}
-      <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 32, lineHeight: 40, letterSpacing: -0.8, color: c.ink }}>{big}</Txt>
+    <View accessible accessibilityLabel={`${top}. ${lead ? lead + ' ' : ''}${hl}`} style={{ paddingHorizontal: 4, gap: 0 }}>
+      <Txt style={big}>{top}</Txt>
+      <Txt accessibilityRole="header" style={big}>{lead ? lead + ' ' : ''}<Txt style={[big, { color: c.ink }]}>{hl}</Txt></Txt>
     </View>
   );
 }
