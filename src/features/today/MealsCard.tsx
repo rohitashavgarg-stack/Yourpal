@@ -225,6 +225,16 @@ function MealsBackdrop() {
   );
 }
 
+// A dotted, whiter rule under the heading. The outer view clips a 2 px dotted box down to its top edge, so the line is the same on web and native.
+function DotRule({ top }: { top: number }) {
+  const { isDark } = useTheme();
+  return (
+    <View accessibilityElementsHidden style={{ height: 1.5, overflow: 'hidden', marginHorizontal: 4, marginTop: top }}>
+      <View style={{ height: 4, borderWidth: 1.5, borderStyle: 'dotted', borderColor: isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.35)' }} />
+    </View>
+  );
+}
+
 export function MealNowCard() {
   const { c, isDark } = useTheme();
   const { d, set } = useDomain();
@@ -272,7 +282,7 @@ export function MealNowCard() {
           <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={16} color={c.bg} strokeWidth={3} /></View>
         </Row>
         <Txt muted style={{ paddingHorizontal: 4, marginTop: -6, fontSize: 14, lineHeight: 20 }}>{`All ${MEALS.length} meals logged. Protein ${t.p} of ${MACRO_TARGET.p} g.`}</Txt>
-        <View style={{ height: 1, backgroundColor: c.line, marginHorizontal: 4, marginTop: -2 }} />
+        <DotRule top={-2} />
         <View>
           {MEALS.map((q, i) => {
             const x = mealLog(d, q.id);
@@ -306,7 +316,7 @@ export function MealNowCard() {
           </View>
         </View>
       </Row>
-      <View style={{ height: 1, backgroundColor: c.line, marginHorizontal: 4, marginTop: -4 }} />
+      <DotRule top={-4} />
       {ask && <MissedRow id={ask} more={missed.length - 1} />}
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <View>
