@@ -323,8 +323,8 @@ export function MealNowCard() {
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
         <View style={{ borderRadius: 999, overflow: 'hidden' }}>
-          <BlurView intensity={isDark ? 30 : 40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
-          <View style={{ backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.5)' }}>
+          <BlurView intensity={isDark ? 30 : 40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: 999, overflow: 'hidden' }} />
+          <View style={{ borderRadius: 999, backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.5)' }}>
             <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
           </View>
         </View>
