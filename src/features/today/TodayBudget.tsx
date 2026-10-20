@@ -8,6 +8,7 @@ import { KCAL_TARGET } from '@/lib/data';
 import { useGoalV2 } from '@/features/goalv2/model';
 import { createStore } from '@/lib/createStore';
 import { GC } from './goalCardState';
+import { Glow } from './GoalTickCard';
 import { font } from '@/theme/tokens';
 
 // Which card sits at the top of Today: the whole goal (the live goal card) or today's calories. Demo panel only for now.
@@ -44,6 +45,7 @@ export function TodayBudgetCard() {
   const burn = live ? burned(d) : done ? wkDoneInfo(d).k : 0;
   return (
     <View style={{ backgroundColor: GC.bg, borderColor: GC.border, borderWidth: 1, borderRadius: 24, overflow: 'hidden', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 0, gap: 12 }}>
+      <Glow color="#2F6BEA" a={0.5} />
       <Row style={{ gap: 16, alignItems: 'flex-start' }}>
         <Half icon={<UtensilsCrossed size={14} color={GC.mint} />} label="Eat today" hint="kcal" value={inr(eaten)} of={inr(KCAL_TARGET)} pct={eaten / KCAL_TARGET} color={GC.mint} />
         <View style={{ width: 1, alignSelf: 'stretch', backgroundColor: 'rgba(255,255,255,0.1)' }} />
