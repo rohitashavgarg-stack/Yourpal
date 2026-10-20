@@ -142,7 +142,7 @@ export function MealsCard({ timeline = false }: { timeline?: boolean } = {}) {
     <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 8 }}>
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, paddingBottom: 12 }}>
         <Txt style={{ fontFamily: font.regular, fontSize: 30, letterSpacing: -1.3 }} accessibilityRole="header">Meals</Txt>
-        <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
+        <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} style={{ height: 38, borderRadius: 19, paddingHorizontal: 14 }} />
       </Row>
       {timeline && <Txt style={{ fontSize: 14, lineHeight: 20, paddingHorizontal: 4, paddingBottom: 12, color: c.ink }}>{mealTimeline(d)}</Txt>}
       <View accessible accessibilityLabel={`Eaten today ${t.k} of ${KCAL_TARGET} kcal, protein ${t.p} of ${MACRO_TARGET.p} grams`} style={{ gap: 6, paddingVertical: 12, paddingHorizontal: 14, borderRadius: 20, backgroundColor: c.tAct, marginBottom: 6 }}>
@@ -324,7 +324,7 @@ export function MealNowCard() {
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
         <View style={{ borderRadius: 999, backgroundColor: isDark ? 'rgba(14,17,22,0.88)' : 'rgba(255,255,255,0.92)' }}>
-          <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} />
+          <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} style={{ height: 38, borderRadius: 19, paddingHorizontal: 14 }} />
         </View>
       </Row>
       <DotRule top={-4} />
