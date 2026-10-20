@@ -35,7 +35,7 @@ export function TodayGreeting() {
   const { small, big } = greeting(ctx, first);
   return (
     <View accessible accessibilityLabel={small ? `${small}. ${big}` : big} style={{ paddingHorizontal: 4, gap: 0 }}>
-      {!!small && <Txt style={{ fontFamily: font.medium, fontSize: 19, lineHeight: 26, color: c.muted }}>{small}</Txt>}
+      {!!small && <Txt style={{ fontFamily: font.display, fontSize: 32, lineHeight: 40, letterSpacing: -0.8, color: c.ink }}>{small}</Txt>}
       <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 32, lineHeight: 40, letterSpacing: -0.8, color: c.ink }}>{big}</Txt>
     </View>
   );
