@@ -225,12 +225,14 @@ function MealsBackdrop() {
   );
 }
 
-// A dotted, whiter rule under the heading. The outer view clips a 2 px dotted box down to its top edge, so the line is the same on web and native.
+// A dotted rule under the heading: 1 px thick, 40% white, 3 px dots with 3 px gaps. Drawn as small blocks in a clipped row so it looks the same on web and native.
+const DOTS = Array.from({ length: 100 }, (_, i) => i);
 function DotRule({ top }: { top: number }) {
   const { isDark } = useTheme();
+  const col = isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.3)';
   return (
-    <View accessibilityElementsHidden style={{ height: 1.5, overflow: 'hidden', marginHorizontal: 4, marginTop: top }}>
-      <View style={{ height: 4, borderWidth: 1.5, borderStyle: 'dotted', borderColor: isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.35)' }} />
+    <View accessibilityElementsHidden style={{ height: 1, flexDirection: 'row', overflow: 'hidden', marginHorizontal: 4, marginTop: top }}>
+      {DOTS.map((i) => <View key={i} style={{ width: 3, height: 1, marginRight: 3, backgroundColor: col }} />)}
     </View>
   );
 }
