@@ -334,9 +334,9 @@ export function MealNowCard() {
           <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 27, letterSpacing: -0.4 }}>{m.n}</Txt>
           <Txt v="caption">{v.any ? `${v.kcal} kcal eaten` : `${mealKcal(m)} kcal planned`}</Txt>
         </View>
-        <View style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, borderWidth: 1, borderColor: isDark ? 'rgba(255,255,255,0.18)' : c.chipLine, backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)', flexDirection: 'row', gap: 6, alignItems: 'center', justifyContent: 'center' }}>
-          {(shown === now || missed.includes(shown)) && <Clock size={14} color={c.ink} />}
-          <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, paddingTop: 1 }}>{shown === now || missed.includes(shown) ? fmtT(m.t).full : status(shown).t}</Txt>
+        <View style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, borderWidth: 1, borderColor: isDark ? 'rgba(255,255,255,0.18)' : c.chipLine, backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)', flexDirection: 'row', gap: 5, alignItems: 'center', justifyContent: 'center' }}>
+          {(shown === now || missed.includes(shown)) && <Clock size={12} color={c.ink} />}
+          <Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, paddingTop: 1 }}>{shown === now || missed.includes(shown) ? fmtT(m.t).full : status(shown).t}</Txt>
         </View>
       </Row>
       <MealRow id={shown} open bare />
