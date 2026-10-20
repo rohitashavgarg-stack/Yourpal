@@ -2,6 +2,7 @@ import React from 'react';
 import { useLogsPaused } from '@/lib/logGate';
 import { StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavHidden } from '@/components/FloatingTabBar';
@@ -47,11 +48,14 @@ function ListCard({ dot, title, rows }: { dot: string; title: string; rows: { n:
 function LockedPlan({ day, locked, children }: { day: string; locked: boolean; children: React.ReactNode }) {
   const { c, isDark } = useTheme();
   if (!locked) return <>{children}</>;
+  // The blur runs to both screen edges and fades into the page at the top and bottom, so it never reads as a box.
   return (
-    <View accessibilityLabel="This plan is locked" style={{ borderRadius: 24, overflow: 'hidden' }}>
-      <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ gap: 12 }}>{children}</View>
-      <BlurView intensity={isDark ? 70 : 80} tint={isDark ? 'dark' : 'light'} style={StyleSheet.absoluteFill} />
-      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'flex-start', gap: 10, paddingTop: 110, paddingHorizontal: 28 }}>
+    <View accessibilityLabel="This plan is locked" style={{ marginHorizontal: -16, overflow: 'hidden' }}>
+      <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ gap: 12, paddingHorizontal: 16 }}>{children}</View>
+      <BlurView intensity={isDark ? 60 : 70} tint={isDark ? 'dark' : 'light'} style={StyleSheet.absoluteFill} />
+      <LinearGradient pointerEvents="none" colors={[c.bg, c.bg + '00']} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 70 }} />
+      <LinearGradient pointerEvents="none" colors={[c.bg + '00', c.bg]} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120 }} />
+      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'flex-start', gap: 10, paddingTop: 110, paddingHorizontal: 44 }}>
         <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}><Lock size={24} color={c.ink} /></View>
         <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 22, lineHeight: 29 }}>This plan is locked</Txt>
         <Txt style={{ textAlign: 'center', maxWidth: 290, fontSize: 14, lineHeight: 20, color: c.ink }}>{`Renew at Wulf Fitness reception to see what Coach Vikram planned for ${day}. Workouts you logged stay here.`}</Txt>
