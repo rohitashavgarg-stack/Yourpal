@@ -20,7 +20,7 @@ export type TodayCtx = {
 export type Greeting = { small?: string; big: string };
 
 const pick = (day: number, key: number, list: string[]) => list[(day + key) % list.length];
-const timeGreet = (c: TodayCtx) => (c.min < 12 * 60 ? ['Good morning, {n}', 'Morning, {n}', 'Hey {n}'] : c.min < 17 * 60 ? ['Good afternoon, {n}', 'Hey {n}', 'Afternoon, {n}'] : ['Good evening, {n}', 'Evening, {n}', 'Hey {n}']);
+const timeGreet = (c: TodayCtx) => (c.min < 12 * 60 ? ['Good morning, {n}', 'Hello, {n}', 'Hey {n}'] : c.min < 17 * 60 ? ['Good afternoon, {n}', 'Hello, {n}', 'Hey {n}'] : ['Good evening, {n}', 'Hello, {n}', 'Hey {n}']);
 const withName = (line: string, first: string) => (first ? line.replace('{n}', first) : line.replace(/,? ?\{n\}/, '').trim() || 'Hey');
 
 export function greeting(c: TodayCtx, first: string): Greeting {
@@ -34,7 +34,7 @@ export function greeting(c: TodayCtx, first: string): Greeting {
   if (c.workout === 'done') return c.weeks > 0 ? two(['Good job, {n}', 'Well done, {n}'], 3, `${c.weeks} week streak`) : one(['Workout done, {n}', 'Good job, {n}'], 3);
   if (c.workout === 'todo' && c.min < c.planned) {
     const soon = c.planned - c.min <= 120;
-    return two(soon ? ['Almost time, {n}', 'Get ready, {n}'] : timeGreet(c), 4, `Leg day is at ${c.clock(c.planned)}`);
+    return two(soon ? ['Almost time, {n}', 'Hello, {n}'] : ['Hello, {n}', ...timeGreet(c)], 4, "It's your leg day");
   }
   if (c.nextMeal) return two(timeGreet(c), 5, `${c.nextMeal} is next`);
   return two(timeGreet(c), 6, `${c.weekDone} of ${c.target} workouts this week`);
