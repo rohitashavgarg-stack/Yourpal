@@ -25,6 +25,7 @@ import { CheckInBar, useCiMode } from '@/features/today/CheckInBar';
 import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
 import { ViewOnly } from '@/features/today/ViewOnly';
 import { TodayBudgetCard, topCardStore } from '@/features/today/TodayBudget';
+import { TodayGreeting } from '@/features/today/TodayGreeting';
 import { PushBanner } from '@/features/reminders/PushBanner';
 import { GOAL_STATE_OPTIONS, goalCardStore } from '@/features/today/goalCardState';
 
@@ -148,6 +149,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             {comebackNew && <Enter i={0}><ComebackGreeting /></Enter>}
             {!!payNotice && <Enter i={0}><View style={{ marginTop: 14, marginBottom: comebackNew ? -12 : 6 }} onLayout={(e) => setStripY(e.nativeEvent.layout.y)}><PaymentBanner /></View></Enter>}
             {comebackNew && <Enter i={0}><WorkoutCard restart /></Enter>}
+            {!comebackNew && <Enter i={0}><TodayGreeting /></Enter>}
             {!comebackNew && forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
             {/* fixed order, time never moves a card: today's numbers, trackers, workout, meals, this week */}
             <Enter i={1}>{topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</Enter>

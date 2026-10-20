@@ -1,0 +1,43 @@
+import React from 'react';
+import { View } from 'react-native';
+import { Txt } from '@/components/ui';
+import { MEALS, fmtT } from '@/lib/data';
+import { plannedMin, useDomain, workoutState } from '@/lib/domain';
+import { forceCtx, greetWord, GreetingState, todayLine } from '@/lib/microcopy';
+import { createStore } from '@/lib/createStore';
+import { useLogsPaused } from '@/lib/logGate';
+import { useStore } from '@/lib/store';
+import { useStreak } from '@/features/streak/useStreak';
+import { nextMeal } from './meals';
+import { useTheme } from '@/theme/ThemeProvider';
+import { font } from '@/theme/tokens';
+
+// Demo panel: preview any state of the line and the language (Mixed alternates English and Hinglish by day).
+export const greetStore = createStore(() => ({ state: 'Auto' as GreetingState, lang: 'Mixed' as 'Mixed' | 'English' | 'Hinglish' }));
+
+// The top of Today: "Good evening, Rohitashav" and one line about what is going on right now. No container.
+export function TodayGreeting() {
+  const { c } = useTheme();
+  const { d } = useDomain();
+  const { state } = useStore();
+  const streak = useStreak();
+  const paused = useLogsPaused();
+  const first = (state.profile.name || '').trim().split(' ')[0];
+  const nm = nextMeal(d);
+  const g = greetStore.use();
+  const base = {
+    min: d.min, planned: plannedMin(state.profile.time), workout: workoutState(d),
+    nextMeal: nm ? MEALS.find((m) => m.id === nm)?.n ?? null : null,
+    weeks: streak.weeks, weekDone: streak.weekDone, target: streak.target, paused,
+    day: new Date().getDate(), clock: (m: number) => fmtT(m).full,
+    lang: (g.lang === 'English' ? 'en' : g.lang === 'Hinglish' ? 'hi' : 'mixed') as 'en' | 'hi' | 'mixed',
+  };
+  const line = todayLine(forceCtx(base, g.state));
+  const word = greetWord(d.min);
+  return (
+    <View accessible accessibilityLabel={`${word}${first ? ', ' + first : ''}. ${line}`} style={{ paddingHorizontal: 4, gap: 2 }}>
+      <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 26, lineHeight: 34, letterSpacing: -0.5, color: c.ink }}>{first ? `${word}, ${first}` : word}</Txt>
+      <Txt muted style={{ fontSize: 15, lineHeight: 22 }}>{line}</Txt>
+    </View>
+  );
+}
