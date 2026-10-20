@@ -37,7 +37,7 @@ export function TodayGreeting() {
   return (
     <View accessible accessibilityLabel={`${head}. ${line}`} style={{ paddingHorizontal: 4, gap: 2 }}>
       <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 26, lineHeight: 34, letterSpacing: -0.5, color: c.ink }}>{head}</Txt>
-      <Txt muted style={{ fontSize: 15, lineHeight: 22 }}>{line}</Txt>
+      <Txt style={{ fontFamily: font.display, fontSize: 26, lineHeight: 34, letterSpacing: -0.5, color: c.ink }}>{line}</Txt>
     </View>
   );
 }
