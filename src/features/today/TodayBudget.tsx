@@ -56,9 +56,9 @@ export function TodayBudgetCard() {
         </Row>
       </Pressy>
       <Row style={{ gap: 16, alignItems: 'flex-start' }}>
-        <Half icon={<UtensilsCrossed size={14} color={GC.mint} />} label="Eat" hint={left > 0 ? `${inr(left)} left` : 'Reached'} value={inr(eaten)} of={`${inr(KCAL_TARGET)} kcal`} pct={eaten / KCAL_TARGET} color={GC.mint} />
+        <Half icon={<UtensilsCrossed size={14} color={GC.mint} />} label="Eat today" hint={left > 0 ? `${inr(left)} left` : 'Reached'} value={inr(eaten)} of={`${inr(KCAL_TARGET)} kcal`} pct={eaten / KCAL_TARGET} color={GC.mint} />
         <View style={{ width: 1, alignSelf: 'stretch', backgroundColor: 'rgba(255,255,255,0.1)' }} />
-        <Half icon={<Flame size={14} color={BURN} />} label="Burn" hint={live ? 'watch' : done ? 'done' : 'planned'} value={inr(burn)} of={`${inr(PLANNED_BURN)} kcal`} pct={burn / PLANNED_BURN} color={BURN} />
+        <Half icon={<Flame size={14} color={BURN} />} label="Burn today" hint={live ? 'watch' : done ? 'done' : 'planned'} value={inr(burn)} of={`${inr(PLANNED_BURN)} kcal`} pct={burn / PLANNED_BURN} color={BURN} />
       </Row>
     </View>
   );
