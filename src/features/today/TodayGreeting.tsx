@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Txt } from '@/components/ui';
 import { MEALS, fmtT } from '@/lib/data';
 import { plannedMin, useDomain, workoutState } from '@/lib/domain';
-import { forceCtx, greetHeading, GreetingState, todayLine } from '@/lib/microcopy';
+import { forceCtx, greetHeading, GreetingState } from '@/lib/microcopy';
 import { createStore } from '@/lib/createStore';
 import { useLogsPaused } from '@/lib/logGate';
 import { useStore } from '@/lib/store';
@@ -15,7 +15,7 @@ import { font } from '@/theme/tokens';
 // Demo panel: preview any state of the line.
 export const greetStore = createStore(() => ({ state: 'Auto' as GreetingState }));
 
-// The top of Today: "Good evening, Rohitashav" and one line about what is going on right now. No container.
+// The top of Today: one heading that follows what is going on ("Good evening, Rohitashav", "Almost time, Rohitashav"). No container, no second line.
 export function TodayGreeting() {
   const { c } = useTheme();
   const { d } = useDomain();
@@ -32,12 +32,10 @@ export function TodayGreeting() {
     day: new Date().getDate(), clock: (m: number) => fmtT(m).full,
   };
   const ctx = forceCtx(base, g.state);
-  const { line } = todayLine(ctx);
   const head = greetHeading(ctx, first);
   return (
-    <View accessible accessibilityLabel={`${head}. ${line}`} style={{ paddingHorizontal: 4, gap: 2 }}>
+    <View accessible accessibilityLabel={head} style={{ paddingHorizontal: 4 }}>
       <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 26, lineHeight: 34, letterSpacing: -0.5, color: c.ink }}>{head}</Txt>
-      <Txt style={{ fontFamily: font.display, fontSize: 26, lineHeight: 34, letterSpacing: -0.5, color: c.ink }}>{line}</Txt>
     </View>
   );
 }

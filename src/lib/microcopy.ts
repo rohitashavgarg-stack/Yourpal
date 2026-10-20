@@ -14,33 +14,8 @@ export type TodayCtx = {
   clock: (min: number) => string;                // "6:30 pm"
 };
 
-// Two wordings per moment; the day of the month picks one, so a line does not change on every render.
-const pick = (day: number, key: number, a: string, b: string) => ((day + key) % 2 === 0 ? a : b);
-
-// What sits under the greeting: one fact (line) and, when it helps, the smallest next step or one more number on its own quieter line (hint).
-// Never two sentences joined in one line. First rule that fits wins.
-export type TodayLine = { line: string; hint?: string };
-export function todayLine(c: TodayCtx): TodayLine {
-  if (c.paused) return { line: 'Your history is all here' };
-  if (c.workout === 'live') return { line: 'Workout in progress', hint: pick(c.day, 1, 'The rest timer is running', 'Take your rest, then the next set') };
-  if (c.workout === 'done') {
-    const line = pick(c.day, 2, 'Leg day is done', 'Leg day is logged');
-    return c.weeks > 0 ? { line, hint: `${c.weeks} week streak` } : { line, hint: `${c.weekDone} of ${c.target} workouts this week` };
-  }
-  if (c.workout === 'rest') return { line: 'Rest day', hint: pick(c.day, 3, 'Recovery counts toward your week', 'Sleep and water do the work today') };
-  if (c.workout === 'todo' && c.min < c.planned) {
-    const line = `Leg day is at ${c.clock(c.planned)}`;
-    return c.planned - c.min <= 180
-      ? { line, hint: pick(c.day, 4, 'Warm-up takes about 5 minutes', 'Start with the warm-up') }
-      : { line, hint: pick(c.day, 4, 'A light meal two hours before helps', 'Eat something light before you go') };
-  }
-  if (c.nextMeal) return { line: `${c.nextMeal} is next`, hint: pick(c.day, 5, 'Log it when you eat', 'Log it as you eat it') };
-  const week = `${c.weekDone} of ${c.target} workouts this week`;
-  return c.weeks > 0 ? { line: week, hint: `${c.weeks} week streak` } : { line: week };
-}
-
-// The heading above the line. It follows what is happening (workout live, soon, done, rest day) and otherwise the time of day, and the day of the month
-// rotates the wording, so it is not "Good afternoon, Name" on every open. {n} is the first name; without one the name is dropped.
+// The greeting is one heading and nothing else. It follows what is happening (workout live, soon, done, rest day, the next meal) and otherwise the time
+// of day, and the day of the month rotates the wording so it is not the same line on every open. {n} is the first name; without one the name is dropped.
 const HEAD: Record<string, string[]> = {
   live: ['Keep going, {n}', 'Strong set, {n}'],
   soon: ['Almost time, {n}', 'Get ready, {n}'],
@@ -57,8 +32,11 @@ export function greetHeading(c: TodayCtx, first: string): string {
     : c.workout === 'rest' ? 'rest'
     : c.workout === 'todo' && c.min < c.planned && c.planned - c.min <= 120 ? 'soon'
     : null;
-  const slot = key ?? (c.min < 12 * 60 ? 'morning' : c.min < 17 * 60 ? 'afternoon' : 'evening');
-  const list = HEAD[slot];
+  const time = c.min < 12 * 60 ? 'morning' : c.min < 17 * 60 ? 'afternoon' : 'evening';
+  const slot = key ?? time;
+  let list = HEAD[slot];
+  if (slot === 'done' && c.weeks > 0) list = [...list, `${c.weeks} week streak, {n}`];                  // the streak is one of the headings after a workout
+  if (!key && !c.paused && c.nextMeal) list = [`${c.nextMeal} is next, {n}`, ...list];                  // at meal time, the meal can be the heading
   const line = list[(c.day + slot.length) % list.length];
   return first ? line.replace('{n}', first) : line.replace(/,? ?\{n\}/, '').trim() || 'Hey';
 }
