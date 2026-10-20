@@ -53,7 +53,7 @@ export function TodayBudgetCard() {
       <Pressy accessibilityRole="link" accessibilityLabel={`Your goal: ${g.name}, ${Math.round(Math.max(0, Math.min(1, g.pct)) * 100)} percent. Open`} onPress={() => router.push('/goal-detail')} scaleTo={0.98}
         style={{ minHeight: 60, marginHorizontal: -16, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.16)', backgroundColor: 'rgba(255,255,255,0.05)', paddingHorizontal: 16, justifyContent: 'center' }}>
         <Row style={{ gap: 8 }}>
-          <Target size={16} color={GC.rest} />
+          <Target size={24} color={GC.title} />
           <View style={{ flex: 1 }}>
             <Txt style={{ fontSize: 12, lineHeight: 17, color: GC.rest }}>Goal</Txt>
             <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: GC.title }}>{g.name}</Txt>
