@@ -91,7 +91,7 @@ function Journey({ g }: { g: Goal2 }) {
 export function GoalStrip({ flat = false }: { flat?: boolean } = {}) {
   const { c, isDark } = useTheme();
   const g = useGoalV2();
-  const small = false; // the larger strip, with the "Your goal" line, as in the reference
+  const small = !flat; // the smaller strip (the one we used on Today): the name and the date on one line, a short bar, no "Your goal" label
   const pct = goalShare(g);
   const done = Math.abs(g.currentValue - g.startValue);
   const total = Math.abs(g.targetValue - g.startValue);

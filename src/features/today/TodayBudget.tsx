@@ -51,11 +51,13 @@ export function TodayBudgetCard() {
       </Row>
       {/* the whole goal sits apart at the bottom: a strip that runs edge to edge, touching the card's border on the left, right and bottom */}
       <Pressy accessibilityRole="link" accessibilityLabel={`Your goal: ${g.name}, ${Math.round(Math.max(0, Math.min(1, g.pct)) * 100)} percent. Open`} onPress={() => router.push('/goal-detail')} scaleTo={0.98}
-        style={{ minHeight: 50, marginHorizontal: -16, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.16)', backgroundColor: 'rgba(255,255,255,0.05)', paddingHorizontal: 16, justifyContent: 'center' }}>
+        style={{ minHeight: 60, marginHorizontal: -16, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.16)', backgroundColor: 'rgba(255,255,255,0.05)', paddingHorizontal: 16, justifyContent: 'center' }}>
         <Row style={{ gap: 8 }}>
           <Target size={16} color={GC.rest} />
-          <Txt style={{ fontSize: 12, lineHeight: 17, color: GC.rest }}>Goal</Txt>
-          <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: GC.title }}>{g.name}</Txt>
+          <View style={{ flex: 1 }}>
+            <Txt style={{ fontSize: 12, lineHeight: 17, color: GC.rest }}>Goal</Txt>
+            <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: GC.title }}>{g.name}</Txt>
+          </View>
           <Txt style={{ fontSize: 13, lineHeight: 19, color: GC.rest }}>{`${Math.round(Math.max(0, Math.min(1, g.pct)) * 100)}%`}</Txt>
           <ChevronRight size={16} color={GC.rest} />
         </Row>
