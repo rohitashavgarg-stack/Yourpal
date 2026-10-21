@@ -73,17 +73,8 @@ export function Button({ kind = 'primary', label, onPress, disabled, icon, style
 }
 
 // ---------- Card ----------
-export function Card({ style, children, dark: isDarkCard }: { style?: StyleProp<ViewStyle>; children: React.ReactNode; dark?: boolean }) {
-  const { c, isDark } = useTheme();
-  return (
-    <View style={[{
-      backgroundColor: isDarkCard ? c.dark : c.surface, borderRadius: radius.lg, padding: 20,
-      ...(isDark || isDarkCard ? {} : { shadowColor: fixed.shadow, shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 }, elevation: 2 }),
-    }, style]}>
-      {children}
-    </View>
-  );
-}
+// The Card moved to src/design-system/primitives/Card.tsx (variants: default, compact, dark). Re-exported so this import path keeps working.
+export { Card } from '@/design-system/primitives/Card';
 
 // ---------- Outline chip (reference style) ----------
 export function Chip({ label, icon, tone = 'default', onDark, style }: { label: string; icon?: React.ReactNode; tone?: 'default' | 'good' | 'warn' | 'live'; onDark?: boolean; style?: StyleProp<ViewStyle> }) {
