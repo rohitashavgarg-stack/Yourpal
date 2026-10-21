@@ -2,14 +2,15 @@ import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { Dumbbell, MapPin, UtensilsCrossed } from '@/lib/icons';
-import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
+import { Button, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { fmtT } from '@/lib/data';
 import { Domain, plannedMin, totals, useDomain, wkDoneInfo, workoutState } from '@/lib/domain';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { radii, fontSizes } from '@/design-system/tokens';
+import { fontSizes } from '@/design-system/tokens';
+import { WeekCard as WeekCardPattern, WeekDay } from '@/design-system/patterns/WeekCard';
 
 export const ciTime = (d: Domain) => d.ciAt ?? (d.ci === 'Checked in' ? 1098 : null);
 
@@ -41,53 +42,20 @@ function days(d: Domain, planAt: string): Day[] {
   ];
 }
 
-function DayDot({ kind }: { kind: 'done' | 'rest' | '' }) {
-  const { c } = useTheme();
-  if (kind === 'rest') return <View style={{ width: 8, height: 8 }} />;
-  return <View style={{ width: 8, height: 8, borderRadius: radii.xs, borderWidth: 1.5, borderColor: kind === 'done' ? c.accent : c.surface3, backgroundColor: kind === 'done' ? c.accent : 'transparent' }} />;
-}
-function WeekBar({ w }: { w: number }) {
-  const { c } = useTheme();
-  return <View style={{ width: 22, height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}><View style={{ width: `${w}%`, height: '100%', backgroundColor: c.good, borderRadius: radii.xs }} /></View>;
-}
-
-export function WeekCard() {
-  const { c } = useTheme();
+// The week card is a pattern (src/design-system/patterns/WeekCard.tsx). This feeds it the member's week.
+export function TodayWeekCard() {
   const { d } = useDomain();
   const { state } = useStore();
   const { openSheet } = useOverlay();
   const list = days(d, fmtT(plannedMin(state.profile.time)).full);
   const t = totals(d);
   const doneN = 1 + (workoutState(d) === 'done' ? 1 : 0);
-  return (
-    <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 10, gap: 14 }}>
-      <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
-        <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, letterSpacing: -1.3 }}>This week</Txt>
-        <Chip label={`${doneN} of 4 workouts`} icon={<Dumbbell size={13} color={c.ink} />} />
-      </Row>
-      <View accessibilityLabel="Days this week. Tap a past day for its summary, a future day to open its plan" style={{ flexDirection: 'row' }}>
-        {list.map((x, i) => (
-          <View key={x.num} style={{ flex: 1, alignItems: 'center', gap: 6, borderLeftWidth: i ? 1 : 0, borderLeftColor: c.line }}>
-            <Pressy accessibilityRole="button" accessibilityLabel={`${DN[i]} ${x.num}${x.today ? ', today' : ''}${x.fut ? ', open plan' : ', open summary'}`}
-              onPress={() => (x.fut ? router.navigate({ pathname: '/plans', params: { day: String(i) } }) : openSheet(<DaySheet i={i} />, { label: 'Day summary' }))}
-              style={{ width: 44, height: 58, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center', gap: 2, backgroundColor: x.today ? c.ink : 'transparent', opacity: x.fut ? 0.55 : 1 }}>
-              <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, color: x.today ? c.bg : c.ink }}>{x.num}</Txt>
-              <Txt style={{ fontSize: fontSizes.xs2, color: x.today ? c.bg : c.muted, opacity: x.today ? 0.7 : 1 }}>{x.let}</Txt>
-            </Pressy>
-            <DayDot kind={x.wk} />
-            <WeekBar w={x.mealW} />
-          </View>
-        ))}
-      </View>
-      <Txt muted style={{ fontSize: fontSizes.sm, paddingHorizontal: 4 }}>{doneN} of 4 workouts · {7 + t.onPlan} of 12 meals on plan · {ciTime(d) != null ? '2 check-ins' : '1 check-in'}</Txt>
-      <Row style={{ gap: 14, justifyContent: 'center', paddingTop: 2, paddingBottom: 6 }}>
-        <Row style={{ gap: 5 }}><DayDot kind="done" /><Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>Workout done</Txt></Row>
-        <Row style={{ gap: 5 }}><DayDot kind="" /><Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>Planned</Txt></Row>
-        <Row style={{ gap: 5 }}><WeekBar w={70} /><Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>Meals on plan</Txt></Row>
-      </Row>
-    </Card>
-  );
+  const week: WeekDay[] = list.map((x, i) => ({ num: x.num, letter: x.let, name: DN[i], workout: x.wk, mealsPct: x.mealW, future: x.fut, today: x.today }));
+  const onDayPress = (i: number) => (list[i].fut ? router.navigate({ pathname: '/plans', params: { day: String(i) } }) : openSheet(<DaySheet i={i} />, { label: 'Day summary' }));
+  return <WeekCardPattern days={week} workoutsDone={doneN} onDayPress={onDayPress}
+    summary={`${doneN} of 4 workouts · ${7 + t.onPlan} of 12 meals on plan · ${ciTime(d) != null ? '2 check-ins' : '1 check-in'}`} />;
 }
+export { TodayWeekCard as WeekCard }; // the old name, so existing imports keep working
 
 export function DaySheet({ i }: { i: number }) {
   const { c } = useTheme();

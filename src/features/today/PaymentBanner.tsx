@@ -1,12 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
 import { router } from 'expo-router';
-import { CircleCheck, Clock, Pause, X } from '@/lib/icons';
-import { Pressy, Row, Txt } from '@/components/ui';
 import { useDomain } from '@/lib/domain';
-import { useTheme } from '@/theme/ThemeProvider';
-import { font } from '@/theme/tokens';
-import { radii, fontSizes } from '@/design-system/tokens';
+import { Banner } from '@/design-system/patterns/Banner';
 
 // Membership is view-only in the app: this only tells the member what is going on and points to the membership page.
 // One card design for the membership everywhere (the Today banner and the Gym tab card), full card width:
@@ -34,56 +29,17 @@ export function usePaymentNotice() {
   return n;
 }
 
+// The two looks of the account banner are one pattern (src/design-system/patterns/Banner.tsx). These feed it.
 export function MembershipCard({ n }: { n: Notice }) {
-  const { c } = useTheme();
-  const warn = n.tone === 'warn';
-  const Icon = n.icon === 'pause' ? Pause : n.icon === 'ok' ? CircleCheck : Clock;
-  const fg = warn ? c.warn : c.good;
-  return (
-    <Pressy accessibilityRole="button" accessibilityLabel={`${n.title}. ${n.line} ${n.act ?? ''} See plan`} onPress={() => router.push('/gym/membership')} scaleTo={0.98}
-      style={{ alignSelf: 'stretch', borderRadius: 20, backgroundColor: warn ? c.warnSoft : c.surface, paddingVertical: 12, paddingHorizontal: 14 }}>
-      <Row style={{ gap: 12, alignItems: 'flex-start' }}>
-        <View style={{ width: 36, height: 36, borderRadius: radii.sm, backgroundColor: fg + '2E', alignItems: 'center', justifyContent: 'center' }}><Icon size={17} color={fg} /></View>
-        <View style={{ flex: 1, gap: 2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: c.ink }}>{n.title}</Txt>
-          <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.ink, opacity: 0.8 }}>{n.line}</Txt>
-          {!!n.act && <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17, marginTop: 2 }}>{n.act}</Txt>}
-        </View>
-        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 21, color: c.ink, textDecorationLine: 'underline' }}>See plan</Txt>
-      </Row>
-    </Pressy>
-  );
+  return <Banner variant="card" icon={n.icon} tone={n.tone} title={n.title} line={n.line} act={n.act} onPress={() => router.push('/gym/membership')} />;
 }
 
 // The strip at the top of Today: edge to edge under the header, the title and one sentence on the left, "View plan" on the right.
 // (The "what to do" line stays on the Gym tab card; the strip only says what is happening and what it means.)
 export function PaymentBanner() {
-  const { c } = useTheme();
   const { d, set } = useDomain();
   const n = usePaymentNotice();
   if (!n) return null;
-  const Icon = n.icon === 'pause' ? Pause : Clock;
   const cross = () => set((x) => ({ dismissed: { ...x.dismissed, ['membership-' + d.membership]: true } }));
-  return (
-    <View style={{ marginHorizontal: -16, backgroundColor: c.warnSoft, flexDirection: 'row', alignItems: 'center' }}>
-      <Pressy accessibilityRole="button" accessibilityLabel={`${n.title}. ${n.line} View plan`} onPress={() => router.push('/gym/membership')} scaleTo={1}
-        style={{ flex: 1, paddingVertical: 14, paddingLeft: 16, paddingRight: n.once ? 4 : 16 }}>
-        <Row style={{ gap: 12 }}>
-          <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.warn + '2E', alignItems: 'center', justifyContent: 'center' }}><Icon size={18} color={c.warn} /></View>
-          <View style={{ flex: 1, gap: 1 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: c.ink }}>{n.title}</Txt>
-            <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{n.line}</Txt>
-          </View>
-          <View style={{ minHeight: 40, paddingHorizontal: 16, borderRadius: 20, borderWidth: 1, borderColor: c.ink + '55', alignItems: 'center', justifyContent: 'center' }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>View plan</Txt>
-          </View>
-        </Row>
-      </Pressy>
-      {n.once && (
-        <Pressy accessibilityRole="button" accessibilityLabel="Dismiss" onPress={cross} scaleTo={0.9} style={{ width: 44, height: 44, marginRight: 4, alignItems: 'center', justifyContent: 'center' }}>
-          <X size={18} color={c.muted} />
-        </Pressy>
-      )}
-    </View>
-  );
+  return <Banner variant="strip" icon={n.icon} tone={n.tone} title={n.title} line={n.line} once={n.once} onPress={() => router.push('/gym/membership')} onDismiss={cross} />;
 }

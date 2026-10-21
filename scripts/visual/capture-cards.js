@@ -8,7 +8,8 @@
  *
  * Add --only=goal- or --only=budget- (names that start with it; comma separated) to capture a part.
  * Files: <outDir>/<theme>/goal-<state>.png, goal-onTrack-stale.png, goal-flat.png, budget-<state>.png, budget-goal-<state>.png
- * Each image is 390 x 320: the card alone at the top of the page.
+ * Each image is 390 wide and 320 high unless the shot names a height: the card alone at the top of the page.
+ * Also: workout-<state>, meals-<state>, trackers-<state>, week-<state>, banner-<state> (see src/app/dev-cards.tsx for the states).
  */
 const fs = require('fs'); const path = require('path'); const os = require('os'); const { spawn } = require('child_process');
 const BASE = process.env.APP_URL || 'http://localhost:8082';
@@ -23,6 +24,14 @@ const ALL = [
   ...GOAL_STATES.map((s) => ['budget-goal-' + s, '/dev-cards?c=budget&s=default&g=' + s]),
   ['budget-goal-onTrack-stale', '/dev-cards?c=budget&s=default&g=onTrack&w=12'],
 ];
+const SCENES = {
+  workout: [['upcoming', 400], ['due', 400], ['missed', 440], ['moved', 240], ['skipped', 240], ['live', 440], ['done', 420], ['done-watch', 470], ['rest', 340], ['paused', 240], ['comeback', 340]],
+  meals: [['now', 560], ['missed', 640], ['complete', 520], ['paused', 300], ['other', 560], ['nothing', 560]],
+  trackers: [['default', 240], ['health', 240], ['hc-only', 240], ['weight-up', 240], ['water-empty', 240], ['water-full', 240], ['tiles', 380], ['tiles-health', 580]],
+  week: [['default', 420], ['done', 420], ['checked-in', 420]],
+  banner: [['strip', 200], ['card-active', 200], ['card-expiring', 200], ['card-expired', 200]],
+};
+for (const [k, list] of Object.entries(SCENES)) for (const [s, h] of list) ALL.push([k + '-' + s, '/dev-cards?c=' + k + '&s=' + s, h]);
 const SHOTS = ALL.filter(([name]) => !only.length || only.some((w) => name.startsWith(w)));
 const edge = ['C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Google/Chrome/Application/chrome.exe'].find((p) => fs.existsSync(p));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -40,7 +49,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     let n = 0;
     for (const theme of ['light', 'dark']) {
       fs.mkdirSync(path.join(out, theme), { recursive: true });
-      for (const [name, p] of SHOTS) {
+      for (const [name, p, h] of SHOTS) {
+        await send('Emulation.setDeviceMetricsOverride', { width: 390, height: h || 320, deviceScaleFactor: 1, mobile: false });
         await send('Page.navigate', { url: BASE + p + '&signedin=1&theme=' + theme });
         for (let i = 0; i < 80; i++) { if ((await js('document.body ? document.body.innerText.length : 0')) > 5) break; await sleep(250); }
         await sleep(2500);
