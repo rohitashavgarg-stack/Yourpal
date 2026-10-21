@@ -51,7 +51,6 @@ export type Domain = {
   coachUpdated: boolean;
   goal: { type: string; target: number; by: string };
   membership: 'Active' | 'Expiring' | 'Expired';
-  hold: 'None' | 'Frozen' | 'Paused'; // the gym froze or paused the membership; the goal clock stops and it is never the member's doing
   assess: 'Two done' | 'Only first' | 'Due now' | 'None yet';
   ptLeft: number;
   onBreak: boolean;
@@ -99,7 +98,7 @@ export function initialDomain(): Domain {
     water: 1.8, weight: 72.4, weightLog: [{ t: 'Mon 22', v: 72.6 }, { t: 'Tue 23', v: 72.5 }],
     meals: mealsAt(1100), wkScenario: 'Not started', wkDone: null, session: null,
     ci: 'At the gym', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null, scanFails: false, dismissed: {}, plans: basePlans(), planReq: 'none', coachUpdated: false,
-    goal: { type: 'Weight loss', target: 6, by: '30 Nov' }, membership: 'Active', hold: 'None', assess: 'Two done', ptLeft: 8, onBreak: false,
+    goal: { type: 'Weight loss', target: 6, by: '30 Nov' }, membership: 'Active', assess: 'Two done', ptLeft: 8, onBreak: false,
     chat: [{ me: true, t: 'Is my squat depth ok?', ctx: 'Squat', meta: 'Yesterday · Seen' }, { me: false, t: 'Go to parallel. Film one set and send it.', meta: '2 hours ago' }],
     offline: false, notifsRead: {}, openMeal: null,
   };

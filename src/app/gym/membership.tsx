@@ -43,7 +43,7 @@ export default function Membership() {
       <View style={{ paddingVertical: 16, paddingHorizontal: 18, borderRadius: radii.lg, backgroundColor: c.surface2, gap: 10 }}>
         <Txt style={{ fontFamily: font.semibold }}>Renewals and freezes happen at the front desk</Txt>
         <Txt muted style={{ fontSize: fontSizes.md }}>The app shows your membership but can’t renew or pause it. The front desk can renew, freeze or change your plan.</Txt>
-        <Button label="Call front desk" icon={<Phone size={18} color={c.bg} />} onPress={call} style={{ height: 48, borderRadius: 24 }} />
+        <Button label="Call front desk" icon={<Phone size={18} color={c.bg} />} onPress={call} style={{ height: 48, borderRadius: radii.card }} />
       </View>
       <Hint>When it ends, your history stays visible and logging pauses until you renew.</Hint>
     </SubPage>

@@ -10,7 +10,7 @@ import { radii, fontSizes } from '@/design-system/tokens';
 export function NoPlanCard() {
   const { c } = useTheme();
   return (
-    <View accessible accessibilityLabel="No plan assigned yet. Your coach shares your workout and diet plan after your assessment. Until then, track your weight, water and Health data." style={{ borderRadius: 24, backgroundColor: c.surface, padding: 16, flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
+    <View accessible accessibilityLabel="No plan assigned yet. Your coach shares your workout and diet plan after your assessment. Until then, track your weight, water and Health data." style={{ borderRadius: radii.card, backgroundColor: c.surface, padding: 16, flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
       <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><CalendarClock size={19} color={c.accentText} /></View>
       <View style={{ flex: 1, gap: 2 }}>
         <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>No plan assigned yet</Txt>

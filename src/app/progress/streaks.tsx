@@ -13,7 +13,7 @@ import { BADGES, Badge, BadgeIcon, streakStore, StreakMode } from '@/features/st
 import { useStreak } from '@/features/streak/useStreak';
 import { StreakHero } from '@/features/streak/StreakHero';
 import { FLAME } from '@/features/streak/StreakChip';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
 const ICONS: Record<BadgeIcon, any> = { dumbbell: Dumbbell, flame: Flame, trophy: Trophy, award: Award, medal: Medal, scale: Scale, target: Target, droplets: Droplets, footprints: Footprints, clipboard: ClipboardCheck };
@@ -27,7 +27,7 @@ function BadgeCard({ b, weeks }: { b: Badge; weeks: number }) {
   const earned = !!b.earned;
   return (
     <View accessible accessibilityLabel={earned ? `${b.title}, earned ${b.earned}` : `${b.title}, locked. ${b.hint}${b.need ? `. ${have} of ${b.need}` : ''}`}
-      style={[{ width: '48%', backgroundColor: c.surface, borderRadius: 24, paddingHorizontal: 12, paddingVertical: 16, gap: 10, minHeight: 200, alignItems: 'center', overflow: 'hidden' }, cardShadow(isDark)]}>
+      style={[{ width: '48%', backgroundColor: c.surface, borderRadius: radii.card, paddingHorizontal: 12, paddingVertical: 16, gap: 10, minHeight: 200, alignItems: 'center', overflow: 'hidden' }, cardShadow(isDark)]}>
       {earned && <CornerGlow color={BADGE_LOOK[b.id].b} size={240} />}
       <BadgeArt id={b.id} icon={Icon} earned={earned} />
       <View style={{ gap: 2, alignItems: 'center' }}>
@@ -67,7 +67,7 @@ export default function Streaks() {
       <StreakHero />
 
       <SectionLabel variant="overline" inset={4}>LAST 12 WEEKS</SectionLabel>
-      <View style={[{ backgroundColor: c.surface, borderRadius: 24, padding: 16, gap: 10 }, cardShadow(isDark)]}>
+      <View style={[{ backgroundColor: c.surface, borderRadius: radii.card, padding: 16, gap: 10 }, cardShadow(isDark)]}>
         <Row style={{ gap: 6 }}>
           {Array.from({ length: pad }, (_, i) => <View key={`p${i}`} style={{ flex: 1, height: 28, borderRadius: 8, backgroundColor: c.surface2 }} />)}
           {cells.map((k, i) => (

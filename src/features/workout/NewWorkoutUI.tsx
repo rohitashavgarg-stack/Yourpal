@@ -34,7 +34,7 @@ function ClipPopup({ source, onClose }: { source: number; onClose: () => void })
             {/* in a View so on the web it is drawn above the glass layer */}
             <View><X size={20} color={fixed.white} /></View>
           </Pressy>
-          <View style={{ width: '100%', aspectRatio: 1, borderRadius: 24, overflow: 'hidden', backgroundColor: fixed.white }}>
+          <View style={{ width: '100%', aspectRatio: 1, borderRadius: radii.card, overflow: 'hidden', backgroundColor: fixed.white }}>
             <VideoView player={player} nativeControls={false} contentFit="contain" allowsPictureInPicture={false} pointerEvents="none" style={{ width: '100%', height: '100%' }} />
           </View>
         </View>

@@ -256,7 +256,7 @@ function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
   const addElse = () => router.push({ pathname: '/plans/log', params: { meal: mid } });
 
   return (
-    <Card style={{ padding: 6, borderRadius: 24 }}>
+    <Card style={{ padding: 6, borderRadius: radii.card }}>
       <Row style={{ gap: 6 }}>
         <Pressy accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel={`${m.n}, ${sub}`} accessibilityHint="Double tap quickly to mark the whole meal eaten"
           onPress={tap} scaleTo={0.985} haptics={false} style={{ flex: 1, minHeight: 56, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 10 }}>

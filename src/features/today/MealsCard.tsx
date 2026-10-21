@@ -222,7 +222,7 @@ function MealsBackdrop() {
   const W = 460, H = 340;
   const peak = isDark ? 0.34 : 0.26;
   return (
-    <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', borderRadius: 24 }}>
+    <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', borderRadius: radii.card }}>
       <View style={{ position: 'absolute', top: -H * 0.45, right: -W * 0.35, width: W, height: H }}>
         <Svg width={W} height={H}>
           <Defs>
@@ -275,7 +275,7 @@ export function MealNowCard() {
   };
   if (paused) {
     return (
-      <View accessibilityLabel="Meal logging is paused" style={{ borderRadius: 24, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
+      <View accessibilityLabel="Meal logging is paused" style={{ borderRadius: radii.card, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
         <Row style={{ gap: 12, alignItems: 'flex-start' }}>
           <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={18} color={c.muted} /></View>
           <View style={{ flex: 1, gap: 2 }}>

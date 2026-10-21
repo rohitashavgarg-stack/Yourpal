@@ -51,7 +51,7 @@ export function StepsTile() {
   return (
     <View style={{ width: SQ }}>
     <View style={{ width: SQ, height: SQ }}>
-      <Pressy accessibilityRole="button" accessibilityLabel={a11y} onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'steps' } })} scaleTo={0.97} style={{ width: SQ, height: SQ, borderRadius: 24, overflow: 'hidden' }}>
+      <Pressy accessibilityRole="button" accessibilityLabel={a11y} onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'steps' } })} scaleTo={0.97} style={{ width: SQ, height: SQ, borderRadius: radii.card, overflow: 'hidden' }}>
         <Face design={design} s={s} />
       </Pressy>
       <Pressy accessibilityRole="button" accessibilityLabel="Add steps manually" onPress={gate(() => openSheet(<StepsSheet />, { label: 'Add steps' }))} hitSlop={10}
@@ -80,7 +80,7 @@ const kcalOf = (n: number) => Math.round(n * 0.043);
 export function StepsPreview({ design }: { design: StepsDesign }) {
   const s = useSteps();
   return (
-    <View pointerEvents="none" style={{ width: SQ, height: SQ, borderRadius: 24, overflow: 'hidden' }}>
+    <View pointerEvents="none" style={{ width: SQ, height: SQ, borderRadius: radii.card, overflow: 'hidden' }}>
       <Face design={design} s={s} />
       <View style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: design === 'Ruler' ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.22)' }}>
         <Plus size={17} color={fixed.white} />

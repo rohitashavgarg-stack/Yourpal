@@ -83,7 +83,7 @@ export default function CreateWorkout() {
           </Card>
         </View>
         <Pressy accessibilityRole="button" onPress={() => openSheet(<LibrarySheet mode="create" />, { label: 'Add exercise' })}
-          style={{ height: 48, borderRadius: 24, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, alignItems: 'center', justifyContent: 'center' }}>
+          style={{ height: 48, borderRadius: radii.card, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, alignItems: 'center', justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>+ Add exercise</Txt>
         </Pressy>
         <ShakeText text={p.cErr} n={tries} />

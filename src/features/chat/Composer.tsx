@@ -178,7 +178,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
               <GlassBackdrop radius={23} />
               <View style={{ zIndex: 2 }}><Plus size={22} color={c.ink} /></View>
             </Pressy>
-          <View style={[{ flex: 1, borderRadius: 24, overflow: 'hidden' }, lift]}>
+          <View style={[{ flex: 1, borderRadius: radii.card, overflow: 'hidden' }, lift]}>
             <GlassBackdrop radius={24} />
             {img && (
               <FadeIn exiting={fadeOut()} style={{ padding: 10, paddingBottom: 0, flexDirection: 'row', zIndex: 2 }}>

@@ -162,7 +162,7 @@ function StreakEntry() {
   const st = useStreak();
   return (
     <PCard onPress={() => router.push('/progress/streaks')} label={`Streaks and badges. ${st.weeks} week streak. Open`} style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-      <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ width: 48, height: 48, borderRadius: radii.card, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}>
         <Flame size={26} color={FLAME} fill={st.weeks > 0 ? FLAME : 'transparent'} strokeWidth={2} />
       </View>
       <View style={{ flex: 1 }}>

@@ -4,7 +4,7 @@ Cases the codemod did **not** change, because the right token is not clear. Gene
 
 How the nearest token is chosen: colours by the largest per-channel difference against every light and dark palette value and every `fixed` colour; `rgba()` by RGB distance plus the alpha difference against the rgba palette values; font sizes and radii by absolute difference to the nearest scale step. A tie means two steps are equally close.
 
-Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 radii.
+Counts: 270 hex, 179 rgba, 4 colours inside longer strings, 86 font sizes, 151 radii.
 
 ## Contents
 1. Hex colours
@@ -27,17 +27,12 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 | `features/trackers/Widgets.tsx:130` | `#0A6F78` | `light.cNutri` `#0F8A5F` | 27 |
 | `features/trackers/Widgets.tsx:110` | `#0B2A4A` | `dark.waterSoft` `#16263A` | 16 |
 | `features/today/WorkoutCard.tsx:199` | `#0B3A2C` | `dark.mapPark` `#1B3326` | 16 |
-| `features/goalv2/GoalCard2.tsx:21` | `#0B6A49` | `light.cNutri` `#0F8A5F` | 32 |
-| `features/today/GoalCards.tsx:28` | `#0B7A54` | `light.cNutri` `#0F8A5F` | 16 |
-| `features/today/GoalCards.tsx:31` | `#0B7A54` | `light.cNutri` `#0F8A5F` | 16 |
-| `features/today/GoalStrip.tsx:30` | `#0C307E` | `dark.moon` `#1D3560` | 30 |
 | `features/trackers/Widgets.tsx:166` | `#0D0B24` | `light.ink` `#12151C` | 10 |
 | `features/today/WorkoutCard.tsx:170` | `#0D2A22` | `dark.sk` `#1A1F27` | 13 |
 | `features/today/WorkoutCard.tsx:134` | `#0E1B45` | `dark.waterSoft` `#16263A` | 11 |
 | `features/today/WorkoutCard.tsx:271` | `#0E1B45` | `dark.waterSoft` `#16263A` | 11 |
-| `features/today/StepsCards.tsx:144` | `#0E3B2C` | `dark.mapPark` `#1B3326` | 13 |
+| `features/today/StepsCards.tsx:143` | `#0E3B2C` | `dark.mapPark` `#1B3326` | 13 |
 | `features/trackers/Widgets.tsx:101` | `#0E4A8A` | `dark.moonRing` `#2A4B85` | 28 |
-| `features/goalv2/GoalCard2.tsx:21` | `#0E7E58` | `light.cNutri` `#0F8A5F` | 12 |
 | `features/progress/look.tsx:14` | `#0E8FA0` | `light.cWater` `#2371C9` | 41 |
 | `features/streak/BadgeArt.tsx:22` | `#0E8FA0` | `light.cWater` `#2371C9` | 41 |
 | `features/workout/FinishScreen.tsx:77` | `#0F0E3C` | `dark.sky` `#0F1A2E` | 14 |
@@ -58,116 +53,93 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 | `features/trackers/Widgets.tsx:143` | `#1A0A10` | `light.ink` `#12151C` | 12 |
 | `features/trackers/Widgets.tsx:74` | `#1A0D06` | `light.dark` `#0B0E14` | 15 |
 | `features/today/WorkoutCard.tsx:152` | `#1A1636` | `dark.sky` `#0F1A2E` | 11 |
-| `features/today/goalCardState.ts:37` | `#1A1D22` | `dark.surface` `#171B22` | 3 |
+| `features/today/goalCardState.ts:36` | `#1A1D22` | `dark.surface` `#171B22` | 3 |
 | `features/shell/ThemeTile.tsx:12` | `#1A1F29` | `dark.sk` `#1A1F27` | 2 |
 | `features/today/WorkoutCard.tsx:225` | `#1B1710` | `light.ink` `#12151C` | 12 |
-| `features/today/TodayBudget.tsx:51` | `#1B1D22` | `dark.surface` `#171B22` | 4 |
 | `features/today/Trackers.tsx:109` | `#1B2440` | `dark.waterSoft` `#16263A` | 6 |
 | `features/today/Trackers.tsx:115` | `#1B2440` | `dark.waterSoft` `#16263A` | 6 |
 | `features/today/Trackers.tsx:145` | `#1B2440` | `dark.waterSoft` `#16263A` | 6 |
-| `features/goalv2/GoalCard2.tsx:19` | `#1B3FB8` | `light.accentText` `#2358C9` | 25 |
-| `features/today/GoalCards.tsx:27` | `#1B3FB8` | `light.accentText` `#2358C9` | 25 |
-| `features/today/GoalCards.tsx:72` | `#1B3FB8` | `light.accentText` `#2358C9` | 25 |
-| `features/today/GoalCards.tsx:73` | `#1B3FB8` | `light.accentText` `#2358C9` | 25 |
-| `features/today/GoalCards.tsx:169` | `#1B3FB8` | `light.accentText` `#2358C9` | 25 |
-| `features/today/TopCards.tsx:103` | `#1B3FB8` | `light.accentText` `#2358C9` | 25 |
+| `features/today/TopCards.tsx:104` | `#1B3FB8` | `light.accentText` `#2358C9` | 25 |
 | `features/today/Trackers.tsx:163` | `#1C2BC0` | `light.accentText` `#2358C9` | 45 |
-| `app/welcome.tsx:50` | `#1D46B5` | `light.accentText` `#2358C9` | 20 |
-| `features/today/TodayBudget.tsx:51` | `#1E2438` | `dark.surface2` `#212631` | 7 |
-| `features/today/StepsCards.tsx:164` | `#1E2A9E` | `dark.moonRing` `#2A4B85` | 33 |
-| `features/today/StepsCards.tsx:181` | `#1E2A9E` | `dark.moonRing` `#2A4B85` | 33 |
+| `app/welcome.tsx:51` | `#1D46B5` | `light.accentText` `#2358C9` | 20 |
+| `features/today/StepsCards.tsx:163` | `#1E2A9E` | `dark.moonRing` `#2A4B85` | 33 |
+| `features/today/StepsCards.tsx:180` | `#1E2A9E` | `dark.moonRing` `#2A4B85` | 33 |
 | `features/today/LogMealsSheet.tsx:41` | `#1E4A3F` | `dark.surface3` `#2C323E` | 24 |
-| `features/today/MealsCard.tsx:93` | `#1E4A3F` | `dark.surface3` `#2C323E` | 24 |
+| `features/today/MealsCard.tsx:94` | `#1E4A3F` | `dark.surface3` `#2C323E` | 24 |
 | `components/bits.tsx:14` | `#1E9E5A` | `light.cNutri` `#0F8A5F` | 20 |
-| `features/today/GoalStrip.tsx:29` | `#1F5FDB` | `light.accent` `#2F6BEA` | 16 |
 | `features/workout/FinishScreen.tsx:21` | `#1F6E63` | `light.cNutri` `#0F8A5F` | 28 |
-| `features/today/StepsCards.tsx:144` | `#1F7A52` | `light.cNutri` `#0F8A5F` | 16 |
-| `features/goalv2/GoalCard2.tsx:21` | `#1FA67C` | `light.good` `#0F9D74` | 16 |
+| `features/today/StepsCards.tsx:143` | `#1F7A52` | `light.cNutri` `#0F8A5F` | 16 |
 | `features/trackers/Widgets.tsx:130` | `#1FB5A6` | `dark.good` `#3CCB9A` | 29 |
-| `features/today/GoalStrip.tsx:113` | `#2034E6` | `light.accentText` `#2358C9` | 36 |
-| `features/today/StepsCards.tsx:96` | `#222FB5` | `light.accentText` `#2358C9` | 41 |
+| `features/today/StepsCards.tsx:95` | `#222FB5` | `light.accentText` `#2358C9` | 41 |
 | `features/streak/BadgeArt.tsx:67` | `#232A36` | `dark.skHi` `#252B35` | 2 |
 | `features/progress/look.tsx:17` | `#2371C9` | `light.cWater` `#2371C9` | 0 |
 | `features/streak/BadgeArt.tsx:23` | `#2371C9` | `light.cWater` `#2371C9` | 0 |
 | `features/trackers/Widgets.tsx:112` | `#27A9FF` | `light.heroMid` `#3E8FEA` | 26 |
-| `app/welcome.tsx:47` | `#2A3242` | `dark.mapRoad` `#2A3140` | 2 |
-| `features/today/TodayBudget.tsx:51` | `#2A3860` | `dark.moon` `#1D3560` | 13 |
+| `app/welcome.tsx:48` | `#2A3242` | `dark.mapRoad` `#2A3140` | 2 |
 | `features/trackers/Widgets.tsx:155` | `#2B2080` | `dark.moon` `#1D3560` | 32 |
 | `features/onboarding/Steps.tsx:162` | `#2B2118` | `dark.sk` `#1A1F27` | 17 |
 | `features/onboarding/Steps.tsx:164` | `#2B2118` | `dark.sk` `#1A1F27` | 17 |
-| `features/streak/StreakHero.tsx:46` | `#2B3342` | `dark.mapRoad` `#2A3140` | 2 |
+| `features/streak/StreakHero.tsx:45` | `#2B3342` | `dark.mapRoad` `#2A3140` | 2 |
 | `features/workout/ExerciseArt.tsx:50` | `#2C323E` | `dark.surface3` `#2C323E` | 0 |
-| `features/goalv2/GoalCard2.tsx:20` | `#2E2A9A` | `dark.moonRing` `#2A4B85` | 33 |
-| `features/today/goalCardState.ts:37` | `#2E3038` | `dark.surface3` `#2C323E` | 6 |
-| `features/today/goalCardState.ts:39` | `#2EE6A8` | `dark.good` `#3CCB9A` | 27 |
-| `features/today/TodayBudget.tsx:21` | `#2EE6A8` | `dark.good` `#3CCB9A` | 27 |
-| `features/today/StepsCards.tsx:164` | `#2F3FD6` | `light.accentText` `#2358C9` | 25 |
-| `features/today/StepsCards.tsx:181` | `#2F3FD6` | `light.accentText` `#2358C9` | 25 |
+| `features/today/goalCardState.ts:36` | `#2E3038` | `dark.surface3` `#2C323E` | 6 |
+| `features/today/goalCardState.ts:38` | `#2EE6A8` | `dark.good` `#3CCB9A` | 27 |
+| `features/today/StepsCards.tsx:163` | `#2F3FD6` | `light.accentText` `#2358C9` | 25 |
+| `features/today/StepsCards.tsx:180` | `#2F3FD6` | `light.accentText` `#2358C9` | 25 |
 | `components/YourPalLogo.tsx:5` | `#303F9F` | `dark.moonRing` `#2A4B85` | 26 |
 | `features/today/Trackers.tsx:247` | `#3145F0` | `light.accent` `#2F6BEA` | 38 |
 | `features/progress/look.tsx:13` | `#3346E8` | `light.accentText` `#2358C9` | 31 |
 | `features/streak/BadgeArt.tsx:24` | `#3346E8` | `light.accentText` `#2358C9` | 31 |
-| `features/today/StepsCards.tsx:96` | `#3346E8` | `light.accentText` `#2358C9` | 31 |
+| `features/today/StepsCards.tsx:95` | `#3346E8` | `light.accentText` `#2358C9` | 31 |
+| `app/checkin.tsx:95` | `#3478F6` | `light.accent` `#2F6BEA` | 13 |
 | `app/checkin.tsx:96` | `#3478F6` | `light.accent` `#2F6BEA` | 13 |
 | `app/checkin.tsx:97` | `#3478F6` | `light.accent` `#2F6BEA` | 13 |
-| `app/checkin.tsx:98` | `#3478F6` | `light.accent` `#2F6BEA` | 13 |
 | `features/checkin/GymMap.native.tsx:52` | `#3478F6` | `light.accent` `#2F6BEA` | 13 |
 | `features/trackers/Widgets.tsx:166` | `#35288F` | `dark.moonRing` `#2A4B85` | 35 |
 | `app/profile/index.tsx:78` | `#3A2A00` | `dark.surface` `#171B22` | 35 |
 | `components/Brand.tsx:39` | `#3A2A00` | `dark.surface` `#171B22` | 35 |
-| `features/goalv2/GoalCard2.tsx:20` | `#3A35B5` | `light.cSleep` `#5B4BD1` | 33 |
 | `features/workout/FinishScreen.tsx:21` | `#3A36C9` | `light.cSleep` `#5B4BD1` | 33 |
-| `features/today/goalCardState.ts:39` | `#3A3B42` | `dark.surface3` `#2C323E` | 14 |
-| `features/today/goalCardState.ts:37` | `#3A3D48` | `dark.surface3` `#2C323E` | 14 |
+| `features/today/goalCardState.ts:38` | `#3A3B42` | `dark.surface3` `#2C323E` | 14 |
+| `features/today/goalCardState.ts:36` | `#3A3D48` | `dark.surface3` `#2C323E` | 14 |
 | `features/shell/ThemeTile.tsx:12` | `#3A4250` | `dark.mapRoad` `#2A3140` | 17 |
 | `features/streak/BadgeArt.tsx:68` | `#3A4252` | `dark.mapRoad` `#2A3140` | 18 |
-| `features/today/GoalCards.tsx:48` | `#3B86EA` | `light.heroMid` `#3E8FEA` | 9 |
 | `features/goalv2/GoalVisual.tsx:16` | `#3CCB9A` | `dark.good` `#3CCB9A` | 0 |
 | `features/today/Trackers.tsx:105` | `#3D6BFF` | `light.accent` `#2F6BEA` | 21 |
 | `features/today/Trackers.tsx:143` | `#3D6BFF` | `light.accent` `#2F6BEA` | 21 |
-| `app/welcome.tsx:50` | `#3E7BF0` | `dark.accent` `#4C82F7` | 14 |
-| `app/gym/assessments.tsx:61` | `#3E8FEA` | `light.heroMid` `#3E8FEA` | 0 |
+| `app/welcome.tsx:51` | `#3E7BF0` | `dark.accent` `#4C82F7` | 14 |
+| `app/gym/assessments.tsx:60` | `#3E8FEA` | `light.heroMid` `#3E8FEA` | 0 |
 | `app/gym/pt.tsx:22` | `#3E8FEA` | `light.heroMid` `#3E8FEA` | 0 |
-| `app/workout.tsx:45` | `#3E8FEA` | `light.heroMid` `#3E8FEA` | 0 |
-| `features/goalv2/GoalCard2.tsx:19` | `#3E8FEA` | `light.heroMid` `#3E8FEA` | 0 |
-| `features/today/TopCards.tsx:78` | `#3E8FEA` | `light.heroMid` `#3E8FEA` | 0 |
-| `features/streak/StreakHero.tsx:21` | `#48526A` | `light.muted` `#5C6370` | 20 |
+| `app/workout.tsx:44` | `#3E8FEA` | `light.heroMid` `#3E8FEA` | 0 |
+| `features/today/TopCards.tsx:79` | `#3E8FEA` | `light.heroMid` `#3E8FEA` | 0 |
+| `features/streak/StreakHero.tsx:20` | `#48526A` | `light.muted` `#5C6370` | 20 |
 | `features/trackers/Widgets.tsx:155` | `#4A3BC4` | `light.cSleep` `#5B4BD1` | 17 |
-| `features/streak/StreakHero.tsx:27` | `#4A5468` | `light.muted` `#5C6370` | 18 |
-| `features/today/StepsCards.tsx:164` | `#4B5CF5` | `light.accent` `#2F6BEA` | 28 |
-| `features/today/StepsCards.tsx:181` | `#4B5CF5` | `light.accent` `#2F6BEA` | 28 |
-| `features/today/GoalCards.tsx:48` | `#4FB0E6` | `dark.water` `#5AA8F5` | 15 |
-| `features/today/StepsCards.tsx:96` | `#5468FF` | `dark.accent` `#4C82F7` | 26 |
-| `features/goalv2/GoalCard2.tsx:20` | `#5A54DD` | `light.cSleep` `#5B4BD1` | 12 |
+| `features/streak/StreakHero.tsx:26` | `#4A5468` | `light.muted` `#5C6370` | 18 |
+| `features/today/StepsCards.tsx:163` | `#4B5CF5` | `light.accent` `#2F6BEA` | 28 |
+| `features/today/StepsCards.tsx:180` | `#4B5CF5` | `light.accent` `#2F6BEA` | 28 |
+| `features/today/StepsCards.tsx:95` | `#5468FF` | `dark.accent` `#4C82F7` | 26 |
 | `features/progress/look.tsx:19` | `#5B4BD1` | `light.cSleep` `#5B4BD1` | 0 |
-| `features/today/goalCardState.ts:39` | `#5B5D66` | `light.muted` `#5C6370` | 10 |
-| `app/workout.tsx:84` | `#5B6577` | `light.muted` `#5C6370` | 7 |
+| `features/today/goalCardState.ts:38` | `#5B5D66` | `light.muted` `#5C6370` | 10 |
+| `app/workout.tsx:83` | `#5B6577` | `light.muted` `#5C6370` | 7 |
 | `features/today/Trackers.tsx:371` | `#5B8DFF` | `dark.accent` `#4C82F7` | 15 |
-| `features/today/GoalStrip.tsx:30` | `#5C8DF0` | `dark.accent` `#4C82F7` | 16 |
-| `app/gym/assessments.tsx:61` | `#5CC2E6` | `light.heroTo` `#5CC2E6` | 0 |
+| `app/gym/assessments.tsx:60` | `#5CC2E6` | `light.heroTo` `#5CC2E6` | 0 |
 | `app/gym/pt.tsx:22` | `#5CC2E6` | `light.heroTo` `#5CC2E6` | 0 |
 | `app/plans/log.tsx:32` | `#5CC2E6` | `light.heroTo` `#5CC2E6` | 0 |
 | `app/plans/log.tsx:32` | `#5CC2E6` | `light.heroTo` `#5CC2E6` | 0 |
-| `app/workout.tsx:45` | `#5CC2E6` | `light.heroTo` `#5CC2E6` | 0 |
-| `features/goalv2/GoalCard2.tsx:19` | `#5CC2E6` | `light.heroTo` `#5CC2E6` | 0 |
-| `features/today/TopCards.tsx:78` | `#5CC2E6` | `light.heroTo` `#5CC2E6` | 0 |
-| `features/goalv2/GoalCard2.tsx:21` | `#5CCDA8` | `dark.cNutri` `#5ED9AE` | 12 |
+| `app/workout.tsx:44` | `#5CC2E6` | `light.heroTo` `#5CC2E6` | 0 |
+| `features/today/TopCards.tsx:79` | `#5CC2E6` | `light.heroTo` `#5CC2E6` | 0 |
 | `features/progress/look.tsx:14` | `#5CD0E0` | `light.heroTo` `#5CC2E6` | 14 |
 | `features/streak/BadgeArt.tsx:22` | `#5CD5E6` | `light.heroTo` `#5CC2E6` | 19 |
 | `features/today/Trackers.tsx:248` | `#5D74FF` | `dark.accent` `#4C82F7` | 17 |
-| `features/today/goalCardState.ts:37` | `#5E6069` | `light.muted` `#5C6370` | 7 |
+| `features/today/goalCardState.ts:36` | `#5E6069` | `light.muted` `#5C6370` | 7 |
 | `features/progress/look.tsx:10` | `#5E9E1A` | `light.warn` `#9A5B0B` | 67 |
 | `features/progress/look.tsx:11` | `#5ED9AE` | `dark.cNutri` `#5ED9AE` | 0 |
 | `features/streak/BadgeArt.tsx:21` | `#5EE0B0` | `dark.cNutri` `#5ED9AE` | 7 |
 | `features/workout/ExerciseArt.tsx:48` | `#66718A` | `light.muted` `#5C6370` | 26 |
-| `app/welcome.tsx:112` | `#6FA0FF` | `dark.water` `#5AA8F5` | 21 |
+| `app/welcome.tsx:113` | `#6FA0FF` | `dark.water` `#5AA8F5` | 21 |
 | `features/progress/look.tsx:9` | `#6FA0FF` | `dark.water` `#5AA8F5` | 21 |
 | `features/streak/BadgeArt.tsx:16` | `#6FA0FF` | `dark.water` `#5AA8F5` | 21 |
-| `features/today/goalCardState.ts:44` | `#787E8C` | `light.muted` `#5C6370` | 28 |
+| `features/today/goalCardState.ts:42` | `#787E8C` | `light.muted` `#5C6370` | 28 |
 | `features/trackers/Widgets.tsx:143` | `#7A1828` | `light.warn` `#9A5B0B` | 67 |
-| `features/today/GoalCards.tsx:29` | `#7A4700` | `light.warn` `#9A5B0B` | 32 |
-| `features/today/GoalCards.tsx:30` | `#7A4700` | `light.warn` `#9A5B0B` | 32 |
-| `features/streak/StreakHero.tsx:22` | `#7A86A0` | `dark.muted` `#9AA3B2` | 32 |
+| `features/streak/StreakHero.tsx:21` | `#7A86A0` | `dark.muted` `#9AA3B2` | 32 |
 | `features/shell/state.ts:95` | `#7B4FD6` | `light.cSleep` `#5B4BD1` | 32 |
 | `features/today/Trackers.tsx:247` | `#7C93FF` | `dark.accentText` `#8FB2FF` | 31 |
 | `features/streak/BadgeArt.tsx:23` | `#7CC4FF` | `dark.cWater` `#8CC4FF` | 16 |
@@ -176,7 +148,7 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 | `features/trackers/Widgets.tsx:121` | `#7FE3D6` | `light.live` `#7CF0C8` | 14 |
 | `features/trackers/Widgets.tsx:123` | `#7FE3D6` | `light.live` `#7CF0C8` | 14 |
 | `features/trackers/Widgets.tsx:74` | `#8A3A12` | `light.warn` `#9A5B0B` | 33 |
-| `app/welcome.tsx:123` | `#8A9BFF` | `dark.accentText` `#8FB2FF` | 23 |
+| `app/welcome.tsx:124` | `#8A9BFF` | `dark.accentText` `#8FB2FF` | 23 |
 | `features/progress/look.tsx:13` | `#8A9BFF` | `dark.accentText` `#8FB2FF` | 23 |
 | `features/streak/BadgeArt.tsx:24` | `#8A9BFF` | `dark.accentText` `#8FB2FF` | 23 |
 | `features/today/Trackers.tsx:248` | `#8AA0FF` | `dark.accentText` `#8FB2FF` | 18 |
@@ -184,23 +156,21 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 | `app/plans/log.tsx:249` | `#8C3B2A` | `light.warn` `#9A5B0B` | 32 |
 | `features/today/QuickLogSheet.tsx:168` | `#8C3B2A` | `light.warn` `#9A5B0B` | 32 |
 | `features/trackers/Widgets.tsx:169` | `#8C7DFF` | `dark.cSleep` `#B3A8FF` | 43 |
-| `features/today/goalCardState.ts:37` | `#8C8E97` | `dark.muted` `#9AA3B2` | 27 |
+| `features/today/goalCardState.ts:36` | `#8C8E97` | `dark.muted` `#9AA3B2` | 27 |
 | `features/today/Trackers.tsx:105` | `#8CBBFF` | `dark.accentText` `#8FB2FF` | 9 |
 | `features/today/Trackers.tsx:143` | `#8CBBFF` | `dark.accentText` `#8FB2FF` | 9 |
 | `features/progress/look.tsx:17` | `#8CC4FF` | `dark.cWater` `#8CC4FF` | 0 |
-| `features/goalv2/GoalCard2.tsx:20` | `#8E80F5` | `dark.cSleep` `#B3A8FF` | 40 |
 | `features/trackers/Widgets.tsx:83` | `#8F2E0F` | `light.warn` `#9A5B0B` | 45 |
 | `features/today/DayQuote.tsx:26` | `#8FB2FF` | `dark.accentText` `#8FB2FF` | 0 |
 | `features/today/Trackers.tsx:108` | `#9294A8` | `dark.muted` `#9AA3B2` | 15 |
-| `features/streak/StreakHero.tsx:22` | `#98A2B6` | `dark.muted` `#9AA3B2` | 4 |
+| `features/streak/StreakHero.tsx:21` | `#98A2B6` | `dark.muted` `#9AA3B2` | 4 |
 | `features/today/Trackers.tsx:106` | `#999999` | `dark.muted` `#9AA3B2` | 25 |
 | `web/WebFrame.tsx:258` | `#9A5A00` | `light.warn` `#9A5B0B` | 11 |
-| `features/today/TodayBudget.tsx:21` | `#9AA0AD` | `dark.muted` `#9AA3B2` | 5 |
 | `components/bits.tsx:16` | `#A0522D` | `light.warn` `#9A5B0B` | 34 |
 | `features/progress/look.tsx:10` | `#A5D75C` | `dark.warn` `#F2B35B` | 77 |
 | `features/progress/look.tsx:19` | `#B3A8FF` | `dark.cSleep` `#B3A8FF` | 0 |
 | `features/trackers/Widgets.tsx:167` | `#B3A8FF` | `dark.cSleep` `#B3A8FF` | 0 |
-| `features/today/TopCards.tsx:172` | `#B5500F` | `light.cAct` `#C4610E` | 17 |
+| `features/today/TopCards.tsx:173` | `#B5500F` | `light.cAct` `#C4610E` | 17 |
 | `features/shell/state.ts:38` | `#B5541A` | `light.cAct` `#C4610E` | 15 |
 | `features/onboarding/Steps.tsx:169` | `#B5541F` | `light.cAct` `#C4610E` | 17 |
 | `app/plans/log.tsx:249` | `#B5543C` | `light.danger` `#C4372F` | 29 |
@@ -214,17 +184,16 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 | `features/progress/look.tsx:16` | `#BE98FF` | `dark.cSleep` `#B3A8FF` | 16 |
 | `features/progress/look.tsx:15` | `#C2408A` | `light.cHeart` `#D6404F` | 59 |
 | `features/streak/BadgeArt.tsx:25` | `#C2408A` | `light.cHeart` `#D6404F` | 59 |
-| `features/today/goalCardState.ts:38` | `#C3C7D0` | `light.chipLine` `#D5DAE1` | 19 |
+| `features/today/goalCardState.ts:37` | `#C3C7D0` | `light.chipLine` `#D5DAE1` | 19 |
 | `features/progress/LogSheets.tsx:31` | `#C4610E` | `light.cAct` `#C4610E` | 0 |
 | `features/onboarding/Steps.tsx:169` | `#C9862B` | `light.cAct` `#C4610E` | 37 |
 | `features/progress/look.tsx:12` | `#C98A00` | `light.cFat` `#D9A400` | 26 |
-| `features/today/TodayBudget.tsx:21` | `#C9CDD6` | `light.chipLine` `#D5DAE1` | 13 |
 | `features/shell/ThemeTile.tsx:11` | `#C9CFD8` | `light.chipLine` `#D5DAE1` | 12 |
-| `features/streak/StreakHero.tsx:21` | `#C9D0DD` | `light.chipLine` `#D5DAE1` | 12 |
+| `features/streak/StreakHero.tsx:20` | `#C9D0DD` | `light.chipLine` `#D5DAE1` | 12 |
 | `features/workout/ClipStage.tsx:39` | `#C9D1DD` | `light.chipLine` `#D5DAE1` | 12 |
-| `features/workout/NewWorkoutUI.tsx:67` | `#C9D1DD` | `light.chipLine` `#D5DAE1` | 12 |
-| `features/workout/NewWorkoutUI.tsx:100` | `#C9D1DD` | `light.chipLine` `#D5DAE1` | 12 |
-| `features/workout/NewWorkoutUI.tsx:106` | `#C9D1DD` | `light.chipLine` `#D5DAE1` | 12 |
+| `features/workout/NewWorkoutUI.tsx:66` | `#C9D1DD` | `light.chipLine` `#D5DAE1` | 12 |
+| `features/workout/NewWorkoutUI.tsx:99` | `#C9D1DD` | `light.chipLine` `#D5DAE1` | 12 |
+| `features/workout/NewWorkoutUI.tsx:105` | `#C9D1DD` | `light.chipLine` `#D5DAE1` | 12 |
 | `features/streak/BadgeArt.tsx:68` | `#CBD2DE` | `light.chipLine` `#D5DAE1` | 10 |
 | `features/trackers/Widgets.tsx:102` | `#CBE9FF` | `light.moon` `#CFE6FF` | 4 |
 | `features/trackers/Widgets.tsx:83` | `#D4521A` | `light.cAct` `#C4610E` | 16 |
@@ -237,18 +206,18 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 | `features/today/QuickLogSheet.tsx:169` | `#D9A45A` | `dark.warn` `#F2B35B` | 25 |
 | `features/today/Trackers.tsx:113` | `#D9D9D9` | `light.chipLine` `#D5DAE1` | 8 |
 | `features/onboarding/Steps.tsx:169` | `#DDA13F` | `dark.warn` `#F2B35B` | 28 |
-| `features/streak/StreakHero.tsx:46` | `#DDE2EB` | `light.surface3` `#E1E6EC` | 4 |
-| `app/workout.tsx:278` | `#DDE6FF` | `light.tWater` `#E3F0FD` | 10 |
-| `app/gym/confirm.tsx:30` | `#E08A0B` | `light.cFat` `#D9A400` | 26 |
+| `features/streak/StreakHero.tsx:45` | `#DDE2EB` | `light.surface3` `#E1E6EC` | 4 |
+| `app/workout.tsx:277` | `#DDE6FF` | `light.tWater` `#E3F0FD` | 10 |
+| `app/gym/confirm.tsx:31` | `#E08A0B` | `light.cFat` `#D9A400` | 26 |
 | `features/streak/BadgeArt.tsx:19` | `#E0A100` | `light.cFat` `#D9A400` | 7 |
 | `components/bits.tsx:15` | `#E0A526` | `light.cFat` `#D9A400` | 38 |
 | `features/workout/ExerciseArt.tsx:50` | `#E1E6EC` | `light.surface3` `#E1E6EC` | 0 |
 | `features/onboarding/Steps.tsx:170` | `#E2B970` | `dark.warn` `#F2B35B` | 21 |
 | `features/onboarding/Steps.tsx:170` | `#E2B970` | `dark.warn` `#F2B35B` | 21 |
-| `features/streak/StreakHero.tsx:27` | `#E3E8F3` | `light.line` `#E4E8EE` | 5 |
+| `features/streak/StreakHero.tsx:26` | `#E3E8F3` | `light.line` `#E4E8EE` | 5 |
 | `web/WebFrame.tsx:75` | `#E6EAF0` | `light.line` `#E4E8EE` | 2 |
 | `web/WebFrame.tsx:320` | `#E6F6EE` | `light.tNutri` `#E5F6EE` | 1 |
-| `features/today/goalCardState.ts:39` | `#E8A33D` | `dark.warn` `#F2B35B` | 30 |
+| `features/today/goalCardState.ts:38` | `#E8A33D` | `dark.warn` `#F2B35B` | 30 |
 | `components/Brand.tsx:29` | `#E8C89A` | `dark.cAct` `#FFB072` | 40 |
 | `app/plans/log.tsx:248` | `#E9E4DA` | `light.surface3` `#E1E6EC` | 18 |
 | `features/today/QuickLogSheet.tsx:167` | `#E9E4DA` | `light.surface3` `#E1E6EC` | 18 |
@@ -256,31 +225,30 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 | `features/onboarding/Steps.tsx:166` | `#ECE8E1` | `light.surface3` `#E1E6EC` | 11 |
 | `features/streak/BadgeArt.tsx:67` | `#EEF1F6` | `dark.ink` `#EEF1F6` | 0 |
 | `features/workout/ExerciseArt.tsx:49` | `#EEF1F6` | `dark.ink` `#EEF1F6` | 0 |
-| `app/goal-detail.tsx:275` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
-| `app/goal-detail.tsx:275` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
+| `app/goal-detail.tsx:269` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
+| `app/goal-detail.tsx:269` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
+| `app/goal-detail.tsx:281` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
 | `app/goal-detail.tsx:287` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
-| `app/goal-detail.tsx:293` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
-| `app/goal-detail.tsx:293` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
+| `app/goal-detail.tsx:287` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
 | `features/streak/BadgeArt.tsx:17` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
-| `features/streak/StreakHero.tsx:25` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
-| `features/streak/StreakHero.tsx:25` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
-| `features/streak/StreakHero.tsx:61` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
+| `features/streak/StreakHero.tsx:24` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
+| `features/streak/StreakHero.tsx:24` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
+| `features/streak/StreakHero.tsx:60` | `#F0692C` | `light.cHeart` `#D6404F` | 41 |
 | `features/onboarding/Steps.tsx:168` | `#F1EFEA` | `light.sk` `#E9EDF2` | 8 |
 | `features/shell/ThemeTile.tsx:12` | `#F1F3F6` | `light.surface2` `#EEF1F5` | 3 |
-| `app/gym/confirm.tsx:30` | `#F2B35B` | `dark.warn` `#F2B35B` | 0 |
+| `app/gym/confirm.tsx:31` | `#F2B35B` | `dark.warn` `#F2B35B` | 0 |
 | `features/today/WorkoutCard.tsx:28` | `#F2B35B` | `dark.warn` `#F2B35B` | 0 |
 | `features/workout/FinishScreen.tsx:21` | `#F2B544` | `dark.warn` `#F2B35B` | 23 |
 | `features/progress/look.tsx:12` | `#F2C14E` | `dark.warn` `#F2B35B` | 14 |
 | `features/today/DayQuote.tsx:20` | `#F3F4F6` | `light.bg` `#F5F7FA` | 4 |
-| `features/today/goalCardState.ts:38` | `#F3F4F6` | `light.bg` `#F5F7FA` | 4 |
-| `features/today/TodayBudget.tsx:21` | `#F3F4F6` | `light.bg` `#F5F7FA` | 4 |
+| `features/today/goalCardState.ts:37` | `#F3F4F6` | `light.bg` `#F5F7FA` | 4 |
 | `app/gym/pt.tsx:28` | `#F4F4F6` | `light.bg` `#F5F7FA` | 4 |
-| `app/workout.tsx:37` | `#F4F4F6` | `light.bg` `#F5F7FA` | 4 |
-| `app/workout.tsx:279` | `#F4F4F6` | `light.bg` `#F5F7FA` | 4 |
+| `app/workout.tsx:36` | `#F4F4F6` | `light.bg` `#F5F7FA` | 4 |
+| `app/workout.tsx:278` | `#F4F4F6` | `light.bg` `#F5F7FA` | 4 |
 | `features/shell/ThemeTile.tsx:11` | `#F4F6F9` | `light.bg` `#F5F7FA` | 1 |
 | `app/plans/exercise.tsx:52` | `#F4F6FA` | `light.bg` `#F5F7FA` | 1 |
-| `app/workout.tsx:82` | `#F4F6FA` | `light.bg` `#F5F7FA` | 1 |
-| `features/plans/parts.tsx:89` | `#F4F6FA` | `light.bg` `#F5F7FA` | 1 |
+| `app/workout.tsx:81` | `#F4F6FA` | `light.bg` `#F5F7FA` | 1 |
+| `features/plans/parts.tsx:90` | `#F4F6FA` | `light.bg` `#F5F7FA` | 1 |
 | `features/workout/ExerciseArt.tsx:43` | `#F4F6FA` | `light.bg` `#F5F7FA` | 1 |
 | `features/today/Trackers.tsx:145` | `#F4F7FF` | `light.bg` `#F5F7FA` | 5 |
 | `app/profile/index.tsx:78` | `#F5B301` | `light.cFat` `#D9A400` | 28 |
@@ -291,35 +259,32 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 | `features/onboarding/Steps.tsx:311` | `#FF375F` | `light.cHeart` `#D6404F` | 41 |
 | `features/onboarding/Steps.tsx:311` | `#FF375F` | `light.cHeart` `#D6404F` | 41 |
 | `app/profile/health.tsx:47` | `#FF3B5C` | `light.cHeart` `#D6404F` | 41 |
-| `features/chat/Composer.tsx:28` | `#FF4D4F` | `light.cHeart` `#D6404F` | 41 |
+| `features/chat/Composer.tsx:29` | `#FF4D4F` | `light.cHeart` `#D6404F` | 41 |
 | `features/trackers/Widgets.tsx:146` | `#FF5A6E` | `dark.danger` `#FF7A70` | 32 |
 | `features/today/Trackers.tsx:302` | `#FF6B7A` | `dark.danger` `#FF7A70` | 15 |
 | `features/trackers/Widgets.tsx:185` | `#FF7A45` | `dark.danger` `#FF7A70` | 43 |
-| `app/welcome.tsx:117` | `#FF8A3D` | `dark.warn` `#F2B35B` | 41 |
 | `app/welcome.tsx:118` | `#FF8A3D` | `dark.warn` `#F2B35B` | 41 |
+| `app/welcome.tsx:119` | `#FF8A3D` | `dark.warn` `#F2B35B` | 41 |
 | `features/streak/StreakChip.tsx:12` | `#FF8A3D` | `dark.warn` `#F2B35B` | 41 |
 | `features/trackers/Widgets.tsx:77` | `#FF8A3D` | `dark.warn` `#F2B35B` | 41 |
 | `features/trackers/Widgets.tsx:83` | `#FF8A3D` | `dark.warn` `#F2B35B` | 41 |
 | `features/streak/BadgeArt.tsx:18` | `#FF8A5C` | `dark.danger` `#FF7A70` | 20 |
-| `app/workout.tsx:266` | `#FF8A96` | `dark.cHeart` `#FF8A96` | 0 |
-| `app/workout.tsx:266` | `#FF8A96` | `dark.cHeart` `#FF8A96` | 0 |
+| `app/workout.tsx:265` | `#FF8A96` | `dark.cHeart` `#FF8A96` | 0 |
+| `app/workout.tsx:265` | `#FF8A96` | `dark.cHeart` `#FF8A96` | 0 |
 | `features/progress/look.tsx:18` | `#FF8A96` | `dark.cHeart` `#FF8A96` | 0 |
 | `features/trackers/Widgets.tsx:144` | `#FF8A96` | `dark.cHeart` `#FF8A96` | 0 |
 | `features/workout/FinishScreen.tsx:114` | `#FF8A96` | `dark.cHeart` `#FF8A96` | 0 |
 | `features/progress/look.tsx:15` | `#FF8FC4` | `dark.cHeart` `#FF8A96` | 46 |
 | `features/streak/BadgeArt.tsx:25` | `#FF8FC4` | `dark.cHeart` `#FF8A96` | 46 |
-| `features/today/MealsCard.tsx:229` | `#FF9A4D` | `dark.warn` `#F2B35B` | 25 |
 | `features/today/MealsCard.tsx:230` | `#FF9A4D` | `dark.warn` `#F2B35B` | 25 |
 | `features/today/MealsCard.tsx:231` | `#FF9A4D` | `dark.warn` `#F2B35B` | 25 |
-| `features/today/TodayBudget.tsx:19` | `#FF9A4D` | `dark.warn` `#F2B35B` | 25 |
+| `features/today/MealsCard.tsx:232` | `#FF9A4D` | `dark.warn` `#F2B35B` | 25 |
 | `features/trackers/Widgets.tsx:75` | `#FFB072` | `dark.cAct` `#FFB072` | 0 |
-| `features/today/TopCards.tsx:172` | `#FFB27A` | `dark.cAct` `#FFB072` | 8 |
+| `features/today/TopCards.tsx:173` | `#FFB27A` | `dark.cAct` `#FFB072` | 8 |
 | `features/streak/BadgeArt.tsx:17` | `#FFB347` | `dark.warn` `#F2B35B` | 20 |
-| `features/streak/StreakHero.tsx:61` | `#FFB347` | `dark.warn` `#F2B35B` | 20 |
+| `features/streak/StreakHero.tsx:60` | `#FFB347` | `dark.warn` `#F2B35B` | 20 |
 | `features/streak/BadgeArt.tsx:20` | `#FFC46B` | `dark.warn` `#F2B35B` | 17 |
 | `features/streak/BadgeArt.tsx:19` | `#FFD966` | `dark.cFat` `#FFD25A` | 12 |
-| `features/today/GoalCards.tsx:29` | `#FFE7B8` | `light.tFat` `#FFF6D6` | 30 |
-| `features/today/GoalCards.tsx:30` | `#FFE7B8` | `light.tFat` `#FFF6D6` | 30 |
 | `web/WebFrame.tsx:258` | `#FFF4E0` | `light.warnSoft` `#FFF3E0` | 1 |
 | `app/plans/log.tsx:250` | `#FFFDF6` | `light.surface` `#FFFFFF` | 9 |
 | `features/today/QuickLogSheet.tsx:169` | `#FFFDF6` | `light.surface` `#FFFFFF` | 9 |
@@ -328,34 +293,34 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 
 | Location | Value | Nearest rgba token | Distance |
 |---|---|---|---|
-| `features/today/MealsCard.tsx:340` | `rgba(0,0,0,0.04)` | `light.tile` `rgba(18,21,28,0.04)` | 39 |
-| `features/today/MealsCard.tsx:245` | `rgba(0,0,0,0.3)` | `dark.scrim` `rgba(0,0,0,0.6)` | 30 |
-| `app/(tabs)/progress.tsx:138` | `rgba(0,0,0,0.55)` | `dark.scrim` `rgba(0,0,0,0.6)` | 5 |
-| `app/progress/photos.tsx:18` | `rgba(0,0,0,0.55)` | `dark.scrim` `rgba(0,0,0,0.6)` | 5 |
-| `features/plans/parts.tsx:95` | `rgba(0,0,0,0.55)` | `dark.scrim` `rgba(0,0,0,0.6)` | 5 |
+| `features/today/MealsCard.tsx:341` | `rgba(0,0,0,0.04)` | `light.tile` `rgba(18,21,28,0.04)` | 39 |
+| `features/today/MealsCard.tsx:246` | `rgba(0,0,0,0.3)` | `dark.scrim` `rgba(0,0,0,0.6)` | 30 |
+| `app/(tabs)/progress.tsx:137` | `rgba(0,0,0,0.55)` | `dark.scrim` `rgba(0,0,0,0.6)` | 5 |
+| `app/progress/photos.tsx:19` | `rgba(0,0,0,0.55)` | `dark.scrim` `rgba(0,0,0,0.6)` | 5 |
+| `features/plans/parts.tsx:96` | `rgba(0,0,0,0.55)` | `dark.scrim` `rgba(0,0,0,0.6)` | 5 |
 | `app/plans/log.tsx:254` | `rgba(0,0,0,0.6)` | `dark.scrim` `rgba(0,0,0,0.6)` | 0 |
 | `features/today/QuickLogSheet.tsx:173` | `rgba(0,0,0,0.6)` | `dark.scrim` `rgba(0,0,0,0.6)` | 0 |
-| `features/workout/NewWorkoutUI.tsx:29` | `rgba(0,0,0,0.6)` | `dark.scrim` `rgba(0,0,0,0.6)` | 0 |
+| `features/workout/NewWorkoutUI.tsx:28` | `rgba(0,0,0,0.6)` | `dark.scrim` `rgba(0,0,0,0.6)` | 0 |
 | `features/onboarding/Steps.tsx:174` | `rgba(0,0,0,0.72)` | `dark.scrim` `rgba(0,0,0,0.6)` | 12 |
-| `app/welcome.tsx:183` | `rgba(0,0,0,0)` | `light.tile` `rgba(18,21,28,0.04)` | 43 |
+| `app/welcome.tsx:184` | `rgba(0,0,0,0)` | `light.tile` `rgba(18,21,28,0.04)` | 43 |
 | `components/bits.tsx:38` | `rgba(0,0,0,0)` | `light.tile` `rgba(18,21,28,0.04)` | 43 |
-| `components/ui.tsx:107` | `rgba(0,0,0,0)` | `light.tile` `rgba(18,21,28,0.04)` | 43 |
-| `features/today/MealsCard.tsx:329` | `rgba(10,12,16,0.22)` | `light.scrim` `rgba(16,20,30,0.36)` | 31 |
+| `components/ui.tsx:98` | `rgba(0,0,0,0)` | `light.tile` `rgba(18,21,28,0.04)` | 43 |
+| `features/today/MealsCard.tsx:330` | `rgba(10,12,16,0.22)` | `light.scrim` `rgba(16,20,30,0.36)` | 31 |
 | `app/profile/index.tsx:206` | `rgba(10,20,40,0.10)` | `light.navLine` `rgba(18,21,28,0.06)` | 18 |
 | `app/plans/exercise.tsx:39` | `rgba(11,11,13,0.15)` | `light.navLine` `rgba(18,21,28,0.06)` | 28 |
 | `app/plans/exercise.tsx:80` | `rgba(11,11,13,0.72)` | `dark.scrim` `rgba(0,0,0,0.6)` | 32 |
 | `app/plans/exercise.tsx:85` | `rgba(11,11,13,0.72)` | `dark.scrim` `rgba(0,0,0,0.6)` | 32 |
 | `components/TrendsButton.tsx:16` | `rgba(11,14,20,0.05)` | `light.tile` `rgba(18,21,28,0.04)` | 14 |
-| `app/workout.tsx:85` | `rgba(11,14,20,0.08)` | `light.navLine` `rgba(18,21,28,0.06)` | 15 |
+| `app/workout.tsx:84` | `rgba(11,14,20,0.08)` | `light.navLine` `rgba(18,21,28,0.06)` | 15 |
 | `features/workout/ClipStage.tsx:34` | `rgba(11,14,20,0.72)` | `dark.glass` `rgba(23,27,34,0.6)` | 35 |
-| `features/workout/NewWorkoutUI.tsx:54` | `rgba(11,14,20,0.72)` | `dark.glass` `rgba(23,27,34,0.6)` | 35 |
-| `features/workout/NewWorkoutUI.tsx:93` | `rgba(11,14,20,0.72)` | `dark.glass` `rgba(23,27,34,0.6)` | 35 |
-| `features/workout/NewWorkoutUI.tsx:121` | `rgba(11,14,20,0.72)` | `dark.glass` `rgba(23,27,34,0.6)` | 35 |
-| `app/workout.tsx:316` | `rgba(11,14,20,0.82)` | `dark.navBg` `rgba(26,30,38,0.9)` | 36 |
+| `features/workout/NewWorkoutUI.tsx:53` | `rgba(11,14,20,0.72)` | `dark.glass` `rgba(23,27,34,0.6)` | 35 |
+| `features/workout/NewWorkoutUI.tsx:92` | `rgba(11,14,20,0.72)` | `dark.glass` `rgba(23,27,34,0.6)` | 35 |
+| `features/workout/NewWorkoutUI.tsx:120` | `rgba(11,14,20,0.72)` | `dark.glass` `rgba(23,27,34,0.6)` | 35 |
+| `app/workout.tsx:315` | `rgba(11,14,20,0.82)` | `dark.navBg` `rgba(26,30,38,0.9)` | 36 |
 | `features/today/WorkoutCard.tsx:271` | `rgba(124,240,200,0.45)` | `dark.goodSoft` `rgba(60,203,154,0.14)` | 118 |
 | `features/today/WorkoutCard.tsx:275` | `rgba(124,240,200,0.6)` | `dark.goodSoft` `rgba(60,203,154,0.14)` | 133 |
 | `app/food.tsx:176` | `rgba(14,17,22,0)` | `light.tile` `rgba(18,21,28,0.04)` | 12 |
-| `app/welcome.tsx:127` | `rgba(15,138,95,0.25)` | `dark.tNutri` `rgba(60,203,154,0.14)` | 110 |
+| `app/welcome.tsx:128` | `rgba(15,138,95,0.25)` | `dark.tNutri` `rgba(60,203,154,0.14)` | 110 |
 | `components/FloatingTabBar.tsx:119` | `rgba(18,21,28,0.13)` | `light.navLine` `rgba(18,21,28,0.06)` | 7 |
 | `features/today/Trackers.tsx:286` | `rgba(196,97,14,0.15)` | `dark.tAct` `rgba(255,160,80,0.14)` | 110 |
 | `app/onboarding.tsx:147` | `rgba(224,128,48,0.09)` | `dark.tAct` `rgba(255,160,80,0.14)` | 60 |
@@ -364,39 +329,36 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 | `app/onboarding.tsx:147` | `rgba(224,128,48,0.42)` | `dark.tAct` `rgba(255,160,80,0.14)` | 83 |
 | `app/onboarding.tsx:147` | `rgba(224,128,48,0)` | `dark.tAct` `rgba(255,160,80,0.14)` | 69 |
 | `app/onboarding.tsx:147` | `rgba(224,128,48,0)` | `dark.tAct` `rgba(255,160,80,0.14)` | 69 |
-| `features/today/goalCardState.ts:41` | `rgba(232,163,61,0.2)` | `dark.tAct` `rgba(255,160,80,0.14)` | 36 |
-| `app/goal-detail.tsx:287` | `rgba(240,105,44,0.55)` | `dark.tAct` `rgba(255,160,80,0.14)` | 108 |
+| `features/today/goalCardState.ts:40` | `rgba(232,163,61,0.2)` | `dark.tAct` `rgba(255,160,80,0.14)` | 36 |
+| `app/goal-detail.tsx:281` | `rgba(240,105,44,0.55)` | `dark.tAct` `rgba(255,160,80,0.14)` | 108 |
 | `features/today/WorkoutCard.tsx:53` | `rgba(242,179,91,0.14)` | `dark.warnSoft` `rgba(242,179,91,0.12)` | 2 |
 | `features/today/WorkoutCard.tsx:225` | `rgba(242,179,91,0.28)` | `dark.warnSoft` `rgba(242,179,91,0.12)` | 16 |
 | `features/today/WorkoutCard.tsx:228` | `rgba(242,179,91,0.5)` | `dark.warnSoft` `rgba(242,179,91,0.12)` | 38 |
 | `features/today/DayQuote.tsx:21` | `rgba(243,244,246,0.58)` | `light.glass` `rgba(255,255,255,0.72)` | 33 |
-| `features/today/goalCardState.ts:38` | `rgba(243,244,246,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 27 |
-| `app/workout.tsx:280` | `rgba(244,244,246,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 26 |
+| `features/today/goalCardState.ts:37` | `rgba(243,244,246,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 27 |
+| `app/workout.tsx:279` | `rgba(244,244,246,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 26 |
 | `app/food.tsx:176` | `rgba(245,247,250,0)` | `dark.tile` `rgba(255,255,255,0.06)` | 20 |
 | `features/workout/FinishScreen.tsx:114` | `rgba(255,107,122,0.16)` | `dark.tHeart` `rgba(255,110,125,0.14)` | 6 |
 | `features/workout/FinishScreen.tsx:49` | `rgba(255,138,61,0.14)` | `dark.tAct` `rgba(255,160,80,0.14)` | 29 |
-| `app/(tabs)/progress.tsx:166` | `rgba(255,138,61,0.16)` | `dark.tAct` `rgba(255,160,80,0.14)` | 31 |
+| `app/(tabs)/progress.tsx:165` | `rgba(255,138,61,0.16)` | `dark.tAct` `rgba(255,160,80,0.14)` | 31 |
 | `features/streak/StreakChip.tsx:38` | `rgba(255,138,61,0.16)` | `dark.tAct` `rgba(255,160,80,0.14)` | 31 |
-| `features/today/ForYou.tsx:245` | `rgba(255,138,61,0.16)` | `dark.tAct` `rgba(255,160,80,0.14)` | 31 |
-| `features/today/TopCards.tsx:164` | `rgba(255,138,61,0.16)` | `dark.tAct` `rgba(255,160,80,0.14)` | 31 |
-| `features/today/TopCards.tsx:171` | `rgba(255,138,61,0.16)` | `dark.tAct` `rgba(255,160,80,0.14)` | 31 |
+| `features/today/ForYou.tsx:214` | `rgba(255,138,61,0.16)` | `dark.tAct` `rgba(255,160,80,0.14)` | 31 |
+| `features/today/TopCards.tsx:165` | `rgba(255,138,61,0.16)` | `dark.tAct` `rgba(255,160,80,0.14)` | 31 |
+| `features/today/TopCards.tsx:172` | `rgba(255,138,61,0.16)` | `dark.tAct` `rgba(255,160,80,0.14)` | 31 |
 | `features/onboarding/Steps.tsx:165` | `rgba(255,255,255,0.04)` | `dark.tile` `rgba(255,255,255,0.06)` | 2 |
 | `features/today/Trackers.tsx:226` | `rgba(255,255,255,0.05)` | `dark.tile` `rgba(255,255,255,0.06)` | 1 |
 | `features/today/WorkoutCard.tsx:77` | `rgba(255,255,255,0.05)` | `dark.tile` `rgba(255,255,255,0.06)` | 1 |
-| `features/today/TodayBudget.tsx:59` | `rgba(255,255,255,0.07)` | `dark.navLine` `rgba(255,255,255,0.08)` | 1 |
 | `features/trackers/Widgets.tsx:102` | `rgba(255,255,255,0.07)` | `dark.navLine` `rgba(255,255,255,0.08)` | 1 |
-| `features/today/MealsCard.tsx:340` | `rgba(255,255,255,0.08)` | `dark.navLine` `rgba(255,255,255,0.08)` | 0 |
-| `app/checkin.tsx:126` | `rgba(255,255,255,0.1)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
-| `features/today/TodayBudget.tsx:50` | `rgba(255,255,255,0.1)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
-| `features/today/TopCards.tsx:83` | `rgba(255,255,255,0.1)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
+| `features/today/MealsCard.tsx:341` | `rgba(255,255,255,0.08)` | `dark.navLine` `rgba(255,255,255,0.08)` | 0 |
+| `app/checkin.tsx:125` | `rgba(255,255,255,0.1)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
+| `features/today/TopCards.tsx:84` | `rgba(255,255,255,0.1)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
 | `features/today/Trackers.tsx:301` | `rgba(255,255,255,0.1)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
 | `features/today/Trackers.tsx:302` | `rgba(255,255,255,0.1)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
 | `features/today/WorkoutCard.tsx:136` | `rgba(255,255,255,0.1)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
 | `features/trackers/DotText.tsx:26` | `rgba(255,255,255,0.1)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
-| `app/welcome.tsx:34` | `rgba(255,255,255,0.10)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
+| `app/welcome.tsx:35` | `rgba(255,255,255,0.10)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
 | `components/TrendsButton.tsx:16` | `rgba(255,255,255,0.10)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
 | `features/today/Trackers.tsx:147` | `rgba(255,255,255,0.10)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 0 |
-| `features/today/TodayBudget.tsx:54` | `rgba(255,255,255,0.12)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 2 |
 | `features/today/WorkoutCard.tsx:53` | `rgba(255,255,255,0.12)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 2 |
 | `features/today/WorkoutCard.tsx:67` | `rgba(255,255,255,0.12)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 2 |
 | `features/today/WorkoutCard.tsx:108` | `rgba(255,255,255,0.12)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 2 |
@@ -405,66 +367,55 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 | `app/profile/index.tsx:206` | `rgba(255,255,255,0.13)` | `dark.glassLine` `rgba(255,255,255,0.1)` | 3 |
 | `app/plans/exercise.tsx:80` | `rgba(255,255,255,0.14)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
 | `features/reminders/PushBanner.tsx:24` | `rgba(255,255,255,0.14)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
-| `features/today/TodayBudget.tsx:59` | `rgba(255,255,255,0.14)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
 | `features/trackers/Widgets.tsx:62` | `rgba(255,255,255,0.14)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
-| `app/welcome.tsx:118` | `rgba(255,255,255,0.15)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 3 |
+| `app/welcome.tsx:119` | `rgba(255,255,255,0.15)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 3 |
 | `components/FloatingTabBar.tsx:119` | `rgba(255,255,255,0.16)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
 | `components/Overlay.tsx:162` | `rgba(255,255,255,0.16)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
-| `features/today/StepsCards.tsx:59` | `rgba(255,255,255,0.16)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
-| `features/today/StepsCards.tsx:86` | `rgba(255,255,255,0.16)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
+| `features/today/StepsCards.tsx:58` | `rgba(255,255,255,0.16)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
+| `features/today/StepsCards.tsx:85` | `rgba(255,255,255,0.16)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
 | `features/today/Trackers.tsx:87` | `rgba(255,255,255,0.16)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
 | `features/trackers/Widgets.tsx:47` | `rgba(255,255,255,0.16)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
-| `features/today/MealsCard.tsx:340` | `rgba(255,255,255,0.18)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 0 |
-| `features/today/TodayBudget.tsx:33` | `rgba(255,255,255,0.18)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 0 |
+| `features/today/MealsCard.tsx:341` | `rgba(255,255,255,0.18)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 0 |
 | `features/today/WorkoutCard.tsx:214` | `rgba(255,255,255,0.18)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 0 |
 | `components/bits.tsx:133` | `rgba(255,255,255,0.2)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
 | `features/goalv2/GoalVisual.tsx:111` | `rgba(255,255,255,0.2)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
-| `features/today/GoalCards.tsx:138` | `rgba(255,255,255,0.2)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
-| `features/today/goalCardState.ts:38` | `rgba(255,255,255,0.2)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
-| `app/welcome.tsx:33` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
-| `app/workout.tsx:37` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
+| `features/today/goalCardState.ts:37` | `rgba(255,255,255,0.2)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 2 |
+| `app/welcome.tsx:34` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
+| `app/workout.tsx:36` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
 | `features/chat/AudioBubble.tsx:38` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
-| `features/goalv2/GoalCard2.tsx:90` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
-| `features/today/GoalCards.tsx:163` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
-| `features/today/GoalCards.tsx:168` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
-| `features/today/StepsCards.tsx:59` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
-| `features/today/StepsCards.tsx:86` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
-| `features/today/StepsCards.tsx:171` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
-| `features/today/StepsCards.tsx:188` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
-| `features/today/TopCards.tsx:85` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
+| `features/today/StepsCards.tsx:58` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
+| `features/today/StepsCards.tsx:85` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
+| `features/today/StepsCards.tsx:170` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
+| `features/today/StepsCards.tsx:187` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
+| `features/today/TopCards.tsx:86` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
 | `features/trackers/Widgets.tsx:41` | `rgba(255,255,255,0.22)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 4 |
 | `features/goalv2/GoalVisual.tsx:56` | `rgba(255,255,255,0.24)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 6 |
 | `app/plans/exercise.tsx:39` | `rgba(255,255,255,0.25)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 7 |
-| `features/goalv2/GoalCard2.tsx:38` | `rgba(255,255,255,0.25)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 7 |
-| `features/today/GoalCards.tsx:93` | `rgba(255,255,255,0.25)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 7 |
-| `features/today/GoalCards.tsx:130` | `rgba(255,255,255,0.25)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 7 |
-| `features/today/GoalCards.tsx:159` | `rgba(255,255,255,0.25)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 7 |
-| `features/today/StepsCards.tsx:107` | `rgba(255,255,255,0.25)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 7 |
-| `app/welcome.tsx:52` | `rgba(255,255,255,0.28)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 10 |
-| `app/welcome.tsx:157` | `rgba(255,255,255,0.28)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 10 |
-| `components/ui.tsx:92` | `rgba(255,255,255,0.28)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 10 |
+| `features/today/StepsCards.tsx:106` | `rgba(255,255,255,0.25)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 7 |
+| `app/welcome.tsx:53` | `rgba(255,255,255,0.28)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 10 |
+| `app/welcome.tsx:158` | `rgba(255,255,255,0.28)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 10 |
+| `components/ui.tsx:83` | `rgba(255,255,255,0.28)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 10 |
 | `app/profile/index.tsx:161` | `rgba(255,255,255,0.3)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 12 |
-| `app/welcome.tsx:92` | `rgba(255,255,255,0.3)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 12 |
-| `features/workout/NewWorkoutUI.tsx:34` | `rgba(255,255,255,0.3)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 12 |
+| `app/welcome.tsx:93` | `rgba(255,255,255,0.3)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 12 |
+| `features/workout/NewWorkoutUI.tsx:33` | `rgba(255,255,255,0.3)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 12 |
 | `features/today/Trackers.tsx:149` | `rgba(255,255,255,0.30)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 12 |
 | `features/today/Trackers.tsx:252` | `rgba(255,255,255,0.35)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 17 |
 | `features/trackers/Widgets.tsx:86` | `rgba(255,255,255,0.35)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 17 |
 | `features/chat/AudioBubble.tsx:27` | `rgba(255,255,255,0.4)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 22 |
-| `features/today/MealsCard.tsx:245` | `rgba(255,255,255,0.4)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 22 |
-| `features/today/StepsCards.tsx:133` | `rgba(255,255,255,0.4)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 22 |
-| `features/today/MealsCard.tsx:329` | `rgba(255,255,255,0.45)` | `light.glass` `rgba(255,255,255,0.72)` | 27 |
+| `features/today/MealsCard.tsx:246` | `rgba(255,255,255,0.4)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 22 |
+| `features/today/StepsCards.tsx:132` | `rgba(255,255,255,0.4)` | `dark.chipLine` `rgba(255,255,255,0.18)` | 22 |
+| `features/today/MealsCard.tsx:330` | `rgba(255,255,255,0.45)` | `light.glass` `rgba(255,255,255,0.72)` | 27 |
 | `features/trackers/Widgets.tsx:159` | `rgba(255,255,255,0.45)` | `light.glass` `rgba(255,255,255,0.72)` | 27 |
-| `app/checkin.tsx:126` | `rgba(255,255,255,0.5)` | `light.glass` `rgba(255,255,255,0.72)` | 22 |
-| `app/welcome.tsx:194` | `rgba(255,255,255,0.5)` | `light.glass` `rgba(255,255,255,0.72)` | 22 |
+| `app/checkin.tsx:125` | `rgba(255,255,255,0.5)` | `light.glass` `rgba(255,255,255,0.72)` | 22 |
+| `app/welcome.tsx:195` | `rgba(255,255,255,0.5)` | `light.glass` `rgba(255,255,255,0.72)` | 22 |
 | `components/FloatingTabBar.tsx:122` | `rgba(255,255,255,0.5)` | `light.glass` `rgba(255,255,255,0.72)` | 22 |
 | `features/trackers/Widgets.tsx:133` | `rgba(255,255,255,0.5)` | `light.glass` `rgba(255,255,255,0.72)` | 22 |
-| `app/workout.tsx:223` | `rgba(255,255,255,0.55)` | `light.glass` `rgba(255,255,255,0.72)` | 17 |
-| `features/goalv2/GoalCard2.tsx:72` | `rgba(255,255,255,0.55)` | `light.glass` `rgba(255,255,255,0.72)` | 17 |
+| `app/workout.tsx:222` | `rgba(255,255,255,0.55)` | `light.glass` `rgba(255,255,255,0.72)` | 17 |
 | `features/today/Trackers.tsx:146` | `rgba(255,255,255,0.55)` | `light.glass` `rgba(255,255,255,0.72)` | 17 |
 | `app/profile/index.tsx:165` | `rgba(255,255,255,0.6)` | `light.glass` `rgba(255,255,255,0.72)` | 12 |
-| `app/welcome.tsx:35` | `rgba(255,255,255,0.6)` | `light.glass` `rgba(255,255,255,0.72)` | 12 |
+| `app/welcome.tsx:36` | `rgba(255,255,255,0.6)` | `light.glass` `rgba(255,255,255,0.72)` | 12 |
 | `features/reminders/PushBanner.tsx:31` | `rgba(255,255,255,0.6)` | `light.glass` `rgba(255,255,255,0.72)` | 12 |
-| `features/today/TopCards.tsx:95` | `rgba(255,255,255,0.6)` | `light.glass` `rgba(255,255,255,0.72)` | 12 |
+| `features/today/TopCards.tsx:96` | `rgba(255,255,255,0.6)` | `light.glass` `rgba(255,255,255,0.72)` | 12 |
 | `features/today/Trackers.tsx:150` | `rgba(255,255,255,0.6)` | `light.glass` `rgba(255,255,255,0.72)` | 12 |
 | `features/today/Trackers.tsx:164` | `rgba(255,255,255,0.6)` | `light.glass` `rgba(255,255,255,0.72)` | 12 |
 | `features/trackers/Widgets.tsx:111` | `rgba(255,255,255,0.6)` | `light.glass` `rgba(255,255,255,0.72)` | 12 |
@@ -472,62 +423,51 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 | `features/trackers/Widgets.tsx:182` | `rgba(255,255,255,0.6)` | `light.glass` `rgba(255,255,255,0.72)` | 12 |
 | `features/today/WorkoutCard.tsx:30` | `rgba(255,255,255,0.65)` | `light.glass` `rgba(255,255,255,0.72)` | 7 |
 | `features/trackers/Widgets.tsx:179` | `rgba(255,255,255,0.65)` | `light.glass` `rgba(255,255,255,0.72)` | 7 |
-| `app/welcome.tsx:188` | `rgba(255,255,255,0.7)` | `light.glass` `rgba(255,255,255,0.72)` | 2 |
-| `features/goalv2/GoalCard2.tsx:42` | `rgba(255,255,255,0.7)` | `light.glass` `rgba(255,255,255,0.72)` | 2 |
+| `app/welcome.tsx:189` | `rgba(255,255,255,0.7)` | `light.glass` `rgba(255,255,255,0.72)` | 2 |
 | `features/goalv2/GoalVisual.tsx:57` | `rgba(255,255,255,0.7)` | `light.glass` `rgba(255,255,255,0.72)` | 2 |
 | `features/goalv2/GoalVisual.tsx:111` | `rgba(255,255,255,0.7)` | `light.glass` `rgba(255,255,255,0.72)` | 2 |
 | `features/onboarding/Steps.tsx:176` | `rgba(255,255,255,0.7)` | `light.glass` `rgba(255,255,255,0.72)` | 2 |
 | `features/today/CheckInBar.tsx:59` | `rgba(255,255,255,0.7)` | `light.glass` `rgba(255,255,255,0.72)` | 2 |
-| `features/today/StepsCards.tsx:150` | `rgba(255,255,255,0.7)` | `light.glass` `rgba(255,255,255,0.72)` | 2 |
+| `features/today/StepsCards.tsx:149` | `rgba(255,255,255,0.7)` | `light.glass` `rgba(255,255,255,0.72)` | 2 |
 | `features/trackers/Widgets.tsx:60` | `rgba(255,255,255,0.7)` | `light.glass` `rgba(255,255,255,0.72)` | 2 |
-| `features/goalv2/GoalCard2.tsx:45` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
-| `features/goalv2/GoalCard2.tsx:94` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
-| `features/goalv2/GoalCard2.tsx:103` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
-| `features/today/GoalCards.tsx:113` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
+| `features/today/StepsCards.tsx:190` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
 | `features/today/StepsCards.tsx:191` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
-| `features/today/StepsCards.tsx:192` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
-| `features/today/TopCards.tsx:92` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
-| `features/today/TopCards.tsx:145` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
+| `features/today/TopCards.tsx:93` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
+| `features/today/TopCards.tsx:146` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
 | `features/today/WorkoutCard.tsx:51` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
 | `features/today/WorkoutCard.tsx:158` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
 | `features/trackers/Widgets.tsx:90` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
 | `features/trackers/Widgets.tsx:103` | `rgba(255,255,255,0.75)` | `light.glass` `rgba(255,255,255,0.72)` | 3 |
-| `app/welcome.tsx:56` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
-| `features/today/GoalCards.tsx:133` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
-| `features/today/GoalCards.tsx:139` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
-| `features/today/GoalCards.tsx:164` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
-| `features/today/StepsCards.tsx:98` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
-| `features/today/StepsCards.tsx:104` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
-| `features/today/StepsCards.tsx:124` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
-| `features/today/StepsCards.tsx:166` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
-| `features/today/StepsCards.tsx:183` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
-| `features/today/TopCards.tsx:100` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
-| `features/today/TopCards.tsx:102` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
+| `app/welcome.tsx:57` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
+| `features/today/StepsCards.tsx:97` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
+| `features/today/StepsCards.tsx:103` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
+| `features/today/StepsCards.tsx:123` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
+| `features/today/StepsCards.tsx:165` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
+| `features/today/StepsCards.tsx:182` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
+| `features/today/TopCards.tsx:101` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
+| `features/today/TopCards.tsx:103` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
 | `features/today/WorkoutCard.tsx:233` | `rgba(255,255,255,0.8)` | `light.glass` `rgba(255,255,255,0.72)` | 8 |
 | `components/bits.tsx:133` | `rgba(255,255,255,0.82)` | `light.glassLine` `rgba(255,255,255,0.9)` | 8 |
-| `app/gym/assessments.tsx:66` | `rgba(255,255,255,0.85)` | `light.glassLine` `rgba(255,255,255,0.9)` | 5 |
-| `features/goalv2/GoalCard2.tsx:79` | `rgba(255,255,255,0.85)` | `light.glassLine` `rgba(255,255,255,0.9)` | 5 |
+| `app/gym/assessments.tsx:65` | `rgba(255,255,255,0.85)` | `light.glassLine` `rgba(255,255,255,0.9)` | 5 |
 | `features/onboarding/Steps.tsx:179` | `rgba(255,255,255,0.85)` | `light.glassLine` `rgba(255,255,255,0.9)` | 5 |
 | `features/onboarding/Steps.tsx:182` | `rgba(255,255,255,0.85)` | `light.glassLine` `rgba(255,255,255,0.9)` | 5 |
-| `features/today/GoalCards.tsx:61` | `rgba(255,255,255,0.85)` | `light.glassLine` `rgba(255,255,255,0.9)` | 5 |
-| `features/today/StepsCards.tsx:128` | `rgba(255,255,255,0.85)` | `light.glassLine` `rgba(255,255,255,0.9)` | 5 |
-| `features/today/StepsCards.tsx:168` | `rgba(255,255,255,0.85)` | `light.glassLine` `rgba(255,255,255,0.9)` | 5 |
-| `features/goalv2/GoalCard2.tsx:83` | `rgba(255,255,255,0.88)` | `light.glassLine` `rgba(255,255,255,0.9)` | 2 |
-| `app/gym/assessments.tsx:68` | `rgba(255,255,255,0.9)` | `light.glassLine` `rgba(255,255,255,0.9)` | 0 |
+| `features/today/StepsCards.tsx:127` | `rgba(255,255,255,0.85)` | `light.glassLine` `rgba(255,255,255,0.9)` | 5 |
+| `features/today/StepsCards.tsx:167` | `rgba(255,255,255,0.85)` | `light.glassLine` `rgba(255,255,255,0.9)` | 5 |
+| `app/gym/assessments.tsx:67` | `rgba(255,255,255,0.9)` | `light.glassLine` `rgba(255,255,255,0.9)` | 0 |
 | `features/chat/AudioBubble.tsx:44` | `rgba(255,255,255,0.9)` | `light.glassLine` `rgba(255,255,255,0.9)` | 0 |
 | `features/reminders/PushBanner.tsx:33` | `rgba(255,255,255,0.9)` | `light.glassLine` `rgba(255,255,255,0.9)` | 0 |
-| `features/today/StepsCards.tsx:146` | `rgba(255,255,255,0.9)` | `light.glassLine` `rgba(255,255,255,0.9)` | 0 |
+| `features/today/StepsCards.tsx:145` | `rgba(255,255,255,0.9)` | `light.glassLine` `rgba(255,255,255,0.9)` | 0 |
 | `features/today/Trackers.tsx:170` | `rgba(255,255,255,0.9)` | `light.glassLine` `rgba(255,255,255,0.9)` | 0 |
 | `features/trackers/Widgets.tsx:25` | `rgba(255,255,255,0.9)` | `light.glassLine` `rgba(255,255,255,0.9)` | 0 |
 | `app/plans/exercise.tsx:85` | `rgba(255,255,255,0.92)` | `light.navBg` `rgba(255,255,255,0.92)` | 0 |
-| `features/today/TopCards.tsx:86` | `rgba(255,255,255,0.92)` | `light.navBg` `rgba(255,255,255,0.92)` | 0 |
+| `features/today/TopCards.tsx:87` | `rgba(255,255,255,0.92)` | `light.navBg` `rgba(255,255,255,0.92)` | 0 |
 | `components/FloatingTabBar.tsx:122` | `rgba(255,255,255,0.95)` | `light.navBg` `rgba(255,255,255,0.92)` | 3 |
 | `features/today/Trackers.tsx:146` | `rgba(27,36,64,0.35)` | `light.scrim` `rgba(16,20,30,0.36)` | 40 |
 | `features/today/Trackers.tsx:150` | `rgba(27,36,64,0.5)` | `dark.glass` `rgba(23,27,34,0.6)` | 42 |
 | `components/FloatingTabBar.tsx:122` | `rgba(30,35,46,0.42)` | `light.scrim` `rgba(16,20,30,0.36)` | 32 |
 | `components/FloatingTabBar.tsx:122` | `rgba(30,35,46,0.93)` | `dark.navBg` `rgba(26,30,38,0.9)` | 13 |
 | `features/reminders/PushBanner.tsx:24` | `rgba(38,40,46,0.96)` | `dark.navBg` `rgba(26,30,38,0.9)` | 24 |
-| `features/today/goalCardState.ts:41` | `rgba(46,230,168,0.2)` | `dark.goodSoft` `rgba(60,203,154,0.14)` | 39 |
+| `features/today/goalCardState.ts:40` | `rgba(46,230,168,0.2)` | `dark.goodSoft` `rgba(60,203,154,0.14)` | 39 |
 | `features/today/Trackers.tsx:147` | `rgba(47,107,234,0.08)` | `dark.accentSoft` `rgba(76,130,247,0.18)` | 49 |
 | `features/checkin/GymMap.native.tsx:51` | `rgba(52,120,246,0.22)` | `dark.accentSoft` `rgba(76,130,247,0.18)` | 30 |
 | `features/goalv2/GoalVisual.tsx:111` | `rgba(60,203,154,0.15)` | `dark.tNutri` `rgba(60,203,154,0.14)` | 1 |
@@ -537,7 +477,7 @@ Counts: 305 hex, 204 rgba, 4 colours inside longer strings, 95 font sizes, 191 r
 
 | Location | Value |
 |---|---|
-| `app/onboarding.tsx:555` | ``rgba(255,255,255,${a})`` |
+| `app/onboarding.tsx:542` | ``rgba(255,255,255,${a})`` |
 | `app/_layout.tsx:77` | `position:absolute;left:0;right:0;top:0;bottom:0;backgroun...` |
 | `components/Glass.tsx:61` | `linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.6) 45%, ...` |
 | `components/Glass.tsx:61` | `linear-gradient(to top, #000 0%, rgba(0,0,0,0.6) 45%, tra...` |
@@ -551,94 +491,85 @@ Scale: xs2 11, xs 12, sm 13, md 14, base 15, lg 17, xl 20, xl2 22, xl3 26, xl4 3
 | `web/ControlParts.tsx:21` | 11.5 | `fontSizes.xs2` (11) | 0.5 | tie between xs2 (11) and xs (12) |
 | `web/ControlParts.tsx:142` | 11.5 | `fontSizes.xs2` (11) | 0.5 | tie between xs2 (11) and xs (12) |
 | `web/WebFrame.tsx:257` | 11.5 | `fontSizes.xs2` (11) | 0.5 | tie between xs2 (11) and xs (12) |
-| `features/today/ForYou.tsx:249` | 12.5 | `fontSizes.xs` (12) | 0.5 | tie between xs (12) and sm (13) |
+| `features/today/ForYou.tsx:218` | 12.5 | `fontSizes.xs` (12) | 0.5 | tie between xs (12) and sm (13) |
 | `features/today/WorkoutCard.tsx:40` | 12.5 | `fontSizes.xs` (12) | 0.5 | tie between xs (12) and sm (13) |
 | `web/ControlParts.tsx:101` | 12.5 | `fontSizes.xs` (12) | 0.5 | tie between xs (12) and sm (13) |
 | `web/ControlParts.tsx:115` | 12.5 | `fontSizes.xs` (12) | 0.5 | tie between xs (12) and sm (13) |
 | `features/reminders/PushBanner.tsx:30` | 13.5 | `fontSizes.sm` (13) | 0.5 | tie between sm (13) and md (14) |
 | `features/reminders/PushBanner.tsx:33` | 13.5 | `fontSizes.sm` (13) | 0.5 | tie between sm (13) and md (14) |
-| `features/today/GoalTickCard.tsx:145` | 13.5 | `fontSizes.sm` (13) | 0.5 | tie between sm (13) and md (14) |
 | `web/ControlParts.tsx:19` | 13.5 | `fontSizes.sm` (13) | 0.5 | tie between sm (13) and md (14) |
-| `app/(tabs)/plans.tsx:76` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `app/goal-detail.tsx:251` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `app/goal-detail.tsx:294` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `app/(tabs)/plans.tsx:75` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `app/goal-detail.tsx:245` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `app/goal-detail.tsx:288` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
 | `app/login.tsx:226` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `app/onboarding.tsx:320` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `app/onboarding.tsx:345` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `app/onboarding.tsx:307` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `app/onboarding.tsx:332` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
 | `app/plans/log.tsx:269` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
 | `components/ui.tsx:70` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `components/ui.tsx:149` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `components/ui.tsx:156` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `components/ui.tsx:182` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `features/chat/Composer.tsx:166` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `features/chat/Composer.tsx:206` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `features/plans/DietPlan.tsx:265` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `features/streak/StreakHero.tsx:27` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `features/today/ForYou.tsx:155` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `features/today/GoalStrip.tsx:84` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `features/today/GoalStrip.tsx:122` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `features/today/GoalStrip.tsx:126` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `features/today/GoalTickCard.tsx:92` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `features/today/MealsCard.tsx:81` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `components/ui.tsx:140` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `components/ui.tsx:147` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `components/ui.tsx:173` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `features/chat/Composer.tsx:167` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `features/chat/Composer.tsx:207` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `features/plans/DietPlan.tsx:264` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `features/streak/StreakHero.tsx:26` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `features/today/ForYou.tsx:124` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `features/today/MealsCard.tsx:82` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
 | `features/today/NoPlanCard.tsx:16` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
 | `features/today/Trackers.tsx:228` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
 | `features/today/WorkoutCard.tsx:39` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `features/workout/NewWorkoutUI.tsx:221` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
+| `features/workout/NewWorkoutUI.tsx:220` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
 | `features/workout/WorkoutSheets.tsx:88` | 16 | `fontSizes.base` (15) | 1 | tie between base (15) and lg (17) |
-| `app/gym/assessments.tsx:49` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
+| `app/gym/assessments.tsx:48` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
 | `app/gym/break.tsx:30` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
 | `app/profile/index.tsx:143` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
-| `app/welcome.tsx:89` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
+| `app/welcome.tsx:90` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
 | `features/progress/LogSheets.tsx:26` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
-| `features/today/GoalStrip.tsx:124` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
-| `features/today/GoalTickCard.tsx:177` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
 | `features/today/LogMealsSheet.tsx:33` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
-| `features/today/TopCards.tsx:91` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
-| `features/today/TopCards.tsx:95` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
-| `features/today/TopCards.tsx:101` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
+| `features/today/TopCards.tsx:92` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
+| `features/today/TopCards.tsx:96` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
+| `features/today/TopCards.tsx:102` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
 | `features/today/Trackers.tsx:374` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
 | `features/workout/WorkoutSheets.tsx:81` | 24 | `fontSizes.xl2` (22) | 2 | tie between xl2 (22) and xl3 (26) |
-| `app/checkin.tsx:122` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
+| `app/checkin.tsx:121` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
 | `app/profile/index.tsx:76` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
 | `components/ui.tsx:13` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
-| `features/body/BodyLog.tsx:158` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
+| `features/body/BodyLog.tsx:157` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
 | `features/checkin/CheckInEngine.tsx:26` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
 | `features/onboarding/Steps.tsx:314` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
 | `features/onboarding/Steps.tsx:315` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
-| `features/plans/parts.tsx:37` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
+| `features/plans/parts.tsx:38` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
 | `features/today/QuickLogSheet.tsx:117` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
-| `features/today/StepsCards.tsx:167` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
-| `features/today/TopCards.tsx:317` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
+| `features/today/StepsCards.tsx:166` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
+| `features/today/TopCards.tsx:318` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
 | `features/today/Trackers.tsx:170` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
 | `features/today/Trackers.tsx:187` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
 | `features/workout/WorkoutSheets.tsx:40` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
 | `features/workout/WorkoutSheets.tsx:60` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
 | `features/workout/WorkoutSheets.tsx:141` | 28 | `fontSizes.xl3` (26) | 2 | tie between xl3 (26) and xl4 (30) |
 | `app/food.tsx:93` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
-| `app/gym/assessments.tsx:67` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
-| `app/workout.tsx:279` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
+| `app/gym/assessments.tsx:66` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
+| `app/workout.tsx:278` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
 | `components/TabScreen.tsx:66` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
 | `components/ui.tsx:12` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
-| `features/plans/WorkoutPlan.tsx:147` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
-| `features/today/TopCards.tsx:91` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
-| `features/today/TopCards.tsx:95` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
+| `features/plans/WorkoutPlan.tsx:128` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
+| `features/today/TopCards.tsx:92` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
+| `features/today/TopCards.tsx:96` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
 | `features/today/WorkoutCard.tsx:51` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
-| `features/workout/NewWorkoutUI.tsx:241` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
+| `features/workout/NewWorkoutUI.tsx:240` | 34 | `fontSizes.xl4` (30) | 4 | more than 2 px from any step |
 | `features/onboarding/Steps.tsx:193` | 36 | `fontSizes.xl4` (30) | 6 | more than 2 px from any step |
-| `features/today/TodayBudget.tsx:32` | 36 | `fontSizes.xl4` (30) | 6 | more than 2 px from any step |
-| `app/(tabs)/gym.tsx:49` | 37 | `fontSizes.xl4` (30) | 7 | more than 2 px from any step |
-| `features/today/GoalCards.tsx:106` | 38 | `fontSizes.xl4` (30) | 8 | more than 2 px from any step |
+| `app/(tabs)/gym.tsx:47` | 37 | `fontSizes.xl4` (30) | 7 | more than 2 px from any step |
 | `features/trackers/Widgets.tsx:89` | 38 | `fontSizes.xl4` (30) | 8 | more than 2 px from any step |
 | `features/workout/FinishScreen.tsx:84` | 38 | `fontSizes.xl4` (30) | 8 | more than 2 px from any step |
 | `app/gym/break.tsx:42` | 40 | `fontSizes.xl4` (30) | 10 | more than 2 px from any step |
-| `app/onboarding.tsx:440` | 40 | `fontSizes.xl4` (30) | 10 | more than 2 px from any step |
-| `app/progress/metric.tsx:67` | 42 | `fontSizes.xl4` (30) | 12 | more than 2 px from any step |
+| `app/onboarding.tsx:427` | 40 | `fontSizes.xl4` (30) | 10 | more than 2 px from any step |
+| `app/progress/metric.tsx:66` | 42 | `fontSizes.xl4` (30) | 12 | more than 2 px from any step |
 | `features/today/WorkoutCard.tsx:205` | 42 | `fontSizes.xl4` (30) | 12 | more than 2 px from any step |
-| `features/streak/StreakHero.tsx:53` | 44 | `fontSizes.xl4` (30) | 14 | more than 2 px from any step |
-| `features/today/StepsCards.tsx:232` | 44 | `fontSizes.xl4` (30) | 14 | more than 2 px from any step |
+| `features/streak/StreakHero.tsx:52` | 44 | `fontSizes.xl4` (30) | 14 | more than 2 px from any step |
+| `features/today/StepsCards.tsx:231` | 44 | `fontSizes.xl4` (30) | 14 | more than 2 px from any step |
 | `features/today/Trackers.tsx:410` | 44 | `fontSizes.xl4` (30) | 14 | more than 2 px from any step |
 | `features/plans/QtySheet.tsx:53` | 48 | `fontSizes.xl4` (30) | 18 | more than 2 px from any step |
-| `features/workout/NewWorkoutUI.tsx:220` | 48 | `fontSizes.xl4` (30) | 18 | more than 2 px from any step |
+| `features/workout/NewWorkoutUI.tsx:219` | 48 | `fontSizes.xl4` (30) | 18 | more than 2 px from any step |
 | `app/profile/index.tsx:206` | 50 | `fontSizes.xl4` (30) | 20 | more than 2 px from any step |
 | `features/today/Trackers.tsx:374` | 50 | `fontSizes.xl4` (30) | 20 | more than 2 px from any step |
 | `app/goal.tsx:85` | 52 | `fontSizes.xl4` (30) | 22 | more than 2 px from any step |
@@ -646,63 +577,59 @@ Scale: xs2 11, xs 12, sm 13, md 14, base 15, lg 17, xl 20, xl2 22, xl3 26, xl4 3
 
 ## 5. Radii
 
-Scale: xs 4, sm 12, md 18, lg 22, xl 28, pill 999.
+Scale: xs 4, sm 12, md 18, lg 22, card 24, xl 28, pill 999.
 
 | Location | Value | Nearest step | Distance | Why not changed |
 |---|---|---|---|---|
 | `components/Ruler.tsx:106` | 1 | `radii.xs` (4) | 3 | more than 2 px from any step |
 | `components/Ruler.tsx:112` | 1 | `radii.xs` (4) | 3 | more than 2 px from any step |
 | `features/goalv2/GoalVisual.tsx:99` | 1 | `radii.xs` (4) | 3 | more than 2 px from any step |
-| `features/today/StepsCards.tsx:133` | 1 | `radii.xs` (4) | 3 | more than 2 px from any step |
+| `features/today/StepsCards.tsx:132` | 1 | `radii.xs` (4) | 3 | more than 2 px from any step |
 | `features/trackers/Widgets.tsx:133` | 1 | `radii.xs` (4) | 3 | more than 2 px from any step |
 | `app/gym/attendance.tsx:96` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/chat/Composer.tsx:28` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `features/chat/Composer.tsx:29` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
 | `features/goalv2/GoalVisual.tsx:86` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/plans/WorkoutPlan.tsx:111` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/TopCards.tsx:323` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `features/plans/WorkoutPlan.tsx:92` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `features/today/TopCards.tsx:324` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
 | `features/today/Trackers.tsx:277` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
 | `features/today/Trackers.tsx:286` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
 | `features/today/Trackers.tsx:287` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
 | `features/today/WorkoutCard.tsx:37` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
 | `features/trackers/Widgets.tsx:159` | 5 | `radii.xs` (4) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `app/(tabs)/plans.tsx:79` | 6 | `radii.xs` (4) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/coach.tsx:44` | 6 | `radii.xs` (4) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/(tabs)/plans.tsx:78` | 7 | `radii.xs` (4) | 3 | more than 2 px from any step |
+| `app/(tabs)/plans.tsx:78` | 6 | `radii.xs` (4) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `app/coach.tsx:41` | 6 | `radii.xs` (4) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `app/(tabs)/plans.tsx:77` | 7 | `radii.xs` (4) | 3 | more than 2 px from any step |
 | `features/shell/ThemeTile.tsx:21` | 7 | `radii.xs` (4) | 3 | more than 2 px from any step |
-| `features/streak/StreakHero.tsx:72` | 7 | `radii.xs` (4) | 3 | more than 2 px from any step |
-| `features/today/GoalCards.tsx:93` | 7 | `radii.xs` (4) | 3 | more than 2 px from any step |
-| `features/today/GoalCards.tsx:94` | 7 | `radii.xs` (4) | 3 | more than 2 px from any step |
+| `features/streak/StreakHero.tsx:71` | 7 | `radii.xs` (4) | 3 | more than 2 px from any step |
 | `features/trackers/Widgets.tsx:86` | 7 | `radii.xs` (4) | 3 | more than 2 px from any step |
-| `app/goal-detail.tsx:287` | 8 | `radii.xs` (4) | 4 | tie between xs (4) and sm (12) |
-| `app/progress/streaks.tsx:75` | 8 | `radii.xs` (4) | 4 | tie between xs (4) and sm (12) |
-| `app/progress/streaks.tsx:77` | 8 | `radii.xs` (4) | 4 | tie between xs (4) and sm (12) |
+| `app/goal-detail.tsx:281` | 8 | `radii.xs` (4) | 4 | tie between xs (4) and sm (12) |
+| `app/progress/streaks.tsx:72` | 8 | `radii.xs` (4) | 4 | tie between xs (4) and sm (12) |
+| `app/progress/streaks.tsx:74` | 8 | `radii.xs` (4) | 4 | tie between xs (4) and sm (12) |
 | `features/checkin/GymMap.native.tsx:52` | 8 | `radii.xs` (4) | 4 | tie between xs (4) and sm (12) |
-| `features/plans/parts.tsx:95` | 8 | `radii.xs` (4) | 4 | tie between xs (4) and sm (12) |
+| `features/plans/parts.tsx:96` | 8 | `radii.xs` (4) | 4 | tie between xs (4) and sm (12) |
 | `features/shell/ThemeTile.tsx:37` | 8 | `radii.xs` (4) | 4 | tie between xs (4) and sm (12) |
 | `features/trackers/Widgets.tsx:185` | 8 | `radii.xs` (4) | 4 | tie between xs (4) and sm (12) |
-| `app/welcome.tsx:92` | 9 | `radii.sm` (12) | 3 | more than 2 px from any step |
-| `features/today/MealsCard.tsx:30` | 9 | `radii.sm` (12) | 3 | more than 2 px from any step |
+| `app/welcome.tsx:93` | 9 | `radii.sm` (12) | 3 | more than 2 px from any step |
+| `features/today/MealsCard.tsx:31` | 9 | `radii.sm` (12) | 3 | more than 2 px from any step |
 | `app/food.tsx:163` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `app/goal-detail.tsx:97` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `app/onboarding.tsx:323` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `app/onboarding.tsx:348` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `app/goal-detail.tsx:91` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `app/onboarding.tsx:310` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `app/onboarding.tsx:335` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
 | `components/GymHeader.tsx:56` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/shell/parts.tsx:72` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/GoalStrip.tsx:60` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/GoalTickCard.tsx:68` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `features/shell/parts.tsx:44` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
 | `features/workout/FinishScreen.tsx:39` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/workout/NewWorkoutUI.tsx:54` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `features/workout/NewWorkoutUI.tsx:53` | 13 | `radii.sm` (12) | 1 | may be a circle or pill, and the nearest step is smaller |
 | `app/plans/log.tsx:148` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/welcome.tsx:127` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/workout.tsx:220` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `components/ui.tsx:94` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/chat/Composer.tsx:155` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/plans/parts.tsx:127` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/plans/WorkoutPlan.tsx:150` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/ForYou.tsx:249` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/MealsCard.tsx:299` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/MealsCard.tsx:340` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/MealsCard.tsx:353` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `app/welcome.tsx:128` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `app/workout.tsx:219` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `components/ui.tsx:85` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `features/chat/Composer.tsx:156` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `features/plans/parts.tsx:116` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `features/plans/WorkoutPlan.tsx:131` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `features/today/ForYou.tsx:218` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `features/today/MealsCard.tsx:300` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `features/today/MealsCard.tsx:341` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `features/today/MealsCard.tsx:354` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
 | `features/today/WorkoutCard.tsx:53` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
 | `features/today/WorkoutCard.tsx:173` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
 | `features/today/WorkoutCard.tsx:228` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
@@ -711,116 +638,80 @@ Scale: xs 4, sm 12, md 18, lg 22, xl 28, pill 999.
 | `web/ControlParts.tsx:56` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
 | `web/ControlParts.tsx:74` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
 | `web/ControlParts.tsx:125` | 14 | `radii.sm` (12) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/goal-detail.tsx:256` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
+| `app/goal-detail.tsx:250` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
 | `app/gym/chat.tsx:130` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
 | `app/profile/health.tsx:71` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
-| `app/welcome.tsx:75` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
-| `features/today/StepsCards.tsx:59` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
-| `features/today/StepsCards.tsx:86` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
+| `app/welcome.tsx:76` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
+| `features/today/StepsCards.tsx:58` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
+| `features/today/StepsCards.tsx:85` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
 | `features/trackers/Widgets.tsx:41` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
 | `web/ControlParts.tsx:99` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
 | `web/ControlParts.tsx:140` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
 | `web/WebFrame.tsx:311` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
 | `web/WebFrame.tsx:316` | 15 | `radii.sm` (12) | 3 | tie between sm (12) and md (18) |
 | `app/gym/attendance.tsx:88` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `app/workout.tsx:316` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/chat/Composer.tsx:149` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `app/workout.tsx:315` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `features/chat/Composer.tsx:150` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
 | `features/checkin/GymMap.native.tsx:44` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/plans/DietPlan.tsx:112` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/GoalCards.tsx:71` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/MealsCard.tsx:146` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/MealsCard.tsx:330` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `app/(tabs)/plans.tsx:148` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `app/(tabs)/progress.tsx:153` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `features/plans/DietPlan.tsx:111` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `features/today/MealsCard.tsx:147` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `features/today/MealsCard.tsx:331` | 19 | `radii.md` (18) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `app/(tabs)/plans.tsx:147` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `app/(tabs)/progress.tsx:152` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `app/exercise-search.tsx:73` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `app/food.tsx:103` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `app/goal-detail.tsx:134` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `app/goal-detail.tsx:249` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `app/gym/assessments.tsx:57` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `app/goal-detail.tsx:128` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `app/goal-detail.tsx:243` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `app/gym/assessments.tsx:56` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `app/gym/chat.tsx:159` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `app/gym/chat.tsx:179` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `app/login.tsx:184` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `app/onboarding.tsx:120` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `app/onboarding.tsx:297` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `app/onboarding.tsx:284` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `app/plans/edit.tsx:130` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `app/plans/log.tsx:237` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `app/plans/log.tsx:257` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `app/plans/log.tsx:283` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `app/profile/details.tsx:66` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `app/progress/streaks.tsx:86` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `app/progress/streaks.tsx:83` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/chat/AudioBubble.tsx:38` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `features/chat/Composer.tsx:61` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `features/chat/Composer.tsx:62` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/onboarding/Steps.tsx:75` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/onboarding/Steps.tsx:322` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `features/plans/parts.tsx:61` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `features/plans/parts.tsx:62` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/progress/TrendUI.tsx:127` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `features/shell/parts.tsx:115` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `features/shell/parts.tsx:75` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/streak/StreakChip.tsx:38` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/today/CheckInBar.tsx:61` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `features/today/ForYou.tsx:165` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `features/today/MealsCard.tsx:149` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `features/today/ForYou.tsx:134` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `features/today/MealsCard.tsx:150` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/today/PaymentBanner.tsx:44` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/today/PaymentBanner.tsx:77` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/today/QuickLogSheet.tsx:125` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/today/QuickLogSheet.tsx:193` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/today/QuickLogSheet.tsx:216` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `features/today/TopCards.tsx:40` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `features/today/TopCards.tsx:41` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/today/Trackers.tsx:302` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/today/WorkoutCard.tsx:67` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/workout/FinishScreen.tsx:86` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `features/workout/NewWorkoutUI.tsx:106` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `features/workout/NewWorkoutUI.tsx:118` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `features/workout/SetRow.tsx:105` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `features/workout/SetRow.tsx:106` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `features/workout/SetRow.tsx:120` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `features/workout/NewWorkoutUI.tsx:105` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `features/workout/NewWorkoutUI.tsx:117` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `features/workout/SetRow.tsx:72` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `features/workout/SetRow.tsx:73` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
+| `features/workout/SetRow.tsx:87` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `features/workout/WorkoutSheets.tsx:62` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `web/WebFrame.tsx:337` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `web/WebFrame.tsx:345` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
 | `web/WebFrame.tsx:353` | 20 | `radii.md` (18) | 2 | tie between md (18) and lg (22) |
-| `features/chat/Composer.tsx:176` | 23 | `radii.lg` (22) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/MealsCard.tsx:120` | 23 | `radii.lg` (22) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/MealsCard.tsx:123` | 23 | `radii.lg` (22) | 1 | may be a circle or pill, and the nearest step is smaller |
-| `app/(tabs)/progress.tsx:166` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/goal-detail.tsx:29` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/gym/attendance.tsx:75` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/gym/break.tsx:33` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/gym/break.tsx:51` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/gym/break.tsx:53` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/gym/chat.tsx:112` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/gym/membership.tsx:47` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/login.tsx:223` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/plans/create.tsx:86` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/plans/edit.tsx:149` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/profile/delete.tsx:35` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/progress/streaks.tsx:33` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/progress/streaks.tsx:73` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/workout.tsx:228` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/chat/Composer.tsx:180` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/onboarding/Steps.tsx:186` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/onboarding/Steps.tsx:186` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/onboarding/Steps.tsx:272` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/onboarding/Steps.tsx:282` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/plans/DietPlan.tsx:260` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/ForYou.tsx:149` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/GoalTickCard.tsx:137` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/MealsCard.tsx:224` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/MealsCard.tsx:277` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/NoPlanCard.tsx:13` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/StepsCards.tsx:55` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/StepsCards.tsx:84` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/TopCards.tsx:79` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/Trackers.tsx:176` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/Trackers.tsx:227` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/WorkoutCard.tsx:75` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/WorkoutCard.tsx:118` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/today/WorkoutCard.tsx:251` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `features/workout/NewWorkoutUI.tsx:38` | 24 | `radii.lg` (22) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `components/FloatingTabBar.tsx:232` | 25 | `radii.lg` (22) | 3 | tie between lg (22) and xl (28) |
-| `features/onboarding/Steps.tsx:180` | 25 | `radii.lg` (22) | 3 | tie between lg (22) and xl (28) |
-| `features/today/WorkoutCard.tsx:62` | 25 | `radii.lg` (22) | 3 | tie between lg (22) and xl (28) |
-| `features/workout/FinishScreen.tsx:128` | 25 | `radii.lg` (22) | 3 | tie between lg (22) and xl (28) |
-| `app/checkin.tsx:119` | 30 | `radii.xl` (28) | 2 | may be a circle or pill, and the nearest step is smaller |
-| `app/checkin.tsx:119` | 30 | `radii.xl` (28) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `features/chat/Composer.tsx:177` | 23 | `radii.lg` (22) | 1 | tie between lg (22) and card (24) |
+| `features/today/MealsCard.tsx:121` | 23 | `radii.lg` (22) | 1 | tie between lg (22) and card (24) |
+| `features/today/MealsCard.tsx:124` | 23 | `radii.lg` (22) | 1 | tie between lg (22) and card (24) |
+| `components/FloatingTabBar.tsx:232` | 25 | `radii.card` (24) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `features/onboarding/Steps.tsx:180` | 25 | `radii.card` (24) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `features/today/WorkoutCard.tsx:62` | 25 | `radii.card` (24) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `features/workout/FinishScreen.tsx:128` | 25 | `radii.card` (24) | 1 | may be a circle or pill, and the nearest step is smaller |
+| `app/checkin.tsx:118` | 30 | `radii.xl` (28) | 2 | may be a circle or pill, and the nearest step is smaller |
+| `app/checkin.tsx:118` | 30 | `radii.xl` (28) | 2 | may be a circle or pill, and the nearest step is smaller |
 | `components/Overlay.tsx:116` | 30 | `radii.xl` (28) | 2 | may be a circle or pill, and the nearest step is smaller |
 | `components/Overlay.tsx:116` | 30 | `radii.xl` (28) | 2 | may be a circle or pill, and the nearest step is smaller |
 | `features/onboarding/Steps.tsx:259` | 30 | `radii.xl` (28) | 2 | may be a circle or pill, and the nearest step is smaller |
@@ -832,10 +723,10 @@ Scale: xs 4, sm 12, md 18, lg 22, xl 28, pill 999.
 | `features/workout/FinishScreen.tsx:76` | 32 | `radii.xl` (28) | 4 | more than 2 px from any step |
 | `features/workout/FinishScreen.tsx:79` | 32 | `radii.xl` (28) | 4 | more than 2 px from any step |
 | `features/workout/FinishScreen.tsx:80` | 32 | `radii.xl` (28) | 4 | more than 2 px from any step |
-| `features/workout/NewWorkoutUI.tsx:93` | 32 | `radii.xl` (28) | 4 | more than 2 px from any step |
+| `features/workout/NewWorkoutUI.tsx:92` | 32 | `radii.xl` (28) | 4 | more than 2 px from any step |
 | `app/food.tsx:91` | 33 | `radii.xl` (28) | 5 | more than 2 px from any step |
-| `app/welcome.tsx:33` | 34 | `radii.xl` (28) | 6 | more than 2 px from any step |
-| `app/welcome.tsx:33` | 34 | `radii.xl` (28) | 6 | more than 2 px from any step |
+| `app/welcome.tsx:34` | 34 | `radii.xl` (28) | 6 | more than 2 px from any step |
+| `app/welcome.tsx:34` | 34 | `radii.xl` (28) | 6 | more than 2 px from any step |
 | `features/onboarding/Steps.tsx:179` | 34 | `radii.xl` (28) | 6 | more than 2 px from any step |
 | `web/WebFrame.tsx:78` | 44 | `radii.xl` (28) | 16 | more than 2 px from any step |
 | `app/food.tsx:89` | 48 | `radii.xl` (28) | 20 | more than 2 px from any step |
@@ -848,21 +739,20 @@ Spacing (`gap`, `padding*`, `margin*`) is not changed by the codemod in this pha
 
 | Value | Uses | Files | Nearest 4 px steps |
 |---|---|---|---|
-| 6 | 209 | 73 | 4 or 8 (tie) |
-| 10 | 149 | 74 | 8 or 12 (tie) |
-| 14 | 131 | 56 | 12 or 16 (tie) |
-| 2 | 72 | 42 | 0 or 4 (tie) |
-| 18 | 60 | 38 | 16 or 20 (tie) |
-| 3 | 22 | 20 | 4 |
-| 1 | 14 | 12 | 0 |
+| 6 | 200 | 70 | 4 or 8 (tie) |
+| 10 | 141 | 70 | 8 or 12 (tie) |
+| 14 | 127 | 54 | 12 or 16 (tie) |
+| 2 | 69 | 40 | 0 or 4 (tie) |
+| 18 | 51 | 34 | 16 or 20 (tie) |
+| 3 | 21 | 19 | 4 |
 | 22 | 13 | 9 | 20 or 24 (tie) |
+| 1 | 11 | 9 | 0 |
 | 5 | 9 | 7 | 4 |
-| 11 | 7 | 6 | 12 |
-| 9 | 5 | 5 | 8 |
-| 7 | 3 | 3 | 8 |
-| 13 | 3 | 3 | 12 |
+| 11 | 5 | 4 | 12 |
+| 9 | 3 | 3 | 8 |
+| 7 | 2 | 2 | 8 |
+| 13 | 2 | 2 | 12 |
 | 30 | 2 | 2 | 28 or 32 (tie) |
-| 15 | 1 | 1 | 16 |
 | 26 | 1 | 1 | 24 or 28 (tie) |
 | 38 | 1 | 1 | 36 or 40 (tie) |
 | 54 | 1 | 1 | 52 or 56 (tie) |

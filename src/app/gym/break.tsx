@@ -30,7 +30,7 @@ export default function MembershipPauses() {
       <Txt style={{ fontFamily: font.semibold, fontSize: 24, lineHeight: 31, letterSpacing: -0.7, paddingHorizontal: 4 }}>Pauses are set by the front desk.</Txt>
 
       {d.onBreak && (
-        <View style={[{ padding: 16, borderRadius: 24, backgroundColor: c.surface, borderWidth: 1.5, borderColor: c.accent, gap: 4 }, cardShadow(isDark)]}>
+        <View style={[{ padding: 16, borderRadius: radii.card, backgroundColor: c.surface, borderWidth: 1.5, borderColor: c.accent, gap: 4 }, cardShadow(isDark)]}>
           <Row style={{ gap: 8 }}><PauseCircle size={18} color={c.accentText} /><Txt style={{ fontFamily: font.semibold }}>Paused until {dateLabel(g.breakUntil)}</Txt></Row>
           <Txt muted style={{ fontSize: fontSizes.md }}>Your streak is frozen and reminders are off. Your end date moves out by the paused days.</Txt>
         </View>
@@ -48,9 +48,9 @@ export default function MembershipPauses() {
 
       <Txt v="label" style={{ paddingHorizontal: 6 }}>PAUSE HISTORY</Txt>
       {history.length === 0 ? (
-        <View style={{ padding: 18, borderRadius: 24, backgroundColor: c.surface }}><Txt muted>No pauses yet.</Txt></View>
+        <View style={{ padding: 18, borderRadius: radii.card, backgroundColor: c.surface }}><Txt muted>No pauses yet.</Txt></View>
       ) : history.map((h) => (
-        <View key={h.from} style={[{ padding: 16, borderRadius: 24, backgroundColor: c.surface, gap: 6 }, cardShadow(isDark)]}>
+        <View key={h.from} style={[{ padding: 16, borderRadius: radii.card, backgroundColor: c.surface, gap: 6 }, cardShadow(isDark)]}>
           <Row style={{ justifyContent: 'space-between' }}>
             <Txt style={{ fontFamily: font.semibold }}>{h.from} – {h.to}</Txt>
             <Tag label={`${h.days} days`} bg={c.accentSoft} fg={c.accentText} />

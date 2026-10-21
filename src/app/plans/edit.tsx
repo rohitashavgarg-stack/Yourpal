@@ -146,7 +146,7 @@ export default function EditPlan() {
             );
           }} />
         {dr.rows.length === 0 && <Txt muted style={{ textAlign: 'center', padding: 12 }}>Nothing here yet. Add {isDiet ? 'an item' : 'an exercise'} to keep this {isDiet ? 'meal' : 'day'} in your plan.</Txt>}
-        <Pressy accessibilityRole="button" onPress={add} style={{ height: 48, borderRadius: 24, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, alignItems: 'center', justifyContent: 'center' }}>
+        <Pressy accessibilityRole="button" onPress={add} style={{ height: 48, borderRadius: radii.card, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, alignItems: 'center', justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>+ {isDiet ? 'Add item' : 'Add exercise'}</Txt>
         </Pressy>
         <InfoBox>Coach Vikram will be notified of these changes.</InfoBox>

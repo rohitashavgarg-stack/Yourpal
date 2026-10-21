@@ -72,7 +72,7 @@ export default function Attendance() {
         <FadeIn exiting={fadeOut()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 8, borderWidth: 1.5, borderColor: c.accent }, cardShadow(isDark)]}>
           <Txt style={{ fontFamily: font.semibold }}>Confirm your session</Txt>
           <Txt muted style={{ fontSize: fontSizes.md }}>Coach Vikram marked Tue 23 Sep, 6–7 pm as completed</Txt>
-          <Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} style={{ height: 48, borderRadius: 24 }} />
+          <Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} style={{ height: 48, borderRadius: radii.card }} />
         </FadeIn>
       )}
       <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 16 }, cardShadow(isDark)]}>

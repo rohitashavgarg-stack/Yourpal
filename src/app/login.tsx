@@ -220,7 +220,7 @@ export default function Login() {
             {progs.map((p, i) => (
               <FadeIn key={p.id} delay={i * 60}>
                 <Pressy accessibilityRole="button" accessibilityLabel={`Start with ${p.name}`} onPress={() => finish(p.id)} scaleTo={0.98}
-                  style={{ flexDirection: 'row', alignItems: 'center', gap: 14, padding: 14, borderRadius: 24, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line }}>
+                  style={{ flexDirection: 'row', alignItems: 'center', gap: 14, padding: 14, borderRadius: radii.card, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line }}>
                   <ProgLogo p={p} size={48} />
                   <View style={{ flex: 1, gap: 2 }}>
                     <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{p.name.split(' · ')[0]}</Txt>

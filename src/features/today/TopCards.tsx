@@ -77,7 +77,7 @@ export function GoalCard({ soft: compact = false }: { soft?: boolean } = {}) {
       accessibilityLabel={`Your goal: ${goal.toLowerCase()}. ${sub}, ${statusLine(g2).toLowerCase()}. Eaten ${t.k} of ${KCAL_TARGET} kcal.${d.hc && d.wearable ? ` Burned ${burned(d)}.` : ""} Open goal details`}
       onPress={() => router.push('/goal-detail')}>
       <LinearGradient colors={[fixed.blue, '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-        style={{ borderRadius: soft ? 24 : radii.xl, paddingVertical: soft ? 16 : 18, paddingLeft: soft ? 16 : 16, paddingRight: soft ? 16 : 18, flexDirection: 'row', alignItems: 'center', gap: soft ? 16 : 18, overflow: 'hidden' }}>
+        style={{ borderRadius: soft ? radii.card : radii.xl, paddingVertical: soft ? 16 : 18, paddingLeft: soft ? 16 : 16, paddingRight: soft ? 16 : 18, flexDirection: 'row', alignItems: 'center', gap: soft ? 16 : 18, overflow: 'hidden' }}>
         <Svg width={260} height={260} viewBox="0 0 260 260" style={{ position: 'absolute', right: -90, top: -80, opacity: 0.16 }}>
           <Circle cx={130} cy={130} r={120} fill="none" stroke={fixed.white} strokeWidth={18} /><Circle cx={130} cy={130} r={78} fill="none" stroke={fixed.white} strokeWidth={12} />
         </Svg>

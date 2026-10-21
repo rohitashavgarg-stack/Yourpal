@@ -183,7 +183,7 @@ export function MealStep() {
           </View>
         )}
         {read && (
-          <FadeIn style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 16, gap: 8, backgroundColor: c.surface, borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
+          <FadeIn style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 16, gap: 8, backgroundColor: c.surface, borderTopLeftRadius: radii.card, borderTopRightRadius: radii.card }}>
             <Row style={{ gap: 6 }}><Check size={14} strokeWidth={3} color={c.good} /><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.2, color: c.good }}>IDENTIFIED ITEM BY ITEM</Txt></Row>
             <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 26 }}>Rice, dal and roti</Txt>
             {MEAL_ITEMS.map(([n, q]) => (
@@ -269,7 +269,7 @@ export function ReadyContent({ assess }: { assess: string }) {
         </Row>
       </View>
 
-      <View style={{ gap: 4, padding: 16, borderRadius: 24, backgroundColor: c.surface }}>
+      <View style={{ gap: 4, padding: 16, borderRadius: radii.card, backgroundColor: c.surface }}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>SHARED WITH YOUR COACH</Txt>
         {shared.map(([k, v], i) => (
           <Row key={k} style={{ justifyContent: 'space-between', gap: 12, minHeight: 48, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
@@ -279,7 +279,7 @@ export function ReadyContent({ assess }: { assess: string }) {
         ))}
       </View>
 
-      <View style={{ gap: 6, padding: 16, borderRadius: 24, backgroundColor: c.surface }}>
+      <View style={{ gap: 6, padding: 16, borderRadius: radii.card, backgroundColor: c.surface }}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>WHAT HAPPENS NEXT</Txt>
         {next.map(([icon, t, s], i) => (
           <Row key={t} style={{ gap: 14, alignItems: 'flex-start', paddingVertical: 6 }}>

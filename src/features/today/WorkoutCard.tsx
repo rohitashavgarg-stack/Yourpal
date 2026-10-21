@@ -72,7 +72,7 @@ const LiveDot = () => <View style={{ width: 8, height: 8, borderRadius: radii.xs
 
 function Shell({ colors, edge, children, compact = false, label }: { colors: string[]; edge?: string; children: React.ReactNode; compact?: boolean; label: string }) {
   return (
-    <View accessibilityLabel={label} style={{ borderRadius: 24, padding: 16, paddingVertical: compact ? 14 : 16, gap: 12, overflow: 'hidden', borderWidth: edge ? 1.5 : 0, borderColor: edge }}>
+    <View accessibilityLabel={label} style={{ borderRadius: radii.card, padding: 16, paddingVertical: compact ? 14 : 16, gap: 12, overflow: 'hidden', borderWidth: edge ? 1.5 : 0, borderColor: edge }}>
       <LinearGradient colors={colors as any} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
       {!compact && <View pointerEvents="none" style={{ position: 'absolute', right: -70, top: -80, width: 220, height: 220, borderRadius: 110, borderWidth: 14, borderColor: 'rgba(255,255,255,0.05)' }} />}
       {children}
@@ -115,7 +115,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   // expired membership: no Start and no dark glow, one flat card that says why and still shows the plan
   if (paused && (st === 'todo' || st === 'live')) {
     return (
-      <View accessibilityLabel="Workouts are paused" style={{ borderRadius: 24, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
+      <View accessibilityLabel="Workouts are paused" style={{ borderRadius: radii.card, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
         <Row style={{ gap: 12, alignItems: 'flex-start' }}>
           <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={18} color={c.muted} /></View>
           <View style={{ flex: 1, gap: 2 }}>
@@ -248,7 +248,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   if (comeback) {
     const btn = { flex: 1, height: 44, borderRadius: radii.lg, alignItems: 'center' as const, justifyContent: 'center' as const };
     return (
-      <View accessibilityLabel="Easy session" style={{ borderRadius: 24, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
+      <View accessibilityLabel="Easy session" style={{ borderRadius: radii.card, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, letterSpacing: -0.3, color: c.ink }}>Easy session</Txt>
           <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}>5 exercises, about 30 minutes, lighter weights</Txt>

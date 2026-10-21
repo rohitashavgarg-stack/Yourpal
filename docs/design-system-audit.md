@@ -577,7 +577,7 @@ The new scales (from `src/design-system/tokens/`):
 | Scale | Steps |
 |---|---|
 | `fontSizes` (10) | 11, 12, 13, 14, 15, 17, 20, 22, 26, 30 |
-| `radii` (5 and the pill) | 4, 12, 18, 22, 28, 999 |
+| `radii` (6 and the pill) | 4, 12, 18, 22, 24, 28, 999 |
 | `spacing` (4 px grid) | 0, 4, 8, 12, 16, 20, 24, 32, 40 (defined, not applied yet) |
 | `fixed` colours | white `#FFFFFF`, black `#000000`, blue `#2F6BEA`, dark `#0B0E14`, live `#7CF0C8`, shadow `#101828` |
 | `semantic` roles | success, warning, danger, info, progress, muted (each with fg and bg), also on `useTheme()` as `s` |

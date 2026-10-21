@@ -107,7 +107,6 @@ export default function Today() {
           // keep the goal page in step, so tapping a Behind card lands on the option to move the date
           if (hit?.[1] === 'behind') goalV2Store.set({ scenario: 'A bit behind', extendDays: 0, lowerBy: 0, finished: false });
         } },
-      { label: 'Membership hold', options: ['None', 'Frozen', 'Paused'], value: d.hold ?? 'None', onPick: (v) => set({ hold: v as any }) },
       { label: 'Last weigh-in', options: ['Today', '3 days ago', '10+ days ago'], value: gcs.weighDays >= 10 ? '10+ days ago' : gcs.weighDays >= 3 ? '3 days ago' : 'Today', onPick: (v) => goalCardStore.set({ weighDays: v === '10+ days ago' ? 12 : v === '3 days ago' ? 3 : 0 }) },
       ...(gv.version === 'Version 1' ? [{ label: 'Goal card design', options: DESIGNS, value: gs.design, onPick: (v: string) => goalStore.set({ design: v as GoalDesign }) }] : []),
       { label: 'Steps tracker design', options: STEPS_DESIGNS, value: st.design, onPick: (v) => stepsStore.set({ design: v as StepsDesign }) },
@@ -124,7 +123,7 @@ export default function Today() {
       { label: 'Show loading state', run: () => load(1400) },
       { label: 'Reset meals for this time of day', run: () => set({ meals: mealsAt(d.min), openMeal: null }) },
     ],
-  }, [layout, d.todayVariant, d.hc, d.time, d.wkScenario, d.wkDone, d.ci, d.scanFails, d.session, d.ciStart, d.ciOut, d.ciExtend, gs.design, gs.pace, st.design, gv.version, gsz.size, gv.scenario, d.goal, d.hold, gcs.force, gcs.weighDays]);
+  }, [layout, d.todayVariant, d.hc, d.time, d.wkScenario, d.wkDone, d.ci, d.scanFails, d.session, d.ciStart, d.ciOut, d.ciExtend, gs.design, gs.pace, st.design, gv.version, gsz.size, gv.scenario, d.goal, gcs.force, gcs.weighDays]);
 
   // After a break the greeting itself says welcome back (new layout); the days away sit right under the title.
   const greet = { Morning: 'Good morning', Afternoon: 'Good afternoon', Evening: 'Good evening' }[d.time];

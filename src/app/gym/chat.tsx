@@ -109,7 +109,7 @@ export default function CoachChat() {
   ) : g.blocked ? (
     <View style={{ paddingTop: 14, paddingHorizontal: 16, paddingBottom: (kb ? 0 : insets.bottom) + 16, gap: 8 }}>
       <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.md }}>You blocked this chat. Coach Vikram can’t message you.</Txt>
-      <Button kind="secondary" label="Unblock" onPress={() => gymStore.set({ blocked: false })} style={{ height: 48, borderRadius: 24 }} />
+      <Button kind="secondary" label="Unblock" onPress={() => gymStore.set({ blocked: false })} style={{ height: 48, borderRadius: radii.card }} />
     </View>
   ) : (
     <View>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleProp, ViewStyle } from 'react-native';
-import { fixed, shadows } from '@/design-system/tokens';
+import { fixed, radii, shadows } from '@/design-system/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
 
 /**
@@ -9,13 +9,13 @@ import { useTheme } from '@/theme/ThemeProvider';
  *   compact  white card, radius 24, padding 18, gap 10 (the old Card in app/goal-detail.tsx)
  *   dark     the dark card (palette `dark`), radius 28, padding 20, never a shadow
  * The shadow is the card shadow in light mode and none in dark mode, as before.
- * Radius 24 is not a step of the `radii` scale; it is kept here so the compact card does not change (see docs/tokens-review.md).
+ * The compact radius is `radii.card` (24).
  */
 export type CardVariant = 'default' | 'compact' | 'dark';
 
 const SPEC: Record<CardVariant, { radius: number; padding: number; gap?: number }> = {
   default: { radius: 28, padding: 20 },
-  compact: { radius: 24, padding: 18, gap: 10 },
+  compact: { radius: radii.card, padding: 18, gap: 10 },
   dark: { radius: 28, padding: 20 },
 };
 

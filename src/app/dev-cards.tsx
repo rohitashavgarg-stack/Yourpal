@@ -31,7 +31,7 @@ function Harness() {
       if (p.s === 'watch') set({ hc: true, wearable: true });
       if (p.g) goalCardStore.set({ force: p.g as GoalCardState });
     }
-    if (p.c === 'goal' && p.w) goalCardStore.set({ weighDays: Number(p.w) });
+    if (p.w) goalCardStore.set({ weighDays: Number(p.w) });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <ScrollView style={{ flex: 1, backgroundColor: c.bg }} contentContainerStyle={{ padding: 16, paddingTop: insets.top + 24 }}>

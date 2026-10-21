@@ -17,6 +17,6 @@
 
 Shadow: the card shadow in light mode, none in dark mode and none on the `dark` variant (the same rule as before).
 
-Radius 24 is not a step of the `radii` scale (4, 12, 18, 22, 28). It stays 24 so nothing moves; see `docs/tokens-review.md`.
+Radius 24 is `radii.card`, a step of the `radii` scale (4, 12, 18, 22, 24, 28).
 
 Hand-built containers: `scripts/codemods/card-matches.js` looks for `<View>` containers with `backgroundColor: c.surface` and only radius, padding and gap. None matched a variant exactly, so none were replaced. The 33 that look similar are listed in `docs/card-review.md` with the reason each was left.

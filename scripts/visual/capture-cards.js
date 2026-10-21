@@ -13,7 +13,7 @@
 const fs = require('fs'); const path = require('path'); const os = require('os'); const { spawn } = require('child_process');
 const BASE = process.env.APP_URL || 'http://localhost:8082';
 const out = process.argv[2]; if (!out) { console.error('usage: capture-cards.js <outDir>'); process.exit(1); }
-const GOAL_STATES = ['onTrack', 'behind', 'almost', 'complete', 'frozen', 'paused', 'comeback', 'backOn', 'noGoal'];
+const GOAL_STATES = ['onTrack', 'behind', 'almost', 'complete', 'comeback', 'backOn', 'noGoal'];
 const only = ((process.argv.find((a) => a.startsWith('--only=')) || '').slice(7) || '').split(',').filter(Boolean); // e.g. --only=goal- or --only=budget-
 const ALL = [
   ...GOAL_STATES.map((s) => ['goal-' + s, '/dev-cards?c=goal&s=' + s]),
@@ -21,6 +21,7 @@ const ALL = [
   ['goal-flat', '/dev-cards?c=goal&v=flat'],
   ...['default', 'nothing-eaten', 'all-logged', 'workout-done', 'watch'].map((s) => ['budget-' + s, '/dev-cards?c=budget&s=' + s]),
   ...GOAL_STATES.map((s) => ['budget-goal-' + s, '/dev-cards?c=budget&s=default&g=' + s]),
+  ['budget-goal-onTrack-stale', '/dev-cards?c=budget&s=default&g=onTrack&w=12'],
 ];
 const SHOTS = ALL.filter(([name]) => !only.length || only.some((w) => name.startsWith(w)));
 const edge = ['C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Google/Chrome/Application/chrome.exe'].find((p) => fs.existsSync(p));

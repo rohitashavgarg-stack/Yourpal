@@ -173,7 +173,7 @@ export function WaterCard() {
       </Pressy>
       {/* Sits above the card press target so tapping it only adds a glass: a 32 px pill (glass + plus) with a 44 px touch area. */}
       <Pressy accessibilityRole="button" accessibilityLabel="Add a glass, 250 millilitres" onPress={() => change(0.25)} scaleTo={0.92} hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
-        style={{ position: 'absolute', top: 16, right: 16, height: 32, paddingHorizontal: 8, borderRadius: 24, backgroundColor: GLASS, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4, zIndex: 3 }}>
+        style={{ position: 'absolute', top: 16, right: 16, height: 32, paddingHorizontal: 8, borderRadius: radii.card, backgroundColor: GLASS, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4, zIndex: 3 }}>
         <GlassWater size={20} color={fixed.white} />
         <Plus size={16} color={fixed.white} />
       </Pressy>
@@ -224,7 +224,7 @@ export function WeightCard() {
   return (
     <View style={{ width: 160 }}>
     <Tile bg={isDark ? 'rgba(255,255,255,0.05)' : c.surface} shadow={!isDark} label="Weight" a11y={`Weight ${fmt1(d.weight)} kg, ${diff <= 0 ? 'down' : 'up'} ${Math.abs(diff)} kg this week. Log weight`} onPress={() => (paused ? router.push({ pathname: '/progress/metric', params: { k: 'weight' } }) : router.push('/log-weight'))}
-      right={<View style={{ height: 32, minWidth: 32, paddingHorizontal: 8, borderRadius: 24, backgroundColor: isDark ? GLASS : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Plus size={16} color={isDark ? fixed.white : c.accentText} /></View>}>
+      right={<View style={{ height: 32, minWidth: 32, paddingHorizontal: 8, borderRadius: radii.card, backgroundColor: isDark ? GLASS : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Plus size={16} color={isDark ? fixed.white : c.accentText} /></View>}>
       <Txt style={{ ...NUM, color: c.ink }}>{fmt1(d.weight)}<Txt style={{ fontFamily: font.regular, fontSize: 16, lineHeight: 22, color: c.muted }}> kg</Txt></Txt>
       <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xs, lineHeight: 17, color: diff <= 0 ? c.good : c.warn }}>{sign} {Math.abs(diff)} kg this week</Txt>
       <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>

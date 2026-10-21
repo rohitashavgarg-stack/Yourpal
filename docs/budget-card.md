@@ -6,7 +6,7 @@ The card draws what it is given. `TodayBudgetCard` (`src/features/today/TodayBud
 
 ```tsx
 <BudgetCard eaten={1150} eatTarget={1800} burned={0} burnTarget={350} burnSource="plan" />
-<BudgetCard eaten={1150} eatTarget={1800} burned={320} burnTarget={350} burnSource="watch" goalState="frozen" />
+<BudgetCard eaten={1150} eatTarget={1800} burned={320} burnTarget={350} burnSource="watch" goalState="behind" />
 ```
 
 ## Props (every state is a prop)
@@ -64,7 +64,8 @@ Drawn alone on the developer page `/dev-cards?c=budget` (`src/app/dev-cards.tsx`
 | `budget-all-logged` | every meal logged |
 | `budget-workout-done` | burn 380, "350 done" |
 | `budget-watch` | live burn 320, "350 watch" |
-| `budget-goal-<state>` | the default day with the goal row pinned to each of the 9 goal states |
+| `budget-goal-onTrack-stale` | the default day with a weigh-in 12 days old: "Needs a weigh-in" |
+| `budget-goal-<state>` | the default day with the goal row pinned to each of the 7 goal states |
 
 ## Known behaviour
 
@@ -74,4 +75,4 @@ Drawn alone on the developer page `/dev-cards?c=budget` (`src/app/dev-cards.tsx`
 
 ## Checked
 
-After the move into the pattern, 28 images (14 per theme) were compared with the baseline taken before. The 12 that are not about a goal state, or are on track, were identical (0.00% of pixels). The other 16 (the 8 non-on-track goal states, in both themes) changed only in the goal row, on purpose: the strip now follows the goal state (Behind in amber, Almost there in mint, Complete, Frozen, Paused, Resumes today, Back on in words, and "No goal set yet"). Before, the strip ignored the goal state and always showed a percentage.
+After the move into the pattern, 28 images (14 per theme) were compared with the baseline taken before. The 12 that are not about a goal state, or are on track, were identical (0.00% of pixels). The other 16 (the 8 non-on-track goal states, in both themes) changed only in the goal row, on purpose: the strip now follows the goal state (Behind in amber, Almost there in mint, Complete and Back on in words, and "No goal set yet"). Before, the strip ignored the goal state and always showed a percentage. A later fix replaced the percentage with the kg line and added the stale weigh-in.

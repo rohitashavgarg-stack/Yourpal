@@ -97,18 +97,13 @@ function Journey({ g }: { g: Goal2 }) {
   );
 }
 
-// The strip variant. Percentages stay what the Daily budget card always showed (the share of the goal done); the states that are not
-// "on its way" say the state in words, in the colour of that state.
+// The strip variant: one row with the goal name and, on the right, how far the member got in the goal's own words ("1.6 of 6.0 kg"),
+// in the colour of the state. Complete and Back on say the state in words instead; a weight or muscle goal whose last weigh-in is 10 days
+// or more old says "Needs a weigh-in" in amber; no goal says so in the name.
 const STRIP = { white: '#F3F4F6', soft: '#C9CDD6' };
-function GoalStripRow({ g, state }: { g: Goal2; state: GoalCardState }) {
-  const none = state === 'noGoal';
-  const percent = Math.round(Math.max(0, Math.min(1, g.pct)) * 100);
-  const words = state === 'behind' || state === 'almost' || state === 'onTrack' ? null : LOOK[state as Exclude<GoalCardState, 'noGoal'>]?.pill.label ?? null;
-  const right = none ? '' : words ?? `${percent}% completed`;
-  const rightColor = state === 'behind' || state === 'frozen' ? GC.amber : state === 'almost' || state === 'complete' || state === 'backOn' ? GC.mint : STRIP.soft;
-  const name = none ? 'No goal set yet' : g.name;
+function GoalStripRow({ name, right, rightColor, none }: { name: string; right: string; rightColor: string; none: boolean }) {
   return (
-    <Pressy accessibilityRole="link" accessibilityLabel={none ? 'No goal set yet. Open' : `Your goal: ${g.name}, ${right}. Open`} onPress={() => router.push('/goal-detail')} scaleTo={0.98}
+    <Pressy accessibilityRole="link" accessibilityLabel={none ? 'No goal set yet. Open' : `Your goal: ${name}, ${right}. Open`} onPress={() => router.push('/goal-detail')} scaleTo={0.98}
       style={{ minHeight: 64, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.14)', backgroundColor: 'rgba(255,255,255,0.07)', paddingHorizontal: 18, justifyContent: 'center' }}>
       <Row style={{ gap: 12 }}>
         <Target size={22} color={none ? GC.emptyTitle : STRIP.white} />
@@ -127,7 +122,7 @@ function GoalStripRow({ g, state }: { g: Goal2; state: GoalCardState }) {
  * "Programme goal": the member's goal, in three looks. All of them follow the same goal state (GoalCardState).
  *   card   the dark card on Progress (and on Today when the demo switch "Top card" is "Goal card"): name, date, status pill, progress picture, numbers
  *   flat   the header of the goal page: no card, status colours of the page, a large visual with a "now" bubble
- *   strip  one row, the goal inside the Daily budget card on Today: target icon, "Goal", the name, and the percentage or the state in words
+ *   strip  one row, the goal inside the Daily budget card on Today: target icon, "Goal", the name, and how far the member got ("1.6 of 6.0 kg")
  * `state` and `weighDays` pin a state for the demo panel and the screenshot page; without them the state comes from the member's data.
  */
 export type GoalCardVariant = 'card' | 'flat' | 'strip';
@@ -149,7 +144,19 @@ export function GoalCard({ variant = 'card', state: stateProp, weighDays: weighP
   const verb = g.kind === 'weight' ? 'lost' : g.kind === 'muscle' ? 'gained' : g.kind === 'lean' ? 'lower' : 'added';
 
   // ---- the goal row inside the Daily budget card ----
-  if (variant === 'strip') return <GoalStripRow g={g} state={state} />;
+  if (variant === 'strip') {
+    const none = state === 'noGoal';
+    const kgGoal = g.kind === 'weight' || g.kind === 'muscle';
+    const sampleS = demo && kgGoal && !none ? DEMO[state] : null; // the same sample numbers the card shows when a state is pinned
+    const lostS = sampleS ? sampleS.lost : done;
+    const unit = g.unit === '%' ? '%' : ` ${g.unit}`;
+    const line = g.kind === 'consistency' ? `${g.currentValue} of ${g.weeklyTarget} this week` : `${fmtVal(g, lostS)} of ${fmtVal(g, total)}${unit}${g.kind === 'agility' ? ' faster' : ''}`;
+    const inWords = state === 'complete' || state === 'backOn';
+    const staleS = kgGoal && weighDays >= STALE_WEIGH_DAYS && !inWords;
+    const right = none ? '' : inWords ? LOOK[state].pill!.label : staleS ? 'Needs a weigh-in' : line;
+    const rightColor = staleS ? GC.amber : state === 'behind' ? GC.amber : state === 'almost' || inWords ? GC.mint : STRIP.soft;
+    return <GoalStripRow name={none ? 'No goal set yet' : g.name} right={right} rightColor={rightColor} none={none} />;
+  }
 
   // ---- the goal page keeps its own header (no card around it, status colours): unchanged ----
   if (variant === 'flat') {
@@ -173,7 +180,7 @@ export function GoalCard({ variant = 'card', state: stateProp, weighDays: weighP
     );
   }
 
-  const box = { borderRadius: 24, paddingVertical: 16, paddingHorizontal: 15, overflow: 'hidden' as const, borderWidth: 1 };
+  const box = { borderRadius: radii.card, paddingVertical: 16, paddingHorizontal: 15, overflow: 'hidden' as const, borderWidth: 1 };
 
   if (state === 'noGoal') {
     // No goal yet: a different, quiet layout. No glow, no bar, no number.
@@ -207,7 +214,7 @@ export function GoalCard({ variant = 'card', state: stateProp, weighDays: weighP
   const small = { fontSize: fontSizes.sm, lineHeight: 19 };
   return (
     <Pressy accessibilityRole="link" scaleTo={0.98} onPress={() => router.push('/goal-detail')}
-      accessibilityLabel={`${g.name}, ${suffix}. ${leftBold}${leftRest}. ${look.pill.label}.${right ? ` ${right.text}.` : ''} Open goal details`}>
+      accessibilityLabel={`${g.name}, ${suffix}. ${leftBold}${leftRest}. ${look.pill ? `${look.pill.label}.` : ''}${right ? ` ${right.text}.` : ''} Open goal details`}>
       <View style={{ ...box, backgroundColor: GC.bg, borderColor: GC.border, gap: 12, marginBottom: 4 }}>
         <Glow color={look.glow.color} a={look.glow.a} />
         {/* the title with the date as subtext under it, and the pill in front on the same row: the title wraps inside its own space, the pill never moves down or truncates */}
@@ -216,9 +223,11 @@ export function GoalCard({ variant = 'card', state: stateProp, weighDays: weighP
             <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 32, letterSpacing: -0.24, color: GC.title }}>{g.name}</Txt>
             <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: GC.date }}>{suffix}</Txt>
           </View>
-          <View style={{ flexShrink: 0, paddingVertical: 6, paddingHorizontal: 13, borderRadius: radii.pill, backgroundColor: look.pill.bg, borderWidth: look.pill.border ? 1 : 0, borderColor: look.pill.border }}>
-            <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: look.pill.fg }}>{look.pill.label}</Txt>
-          </View>
+          {look.pill && (
+            <View style={{ flexShrink: 0, paddingVertical: 6, paddingHorizontal: 13, borderRadius: radii.pill, backgroundColor: look.pill!.bg, borderWidth: look.pill!.border ? 1 : 0, borderColor: look.pill!.border }}>
+              <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: look.pill!.fg }}>{look.pill!.label}</Txt>
+            </View>
+          )}
         </Row>
         {/* the 36-segment bar is for body-weight goals; every other kind keeps its own picture (ticks for body fat, staircase, stopwatch ruler, race lane, workout slots), in the state colour */}
         {kg ? <Segments filled={filled} color={look.seg} /> : <GoalVisual g={g} size="mini" color={look.seg} track={GC.unfilled} ring={GC.rest} share={state === 'complete' && g.kind !== 'consistency' ? 1 : undefined} />}
