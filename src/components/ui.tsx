@@ -28,83 +28,22 @@ export function Txt({ v = 'body', muted, color, style, ...rest }: TextProps & { 
   return <Text {...rest} style={[V[v], { color: color ?? (muted || v === 'label' || v === 'caption' ? c.muted : c.ink) }, style, { lineHeight: lh }]} />;
 }
 
-// ---------- Pressable with iOS-style scale ----------
-const APressable = Animated.createAnimatedComponent(Pressable);
-export function Pressy({ style, children, haptics = true, scaleTo = 0.97, onPress, ...rest }: PressableProps & { style?: StyleProp<ViewStyle>; haptics?: boolean; scaleTo?: number; children?: React.ReactNode }) {
-  const s = useSharedValue(1);
-  const a = useAnimatedStyle(() => ({ transform: [{ scale: s.value }] }));
-  return (
-    <APressable
-      {...rest}
-      onPressIn={(e) => { s.value = withSpring(scaleTo, spring.snappy); rest.onPressIn?.(e); }}
-      onPressOut={(e) => { s.value = withSpring(1, spring.bouncy); rest.onPressOut?.(e); }}
-      onPress={(e) => { if (haptics) haptic.tap(); onPress?.(e); }}
-      style={[style as any, a]}
-    >
-      {children}
-    </APressable>
-  );
-}
+// Pressy, Chip, Pill and the text inputs moved to src/design-system/primitives/. Re-exported so these import paths keep working.
+export { Pressy } from '@/design-system/primitives/Pressy';
+export { Chip } from '@/design-system/primitives/Chip';
+export { Pill } from '@/design-system/primitives/Pill';
+export { Field, NoteField } from '@/design-system/primitives/Input';
 
 // ---------- Buttons ----------
-type BtnKind = 'primary' | 'accent' | 'secondary' | 'ghost' | 'white' | 'outline';
-export function Button({ kind = 'primary', label, onPress, disabled, icon, style, small, accessibilityLabel }: {
-  kind?: BtnKind; label: string; onPress?: () => void; disabled?: boolean; icon?: React.ReactNode; style?: StyleProp<ViewStyle>; small?: boolean; accessibilityLabel?: string;
-}) {
-  const { c } = useTheme();
-  const bg = { primary: c.ink, accent: c.accent, secondary: c.surface2, ghost: 'transparent', white: fixed.white, outline: 'transparent' }[kind];
-  const fg = { primary: c.bg, accent: c.accentInk, secondary: c.ink, ghost: c.accentText, white: fixed.dark, outline: c.ink }[kind];
-  return (
-    <Pressy
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel ?? label}
-      accessibilityState={{ disabled: !!disabled }}
-      disabled={disabled}
-      onPress={onPress}
-      style={[{
-        height: small ? 44 : 56, borderRadius: small ? radii.lg : radii.xl, backgroundColor: bg, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-        paddingHorizontal: 20, opacity: disabled ? 0.4 : 1, borderWidth: kind === 'outline' ? 1 : 0, borderColor: c.line,
-      }, style]}
-    >
-      {icon}
-      <Text style={{ fontFamily: font.semibold, fontSize: small ? fontSizes.md : 16, lineHeight: small ? 18 : 21, color: fg }}>{label}</Text>
-    </Pressy>
-  );
-}
+export { Button, IconButton } from '@/design-system/primitives/Button';
+export type { ButtonProps, ButtonKind, ButtonSize, IconButtonProps } from '@/design-system/primitives/Button';
 
 // ---------- Card ----------
 // The Card moved to src/design-system/primitives/Card.tsx (variants: default, compact, dark). Re-exported so this import path keeps working.
 export { Card } from '@/design-system/primitives/Card';
 
 // ---------- Outline chip (reference style) ----------
-export function Chip({ label, icon, tone = 'default', onDark, style }: { label: string; icon?: React.ReactNode; tone?: 'default' | 'good' | 'warn' | 'live'; onDark?: boolean; style?: StyleProp<ViewStyle> }) {
-  const { c } = useTheme();
-  const col = tone === 'good' ? c.good : tone === 'warn' ? c.warn : tone === 'live' ? c.live : onDark ? fixed.white : c.ink;
-  const border = tone === 'default' ? (onDark ? 'rgba(255,255,255,0.28)' : c.chipLine) : col;
-  return (
-    <View style={[{ height: 28, paddingHorizontal: 11, borderRadius: 14, borderWidth: 1, borderColor: border, flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start' }, style]}>
-      {icon}
-      <Text style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: col }}>{label}</Text>
-    </View>
-  );
-}
-
 // ---------- Selectable pill (filter / option) ----------
-export function Pill({ label, on, onPress, style }: { label: string; on: boolean; onPress: () => void; style?: StyleProp<ViewStyle> }) {
-  const { c } = useTheme();
-  const p = useSharedValue(on ? 1 : 0);
-  useEffect(() => { p.value = withTiming(on ? 1 : 0, { duration: 220 }); }, [on]);
-  const a = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(p.value, [0, 1], ['rgba(0,0,0,0)', c.ink]),
-    borderColor: interpolateColor(p.value, [0, 1], [c.surface3, c.ink]),
-  }));
-  return (
-    <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={onPress} style={[{ height: 44, paddingHorizontal: 16, borderRadius: radii.lg, borderWidth: 1, alignItems: 'center', justifyContent: 'center' }, a as any, style]}>
-      <Text style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 18, color: on ? c.bg : c.ink }}>{label}</Text>
-    </Pressy>
-  );
-}
-
 // ---------- Segmented control with sliding thumb ----------
 export function Segmented<T extends string>({ options, value, onChange, icons, accessibilityLabel }: { options: { value: T; label: string }[]; value: T; onChange: (v: T) => void; icons?: Partial<Record<T, (color: string) => React.ReactNode>>; accessibilityLabel?: string }) {
   const { c } = useTheme();
@@ -132,52 +71,6 @@ export function Segmented<T extends string>({ options, value, onChange, icons, a
 }
 
 // ---------- Text field ----------
-export const Field = React.forwardRef<TextInput, TextInputProps & { error?: boolean; prefix?: string }>(function Field({ error, prefix, style, ...rest }, ref) {
-  const { c } = useTheme();
-  const [focus, setFocus] = React.useState(false);
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', height: 56, borderRadius: radii.xl, borderWidth: focus || error ? 1.5 : 1, borderColor: error ? c.warn : focus ? c.accent : c.line, backgroundColor: c.surface, paddingHorizontal: 18, gap: 10 }}>
-      {prefix ? <Text style={{ fontFamily: font.medium, fontSize: 16, lineHeight: 21, color: c.muted }}>{prefix}</Text> : null}
-      <TextInput
-        ref={ref}
-        placeholderTextColor={c.muted}
-        {...rest}
-        onFocus={(e) => { setFocus(true); rest.onFocus?.(e); }}
-        onBlur={(e) => { setFocus(false); rest.onBlur?.(e); }}
-        style={[{ flex: 1, fontFamily: font.medium, fontSize: 16, color: c.ink, height: '100%' as any, outlineStyle: 'none' as any }, style]}
-      />
-    </View>
-  );
-});
-
-export function NoteField({ value, onChangeText, placeholder, accessibilityLabel, autoFocus, error, maxLength = 500, minHeight = 112 }: {
-  value: string; onChangeText: (t: string) => void; placeholder?: string; accessibilityLabel?: string; autoFocus?: boolean; error?: boolean; maxLength?: number; minHeight?: number;
-}) {
-  const { c } = useTheme();
-  const [focus, setFocus] = React.useState(false);
-  return (
-    <View>
-      <View style={{ minHeight, borderRadius: radii.lg, borderWidth: focus || error ? 1.5 : 1, borderColor: error ? c.warn : focus ? c.accent : c.line, backgroundColor: c.surface, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 8 }}>
-        <TextInput
-          value={value}
-          onChangeText={onChangeText}
-          placeholder={placeholder}
-          placeholderTextColor={c.muted}
-          accessibilityLabel={accessibilityLabel}
-          autoFocus={autoFocus}
-          multiline
-          maxLength={maxLength}
-          textAlignVertical="top"
-          onFocus={() => setFocus(true)}
-          onBlur={() => setFocus(false)}
-          style={{ minHeight: minHeight - 34, maxHeight: 220, fontFamily: font.medium, fontSize: 16, lineHeight: 23, color: c.ink, padding: 0, outlineStyle: 'none' as any }}
-        />
-      </View>
-      <Text style={{ alignSelf: 'flex-end', marginTop: 4, marginRight: 8, fontFamily: font.regular, fontSize: fontSizes.xs, lineHeight: 17, color: c.muted }}>{value.length}/{maxLength}</Text>
-    </View>
-  );
-}
-
 export function Row({ style, children, ...rest }: { style?: StyleProp<ViewStyle>; children: React.ReactNode; collapsable?: boolean }) {
   return <View {...rest} style={[{ flexDirection: 'row', alignItems: 'center' }, style]}>{children}</View>;
 }

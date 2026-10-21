@@ -18,6 +18,7 @@ import { buildExercises, WORKOUT_MIN } from '@/features/workout/session';
 import { rel } from './meals';
 import { useLogGate } from '@/lib/logGate';
 import { createStore } from '@/features/progress/store';
+import { Button } from '@/design-system/primitives/Button';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // What the member said about a missed workout (kept for the day): moved to tomorrow or skipped. "I did it" logs it as done instead.
@@ -58,16 +59,9 @@ function WorkoutTitle({ name, time, tone = 'default' }: { name: string; time?: s
   );
 }
 
-const Btn = ({ label, onPress }: { label: string; onPress: () => void }) => (
-  <Pressy accessibilityRole="button" onPress={onPress} style={{ height: 50, borderRadius: 25, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
-    <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: fixed.dark }}>{label}</Txt>
-  </Pressy>
-);
-const SmallBtn = ({ label, onPress, solid = false }: { label: string; onPress: () => void; solid?: boolean }) => (
-  <Pressy accessibilityRole="button" onPress={onPress} style={{ height: 40, paddingHorizontal: 16, borderRadius: 20, backgroundColor: solid ? fixed.white : 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
-    <Txt style={{ fontFamily: solid ? font.semibold : font.medium, fontSize: fontSizes.md, lineHeight: 20, color: solid ? fixed.dark : fixed.white }}>{label}</Txt>
-  </Pressy>
-);
+// The two buttons on the dark workout card are the Button primitive: white pill (medium) and the small white or glass pill (tight).
+const Btn = ({ label, onPress }: { label: string; onPress: () => void }) => <Button kind="white" size="medium" label={label} onPress={onPress} />;
+const SmallBtn = ({ label, onPress, solid = false }: { label: string; onPress: () => void; solid?: boolean }) => <Button kind={solid ? 'white' : 'glass'} size="tight" label={label} onPress={onPress} />;
 const LiveDot = () => <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: MINT }} />;
 
 function WorkoutShell({ colors, edge, children, compact = false, label }: { colors: string[]; edge?: string; children: React.ReactNode; compact?: boolean; label: string }) {

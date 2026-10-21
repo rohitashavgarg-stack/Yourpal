@@ -7,6 +7,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { FoodType } from '@/lib/data';
 import { Pressy } from './ui';
+import { Button, IconButton, IconButtonProps } from '@/design-system/primitives/Button';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // ---------- Veg / egg / non-veg mark (Indian food label style) ----------
@@ -71,17 +72,10 @@ export function Tag({ label, bg, fg, style }: { label: string; bg: string; fg: s
 }
 
 // ---------- Small black pill button ----------
+// The Button primitive with size="compact". Kept under its old name.
+const PILL_KIND = { ink: 'primary', white: 'white', soft: 'secondary' } as const;
 export function PillBtn({ label, onPress, tone = 'ink', icon, style, h = 36 }: { label: string; onPress?: () => void; tone?: 'ink' | 'white' | 'soft'; icon?: React.ReactNode; style?: StyleProp<ViewStyle>; h?: number }) {
-  const { c } = useTheme();
-  const bg = tone === 'white' ? fixed.white : tone === 'soft' ? c.surface2 : c.ink;
-  const fg = tone === 'white' ? fixed.dark : tone === 'soft' ? c.ink : c.bg;
-  return (
-    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} hitSlop={{ top: (44 - h) / 2, bottom: (44 - h) / 2 }}
-      style={[{ height: h, paddingHorizontal: 14, borderRadius: h / 2, backgroundColor: bg, flexDirection: 'row', alignItems: 'center', gap: 5 }, style]}>
-      {icon}
-      <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 17, color: fg }}>{label}</Text>
-    </Pressy>
-  );
+  return <Button size="compact" height={h} kind={PILL_KIND[tone]} label={label} onPress={onPress} icon={icon} style={style} />;
 }
 
 // ---------- Soft ring (steps etc.) ----------
@@ -120,23 +114,8 @@ export function HeartIcon({ size = 14, color }: { size?: number; color: string }
   return <Svg width={size} height={size} viewBox="0 0 24 24"><Path d="M12 21s-7.5-4.6-9.5-9.2C1.1 8.4 3.3 5 6.6 5c2 0 3.4 1 5.4 3 2-2 3.4-3 5.4-3 3.3 0 5.5 3.4 4.1 6.8C19.5 16.4 12 21 12 21z" fill={color} /></Svg>;
 }
 
-// Close / back button for full-screen pages.
-export function RoundBtn({ label, onPress, children, bg, style, glass }: { label: string; onPress: () => void; children: React.ReactNode; bg?: string; style?: StyleProp<ViewStyle>; glass?: boolean }) {
-  const { c, isDark } = useTheme();
-  // Glass buttons get a soft shadow so they still read on a plain page.
-  const rim = glass ? { shadowColor: fixed.shadow, shadowOpacity: isDark ? 0.35 : 0.1, shadowRadius: 10, shadowOffset: { width: 0, height: 3 }, elevation: 3 } : null;
-  return (
-    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress}
-      style={[{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center' }, rim, style]}>
-      {glass ? (
-        <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radii.lg, overflow: 'hidden' }}>
-          <GlassBackdrop radius={22} tint={Platform.OS === 'web' ? (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.82)') : undefined} />
-        </View>
-      ) : null}
-      {glass ? <View style={{ zIndex: 2 }}>{children}</View> : children}
-    </Pressy>
-  );
-}
+// Close / back button for full-screen pages. The IconButton primitive under its old name.
+export function RoundBtn(props: IconButtonProps) { return <IconButton {...props} />; }
 
 export const popIn = (delay: number) => withSequence(withTiming(0, { duration: delay }), withSpring(1, spring.bouncy));
 

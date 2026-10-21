@@ -8,6 +8,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { SubPage as DSSubPage, SubPageProps } from '@/design-system/primitives/SubPage';
+import { IconButton } from '@/design-system/primitives/Button';
 import { ListCard } from '@/design-system/primitives/ListCard';
 
 
@@ -98,13 +99,7 @@ export function GrowBar({ pct, color, h = 6, track }: { pct: number; color: stri
 
 // ---------- Round − / + stepper button ----------
 export function StepBtn({ label, sign, onPress }: { label: string; sign: '−' | '+'; onPress: () => void }) {
-  const { c } = useTheme();
-  return (
-    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} scaleTo={0.9}
-      style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
-      <Txt style={{ fontSize: fontSizes.xl, fontFamily: font.medium }}>{sign}</Txt>
-    </Pressy>
-  );
+  return <IconButton label={label} onPress={onPress} scaleTo={0.9}><Txt style={{ fontSize: fontSizes.xl, fontFamily: font.medium }}>{sign}</Txt></IconButton>;
 }
 
 // ---------- Horizontal shake for inline errors (timing, no overshoot) ----------
