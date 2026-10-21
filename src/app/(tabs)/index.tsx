@@ -26,6 +26,7 @@ import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
 import { ViewOnly } from '@/features/today/ViewOnly';
 import { TodayBudgetCard, topCardStore } from '@/features/today/TodayBudget';
 import { TodayGreeting } from '@/features/today/TodayGreeting';
+import { DayQuote } from '@/features/today/DayQuote';
 import { NoPlanCard } from '@/features/today/NoPlanCard';
 import { planStore } from '@/lib/planState';
 import { PushBanner } from '@/features/reminders/PushBanner';
@@ -159,6 +160,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
             <Enter i={1}>{!assigned ? <NoPlanCard /> : topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</Enter>
             {comebackNew && forYou.length > 0 && <Enter i={1}><ForYouStack /></Enter>}
             {order.map((k, i) => <Enter key={k} i={2 + i}>{slots[k]}</Enter>)}
+            <Enter i={7}><DayQuote /></Enter>
           </>
         ) : (
           <>

@@ -55,3 +55,20 @@ export function forceCtx(c: TodayCtx, k: GreetingState): TodayCtx {
     default: return c;
   }
 }
+
+// A line to close the day on, at the bottom of Today. One a day, picked by the date, the same all day. Plain, no emoji, no hype.
+export const QUOTES = [
+  'Show up. The rest follows.',
+  'Small sessions, done often, change a body.',
+  'You do not have to feel ready. You only have to start.',
+  'Strong is built one ordinary day at a time.',
+  'Progress is quiet. Keep going anyway.',
+  'Rest is part of the plan, not a break from it.',
+  'The best workout is the one you actually do.',
+  'Be a little better than your last session.',
+  'Eat well, sleep well, lift well. Repeat.',
+  'Consistency beats intensity, every month of the year.',
+  'Your future self is watching what you do today.',
+  'Discipline is just remembering what you want.',
+];
+export const quoteOfDay = (day: number) => QUOTES[day % QUOTES.length];

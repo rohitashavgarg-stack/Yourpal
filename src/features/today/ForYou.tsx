@@ -16,7 +16,7 @@ import { plannedMin, useDomain, totals, workoutState } from '@/lib/domain';
 import { useStore } from '@/lib/store';
 import { planStore } from '@/lib/planState';
 import { nextMeal } from './meals';
-import { QuickLogSheet } from './QuickLogSheet';
+import { LogMealsSheet } from './LogMealsSheet';
 import { MISSED_AFTER, missedWkStore } from './WorkoutCard';
 import { reminderStore, useReminders } from '@/features/reminders/reminders';
 import { useLogsPaused } from '@/lib/logGate';
@@ -96,11 +96,11 @@ export function useForYou(): Item[] {
     const meal = nm ? MEALS.find((m) => m.id === nm) : undefined;
     if (meal && d.min >= meal.t - 30) {
       const late = d.min > meal.t + 60;
-      out.push({ key: 'log-meal', title: 'Log your ' + meal.n.toLowerCase(), body: late ? 'It was due at ' + fmtT(meal.t).full + '. Log it, or skip it if you missed it.' : 'It is time for ' + meal.n.toLowerCase() + '. Log it when you eat.', tone: 'accent', icon: UtensilsCrossed, btn: 'Log meal', act: () => openSheet(<QuickLogSheet mealId={meal.id} mode="scan" />, { label: 'Log a meal' }) });
+      out.push({ key: 'log-meal', title: 'Log your ' + meal.n.toLowerCase(), body: late ? 'It was due at ' + fmtT(meal.t).full + '. Log it, or skip it if you missed it.' : 'It is time for ' + meal.n.toLowerCase() + '. Log it when you eat.', tone: 'accent', icon: UtensilsCrossed, btn: 'Log meal', act: () => openSheet(<LogMealsSheet />, { label: 'Log meals' }) });
     }
     const planned = plannedMin(state.profile.time);
     if (workoutState(d) === 'todo' && d.min - planned > MISSED_AFTER && !missedWk.answer && !live.some((u) => u.key === 'log')) {
-      out.push({ key: 'log-workout', title: 'Log your workout', body: 'Leg day was planned for ' + fmtT(planned).full + '. Log it if you trained, or skip it.', tone: 'accent', icon: Dumbbell, btn: 'Log workout', act: () => startWorkout() });
+      out.push({ key: 'log-workout', title: 'Log your workout', body: 'Leg day was planned for ' + fmtT(planned).full + '. Log it if you trained, or skip it.', tone: 'accent', icon: Dumbbell, btn: 'Start workout', act: () => startWorkout() });
     }
   }
   // Personal reminders (log your water, log your weight, steps behind): a card each, last in the stack; the meals reminder lives in the meals card.
