@@ -1,0 +1,1536 @@
+[
+ {
+  "id": "route:/gym",
+  "screen": "Gym",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "app/(tabs)/gym.tsx"
+  ]
+ },
+ {
+  "id": "route:/",
+  "screen": "Today",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 12,
+  "files": [
+   "app/(tabs)/index.tsx",
+   "features/today/TopCards.tsx",
+   "features/today/WorkoutCard.tsx",
+   "features/today/WeekCard.tsx",
+   "features/today/timeline.ts",
+   "features/today/ForYou.tsx",
+   "features/today/ui.ts",
+   "features/today/CheckInBar.tsx",
+   "features/today/ViewOnly.tsx",
+   "features/today/TodayBudget.tsx",
+   "features/today/TodayGreeting.tsx",
+   "features/today/DayQuote.tsx",
+   "features/today/NoPlanCard.tsx",
+   "features/reminders/PushBanner.tsx",
+   "features/today/GoalCards.tsx",
+   "features/today/LogMealsSheet.tsx",
+   "features/reminders/push.ts"
+  ]
+ },
+ {
+  "id": "route:/plans",
+  "screen": "Plans",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 21,
+  "files": [
+   "app/(tabs)/plans.tsx",
+   "features/plans/WorkoutPlan.tsx",
+   "features/plans/DietPlan.tsx",
+   "features/plans/QtySheet.tsx",
+   "features/plans/qty.ts"
+  ]
+ },
+ {
+  "id": "route:/progress",
+  "screen": "Progress",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "app/(tabs)/progress.tsx"
+  ]
+ },
+ {
+  "id": "route:/checkin",
+  "screen": "Check-in map",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/checkin.tsx",
+   "features/checkin/GymMap.tsx"
+  ]
+ },
+ {
+  "id": "route:/coach",
+  "screen": "Coach",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "app/coach.tsx"
+  ]
+ },
+ {
+  "id": "route:/exercise-search",
+  "screen": "Exercise search",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "app/exercise-search.tsx"
+  ]
+ },
+ {
+  "id": "route:/food",
+  "screen": "Food detail",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 7,
+  "files": [
+   "app/food.tsx"
+  ]
+ },
+ {
+  "id": "route:/goal-detail",
+  "screen": "Your goal",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 9,
+  "files": [
+   "app/goal-detail.tsx"
+  ]
+ },
+ {
+  "id": "route:/goal",
+  "screen": "Change goal",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/goal.tsx"
+  ]
+ },
+ {
+  "id": "route:/gym/assessments",
+  "screen": "Assessments",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "app/gym/assessments.tsx"
+  ]
+ },
+ {
+  "id": "route:/gym/attendance",
+  "screen": "Attendance",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 5,
+  "files": [
+   "app/gym/attendance.tsx"
+  ]
+ },
+ {
+  "id": "route:/gym/break",
+  "screen": "Membership pauses",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 4,
+  "files": [
+   "app/gym/break.tsx"
+  ]
+ },
+ {
+  "id": "route:/gym/chat",
+  "screen": "Coach chat",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 11,
+  "files": [
+   "app/gym/chat.tsx",
+   "features/chat/AudioBubble.tsx",
+   "features/chat/Composer.tsx",
+   "features/chat/emoji.ts"
+  ]
+ },
+ {
+  "id": "route:/gym/confirm",
+  "screen": "Confirm session",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/gym/confirm.tsx"
+  ]
+ },
+ {
+  "id": "route:/gym/membership",
+  "screen": "Membership",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/gym/membership.tsx"
+  ]
+ },
+ {
+  "id": "route:/gym/pt",
+  "screen": "PT package",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/gym/pt.tsx"
+  ]
+ },
+ {
+  "id": "route:/index",
+  "screen": "Entry redirect",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/index.tsx"
+  ]
+ },
+ {
+  "id": "route:/log-height",
+  "screen": "Log height",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/log-height.tsx"
+  ]
+ },
+ {
+  "id": "route:/log-weight",
+  "screen": "Log weight",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/log-weight.tsx"
+  ]
+ },
+ {
+  "id": "route:/login",
+  "screen": "Log in",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "app/login.tsx",
+   "components/OtpInput.tsx"
+  ]
+ },
+ {
+  "id": "route:/notifications",
+  "screen": "Notifications",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "app/notifications.tsx"
+  ]
+ },
+ {
+  "id": "route:/onboarding",
+  "screen": "Onboarding (frame)",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/plan.ts",
+   "features/onboarding/Steps.tsx",
+   "features/onboarding/path.ts"
+  ]
+ },
+ {
+  "id": "route:/plans/ask",
+  "screen": "Ask coach",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/plans/ask.tsx"
+  ]
+ },
+ {
+  "id": "route:/plans/create",
+  "screen": "Create a workout",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/plans/create.tsx"
+  ]
+ },
+ {
+  "id": "route:/plans/edit",
+  "screen": "Edit plan",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "app/plans/edit.tsx",
+   "features/plans/DragList.tsx"
+  ]
+ },
+ {
+  "id": "route:/plans/exercise",
+  "screen": "Exercise",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "app/plans/exercise.tsx"
+  ]
+ },
+ {
+  "id": "route:/plans/history",
+  "screen": "Workout history",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/plans/history.tsx"
+  ]
+ },
+ {
+  "id": "route:/plans/log",
+  "screen": "What did you eat?",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 6,
+  "files": [
+   "app/plans/log.tsx"
+  ]
+ },
+ {
+  "id": "route:/plans/updated",
+  "screen": "What changed",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/plans/updated.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/appearance",
+  "screen": "Appearance",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 4,
+  "files": [
+   "app/profile/appearance.tsx",
+   "features/shell/ThemeTile.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/delete",
+  "screen": "Delete account",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/profile/delete.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/details",
+  "screen": "My details",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/details.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/export",
+  "screen": "Export my data",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/profile/export.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/health",
+  "screen": "Connected apps",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 5,
+  "files": [
+   "app/profile/health.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/help",
+  "screen": "Help and support",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/help.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile",
+  "screen": "Profile",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 5,
+  "files": [
+   "app/profile/index.tsx",
+   "features/shell/sheets.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/join",
+  "screen": "Join a programme",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/join.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/notifications",
+  "screen": "Notification settings",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/notifications.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/privacy",
+  "screen": "Privacy",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/privacy.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/tracker-designs",
+  "screen": "Tracker designs",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/profile/tracker-designs.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/trackers",
+  "screen": "Quick trackers",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/trackers.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/units",
+  "screen": "Units and detail",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/units.tsx"
+  ]
+ },
+ {
+  "id": "route:/progress/assess",
+  "screen": "Assessment",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/progress/assess.tsx"
+  ]
+ },
+ {
+  "id": "route:/progress/goal",
+  "screen": "Goal (progress)",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/progress/goal.tsx"
+  ]
+ },
+ {
+  "id": "route:/progress/lift",
+  "screen": "Lift detail",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/progress/lift.tsx"
+  ]
+ },
+ {
+  "id": "route:/progress/metric",
+  "screen": "Metric detail",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "app/progress/metric.tsx",
+   "features/progress/LogSheets.tsx"
+  ]
+ },
+ {
+  "id": "route:/progress/photos",
+  "screen": "Photos",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "app/progress/photos.tsx"
+  ]
+ },
+ {
+  "id": "route:/progress/streaks",
+  "screen": "Streaks and badges",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 4,
+  "files": [
+   "app/progress/streaks.tsx",
+   "features/streak/BadgeArt.tsx",
+   "features/streak/StreakHero.tsx"
+  ]
+ },
+ {
+  "id": "route:/welcome",
+  "screen": "Welcome",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 7,
+  "files": [
+   "app/welcome.tsx"
+  ]
+ },
+ {
+  "id": "route:/workout",
+  "screen": "Active workout",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 20,
+  "files": [
+   "app/workout.tsx",
+   "features/workout/SetRow.tsx",
+   "features/workout/RestPanel.tsx",
+   "features/workout/FinishScreen.tsx",
+   "features/workout/NewWorkoutUI.tsx",
+   "features/workout/WorkoutSheets.tsx"
+  ]
+ },
+ {
+  "id": "route:(app shell)",
+  "screen": "App shell (layout, floating tab bar host, overlays)",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/_layout.tsx"
+  ]
+ },
+ {
+  "id": "step:welcome",
+  "screen": "Onboarding: Welcome",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:facility",
+  "screen": "Onboarding: Gym",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:goal",
+  "screen": "Onboarding: Goal",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:exp",
+  "screen": "Onboarding: Experience",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:sched",
+  "screen": "Onboarding: Schedule",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:age",
+  "screen": "Onboarding: Age",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:height",
+  "screen": "Onboarding: Height",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:weight",
+  "screen": "Onboarding: Weight",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:target",
+  "screen": "Onboarding: Target",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:plan",
+  "screen": "Onboarding: Projection",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:health",
+  "screen": "Onboarding: Health",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:basics",
+  "screen": "Onboarding: Basics",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:consent",
+  "screen": "Onboarding: Privacy and consent",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:building",
+  "screen": "Onboarding: Building your plan",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "step:ready",
+  "screen": "Onboarding: All set",
+  "group": "Onboarding steps",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "app/onboarding.tsx",
+   "features/onboarding/Steps.tsx"
+  ]
+ },
+ {
+  "id": "sheet:ChangePhoneSheet",
+  "screen": "ChangePhoneSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/details.tsx"
+  ]
+ },
+ {
+  "id": "sheet:PhotoSheet",
+  "screen": "PhotoSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/profile/details.tsx"
+  ]
+ },
+ {
+  "id": "sheet:DobSheet",
+  "screen": "DobSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/details.tsx"
+  ]
+ },
+ {
+  "id": "sheet:WeighDateSheet",
+  "screen": "WeighDateSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/body/BodyLog.tsx"
+  ]
+ },
+ {
+  "id": "sheet:AttachSheet",
+  "screen": "AttachSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/chat/Composer.tsx"
+  ]
+ },
+ {
+  "id": "sheet:StillTrainingSheet",
+  "screen": "StillTrainingSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/checkin/CheckInEngine.tsx"
+  ]
+ },
+ {
+  "id": "sheet:DateSheet",
+  "screen": "DateSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/goalv2/FinishBy.tsx"
+  ]
+ },
+ {
+  "id": "sheet:FlagSheet",
+  "screen": "FlagSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/gym/sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:ChatOptionsSheet",
+  "screen": "ChatOptionsSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/gym/sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:UndoEatenSheet",
+  "screen": "UndoEatenSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/plans/DietPlan.tsx"
+  ]
+ },
+ {
+  "id": "sheet:QtySheet",
+  "screen": "QtySheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/plans/QtySheet.tsx"
+  ]
+ },
+ {
+  "id": "sheet:PlanMenuSheet",
+  "screen": "PlanMenuSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/plans/Sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:DietMenuSheet",
+  "screen": "DietMenuSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/plans/Sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:ResetSheet",
+  "screen": "ResetSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/plans/Sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:DiscardSheet",
+  "screen": "DiscardSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/plans/Sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:LibrarySheet",
+  "screen": "LibrarySheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/plans/Sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:EditItemSheet",
+  "screen": "EditItemSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/plans/Sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:ItemMenuSheet",
+  "screen": "ItemMenuSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/plans/Sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:NutritionSheet",
+  "screen": "NutritionSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/plans/Sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:DietSwapSheet",
+  "screen": "DietSwapSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/plans/Sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:HistSheet",
+  "screen": "HistSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/plans/Sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:ManualLogSheet",
+  "screen": "ManualLogSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/progress/LogSheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:CalendarSheet",
+  "screen": "CalendarSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 4,
+  "files": [
+   "features/progress/TrendUI.tsx"
+  ]
+ },
+ {
+  "id": "sheet:LogoutSheet",
+  "screen": "LogoutSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/shell/sheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:ProgrammeSwitcherSheet",
+  "screen": "ProgrammeSwitcherSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/shell/Switcher.tsx"
+  ]
+ },
+ {
+  "id": "sheet:JoinConsentSheet",
+  "screen": "JoinConsentSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/shell/Switcher.tsx"
+  ]
+ },
+ {
+  "id": "sheet:LogMealsSheet",
+  "screen": "LogMealsSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/LogMealsSheet.tsx"
+  ]
+ },
+ {
+  "id": "sheet:QuickLogSheet",
+  "screen": "QuickLogSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/today/QuickLogSheet.tsx"
+  ]
+ },
+ {
+  "id": "sheet:StepsSheet",
+  "screen": "StepsSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/today/StepsCards.tsx"
+  ]
+ },
+ {
+  "id": "sheet:UpdatesSheet",
+  "screen": "UpdatesSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/today/TopCards.tsx"
+  ]
+ },
+ {
+  "id": "sheet:WaterSheet",
+  "screen": "WaterSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/Trackers.tsx"
+  ]
+ },
+ {
+  "id": "sheet:HealthSheet",
+  "screen": "HealthSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/Trackers.tsx"
+  ]
+ },
+ {
+  "id": "sheet:DaySheet",
+  "screen": "DaySheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/WeekCard.tsx"
+  ]
+ },
+ {
+  "id": "sheet:WkMenuSheet",
+  "screen": "WkMenuSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/workout/WorkoutSheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:FormTipsSheet",
+  "screen": "FormTipsSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/workout/WorkoutSheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:WorkoutSwapSheet",
+  "screen": "WorkoutSwapSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "features/workout/WorkoutSheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:SetMenuSheet",
+  "screen": "SetMenuSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/workout/WorkoutSheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:FinishConfirmSheet",
+  "screen": "FinishConfirmSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/workout/WorkoutSheets.tsx"
+  ]
+ },
+ {
+  "id": "sheet:inline-notifications",
+  "screen": "Notification permission (onboarding)",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/onboarding.tsx"
+  ]
+ },
+ {
+  "id": "sheet:inline-disconnect",
+  "screen": "Disconnect Health",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/health.tsx"
+  ]
+ },
+ {
+  "id": "sheet:inline-joincode",
+  "screen": "Join with a code (JoinCode)",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/login.tsx"
+  ]
+ },
+ {
+  "id": "overlay:snackbar",
+  "screen": "Snackbar (toast)",
+  "group": "Overlays and popups",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "design-system/primitives/Snackbar.tsx"
+  ]
+ },
+ {
+  "id": "overlay:pushbanner",
+  "screen": "Phone push preview banner",
+  "group": "Overlays and popups",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/reminders/PushBanner.tsx"
+  ]
+ },
+ {
+  "id": "overlay:tabbar",
+  "screen": "Floating tab bar",
+  "group": "Overlays and popups",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "components/FloatingTabBar.tsx"
+  ]
+ },
+ {
+  "id": "overlay:checkinbar",
+  "screen": "Check-in bar and mini workout",
+  "group": "Overlays and popups",
+  "status": "not started",
+  "hand": 4,
+  "files": [
+   "features/today/CheckInBar.tsx"
+  ]
+ },
+ {
+  "id": "overlay:finish",
+  "screen": "Workout finish screen (confetti and stats)",
+  "group": "Overlays and popups",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "features/workout/FinishScreen.tsx"
+  ]
+ },
+ {
+  "id": "overlay:rest",
+  "screen": "Rest timer panel",
+  "group": "Overlays and popups",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/workout/NewWorkoutUI.tsx"
+  ]
+ },
+ {
+  "id": "overlay:webframe",
+  "screen": "Web phone frame and demo controls panel",
+  "group": "Overlays and popups",
+  "status": "not started",
+  "hand": 7,
+  "files": [
+   "web/WebFrame.tsx"
+  ]
+ },
+ {
+  "id": "state:today-loading",
+  "screen": "Today loading skeleton",
+  "group": "Empty, loading and error states",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/(tabs)/index.tsx"
+  ]
+ },
+ {
+  "id": "state:no-plan",
+  "screen": "No plan yet (empty)",
+  "group": "Empty, loading and error states",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/NoPlanCard.tsx"
+  ]
+ },
+ {
+  "id": "state:locked-plan",
+  "screen": "Locked plan behind blur (membership expired)",
+  "group": "Empty, loading and error states",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/plans/WorkoutPlan.tsx"
+  ]
+ },
+ {
+  "id": "state:offline",
+  "screen": "Offline notices",
+  "group": "Empty, loading and error states",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/(tabs)/plans.tsx"
+  ]
+ },
+ {
+  "id": "state:scan-fail",
+  "screen": "Scan failed and camera denied",
+  "group": "Empty, loading and error states",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/plans/log.tsx"
+  ]
+ },
+ {
+  "id": "state:login-errors",
+  "screen": "Login errors (not found, wrong code)",
+  "group": "Empty, loading and error states",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/login.tsx"
+  ]
+ },
+ {
+  "id": "state:search-empty",
+  "screen": "Exercise search: empty and no match",
+  "group": "Empty, loading and error states",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/exercise-search.tsx"
+  ]
+ },
+ {
+  "id": "state:no-goal",
+  "screen": "No goal set yet",
+  "group": "Empty, loading and error states",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "design-system/patterns/GoalCard.tsx"
+  ]
+ },
+ {
+  "id": "state:comeback",
+  "screen": "Comeback day",
+  "group": "Empty, loading and error states",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/ForYou.tsx"
+  ]
+ },
+ {
+  "id": "state:streak-broken",
+  "screen": "Streak broken and new member",
+  "group": "Empty, loading and error states",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/progress/streaks.tsx"
+  ]
+ },
+ {
+  "id": "state:export-fail",
+  "screen": "Export failed (offline)",
+  "group": "Empty, loading and error states",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/export.tsx"
+  ]
+ },
+ {
+  "id": "shared:components/GymHeader.tsx",
+  "screen": "components/GymHeader.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "components/GymHeader.tsx"
+  ]
+ },
+ {
+  "id": "shared:components/bits.tsx",
+  "screen": "components/bits.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "components/bits.tsx"
+  ]
+ },
+ {
+  "id": "shared:components/ui.tsx",
+  "screen": "components/ui.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "components/ui.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/progress/parts.tsx",
+  "screen": "features/progress/parts.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/progress/parts.tsx"
+  ]
+ },
+ {
+  "id": "shared:components/FloatingTabBar.tsx",
+  "screen": "components/FloatingTabBar.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "components/FloatingTabBar.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/shell/Switcher.tsx",
+  "screen": "features/shell/Switcher.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/shell/Switcher.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/shell/parts.tsx",
+  "screen": "features/shell/parts.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "features/shell/parts.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/today/Trackers.tsx",
+  "screen": "features/today/Trackers.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/Trackers.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/today/MealsCard.tsx",
+  "screen": "features/today/MealsCard.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/MealsCard.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/streak/StreakChip.tsx",
+  "screen": "features/streak/StreakChip.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "features/streak/StreakChip.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/today/StepsCards.tsx",
+  "screen": "features/today/StepsCards.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "features/today/StepsCards.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/trackers/Widgets.tsx",
+  "screen": "features/trackers/Widgets.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/trackers/Widgets.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/today/QuickLogSheet.tsx",
+  "screen": "features/today/QuickLogSheet.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/QuickLogSheet.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/plans/Sheets.tsx",
+  "screen": "features/plans/Sheets.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/plans/Sheets.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/plans/parts.tsx",
+  "screen": "features/plans/parts.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/plans/parts.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/progress/TrendUI.tsx",
+  "screen": "features/progress/TrendUI.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 6,
+  "files": [
+   "features/progress/TrendUI.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/goalv2/FinishBy.tsx",
+  "screen": "features/goalv2/FinishBy.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/goalv2/FinishBy.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/body/BodyLog.tsx",
+  "screen": "features/body/BodyLog.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "features/body/BodyLog.tsx"
+  ]
+ },
+ {
+  "id": "shared:components/Ruler.tsx",
+  "screen": "components/Ruler.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "components/Ruler.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/checkin/CheckInEngine.tsx",
+  "screen": "features/checkin/CheckInEngine.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/checkin/CheckInEngine.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/checkin/GymMap.native.tsx",
+  "screen": "features/checkin/GymMap.native.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "features/checkin/GymMap.native.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/workout/ClipStage.tsx",
+  "screen": "features/workout/ClipStage.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "features/workout/ClipStage.tsx"
+  ]
+ }
+]

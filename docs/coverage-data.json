@@ -1,0 +1,4255 @@
+{
+ "routes": [
+  {
+   "route": "/gym",
+   "file": "app/(tabs)/gym.tsx",
+   "files": [
+    "app/(tabs)/gym.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "AttendanceCard",
+     "line": 51,
+     "tag": "View",
+     "text": "<View key={i} style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: v && v !== 'x' ? (v === '",
+     "file": "app/(tabs)/gym.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "AssessCard",
+     "line": 70,
+     "tag": "View",
+     "text": "<View style={{ width: 52, height: 52, borderRadius: radii.md, backgroundColor: c.tNutri, alignItems: 'center',",
+     "file": "app/(tabs)/gym.tsx"
+    }
+   ],
+   "ds": {
+    "FadeIn": 7,
+    "Txt": 20,
+    "Row": 3,
+    "Pressy": 1
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/gym/chat.tsx"
+   ]
+  },
+  {
+   "route": "/",
+   "file": "app/(tabs)/index.tsx",
+   "files": [
+    "app/(tabs)/index.tsx",
+    "features/today/TopCards.tsx",
+    "features/today/WorkoutCard.tsx",
+    "features/today/WeekCard.tsx",
+    "features/today/timeline.ts",
+    "features/today/ForYou.tsx",
+    "features/today/ui.ts",
+    "features/today/CheckInBar.tsx",
+    "features/today/ViewOnly.tsx",
+    "features/today/TodayBudget.tsx",
+    "features/today/TodayGreeting.tsx",
+    "features/today/DayQuote.tsx",
+    "features/today/NoPlanCard.tsx",
+    "features/reminders/PushBanner.tsx",
+    "features/today/GoalCards.tsx",
+    "features/today/LogMealsSheet.tsx",
+    "features/reminders/push.ts"
+   ],
+   "hand": [
+    {
+     "kind": "button or pill",
+     "fn": "GoalLine",
+     "line": 40,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Your goal: ${g.name}. ${progressLine(g)}. ${statusLine",
+     "file": "features/today/TopCards.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ComebackCard",
+     "line": 165,
+     "tag": "View",
+     "text": "<View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: 'rgba(255,138,61,0.16)', alignI",
+     "file": "features/today/TopCards.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "UpdIcon",
+     "line": 211,
+     "tag": "View",
+     "text": "<View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: bg, alignItems: 'center', justi",
+     "file": "features/today/TopCards.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "UpdatesCard",
+     "line": 302,
+     "tag": "View",
+     "text": "<View key={k} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: radii.xs, backgroundColor: k === i ? ",
+     "file": "features/today/TopCards.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "UpdatesSheet",
+     "line": 324,
+     "tag": "View",
+     "text": "<View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: fg, marginTop: 6 }} />",
+     "file": "features/today/TopCards.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "StackCard",
+     "line": 118,
+     "tag": "View",
+     "text": "<View style={[{ flexGrow: 1, flexShrink: 1, backgroundColor: c.surface, borderRadius: radii.card, padding: 16,",
+     "file": "features/today/ForYou.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "StackCard",
+     "line": 122,
+     "tag": "View",
+     "text": "<View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: bg, alignItems: 'center', justi",
+     "file": "features/today/ForYou.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "StackCard",
+     "line": 134,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" onPress={it.act} style={{ height: 40, paddingHorizontal: 18, borderRadius: ",
+     "file": "features/today/ForYou.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "PagerDot",
+     "line": 155,
+     "tag": "Animated.View",
+     "text": "<Animated.View style={[{ height: 6, borderRadius: radii.xs, backgroundColor: c.ink }, st]} />",
+     "file": "features/today/ForYou.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ComebackPlan",
+     "line": 214,
+     "tag": "View",
+     "text": "<View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: 'rgba(255,138,61,0.16)', alignI",
+     "file": "features/today/ForYou.tsx"
+    },
+    {
+     "kind": "chip",
+     "fn": "ComebackPlan",
+     "line": 218,
+     "tag": "View",
+     "text": "<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, borderWidth: 1, borderColor: c.chi",
+     "file": "features/today/ForYou.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "MiniWorkout",
+     "line": 61,
+     "tag": "View",
+     "text": "<View style={{ height: 40, borderRadius: 20, paddingHorizontal: 16, backgroundColor: fixed.white, justifyConte",
+     "file": "features/today/CheckInBar.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "CheckInBar",
+     "line": 119,
+     "tag": "View",
+     "text": "<View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: icBg, alignItems: 'center', jus",
+     "file": "features/today/CheckInBar.tsx"
+    },
+    {
+     "kind": "chip",
+     "fn": "CheckInBar",
+     "line": 124,
+     "tag": "View",
+     "text": "<View style={{ height: 20, paddingHorizontal: 8, borderRadius: radii.sm, backgroundColor: c.goodSoft, justifyC",
+     "file": "features/today/CheckInBar.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "CheckInBar",
+     "line": 134,
+     "tag": "View",
+     "text": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: 18, right: 18, bottom: 0, height: 3, borderRad",
+     "file": "features/today/CheckInBar.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "NoPlanCard",
+     "line": 13,
+     "tag": "View",
+     "text": "<View accessible accessibilityLabel=\"No plan assigned yet. Your coach shares your workout and diet plan after ",
+     "file": "features/today/NoPlanCard.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "NoPlanCard",
+     "line": 14,
+     "tag": "View",
+     "text": "<View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.accentSoft, alignItems: 'cent",
+     "file": "features/today/NoPlanCard.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "PushBanner",
+     "line": 25,
+     "tag": "View",
+     "text": "<View style={{ width: 38, height: 38, borderRadius: radii.sm, backgroundColor: fixed.blue, alignItems: 'center",
+     "file": "features/reminders/PushBanner.tsx"
+    }
+   ],
+   "ds": {
+    "FadeIn": 24,
+    "Pressy": 10,
+    "Row": 15,
+    "Txt": 61,
+    "Button": 10,
+    "Card": 1,
+    "WorkoutCardPattern": 1,
+    "WeekCardPattern": 1,
+    "BudgetCard": 1
+   },
+   "sheets": [
+    {
+     "comp": "FlagSheet",
+     "label": "Flag session",
+     "line": 126,
+     "in": "PtConfirmCard",
+     "file": "features/today/TopCards.tsx"
+    },
+    {
+     "comp": "UpdatesSheet",
+     "label": "Updates",
+     "line": 271,
+     "in": "UpdatesCard",
+     "file": "features/today/TopCards.tsx"
+    },
+    {
+     "comp": "DaySheet",
+     "label": "Day summary",
+     "line": 54,
+     "in": "onDayPress",
+     "file": "features/today/WeekCard.tsx"
+    },
+    {
+     "comp": "LogMealsSheet",
+     "label": "Log meal",
+     "line": 69,
+     "in": "useForYou",
+     "file": "features/today/ForYou.tsx"
+    },
+    {
+     "comp": "FlagSheet",
+     "label": "Flag session",
+     "line": 130,
+     "in": "StackCard",
+     "file": "features/today/ForYou.tsx"
+    },
+    {
+     "comp": "QuickLogSheet",
+     "label": "Log a meal",
+     "line": 29,
+     "in": "elseFood",
+     "file": "features/today/LogMealsSheet.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Today",
+     "rows": [
+      "Today variant: Regular, With updates, Comeback",
+      "Goal card state: Auto, ...GOAL_STATE_OPTIONS.map(([l",
+      "Last weigh-in: Today, 3 days ago, 10+ days ago",
+      "Health (steps): Connected, Not connected",
+      "Wearable (heart rate, sleep, energy): Has a wearable, No wearable",
+      "Time of day: Morning, Afternoon, Evening",
+      "Workout today: Not started, Done, Rest day",
+      "Check-in (location): Away, Near (25 m), At the gym, Checked in, Location off",
+      "Food scan result: Works, Fails"
+     ],
+     "actions": [
+      "Show loading state",
+      "Reset meals for this time of day"
+     ],
+     "file": "app/(tabs)/index.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "app/+not-found.tsx",
+    "app/checkin.tsx",
+    "app/dev-cards.tsx",
+    "app/exercise-search.tsx",
+    "app/food.tsx",
+    "app/index.tsx",
+    "app/login.tsx",
+    "app/onboarding.tsx",
+    "app/welcome.tsx",
+    "app/workout.tsx",
+    "features/body/BodyLog.tsx",
+    "features/shell/parts.tsx",
+    "features/today/TopCards.tsx",
+    "web/WebFrame.tsx"
+   ]
+  },
+  {
+   "route": "/plans",
+   "file": "app/(tabs)/plans.tsx",
+   "files": [
+    "app/(tabs)/plans.tsx",
+    "features/plans/WorkoutPlan.tsx",
+    "features/plans/DietPlan.tsx",
+    "features/plans/QtySheet.tsx",
+    "features/plans/qty.ts"
+   ],
+   "hand": [
+    {
+     "kind": "button or pill",
+     "fn": "DayStrip",
+     "line": 51,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Back to this week\" onPress={() => goto(THIS)} style={{ ",
+     "file": "app/(tabs)/plans.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "DayStrip",
+     "line": 70,
+     "tag": "Pressy",
+     "text": "<Pressy key={i} accessibilityRole=\"button\" accessibilityState={{ selected: on }} accessibilityLabel={`${DAYL[i",
+     "file": "app/(tabs)/plans.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "DayStrip",
+     "line": 77,
+     "tag": "View",
+     "text": "<View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: c.good, alignItems: 'center', justifyC",
+     "file": "app/(tabs)/plans.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "DayStrip",
+     "line": 78,
+     "tag": "View",
+     "text": "<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c",
+     "file": "app/(tabs)/plans.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "DayStrip",
+     "line": 79,
+     "tag": "View",
+     "text": "<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />",
+     "file": "app/(tabs)/plans.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "Plans",
+     "line": 147,
+     "tag": "View",
+     "text": "<View accessibilityLabel=\"Plans are view only\" style={{ borderRadius: 20, backgroundColor: c.surface2, padding",
+     "file": "app/(tabs)/plans.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "Plans",
+     "line": 149,
+     "tag": "View",
+     "text": "<View style={{ width: 36, height: 36, borderRadius: radii.sm, backgroundColor: c.surface3, alignItems: 'center",
+     "file": "app/(tabs)/plans.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "Plans",
+     "line": 163,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={isW ? 'Plan menu' : 'Diet menu'} onPress={openMenu} sty",
+     "file": "app/(tabs)/plans.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "LockedPlan",
+     "line": 41,
+     "tag": "View",
+     "text": "<View style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface2, borderWidth: 1, bor",
+     "file": "features/plans/WorkoutPlan.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "WorkoutPlan",
+     "line": 90,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See w",
+     "file": "features/plans/WorkoutPlan.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "WorkoutPlan",
+     "line": 92,
+     "tag": "View",
+     "text": "<View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: c.accent }} />",
+     "file": "features/plans/WorkoutPlan.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "WorkoutPlan",
+     "line": 112,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca",
+     "file": "features/plans/WorkoutPlan.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "WorkoutPlan",
+     "line": 131,
+     "tag": "View",
+     "text": "<View accessibilityLabel=\"Logged\" style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.good, a",
+     "file": "features/plans/WorkoutPlan.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "WorkoutPlan",
+     "line": 152,
+     "tag": "View",
+     "text": "<View key={e.id} accessibilityLabel={e.res === 'skip' ? 'Not logged' : 'Logged'} style={{ flex: 1, height: 4, ",
+     "file": "features/plans/WorkoutPlan.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "WorkoutPlan",
+     "line": 178,
+     "tag": "View",
+     "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo",
+     "file": "features/plans/WorkoutPlan.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "WorkoutPlan",
+     "line": 179,
+     "tag": "View",
+     "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g",
+     "file": "features/plans/WorkoutPlan.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "MacroBar",
+     "line": 67,
+     "tag": "View",
+     "text": "<View style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>",
+     "file": "features/plans/DietPlan.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "QtyControl",
+     "line": 105,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`${label} ${qty.unit || 'piece'}`} disabled={off} onPre",
+     "file": "features/plans/DietPlan.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "QtyControl",
+     "line": 112,
+     "tag": "View",
+     "text": "<View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, height: 38, paddingHorizontal: 3, borderRad",
+     "file": "features/plans/DietPlan.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "QtyControl",
+     "line": 121,
+     "tag": "View",
+     "text": "<View accessibilityLabel=\"Changed from plan\" style={{ position: 'absolute', top: 0, right: 0, width: 8, height",
+     "file": "features/plans/DietPlan.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "AteElse",
+     "line": 279,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Ate something else? Log it\" onPress={onPress} style={{ ",
+     "file": "features/plans/DietPlan.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "QtySheet",
+     "line": 38,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={label} disabled={off} onPress={on} scaleTo={0.9} style=",
+     "file": "features/plans/QtySheet.tsx"
+    }
+   ],
+   "ds": {
+    "Row": 11,
+    "Txt": 70,
+    "Pressy": 13,
+    "FadeIn": 21,
+    "Segmented": 1,
+    "Card": 9,
+    "Button": 9,
+    "ListCard": 2,
+    "Chevron": 1
+   },
+   "sheets": [
+    {
+     "comp": "isW ? <PlanMenuSheet /> : <DietMenuSheet />",
+     "label": "",
+     "line": 108,
+     "in": "openMenu",
+     "file": "app/(tabs)/plans.tsx"
+    },
+    {
+     "comp": "QtySheet",
+     "label": "Change amount",
+     "line": 115,
+     "in": "QtyControl",
+     "file": "features/plans/DietPlan.tsx"
+    },
+    {
+     "comp": "it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode=\"sugg\"",
+     "label": "Swap item",
+     "line": 155,
+     "in": "onLeft",
+     "file": "features/plans/DietPlan.tsx"
+    },
+    {
+     "comp": "ItemMenuSheet",
+     "label": "Item options",
+     "line": 182,
+     "in": "menu",
+     "file": "features/plans/DietPlan.tsx"
+    },
+    {
+     "comp": "UndoEatenSheet",
+     "label": "Mark as not eaten",
+     "line": 217,
+     "in": "ItemRow",
+     "file": "features/plans/DietPlan.tsx"
+    },
+    {
+     "comp": "UndoEatenSheet",
+     "label": "Mark as not eaten",
+     "line": 263,
+     "in": "MealCard",
+     "file": "features/plans/DietPlan.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Plans",
+     "rows": [
+      "Plan type: Workout, Diet",
+      "Coach updated the plan: Off, On",
+      "Plan change request: None, Requested, Ready",
+      "No plan yet (before assessment): Off, On",
+      "Mid-workout when the update arrives: Off, On",
+      "Connection: Online, Offline",
+      "Diet type (plan + swaps): Veg, Eggetarian, Non-veg",
+      "Detail level: Detailed, Simple",
+      "Camera (scan food): Allowed, Denied",
+      "Scan result: Works, Fails"
+     ],
+     "actions": [
+      "Apply Coach update now",
+      "Reset this prototype"
+     ],
+     "file": "app/(tabs)/plans.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "app/coach.tsx",
+    "app/goal.tsx",
+    "app/progress/goal.tsx",
+    "features/plans/parts.tsx",
+    "features/today/ForYou.tsx",
+    "features/today/TopCards.tsx",
+    "features/today/WeekCard.tsx"
+   ]
+  },
+  {
+   "route": "/progress",
+   "file": "app/(tabs)/progress.tsx",
+   "files": [
+    "app/(tabs)/progress.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "ProgressCard",
+     "line": 117,
+     "tag": "View",
+     "text": "<View key={t.l} style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 12, borderRadius: radii.md, backgrou",
+     "file": "app/(tabs)/progress.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "ProgressCard",
+     "line": 152,
+     "tag": "View",
+     "text": "<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: ",
+     "file": "app/(tabs)/progress.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "StreakEntry",
+     "line": 165,
+     "tag": "View",
+     "text": "<View style={{ width: 48, height: 48, borderRadius: radii.card, backgroundColor: 'rgba(255,138,61,0.16)', alig",
+     "file": "app/(tabs)/progress.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 23,
+    "Row": 6,
+    "FadeIn": 4
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/goal-detail.tsx",
+    "app/gym/assessments.tsx",
+    "features/today/WeekCard.tsx"
+   ]
+  },
+  {
+   "route": "/checkin",
+   "file": "app/checkin.tsx",
+   "files": [
+    "app/checkin.tsx",
+    "features/checkin/GymMap.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "CheckIn",
+     "line": 125,
+     "tag": "View",
+     "text": "<View style={{ width: 34, height: 34, borderRadius: radii.md, backgroundColor: isDark ? 'rgba(255,255,255,0.1)",
+     "file": "app/checkin.tsx"
+    }
+   ],
+   "ds": {
+    "Row": 1,
+    "Txt": 6,
+    "FadeIn": 1,
+    "Button": 4
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Check-in map",
+     "rows": [
+      "Check-in (location): Away, Near (25 m), At the gym, Location off"
+     ],
+     "actions": [
+      "Refresh location"
+     ],
+     "file": "app/checkin.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "features/today/CheckInBar.tsx"
+   ]
+  },
+  {
+   "route": "/coach",
+   "file": "app/coach.tsx",
+   "files": [
+    "app/coach.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "CoachHub",
+     "line": 41,
+     "tag": "View",
+     "text": "<View accessibilityLabel=\"Unread reply\" style={{ position: 'absolute', right: 5, top: 5, width: 12, height: 12",
+     "file": "app/coach.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "CoachHub",
+     "line": 67,
+     "tag": "View",
+     "text": "<View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.accentSoft, alignItems: 'cent",
+     "file": "app/coach.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "CoachHub",
+     "line": 81,
+     "tag": "Pressy",
+     "text": "<Pressy key={t.l} accessibilityRole=\"button\" onPress={() => askCoach(t.ctx, t.draft)} scaleTo={0.95} style={{ ",
+     "file": "app/coach.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 11,
+    "Row": 6,
+    "Button": 2,
+    "Card": 3,
+    "SectionLabel": 3,
+    "Pressy": 2
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Coach",
+     "rows": [
+      "Coach availability: Available, Away",
+      "Unread reply: Yes, No"
+     ],
+     "actions": [],
+     "file": "app/coach.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "app/(tabs)/gym.tsx",
+    "app/gym/chat.tsx",
+    "features/gym/sheets.tsx",
+    "features/today/WorkoutCard.tsx"
+   ]
+  },
+  {
+   "route": "/exercise-search",
+   "file": "app/exercise-search.tsx",
+   "files": [
+    "app/exercise-search.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "button or pill",
+     "fn": "ExerciseSearch",
+     "line": 72,
+     "tag": "Pressy",
+     "text": "<Pressy key={x.n} accessibilityRole=\"button\" accessibilityLabel={`${x.n}, ${x.g}. Swap`} onPress={() => pick(x",
+     "file": "app/exercise-search.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ExerciseSearch",
+     "line": 84,
+     "tag": "View",
+     "text": "<View style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface2, alignItems: 'center",
+     "file": "app/exercise-search.tsx"
+    }
+   ],
+   "ds": {
+    "Row": 2,
+    "Txt": 5,
+    "Field": 1,
+    "Pill": 3,
+    "Pressy": 1,
+    "Button": 1
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Exercise search",
+     "rows": [
+      "Query: Empty, Squat, No match"
+     ],
+     "actions": [],
+     "file": "app/exercise-search.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "features/workout/WorkoutSheets.tsx"
+   ]
+  },
+  {
+   "route": "/food",
+   "file": "app/food.tsx",
+   "files": [
+    "app/food.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "FoodDetail",
+     "line": 97,
+     "tag": "View",
+     "text": "<View key={l} style={{ gap: 2, paddingVertical: 9, paddingHorizontal: 14, borderRadius: radii.md, backgroundCo",
+     "file": "app/food.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "FoodDetail",
+     "line": 103,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" onPress={() => askCoach(fd!.n, `Is ${fd!.n.toLowerCase()} right for my plan",
+     "file": "app/food.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "FoodDetail",
+     "line": 113,
+     "tag": "View",
+     "text": "<View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.tAct, alignItems: 'center', j",
+     "file": "app/food.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "FoodDetail",
+     "line": 123,
+     "tag": "View",
+     "text": "<View style={{ height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>",
+     "file": "app/food.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "FoodDetail",
+     "line": 127,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityState={{ expanded: micro }} onPress={() => setMicro((v) => !v)",
+     "file": "app/food.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "FoodDetail",
+     "line": 138,
+     "tag": "View",
+     "text": "<View style={{ height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>",
+     "file": "app/food.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "FoodDetail",
+     "line": 163,
+     "tag": "View",
+     "text": "<View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.surface2, alignItems: 'center', jus",
+     "file": "app/food.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 27,
+    "Row": 9,
+    "Pressy": 2,
+    "Chip": 2,
+    "Card": 3,
+    "FadeIn": 1,
+    "Button": 2
+   },
+   "sheets": [
+    {
+     "comp": "QuickLogSheet",
+     "label": "Swap item",
+     "line": 80,
+     "in": "alt",
+     "file": "app/food.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Food detail",
+     "rows": [
+      "Micronutrients: Collapsed, Expanded"
+     ],
+     "actions": [
+      "Close food page"
+     ],
+     "file": "app/food.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "features/plans/DietPlan.tsx",
+    "features/plans/Sheets.tsx",
+    "features/today/MealsCard.tsx"
+   ]
+  },
+  {
+   "route": "/goal-detail",
+   "file": "app/goal-detail.tsx",
+   "files": [
+    "app/goal-detail.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "chip",
+     "fn": "ProgressChart",
+     "line": 91,
+     "tag": "View",
+     "text": "<View style={{ height: 26, paddingHorizontal: 10, borderRadius: 13, backgroundColor: c.ink, justifyContent: 'c",
+     "file": "app/goal-detail.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "ProgressChart",
+     "line": 106,
+     "tag": "View",
+     "text": "<View style={{ width: 16, height: 3, borderRadius: radii.xs, backgroundColor: c.accent }} />",
+     "file": "app/goal-detail.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "Drivers",
+     "line": 128,
+     "tag": "View",
+     "text": "<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: col[r.key][0], alignItems: 'center', ",
+     "file": "app/goal-detail.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "Drivers",
+     "line": 131,
+     "tag": "View",
+     "text": "<View style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface3, overflow: 'hidden' }}>",
+     "file": "app/goal-detail.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "Drivers",
+     "line": 132,
+     "tag": "View",
+     "text": "<View style={{ width: `${Math.max(4, r.pct * 100)}%`, height: 6, borderRadius: radii.xs, backgroundColor: col[",
+     "file": "app/goal-detail.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "History",
+     "line": 151,
+     "tag": "View",
+     "text": "<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: h.result === 'Reached' ? c.good",
+     "file": "app/goal-detail.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "GoalDetail",
+     "line": 243,
+     "tag": "View",
+     "text": "<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.accentSoft, alignItems: 'center', j",
+     "file": "app/goal-detail.tsx"
+    },
+    {
+     "kind": "chip",
+     "fn": "GoalDetail",
+     "line": 250,
+     "tag": "View",
+     "text": "<View style={{ alignSelf: 'flex-start', height: 30, paddingHorizontal: 12, borderRadius: 15, backgroundColor: ",
+     "file": "app/goal-detail.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "GoalDetail",
+     "line": 269,
+     "tag": "View",
+     "text": "<View style={{ width: 34, height: 34, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center', ",
+     "file": "app/goal-detail.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 32,
+    "Row": 10,
+    "Card": 11,
+    "SectionLabel": 1,
+    "Pressy": 3,
+    "Button": 7
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Your goal (page)",
+     "rows": [],
+     "actions": [],
+     "file": "app/goal-detail.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "design-system/patterns/GoalCard.tsx",
+    "features/today/TopCards.tsx"
+   ]
+  },
+  {
+   "route": "/goal",
+   "file": "app/goal.tsx",
+   "files": [
+    "app/goal.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "Button": 2,
+    "Card": 5,
+    "Txt": 12,
+    "Row": 4,
+    "Pill": 4,
+    "FadeIn": 1
+   },
+   "sheets": [
+    {
+     "comp": "DateSheet",
+     "label": "Pick a finish date",
+     "line": 100,
+     "in": "Goal",
+     "file": "app/goal.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Change goal",
+     "rows": [
+      "Main goal: Weight loss, Strength, Flexibility, Not sure yet",
+      "Target size: Normal, Big (18 kg)"
+     ],
+     "actions": [
+      "Save goal"
+     ],
+     "file": "app/goal.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "app/goal-detail.tsx"
+   ]
+  },
+  {
+   "route": "/gym/assessments",
+   "file": "app/gym/assessments.tsx",
+   "files": [
+    "app/gym/assessments.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "GymAssessments",
+     "line": 76,
+     "tag": "View",
+     "text": "<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone] }} />",
+     "file": "app/gym/assessments.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "GymAssessments",
+     "line": 90,
+     "tag": "View",
+     "text": "<View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingHorizontal: 16, paddingBottom: 4 },",
+     "file": "app/gym/assessments.tsx"
+    }
+   ],
+   "ds": {
+    "FadeIn": 3,
+    "Card": 3,
+    "Txt": 15,
+    "Pill": 1,
+    "Row": 2,
+    "Button": 2
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/(tabs)/gym.tsx",
+    "app/coach.tsx",
+    "app/progress/assess.tsx"
+   ]
+  },
+  {
+   "route": "/gym/attendance",
+   "file": "app/gym/attendance.tsx",
+   "files": [
+    "app/gym/attendance.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "Attendance",
+     "line": 78,
+     "tag": "View",
+     "text": "<View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 16 }, cardShadow(isDark)]}>",
+     "file": "app/gym/attendance.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "Attendance",
+     "line": 88,
+     "tag": "View",
+     "text": "<View style={{ width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center', backgr",
+     "file": "app/gym/attendance.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "Attendance",
+     "line": 96,
+     "tag": "View",
+     "text": "<View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: x.col }} />",
+     "file": "app/gym/attendance.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "Attendance",
+     "line": 105,
+     "tag": "View",
+     "text": "<View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 4, paddingHorizontal: 16 ",
+     "file": "app/gym/attendance.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "Attendance",
+     "line": 110,
+     "tag": "View",
+     "text": "<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: t.dotBg, alignItems: 'center', ",
+     "file": "app/gym/attendance.tsx"
+    }
+   ],
+   "ds": {
+    "FadeIn": 2,
+    "Txt": 10,
+    "Button": 1,
+    "Row": 3,
+    "Pill": 1
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/(tabs)/gym.tsx",
+    "app/gym/confirm.tsx"
+   ]
+  },
+  {
+   "route": "/gym/break",
+   "file": "app/gym/break.tsx",
+   "files": [
+    "app/gym/break.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "MembershipPauses",
+     "line": 33,
+     "tag": "View",
+     "text": "<View style={[{ padding: 16, borderRadius: radii.card, backgroundColor: c.surface, borderWidth: 1.5, borderCol",
+     "file": "app/gym/break.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "MembershipPauses",
+     "line": 39,
+     "tag": "View",
+     "text": "<View style={[{ padding: 18, borderRadius: radii.xl, backgroundColor: c.surface, gap: 10 }, cardShadow(isDark)",
+     "file": "app/gym/break.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "MembershipPauses",
+     "line": 51,
+     "tag": "View",
+     "text": "<View style={{ padding: 18, borderRadius: radii.card, backgroundColor: c.surface }}>",
+     "file": "app/gym/break.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "MembershipPauses",
+     "line": 53,
+     "tag": "View",
+     "text": "<View key={h.from} style={[{ padding: 16, borderRadius: radii.card, backgroundColor: c.surface, gap: 6 }, card",
+     "file": "app/gym/break.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 11,
+    "Row": 3
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/(tabs)/gym.tsx"
+   ]
+  },
+  {
+   "route": "/gym/chat",
+   "file": "app/gym/chat.tsx",
+   "files": [
+    "app/gym/chat.tsx",
+    "features/chat/AudioBubble.tsx",
+    "features/chat/Composer.tsx",
+    "features/chat/emoji.ts"
+   ],
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "TypingDot",
+     "line": 37,
+     "tag": "Animated.View",
+     "text": "<Animated.View style={[{ width: 6, height: 6, borderRadius: radii.xs, backgroundColor: c.muted, marginHorizont",
+     "file": "app/gym/chat.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "CoachChat",
+     "line": 117,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`About ${ctx}. Remove`} onPress={() => setCtx(undefined",
+     "file": "app/gym/chat.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "CoachChat",
+     "line": 145,
+     "tag": "View",
+     "text": "<View accessibilityRole=\"alert\" style={{ padding: 12, borderRadius: radii.md, backgroundColor: c.warnSoft }}>",
+     "file": "app/gym/chat.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "CoachChat",
+     "line": 153,
+     "tag": "Pressy",
+     "text": "<Pressy key={t.l} accessibilityRole=\"button\" onPress={() => { setDraft(t.draft); setCtx(t.ctx); }} scaleTo={0.",
+     "file": "app/gym/chat.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "CoachChat",
+     "line": 159,
+     "tag": "View",
+     "text": "<View style={{ flexShrink: 1, paddingVertical: m.img ? 6 : 10, paddingHorizontal: m.img ? 6 : 14, borderRadius",
+     "file": "app/gym/chat.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "AudioBubble",
+     "line": 37,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={st.playing ? 'Pause voice message' : 'Play voice messag",
+     "file": "features/chat/AudioBubble.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "Pulse",
+     "line": 29,
+     "tag": "Animated.View",
+     "text": "<Animated.View style={[{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#FF4D4F' }, a]} />",
+     "file": "features/chat/Composer.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "EmojiPanel",
+     "line": 39,
+     "tag": "Pressy",
+     "text": "<Pressy key={x.key} accessibilityRole=\"button\" accessibilityLabel={`${x.key} emoji`} onPress={() => setG(i)} s",
+     "file": "features/chat/Composer.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "AttachSheet",
+     "line": 61,
+     "tag": "Pressy",
+     "text": "<Pressy key={src} accessibilityRole=\"button\" onPress={() => closeSheet(() => onPick(src))} scaleTo={0.98} styl",
+     "file": "features/chat/Composer.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "Composer",
+     "line": 156,
+     "tag": "View",
+     "text": "<View accessibilityRole=\"alert\" style={{ marginHorizontal: 16, marginTop: 10, padding: 10, borderRadius: 14, b",
+     "file": "features/chat/Composer.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "Composer",
+     "line": 187,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Remove photo\" onPress={() => setImg(undefined)} scaleTo",
+     "file": "features/chat/Composer.tsx"
+    },
+    {
+     "kind": "input",
+     "fn": "Composer",
+     "line": 195,
+     "tag": "TextInput",
+     "text": "<TextInput ref={input} value={draft} onChangeText={setDraft} onFocus={() => setEmoji(false)} placeholder={img ",
+     "file": "features/chat/Composer.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 19,
+    "Button": 1,
+    "Pressy": 15,
+    "Row": 2,
+    "FadeIn": 5
+   },
+   "sheets": [
+    {
+     "comp": "ChatOptionsSheet",
+     "label": "Chat options",
+     "line": 140,
+     "in": "CoachChat",
+     "file": "app/gym/chat.tsx"
+    },
+    {
+     "comp": "AttachSheet",
+     "label": "Send a photo",
+     "line": 177,
+     "in": "Composer",
+     "file": "features/chat/Composer.tsx"
+    }
+   ],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/(tabs)/gym.tsx",
+    "app/gym/pt.tsx",
+    "features/coach/coach.ts"
+   ]
+  },
+  {
+   "route": "/gym/confirm",
+   "file": "app/gym/confirm.tsx",
+   "files": [
+    "app/gym/confirm.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "ConfirmSession",
+     "line": 80,
+     "tag": "View",
+     "text": "<View style={{ padding: 18, borderRadius: radii.xl, backgroundColor: c.accentSoft, gap: 4 }}>",
+     "file": "app/gym/confirm.tsx"
+    }
+   ],
+   "ds": {
+    "Pressy": 1,
+    "Txt": 6,
+    "Field": 1,
+    "FadeIn": 2,
+    "Button": 1
+   },
+   "sheets": [
+    {
+     "comp": "FlagSheet",
+     "label": "Flag session",
+     "line": 106,
+     "in": "ConfirmSession",
+     "file": "app/gym/confirm.tsx"
+    }
+   ],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/gym/attendance.tsx",
+    "features/today/ForYou.tsx",
+    "features/today/TopCards.tsx"
+   ]
+  },
+  {
+   "route": "/gym/membership",
+   "file": "app/gym/membership.tsx",
+   "files": [
+    "app/gym/membership.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "Membership",
+     "line": 43,
+     "tag": "View",
+     "text": "<View style={{ paddingVertical: 16, paddingHorizontal: 18, borderRadius: radii.lg, backgroundColor: c.surface2",
+     "file": "app/gym/membership.tsx"
+    }
+   ],
+   "ds": {
+    "FadeIn": 1,
+    "Txt": 7,
+    "Card": 1,
+    "Button": 1
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/(tabs)/gym.tsx",
+    "features/today/ForYou.tsx",
+    "features/today/PaymentBanner.tsx"
+   ]
+  },
+  {
+   "route": "/gym/pt",
+   "file": "app/gym/pt.tsx",
+   "files": [
+    "app/gym/pt.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "Txt": 3,
+    "Card": 1,
+    "Button": 1
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/(tabs)/gym.tsx",
+    "app/gym/assessments.tsx",
+    "app/progress/assess.tsx"
+   ]
+  },
+  {
+   "route": "/",
+   "file": "app/index.tsx",
+   "files": [
+    "app/index.tsx"
+   ],
+   "hand": [],
+   "ds": {},
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/+not-found.tsx",
+    "app/checkin.tsx",
+    "app/dev-cards.tsx",
+    "app/exercise-search.tsx",
+    "app/food.tsx",
+    "app/index.tsx",
+    "app/login.tsx",
+    "app/onboarding.tsx",
+    "app/welcome.tsx",
+    "app/workout.tsx",
+    "features/body/BodyLog.tsx",
+    "features/shell/parts.tsx",
+    "features/today/TopCards.tsx",
+    "web/WebFrame.tsx"
+   ]
+  },
+  {
+   "route": "/log-height",
+   "file": "app/log-height.tsx",
+   "files": [
+    "app/log-height.tsx"
+   ],
+   "hand": [],
+   "ds": {},
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/profile/details.tsx"
+   ]
+  },
+  {
+   "route": "/log-weight",
+   "file": "app/log-weight.tsx",
+   "files": [
+    "app/log-weight.tsx"
+   ],
+   "hand": [],
+   "ds": {},
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/profile/details.tsx",
+    "app/progress/metric.tsx",
+    "features/reminders/PushBanner.tsx",
+    "features/today/ForYou.tsx",
+    "features/today/Trackers.tsx"
+   ]
+  },
+  {
+   "route": "/login",
+   "file": "app/login.tsx",
+   "files": [
+    "app/login.tsx",
+    "components/OtpInput.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "Login",
+     "line": 153,
+     "tag": "View",
+     "text": "<View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.warnSoft, gap: 10 }}>",
+     "file": "app/login.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "Login",
+     "line": 201,
+     "tag": "View",
+     "text": "<View style={{ padding: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>",
+     "file": "app/login.tsx"
+    },
+    {
+     "kind": "input",
+     "fn": "OtpInput",
+     "line": 25,
+     "tag": "TextInput",
+     "text": "<TextInput ref={ref} value={value} onChangeText={(t) => onChange(t.replace(/\\D/g, '').slice(0, 6))} keyboardTy",
+     "file": "components/OtpInput.tsx"
+    }
+   ],
+   "ds": {
+    "FadeIn": 12,
+    "Txt": 27,
+    "Field": 2,
+    "Row": 4,
+    "Button": 5,
+    "Pressy": 2
+   },
+   "sheets": [
+    {
+     "comp": "JoinCode",
+     "label": "Join with a code",
+     "line": 113,
+     "in": "openJoin",
+     "file": "app/login.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Log in",
+     "rows": [
+      "Phone number: In CRM, Not found",
+      "Code entered: Correct, Wrong",
+      "Android SMS auto-read: Off, On",
+      "Connection: Online, Offline",
+      "Programmes on this number: Three, Only one"
+     ],
+     "actions": [
+      "Fill a valid number",
+      "Jump to code step"
+     ],
+     "file": "app/login.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "app/onboarding.tsx",
+    "app/welcome.tsx",
+    "features/shell/sheets.tsx"
+   ]
+  },
+  {
+   "route": "/notifications",
+   "file": "app/notifications.tsx",
+   "files": [
+    "app/notifications.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "Notifications",
+     "line": 83,
+     "tag": "View",
+     "text": "<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: c.accent }} />",
+     "file": "app/notifications.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "Notifications",
+     "line": 91,
+     "tag": "View",
+     "text": "<View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accentSoft, alignItems: 'cent",
+     "file": "app/notifications.tsx"
+    }
+   ],
+   "ds": {
+    "Pressy": 2,
+    "Txt": 5,
+    "Pill": 1,
+    "FadeIn": 2
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Notifications",
+     "rows": [
+      "Notifications: Some, None",
+      "Programmes joined: Three, Only one"
+     ],
+     "actions": [
+      "Mark everything unread"
+     ],
+     "file": "app/notifications.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "components/GymHeader.tsx"
+   ]
+  },
+  {
+   "route": "/onboarding",
+   "file": "app/onboarding.tsx",
+   "files": [
+    "app/onboarding.tsx",
+    "features/onboarding/plan.ts",
+    "features/onboarding/Steps.tsx",
+    "features/onboarding/path.ts"
+   ],
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "Onboarding",
+     "line": 120,
+     "tag": "View",
+     "text": "<View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.accentSoft, alignItems: 'center', j",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "StepProgress",
+     "line": 204,
+     "tag": "View",
+     "text": "<View accessibilityRole=\"progressbar\" accessibilityValue={{ now: n, min: 0, max: total }} style={{ flex: 1, he",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "GoalChoiceTile",
+     "line": 282,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"radio\" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onP",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "GoalChoiceTile",
+     "line": 284,
+     "tag": "View",
+     "text": "<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', jus",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "GoalChoiceTile",
+     "line": 288,
+     "tag": "View",
+     "text": "<View style={{ position: 'absolute', right: 12, top: 12, width: 22, height: 22, borderRadius: radii.sm, backgr",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "FacilityStep",
+     "line": 303,
+     "tag": "Pressy",
+     "text": "<Pressy key={g.id} accessibilityRole=\"radio\" accessibilityState={{ selected: on }} onPress={() => setShell({ c",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "FacilityStep",
+     "line": 310,
+     "tag": "View",
+     "text": "<View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, ba",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "ExpStep",
+     "line": 329,
+     "tag": "Pressy",
+     "text": "<Pressy key={e.l} accessibilityRole=\"radio\" accessibilityState={{ selected: on }} onPress={() => setProfile({ ",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ExpStep",
+     "line": 335,
+     "tag": "View",
+     "text": "<View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, ba",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "SchedStep",
+     "line": 357,
+     "tag": "Pressy",
+     "text": "<Pressy key={d} accessibilityRole=\"radio\" accessibilityState={{ selected: on }} accessibilityLabel={`${d} days",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ProjectionStep",
+     "line": 75,
+     "tag": "View",
+     "text": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: end[0] - 20, top: end[1] - 20, width: 40, heig",
+     "file": "features/onboarding/Steps.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "HowStep",
+     "line": 129,
+     "tag": "View",
+     "text": "<View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accent, alignItems: 'center',",
+     "file": "features/onboarding/Steps.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "MealStep",
+     "line": 174,
+     "tag": "View",
+     "text": "<View style={{ alignSelf: 'stretch', padding: 14, borderRadius: radii.md, backgroundColor: 'rgba(0,0,0,0.72)' ",
+     "file": "features/onboarding/Steps.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "MealStep",
+     "line": 178,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"See what the app reads\" onPress={() => { haptic.success",
+     "file": "features/onboarding/Steps.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "MealStep",
+     "line": 180,
+     "tag": "View",
+     "text": "<View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: fixed.white, alignItems: 'center', ju",
+     "file": "features/onboarding/Steps.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "ReadyContent",
+     "line": 272,
+     "tag": "View",
+     "text": "<View style={{ gap: 4, padding: 16, borderRadius: radii.card, backgroundColor: c.surface }}>",
+     "file": "features/onboarding/Steps.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "ReadyContent",
+     "line": 282,
+     "tag": "View",
+     "text": "<View style={{ gap: 6, padding: 16, borderRadius: radii.card, backgroundColor: c.surface }}>",
+     "file": "features/onboarding/Steps.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ReadyContent",
+     "line": 286,
+     "tag": "View",
+     "text": "<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center",
+     "file": "features/onboarding/Steps.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "HealthStep",
+     "line": 322,
+     "tag": "View",
+     "text": "<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', jus",
+     "file": "features/onboarding/Steps.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 79,
+    "Button": 3,
+    "Pressy": 8,
+    "FadeIn": 8,
+    "Card": 2,
+    "Row": 15,
+    "Pill": 4,
+    "Chip": 3,
+    "NoteField": 1
+   },
+   "sheets": [
+    {
+     "comp": "View",
+     "label": "Notifications",
+     "line": 118,
+     "in": "askNotifications",
+     "file": "app/onboarding.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Onboarding",
+     "rows": [
+      "Jump to step: Welcome, Gym, Goal, Experience, Schedule, Age, Height, Weight, Target, Projection, Basics, Health, Privacy, Building, All set",
+      "Assessment: Scheduled, Not scheduled",
+      "Connection: Online, Offline"
+     ],
+     "actions": [
+      "Restart onboarding"
+     ],
+     "file": "app/onboarding.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "app/(tabs)/_layout.tsx",
+    "app/index.tsx",
+    "web/WebFrame.tsx"
+   ]
+  },
+  {
+   "route": "/plans/ask",
+   "file": "app/plans/ask.tsx",
+   "files": [
+    "app/plans/ask.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "input",
+     "fn": "AskCoach",
+     "line": 67,
+     "tag": "TextInput",
+     "text": "<TextInput accessibilityLabel=\"Note for Coach Vikram, optional\" value={note} onChangeText={setNote} multiline ",
+     "file": "app/plans/ask.tsx"
+    }
+   ],
+   "ds": {
+    "Row": 2,
+    "Txt": 4,
+    "Pill": 1,
+    "FadeIn": 1,
+    "Button": 1
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Ask Coach",
+     "rows": [],
+     "actions": [
+      "Send without a reason (error)"
+     ],
+     "file": "app/plans/ask.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "app/plans/edit.tsx",
+    "features/plans/Sheets.tsx"
+   ]
+  },
+  {
+   "route": "/plans/create",
+   "file": "app/plans/create.tsx",
+   "files": [
+    "app/plans/create.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "button or pill",
+     "fn": "CreateWorkout",
+     "line": 85,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" onPress={() => openSheet(<LibrarySheet mode=\"create\" />, { label: 'Add exer",
+     "file": "app/plans/create.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 9,
+    "Field": 1,
+    "Row": 2,
+    "Pill": 1,
+    "Card": 1,
+    "Pressy": 2,
+    "Button": 1
+   },
+   "sheets": [
+    {
+     "comp": "LibrarySheet",
+     "label": "Add exercise",
+     "line": 85,
+     "in": "CreateWorkout",
+     "file": "app/plans/create.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Create a workout",
+     "rows": [],
+     "actions": [
+      "Fill a sample workout",
+      "Try to save empty (errors)",
+      "Pick a day that already has a workout"
+     ],
+     "file": "app/plans/create.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "features/plans/openers.ts"
+   ]
+  },
+  {
+   "route": "/plans/edit",
+   "file": "app/plans/edit.tsx",
+   "files": [
+    "app/plans/edit.tsx",
+    "features/plans/DragList.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "EditPlan",
+     "line": 130,
+     "tag": "View",
+     "text": "<View style={{ height: ROW_H, borderRadius: 20, backgroundColor: c.surface, flexDirection: 'row', alignItems: ",
+     "file": "app/plans/edit.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "EditPlan",
+     "line": 149,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" onPress={add} style={{ height: 48, borderRadius: radii.card, borderWidth: 1",
+     "file": "app/plans/edit.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 7,
+    "Pressy": 4,
+    "Button": 2
+   },
+   "sheets": [
+    {
+     "comp": "DiscardSheet",
+     "label": "Discard changes",
+     "line": 37,
+     "in": "close",
+     "file": "app/plans/edit.tsx"
+    },
+    {
+     "comp": "LibrarySheet",
+     "label": "Add exercise",
+     "line": 107,
+     "in": "add",
+     "file": "app/plans/edit.tsx"
+    },
+    {
+     "comp": "EditItemSheet",
+     "label": "Edit item",
+     "line": 132,
+     "in": "EditPlan",
+     "file": "app/plans/edit.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Edit plan",
+     "rows": [],
+     "actions": [
+      "Remove the first row",
+      "Close (asks to discard when changed)"
+     ],
+     "file": "app/plans/edit.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "features/plans/openers.ts"
+   ]
+  },
+  {
+   "route": "/plans/exercise",
+   "file": "app/plans/exercise.tsx",
+   "files": [
+    "app/plans/exercise.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "bar",
+     "fn": "PlayBar",
+     "line": 39,
+     "tag": "View",
+     "text": "<View style={{ position: 'absolute', left: 14, right: 14, bottom: 12, height: 4, borderRadius: radii.xs, backg",
+     "file": "app/plans/exercise.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "ExerciseDetail",
+     "line": 84,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={playing ? 'Pause video' : 'Play form video'} onPress={(",
+     "file": "app/plans/exercise.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "ExerciseDetail",
+     "line": 97,
+     "tag": "View",
+     "text": "<View style={{ height: 96, borderRadius: radii.lg, backgroundColor: c.surface, flexDirection: 'row', alignItem",
+     "file": "app/plans/exercise.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 9,
+    "Pressy": 1,
+    "Row": 1,
+    "Card": 2,
+    "Button": 1
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Exercise",
+     "rows": [
+      "Form video: Paused, Playing",
+      "Connection: Online, Offline"
+     ],
+     "actions": [],
+     "file": "app/plans/exercise.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "features/plans/Sheets.tsx",
+    "features/plans/WorkoutPlan.tsx"
+   ]
+  },
+  {
+   "route": "/plans/history",
+   "file": "app/plans/history.tsx",
+   "files": [
+    "app/plans/history.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "WorkoutHistory",
+     "line": 30,
+     "tag": "View",
+     "text": "<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.good, alignItems: 'center', j",
+     "file": "app/plans/history.tsx"
+    }
+   ],
+   "ds": {
+    "Card": 1,
+    "Pressy": 1,
+    "Txt": 4
+   },
+   "sheets": [
+    {
+     "comp": "HistSheet",
+     "label": "Workout summary",
+     "line": 19,
+     "in": "open",
+     "file": "app/plans/history.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Workout history",
+     "rows": [],
+     "actions": [
+      "Open ${h.t}"
+     ],
+     "file": "app/plans/history.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "features/plans/Sheets.tsx",
+    "features/plans/WorkoutPlan.tsx"
+   ]
+  },
+  {
+   "route": "/plans/log",
+   "file": "app/plans/log.tsx",
+   "files": [
+    "app/plans/log.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "NumField",
+     "line": 38,
+     "tag": "View",
+     "text": "<View style={{ flex: 1, height: 52, borderRadius: radii.xl, borderWidth: 1, borderColor: c.line, backgroundCol",
+     "file": "app/plans/log.tsx"
+    },
+    {
+     "kind": "input",
+     "fn": "NumField",
+     "line": 39,
+     "tag": "TextInput",
+     "text": "<TextInput accessibilityLabel={label} value={value} onChangeText={(t) => onChange(t.replace(/[^0-9]/g, ''))} k",
+     "file": "app/plans/log.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "LogFood",
+     "line": 142,
+     "tag": "Pressy",
+     "text": "<Pressy key={f.n} accessibilityRole=\"radio\" accessibilityState={{ selected: on }} accessibilityLabel={`${f.n}$",
+     "file": "app/plans/log.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "LogFood",
+     "line": 204,
+     "tag": "Pressy",
+     "text": "<Pressy key={t} accessibilityRole=\"radio\" accessibilityState={{ selected: wType === t }} accessibilityLabel={f",
+     "file": "app/plans/log.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "LogFood",
+     "line": 232,
+     "tag": "View",
+     "text": "<View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', jus",
+     "file": "app/plans/log.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "LogFood",
+     "line": 278,
+     "tag": "View",
+     "text": "<View accessibilityLiveRegion=\"polite\" style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, ",
+     "file": "app/plans/log.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 25,
+    "Pressy": 3,
+    "Pill": 3,
+    "Segmented": 1,
+    "Field": 2,
+    "Row": 4,
+    "Card": 4,
+    "FadeIn": 5,
+    "Button": 4,
+    "ScanBracket": 4
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "What did you eat?",
+     "rows": [
+      "How to add it: Search, Write, Scan",
+      "Camera (scan food): Allowed, Denied",
+      "Scan result: Works, Fails",
+      "Diet type (catalogue): Veg, Eggetarian, Non-veg"
+     ],
+     "actions": [
+      "Search for something missing"
+     ],
+     "file": "app/plans/log.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "app/plans/edit.tsx",
+    "features/plans/DietPlan.tsx",
+    "features/plans/Sheets.tsx"
+   ]
+  },
+  {
+   "route": "/plans/updated",
+   "file": "app/plans/updated.tsx",
+   "files": [
+    "app/plans/updated.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "Txt": 3,
+    "Card": 1,
+    "FadeIn": 1,
+    "Button": 1
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "What changed",
+     "rows": [
+      "Mid-workout when the update arrives: Off, On"
+     ],
+     "actions": [],
+     "file": "app/plans/updated.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "features/plans/WorkoutPlan.tsx"
+   ]
+  },
+  {
+   "route": "/profile/appearance",
+   "file": "app/profile/appearance.tsx",
+   "files": [
+    "app/profile/appearance.tsx",
+    "features/shell/ThemeTile.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "bar",
+     "fn": "ThemeTile",
+     "line": 20,
+     "tag": "View",
+     "text": "<View style={{ width: 22, height: 5, borderRadius: radii.xs, backgroundColor: m.ink, opacity: 0.8 }} />",
+     "file": "features/shell/ThemeTile.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "ThemeTile",
+     "line": 25,
+     "tag": "View",
+     "text": "<View style={{ flex: 1, height: 5, borderRadius: radii.xs, backgroundColor: m.mute }} />",
+     "file": "features/shell/ThemeTile.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "ThemeTile",
+     "line": 26,
+     "tag": "View",
+     "text": "<View style={{ flex: 1, height: 5, borderRadius: radii.xs, backgroundColor: m.mute }} />",
+     "file": "features/shell/ThemeTile.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ThemeTile",
+     "line": 37,
+     "tag": "View",
+     "text": "<View style={{ width: 16, height: 16, borderRadius: 8, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, bac",
+     "file": "features/shell/ThemeTile.tsx"
+    }
+   ],
+   "ds": {
+    "Row": 2,
+    "Pressy": 1,
+    "Txt": 1
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": []
+  },
+  {
+   "route": "/profile/delete",
+   "file": "app/profile/delete.tsx",
+   "files": [
+    "app/profile/delete.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "DeleteAccount",
+     "line": 35,
+     "tag": "View",
+     "text": "<View style={{ padding: 18, borderRadius: radii.card, backgroundColor: c.warnSoft, gap: 6 }}>",
+     "file": "app/profile/delete.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 2,
+    "Field": 1,
+    "Button": 2
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Delete account",
+     "rows": [
+      "Confirmation: Empty, Typed DELETE"
+     ],
+     "actions": [],
+     "file": "app/profile/delete.tsx"
+    }
+   ],
+   "reachedFrom": []
+  },
+  {
+   "route": "/profile/details",
+   "file": "app/profile/details.tsx",
+   "files": [
+    "app/profile/details.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "button or pill",
+     "fn": "PhotoSheet",
+     "line": 65,
+     "tag": "Pressy",
+     "text": "<Pressy key={label} accessibilityRole=\"button\" onPress={() => closeSheet(run)} scaleTo={0.98} style={{ flexDir",
+     "file": "app/profile/details.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 12,
+    "Field": 3,
+    "Button": 4,
+    "Pressy": 4,
+    "FadeIn": 2,
+    "Row": 5,
+    "Pill": 5,
+    "NoteField": 1
+   },
+   "sheets": [
+    {
+     "comp": "PhotoSheet",
+     "label": "Profile photo",
+     "line": 157,
+     "in": "MyDetails",
+     "file": "app/profile/details.tsx"
+    },
+    {
+     "comp": "PhotoSheet",
+     "label": "Profile photo",
+     "line": 160,
+     "in": "MyDetails",
+     "file": "app/profile/details.tsx"
+    },
+    {
+     "comp": "ChangePhoneSheet",
+     "label": "Change mobile number",
+     "line": 177,
+     "in": "MyDetails",
+     "file": "app/profile/details.tsx"
+    },
+    {
+     "comp": "DobSheet",
+     "label": "Date of birth",
+     "line": 182,
+     "in": "MyDetails",
+     "file": "app/profile/details.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "My details",
+     "rows": [
+      "Name: Filled, Empty",
+      "Injuries: No, Yes"
+     ],
+     "actions": [
+      "Try saving"
+     ],
+     "file": "app/profile/details.tsx"
+    }
+   ],
+   "reachedFrom": []
+  },
+  {
+   "route": "/profile/export",
+   "file": "app/profile/export.tsx",
+   "files": [
+    "app/profile/export.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "bar",
+     "fn": "ExportData",
+     "line": 55,
+     "tag": "View",
+     "text": "<View style={{ height: 8, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>",
+     "file": "app/profile/export.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 3,
+    "FadeIn": 3,
+    "Button": 1
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Export my data",
+     "rows": [
+      "Export result: Succeeds, Fails (offline)"
+     ],
+     "actions": [
+      "Start export"
+     ],
+     "file": "app/profile/export.tsx"
+    }
+   ],
+   "reachedFrom": []
+  },
+  {
+   "route": "/profile/health",
+   "file": "app/profile/health.tsx",
+   "files": [
+    "app/profile/health.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "ConnectedApps",
+     "line": 44,
+     "tag": "View",
+     "text": "<View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14 }}>",
+     "file": "app/profile/health.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ConnectedApps",
+     "line": 46,
+     "tag": "View",
+     "text": "<View accessibilityLabel={HEALTH_NAME} style={{ width: 56, height: 56, borderRadius: radii.md, backgroundColor",
+     "file": "app/profile/health.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ConnectedApps",
+     "line": 52,
+     "tag": "View",
+     "text": "<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: on ? c.good : c.muted }} />",
+     "file": "app/profile/health.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ConnectedApps",
+     "line": 71,
+     "tag": "View",
+     "text": "<View style={{ width: 44, height: 44, borderRadius: 15, backgroundColor: bg, alignItems: 'center', justifyCont",
+     "file": "app/profile/health.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ConnectedApps",
+     "line": 87,
+     "tag": "View",
+     "text": "<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center",
+     "file": "app/profile/health.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 12,
+    "Button": 4,
+    "Row": 5,
+    "Pressy": 1
+   },
+   "sheets": [
+    {
+     "comp": "View",
+     "label": "Disconnect ${HEALTH_NAME}",
+     "line": 32,
+     "in": "disconnect",
+     "file": "app/profile/health.tsx"
+    }
+   ],
+   "scenarios": [],
+   "reachedFrom": []
+  },
+  {
+   "route": "/profile/help",
+   "file": "app/profile/help.tsx",
+   "files": [
+    "app/profile/help.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "Pressy": 1,
+    "Txt": 2,
+    "FadeIn": 1,
+    "Button": 1
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Help & support",
+     "rows": [
+      "FAQ: All closed, First open"
+     ],
+     "actions": [],
+     "file": "app/profile/help.tsx"
+    }
+   ],
+   "reachedFrom": []
+  },
+  {
+   "route": "/profile",
+   "file": "app/profile/index.tsx",
+   "files": [
+    "app/profile/index.tsx",
+    "features/shell/sheets.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "chip",
+     "fn": "Profile",
+     "line": 78,
+     "tag": "View",
+     "text": "<View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, borderRadius: radii.s",
+     "file": "app/profile/index.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "Profile",
+     "line": 80,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Edit name and number\" onPress={go('/profile/details')} ",
+     "file": "app/profile/index.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "Profile",
+     "line": 100,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Goal: ${g2.name}. Change goal`} onPress={go('/goal')} ",
+     "file": "app/profile/index.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "GoalSummaryTile",
+     "line": 141,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`${title} goal ${value}. Edit`} onPress={onPress} scale",
+     "file": "app/profile/index.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "TrackerPromo",
+     "line": 157,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Tracker designs. Choose how your trackers look\" onPress",
+     "file": "app/profile/index.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 18,
+    "Row": 5,
+    "Pressy": 4,
+    "FadeIn": 1,
+    "Button": 4
+   },
+   "sheets": [
+    {
+     "comp": "LogoutSheet",
+     "label": "Log out",
+     "line": 50,
+     "in": "Profile",
+     "file": "app/profile/index.tsx"
+    },
+    {
+     "comp": "LogoutSheet",
+     "label": "Log out",
+     "line": 132,
+     "in": "Profile",
+     "file": "app/profile/index.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Profile",
+     "rows": [
+      "Member type (privacy wording): Regular, PT member",
+      "Programmes joined: Three, Only one",
+      "Account deletion: Not scheduled, Scheduled"
+     ],
+     "actions": [
+      "Log out (confirm sheet)",
+      "Open an invite link (WhatsApp)",
+      "Reset profile settings"
+     ],
+     "file": "app/profile/index.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "components/GymHeader.tsx"
+   ]
+  },
+  {
+   "route": "/profile/join",
+   "file": "app/profile/join.tsx",
+   "files": [
+    "app/profile/join.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "Txt": 2,
+    "FadeIn": 2,
+    "Field": 1,
+    "Button": 1
+   },
+   "sheets": [
+    {
+     "comp": "JoinConsentSheet",
+     "label": "Join programme",
+     "line": 32,
+     "in": "join",
+     "file": "app/profile/join.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Join a program",
+     "rows": [
+      "Invite code: YOGA-2024 (new), GLD-4821 (joined), OLD-0001 (expired), Wrong",
+      "Opened from: Typed, WhatsApp link"
+     ],
+     "actions": [
+      "Try joining"
+     ],
+     "file": "app/profile/join.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "app/profile/index.tsx",
+    "features/shell/Switcher.tsx"
+   ]
+  },
+  {
+   "route": "/profile/notifications",
+   "file": "app/profile/notifications.tsx",
+   "files": [
+    "app/profile/notifications.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "FadeIn": 1,
+    "Row": 1,
+    "Txt": 4,
+    "Button": 1
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Notification settings",
+     "rows": [
+      "Phone permission: Allowed, Blocked, Not asked"
+     ],
+     "actions": [
+      "Turn all reminders on"
+     ],
+     "file": "app/profile/notifications.tsx"
+    }
+   ],
+   "reachedFrom": []
+  },
+  {
+   "route": "/profile/privacy",
+   "file": "app/profile/privacy.tsx",
+   "files": [
+    "app/profile/privacy.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "Row": 1,
+    "Txt": 2
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Privacy",
+     "rows": [
+      "Member type (privacy wording): Regular, PT member",
+      "Programmes joined: Three, Only one"
+     ],
+     "actions": [],
+     "file": "app/profile/privacy.tsx"
+    }
+   ],
+   "reachedFrom": []
+  },
+  {
+   "route": "/profile/tracker-designs",
+   "file": "app/profile/tracker-designs.tsx",
+   "files": [
+    "app/profile/tracker-designs.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "Option",
+     "line": 21,
+     "tag": "View",
+     "text": "<View style={{ position: 'absolute', right: 10, bottom: 10, width: 24, height: 24, borderRadius: radii.sm, bac",
+     "file": "app/profile/tracker-designs.tsx"
+    }
+   ],
+   "ds": {
+    "Pressy": 1,
+    "Txt": 2
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": []
+  },
+  {
+   "route": "/profile/trackers",
+   "file": "app/profile/trackers.tsx",
+   "files": [
+    "app/profile/trackers.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "FadeIn": 1
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Quick trackers",
+     "rows": [
+      "Trackers: All on, All off"
+     ],
+     "actions": [],
+     "file": "app/profile/trackers.tsx"
+    }
+   ],
+   "reachedFrom": []
+  },
+  {
+   "route": "/profile/units",
+   "file": "app/profile/units.tsx",
+   "files": [
+    "app/profile/units.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "Row": 1,
+    "Pill": 1
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Units & detail",
+     "rows": [
+      "Weight: kg, lb",
+      "Diet detail level: Simple, Detailed"
+     ],
+     "actions": [],
+     "file": "app/profile/units.tsx"
+    }
+   ],
+   "reachedFrom": []
+  },
+  {
+   "route": "/progress/assess",
+   "file": "app/progress/assess.tsx",
+   "files": [
+    "app/progress/assess.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "FadeIn": 2,
+    "Card": 2,
+    "Txt": 5,
+    "Button": 2
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/(tabs)/progress.tsx",
+    "app/goal-detail.tsx"
+   ]
+  },
+  {
+   "route": "/progress/goal",
+   "file": "app/progress/goal.tsx",
+   "files": [
+    "app/progress/goal.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "Pill": 3,
+    "Card": 1,
+    "Txt": 7,
+    "Row": 1,
+    "FadeIn": 1,
+    "Button": 2
+   },
+   "sheets": [
+    {
+     "comp": "DateSheet",
+     "label": "Pick a finish date",
+     "line": 63,
+     "in": "EditGoal",
+     "file": "app/progress/goal.tsx"
+    }
+   ],
+   "scenarios": [],
+   "reachedFrom": []
+  },
+  {
+   "route": "/progress/lift",
+   "file": "app/progress/lift.tsx",
+   "files": [
+    "app/progress/lift.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "LiftDetail",
+     "line": 53,
+     "tag": "View",
+     "text": "<View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingTop: 16, paddingHorizontal: 12, pad",
+     "file": "app/progress/lift.tsx"
+    }
+   ],
+   "ds": {
+    "Pill": 2,
+    "Row": 1,
+    "Txt": 3,
+    "FadeIn": 2,
+    "Pressy": 1
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/(tabs)/progress.tsx"
+   ]
+  },
+  {
+   "route": "/progress/metric",
+   "file": "app/progress/metric.tsx",
+   "files": [
+    "app/progress/metric.tsx",
+    "features/progress/LogSheets.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "MetricDetail",
+     "line": 62,
+     "tag": "View",
+     "text": "<View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 8, overflow: 'hidden' },",
+     "file": "app/progress/metric.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "MetricDetail",
+     "line": 64,
+     "tag": "View",
+     "text": "<View style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: radii.md, backgr",
+     "file": "app/progress/metric.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "MetricDetail",
+     "line": 79,
+     "tag": "View",
+     "text": "<View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.surface2, gap: 4 }}>",
+     "file": "app/progress/metric.tsx"
+    }
+   ],
+   "ds": {
+    "FadeIn": 1,
+    "Txt": 9,
+    "Button": 6,
+    "Field": 1
+   },
+   "sheets": [
+    {
+     "comp": "StepsSheet",
+     "label": "Add steps",
+     "line": 74,
+     "in": "MetricDetail",
+     "file": "app/progress/metric.tsx"
+    },
+    {
+     "comp": "WaterSheet",
+     "label": "Water",
+     "line": 75,
+     "in": "MetricDetail",
+     "file": "app/progress/metric.tsx"
+    },
+    {
+     "comp": "QuickLogSheet",
+     "label": "Log a meal",
+     "line": 76,
+     "in": "MetricDetail",
+     "file": "app/progress/metric.tsx"
+    },
+    {
+     "comp": "ManualLogSheet",
+     "label": "",
+     "line": 77,
+     "in": "MetricDetail",
+     "file": "app/progress/metric.tsx"
+    }
+   ],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/(tabs)/progress.tsx",
+    "app/profile/index.tsx",
+    "features/body/BodyLog.tsx",
+    "features/today/StepsCards.tsx",
+    "features/today/Trackers.tsx"
+   ]
+  },
+  {
+   "route": "/progress/photos",
+   "file": "app/progress/photos.tsx",
+   "files": [
+    "app/progress/photos.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "button or pill",
+     "fn": "PhotoTile",
+     "line": 29,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"imagebutton\" accessibilityLabel={`Progress photo ${d}${zoomed ? ', zoomed' : ''}. D",
+     "file": "app/progress/photos.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "Compare",
+     "line": 62,
+     "tag": "View",
+     "text": "<View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: fixed.white, alignItems: 'cente",
+     "file": "app/progress/photos.tsx"
+    }
+   ],
+   "ds": {
+    "Pressy": 1,
+    "FadeIn": 1,
+    "Row": 2,
+    "Txt": 1,
+    "Button": 3
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/(tabs)/progress.tsx"
+   ]
+  },
+  {
+   "route": "/progress/streaks",
+   "file": "app/progress/streaks.tsx",
+   "files": [
+    "app/progress/streaks.tsx",
+    "features/streak/BadgeArt.tsx",
+    "features/streak/StreakHero.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "BadgeCard",
+     "line": 29,
+     "tag": "View",
+     "text": "<View accessible accessibilityLabel={earned ? `${b.title}, earned ${b.earned}` : `${b.title}, locked. ${b.hint",
+     "file": "app/progress/streaks.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "Streaks",
+     "line": 70,
+     "tag": "View",
+     "text": "<View style={[{ backgroundColor: c.surface, borderRadius: radii.card, padding: 16, gap: 10 }, cardShadow(isDar",
+     "file": "app/progress/streaks.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "Streaks",
+     "line": 83,
+     "tag": "View",
+     "text": "<View style={{ padding: 14, borderRadius: 20, backgroundColor: c.accentSoft, gap: 2 }}>",
+     "file": "app/progress/streaks.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "BadgeArt",
+     "line": 81,
+     "tag": "View",
+     "text": "<View style={{ position: 'absolute', right: 0, bottom: 2, width: 24, height: 24, borderRadius: radii.sm, backg",
+     "file": "features/streak/BadgeArt.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 15,
+    "SectionLabel": 2,
+    "Row": 5,
+    "FadeIn": 1
+   },
+   "sheets": [],
+   "scenarios": [
+    {
+     "title": "Streaks & badges",
+     "rows": [
+      "Streak: Active, Broken, New member",
+      "Earlier this week: 0, 1, 2, 3"
+     ],
+     "actions": [],
+     "file": "app/progress/streaks.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "app/(tabs)/progress.tsx",
+    "features/streak/StreakChip.tsx"
+   ]
+  },
+  {
+   "route": "/welcome",
+   "file": "app/welcome.tsx",
+   "files": [
+    "app/welcome.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "TodayMock",
+     "line": 45,
+     "tag": "View",
+     "text": "<View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: fixed.blue }} />",
+     "file": "app/welcome.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "TodayMock",
+     "line": 48,
+     "tag": "View",
+     "text": "<View style={{ width: 20, height: 20, borderRadius: radii.sm, backgroundColor: '#2A3242' }} />",
+     "file": "app/welcome.tsx"
+    },
+    {
+     "kind": "chip",
+     "fn": "TodayMock",
+     "line": 76,
+     "tag": "View",
+     "text": "<View style={{ marginTop: 6, height: 30, borderRadius: 15, backgroundColor: fixed.white, alignItems: 'center',",
+     "file": "app/welcome.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "WorkoutMock",
+     "line": 93,
+     "tag": "View",
+     "text": "<View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: done ? fixed.blue : 'transparent', bor",
+     "file": "app/welcome.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "ProgressMock",
+     "line": 119,
+     "tag": "View",
+     "text": "<View key={i} style={{ flex: 1, height: 6, borderRadius: radii.xs, backgroundColor: o ? '#FF8A3D' : 'rgba(255,",
+     "file": "app/welcome.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ProgressMock",
+     "line": 128,
+     "tag": "View",
+     "text": "<View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: 'rgba(15,138,95,0.25)' }} />",
+     "file": "app/welcome.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "Segment",
+     "line": 157,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={label} onPress={onPress} hitSlop={{ top: 14, bottom: 14",
+     "file": "app/welcome.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 30,
+    "Pressy": 1,
+    "FadeIn": 2,
+    "Button": 1
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/(tabs)/_layout.tsx",
+    "app/index.tsx",
+    "app/login.tsx"
+   ]
+  },
+  {
+   "route": "/workout",
+   "file": "app/workout.tsx",
+   "files": [
+    "app/workout.tsx",
+    "features/workout/SetRow.tsx",
+    "features/workout/RestPanel.tsx",
+    "features/workout/FinishScreen.tsx",
+    "features/workout/NewWorkoutUI.tsx",
+    "features/workout/WorkoutSheets.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "bar",
+     "fn": "Bars",
+     "line": 36,
+     "tag": "View",
+     "text": "<View key={i} style={{ flex: 1, height: 3, borderRadius: radii.xs, backgroundColor: i < pos ? fixed.blue : i =",
+     "file": "app/workout.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "Workout",
+     "line": 227,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" onPress={() => A.addSet(s.exIdx)} style={{ height: 48, borderRadius: radii.",
+     "file": "app/workout.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "Workout",
+     "line": 314,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Play form video\" onPress={() => api.current.formTips()}",
+     "file": "app/workout.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "Workout",
+     "line": 322,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Exercise options: swap, ask coach, form tips, skip\" onP",
+     "file": "app/workout.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "Workout",
+     "line": 350,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92} ",
+     "file": "app/workout.tsx"
+    },
+    {
+     "kind": "chip",
+     "fn": "SetRow",
+     "line": 93,
+     "tag": "View",
+     "text": "<View accessibilityLabel=\"Warm-up set: a lighter set before your working sets. It doesn't count toward your PR",
+     "file": "features/workout/SetRow.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "SetRow",
+     "line": 97,
+     "tag": "View",
+     "text": "<View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center",
+     "file": "features/workout/SetRow.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "SetRow",
+     "line": 108,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={timing ? 'Stop timer and log' : `Start ${p.draft.t} sec",
+     "file": "features/workout/SetRow.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "PopCheck",
+     "line": 39,
+     "tag": "Animated.View",
+     "text": "<Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.accent, alignItems: 'cent",
+     "file": "features/workout/FinishScreen.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "FinishScreen",
+     "line": 97,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Celebrate again\" onPress={() => { haptic.success(); set",
+     "file": "features/workout/FinishScreen.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "FinishScreen",
+     "line": 127,
+     "tag": "Pressy",
+     "text": "<Pressy key={n} accessibilityRole=\"radio\" accessibilityState={{ selected: feel === n }} onPress={() => setFeel",
+     "file": "features/workout/FinishScreen.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "MoveThumb",
+     "line": 51,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Watch the clip\" disabled={!key} onPress={onOpen} scaleT",
+     "file": "features/workout/NewWorkoutUI.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "MoveThumb",
+     "line": 53,
+     "tag": "View",
+     "text": "<View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'c",
+     "file": "features/workout/NewWorkoutUI.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "FinishPill",
+     "line": 65,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Finish workout\" onPress={onPress} scaleTo={0.94} style=",
+     "file": "features/workout/NewWorkoutUI.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "ClipCardInner",
+     "line": 98,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Hide the clip\" onPress={onHide} scaleTo={0.94} style={{",
+     "file": "features/workout/NewWorkoutUI.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "ClipCardInner",
+     "line": 104,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Full screen\" onPress={goFull} scaleTo={0.92} style={{ p",
+     "file": "features/workout/NewWorkoutUI.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "ClipRow",
+     "line": 116,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Show the clip\" onPress={onOpen} scaleTo={0.98} style={{",
+     "file": "features/workout/NewWorkoutUI.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ClipRow",
+     "line": 118,
+     "tag": "View",
+     "text": "<View style={{ width: 44, height: 44, borderRadius: radii.sm, overflow: 'hidden', backgroundColor: fixed.white",
+     "file": "features/workout/NewWorkoutUI.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "ClipRow",
+     "line": 120,
+     "tag": "View",
+     "text": "<View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: 'rgba(11,14,20,0.72)', alignIte",
+     "file": "features/workout/NewWorkoutUI.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "NewExercise",
+     "line": 149,
+     "tag": "View",
+     "text": "<View key={i} style={{ flex: 1, height: 4, borderRadius: radii.xs, backgroundColor: i <= pos ? c.accent : c.su",
+     "file": "features/workout/NewWorkoutUI.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "NewExercise",
+     "line": 163,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Exercise options: swap, ask coach, form tips, skip\" onP",
+     "file": "features/workout/NewWorkoutUI.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "NewExercise",
+     "line": 186,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92} ",
+     "file": "features/workout/NewWorkoutUI.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "FormTipsSheet",
+     "line": 62,
+     "tag": "View",
+     "text": "<View style={{ padding: 16, borderRadius: 20, backgroundColor: c.surface2 }}>",
+     "file": "features/workout/WorkoutSheets.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "WorkoutSwapSheet",
+     "line": 85,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"search\" accessibilityLabel=\"Search all exercises\" onPress={() => closeSheet(() => r",
+     "file": "features/workout/WorkoutSheets.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "WorkoutSwapSheet",
+     "line": 95,
+     "tag": "Pressy",
+     "text": "<Pressy key={a.n} accessibilityRole=\"button\" accessibilityLabel={`${a.n}. ${a.s}`} onPress={() => api.current.",
+     "file": "features/workout/WorkoutSheets.tsx"
+    }
+   ],
+   "ds": {
+    "Row": 22,
+    "Txt": 74,
+    "FadeIn": 10,
+    "Pill": 3,
+    "Button": 14,
+    "Pressy": 23,
+    "Card": 3,
+    "NoteField": 1,
+    "Stepper": 3,
+    "Field": 1,
+    "Chip": 1
+   },
+   "sheets": [
+    {
+     "comp": "SwapSheet",
+     "label": "Swap exercise",
+     "line": 112,
+     "in": "Workout",
+     "file": "app/workout.tsx"
+    },
+    {
+     "comp": "SetMenuSheet",
+     "label": "Set options",
+     "line": 113,
+     "in": "Workout",
+     "file": "app/workout.tsx"
+    },
+    {
+     "comp": "FormTipsSheet",
+     "label": "Form tips",
+     "line": 119,
+     "in": "Workout",
+     "file": "app/workout.tsx"
+    },
+    {
+     "comp": "FinishConfirmSheet",
+     "label": "Finish workout",
+     "line": 165,
+     "in": "askFinish",
+     "file": "app/workout.tsx"
+    },
+    {
+     "comp": "WkMenuSheet",
+     "label": "Workout options",
+     "line": 253,
+     "in": "Workout",
+     "file": "app/workout.tsx"
+    },
+    {
+     "comp": "WkMenuSheet",
+     "label": "Workout options",
+     "line": 322,
+     "in": "Workout",
+     "file": "app/workout.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Active workout",
+     "rows": [
+      "Wearable (Health Connect): Connected, Not connected",
+      "Phase: Warm-up, Main, Cool-down"
+     ],
+     "actions": [
+      "Rest timer: jump to last 5 s",
+      "Log all sets of this exercise",
+      "Finish screen"
+     ],
+     "file": "app/workout.tsx"
+    }
+   ],
+   "reachedFrom": [
+    "app/checkin.tsx",
+    "app/exercise-search.tsx",
+    "features/plans/WorkoutPlan.tsx",
+    "features/today/CheckInBar.tsx",
+    "features/today/WorkoutCard.tsx",
+    "features/workout/StartSheet.tsx",
+    "web/WebFrame.tsx"
+   ]
+  },
+  {
+   "route": "(app shell)",
+   "file": "app/_layout.tsx",
+   "files": [
+    "app/_layout.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "OverlayProvider": 2
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": []
+  }
+ ],
+ "shared": [
+  {
+   "file": "components/GymHeader.tsx",
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "GymHeader",
+     "line": 69,
+     "tag": "View",
+     "text": "<View style={{ position: 'absolute', top: 10, right: 11, width: 8, height: 8, borderRadius: radii.xs, backgrou",
+     "file": "components/GymHeader.tsx"
+    }
+   ],
+   "ds": {},
+   "sheets": [
+    {
+     "comp": "ProgrammeSwitcherSheet",
+     "label": "Switch programme",
+     "line": 52,
+     "in": "GymHeader",
+     "file": "components/GymHeader.tsx"
+    }
+   ],
+   "scenarios": []
+  },
+  {
+   "file": "components/bits.tsx",
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "UnitPill",
+     "line": 126,
+     "tag": "View",
+     "text": "<View accessibilityRole=\"tablist\" accessibilityLabel={label} style={{ flexDirection: 'row', alignSelf: 'center",
+     "file": "components/bits.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "UnitPill",
+     "line": 130,
+     "tag": "Pressy",
+     "text": "<Pressy key={o.value} accessibilityRole=\"tab\" accessibilityState={{ selected: on }} onPress={() => onChange(o.",
+     "file": "components/bits.tsx"
+    }
+   ],
+   "ds": {
+    "Button": 1,
+    "IconButton": 1
+   },
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "components/ui.tsx",
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "Segmented",
+     "line": 57,
+     "tag": "View",
+     "text": "<View accessibilityRole=\"tablist\" accessibilityLabel={accessibilityLabel} onLayout={(e: LayoutChangeEvent) => ",
+     "file": "components/ui.tsx"
+    }
+   ],
+   "ds": {},
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "features/progress/parts.tsx",
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "CardTitle",
+     "line": 50,
+     "tag": "View",
+     "text": "<View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: (tint ?? c.accent) + '26', alig",
+     "file": "features/progress/parts.tsx"
+    }
+   ],
+   "ds": {
+    "Pressy": 1,
+    "Row": 2,
+    "Txt": 3,
+    "IconButton": 1,
+    "DSSubPage": 1
+   },
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "components/FloatingTabBar.tsx",
+   "hand": [
+    {
+     "kind": "button or pill",
+     "fn": "CircleNav",
+     "line": 63,
+     "tag": "Pressable",
+     "text": "<Pressable key={r.key} accessibilityRole=\"tab\" accessibilityState={{ selected: on }} accessibilityLabel={LABEL",
+     "file": "components/FloatingTabBar.tsx"
+    }
+   ],
+   "ds": {},
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "features/shell/Switcher.tsx",
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "ProgrammeSwitcherSheet",
+     "line": 50,
+     "tag": "View",
+     "text": "<View style={{ width: 44, height: 44, borderRadius: radii.lg, borderWidth: 1.5, borderStyle: 'dashed', borderC",
+     "file": "features/shell/Switcher.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 7,
+    "Pressy": 2,
+    "Button": 2
+   },
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "features/shell/parts.tsx",
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "Switch",
+     "line": 44,
+     "tag": "Animated.View",
+     "text": "<Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: fixed.white, shadowColor: f",
+     "file": "features/shell/parts.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "Note",
+     "line": 75,
+     "tag": "View",
+     "text": "<View style={[{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: bg }, style]}>",
+     "file": "features/shell/parts.tsx"
+    }
+   ],
+   "ds": {
+    "Pressy": 2,
+    "Txt": 4
+   },
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "features/today/Trackers.tsx",
+   "hand": [],
+   "ds": {
+    "WaterTile": 1,
+    "WeightTile": 1,
+    "HealthTile": 3,
+    "ConnectTile": 1,
+    "TrackerRow": 1,
+    "Row": 4,
+    "Txt": 14,
+    "BottleFigma": 1,
+    "Ripple": 1,
+    "FadeIn": 3,
+    "Button": 3
+   },
+   "sheets": [
+    {
+     "comp": "WaterSheet",
+     "label": "Water",
+     "line": 116,
+     "in": "WaterCard",
+     "file": "features/today/Trackers.tsx"
+    },
+    {
+     "comp": "HealthSheet",
+     "label": "Health data",
+     "line": 143,
+     "in": "open",
+     "file": "features/today/Trackers.tsx"
+    },
+    {
+     "comp": "HealthSheet",
+     "label": "Health data",
+     "line": 165,
+     "in": "health",
+     "file": "features/today/Trackers.tsx"
+    },
+    {
+     "comp": "WaterSheet",
+     "label": "Water",
+     "line": 170,
+     "in": "TileFor",
+     "file": "features/today/Trackers.tsx"
+    },
+    {
+     "comp": "WaterSheet",
+     "label": "Water",
+     "line": 171,
+     "in": "TileFor",
+     "file": "features/today/Trackers.tsx"
+    }
+   ],
+   "scenarios": []
+  },
+  {
+   "file": "features/today/MealsCard.tsx",
+   "hand": [],
+   "ds": {
+    "MealsCardPattern": 1
+   },
+   "sheets": [
+    {
+     "comp": "QuickLogSheet",
+     "label": "Log a meal",
+     "line": 72,
+     "in": "ateElse",
+     "file": "features/today/MealsCard.tsx"
+    }
+   ],
+   "scenarios": []
+  },
+  {
+   "file": "features/streak/StreakChip.tsx",
+   "hand": [
+    {
+     "kind": "button or pill",
+     "fn": "StreakChip",
+     "line": 36,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`${title}. ${sub}. Open streaks and badges`} onPress={(",
+     "file": "features/streak/StreakChip.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "StreakChip",
+     "line": 38,
+     "tag": "View",
+     "text": "<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: ",
+     "file": "features/streak/StreakChip.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 3,
+    "Pressy": 1
+   },
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "features/today/StepsCards.tsx",
+   "hand": [
+    {
+     "kind": "icon button",
+     "fn": "StepsTile",
+     "line": 57,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Add steps manually\" onPress={gate(() => openSheet(<Step",
+     "file": "features/today/StepsCards.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "StepsPreview",
+     "line": 85,
+     "tag": "View",
+     "text": "<View style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, alignItems: ",
+     "file": "features/today/StepsCards.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "StepsSheet",
+     "line": 240,
+     "tag": "Pressy",
+     "text": "<Pressy key={m} accessibilityRole=\"button\" accessibilityLabel={m === 'steps' ? 'Enter steps' : 'Enter walking ",
+     "file": "features/today/StepsCards.tsx"
+    }
+   ],
+   "ds": {
+    "Pressy": 4,
+    "Txt": 31,
+    "Row": 12,
+    "Button": 3,
+    "Field": 1,
+    "FadeIn": 1
+   },
+   "sheets": [
+    {
+     "comp": "StepsSheet",
+     "label": "Add steps",
+     "line": 57,
+     "in": "StepsTile",
+     "file": "features/today/StepsCards.tsx"
+    }
+   ],
+   "scenarios": []
+  },
+  {
+   "file": "features/trackers/Widgets.tsx",
+   "hand": [
+    {
+     "kind": "button or pill",
+     "fn": "AddButton",
+     "line": 46,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={label} onPress={onPress} disabled={!onPress} scaleTo={0",
+     "file": "features/trackers/Widgets.tsx"
+    }
+   ],
+   "ds": {
+    "Row": 4,
+    "Txt": 22,
+    "Pressy": 3
+   },
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "features/today/QuickLogSheet.tsx",
+   "hand": [
+    {
+     "kind": "button or pill",
+     "fn": "QuickLogSheet",
+     "line": 145,
+     "tag": "Pressy",
+     "text": "<Pressy key={t} accessibilityRole=\"button\" accessibilityLabel={`Add ${t}`} onPress={() => setText((v) => (v.tr",
+     "file": "features/today/QuickLogSheet.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 18,
+    "Segmented": 1,
+    "Pressy": 3,
+    "Field": 2,
+    "Row": 3,
+    "ScanBracket": 4,
+    "FadeIn": 2,
+    "Button": 3,
+    "Chip": 1
+   },
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "features/plans/Sheets.tsx",
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "NutritionSheet",
+     "line": 207,
+     "tag": "View",
+     "text": "<View key={l} accessible accessibilityLabel={`${l} ${v}`} style={{ width: '48%', flexGrow: 1, padding: 14, bor",
+     "file": "features/plans/Sheets.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "HistSheet",
+     "line": 254,
+     "tag": "View",
+     "text": "<View style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: radii.md, backgroundColor: c.surface2",
+     "file": "features/plans/Sheets.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 22,
+    "Row": 4,
+    "Pill": 3,
+    "Button": 6,
+    "Field": 1
+   },
+   "sheets": [
+    {
+     "comp": "ResetSheet",
+     "label": "Reset plan",
+     "line": 33,
+     "in": "PlanMenuSheet",
+     "file": "features/plans/Sheets.tsx"
+    },
+    {
+     "comp": "LibrarySheet",
+     "label": "Exercise library",
+     "line": 34,
+     "in": "PlanMenuSheet",
+     "file": "features/plans/Sheets.tsx"
+    },
+    {
+     "comp": "ResetSheet",
+     "label": "Reset plan",
+     "line": 52,
+     "in": "DietMenuSheet",
+     "file": "features/plans/Sheets.tsx"
+    },
+    {
+     "comp": "it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode=\"sugg\"",
+     "label": "Swap item",
+     "line": 183,
+     "in": "ItemMenuSheet",
+     "file": "features/plans/Sheets.tsx"
+    },
+    {
+     "comp": "NutritionSheet",
+     "label": "Nutrition",
+     "line": 187,
+     "in": "ItemMenuSheet",
+     "file": "features/plans/Sheets.tsx"
+    },
+    {
+     "comp": "DietSwapSheet",
+     "label": "Swap item",
+     "line": 189,
+     "in": "ItemMenuSheet",
+     "file": "features/plans/Sheets.tsx"
+    }
+   ],
+   "scenarios": []
+  },
+  {
+   "file": "features/plans/parts.tsx",
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "InfoBox",
+     "line": 62,
+     "tag": "View",
+     "text": "<View style={[{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: bg }, style]}>",
+     "file": "features/plans/parts.tsx"
+    }
+   ],
+   "ds": {
+    "Row": 1,
+    "Txt": 7,
+    "Pressy": 1,
+    "DSStepper": 1
+   },
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "features/progress/TrendUI.tsx",
+   "hand": [
+    {
+     "kind": "icon button",
+     "fn": "RangeBar",
+     "line": 37,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Earlier\" disabled={!win.canPrev} onPress={() => go(-1)}",
+     "file": "features/progress/TrendUI.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "RangeBar",
+     "line": 44,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Later\" disabled={!win.canNext} onPress={() => go(1)} st",
+     "file": "features/progress/TrendUI.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "RangeBar",
+     "line": 50,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" onPress={() => { haptic.tick(); progressStore.set({ anchor: sod(TODAY).getT",
+     "file": "features/progress/TrendUI.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "RangeBarSlim",
+     "line": 75,
+     "tag": "View",
+     "text": "<View accessibilityRole=\"radiogroup\" accessibilityLabel=\"Period\" style={{ flex: 1, flexDirection: 'row', gap: ",
+     "file": "features/progress/TrendUI.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "RangeBarSlim",
+     "line": 79,
+     "tag": "Pressy",
+     "text": "<Pressy key={r.value} accessibilityRole=\"radio\" accessibilityState={{ selected: on }} accessibilityLabel={r.la",
+     "file": "features/progress/TrendUI.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "CalendarSheet",
+     "line": 113,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Previous month\" disabled={!canBack} onPress={() => setC",
+     "file": "features/progress/TrendUI.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "CalendarSheet",
+     "line": 115,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Next month\" disabled={!canFwd} onPress={() => setCursor",
+     "file": "features/progress/TrendUI.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "CalendarSheet",
+     "line": 126,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={d.toDateString()} disabled={future} onPress={() => { pr",
+     "file": "features/progress/TrendUI.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "CalendarSheet",
+     "line": 129,
+     "tag": "View",
+     "text": "<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.xs, backgroundColor: ",
+     "file": "features/progress/TrendUI.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "TrendChart",
+     "line": 177,
+     "tag": "View",
+     "text": "<View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2 }} />",
+     "file": "features/progress/TrendUI.tsx"
+    }
+   ],
+   "ds": {
+    "Segmented": 1,
+    "Row": 6,
+    "Pressy": 13,
+    "Txt": 12,
+    "FadeIn": 1
+   },
+   "sheets": [
+    {
+     "comp": "CalendarSheet",
+     "label": "Pick a date",
+     "line": 40,
+     "in": "RangeBar",
+     "file": "features/progress/TrendUI.tsx"
+    },
+    {
+     "comp": "CalendarSheet",
+     "label": "Pick a date",
+     "line": 88,
+     "in": "RangeBarSlim",
+     "file": "features/progress/TrendUI.tsx"
+    }
+   ],
+   "scenarios": []
+  },
+  {
+   "file": "features/goalv2/FinishBy.tsx",
+   "hand": [],
+   "ds": {
+    "Txt": 5,
+    "Row": 2,
+    "Pill": 2,
+    "Button": 1
+   },
+   "sheets": [
+    {
+     "comp": "DateSheet",
+     "label": "Pick a finish date",
+     "line": 29,
+     "in": "FinishBy",
+     "file": "features/goalv2/FinishBy.tsx"
+    }
+   ],
+   "scenarios": []
+  },
+  {
+   "file": "features/body/BodyLog.tsx",
+   "hand": [
+    {
+     "kind": "input",
+     "fn": "BigNumber",
+     "line": 46,
+     "tag": "TextInput",
+     "text": "<TextInput autoFocus value={text} onChangeText={(t) => { setText(t); setBad(false); }} keyboardType={editable.",
+     "file": "features/body/BodyLog.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "WeightScreen",
+     "line": 220,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Date: ${DAYS[day].full}. Change`} onPress={() => openS",
+     "file": "features/body/BodyLog.tsx"
+    }
+   ],
+   "ds": {
+    "Row": 6,
+    "Txt": 14,
+    "FadeIn": 1,
+    "Button": 1,
+    "Pill": 1,
+    "Card": 1,
+    "Pressy": 1
+   },
+   "sheets": [
+    {
+     "comp": "WeighDateSheet",
+     "label": "Weighed on",
+     "line": 220,
+     "in": "WeightScreen",
+     "file": "features/body/BodyLog.tsx"
+    }
+   ],
+   "scenarios": [
+    {
+     "title": "Log weight",
+     "rows": [
+      "Unit: kg, lb"
+     ],
+     "actions": [],
+     "file": "features/body/BodyLog.tsx"
+    }
+   ]
+  },
+  {
+   "file": "components/Ruler.tsx",
+   "hand": [
+    {
+     "kind": "bar",
+     "fn": "Ruler",
+     "line": 106,
+     "tag": "View",
+     "text": "<View style={{ width: size, height: 2, borderRadius: 1, backgroundColor: major ? c.ink : c.surface3 }} />",
+     "file": "components/Ruler.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "Ruler",
+     "line": 121,
+     "tag": "View",
+     "text": "<View pointerEvents=\"none\" style={{ position: 'absolute', right: 0, top: len / 2 - 1.5, width: 38, height: 3, ",
+     "file": "components/Ruler.tsx"
+    }
+   ],
+   "ds": {},
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "features/checkin/CheckInEngine.tsx",
+   "hand": [],
+   "ds": {
+    "Txt": 3,
+    "Button": 2
+   },
+   "sheets": [
+    {
+     "comp": "StillTrainingSheet",
+     "label": "Still training?",
+     "line": 64,
+     "in": "CheckInEngine",
+     "file": "features/checkin/CheckInEngine.tsx"
+    }
+   ],
+   "scenarios": []
+  },
+  {
+   "file": "features/checkin/GymMap.native.tsx",
+   "hand": [
+    {
+     "kind": "icon badge",
+     "fn": "GymMap",
+     "line": 44,
+     "tag": "View",
+     "text": "<View style={{ width: 38, height: 38, borderRadius: 19, backgroundColor: c.accent, alignItems: 'center', justi",
+     "file": "features/checkin/GymMap.native.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "GymMap",
+     "line": 51,
+     "tag": "View",
+     "text": "<View style={{ width: 34, height: 34, borderRadius: radii.md, backgroundColor: 'rgba(52,120,246,0.22)', alignI",
+     "file": "features/checkin/GymMap.native.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "GymMap",
+     "line": 52,
+     "tag": "View",
+     "text": "<View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: '#3478F6', borderWidth: 3, borderColor",
+     "file": "features/checkin/GymMap.native.tsx"
+    }
+   ],
+   "ds": {},
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "features/workout/ClipStage.tsx",
+   "hand": [
+    {
+     "kind": "icon button",
+     "fn": "Clip",
+     "line": 33,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={isPlaying ? 'Pause the clip' : 'Play the clip'} onPress",
+     "file": "features/workout/ClipStage.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "Clip",
+     "line": 38,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={IS_WEB && wide ? 'Exit full screen' : 'Full screen'} on",
+     "file": "features/workout/ClipStage.tsx"
+    }
+   ],
+   "ds": {
+    "Pressy": 2
+   },
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "web/ControlParts.tsx",
+   "hand": [
+    {
+     "kind": "card",
+     "fn": "PanelCard",
+     "line": 15,
+     "tag": "View",
+     "text": "<View style={{ backgroundColor: fixed.white, borderRadius: radii.md, borderWidth: 1, borderColor: P.line, padd",
+     "file": "web/ControlParts.tsx"
+    },
+    {
+     "kind": "chip",
+     "fn": "PanelCard",
+     "line": 21,
+     "tag": "View",
+     "text": "<View style={{ height: 22, paddingHorizontal: 8, borderRadius: radii.sm, borderWidth: 1, borderColor: P.chip, ",
+     "file": "web/ControlParts.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "Choice",
+     "line": 39,
+     "tag": "View",
+     "text": "<View style={{ flexDirection: 'row', padding: 2, borderRadius: radii.md, backgroundColor: P.tint }}>",
+     "file": "web/ControlParts.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "Choice",
+     "line": 43,
+     "tag": "Pressable",
+     "text": "<Pressable key={o} accessibilityRole=\"button\" accessibilityState={{ selected: on }} onPress={() => onPick(o)} ",
+     "file": "web/ControlParts.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "Choice",
+     "line": 55,
+     "tag": "Pressable",
+     "text": "<Pressable key={o} accessibilityRole=\"button\" accessibilityState={{ selected: on }} onPress={() => onPick(o)} ",
+     "file": "web/ControlParts.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "Actions",
+     "line": 74,
+     "tag": "Pressable",
+     "text": "<Pressable key={o} accessibilityRole=\"button\" onPress={() => onPick(o)} style={{ height: 28, paddingHorizontal",
+     "file": "web/ControlParts.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "QuickTime",
+     "line": 85,
+     "tag": "Pressable",
+     "text": "<Pressable accessibilityRole=\"button\" accessibilityLabel={`Jump to ${label}, ${time}`} onPress={onPress} style",
+     "file": "web/ControlParts.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "ScreenItem",
+     "line": 98,
+     "tag": "Pressable",
+     "text": "<Pressable accessibilityRole=\"button\" accessibilityState={{ selected: on }} onPress={onPress} style={{ flexBas",
+     "file": "web/ControlParts.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "Dropdown",
+     "line": 111,
+     "tag": "Pressable",
+     "text": "<Pressable accessibilityRole=\"button\" accessibilityLabel={`${label}: ${value || placeholder}`} accessibilitySt",
+     "file": "web/ControlParts.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "Dropdown",
+     "line": 124,
+     "tag": "Pressable",
+     "text": "<Pressable key={o} accessibilityRole=\"button\" accessibilityState={{ selected: on }} onPress={() => { onPick(o)",
+     "file": "web/ControlParts.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "SwitchChip",
+     "line": 139,
+     "tag": "Pressable",
+     "text": "<Pressable accessibilityRole=\"switch\" accessibilityState={{ checked: on }} accessibilityLabel={label} onPress=",
+     "file": "web/ControlParts.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "SwitchChip",
+     "line": 141,
+     "tag": "View",
+     "text": "<View style={{ width: 6, height: 6, borderRadius: radii.xs, backgroundColor: on ? fixed.live : P.chip }} />",
+     "file": "web/ControlParts.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "fn": "ActionChip",
+     "line": 150,
+     "tag": "Pressable",
+     "text": "<Pressable accessibilityRole=\"button\" onPress={onPress} style={{ height: 32, paddingHorizontal: 12, borderRadi",
+     "file": "web/ControlParts.tsx"
+    }
+   ],
+   "ds": {},
+   "sheets": [],
+   "scenarios": []
+  },
+  {
+   "file": "web/WebFrame.tsx",
+   "hand": [
+    {
+     "kind": "bar",
+     "fn": "TimeSlider",
+     "line": 116,
+     "tag": "View",
+     "text": "<View pointerEvents=\"none\" style={{ height: 4, borderRadius: radii.xs, backgroundColor: P.track }}>",
+     "file": "web/WebFrame.tsx"
+    },
+    {
+     "kind": "bar",
+     "fn": "TimeSlider",
+     "line": 117,
+     "tag": "View",
+     "text": "<View style={{ width: `${pct}%`, height: 4, borderRadius: radii.xs, backgroundColor: P.ink }} />",
+     "file": "web/WebFrame.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "TimeSlider",
+     "line": 119,
+     "tag": "View",
+     "text": "<View key={h} pointerEvents=\"none\" style={{ position: 'absolute', left: `${(h / 23) * 100}%`, marginLeft: -3, ",
+     "file": "web/WebFrame.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "TimeSlider",
+     "line": 120,
+     "tag": "View",
+     "text": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: `${pct}%`, marginLeft: -11, top: 4, width: 22,",
+     "file": "web/WebFrame.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "PanelBody",
+     "line": 310,
+     "tag": "View",
+     "text": "<View style={{ backgroundColor: fixed.white, borderRadius: radii.md, borderWidth: 1, borderColor: P.line, padd",
+     "file": "web/WebFrame.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "fn": "PanelBody",
+     "line": 311,
+     "tag": "View",
+     "text": "<View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: P.ink, alignItems: 'center', justifyC",
+     "file": "web/WebFrame.tsx"
+    },
+    {
+     "kind": "icon button",
+     "fn": "PanelBody",
+     "line": 316,
+     "tag": "Pressable",
+     "text": "<Pressable accessibilityRole=\"button\" accessibilityLabel={open ? 'Collapse the controls' : 'Expand the control",
+     "file": "web/WebFrame.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "useOpenEdgeCases",
+     "line": 345,
+     "tag": "View",
+     "text": "<View style={{ backgroundColor: fixed.white, borderRadius: 20, padding: 12 }}>",
+     "file": "web/WebFrame.tsx"
+    },
+    {
+     "kind": "card",
+     "fn": "EdgeTab",
+     "line": 353,
+     "tag": "View",
+     "text": "<View style={{ backgroundColor: fixed.white, borderRadius: 20, padding: 12 }}>",
+     "file": "web/WebFrame.tsx"
+    }
+   ],
+   "ds": {},
+   "sheets": [
+    {
+     "comp": "View",
+     "label": "Edge cases",
+     "line": 345,
+     "in": "useOpenEdgeCases",
+     "file": "web/WebFrame.tsx"
+    },
+    {
+     "comp": "View",
+     "label": "Edge cases",
+     "line": 353,
+     "in": "EdgeTab",
+     "file": "web/WebFrame.tsx"
+    }
+   ],
+   "scenarios": []
+  }
+ ]
+}

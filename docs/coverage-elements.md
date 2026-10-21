@@ -1,0 +1,1156 @@
+# Elements per screen
+
+For each row of `docs/coverage.md`: the design-system components it uses (count of tags) and every hand-built element found (file:line, kind, the start of the JSX). Generated; do not edit.
+
+## Gym (routes)
+
+- Files: `app/(tabs)/gym.tsx`
+- Library components used: Txt x20, FadeIn x7, Row x3, Pressy x1
+- Hand-built:
+  - `app/(tabs)/gym.tsx:51` icon badge: `<View key={i} style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: v && `
+  - `app/(tabs)/gym.tsx:70` icon badge: `<View style={{ width: 52, height: 52, borderRadius: radii.md, backgroundColor: c.tNutri, a`
+
+## Today (routes)
+
+- Files: `app/(tabs)/index.tsx`, `features/today/TopCards.tsx`, `features/today/WorkoutCard.tsx`, `features/today/WeekCard.tsx`, `features/today/timeline.ts`, `features/today/ForYou.tsx`, `features/today/ui.ts`, `features/today/CheckInBar.tsx`, `features/today/ViewOnly.tsx`, `features/today/TodayBudget.tsx`, `features/today/TodayGreeting.tsx`, `features/today/DayQuote.tsx`, `features/today/NoPlanCard.tsx`, `features/reminders/PushBanner.tsx`, `features/today/GoalCards.tsx`, `features/today/LogMealsSheet.tsx`, `features/reminders/push.ts`
+- Library components used: Txt x61, FadeIn x24, Row x15, Pressy x10, Button x10, Card x1, WorkoutCardPattern x1, WeekCardPattern x1, BudgetCard x1
+- States and edge cases: Today variant: Regular, With updates, Comeback; Goal card state: Auto, ...GOAL_STATE_OPTIONS.map(([l; Last weigh-in: Today, 3 days ago, 10+ days ago; Health (steps): Connected, Not connected; Wearable (heart rate, sleep, energy): Has a wearable, No wearable; Time of day: Morning, Afternoon, Evening; Workout today: Not started, Done, Rest day; Check-in (location): Away, Near (25 m), At the gym, Checked in, Location off; Food scan result: Works, Fails; (action) Show loading state; (action) Reset meals for this time of day
+- Hand-built:
+  - `features/today/TopCards.tsx:40` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Your goal: ${g.name}. ${progressLi`
+  - `features/today/TopCards.tsx:165` icon badge: `<View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: 'rgba(255,1`
+  - `features/today/TopCards.tsx:211` icon badge: `<View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: bg, alignIt`
+  - `features/today/TopCards.tsx:302` bar: `<View key={k} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: radii.xs, backgro`
+  - `features/today/ForYou.tsx:118` card: `<View style={[{ flexGrow: 1, flexShrink: 1, backgroundColor: c.surface, borderRadius: radi`
+  - `features/today/ForYou.tsx:122` icon badge: `<View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: bg, alignIt`
+  - `features/today/ForYou.tsx:134` button or pill: `<Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, paddingHorizontal`
+  - `features/today/ForYou.tsx:155` bar: `<Animated.View style={[{ height: 6, borderRadius: radii.xs, backgroundColor: c.ink }, st]}`
+  - `features/today/ForYou.tsx:214` icon badge: `<View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: 'rgba(255,1`
+  - `features/today/ForYou.tsx:218` chip: `<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, borderWidth: 1`
+  - `features/today/NoPlanCard.tsx:13` card: `<View accessible accessibilityLabel="No plan assigned yet. Your coach shares your workout `
+  - `features/today/NoPlanCard.tsx:14` icon badge: `<View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.accentSof`
+
+## Plans (routes)
+
+- Files: `app/(tabs)/plans.tsx`, `features/plans/WorkoutPlan.tsx`, `features/plans/DietPlan.tsx`, `features/plans/QtySheet.tsx`, `features/plans/qty.ts`
+- Library components used: Txt x70, FadeIn x21, Pressy x13, Row x11, Card x9, Button x9, ListCard x2, Segmented x1, Chevron x1
+- States and edge cases: Plan type: Workout, Diet; Coach updated the plan: Off, On; Plan change request: None, Requested, Ready; No plan yet (before assessment): Off, On; Mid-workout when the update arrives: Off, On; Connection: Online, Offline; Diet type (plan + swaps): Veg, Eggetarian, Non-veg; Detail level: Detailed, Simple; Camera (scan food): Allowed, Denied; Scan result: Works, Fails; (action) Apply Coach update now; (action) Reset this prototype
+- Hand-built:
+  - `app/(tabs)/plans.tsx:51` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => g`
+  - `app/(tabs)/plans.tsx:70` button or pill: `<Pressy key={i} accessibilityRole="button" accessibilityState={{ selected: on }} accessibi`
+  - `app/(tabs)/plans.tsx:77` icon badge: `<View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: c.good, alignItems`
+  - `app/(tabs)/plans.tsx:78` icon badge: `<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'das`
+  - `app/(tabs)/plans.tsx:79` icon badge: `<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />`
+  - `app/(tabs)/plans.tsx:147` card: `<View accessibilityLabel="Plans are view only" style={{ borderRadius: 20, backgroundColor:`
+  - `app/(tabs)/plans.tsx:149` icon badge: `<View style={{ width: 36, height: 36, borderRadius: radii.sm, backgroundColor: c.surface3,`
+  - `app/(tabs)/plans.tsx:163` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={isW ? 'Plan menu' : 'Diet menu'} on`
+  - `features/plans/WorkoutPlan.tsx:41` icon badge: `<View style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface2,`
+  - `features/plans/WorkoutPlan.tsx:90` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Coach Vikram updated your plan. ${`
+  - `features/plans/WorkoutPlan.tsx:92` icon badge: `<View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: c.accent }} />`
+  - `features/plans/WorkoutPlan.tsx:112` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Your new plan is ready. View" onPre`
+  - `features/plans/WorkoutPlan.tsx:131` icon badge: `<View accessibilityLabel="Logged" style={{ width: 28, height: 28, borderRadius: 14, backgr`
+  - `features/plans/WorkoutPlan.tsx:152` bar: `<View key={e.id} accessibilityLabel={e.res === 'skip' ? 'Not logged' : 'Logged'} style={{ `
+  - `features/plans/WorkoutPlan.tsx:178` icon badge: `<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, `
+  - `features/plans/WorkoutPlan.tsx:179` icon badge: `<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, `
+  - `features/plans/DietPlan.tsx:67` bar: `<View style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: '`
+  - `features/plans/DietPlan.tsx:105` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={'${label} ${qty.unit || 'piece'}'} `
+  - `features/plans/DietPlan.tsx:112` card: `<View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, height: 38, paddingHori`
+  - `features/plans/DietPlan.tsx:121` icon badge: `<View accessibilityLabel="Changed from plan" style={{ position: 'absolute', top: 0, right:`
+  - `features/plans/DietPlan.tsx:279` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Ate something else? Log it" onPress`
+
+## Progress (routes)
+
+- Files: `app/(tabs)/progress.tsx`
+- Library components used: Txt x23, Row x6, FadeIn x4
+- Hand-built:
+  - `app/(tabs)/progress.tsx:117` card: `<View key={t.l} style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 12, borderRadius`
+  - `app/(tabs)/progress.tsx:152` card: `<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 2`
+  - `app/(tabs)/progress.tsx:165` icon badge: `<View style={{ width: 48, height: 48, borderRadius: radii.card, backgroundColor: 'rgba(255`
+
+## Check-in map (routes)
+
+- Files: `app/checkin.tsx`, `features/checkin/GymMap.tsx`
+- Library components used: Txt x6, Button x4, Row x1, FadeIn x1
+- States and edge cases: Check-in (location): Away, Near (25 m), At the gym, Location off; (action) Refresh location
+- Hand-built:
+  - `app/checkin.tsx:125` icon badge: `<View style={{ width: 34, height: 34, borderRadius: radii.md, backgroundColor: isDark ? 'r`
+
+## Coach (routes)
+
+- Files: `app/coach.tsx`
+- Library components used: Txt x11, Row x6, Card x3, SectionLabel x3, Button x2, Pressy x2
+- States and edge cases: Coach availability: Available, Away; Unread reply: Yes, No
+- Hand-built:
+  - `app/coach.tsx:41` icon badge: `<View accessibilityLabel="Unread reply" style={{ position: 'absolute', right: 5, top: 5, w`
+  - `app/coach.tsx:67` icon badge: `<View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.accentSof`
+  - `app/coach.tsx:81` button or pill: `<Pressy key={t.l} accessibilityRole="button" onPress={() => askCoach(t.ctx, t.draft)} scal`
+
+## Exercise search (routes)
+
+- Files: `app/exercise-search.tsx`
+- Library components used: Txt x5, Pill x3, Row x2, Field x1, Pressy x1, Button x1
+- States and edge cases: Query: Empty, Squat, No match
+- Hand-built:
+  - `app/exercise-search.tsx:72` button or pill: `<Pressy key={x.n} accessibilityRole="button" accessibilityLabel={'${x.n}, ${x.g}. Swap'} o`
+  - `app/exercise-search.tsx:84` icon badge: `<View style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface2,`
+
+## Food detail (routes)
+
+- Files: `app/food.tsx`
+- Library components used: Txt x27, Row x9, Card x3, Pressy x2, Chip x2, Button x2, FadeIn x1
+- States and edge cases: Micronutrients: Collapsed, Expanded; (action) Close food page
+- Hand-built:
+  - `app/food.tsx:97` card: `<View key={l} style={{ gap: 2, paddingVertical: 9, paddingHorizontal: 14, borderRadius: ra`
+  - `app/food.tsx:103` button or pill: `<Pressy accessibilityRole="button" onPress={() => askCoach(fd!.n, 'Is ${fd!.n.toLowerCase(`
+  - `app/food.tsx:113` icon badge: `<View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.tAct, ali`
+  - `app/food.tsx:123` bar: `<View style={{ height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: '`
+  - `app/food.tsx:127` button or pill: `<Pressy accessibilityRole="button" accessibilityState={{ expanded: micro }} onPress={() =>`
+  - `app/food.tsx:138` bar: `<View style={{ height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: '`
+  - `app/food.tsx:163` icon badge: `<View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.surface2, align`
+
+## Your goal (routes)
+
+- Files: `app/goal-detail.tsx`
+- Library components used: Txt x32, Card x11, Row x10, Button x7, Pressy x3, SectionLabel x1
+- Hand-built:
+  - `app/goal-detail.tsx:91` chip: `<View style={{ height: 26, paddingHorizontal: 10, borderRadius: 13, backgroundColor: c.ink`
+  - `app/goal-detail.tsx:106` bar: `<View style={{ width: 16, height: 3, borderRadius: radii.xs, backgroundColor: c.accent }} `
+  - `app/goal-detail.tsx:128` icon badge: `<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: col[r.key][0], al`
+  - `app/goal-detail.tsx:131` bar: `<View style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface3, overflow: '`
+  - `app/goal-detail.tsx:132` bar: `<View style={{ width: '${Math.max(4, r.pct * 100)}%', height: 6, borderRadius: radii.xs, b`
+  - `app/goal-detail.tsx:151` icon badge: `<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: h.result ==`
+  - `app/goal-detail.tsx:243` icon badge: `<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.accentSoft, ali`
+  - `app/goal-detail.tsx:250` chip: `<View style={{ alignSelf: 'flex-start', height: 30, paddingHorizontal: 12, borderRadius: 1`
+  - `app/goal-detail.tsx:269` icon badge: `<View style={{ width: 34, height: 34, borderRadius: radii.md, alignItems: 'center', justif`
+
+## Change goal (routes)
+
+- Files: `app/goal.tsx`
+- Library components used: Txt x12, Card x5, Row x4, Pill x4, Button x2, FadeIn x1
+- States and edge cases: Main goal: Weight loss, Strength, Flexibility, Not sure yet; Target size: Normal, Big (18 kg); (action) Save goal
+- Hand-built: none
+
+## Assessments (routes)
+
+- Files: `app/gym/assessments.tsx`
+- Library components used: Txt x15, FadeIn x3, Card x3, Row x2, Button x2, Pill x1
+- Hand-built:
+  - `app/gym/assessments.tsx:76` icon badge: `<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone]`
+  - `app/gym/assessments.tsx:90` card: `<View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingHorizontal: 16,`
+
+## Attendance (routes)
+
+- Files: `app/gym/attendance.tsx`
+- Library components used: Txt x10, Row x3, FadeIn x2, Button x1, Pill x1
+- Hand-built:
+  - `app/gym/attendance.tsx:78` card: `<View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 16 }, cardSha`
+  - `app/gym/attendance.tsx:88` icon badge: `<View style={{ width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyConte`
+  - `app/gym/attendance.tsx:96` icon badge: `<View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: x.col }} />`
+  - `app/gym/attendance.tsx:105` card: `<View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 4, pa`
+  - `app/gym/attendance.tsx:110` icon badge: `<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: t.dotBg, al`
+
+## Membership pauses (routes)
+
+- Files: `app/gym/break.tsx`
+- Library components used: Txt x11, Row x3
+- Hand-built:
+  - `app/gym/break.tsx:33` card: `<View style={[{ padding: 16, borderRadius: radii.card, backgroundColor: c.surface, borderW`
+  - `app/gym/break.tsx:39` card: `<View style={[{ padding: 18, borderRadius: radii.xl, backgroundColor: c.surface, gap: 10 }`
+  - `app/gym/break.tsx:51` card: `<View style={{ padding: 18, borderRadius: radii.card, backgroundColor: c.surface }}>`
+  - `app/gym/break.tsx:53` card: `<View key={h.from} style={[{ padding: 16, borderRadius: radii.card, backgroundColor: c.sur`
+
+## Coach chat (routes)
+
+- Files: `app/gym/chat.tsx`, `features/chat/AudioBubble.tsx`, `features/chat/Composer.tsx`, `features/chat/emoji.ts`
+- Library components used: Txt x19, Pressy x15, FadeIn x5, Row x2, Button x1
+- Hand-built:
+  - `app/gym/chat.tsx:37` icon badge: `<Animated.View style={[{ width: 6, height: 6, borderRadius: radii.xs, backgroundColor: c.m`
+  - `app/gym/chat.tsx:117` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'About ${ctx}. Remove'} onPress={()`
+  - `app/gym/chat.tsx:145` card: `<View accessibilityRole="alert" style={{ padding: 12, borderRadius: radii.md, backgroundCo`
+  - `app/gym/chat.tsx:153` button or pill: `<Pressy key={t.l} accessibilityRole="button" onPress={() => { setDraft(t.draft); setCtx(t.`
+  - `app/gym/chat.tsx:159` card: `<View style={{ flexShrink: 1, paddingVertical: m.img ? 6 : 10, paddingHorizontal: m.img ? `
+  - `features/chat/AudioBubble.tsx:37` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={st.playing ? 'Pause voice message' `
+  - `features/chat/Composer.tsx:29` icon badge: `<Animated.View style={[{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#FF4D4F`
+  - `features/chat/Composer.tsx:39` icon button: `<Pressy key={x.key} accessibilityRole="button" accessibilityLabel={'${x.key} emoji'} onPre`
+  - `features/chat/Composer.tsx:156` card: `<View accessibilityRole="alert" style={{ marginHorizontal: 16, marginTop: 10, padding: 10,`
+  - `features/chat/Composer.tsx:187` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Remove photo" onPress={() => setImg`
+  - `features/chat/Composer.tsx:195` input: `<TextInput ref={input} value={draft} onChangeText={setDraft} onFocus={() => setEmoji(false`
+
+## Confirm session (routes)
+
+- Files: `app/gym/confirm.tsx`
+- Library components used: Txt x6, FadeIn x2, Pressy x1, Field x1, Button x1
+- Hand-built:
+  - `app/gym/confirm.tsx:80` card: `<View style={{ padding: 18, borderRadius: radii.xl, backgroundColor: c.accentSoft, gap: 4 `
+
+## Membership (routes)
+
+- Files: `app/gym/membership.tsx`
+- Library components used: Txt x7, FadeIn x1, Card x1, Button x1
+- Hand-built:
+  - `app/gym/membership.tsx:43` card: `<View style={{ paddingVertical: 16, paddingHorizontal: 18, borderRadius: radii.lg, backgro`
+
+## PT package (routes)
+
+- Files: `app/gym/pt.tsx`
+- Library components used: Txt x3, Card x1, Button x1
+- Hand-built: none
+
+## Entry redirect (routes)
+
+- Files: `app/index.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Log height (routes)
+
+- Files: `app/log-height.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Log weight (routes)
+
+- Files: `app/log-weight.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Log in (routes)
+
+- Files: `app/login.tsx`, `components/OtpInput.tsx`
+- Library components used: Txt x27, FadeIn x12, Button x5, Row x4, Field x2, Pressy x2
+- States and edge cases: Phone number: In CRM, Not found; Code entered: Correct, Wrong; Android SMS auto-read: Off, On; Connection: Online, Offline; Programmes on this number: Three, Only one; (action) Fill a valid number; (action) Jump to code step
+- Hand-built:
+  - `app/login.tsx:153` card: `<View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.warnSoft, gap: 10 }`
+  - `app/login.tsx:201` card: `<View style={{ padding: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>`
+  - `components/OtpInput.tsx:25` input: `<TextInput ref={ref} value={value} onChangeText={(t) => onChange(t.replace(/\D/g, '').slic`
+
+## Notifications (routes)
+
+- Files: `app/notifications.tsx`
+- Library components used: Txt x5, Pressy x2, FadeIn x2, Pill x1
+- States and edge cases: Notifications: Some, None; Programmes joined: Three, Only one; (action) Mark everything unread
+- Hand-built:
+  - `app/notifications.tsx:83` icon badge: `<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: c.accent }} /`
+  - `app/notifications.tsx:91` icon badge: `<View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accentSof`
+
+## Onboarding (frame) (routes)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/plan.ts`, `features/onboarding/Steps.tsx`, `features/onboarding/path.ts`
+- Library components used: Txt x79, Row x15, Pressy x8, FadeIn x8, Pill x4, Button x3, Chip x3, Card x2, NoteField x1
+- States and edge cases: Jump to step: Welcome, Gym, Goal, Experience, Schedule, Age, Height, Weight, Target, Projection, Basics, Health, Privacy, Building, All set; Assessment: Scheduled, Not scheduled; Connection: Online, Offline; (action) Restart onboarding
+- Hand-built:
+  - `app/onboarding.tsx:120` icon badge: `<View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.accentSoft, ali`
+  - `app/onboarding.tsx:204` bar: `<View accessibilityRole="progressbar" accessibilityValue={{ now: n, min: 0, max: total }} `
+
+## Ask coach (routes)
+
+- Files: `app/plans/ask.tsx`
+- Library components used: Txt x4, Row x2, Pill x1, FadeIn x1, Button x1
+- States and edge cases: (action) Send without a reason (error)
+- Hand-built:
+  - `app/plans/ask.tsx:67` input: `<TextInput accessibilityLabel="Note for Coach Vikram, optional" value={note} onChangeText=`
+
+## Create a workout (routes)
+
+- Files: `app/plans/create.tsx`
+- Library components used: Txt x9, Row x2, Pressy x2, Field x1, Pill x1, Card x1, Button x1
+- States and edge cases: (action) Fill a sample workout; (action) Try to save empty (errors); (action) Pick a day that already has a workout
+- Hand-built:
+  - `app/plans/create.tsx:85` button or pill: `<Pressy accessibilityRole="button" onPress={() => openSheet(<LibrarySheet mode="create" />`
+
+## Edit plan (routes)
+
+- Files: `app/plans/edit.tsx`, `features/plans/DragList.tsx`
+- Library components used: Txt x7, Pressy x4, Button x2
+- States and edge cases: (action) Remove the first row; (action) Close (asks to discard when changed)
+- Hand-built:
+  - `app/plans/edit.tsx:130` card: `<View style={{ height: ROW_H, borderRadius: 20, backgroundColor: c.surface, flexDirection:`
+  - `app/plans/edit.tsx:149` button or pill: `<Pressy accessibilityRole="button" onPress={add} style={{ height: 48, borderRadius: radii.`
+
+## Exercise (routes)
+
+- Files: `app/plans/exercise.tsx`
+- Library components used: Txt x9, Card x2, Pressy x1, Row x1, Button x1
+- States and edge cases: Form video: Paused, Playing; Connection: Online, Offline
+- Hand-built:
+  - `app/plans/exercise.tsx:39` bar: `<View style={{ position: 'absolute', left: 14, right: 14, bottom: 12, height: 4, borderRad`
+  - `app/plans/exercise.tsx:84` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={playing ? 'Pause video' : 'Play for`
+  - `app/plans/exercise.tsx:97` card: `<View style={{ height: 96, borderRadius: radii.lg, backgroundColor: c.surface, flexDirecti`
+
+## Workout history (routes)
+
+- Files: `app/plans/history.tsx`
+- Library components used: Txt x4, Card x1, Pressy x1
+- States and edge cases: (action) Open ${h.t}
+- Hand-built:
+  - `app/plans/history.tsx:30` icon badge: `<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.good, ali`
+
+## What did you eat? (routes)
+
+- Files: `app/plans/log.tsx`
+- Library components used: Txt x25, FadeIn x5, Row x4, Card x4, Button x4, ScanBracket x4, Pressy x3, Pill x3, Field x2, Segmented x1
+- States and edge cases: How to add it: Search, Write, Scan; Camera (scan food): Allowed, Denied; Scan result: Works, Fails; Diet type (catalogue): Veg, Eggetarian, Non-veg; (action) Search for something missing
+- Hand-built:
+  - `app/plans/log.tsx:38` card: `<View style={{ flex: 1, height: 52, borderRadius: radii.xl, borderWidth: 1, borderColor: c`
+  - `app/plans/log.tsx:39` input: `<TextInput accessibilityLabel={label} value={value} onChangeText={(t) => onChange(t.replac`
+  - `app/plans/log.tsx:142` button or pill: `<Pressy key={f.n} accessibilityRole="radio" accessibilityState={{ selected: on }} accessib`
+  - `app/plans/log.tsx:204` button or pill: `<Pressy key={t} accessibilityRole="radio" accessibilityState={{ selected: wType === t }} a`
+  - `app/plans/log.tsx:232` icon badge: `<View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.surface2, align`
+  - `app/plans/log.tsx:278` card: `<View accessibilityLiveRegion="polite" style={{ paddingVertical: 14, paddingHorizontal: 16`
+
+## What changed (routes)
+
+- Files: `app/plans/updated.tsx`
+- Library components used: Txt x3, Card x1, FadeIn x1, Button x1
+- States and edge cases: Mid-workout when the update arrives: Off, On
+- Hand-built: none
+
+## Appearance (routes)
+
+- Files: `app/profile/appearance.tsx`, `features/shell/ThemeTile.tsx`
+- Library components used: Row x2, Pressy x1, Txt x1
+- Hand-built:
+  - `features/shell/ThemeTile.tsx:20` bar: `<View style={{ width: 22, height: 5, borderRadius: radii.xs, backgroundColor: m.ink, opaci`
+  - `features/shell/ThemeTile.tsx:25` bar: `<View style={{ flex: 1, height: 5, borderRadius: radii.xs, backgroundColor: m.mute }} />`
+  - `features/shell/ThemeTile.tsx:26` bar: `<View style={{ flex: 1, height: 5, borderRadius: radii.xs, backgroundColor: m.mute }} />`
+  - `features/shell/ThemeTile.tsx:37` icon badge: `<View style={{ width: 16, height: 16, borderRadius: 8, borderWidth: on ? 0 : 1.5, borderCo`
+
+## Delete account (routes)
+
+- Files: `app/profile/delete.tsx`
+- Library components used: Txt x2, Button x2, Field x1
+- States and edge cases: Confirmation: Empty, Typed DELETE
+- Hand-built:
+  - `app/profile/delete.tsx:35` card: `<View style={{ padding: 18, borderRadius: radii.card, backgroundColor: c.warnSoft, gap: 6 `
+
+## My details (routes)
+
+- Files: `app/profile/details.tsx`
+- Library components used: Txt x12, Row x5, Pill x5, Button x4, Pressy x4, Field x3, FadeIn x2, NoteField x1
+- States and edge cases: Name: Filled, Empty; Injuries: No, Yes; (action) Try saving
+- Hand-built: none
+
+## Export my data (routes)
+
+- Files: `app/profile/export.tsx`
+- Library components used: Txt x3, FadeIn x3, Button x1
+- States and edge cases: Export result: Succeeds, Fails (offline); (action) Start export
+- Hand-built:
+  - `app/profile/export.tsx:55` bar: `<View style={{ height: 8, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: '`
+
+## Connected apps (routes)
+
+- Files: `app/profile/health.tsx`
+- Library components used: Txt x12, Row x5, Button x4, Pressy x1
+- Hand-built:
+  - `app/profile/health.tsx:44` card: `<View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14 }}`
+  - `app/profile/health.tsx:46` icon badge: `<View accessibilityLabel={HEALTH_NAME} style={{ width: 56, height: 56, borderRadius: radii`
+  - `app/profile/health.tsx:52` icon badge: `<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: on ? c.good :`
+  - `app/profile/health.tsx:71` icon badge: `<View style={{ width: 44, height: 44, borderRadius: 15, backgroundColor: bg, alignItems: '`
+  - `app/profile/health.tsx:87` icon badge: `<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface2,`
+
+## Help and support (routes)
+
+- Files: `app/profile/help.tsx`
+- Library components used: Txt x2, Pressy x1, FadeIn x1, Button x1
+- States and edge cases: FAQ: All closed, First open
+- Hand-built: none
+
+## Profile (routes)
+
+- Files: `app/profile/index.tsx`, `features/shell/sheets.tsx`
+- Library components used: Txt x18, Row x5, Pressy x4, Button x4, FadeIn x1
+- States and edge cases: Member type (privacy wording): Regular, PT member; Programmes joined: Three, Only one; Account deletion: Not scheduled, Scheduled; (action) Log out (confirm sheet); (action) Open an invite link (WhatsApp); (action) Reset profile settings
+- Hand-built:
+  - `app/profile/index.tsx:78` chip: `<View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, b`
+  - `app/profile/index.tsx:80` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Edit name and number" onPress={go('`
+  - `app/profile/index.tsx:100` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Goal: ${g2.name}. Change goal'} on`
+  - `app/profile/index.tsx:141` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'${title} goal ${value}. Edit'} onP`
+  - `app/profile/index.tsx:157` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Tracker designs. Choose how your tr`
+
+## Join a programme (routes)
+
+- Files: `app/profile/join.tsx`
+- Library components used: Txt x2, FadeIn x2, Field x1, Button x1
+- States and edge cases: Invite code: YOGA-2024 (new), GLD-4821 (joined), OLD-0001 (expired), Wrong; Opened from: Typed, WhatsApp link; (action) Try joining
+- Hand-built: none
+
+## Notification settings (routes)
+
+- Files: `app/profile/notifications.tsx`
+- Library components used: Txt x4, FadeIn x1, Row x1, Button x1
+- States and edge cases: Phone permission: Allowed, Blocked, Not asked; (action) Turn all reminders on
+- Hand-built: none
+
+## Privacy (routes)
+
+- Files: `app/profile/privacy.tsx`
+- Library components used: Txt x2, Row x1
+- States and edge cases: Member type (privacy wording): Regular, PT member; Programmes joined: Three, Only one
+- Hand-built: none
+
+## Tracker designs (routes)
+
+- Files: `app/profile/tracker-designs.tsx`
+- Library components used: Txt x2, Pressy x1
+- Hand-built:
+  - `app/profile/tracker-designs.tsx:21` icon badge: `<View style={{ position: 'absolute', right: 10, bottom: 10, width: 24, height: 24, borderR`
+
+## Quick trackers (routes)
+
+- Files: `app/profile/trackers.tsx`
+- Library components used: FadeIn x1
+- States and edge cases: Trackers: All on, All off
+- Hand-built: none
+
+## Units and detail (routes)
+
+- Files: `app/profile/units.tsx`
+- Library components used: Row x1, Pill x1
+- States and edge cases: Weight: kg, lb; Diet detail level: Simple, Detailed
+- Hand-built: none
+
+## Assessment (routes)
+
+- Files: `app/progress/assess.tsx`
+- Library components used: Txt x5, FadeIn x2, Card x2, Button x2
+- Hand-built: none
+
+## Goal (progress) (routes)
+
+- Files: `app/progress/goal.tsx`
+- Library components used: Txt x7, Pill x3, Button x2, Card x1, Row x1, FadeIn x1
+- Hand-built: none
+
+## Lift detail (routes)
+
+- Files: `app/progress/lift.tsx`
+- Library components used: Txt x3, Pill x2, FadeIn x2, Row x1, Pressy x1
+- Hand-built:
+  - `app/progress/lift.tsx:53` card: `<View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingTop: 16, paddin`
+
+## Metric detail (routes)
+
+- Files: `app/progress/metric.tsx`, `features/progress/LogSheets.tsx`
+- Library components used: Txt x9, Button x6, FadeIn x1, Field x1
+- Hand-built:
+  - `app/progress/metric.tsx:62` card: `<View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 8, o`
+  - `app/progress/metric.tsx:64` icon badge: `<View style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadi`
+  - `app/progress/metric.tsx:79` card: `<View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.surface2, gap: 4 }}`
+
+## Photos (routes)
+
+- Files: `app/progress/photos.tsx`
+- Library components used: Button x3, Row x2, Pressy x1, FadeIn x1, Txt x1
+- Hand-built:
+  - `app/progress/photos.tsx:29` button or pill: `<Pressy accessibilityRole="imagebutton" accessibilityLabel={'Progress photo ${d}${zoomed ?`
+  - `app/progress/photos.tsx:62` icon badge: `<View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: fixed.white`
+
+## Streaks and badges (routes)
+
+- Files: `app/progress/streaks.tsx`, `features/streak/BadgeArt.tsx`, `features/streak/StreakHero.tsx`
+- Library components used: Txt x15, Row x5, SectionLabel x2, FadeIn x1
+- States and edge cases: Streak: Active, Broken, New member; Earlier this week: 0, 1, 2, 3
+- Hand-built:
+  - `app/progress/streaks.tsx:29` card: `<View accessible accessibilityLabel={earned ? '${b.title}, earned ${b.earned}' : '${b.titl`
+  - `app/progress/streaks.tsx:70` card: `<View style={[{ backgroundColor: c.surface, borderRadius: radii.card, padding: 16, gap: 10`
+  - `app/progress/streaks.tsx:83` card: `<View style={{ padding: 14, borderRadius: 20, backgroundColor: c.accentSoft, gap: 2 }}>`
+  - `features/streak/BadgeArt.tsx:81` icon badge: `<View style={{ position: 'absolute', right: 0, bottom: 2, width: 24, height: 24, borderRad`
+
+## Welcome (routes)
+
+- Files: `app/welcome.tsx`
+- Library components used: Txt x30, FadeIn x2, Pressy x1, Button x1
+- Hand-built:
+  - `app/welcome.tsx:45` icon badge: `<View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: fixed.blue `
+  - `app/welcome.tsx:48` icon badge: `<View style={{ width: 20, height: 20, borderRadius: radii.sm, backgroundColor: '#2A3242' }`
+  - `app/welcome.tsx:76` chip: `<View style={{ marginTop: 6, height: 30, borderRadius: 15, backgroundColor: fixed.white, a`
+  - `app/welcome.tsx:93` icon badge: `<View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: done ? fixed.blue `
+  - `app/welcome.tsx:119` bar: `<View key={i} style={{ flex: 1, height: 6, borderRadius: radii.xs, backgroundColor: o ? '#`
+  - `app/welcome.tsx:128` icon badge: `<View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: 'rgba(15,138,95,0`
+  - `app/welcome.tsx:157` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} hitSlop={{`
+
+## Active workout (routes)
+
+- Files: `app/workout.tsx`, `features/workout/SetRow.tsx`, `features/workout/RestPanel.tsx`, `features/workout/FinishScreen.tsx`, `features/workout/NewWorkoutUI.tsx`, `features/workout/WorkoutSheets.tsx`
+- Library components used: Txt x74, Pressy x23, Row x22, Button x14, FadeIn x10, Pill x3, Card x3, Stepper x3, NoteField x1, Field x1, Chip x1
+- States and edge cases: Wearable (Health Connect): Connected, Not connected; Phase: Warm-up, Main, Cool-down; (action) Rest timer: jump to last 5 s; (action) Log all sets of this exercise; (action) Finish screen
+- Hand-built:
+  - `app/workout.tsx:36` bar: `<View key={i} style={{ flex: 1, height: 3, borderRadius: radii.xs, backgroundColor: i < po`
+  - `app/workout.tsx:227` button or pill: `<Pressy accessibilityRole="button" onPress={() => A.addSet(s.exIdx)} style={{ height: 48, `
+  - `app/workout.tsx:314` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Play form video" onPress={() => api`
+  - `app/workout.tsx:322` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Exercise options: swap, ask coach, `
+  - `app/workout.tsx:350` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={'Back to ${prevName}'} onPress={pre`
+  - `features/workout/SetRow.tsx:93` chip: `<View accessibilityLabel="Warm-up set: a lighter set before your working sets. It doesn't `
+  - `features/workout/SetRow.tsx:97` icon badge: `<View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: c.surface2,`
+  - `features/workout/SetRow.tsx:108` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={timing ? 'Stop timer and log' : 'St`
+  - `features/workout/FinishScreen.tsx:39` icon badge: `<Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.accen`
+  - `features/workout/NewWorkoutUI.tsx:51` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Watch the clip" disabled={!key} onP`
+  - `features/workout/NewWorkoutUI.tsx:53` icon badge: `<View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.`
+  - `features/workout/NewWorkoutUI.tsx:65` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Finish workout" onPress={onPress} s`
+  - `features/workout/NewWorkoutUI.tsx:98` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Hide the clip" onPress={onHide} sca`
+  - `features/workout/NewWorkoutUI.tsx:104` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Full screen" onPress={goFull} scale`
+  - `features/workout/NewWorkoutUI.tsx:116` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Show the clip" onPress={onOpen} sca`
+  - `features/workout/NewWorkoutUI.tsx:118` icon badge: `<View style={{ width: 44, height: 44, borderRadius: radii.sm, overflow: 'hidden', backgrou`
+  - `features/workout/NewWorkoutUI.tsx:120` icon badge: `<View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: 'rgba(11,14`
+  - `features/workout/NewWorkoutUI.tsx:149` bar: `<View key={i} style={{ flex: 1, height: 4, borderRadius: radii.xs, backgroundColor: i <= p`
+  - `features/workout/NewWorkoutUI.tsx:163` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Exercise options: swap, ask coach, `
+  - `features/workout/NewWorkoutUI.tsx:186` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={'Back to ${prevName}'} onPress={pre`
+
+## App shell (layout, floating tab bar host, overlays) (routes)
+
+- Files: `app/_layout.tsx`
+- Library components used: OverlayProvider x2
+- Hand-built: none
+
+## Onboarding: Welcome (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Onboarding: Gym (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `app/onboarding.tsx:303` button or pill: `<Pressy key={g.id} accessibilityRole="radio" accessibilityState={{ selected: on }} onPress`
+  - `app/onboarding.tsx:310` icon badge: `<View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderC`
+
+## Onboarding: Goal (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `app/onboarding.tsx:282` button or pill: `<Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel`
+  - `app/onboarding.tsx:284` icon badge: `<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, align`
+  - `app/onboarding.tsx:288` icon badge: `<View style={{ position: 'absolute', right: 12, top: 12, width: 22, height: 22, borderRadi`
+
+## Onboarding: Experience (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `app/onboarding.tsx:329` button or pill: `<Pressy key={e.l} accessibilityRole="radio" accessibilityState={{ selected: on }} onPress=`
+  - `app/onboarding.tsx:335` icon badge: `<View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderC`
+
+## Onboarding: Schedule (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `app/onboarding.tsx:357` button or pill: `<Pressy key={d} accessibilityRole="radio" accessibilityState={{ selected: on }} accessibil`
+
+## Onboarding: Age (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Onboarding: Height (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Onboarding: Weight (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Onboarding: Target (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Onboarding: Projection (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/onboarding/Steps.tsx:75` icon badge: `<View pointerEvents="none" style={{ position: 'absolute', left: end[0] - 20, top: end[1] -`
+  - `features/onboarding/Steps.tsx:129` icon badge: `<View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accent, a`
+
+## Onboarding: Health (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/onboarding/Steps.tsx:322` icon badge: `<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, align`
+
+## Onboarding: Basics (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Onboarding: Privacy and consent (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Onboarding: Building your plan (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/onboarding/Steps.tsx:174` card: `<View style={{ alignSelf: 'stretch', padding: 14, borderRadius: radii.md, backgroundColor:`
+  - `features/onboarding/Steps.tsx:178` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="See what the app reads" onPress={()`
+  - `features/onboarding/Steps.tsx:180` icon badge: `<View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: fixed.white, alig`
+
+## Onboarding: All set (onboarding steps)
+
+- Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/onboarding/Steps.tsx:272` card: `<View style={{ gap: 4, padding: 16, borderRadius: radii.card, backgroundColor: c.surface }`
+  - `features/onboarding/Steps.tsx:282` card: `<View style={{ gap: 6, padding: 16, borderRadius: radii.card, backgroundColor: c.surface }`
+  - `features/onboarding/Steps.tsx:286` icon badge: `<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface2,`
+
+## ChangePhoneSheet (bottom sheets)
+
+- Files: `app/profile/details.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## PhotoSheet (bottom sheets)
+
+- Files: `app/profile/details.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `app/profile/details.tsx:65` button or pill: `<Pressy key={label} accessibilityRole="button" onPress={() => closeSheet(run)} scaleTo={0.`
+
+## DobSheet (bottom sheets)
+
+- Files: `app/profile/details.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## WeighDateSheet (bottom sheets)
+
+- Files: `features/body/BodyLog.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## AttachSheet (bottom sheets)
+
+- Files: `features/chat/Composer.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/chat/Composer.tsx:61` button or pill: `<Pressy key={src} accessibilityRole="button" onPress={() => closeSheet(() => onPick(src))}`
+
+## StillTrainingSheet (bottom sheets)
+
+- Files: `features/checkin/CheckInEngine.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## DateSheet (bottom sheets)
+
+- Files: `features/goalv2/FinishBy.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## FlagSheet (bottom sheets)
+
+- Files: `features/gym/sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## ChatOptionsSheet (bottom sheets)
+
+- Files: `features/gym/sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## UndoEatenSheet (bottom sheets)
+
+- Files: `features/plans/DietPlan.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## QtySheet (bottom sheets)
+
+- Files: `features/plans/QtySheet.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/plans/QtySheet.tsx:38` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={label} disabled={off} onPress={on} `
+
+## PlanMenuSheet (bottom sheets)
+
+- Files: `features/plans/Sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## DietMenuSheet (bottom sheets)
+
+- Files: `features/plans/Sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## ResetSheet (bottom sheets)
+
+- Files: `features/plans/Sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## DiscardSheet (bottom sheets)
+
+- Files: `features/plans/Sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## LibrarySheet (bottom sheets)
+
+- Files: `features/plans/Sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## EditItemSheet (bottom sheets)
+
+- Files: `features/plans/Sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## ItemMenuSheet (bottom sheets)
+
+- Files: `features/plans/Sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## NutritionSheet (bottom sheets)
+
+- Files: `features/plans/Sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/plans/Sheets.tsx:207` card: `<View key={l} accessible accessibilityLabel={'${l} ${v}'} style={{ width: '48%', flexGrow:`
+
+## DietSwapSheet (bottom sheets)
+
+- Files: `features/plans/Sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## HistSheet (bottom sheets)
+
+- Files: `features/plans/Sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/plans/Sheets.tsx:254` card: `<View style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: radii.md, backgro`
+
+## ManualLogSheet (bottom sheets)
+
+- Files: `features/progress/LogSheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## CalendarSheet (bottom sheets)
+
+- Files: `features/progress/TrendUI.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/progress/TrendUI.tsx:113` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Previous month" disabled={!canBack}`
+  - `features/progress/TrendUI.tsx:115` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Next month" disabled={!canFwd} onPr`
+  - `features/progress/TrendUI.tsx:126` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={d.toDateString()} disabled={future}`
+  - `features/progress/TrendUI.tsx:129` icon badge: `<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.x`
+
+## LogoutSheet (bottom sheets)
+
+- Files: `features/shell/sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## ProgrammeSwitcherSheet (bottom sheets)
+
+- Files: `features/shell/Switcher.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/shell/Switcher.tsx:50` icon badge: `<View style={{ width: 44, height: 44, borderRadius: radii.lg, borderWidth: 1.5, borderStyl`
+
+## JoinConsentSheet (bottom sheets)
+
+- Files: `features/shell/Switcher.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## LogMealsSheet (bottom sheets)
+
+- Files: `features/today/LogMealsSheet.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## QuickLogSheet (bottom sheets)
+
+- Files: `features/today/QuickLogSheet.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/today/QuickLogSheet.tsx:145` button or pill: `<Pressy key={t} accessibilityRole="button" accessibilityLabel={'Add ${t}'} onPress={() => `
+
+## StepsSheet (bottom sheets)
+
+- Files: `features/today/StepsCards.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/today/StepsCards.tsx:240` button or pill: `<Pressy key={m} accessibilityRole="button" accessibilityLabel={m === 'steps' ? 'Enter step`
+
+## UpdatesSheet (bottom sheets)
+
+- Files: `features/today/TopCards.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/today/TopCards.tsx:324` icon badge: `<View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: fg, marginTop: 6 }`
+
+## WaterSheet (bottom sheets)
+
+- Files: `features/today/Trackers.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## HealthSheet (bottom sheets)
+
+- Files: `features/today/Trackers.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## DaySheet (bottom sheets)
+
+- Files: `features/today/WeekCard.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## WkMenuSheet (bottom sheets)
+
+- Files: `features/workout/WorkoutSheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## FormTipsSheet (bottom sheets)
+
+- Files: `features/workout/WorkoutSheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/workout/WorkoutSheets.tsx:62` card: `<View style={{ padding: 16, borderRadius: 20, backgroundColor: c.surface2 }}>`
+
+## WorkoutSwapSheet (bottom sheets)
+
+- Files: `features/workout/WorkoutSheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/workout/WorkoutSheets.tsx:85` button or pill: `<Pressy accessibilityRole="search" accessibilityLabel="Search all exercises" onPress={() =`
+  - `features/workout/WorkoutSheets.tsx:95` button or pill: `<Pressy key={a.n} accessibilityRole="button" accessibilityLabel={'${a.n}. ${a.s}'} onPress`
+
+## SetMenuSheet (bottom sheets)
+
+- Files: `features/workout/WorkoutSheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## FinishConfirmSheet (bottom sheets)
+
+- Files: `features/workout/WorkoutSheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Notification permission (onboarding) (bottom sheets)
+
+- Files: `app/onboarding.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Disconnect Health (bottom sheets)
+
+- Files: `app/profile/health.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Join with a code (JoinCode) (bottom sheets)
+
+- Files: `app/login.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Snackbar (toast) (overlays and popups)
+
+- Files: `design-system/primitives/Snackbar.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Phone push preview banner (overlays and popups)
+
+- Files: `features/reminders/PushBanner.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/reminders/PushBanner.tsx:25` icon badge: `<View style={{ width: 38, height: 38, borderRadius: radii.sm, backgroundColor: fixed.blue,`
+
+## Floating tab bar (overlays and popups)
+
+- Files: `components/FloatingTabBar.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Check-in bar and mini workout (overlays and popups)
+
+- Files: `features/today/CheckInBar.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/today/CheckInBar.tsx:61` card: `<View style={{ height: 40, borderRadius: 20, paddingHorizontal: 16, backgroundColor: fixed`
+  - `features/today/CheckInBar.tsx:119` icon badge: `<View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: icBg, align`
+  - `features/today/CheckInBar.tsx:124` chip: `<View style={{ height: 20, paddingHorizontal: 8, borderRadius: radii.sm, backgroundColor: `
+  - `features/today/CheckInBar.tsx:134` bar: `<View pointerEvents="none" style={{ position: 'absolute', left: 18, right: 18, bottom: 0, `
+
+## Workout finish screen (confetti and stats) (overlays and popups)
+
+- Files: `features/workout/FinishScreen.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/workout/FinishScreen.tsx:97` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Celebrate again" onPress={() => { h`
+  - `features/workout/FinishScreen.tsx:127` button or pill: `<Pressy key={n} accessibilityRole="radio" accessibilityState={{ selected: feel === n }} on`
+
+## Rest timer panel (overlays and popups)
+
+- Files: `features/workout/NewWorkoutUI.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Web phone frame and demo controls panel (overlays and popups)
+
+- Files: `web/WebFrame.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `web/WebFrame.tsx:116` bar: `<View pointerEvents="none" style={{ height: 4, borderRadius: radii.xs, backgroundColor: P.`
+  - `web/WebFrame.tsx:117` bar: `<View style={{ width: '${pct}%', height: 4, borderRadius: radii.xs, backgroundColor: P.ink`
+  - `web/WebFrame.tsx:119` icon badge: `<View key={h} pointerEvents="none" style={{ position: 'absolute', left: '${(h / 23) * 100}`
+  - `web/WebFrame.tsx:120` icon badge: `<View pointerEvents="none" style={{ position: 'absolute', left: '${pct}%', marginLeft: -11`
+  - `web/WebFrame.tsx:310` card: `<View style={{ backgroundColor: fixed.white, borderRadius: radii.md, borderWidth: 1, borde`
+  - `web/WebFrame.tsx:311` icon badge: `<View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: P.ink, alignItems`
+  - `web/WebFrame.tsx:316` icon button: `<Pressable accessibilityRole="button" accessibilityLabel={open ? 'Collapse the controls' :`
+
+## Today loading skeleton (empty, loading and error states)
+
+- Files: `app/(tabs)/index.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## No plan yet (empty) (empty, loading and error states)
+
+- Files: `features/today/NoPlanCard.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Locked plan behind blur (membership expired) (empty, loading and error states)
+
+- Files: `features/plans/WorkoutPlan.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Offline notices (empty, loading and error states)
+
+- Files: `app/(tabs)/plans.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Scan failed and camera denied (empty, loading and error states)
+
+- Files: `app/plans/log.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Login errors (not found, wrong code) (empty, loading and error states)
+
+- Files: `app/login.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Exercise search: empty and no match (empty, loading and error states)
+
+- Files: `app/exercise-search.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## No goal set yet (empty, loading and error states)
+
+- Files: `design-system/patterns/GoalCard.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Comeback day (empty, loading and error states)
+
+- Files: `features/today/ForYou.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Streak broken and new member (empty, loading and error states)
+
+- Files: `app/progress/streaks.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## Export failed (offline) (empty, loading and error states)
+
+- Files: `app/profile/export.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## components/GymHeader.tsx (shared components and features)
+
+- Files: `components/GymHeader.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `components/GymHeader.tsx:69` icon badge: `<View style={{ position: 'absolute', top: 10, right: 11, width: 8, height: 8, borderRadius`
+
+## components/bits.tsx (shared components and features)
+
+- Files: `components/bits.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `components/bits.tsx:126` card: `<View accessibilityRole="tablist" accessibilityLabel={label} style={{ flexDirection: 'row'`
+  - `components/bits.tsx:130` button or pill: `<Pressy key={o.value} accessibilityRole="tab" accessibilityState={{ selected: on }} onPres`
+
+## components/ui.tsx (shared components and features)
+
+- Files: `components/ui.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `components/ui.tsx:57` card: `<View accessibilityRole="tablist" accessibilityLabel={accessibilityLabel} onLayout={(e: La`
+
+## features/progress/parts.tsx (shared components and features)
+
+- Files: `features/progress/parts.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/progress/parts.tsx:50` icon badge: `<View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: (tint ?? c.`
+
+## components/FloatingTabBar.tsx (shared components and features)
+
+- Files: `components/FloatingTabBar.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `components/FloatingTabBar.tsx:63` button or pill: `<Pressable key={r.key} accessibilityRole="tab" accessibilityState={{ selected: on }} acces`
+
+## features/shell/Switcher.tsx (shared components and features)
+
+- Files: `features/shell/Switcher.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## features/shell/parts.tsx (shared components and features)
+
+- Files: `features/shell/parts.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/shell/parts.tsx:44` icon badge: `<Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: fixed.w`
+  - `features/shell/parts.tsx:75` card: `<View style={[{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundCo`
+
+## features/today/Trackers.tsx (shared components and features)
+
+- Files: `features/today/Trackers.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## features/today/MealsCard.tsx (shared components and features)
+
+- Files: `features/today/MealsCard.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## features/streak/StreakChip.tsx (shared components and features)
+
+- Files: `features/streak/StreakChip.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/streak/StreakChip.tsx:36` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'${title}. ${sub}. Open streaks and`
+  - `features/streak/StreakChip.tsx:38` icon badge: `<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,138,61,`
+
+## features/today/StepsCards.tsx (shared components and features)
+
+- Files: `features/today/StepsCards.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/today/StepsCards.tsx:57` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Add steps manually" onPress={gate((`
+  - `features/today/StepsCards.tsx:85` icon badge: `<View style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadi`
+
+## features/trackers/Widgets.tsx (shared components and features)
+
+- Files: `features/trackers/Widgets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/trackers/Widgets.tsx:46` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} disabled={`
+
+## features/today/QuickLogSheet.tsx (shared components and features)
+
+- Files: `features/today/QuickLogSheet.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## features/plans/Sheets.tsx (shared components and features)
+
+- Files: `features/plans/Sheets.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## features/plans/parts.tsx (shared components and features)
+
+- Files: `features/plans/parts.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/plans/parts.tsx:62` card: `<View style={[{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundCo`
+
+## features/progress/TrendUI.tsx (shared components and features)
+
+- Files: `features/progress/TrendUI.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/progress/TrendUI.tsx:37` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Earlier" disabled={!win.canPrev} on`
+  - `features/progress/TrendUI.tsx:44` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Later" disabled={!win.canNext} onPr`
+  - `features/progress/TrendUI.tsx:50` button or pill: `<Pressy accessibilityRole="button" onPress={() => { haptic.tick(); progressStore.set({ anc`
+  - `features/progress/TrendUI.tsx:75` card: `<View accessibilityRole="radiogroup" accessibilityLabel="Period" style={{ flex: 1, flexDir`
+  - `features/progress/TrendUI.tsx:79` button or pill: `<Pressy key={r.value} accessibilityRole="radio" accessibilityState={{ selected: on }} acce`
+  - `features/progress/TrendUI.tsx:177` bar: `<View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2`
+
+## features/goalv2/FinishBy.tsx (shared components and features)
+
+- Files: `features/goalv2/FinishBy.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## features/body/BodyLog.tsx (shared components and features)
+
+- Files: `features/body/BodyLog.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/body/BodyLog.tsx:46` input: `<TextInput autoFocus value={text} onChangeText={(t) => { setText(t); setBad(false); }} key`
+  - `features/body/BodyLog.tsx:220` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Date: ${DAYS[day].full}. Change'} `
+
+## components/Ruler.tsx (shared components and features)
+
+- Files: `components/Ruler.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `components/Ruler.tsx:106` bar: `<View style={{ width: size, height: 2, borderRadius: 1, backgroundColor: major ? c.ink : c`
+  - `components/Ruler.tsx:121` bar: `<View pointerEvents="none" style={{ position: 'absolute', right: 0, top: len / 2 - 1.5, wi`
+
+## features/checkin/CheckInEngine.tsx (shared components and features)
+
+- Files: `features/checkin/CheckInEngine.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## features/checkin/GymMap.native.tsx (shared components and features)
+
+- Files: `features/checkin/GymMap.native.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/checkin/GymMap.native.tsx:44` icon badge: `<View style={{ width: 38, height: 38, borderRadius: 19, backgroundColor: c.accent, alignIt`
+  - `features/checkin/GymMap.native.tsx:51` icon badge: `<View style={{ width: 34, height: 34, borderRadius: radii.md, backgroundColor: 'rgba(52,12`
+  - `features/checkin/GymMap.native.tsx:52` icon badge: `<View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: '#3478F6', borderW`
+
+## features/workout/ClipStage.tsx (shared components and features)
+
+- Files: `features/workout/ClipStage.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/workout/ClipStage.tsx:33` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={isPlaying ? 'Pause the clip' : 'Pla`
+  - `features/workout/ClipStage.tsx:38` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={IS_WEB && wide ? 'Exit full screen'`
+
