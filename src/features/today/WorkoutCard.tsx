@@ -44,7 +44,7 @@ function Coach({ dim = false }: { dim?: boolean }) {
 }
 
 // The workout name with its time as a small pill right after it.
-function Title({ name, time, tone = 'default' }: { name: string; time?: string; tone?: 'default' | 'missed' }) {
+function WorkoutTitle({ name, time, tone = 'default' }: { name: string; time?: string; tone?: 'default' | 'missed' }) {
   const missed = tone === 'missed';
   return (
     <Row style={{ gap: 10, flexWrap: 'wrap' }}>
@@ -70,7 +70,7 @@ const SmallBtn = ({ label, onPress, solid = false }: { label: string; onPress: (
 );
 const LiveDot = () => <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: MINT }} />;
 
-function Shell({ colors, edge, children, compact = false, label }: { colors: string[]; edge?: string; children: React.ReactNode; compact?: boolean; label: string }) {
+function WorkoutShell({ colors, edge, children, compact = false, label }: { colors: string[]; edge?: string; children: React.ReactNode; compact?: boolean; label: string }) {
   return (
     <View accessibilityLabel={label} style={{ borderRadius: radii.card, padding: 16, paddingVertical: compact ? 14 : 16, gap: 12, overflow: 'hidden', borderWidth: edge ? 1.5 : 0, borderColor: edge }}>
       <LinearGradient colors={colors as any} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
@@ -131,7 +131,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   if (missed && ms.answer) {
     const moved = ms.answer === 'moved';
     return (
-      <Shell compact label={moved ? 'Leg day moved to tomorrow' : 'Leg day skipped today'} colors={[fixed.dark, '#0E1B45', '#13327A']}>
+      <WorkoutShell compact label={moved ? 'Leg day moved to tomorrow' : 'Leg day skipped today'} colors={[fixed.dark, '#0E1B45', '#13327A']}>
         <Row style={{ gap: 12 }}>
           <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center' }}>{moved ? <CalendarClock size={18} color={fixed.white} /> : <X size={18} color={fixed.white} />}</View>
           <View style={{ flex: 1 }}>
@@ -142,22 +142,22 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: fixed.white }}>Undo</Txt>
           </Pressy>
         </Row>
-      </Shell>
+      </WorkoutShell>
     );
   }
 
   // 6. rest day
   if (st === 'rest') {
     return (
-      <Shell label="Rest day" colors={[fixed.dark, fixed.shadow, '#1A1636']}>
+      <WorkoutShell label="Rest day" colors={[fixed.dark, fixed.shadow, '#1A1636']}>
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <Row style={{ gap: 8 }}><Moon size={17} color={LILAC} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: LILAC }}>Recovery</Txt></Row>
           <Chip label={`Next: Pull, Thu ${fmtT(WKT).full}`} onDark />
         </Row>
-        <Title name="Rest day" />
+        <WorkoutTitle name="Rest day" />
         <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: 'rgba(255,255,255,0.75)' }}>Muscles grow on rest days. A 20 minute walk still counts.</Txt>
         {burnedRow}
-      </Shell>
+      </WorkoutShell>
     );
   }
 
@@ -167,7 +167,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
     const mins = Math.max(1, Math.round(done.b - done.a));
     const stats: [string, string, string][] = [[String(mins), ' min', 'Time'], [String(buildExercises().length), '', 'Exercises'], [String(done.k), ' kcal', 'Burned']];
     return (
-      <Shell label="Workout complete" colors={[fixed.dark, '#0D2A22', '#124A3A']}>
+      <WorkoutShell label="Workout complete" colors={[fixed.dark, '#0D2A22', '#124A3A']}>
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <Row style={{ gap: 8 }}>
             <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: MINT, alignItems: 'center', justifyContent: 'center' }}><Check size={16} strokeWidth={3} color={fixed.dark} /></View>
@@ -185,7 +185,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
           ))}
         </Row>
         {burnedRow}
-      </Shell>
+      </WorkoutShell>
     );
   }
 
@@ -196,7 +196,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
     const next = ex.find((e) => e.sets.some((x) => x.st === 'todo'));
     const elapsed = mmss((now - d.session.startAt) / 1000).padStart(5, '0');
     return (
-      <Shell label={`Workout running, ${elapsed} elapsed, ${doneEx} of ${ex.length} exercises`} colors={['#06231B', '#0B3A2C', '#0F5A42']}>
+      <WorkoutShell label={`Workout running, ${elapsed} elapsed, ${doneEx} of ${ex.length} exercises`} colors={['#06231B', '#0B3A2C', '#0F5A42']}>
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <Row style={{ gap: 8 }}><LiveDot /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: MINT }}>Running</Txt></Row>
           <Chip label={name} onDark tone="live" />
@@ -215,21 +215,21 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
           </Row>
         </View>
         <Btn label="Resume workout" onPress={() => router.push('/workout')} />
-      </Shell>
+      </WorkoutShell>
     );
   }
 
   // 4. missed: muted, amber edge, the time crossed out, one question with three answers
   if (missed) {
     return (
-      <Shell label="Leg day missed" colors={['#17140F', '#17140F', '#1B1710']} edge="rgba(242,179,91,0.28)">
+      <WorkoutShell label="Leg day missed" colors={['#17140F', '#17140F', '#1B1710']} edge="rgba(242,179,91,0.28)">
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <Coach dim />
           <View style={{ height: 28, paddingHorizontal: 11, borderRadius: 14, borderWidth: 1, borderColor: 'rgba(242,179,91,0.5)', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <Clock size={13} color={AMBER} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 17, color: AMBER }}>Missed</Txt>
           </View>
         </Row>
-        <Title name={name} time={time} tone="missed" />
+        <WorkoutTitle name={name} time={time} tone="missed" />
         <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: 'rgba(255,255,255,0.8)' }}>Did you train without the app, or should it move?</Txt>
         <Row style={{ gap: 8, flexWrap: 'wrap' }}>
           <SmallBtn solid label="I did it" onPress={didIt} />
@@ -239,7 +239,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
         <Pressy accessibilityRole="button" onPress={() => startWorkout()} hitSlop={8} style={{ alignSelf: 'flex-start', paddingVertical: 2 }}>
           <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: W60, textDecorationLine: 'underline' }}>Start it now anyway</Txt>
         </Pressy>
-      </Shell>
+      </WorkoutShell>
     );
   }
 
@@ -268,7 +268,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   // 1. upcoming / 2. due now (a thin mint edge and a "Now" chip; the button stays white)
   const due = !comeback && d.min >= WKT - 15;
   return (
-    <Shell label={`Today's workout, ${name}`} colors={[fixed.dark, '#0E1B45', '#13327A']} edge={due ? 'rgba(124,240,200,0.45)' : undefined}>
+    <WorkoutShell label={`Today's workout, ${name}`} colors={[fixed.dark, '#0E1B45', '#13327A']} edge={due ? 'rgba(124,240,200,0.45)' : undefined}>
       <Row style={{ justifyContent: 'space-between', gap: 8 }}>
         <Coach />
         {due ? (
@@ -277,10 +277,10 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
           </View>
         ) : <Chip label={comeback ? 'Today' : rel(d, WKT).t} onDark />}
       </Row>
-      <Title name={name} time={time} />
+      <WorkoutTitle name={name} time={time} />
       <Row style={{ gap: 6, flexWrap: 'wrap' }}>{chips.map((t) => <Chip key={t} label={t} onDark />)}</Row>
       <Btn label={comeback ? 'Start my comeback plan' : 'Start workout'} onPress={() => startWorkout()} />
       {burnedRow}
-    </Shell>
+    </WorkoutShell>
   );
 }

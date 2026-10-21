@@ -180,13 +180,13 @@ export function ItemMenuSheet({ mid, itemKey }: { mid: MealId; itemKey: string }
     <>
       <Row style={{ gap: 10 }}><FoodMark type={it.type} size={16} /><BigTitle style={{ flex: 1 }}>{it.n}</BigTitle></Row>
       <View>
-        <ListRow label="Swap" chevron={false} onPress={() => openSheet(it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode="sugg" replaceIdx={it.idx} /> : <SwapSheet mid={mid} itemKey={it.key} always={false} />, { label: 'Swap item' })} />
+        <ListRow label="Swap" chevron={false} onPress={() => openSheet(it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode="sugg" replaceIdx={it.idx} /> : <DietSwapSheet mid={mid} itemKey={it.key} always={false} />, { label: 'Swap item' })} />
         <ListRow label="Less" chevron={false} right={<Txt v="caption">½ portion</Txt>} onPress={() => por(0.5)} />
         <ListRow label="More" chevron={false} right={<Txt v="caption">1½ portions</Txt>} onPress={() => por(1.5)} />
         {!it.mine && <ListRow label="Skip for today" chevron={false} onPress={() => closeSheet(() => A.skipItem(mid, it))} />}
         <ListRow label="Nutrition" chevron={false} onPress={() => openSheet(<NutritionSheet mid={mid} itemKey={it.key} />, { label: 'Nutrition' })} />
         <ListRow label="Food details and recipe" chevron={false} onPress={() => closeSheet(() => router.push({ pathname: '/food', params: { mid, k: String(it.idx), extra: it.mine ? '1' : '0' } }))} />
-        <ListRow label="Always use a swap for this" chevron={false} last={!it.mine} onPress={() => openSheet(<SwapSheet mid={mid} itemKey={it.key} always />, { label: 'Swap item' })} />
+        <ListRow label="Always use a swap for this" chevron={false} last={!it.mine} onPress={() => openSheet(<DietSwapSheet mid={mid} itemKey={it.key} always />, { label: 'Swap item' })} />
         {it.mine && <ListRow label="Delete item" tone={c.warn} chevron={false} last onPress={() => closeSheet(() => A.deleteExtra(mid, it))} />}
       </View>
       {!it.mine && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Items from Coach's plan can be skipped but not deleted.</Txt>}
@@ -215,7 +215,7 @@ export function NutritionSheet({ mid, itemKey }: { mid: MealId; itemKey: string 
   );
 }
 
-export function SwapSheet({ mid, itemKey, always: always0 }: { mid: MealId; itemKey: string; always: boolean }) {
+export function DietSwapSheet({ mid, itemKey, always: always0 }: { mid: MealId; itemKey: string; always: boolean }) {
   const { c } = useTheme();
   const { it, p } = useItem(mid, itemKey);
   const { closeSheet } = useOverlay();
@@ -257,3 +257,4 @@ export function HistSheet({ h }: { h: Hist }) {
     </>
   );
 }
+export { DietSwapSheet as SwapSheet }; // old name, kept so existing imports work

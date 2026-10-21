@@ -20,7 +20,7 @@ const FAQ = [
   { q: "My check-in didn't show up", a: "Check-ins can take a minute to sync. If it's missing, ask the front desk." },
 ];
 
-function Item({ q, a, open, onPress, last }: { q: string; a: string; open: boolean; onPress: () => void; last: boolean }) {
+function FaqItem({ q, a, open, onPress, last }: { q: string; a: string; open: boolean; onPress: () => void; last: boolean }) {
   const { c } = useTheme();
   const r = useSharedValue(open ? 180 : 0);
   useEffect(() => { r.value = withTiming(open ? 180 : 0, { duration: 220 }); }, [open]);
@@ -55,7 +55,7 @@ export default function Help() {
   return (
     <SubPage title="Help & support" fallback="/profile">
       <ListCard>
-        {FAQ.map((f, i) => <Item key={f.q} q={f.q} a={f.a} open={open === i} last={i === FAQ.length - 1} onPress={() => setOpen(open === i ? null : i)} />)}
+        {FAQ.map((f, i) => <FaqItem key={f.q} q={f.q} a={f.a} open={open === i} last={i === FAQ.length - 1} onPress={() => setOpen(open === i ? null : i)} />)}
       </ListCard>
       <Button kind="secondary" label={`Contact ${current.short} front desk`} icon={<Phone size={17} color={c.ink} />} onPress={call} />
     </SubPage>

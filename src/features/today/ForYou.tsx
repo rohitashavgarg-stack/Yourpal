@@ -146,7 +146,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
 }, (a, b) => a.it.key === b.it.key && a.it.title === b.it.title && a.it.body === b.it.body && a.it.btn === b.it.btn && a.it.critical === b.it.critical && a.i === b.i && a.n === b.n && a.inFlow === b.inFlow && a.prog === b.prog);
 
 // A dot that stretches and darkens as its card comes to the front, in step with the cards.
-function Dot({ k, n, prog }: { k: number; n: number; prog: SharedValue<number> }) {
+function PagerDot({ k, n, prog }: { k: number; n: number; prog: SharedValue<number> }) {
   const { c } = useTheme();
   const st = useAnimatedStyle(() => {
     const near = 1 - Math.min(1, Math.abs(wrapD(k, prog.value, n)));
@@ -196,7 +196,7 @@ export function ForYouStack() {
       </GestureDetector>
       {many && (
         <View pointerEvents="none" style={{ flexDirection: 'row', gap: 4, justifyContent: 'center', alignItems: 'center', height: 14, marginTop: 2 }}>
-          {items.map((x, k) => <Dot key={x.key} k={k} n={n} prog={prog} />)}
+          {items.map((x, k) => <PagerDot key={x.key} k={k} n={n} prog={prog} />)}
         </View>
       )}
     </View>

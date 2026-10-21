@@ -25,6 +25,7 @@ import { QtySheet } from './QtySheet';
 import { fmtNum, fmtQty, Qty, splitFood, stepFor, unitLabel } from './qty';
 import { DItem, dietItems, dietTotals, setP, useCountUp, usePlans } from './store';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Chevron } from '@/design-system/primitives/Chevron';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
@@ -221,14 +222,6 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
 }
 
 // ---------- Meal accordion card ----------
-function Chevron({ open }: { open: boolean }) {
-  const { c } = useTheme();
-  const r = useSharedValue(open ? 180 : 0);
-  useEffect(() => { r.value = withTiming(open ? 180 : 0, { duration: 300 }); }, [open]);
-  const a = useAnimatedStyle(() => ({ transform: [{ rotate: `${r.value}deg` }] }));
-  return <Animated.View style={a}><ChevronDown size={18} color={c.muted} /></Animated.View>;
-}
-
 function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
   const { d } = useDomain();
   const { p } = usePlans();

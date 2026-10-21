@@ -65,7 +65,7 @@ export function FormTipsSheet() {
   );
 }
 
-export function SwapSheet({ api }: { api: ApiRef }) {
+export function WorkoutSwapSheet({ api }: { api: ApiRef }) {
   const { c } = useTheme();
   const { d } = useDomain();
   const { closeSheet } = useOverlay();
@@ -145,3 +145,4 @@ export function FinishConfirmSheet({ left, api }: { left: number; api: ApiRef })
     </>
   );
 }
+export { WorkoutSwapSheet as SwapSheet }; // old name, kept so existing imports work

@@ -94,8 +94,8 @@ export default function Profile() {
       <View style={{ gap: 8 }}>
         <Txt v="label" style={{ paddingHorizontal: 4 }}>MY GOALS</Txt>
         <Row style={{ gap: 10 }}>
-          <GoalTile title="Daily steps" value="8,000" onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'steps' } })} />
-          <GoalTile title="Water" value="3 L" onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'water' } })} />
+          <GoalSummaryTile title="Daily steps" value="8,000" onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'steps' } })} />
+          <GoalSummaryTile title="Water" value="3 L" onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'water' } })} />
         </Row>
         <Pressy accessibilityRole="button" accessibilityLabel={`Goal: ${g2.name}. Change goal`} onPress={go('/goal')} scaleTo={0.985}
           style={{ minHeight: 64, borderRadius: radii.lg, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
@@ -135,7 +135,7 @@ export default function Profile() {
   );
 }
 
-function GoalTile({ title, value, onPress }: { title: string; value: string; onPress: () => void }) {
+function GoalSummaryTile({ title, value, onPress }: { title: string; value: string; onPress: () => void }) {
   const { c } = useTheme();
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`${title} goal ${value}. Edit`} onPress={onPress} scaleTo={0.97}

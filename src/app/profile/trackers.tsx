@@ -7,7 +7,7 @@ import { useShell } from '@/features/shell/state';
 import { fontSizes } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
-export default function Trackers() {
+export default function TrackersScreen() {
   const { s, set } = useShell();
   const flip = (k: keyof typeof s.trk) => () => set((x) => ({ trk: { ...x.trk, [k]: !x.trk[k] } }));
   const allOff = !s.trk.water && !s.trk.weight && !s.trk.steps;

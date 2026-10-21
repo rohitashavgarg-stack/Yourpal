@@ -59,7 +59,7 @@ export function AddButton({ label, onPress, variant = 'round' }: { label: string
 
 const cap = { fontSize: fontSizes.xs, lineHeight: 17, color: 'rgba(255,255,255,0.7)' } as const;
 
-function Segments({ n, on, color, off = 'rgba(255,255,255,0.14)', h = 6, gap = 4, width = W_IN }: { n: number; on: number; color: string; off?: string; h?: number; gap?: number; width?: number }) {
+function SegmentBar({ n, on, color, off = 'rgba(255,255,255,0.14)', h = 6, gap = 4, width = W_IN }: { n: number; on: number; color: string; off?: string; h?: number; gap?: number; width?: number }) {
   const w = (width - gap * (n - 1)) / n;
   return (
     <Svg width={width} height={h}>
@@ -74,7 +74,7 @@ export function EnergyDot({ onPress }: { onPress?: () => void }) {
     <WTile colors={['#8A3A12', '#1A0D06']} label="Active energy" Icon={Flame} a11y="Active energy 320 of 450 kilocalories" onPress={onPress}>
       <View style={{ marginTop: 22 }}><DotText text="320" maxW={W_IN - 6} on="#FFB072" /></View>
       <Txt style={{ ...cap, marginTop: 8 }}>kcal · goal 450</Txt>
-      <View style={{ marginTop: 'auto' }}><Segments n={14} on={10} color="#FF8A3D" h={6} gap={3} /></View>
+      <View style={{ marginTop: 'auto' }}><SegmentBar n={14} on={10} color="#FF8A3D" h={6} gap={3} /></View>
     </WTile>
   );
 }
@@ -109,7 +109,7 @@ export function WaterGlasses({ litres, onPress, onAdd }: { litres: number; onPre
   return (
     <WTile colors={['#0B2A4A', '#061424']} label="Water" a11y={`${glasses} of 12 glasses`} onPress={onPress} add={{ label: 'Add a glass, 250 millilitres', onPress: onAdd, variant: 'glass' }}>
       <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl4, lineHeight: 40, color: fixed.white, marginTop: 10 }}>{glasses}<Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, color: 'rgba(255,255,255,0.6)' }}> / 12 </Txt><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.6)' }}>glasses</Txt></Txt>
-      <View style={{ marginTop: 'auto' }}><Segments n={12} on={glasses} color="#27A9FF" h={12} gap={3} /></View>
+      <View style={{ marginTop: 'auto' }}><SegmentBar n={12} on={glasses} color="#27A9FF" h={12} gap={3} /></View>
     </WTile>
   );
 }
@@ -143,7 +143,7 @@ export function HrDot({ onPress }: { onPress?: () => void }) {
     <WTile colors={['#7A1828', '#1A0A10']} label="Heart rate" Icon={Heart} a11y="Heart rate 72 beats per minute" onPress={onPress}>
       <View style={{ marginTop: 22 }}><DotText text="72" maxW={W_IN - 50} on="#FF8A96" /></View>
       <Txt style={{ ...cap, marginTop: 8 }}>bpm · resting 64</Txt>
-      <View style={{ marginTop: 'auto' }}><Segments n={5} on={2} color="#FF5A6E" h={6} gap={4} /></View>
+      <View style={{ marginTop: 'auto' }}><SegmentBar n={5} on={2} color="#FF5A6E" h={6} gap={4} /></View>
     </WTile>
   );
 }
@@ -166,7 +166,7 @@ export function SleepDot({ onPress }: { onPress?: () => void }) {
     <WTile colors={['#35288F', '#0D0B24']} label="Sleep" Icon={Moon} a11y="Sleep 7 hours 10 minutes" onPress={onPress}>
       <View style={{ marginTop: 22 }}><DotText text="7:10" maxW={W_IN - 6} on="#B3A8FF" /></View>
       <Txt style={{ ...cap, marginTop: 8 }}>hours · goal 8</Txt>
-      <View style={{ marginTop: 'auto' }}><Segments n={8} on={7} color="#8C7DFF" h={6} gap={4} /></View>
+      <View style={{ marginTop: 'auto' }}><SegmentBar n={8} on={7} color="#8C7DFF" h={6} gap={4} /></View>
     </WTile>
   );
 }

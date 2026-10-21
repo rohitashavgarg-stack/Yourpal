@@ -174,7 +174,7 @@ function StreakEntry() {
   );
 }
 
-export default function Progress() {
+export default function ProgressScreen() {
   const { c } = useTheme();
   const { d } = useDomain();
   const ps = progressStore.use();

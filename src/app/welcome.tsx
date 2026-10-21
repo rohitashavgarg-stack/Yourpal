@@ -14,7 +14,7 @@ import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // One soft blue glow bleeding in from the top-right corner. Radial gradient, so it is blurred with no filter (works on web and native).
-function Glow({ width, height }: { width: number; height: number }) {
+function WelcomeGlow({ width, height }: { width: number; height: number }) {
   if (!width || !height) return null;
   const r = width * 1.25;
   return (
@@ -162,7 +162,7 @@ function Segment({ n, i, onPress, label }: { n: number; i: number; onPress: () =
 }
 
 // First screen for a signed-out member: black, one blue glow, a short tour of the app, and one button.
-export default function Welcome() {
+export default function WelcomeScreen() {
   const insets = useSafeAreaInsets();
   const { state } = useStore();
   const [box, setBox] = useState({ w: 0, h: 0 });
@@ -175,7 +175,7 @@ export default function Welcome() {
   const { title, sub, Mock } = SLIDES[i];
   return (
     <View onLayout={(e) => setBox({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height })} style={{ flex: 1, backgroundColor: fixed.black }}>
-      <Glow width={box.w} height={box.h} />
+      <WelcomeGlow width={box.w} height={box.h} />
       <View style={{ paddingTop: insets.top + 18, paddingHorizontal: 24, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
         <View accessibilityRole="header"><YourPalLogo height={40} color={fixed.white} /></View>
       </View>

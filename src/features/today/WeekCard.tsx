@@ -41,12 +41,12 @@ function days(d: Domain, planAt: string): Day[] {
   ];
 }
 
-function Dot({ kind }: { kind: 'done' | 'rest' | '' }) {
+function DayDot({ kind }: { kind: 'done' | 'rest' | '' }) {
   const { c } = useTheme();
   if (kind === 'rest') return <View style={{ width: 8, height: 8 }} />;
   return <View style={{ width: 8, height: 8, borderRadius: radii.xs, borderWidth: 1.5, borderColor: kind === 'done' ? c.accent : c.surface3, backgroundColor: kind === 'done' ? c.accent : 'transparent' }} />;
 }
-function Bar({ w }: { w: number }) {
+function WeekBar({ w }: { w: number }) {
   const { c } = useTheme();
   return <View style={{ width: 22, height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}><View style={{ width: `${w}%`, height: '100%', backgroundColor: c.good, borderRadius: radii.xs }} /></View>;
 }
@@ -74,16 +74,16 @@ export function WeekCard() {
               <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, color: x.today ? c.bg : c.ink }}>{x.num}</Txt>
               <Txt style={{ fontSize: fontSizes.xs2, color: x.today ? c.bg : c.muted, opacity: x.today ? 0.7 : 1 }}>{x.let}</Txt>
             </Pressy>
-            <Dot kind={x.wk} />
-            <Bar w={x.mealW} />
+            <DayDot kind={x.wk} />
+            <WeekBar w={x.mealW} />
           </View>
         ))}
       </View>
       <Txt muted style={{ fontSize: fontSizes.sm, paddingHorizontal: 4 }}>{doneN} of 4 workouts · {7 + t.onPlan} of 12 meals on plan · {ciTime(d) != null ? '2 check-ins' : '1 check-in'}</Txt>
       <Row style={{ gap: 14, justifyContent: 'center', paddingTop: 2, paddingBottom: 6 }}>
-        <Row style={{ gap: 5 }}><Dot kind="done" /><Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>Workout done</Txt></Row>
-        <Row style={{ gap: 5 }}><Dot kind="" /><Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>Planned</Txt></Row>
-        <Row style={{ gap: 5 }}><Bar w={70} /><Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>Meals on plan</Txt></Row>
+        <Row style={{ gap: 5 }}><DayDot kind="done" /><Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>Workout done</Txt></Row>
+        <Row style={{ gap: 5 }}><DayDot kind="" /><Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>Planned</Txt></Row>
+        <Row style={{ gap: 5 }}><WeekBar w={70} /><Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>Meals on plan</Txt></Row>
       </Row>
     </Card>
   );

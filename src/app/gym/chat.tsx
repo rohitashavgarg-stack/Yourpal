@@ -29,7 +29,7 @@ const REPLY = "Got it. I'll check it before your session tomorrow.";
 const REPLY_AUDIO = "Thanks for the voice note. I'll listen and reply before your session.";
 const REPLY_PHOTO = 'Got the photo. I will have a look and tell you what I see.';
 
-function Dot({ i }: { i: number }) {
+function TypingDot({ i }: { i: number }) {
   const { c } = useTheme();
   const o = useSharedValue(0.3);
   useEffect(() => { o.value = withDelay(i * 150, withRepeat(withSequence(withTiming(1, { duration: 350 }), withTiming(0.3, { duration: 650 })), -1, false)); }, []);
@@ -177,7 +177,7 @@ export default function CoachChat() {
         })}
         {g.typing && (
           <FadeIn accessible accessibilityLabel="Coach Vikram is typing" style={{ alignSelf: 'flex-start', flexDirection: 'row', paddingVertical: 14, paddingHorizontal: 14, borderRadius: 20, backgroundColor: c.surface }}>
-            <Dot i={0} /><Dot i={1} /><Dot i={2} />
+            <TypingDot i={0} /><TypingDot i={1} /><TypingDot i={2} />
           </FadeIn>
         )}
         {!isPT && lastMine && !g.typing && <Txt v="caption" style={{ textAlign: 'center' }}>Coach Vikram will reply here.</Txt>}

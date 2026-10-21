@@ -20,7 +20,7 @@ import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
-function MembershipCard() {
+function GymMembership() {
   return <MembershipStrip n={useMembershipNotice()} />;
 }
 
@@ -137,7 +137,7 @@ export default function Gym() {
   useGymScenarios('Gym');
   return (
     <TabScreen title="Gym" header={<GymHeader />} compactTitle={false}>
-      <FadeIn i={0}><MembershipCard /></FadeIn>
+      <FadeIn i={0}><GymMembership /></FadeIn>
       {d.onBreak && <BreakCard />}
       <FadeIn i={1}><AttendanceCard awaiting={awaiting} /></FadeIn>
       <FadeIn i={2}><AssessCard /></FadeIn>

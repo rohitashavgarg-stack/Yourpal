@@ -151,7 +151,7 @@ export default function Onboarding() {
             <ChevronLeft size={22} color={c.ink} />
           </RoundBtn>
         )}
-        {qn ? <Progress n={qn} total={QTOTAL} /> : <View style={{ flex: 1 }} />}
+        {qn ? <StepProgress n={qn} total={QTOTAL} /> : <View style={{ flex: 1 }} />}
         {qn ? <Txt v="label" style={{ textAlign: 'right' }}>{qn} of {QTOTAL}</Txt> : null}
         {questionnaire && (
           <Pressy accessibilityRole="button" accessibilityLabel="Skip all questions and go to Today" onPress={skipAll} scaleTo={0.94} style={{ minHeight: 44, minWidth: 44, justifyContent: 'center', alignItems: 'flex-end', paddingLeft: 6 }}>
@@ -162,7 +162,7 @@ export default function Onboarding() {
 
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 24, paddingTop: 8, gap: 14, flexGrow: 1 }} keyboardShouldPersistTaps="handled">
         <FadeIn key={step} exiting={fadeOut()} style={[{ gap: 14 }, step === 'building' && { flex: 1, justifyContent: 'center' }]}>
-          {step === 'welcome' && <Welcome isPT={isPT} assess={sc.assess} hasGym={dom.hasGym} />}
+          {step === 'welcome' && <WelcomeStep isPT={isPT} assess={sc.assess} hasGym={dom.hasGym} />}
           {step === 'facility' && <FacilityStep />}
           {step === 'goal' && <GoalStep tried={tried} />}
           {step === 'exp' && <ExpStep tried={tried} />}
@@ -195,7 +195,7 @@ export default function Onboarding() {
   );
 }
 
-function Progress({ n, total }: { n: number; total: number }) {
+function StepProgress({ n, total }: { n: number; total: number }) {
   const { c } = useTheme();
   const w = useSharedValue(0);
   useEffect(() => { w.value = withSpring(n / total, spring.soft); }, [n, total]);
@@ -207,7 +207,7 @@ function Progress({ n, total }: { n: number; total: number }) {
   );
 }
 
-function Title({ t, s }: { t: string; s?: string }) {
+function StepTitle({ t, s }: { t: string; s?: string }) {
   return (
     <View style={{ gap: 6, marginBottom: 4 }}>
       <Txt v="title">{t}</Txt>
@@ -216,7 +216,7 @@ function Title({ t, s }: { t: string; s?: string }) {
   );
 }
 
-function Welcome({ isPT, assess, hasGym }: { isPT: boolean; assess: string; hasGym: boolean }) {
+function WelcomeStep({ isPT, assess, hasGym }: { isPT: boolean; assess: string; hasGym: boolean }) {
   const { c } = useTheme();
   return (
     <>
@@ -254,9 +254,9 @@ function GoalStep({ tried }: { tried: boolean }) {
   const p = state.profile;
   return (
     <>
-      <Title t="What's your main goal?" s="Pick one. Coach Vikram fine-tunes it with you at the assessment." />
+      <StepTitle t="What's your main goal?" s="Pick one. Coach Vikram fine-tunes it with you at the assessment." />
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-        {GOALS.map((g) => <GoalTile key={g} goal={g} on={p.goal === g} onPress={() => setProfile({ goal: g, goalTarget: 0, targetKg: '', goal2: p.goal2 === g ? 'None' : p.goal2 })} />)}
+        {GOALS.map((g) => <GoalChoiceTile key={g} goal={g} on={p.goal === g} onPress={() => setProfile({ goal: g, goalTarget: 0, targetKg: '', goal2: p.goal2 === g ? 'None' : p.goal2 })} />)}
       </View>
       {tried && !p.goal && <Txt v="caption" color={c.warn}>Pick a goal, or "Not sure yet".</Txt>}
     </>
@@ -274,7 +274,7 @@ const GOAL_ART: Record<string, { Icon: any; tint: string; col: string }> = {
   'General fitness': { Icon: Activity, tint: 'tNutri', col: 'cNutri' },
   'Not sure yet': { Icon: Compass, tint: 'surface2', col: 'muted' },
 };
-function GoalTile({ goal, on, onPress }: { goal: string; on: boolean; onPress: () => void }) {
+function GoalChoiceTile({ goal, on, onPress }: { goal: string; on: boolean; onPress: () => void }) {
   const { c } = useTheme();
   const a = GOAL_ART[goal];
   // Quiet card: the surface colour, a thin line, one small icon. The selected card gets a darker line.
@@ -296,7 +296,7 @@ function FacilityStep() {
   const gyms = s.progs.filter((x) => x.kind === 'Gym');
   return (
     <>
-      <Title t="Which gym are you joining?" s="Your coach, plan and check-in come from the gym you pick." />
+      <StepTitle t="Which gym are you joining?" s="Your coach, plan and check-in come from the gym you pick." />
       {gyms.map((g) => {
         const on = s.cur === g.id;
         return (
@@ -322,7 +322,7 @@ function ExpStep({ tried }: { tried: boolean }) {
   const { state, setProfile } = useStore();
   return (
     <>
-      <Title t="How much have you trained before?" s="Pick the one closest to you." />
+      <StepTitle t="How much have you trained before?" s="Pick the one closest to you." />
       {EXPS.map((e) => {
         const on = state.profile.exp === e.l;
         return (
@@ -349,7 +349,7 @@ function SchedStep() {
   const p = state.profile;
   return (
     <>
-      <Title t="Days you can realistically train" s="Your plan is built around this. You can change it later." />
+      <StepTitle t="Days you can realistically train" s="Your plan is built around this. You can change it later." />
       <Row style={{ gap: 8 }}>
         {[2, 3, 4, 5, 6].map((d) => {
           const on = p.days === d;
@@ -375,7 +375,7 @@ function AgeStep() {
   const { state, setProfile } = useStore();
   return (
     <>
-      <Title t="When were you born?" s="Used to estimate your daily calories and how hard to start. Only your age is shared with your coach." />
+      <StepTitle t="When were you born?" s="Used to estimate your daily calories and how hard to start. Only your age is shared with your coach." />
       <DobPicker dob={state.profile.dob || defaultDob()} onChange={(v) => setProfile({ dob: v, age: String(ageFrom(v)) })} />
     </>
   );
@@ -396,7 +396,7 @@ function TargetStep() {
     : <Chip tone="good" label={`${d < 0 ? '↘' : '↗'} ${delta > 0 ? '+' : '−'}${Math.abs(delta)} kg`} />;
   return (
     <>
-      <Title t="What's your target weight?" s="Coach Vikram checks that it is a healthy pace at your assessment." />
+      <StepTitle t="What's your target weight?" s="Coach Vikram checks that it is a healthy pace at your assessment." />
       {gv.version === 'Version 2' && <View style={{ paddingBottom: 4 }}><FinishBy by={gv.onboardBy || fmtDay(addDays(TODAY, 84))} onChange={(by) => goalV2Store.set({ onboardBy: by })} /></View>}
       <WeightPicker title="Target weight" kg={target} onChange={(v) => { const t = Math.round(v * 10) / 10; setProfile({ targetKg: String(t), goalTarget: Math.abs(Math.round((t - cur) * 10) / 10) }); }} chip={chip} />
     </>
@@ -439,7 +439,7 @@ function HeightStep() {
   const cm = +state.profile.heightCm || 170;
   return (
     <>
-      <Title t="How tall are you?" s="Used for calories and your plan. Only you and your coach see this." />
+      <StepTitle t="How tall are you?" s="Used for calories and your plan. Only you and your coach see this." />
       <HeightPicker cm={cm} onChange={(v) => setProfile({ heightCm: String(Math.round(v)), skipBody: false })} />
     </>
   );
@@ -450,7 +450,7 @@ function WeightStep() {
   const kg = +state.profile.weightKg || 70;
   return (
     <>
-      <Title t="What do you weigh?" s="Your starting point. You can log it again any time from Today." />
+      <StepTitle t="What do you weigh?" s="Your starting point. You can log it again any time from Today." />
       <WeightPicker kg={kg} onChange={(v) => setProfile({ weightKg: String(Math.round(v * 10) / 10), skipBody: false })} />
     </>
   );
@@ -462,7 +462,7 @@ function BasicsStep({ tried }: { tried: boolean }) {
   const p = state.profile;
   return (
     <>
-      <Title t="A few basics" s="Diet, where you eat and any injuries. Only you and your coach see this." />
+      <StepTitle t="A few basics" s="Diet, where you eat and any injuries. Only you and your coach see this." />
       <Txt v="label" style={{ marginTop: 6 }}>Diet</Txt>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         {['Veg', 'Eggetarian', 'Non-veg', 'Jain', 'Vegan'].map((d) => <Pill key={d} label={d} on={p.diet === d} onPress={() => setProfile({ diet: d })} />)}
@@ -494,7 +494,7 @@ function ConsentStep({ isPT }: { isPT: boolean }) {
   ];
   return (
     <>
-      <Title t="Your privacy" s="What Wulf Fitness can see. You can change this any time in Settings." />
+      <StepTitle t="Your privacy" s="What Wulf Fitness can see. You can change this any time in Settings." />
       <Card style={{ padding: 6 }}>
         {rows.map((r) => (
           <Row key={r.l} style={{ gap: 14, minHeight: 68, paddingHorizontal: 14, borderBottomWidth: 1, borderBottomColor: c.line }}>

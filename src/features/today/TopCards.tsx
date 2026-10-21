@@ -51,7 +51,7 @@ export function GoalLine() {
 }
 
 // soft: the same card with a quieter colour and a smaller ring (used in the new Today layout, where the card is context, not the loudest thing).
-export function GoalCard({ soft: compact = false }: { soft?: boolean } = {}) {
+export function RingGoalCard({ soft: compact = false }: { soft?: boolean } = {}) {
   const soft = compact;
   const { d } = useDomain();
   const SZ = soft ? 84 : 132, RR = soft ? 33 : R, CC = 2 * Math.PI * RR, SW = soft ? 8 : 12;
@@ -334,3 +334,4 @@ export function UpdatesSheet() {
     </>
   );
 }
+export { RingGoalCard as GoalCard }; // old name, kept so existing imports work

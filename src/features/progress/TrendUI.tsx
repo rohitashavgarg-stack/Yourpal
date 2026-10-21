@@ -37,7 +37,7 @@ export function RangeBar() {
           <Pressy accessibilityRole="button" accessibilityLabel="Earlier" disabled={!win.canPrev} onPress={() => go(-1)} style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: win.canPrev ? 1 : 0.35 }}>
             <ChevronLeft size={20} color={c.ink} />
           </Pressy>
-          <Pressy accessibilityRole="button" accessibilityLabel={`${win.label}. Pick a date`} onPress={() => openSheet(<DateSheet />, { label: 'Pick a date' })} style={{ flex: 1, minHeight: 44, alignItems: 'center', justifyContent: 'center' }}>
+          <Pressy accessibilityRole="button" accessibilityLabel={`${win.label}. Pick a date`} onPress={() => openSheet(<CalendarSheet />, { label: 'Pick a date' })} style={{ flex: 1, minHeight: 44, alignItems: 'center', justifyContent: 'center' }}>
             <Txt accessibilityLiveRegion="polite" numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.base }}>{win.label}</Txt>
             <Txt v="caption">{win.current ? 'Swipe or tap for a calendar' : 'Tap for a calendar'}</Txt>
           </Pressy>
@@ -85,7 +85,7 @@ export function RangeBarSlim() {
         </View>
         <Pressy accessibilityRole="button" accessibilityLabel="Later" disabled={!win.canNext} onPress={() => go(1)} style={[btn, { opacity: win.canNext ? 1 : 0.35 }]}><ChevronRight size={18} color={c.ink} /></Pressy>
       </Row>
-      <Pressy accessibilityRole="button" accessibilityLabel={`${win.label}. Pick a date`} onPress={() => openSheet(<DateSheet />, { label: 'Pick a date' })} style={{ alignSelf: 'center', minHeight: 24, paddingHorizontal: 12, justifyContent: 'center' }}>
+      <Pressy accessibilityRole="button" accessibilityLabel={`${win.label}. Pick a date`} onPress={() => openSheet(<CalendarSheet />, { label: 'Pick a date' })} style={{ alignSelf: 'center', minHeight: 24, paddingHorizontal: 12, justifyContent: 'center' }}>
         <Txt v="caption" style={{ textAlign: 'center', fontSize: fontSizes.xs, lineHeight: 16 }}>{win.label}</Txt>
       </Pressy>
     </View>
@@ -94,7 +94,7 @@ export function RangeBarSlim() {
 
 // ============ Calendar to jump to any day ============
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-function DateSheet() {
+function CalendarSheet() {
   const { c } = useTheme();
   const { closeSheet } = useOverlay();
   const ps = progressStore.use();
@@ -140,7 +140,7 @@ function DateSheet() {
 }
 
 // ============ Charts ============
-function Bar({ h, w, color, dim }: { h: number; w: number; color: string; dim: boolean }) {
+function ChartBar({ h, w, color, dim }: { h: number; w: number; color: string; dim: boolean }) {
   const y = useSharedValue(0);
   useEffect(() => { y.value = withTiming(h, { duration: 450, easing: Easing.out(Easing.cubic) }); }, [h]);
   const a = useAnimatedStyle(() => ({ height: y.value }));
@@ -174,7 +174,7 @@ export function TrendChart({ t, unit, height = 170, onSwipe, color }: { t: Trend
           {t.vals.map((v, i) => (
             <Pressy key={i} accessibilityRole="button" accessibilityLabel={v == null ? `${t.buckets[i].sub}, no data` : `${t.buckets[i].sub}, ${t.fmt(v)}${unit}`} haptics={false} scaleTo={1} onPress={() => { if (v != null) { haptic.tick(); setSel(sel === i ? null : i); } }}
               style={{ width: colW, height: chartH, alignItems: 'center', justifyContent: 'flex-end' }}>
-              {v == null ? <View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2 }} /> : <Bar h={Math.max(3, (v / max) * (chartH - 6))} w={barW} color={t.goal != null && v >= t.goal ? c.good : col} dim={sel != null && sel !== i} />}
+              {v == null ? <View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2 }} /> : <ChartBar h={Math.max(3, (v / max) * (chartH - 6))} w={barW} color={t.goal != null && v >= t.goal ? c.good : col} dim={sel != null && sel !== i} />}
             </Pressy>
           ))}
         </View>

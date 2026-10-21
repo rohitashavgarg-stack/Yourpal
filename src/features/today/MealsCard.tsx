@@ -17,6 +17,7 @@ import { QuickLogSheet } from './QuickLogSheet';
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
 import { useLogGate } from '@/lib/logGate';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Chevron } from '@/design-system/primitives/Chevron';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | 'part' | 'off' | null }) {
@@ -34,14 +35,6 @@ function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | '
       )}
     </View>
   );
-}
-
-function Chevron({ open }: { open: boolean }) {
-  const { c } = useTheme();
-  const r = useSharedValue(open ? 180 : 0);
-  useEffect(() => { r.value = withSpring(open ? 180 : 0, spring.snappy); }, [open]);
-  const a = useAnimatedStyle(() => ({ transform: [{ rotate: `${r.value}deg` }] }));
-  return <Animated.View style={a}><ChevronDown size={18} color={c.muted} /></Animated.View>;
 }
 
 function MealRow({ id, open, bare = false }: { id: MealId; open: boolean; bare?: boolean }) {
@@ -83,7 +76,7 @@ function MealRow({ id, open, bare = false }: { id: MealId; open: boolean; bare?:
           <Txt numberOfLines={1} style={{ fontSize: fontSizes.sm, color: v.tone === 'good' ? c.good : v.tone === 'warn' ? c.warn : c.muted }}>{v.status}</Txt>
         </View>
         <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{v.kcal} kcal</Txt>
-        <Chevron open={open} />
+        <Chevron open={open} motion="spring" />
       </Pressy>}
       {(open || bare) && (
         <FadeIn style={{ gap: 4, paddingBottom: bare ? 0 : 12 }}>

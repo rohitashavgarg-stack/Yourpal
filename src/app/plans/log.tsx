@@ -20,6 +20,7 @@ import { useDietActions } from '@/features/plans/dietActions';
 import { PageHeader } from '@/features/plans/parts';
 import { allowedFor, dietItems, Food, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { ScanBracket } from '@/design-system/primitives/ScanBracket';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Mode = 'search' | 'write' | 'scan';
@@ -31,12 +32,6 @@ function ScanBeam() {
   const a = useAnimatedStyle(() => ({ top: `${8 + y.value * 80}%` }));
   return <Animated.View style={[{ position: 'absolute', left: '12%', right: '12%', height: 2, backgroundColor: '#5CC2E6', shadowColor: '#5CC2E6', shadowOpacity: 1, shadowRadius: 8, shadowOffset: { width: 0, height: 0 } }, a]} />;
 }
-function Bracket({ pos }: { pos: 'tl' | 'tr' | 'bl' | 'br' }) {
-  const t = pos[0] === 't', l = pos[1] === 'l';
-  return <View style={{ position: 'absolute', width: 34, height: 34, borderColor: fixed.white, opacity: 0.9, [t ? 'top' : 'bottom']: 22, [l ? 'left' : 'right']: 22,
-    borderTopWidth: t ? 3 : 0, borderBottomWidth: t ? 0 : 3, borderLeftWidth: l ? 3 : 0, borderRightWidth: l ? 0 : 3, [`border${t ? 'Top' : 'Bottom'}${l ? 'Left' : 'Right'}Radius`]: 12 }} />;
-}
-
 function NumField({ label, unit, value, onChange, ph }: { label: string; unit: string; value: string; onChange: (v: string) => void; ph: string }) {
   const { c } = useTheme();
   return (
@@ -249,7 +244,7 @@ export default function LogFood() {
                 <Circle cx={146} cy={120} r={30} fill="#8C3B2A" /><Circle cx={140} cy={113} r={4} fill="#B5543C" /><Circle cx={154} cy={126} r={3} fill="#B5543C" />
                 <Ellipse cx={212} cy={122} rx={34} ry={24} fill="#FFFDF6" /><Circle cx={186} cy={164} r={22} fill="#D9A45A" />
               </Svg>
-              <Bracket pos="tl" /><Bracket pos="tr" /><Bracket pos="bl" /><Bracket pos="br" />
+              <ScanBracket pos="tl" size="large" /><ScanBracket pos="tr" size="large" /><ScanBracket pos="bl" size="large" /><ScanBracket pos="br" size="large" />
               {scan === 'busy' && <ScanBeam />}
               <Txt style={{ position: 'absolute', left: 0, right: 0, bottom: 14, textAlign: 'center', fontFamily: font.medium, fontSize: fontSizes.sm, color: fixed.white, textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 4 }}>{cap}</Txt>
             </View>

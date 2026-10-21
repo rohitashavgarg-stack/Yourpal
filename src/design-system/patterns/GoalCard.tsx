@@ -28,7 +28,7 @@ export const goalSizeStore = createStore(() => ({ size: 'Smaller' as GoalSize })
 
 // The glow of the Today card: a radial ellipse (about 300 x 230) behind the content, 50 px past the left edge and 80 px below the bottom, so only part of it
 // shows, clipped by the card's rounded corners. Its colour comes from the state.
-export function Glow({ color, a, side = 'left' }: { color: string; a: number; side?: 'left' | 'right' }) {
+export function RadialGlow({ color, a, side = 'left' }: { color: string; a: number; side?: 'left' | 'right' }) {
   const W = 340, H = 260;
   return (
     <View pointerEvents="none" style={{ position: 'absolute', ...(side === 'left' ? { left: -60 } : { right: -60 }), bottom: -90, width: W, height: H }}>
@@ -46,7 +46,7 @@ export function Glow({ color, a, side = 'left' }: { color: string; a: number; si
 }
 
 // 36 segments, a 2 px gap, 14 px high. Filled = round(36 x the share of time passed), at least 1 once the goal has started.
-function Segments({ filled, color }: { filled: number; color: string }) {
+function TickBar({ filled, color }: { filled: number; color: string }) {
   return (
     <View style={{ flexDirection: 'row', gap: 2 }}>
       {Array.from({ length: SEGMENTS }, (_, i) => <View key={i} style={{ flex: 1, height: 14, borderRadius: radii.xs, backgroundColor: i < filled ? color : GC.unfilled }} />)}
@@ -216,7 +216,7 @@ export function GoalCard({ variant = 'card', state: stateProp, weighDays: weighP
     <Pressy accessibilityRole="link" scaleTo={0.98} onPress={() => router.push('/goal-detail')}
       accessibilityLabel={`${g.name}, ${suffix}. ${leftBold}${leftRest}. ${look.pill ? `${look.pill.label}.` : ''}${right ? ` ${right.text}.` : ''} Open goal details`}>
       <View style={{ ...box, backgroundColor: GC.bg, borderColor: GC.border, gap: 12, marginBottom: 4 }}>
-        <Glow color={look.glow.color} a={look.glow.a} />
+        <RadialGlow color={look.glow.color} a={look.glow.a} />
         {/* the title with the date as subtext under it, and the pill in front on the same row: the title wraps inside its own space, the pill never moves down or truncates */}
         <Row style={{ alignItems: 'flex-start', justifyContent: 'space-between', columnGap: 8 }}>
           <View style={{ flexShrink: 1 }}>
@@ -230,7 +230,7 @@ export function GoalCard({ variant = 'card', state: stateProp, weighDays: weighP
           )}
         </Row>
         {/* the 36-segment bar is for body-weight goals; every other kind keeps its own picture (ticks for body fat, staircase, stopwatch ruler, race lane, workout slots), in the state colour */}
-        {kg ? <Segments filled={filled} color={look.seg} /> : <GoalVisual g={g} size="mini" color={look.seg} track={GC.unfilled} ring={GC.rest} share={state === 'complete' && g.kind !== 'consistency' ? 1 : undefined} />}
+        {kg ? <TickBar filled={filled} color={look.seg} /> : <GoalVisual g={g} size="mini" color={look.seg} track={GC.unfilled} ring={GC.rest} share={state === 'complete' && g.kind !== 'consistency' ? 1 : undefined} />}
         <Row style={{ justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', columnGap: 8 }}>
           <Txt style={{ flexShrink: 1, ...small, color: GC.rest }}>
             <Txt style={{ ...small, fontFamily: font.semibold, color: GC.title }}>{leftBold}</Txt>{leftRest}
@@ -246,3 +246,4 @@ export function GoalCard({ variant = 'card', state: stateProp, weighDays: weighP
     </Pressy>
   );
 }
+export { RadialGlow as Glow }; // old name, kept so existing imports work

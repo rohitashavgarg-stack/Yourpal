@@ -11,7 +11,7 @@ import { fontSizes } from '@/design-system/tokens';
 const ITEM = 72;
 const VISIBLE = 5;
 
-function Item({ n, i, y, fmt, size }: { n: number; i: number; y: { value: number }; fmt?: (n: number) => string; size: number }) {
+function WheelItem({ n, i, y, fmt, size }: { n: number; i: number; y: { value: number }; fmt?: (n: number) => string; size: number }) {
   const { c } = useTheme();
   const a = useAnimatedStyle(() => {
     const d = Math.abs(y.value / ITEM - i);
@@ -48,7 +48,7 @@ export function Wheel({ value, onChange, min, max, unit, accessibilityLabel, fmt
       style={{ height: H, alignSelf: 'stretch', flex: fmt ? 1 : undefined }}>
       <Animated.ScrollView ref={ref} onScroll={onScroll} scrollEventThrottle={16} showsVerticalScrollIndicator={false} snapToInterval={ITEM} decelerationRate="fast"
         contentContainerStyle={{ paddingVertical: (H - ITEM) / 2 }}>
-        {items.map((n, i) => <Item key={n} n={n} i={i} y={y} fmt={fmt} size={size} />)}
+        {items.map((n, i) => <WheelItem key={n} n={n} i={i} y={y} fmt={fmt} size={size} />)}
       </Animated.ScrollView>
       <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: (H - ITEM) / 2, height: ITEM, borderTopWidth: 1, borderBottomWidth: 1, borderColor: c.line }} />
       {!!unit && <Txt pointerEvents="none" style={{ position: 'absolute', right: 24, top: H / 2 - 8, fontFamily: font.semibold, fontSize: fontSizes.sm, letterSpacing: 1.4, color: c.muted }}>{unit}</Txt>}

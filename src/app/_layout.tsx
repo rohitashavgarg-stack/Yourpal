@@ -156,7 +156,7 @@ function Slide({ name, bottom, children }: { name: string; bottom: boolean; chil
   );
 }
 
-function Shell() {
+function AppShell() {
   const { c, isDark } = useTheme();
   const wide = useIsWideWeb();
   return (
@@ -199,7 +199,7 @@ export default function RootLayout() {
           <ThemeProvider>
             <ScenarioRegistryProvider>
               <DomainProvider>
-                <Shell />
+                <AppShell />
               </DomainProvider>
             </ScenarioRegistryProvider>
           </ThemeProvider>

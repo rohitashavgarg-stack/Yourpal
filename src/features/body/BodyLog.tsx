@@ -150,7 +150,7 @@ function BodyScreen({ title, saveLabel, onSave, children, trend }: { title: stri
 
 // ---------- date row (weight only) ----------
 const DAYS = [{ k: 'Today', full: 'Today · Wed 24', log: 'Wed 24' }, { k: 'Yesterday', full: 'Yesterday · Tue 23', log: 'Tue 23' }, { k: 'Mon 22', full: 'Mon 22', log: 'Mon 22' }];
-function DateSheet({ value, onPick }: { value: number; onPick: (i: number) => void }) {
+function WeighDateSheet({ value, onPick }: { value: number; onPick: (i: number) => void }) {
   const { closeSheet } = useOverlay();
   return (
     <>
@@ -217,7 +217,7 @@ export function WeightScreen() {
         ) : (
           <View style={{ gap: 18 }}>
             <Trend kg={kg} unit={unit} />
-            <Pressy accessibilityRole="button" accessibilityLabel={`Date: ${DAYS[day].full}. Change`} onPress={() => openSheet(<DateSheet value={day} onPick={setDay} />, { label: 'Weighed on' })}
+            <Pressy accessibilityRole="button" accessibilityLabel={`Date: ${DAYS[day].full}. Change`} onPress={() => openSheet(<WeighDateSheet value={day} onPick={setDay} />, { label: 'Weighed on' })}
               style={{ minHeight: 56, borderRadius: radii.md, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
               <CalendarDays size={19} color={c.muted} />
               <View style={{ flex: 1 }}><Txt v="caption">Date</Txt><Txt style={{ fontFamily: font.semibold }}>{DAYS[day].full}</Txt></View>
