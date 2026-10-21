@@ -87,7 +87,13 @@ type Ctx = {
 const StoreCtx = createContext<Ctx | null>(null);
 
 const KEY = 'yourpal-state-v1';
+// Screenshots (scripts/visual/capture.js) open the web app with ?theme=light or ?theme=dark to force the mode. Not used otherwise.
 function load(): AppState {
+  const st = loadState();
+  const m = typeof location !== 'undefined' ? location.search.match(/[?&]theme=(light|dark)/i) : null;
+  return m ? { ...st, sc: { ...st.sc, theme: m[1].toLowerCase() === 'light' ? 'Light' : 'Dark' } } : st;
+}
+function loadState(): AppState {
   if (typeof location !== 'undefined' && /[?&]signedin=1/.test(location.search)) return { ...defaultState, loggedIn: true, onboarded: true, sc: { ...defaultState.sc, member: 'PT member' } }; // TEMP-SHOT
   try {
     const raw = (globalThis as any).localStorage?.getItem(KEY);
