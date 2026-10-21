@@ -10,6 +10,7 @@ Read-only audit of the repository at the time of writing. No code was changed. E
 5. Proposed `/design-system` structure
 6. Questions
 7. Method and limits
+8. After phase 2 (tokens): before and after
 Appendix A: every component. Appendix B: every hard-coded colour.
 
 ## 1. Stack
@@ -544,6 +545,46 @@ Notes on the fit:
 - Inline-pattern counts in section 2.2 are single-line regex matches. A style written across several lines is missed, so those counts are lower bounds.
 - "Near-duplicate" for colours means every RGB channel within 8. For numbers it means a gap of 1 (font size) or 2 (radius). These are prompts for a decision, not decisions.
 - Nothing was run on a device. Counts do not say which screens users see.
+
+## 8. After phase 2 (tokens): before and after
+
+Phase 2 added `src/design-system/tokens/` (colour, typography, spacing, radius, shadows, motion), kept `src/theme/tokens.ts`, `src/theme/motion.ts` and `ThemeProvider` as re-exports, and ran a codemod (`scripts/codemods/apply-tokens.js`) in three commits. Counts are the same script as the rest of this file, re-run after the change; the token files themselves are not counted as hard-coded.
+
+| Measure | Before | After |
+|---|---|---|
+| Distinct hard-coded hex colours | 238 | 214 |
+| Hex colour uses | 659 | 311 |
+| Hex colours that equal a palette value | 13 of 238 | 7 of 214 |
+| Distinct `rgba()` colours | 83 | 83 |
+| `rgba()` uses | 207 | 207 |
+| Distinct literal font sizes | 34 | 17 |
+| Literal `fontSize` uses | 748 | 88 |
+| Distinct literal border radii | 36 | 23 |
+| Literal border radius uses | 507 | 189 |
+| `gap` uses (not changed in this phase) | 679 | 679 |
+| Components found | 413 | 413 |
+
+What the codemod changed:
+
+| Step | Exact matches | Snapped (within the tolerance) | Total values | Files |
+|---|---|---|---|---|
+| Colours to `fixed.*` (white, black, blue, dark, live, shadow); tolerance 8 per channel | 320 | 28 | 348 | 65 |
+| Font sizes to `fontSizes.*`; tolerance 2 px | 617 | 63 | 680 | 103 |
+| Radii to `radii.*`; tolerance 2 px, and a smaller step only when the element is clearly not a circle or pill | 189 | 135 | 324 | 90 |
+
+The new scales (from `src/design-system/tokens/`):
+
+| Scale | Steps |
+|---|---|
+| `fontSizes` (10) | 11, 12, 13, 14, 15, 17, 20, 22, 26, 30 |
+| `radii` (5 and the pill) | 4, 12, 18, 22, 28, 999 |
+| `spacing` (4 px grid) | 0, 4, 8, 12, 16, 20, 24, 32, 40 (defined, not applied yet) |
+| `fixed` colours | white `#FFFFFF`, black `#000000`, blue `#2F6BEA`, dark `#0B0E14`, live `#7CF0C8`, shadow `#101828` |
+| `semantic` roles | success, warning, danger, info, progress, muted (each with fg and bg), also on `useTheme()` as `s` |
+
+What was left alone, and where to decide: `docs/tokens-review.md` (305 hex, 204 rgba, 4 colours inside strings, 95 font sizes, 191 radii, and a summary of off-grid spacing). Regenerate it with `node scripts/codemods/apply-tokens.js --review`.
+
+The new ESLint rule (warn level, `no-restricted-syntax` in `eslint.config.js`) reports hard-coded hex colours, border radii and font sizes outside `src/design-system/` and `src/theme/`. It reports 582 existing leftovers in 88 files today. ESLint also reports 109 errors from other rules (`react-hooks/*`, `react/no-unescaped-entities`, `react/jsx-key`); none come from this phase.
 
 ## Appendix A: every component
 
