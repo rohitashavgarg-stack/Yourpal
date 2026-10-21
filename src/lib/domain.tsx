@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { basePlans, Ex, FoodType, legDay, MealId, MEALS, PlanDay } from './data';
+import { devParam } from './devParams';
 
 // Shared in-app state for Today, Workout, Plans, Progress and Gym.
 // Everything is local (mock backend). Screens read with useDomain() and write with set().
@@ -108,7 +109,7 @@ type Ctx = { d: Domain; set: (p: Partial<Domain> | ((d: Domain) => Partial<Domai
 const DomainCtx = createContext<Ctx | null>(null);
 
 export function DomainProvider({ children }: { children: React.ReactNode }) {
-  const [d, setD] = useState<Domain>(initialDomain);
+  const [d, setD] = useState<Domain>(() => ({ ...initialDomain(), ...devParam<Partial<Domain>>('dom') }));
   const set = useCallback<Ctx['set']>((p) => setD((s) => settle(s, { ...s, ...(typeof p === 'function' ? p(s) : p) })), []);
   const reset = useCallback(() => setD(initialDomain()), []);
   const v = useMemo(() => ({ d, set, reset }), [d, set, reset]);

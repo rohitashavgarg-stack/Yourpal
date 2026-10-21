@@ -54,7 +54,7 @@ function EmojiPanel({ onPick }: { onPick: (e: string) => void }) {
   );
 }
 
-function AttachSheet({ onPick }: { onPick: (src: 'library' | 'camera') => void }) {
+export function AttachSheet({ onPick }: { onPick: (src: 'library' | 'camera') => void }) {
   const { c } = useTheme();
   const { closeSheet } = useOverlay();
   const opt = (label: string, icon: React.ReactNode, src: 'library' | 'camera') => (

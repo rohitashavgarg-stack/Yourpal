@@ -24,7 +24,7 @@ import { FadeIn } from '@/design-system/primitives/FadeIn';
 const maskNum = (p: string) => (p.replace(/D/g, '').length === 10 ? `+91 ${p.slice(0, 2)}xxxxxx${p.slice(8)}` : '+91 98xxxxxx21');
 
 // Changing the number needs a code sent to the new one, so nobody can lock themselves out by a typo.
-function ChangePhoneSheet() {
+export function ChangePhoneSheet() {
   const { c } = useTheme();
   const { state, set } = useStore();
   const { closeSheet, toast } = useOverlay();
@@ -58,7 +58,7 @@ function ChangePhoneSheet() {
   );
 }
 
-function PhotoSheet({ hasCustom, onPick, onRemove }: { hasCustom: boolean; onPick: (src: 'library' | 'camera') => void; onRemove: () => void }) {
+export function PhotoSheet({ hasCustom, onPick, onRemove }: { hasCustom: boolean; onPick: (src: 'library' | 'camera') => void; onRemove: () => void }) {
   const { c } = useTheme();
   const { closeSheet } = useOverlay();
   const opt = (label: string, icon: React.ReactNode, run: () => void, warn?: boolean) => (
@@ -78,7 +78,7 @@ function PhotoSheet({ hasCustom, onPick, onRemove }: { hasCustom: boolean; onPic
   );
 }
 
-function DobSheet() {
+export function DobSheet() {
   const { state, setProfile } = useStore();
   const { closeSheet, toast } = useOverlay();
   const [dob, setDob] = useState(state.profile.dob || defaultDob());

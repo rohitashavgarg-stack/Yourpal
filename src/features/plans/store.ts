@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { FoodType, MealId, MEALS, Mode, TODAY_IDX } from '@/lib/data';
 import { Domain, mealLog, wkDoneInfo, workoutState } from '@/lib/domain';
+import { devParam } from '@/lib/devParams';
 import { fmtT } from '@/lib/data';
 
 // Plans-only state lives in a tiny module store (no provider needed), so the tab,
@@ -51,7 +52,7 @@ export function freshPlans(): PlansState {
   };
 }
 
-let state: PlansState = freshPlans();
+let state: PlansState = { ...freshPlans(), ...(devParam<Record<string, object>>('stores') ?? {}).plans };
 const subs = new Set<() => void>();
 const emit = () => subs.forEach((f) => f());
 const subscribe = (f: () => void) => { subs.add(f); return () => { subs.delete(f); }; };

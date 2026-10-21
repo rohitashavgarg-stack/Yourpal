@@ -16,4 +16,4 @@ export const progressStore = createStore(() => ({
   metric: 0 as 0 | 1 | 2,
   stallGone: false,
   photos: [{ d: 'Sep 2' }, { d: 'Sep 30' }] as { d: string; fresh?: boolean }[],
-}));
+}), 'progress');

@@ -94,7 +94,7 @@ export function RangeBarSlim() {
 
 // ============ Calendar to jump to any day ============
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-function CalendarSheet() {
+export function CalendarSheet() {
   const { c } = useTheme();
   const { closeSheet } = useOverlay();
   const ps = progressStore.use();

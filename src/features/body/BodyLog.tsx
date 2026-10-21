@@ -150,7 +150,7 @@ function BodyScreen({ title, saveLabel, onSave, children, trend }: { title: stri
 
 // ---------- date row (weight only) ----------
 const DAYS = [{ k: 'Today', full: 'Today · Wed 24', log: 'Wed 24' }, { k: 'Yesterday', full: 'Yesterday · Tue 23', log: 'Tue 23' }, { k: 'Mon 22', full: 'Mon 22', log: 'Mon 22' }];
-function WeighDateSheet({ value, onPick }: { value: number; onPick: (i: number) => void }) {
+export function WeighDateSheet({ value, onPick }: { value: number; onPick: (i: number) => void }) {
   const { closeSheet } = useOverlay();
   return (
     <>

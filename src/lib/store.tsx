@@ -1,4 +1,5 @@
 import { useFocusEffect } from 'expo-router';
+import { devParam } from './devParams';
 import React, { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 
 // ---------- App state (mock backend lives on the device) ----------
@@ -91,7 +92,9 @@ const KEY = 'yourpal-state-v1';
 function load(): AppState {
   const st = loadState();
   const m = typeof location !== 'undefined' ? location.search.match(/[?&]theme=(light|dark)/i) : null;
-  return m ? { ...st, sc: { ...st.sc, theme: m[1].toLowerCase() === 'light' ? 'Light' : 'Dark' } } : st;
+  const themed = m ? { ...st, sc: { ...st.sc, theme: (m[1].toLowerCase() === 'light' ? 'Light' : 'Dark') as Scenarios['theme'] } } : st;
+  const app = devParam<Partial<AppState>>('app'), prof = devParam<Partial<Profile>>('prof'), sc = devParam<Partial<Scenarios>>('sc');
+  return { ...themed, ...app, profile: { ...themed.profile, ...prof }, sc: { ...themed.sc, ...sc } };
 }
 function loadState(): AppState {
   if (typeof location !== 'undefined' && /[?&]signedin=1/.test(location.search)) return { ...defaultState, loggedIn: true, onboarded: true, sc: { ...defaultState.sc, member: 'PT member' } }; // TEMP-SHOT

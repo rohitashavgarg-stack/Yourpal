@@ -72,7 +72,7 @@ function MacroBar({ l, v, target, col }: { l: string; v: number; target: number;
 }
 
 // Marking eaten is one tap; undoing it is a deliberate two-step, so browsing other days can't flip food by accident.
-function UndoEatenSheet({ what, onConfirm }: { what: string; onConfirm: () => void }) {
+export function UndoEatenSheet({ what, onConfirm }: { what: string; onConfirm: () => void }) {
   const { closeSheet } = useOverlay();
   return (
     <View style={{ gap: 12, paddingBottom: 8 }}>

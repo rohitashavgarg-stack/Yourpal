@@ -12,6 +12,8 @@ import { ConnectCard, HealthCards, Trackers, WaterCard, WeightCard } from '@/fea
 import { WeekCard } from '@/features/today/WeekCard';
 import { MembershipCard, PaymentBanner, useMembershipNotice } from '@/features/today/PaymentBanner';
 import { newSession } from '@/features/workout/session';
+import { useOverlay } from '@/components/Overlay';
+import { DEV_SHEETS } from '@/lib/devSheets';
 import { useTheme } from '@/theme/ThemeProvider';
 
 // Developer page for the screenshot checks (scripts/visual/capture-cards.js). It draws one card in one state, nothing else.
@@ -23,6 +25,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 //   /dev-cards?c=meals&s=complete               the Today meals card; s = now | missed | complete | paused | other | nothing
 //   /dev-cards?c=trackers&s=health              the tracker row; s = default | health | hc-only | weight-up | water-empty | water-full | tiles | tiles-health
 //   /dev-cards?c=week&s=done                    the week card; s = default | done | checked-in
+//   /dev-cards?c=sheet&s=QuickLogSheet          any bottom sheet in src/lib/devSheets.tsx, opened as in the app
 //   /dev-cards?c=banner&s=card-expired          the account banner; s = strip | card-active | card-expiring | card-expired
 type Patch = Partial<Domain>;
 const SCENES: Record<string, Record<string, () => Patch | void>> = {
@@ -80,7 +83,10 @@ function Harness() {
   const { c } = useTheme();
   const { set } = useDomain();
   const insets = useSafeAreaInsets();
+  const { openSheet } = useOverlay();
   useEffect(() => {
+    const sh = p.c === 'sheet' && p.s ? DEV_SHEETS[p.s] : undefined;
+    if (sh) openSheet(sh.node(), { label: sh.label });
     if (p.c === 'budget') {
       if (p.s === 'nothing-eaten') set({ meals: {} });
       if (p.s === 'all-logged') set({ meals: mealsAt(2000) });
@@ -101,6 +107,7 @@ function Harness() {
 
 function card(kind?: string, s?: string, v?: string, w?: string) {
   switch (kind) {
+    case 'sheet': return null;
     case 'budget': return <TodayBudgetCard />;
     case 'workout': return <WorkoutCard restart={s === 'comeback'} />;
     case 'meals': return <MealNowCard />;
