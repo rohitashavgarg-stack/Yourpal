@@ -18,6 +18,7 @@ import { TODAY } from '@/features/progress/trends';
 import { useStreak } from '@/features/streak/useStreak';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Card } from '@/design-system/primitives/Card';
+import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
 type Past = { name: string; when: string; result: string; amount?: string };
 const HISTORY: Past[] = [
@@ -25,10 +26,6 @@ const HISTORY: Past[] = [
   { name: 'Lose 4 kg', when: 'Oct 2025 to Jan 2026', result: 'Reached', amount: '4.0 kg' },
 ];
 
-const Label = ({ children }: { children: string }) => {
-  const { c } = useTheme();
-  return <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}>{children}</Txt>;
-};
 // A section heading above its cards (sentence case, like the rest of the app), with room above it so the page reads in groups.
 function Section({ title }: { title: string }) {
   return (
@@ -53,7 +50,7 @@ function LeftTiles({ g }: { g: Goal2 }) {
     <Row style={{ gap: 12, alignItems: 'stretch' }}>
       {tiles.map((t) => (
         <Card variant="compact" key={t.label} gap={4} style={{ flex: 1, padding: 16 }}>
-          <Label>{t.label}</Label>
+          <SectionLabel variant="quiet">{t.label}</SectionLabel>
           <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl4, lineHeight: 42, letterSpacing: -1, color: c.ink }}>{t.big}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.base, lineHeight: 22, letterSpacing: 0, color: c.muted }}>{t.unit}</Txt></Txt>
           <Txt v="caption">{t.sub}</Txt>
         </Card>

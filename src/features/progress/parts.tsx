@@ -1,71 +1,15 @@
 import React, { useEffect } from 'react';
-import { ProgressiveBlur, useScrolled } from '@/components/Glass';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleProp, TextStyle, View, ViewStyle } from 'react-native';
+import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
 import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import Svg, { Defs, Polyline, RadialGradient, Rect, Stop } from 'react-native-svg';
-import { router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronLeft, ChevronRight } from '@/lib/icons';
+import { ChevronRight } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
-import { RoundBtn } from '@/components/bits';
-import { useToastLift } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { SubPage as DSSubPage, SubPageProps } from '@/design-system/primitives/SubPage';
+import { ListCard } from '@/design-system/primitives/ListCard';
 
-// ---------- Full-screen pushed page: back button, centred title, optional right slot ----------
-export function SubPage({ title, titleIcon, onTitlePress, right, children, footer, scroll = true, toastLift = 24, fallback = '/(tabs)', onBack }: {
-  title: string; titleIcon?: React.ReactNode; onTitlePress?: () => void; right?: React.ReactNode; children: React.ReactNode; footer?: React.ReactNode; scroll?: boolean; toastLift?: number; fallback?: string;
-  onBack?: () => boolean; // return true when handled in-page (e.g. leave compare mode)
-}) {
-  const { c } = useTheme();
-  const insets = useSafeAreaInsets();
-  const { scrolled, onScroll } = useScrolled();
-  useToastLift(insets.bottom + toastLift);
-  const back = () => { if (onBack?.()) return; if (router.canGoBack()) router.back(); else router.replace(fallback as any); };
-  return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
-      {scroll ? (
-        <>
-          <ScrollView onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + 12 + 44 + 8 + 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
-            {children}
-          </ScrollView>
-          {scrolled && <ProgressiveBlur height={insets.top + 12 + 44 + 8 + 36} />}
-          
-      <Row style={[{ paddingTop: insets.top + 12, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }, scroll && { position: 'absolute', top: 0, left: 0, right: 0 }]}>
-        <RoundBtn label="Back" onPress={back} glass><ChevronLeft size={20} color={c.ink} /></RoundBtn>
-        {titleIcon ? (
-          <Pressy accessibilityRole={onTitlePress ? 'button' : undefined} accessibilityLabel={onTitlePress ? `${title}. View profile` : undefined} disabled={!onTitlePress} onPress={onTitlePress} scaleTo={0.97} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, minHeight: 44 }}>
-            {titleIcon}
-            <Txt accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.semibold, fontSize: fontSizes.lg }}>{title}</Txt>
-          </Pressy>
-        ) : <Txt accessibilityRole="header" numberOfLines={1} style={{ flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: fontSizes.lg }}>{title}</Txt>}
-        {right ?? <View style={{ width: 44 }} />}
-      </Row>
-
-        </>
-      ) : (
-        <>
-          
-      <Row style={[{ paddingTop: insets.top + 12, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }, scroll && { position: 'absolute', top: 0, left: 0, right: 0 }]}>
-        <RoundBtn label="Back" onPress={back} glass><ChevronLeft size={20} color={c.ink} /></RoundBtn>
-        {titleIcon ? (
-          <Pressy accessibilityRole={onTitlePress ? 'button' : undefined} accessibilityLabel={onTitlePress ? `${title}. View profile` : undefined} disabled={!onTitlePress} onPress={onTitlePress} scaleTo={0.97} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, minHeight: 44 }}>
-            {titleIcon}
-            <Txt accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.semibold, fontSize: fontSizes.lg }}>{title}</Txt>
-          </Pressy>
-        ) : <Txt accessibilityRole="header" numberOfLines={1} style={{ flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: fontSizes.lg }}>{title}</Txt>}
-        {right ?? <View style={{ width: 44 }} />}
-      </Row>
-
-          {children}
-        </>
-      )}
-      {footer}
-    </KeyboardAvoidingView>
-  );
-}
 
 // ---------- White data card that is pressable ----------
 export function cardShadow(isDark: boolean): ViewStyle {
@@ -110,31 +54,6 @@ export function CardTitle({ title, right, icon, tint }: { title: string; right?:
   );
 }
 
-// ---------- Plain list card with hairline rows ----------
-export function ListCard({ rows, mono = true, style }: { rows: { l: string; v?: string; sub?: string; right?: React.ReactNode; onPress?: () => void; muted?: boolean; warn?: boolean }[]; mono?: boolean; style?: StyleProp<ViewStyle> }) {
-  const { c, isDark } = useTheme();
-  return (
-    <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 4, paddingHorizontal: 16 }, cardShadow(isDark), style]}>
-      {rows.map((r, i) => {
-        const inner = (
-          <>
-            <View style={{ flex: 1, minWidth: 0 }}>
-              <Txt style={{ fontFamily: r.muted ? font.regular : font.medium, color: r.warn ? c.warn : r.muted ? c.muted : c.ink }}>{r.l}</Txt>
-              {r.sub ? <Txt v="caption">{r.sub}</Txt> : null}
-            </View>
-            {r.v != null && <Txt v={mono ? 'mono' : 'body'} style={{ fontSize: fontSizes.sm, color: r.muted ? c.ink : c.muted, textAlign: 'right', flexShrink: 1 }}>{r.v}</Txt>}
-            {r.right}
-            {r.onPress && <ChevronRight size={16} color={c.muted} />}
-          </>
-        );
-        const st: ViewStyle = { minHeight: 60, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, paddingHorizontal: 4, borderBottomWidth: i < rows.length - 1 ? 1 : 0, borderBottomColor: c.line };
-        return r.onPress
-          ? <Pressy key={r.l + i} accessibilityRole="button" onPress={r.onPress} scaleTo={0.99} style={st}>{inner}</Pressy>
-          : <View key={r.l + i} style={st}>{inner}</View>;
-      })}
-    </View>
-  );
-}
 
 // ---------- Charts ----------
 export function toPts(vals: number[], w: number, h: number, padX: number, padY = padX) {
@@ -199,3 +118,7 @@ export function useShake() {
 export function Hint({ children, style }: { children: React.ReactNode; style?: StyleProp<TextStyle> }) {
   return <Txt v="caption" style={[{ textAlign: 'center', fontSize: fontSizes.sm }, style]}>{children}</Txt>;
 }
+
+// SubPage and ListCard moved to src/design-system/primitives/. The Progress, Gym and Goal pages use the "progress" layout of SubPage.
+export function SubPage(props: Omit<SubPageProps, 'variant' | 'close' | 'gap'>) { return <DSSubPage variant="progress" {...props} />; }
+export { ListCard };

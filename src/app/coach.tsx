@@ -13,11 +13,8 @@ import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
 import { askCoach, coachStore, NOTES, TOPICS, WEEKLY } from '@/features/coach/coach';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
-const Label = ({ children }: { children: string }) => {
-  const { c } = useTheme();
-  return <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted }}>{children}</Txt>;
-};
 
 // Coach Vikram in one place: who he is, what he said this week, your plan, and what to ask.
 export default function CoachHub() {
@@ -57,7 +54,7 @@ export default function CoachHub() {
       {cs.away && <Txt v="caption" style={{ textAlign: 'center' }}>Something urgent? Ask the front desk.</Txt>}
 
       <Card style={{ gap: 10 }}>
-        <Row style={{ justifyContent: 'space-between' }}><Label>THIS WEEK FROM COACH</Label><Txt v="caption">{WEEKLY.when}</Txt></Row>
+        <Row style={{ justifyContent: 'space-between' }}><SectionLabel variant="overline">THIS WEEK FROM COACH</SectionLabel><Txt v="caption">{WEEKLY.when}</Txt></Row>
         <Txt style={{ fontSize: fontSizes.base, lineHeight: 23 }}>{WEEKLY.note}</Txt>
         <Row style={{ gap: 6, flexWrap: 'wrap' }}>
           {WEEKLY.focus.map((f) => <Tag key={f} label={f} bg={c.accentSoft} fg={c.accentText} />)}
@@ -78,7 +75,7 @@ export default function CoachHub() {
       </Pressy>
 
       <View style={{ gap: 8 }}>
-        <Label>ASK ABOUT</Label>
+        <SectionLabel variant="overline">ASK ABOUT</SectionLabel>
         <Row style={{ gap: 8, flexWrap: 'wrap' }}>
           {TOPICS.map((t) => (
             <Pressy key={t.l} accessibilityRole="button" onPress={() => askCoach(t.ctx, t.draft)} scaleTo={0.95}
@@ -90,7 +87,7 @@ export default function CoachHub() {
       </View>
 
       <Card style={{ gap: 2 }}>
-        <Label>RECENT FROM COACH</Label>
+        <SectionLabel variant="overline">RECENT FROM COACH</SectionLabel>
         {NOTES.map((n, i) => (
           <View key={n.t} style={{ paddingVertical: 12, gap: 3, borderTopWidth: i ? 1 : 0, borderTopColor: c.line, marginTop: i ? 0 : 8 }}>
             <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm }}>{n.ctx}</Txt><Txt v="caption">{n.when}</Txt></Row>

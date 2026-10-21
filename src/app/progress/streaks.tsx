@@ -14,13 +14,10 @@ import { useStreak } from '@/features/streak/useStreak';
 import { StreakHero } from '@/features/streak/StreakHero';
 import { FLAME } from '@/features/streak/StreakChip';
 import { fontSizes } from '@/design-system/tokens';
+import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
 const ICONS: Record<BadgeIcon, any> = { dumbbell: Dumbbell, flame: Flame, trophy: Trophy, award: Award, medal: Medal, scale: Scale, target: Target, droplets: Droplets, footprints: Footprints, clipboard: ClipboardCheck };
 
-function Label({ children }: { children: string }) {
-  const { c } = useTheme();
-  return <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingHorizontal: 4 }}>{children}</Txt>;
-}
 
 function BadgeCard({ b, weeks }: { b: Badge; weeks: number }) {
   const { c, isDark } = useTheme();
@@ -69,7 +66,7 @@ export default function Streaks() {
     <SubPage title="Streaks & badges" fallback="/progress">
       <StreakHero />
 
-      <Label>LAST 12 WEEKS</Label>
+      <SectionLabel variant="overline" inset={4}>LAST 12 WEEKS</SectionLabel>
       <View style={[{ backgroundColor: c.surface, borderRadius: 24, padding: 16, gap: 10 }, cardShadow(isDark)]}>
         <Row style={{ gap: 6 }}>
           {Array.from({ length: pad }, (_, i) => <View key={`p${i}`} style={{ flex: 1, height: 28, borderRadius: 8, backgroundColor: c.surface2 }} />)}
@@ -90,7 +87,7 @@ export default function Streaks() {
 
       {!v2 && (
         <>
-          <Label>{`BADGES · ${BADGES.filter((b) => b.earned).length} OF ${BADGES.length} EARNED`}</Label>
+          <SectionLabel variant="overline" inset={4}>{`BADGES · ${BADGES.filter((b) => b.earned).length} OF ${BADGES.length} EARNED`}</SectionLabel>
           <Row style={{ flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 12 }}>
             {BADGES.map((b) => <BadgeCard key={b.id} b={b} weeks={st.weeks} />)}
           </Row>

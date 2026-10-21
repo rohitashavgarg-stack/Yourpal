@@ -1,13 +1,9 @@
 import React, { useEffect } from 'react';
-import { ProgressiveBlur, useScrolled } from '@/components/Glass';
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleProp, Text, View, ViewStyle } from 'react-native';
+import { Text, View, ViewStyle } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming, interpolateColor } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import { ChevronLeft, ChevronRight, X } from '@/lib/icons';
-import { Pressy, Row, Txt } from '@/components/ui';
-import { RoundBtn } from '@/components/bits';
+import { ChevronRight } from '@/lib/icons';
+import { Pressy, Txt } from '@/components/ui';
 // Not imported from GymHeader to avoid a require cycle (GymHeader -> Switcher -> parts).
 import { GymLogoMark } from '@/components/Brand';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -15,36 +11,12 @@ import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import type { Programme } from './state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { goBack, SubPage } from '@/design-system/primitives/SubPage';
+import { ListCard } from '@/design-system/primitives/ListCard';
+import { SectionLabel as Label } from '@/design-system/primitives/SectionLabel';
 
-export const goBack = (fallback: string = '/(tabs)') => (router.canGoBack() ? router.back() : router.replace(fallback as any));
 export const goHome = () => (router.canDismiss() ? router.dismissAll() : router.replace('/(tabs)'));
 
-// Full-screen pushed page: 44 px round back (or close), centred title, optional right action.
-export function SubPage({ title, right, close, fallback, children, gap = 12, footer }: { title: string; right?: React.ReactNode; close?: boolean; fallback?: string; children: React.ReactNode; gap?: number; footer?: React.ReactNode }) {
-  const { c } = useTheme();
-  const insets = useSafeAreaInsets();
-  const { scrolled, onScroll } = useScrolled();
-  const headH = insets.top + 12 + 44 + 8;
-  return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
-      <ScrollView onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: headH + 4, paddingBottom: footer ? 24 : 40 + insets.bottom, gap }}>
-        <View style={{ gap }}>{children}</View>
-      </ScrollView>
-      {/* The header floats over the content so the glass buttons have something to blur as it scrolls underneath. */}
-      {scrolled && <ProgressiveBlur height={headH + 36} />}
-      <Row style={{ position: 'absolute', top: 0, left: 0, right: 0, gap: 8, paddingTop: insets.top + 12, paddingHorizontal: 16, paddingBottom: 8 }}>
-        <RoundBtn label={close ? 'Close' : 'Back'} onPress={() => goBack(fallback)} glass>
-          {close ? <X size={20} color={c.ink} /> : <ChevronLeft size={22} color={c.ink} />}
-        </RoundBtn>
-        <Txt accessibilityRole="header" numberOfLines={1} style={{ flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: fontSizes.lg }}>{title}</Txt>
-        <View style={{ minWidth: 44, alignItems: 'flex-end' }}>{right}</View>
-      </Row>
-      {footer ? (
-        <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 16) + 6, gap: 8, backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>{footer}</View>
-      ) : null}
-    </KeyboardAvoidingView>
-  );
-}
 
 // Programme logo: Wulf Fitness uses the real logo, others a coloured letter.
 export function ProgLogo({ p, size = 44 }: { p: Pick<Programme, 'id' | 'logo' | 'color'>; size?: number }) {
@@ -92,19 +64,7 @@ export function LineRow({ title, sub, right, onPress, color, last, minH = 60, a1
   return <Pressy accessibilityRole="button" accessibilityLabel={sub ? `${title}, ${sub}` : title} accessibilityHint={a11yHint} onPress={onPress} scaleTo={0.985} style={st}>{body}</Pressy>;
 }
 
-export function ListCard({ children, style }: { children: React.ReactNode; style?: StyleProp<ViewStyle> }) {
-  const { c, isDark } = useTheme();
-  return (
-    <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingHorizontal: 18, paddingVertical: 4 },
-      !isDark && { shadowColor: fixed.shadow, shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 }, elevation: 2 }, style]}>
-      {children}
-    </View>
-  );
-}
 
-export function Label({ children, style }: { children: React.ReactNode; style?: any }) {
-  return <Txt v="label" style={[{ paddingHorizontal: 6 }, style]}>{children}</Txt>;
-}
 
 export function Note({ children, tone = 'plain', center, style }: { children: React.ReactNode; tone?: 'plain' | 'soft' | 'warn' | 'good'; center?: boolean; style?: any }) {
   const { c } = useTheme();
@@ -128,3 +88,6 @@ export function useShake(trigger: number) {
   }, [trigger]);
   return useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
 }
+
+// These three moved to src/design-system/primitives/ (SubPage, ListCard, SectionLabel). Re-exported here so every existing import keeps working.
+export { goBack, SubPage, ListCard, Label };

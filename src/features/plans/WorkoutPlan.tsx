@@ -23,25 +23,8 @@ import { ExTile, Highlight, Moon } from './parts';
 import { DAYL, dateOf, dayPlan, exSub, relDay, usePlans } from './store';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { ListCard } from '@/design-system/primitives/ListCard';
 
-function ListCard({ dot, title, rows }: { dot: string; title: string; rows: { n: string; s: string }[] }) {
-  return (
-    <View style={{ gap: 8 }}>
-      <Row style={{ gap: 6, paddingHorizontal: 6 }}>
-        <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot }} />
-        <Txt v="label">{title}</Txt>
-      </Row>
-      <Card style={{ paddingVertical: 6, paddingHorizontal: 16 }}>
-        {rows.map((w) => (
-          <Row key={w.n} style={{ justifyContent: 'space-between', gap: 10, minHeight: 40 }}>
-            <Txt style={{ fontFamily: font.medium, flexShrink: 1 }}>{w.n}</Txt>
-            <Txt v="caption">{w.s}</Txt>
-          </Row>
-        ))}
-      </Card>
-    </View>
-  );
-}
 
 // Expired membership: the plan stays on the page, behind a strong blur (it cannot be tapped), with a lock and the reason on top.
 function LockedPlan({ day, locked, children }: { day: string; locked: boolean; children: React.ReactNode }) {
