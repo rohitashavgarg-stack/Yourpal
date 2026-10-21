@@ -5,7 +5,7 @@ import { View } from 'react-native';
 import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withSequence, withTiming } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { Button, Field, Pressy, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useDomain } from '@/lib/domain';
@@ -17,6 +17,7 @@ import { PT_TOTAL, STAR_WORDS } from '@/features/gym/data';
 import { FlagSheet } from '@/features/gym/sheets';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const STAR = 'M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z';
 const APath = Animated.createAnimatedComponent(Path);
@@ -91,14 +92,14 @@ export default function ConfirmSession() {
       <Txt v="label" style={{ paddingHorizontal: 6 }}>Remarks (optional)</Txt>
       <View style={{ marginTop: -6 }}><Field value={remarks} onChangeText={setRemarks} placeholder="Worked on squat depth" accessibilityLabel="Remarks, optional" /></View>
       {err && (
-        <Animated.View entering={fade()} exiting={fadeOut()} style={shake.style}>
+        <FadeIn exiting={fadeOut()} style={shake.style}>
           <Txt accessibilityRole="alert" style={{ color: c.warn, fontSize: fontSizes.md, paddingHorizontal: 6 }}>Pick a rating to confirm.</Txt>
-        </Animated.View>
+        </FadeIn>
       )}
       {done ? (
-        <Animated.View entering={fade()} accessible accessibilityLabel="Session confirmed" style={{ alignSelf: 'center', width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}>
+        <FadeIn accessible accessibilityLabel="Session confirmed" style={{ alignSelf: 'center', width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}>
           <DoneTick />
-        </Animated.View>
+        </FadeIn>
       ) : (
         <Button label="Confirm session" onPress={confirm} />
       )}

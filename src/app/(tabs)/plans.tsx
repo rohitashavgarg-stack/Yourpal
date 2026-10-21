@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLogsPaused } from '@/lib/logGate';
 import { ScrollView, View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { useLocalSearchParams } from 'expo-router';
 import { Check, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
-import { fade } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
@@ -21,6 +19,7 @@ import { applyCoachUpdate, COACH_HL } from '@/features/plans/content';
 import { haptic } from '@/lib/haptics';
 import { DAYL, DAYN, dateOf, monthOf, dayPlan, Diet, resetPlans, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const JUMP: [string, number][] = [['Today (Wed)', TODAY_IDX], ['Past day (Mon)', 0], ['Rest day (Tue)', 1], ['Future (Thu)', 3]];
 
@@ -140,9 +139,9 @@ export default function Plans() {
     <View style={{ flex: 1 }}>
     <TabScreen title="Plans" header={<GymHeader />} compactTitle={false} bottomPad={canStart ? 190 : 130}>
       {d.offline && (
-        <Animated.View entering={fade()} style={{ paddingVertical: 8, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
+        <FadeIn style={{ paddingVertical: 8, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: c.warn }}>You're offline · changes save on this phone and sync later</Txt>
-        </Animated.View>
+        </FadeIn>
       )}
       {paused && (
         <View accessibilityLabel="Plans are view only" style={{ borderRadius: 20, backgroundColor: c.surface2, padding: 14 }}>

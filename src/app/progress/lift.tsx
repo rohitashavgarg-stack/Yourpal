@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { X } from '@/lib/icons';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { Pill, Pressy, Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
 import { useStore } from '@/lib/store';
@@ -14,6 +13,7 @@ import { cardShadow, DrawLine, ListCard, SubPage, toPts } from '@/features/progr
 import { LiftName, progressStore } from '@/features/progress/store';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const H = 170;
 
@@ -53,7 +53,7 @@ export default function LiftDetail() {
       <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingTop: 16, paddingHorizontal: 12, paddingBottom: 12, gap: 6 }, cardShadow(isDark)]} onLayout={(e) => setW(e.nativeEvent.layout.width)}>
         <Row style={{ justifyContent: 'space-between', paddingHorizontal: 6, minHeight: 26 }}>
           <Txt v="label">{LIFT_TITLES[ps.metric]}</Txt>
-          {tip !== null && <Animated.View entering={fade()} exiting={fadeOut()}><Tag label={`Week ${tip + 1} · ${vals[tip]}${unit}`} bg={c.ink} fg={c.bg} /></Animated.View>}
+          {tip !== null && <FadeIn exiting={fadeOut()}><Tag label={`Week ${tip + 1} · ${vals[tip]}${unit}`} bg={c.ink} fg={c.bg} /></FadeIn>}
         </Row>
         <View accessible accessibilityRole="image" accessibilityLabel={aria} style={{ height: H }}>
           {w > 0 && (
@@ -76,14 +76,14 @@ export default function LiftDetail() {
       <ListCard mono rows={[{ l: L.pr, v: L.prd }, { l: L.last, v: '24 Sep' }]} />
 
       {L.stall && !ps.stallGone && (
-        <Animated.View entering={fade()} exiting={fadeOut()} style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.accentSoft, flexDirection: 'row', gap: 10, alignItems: 'flex-start' }}>
+        <FadeIn exiting={fadeOut()} style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.accentSoft, flexDirection: 'row', gap: 10, alignItems: 'flex-start' }}>
           <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.accentText }}>
             {isPT ? 'Same weight for 3 weeks. Coach Vikram will adjust this in your next plan.' : 'Same weight for 3 weeks. Try a lighter week, or ask Coach Vikram about personal training.'}
           </Txt>
           <Pressy accessibilityRole="button" accessibilityLabel="Dismiss hint" onPress={() => progressStore.set({ stallGone: true })} style={{ width: 44, height: 44, marginTop: -12, marginRight: -12, alignItems: 'center', justifyContent: 'center' }}>
             <X size={16} color={c.accentText} />
           </Pressy>
-        </Animated.View>
+        </FadeIn>
       )}
     </SubPage>
   );

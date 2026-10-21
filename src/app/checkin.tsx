@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLeaveIfPaused } from '@/lib/logGate';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { fade } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, G, Line, Rect, Text as SvgText } from 'react-native-svg';
 import { router } from 'expo-router';
@@ -23,6 +21,7 @@ import { haptic } from '@/lib/haptics';
 import { GlassBackdrop } from '@/components/Glass';
 import { GymMap, hasRealMap } from '@/features/checkin/GymMap';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 
 // Manual check-in only, only inside the 20 m area. Location is read while this page is open.
@@ -122,7 +121,7 @@ export default function CheckIn() {
           <Txt style={{ fontFamily: font.regular, fontSize: 28, letterSpacing: -1.1 }}>Wulf Fitness</Txt>
           <Txt muted style={{ fontSize: fontSizes.sm }}>Vaishali Nagar, Jaipur · 20 m check-in area</Txt>
         </View>
-        <Animated.View key={status.t} entering={fade()} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: status.bg }}>
+        <FadeIn key={status.t} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: status.bg }}>
           <View style={{ width: 34, height: 34, borderRadius: radii.md, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.5)', alignItems: 'center', justifyContent: 'center' }}>
             {off ? <LocateOff size={17} color={status.fg} /> : <MapPin size={17} color={status.fg} />}
           </View>
@@ -130,7 +129,7 @@ export default function CheckIn() {
             <Txt style={{ fontFamily: font.semibold, color: status.fg }}>{status.t}</Txt>
             <Txt style={{ fontSize: fontSizes.sm, color: status.fg, opacity: 0.85 }}>{status.s}</Txt>
           </View>
-        </Animated.View>
+        </FadeIn>
         {checkedIn ? (
           <Button kind="primary" label="Check out" onPress={CI.checkOut} />
         ) : d.ciOut ? (

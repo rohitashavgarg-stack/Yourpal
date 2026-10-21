@@ -3,9 +3,8 @@ import { DateSheet } from '@/features/goalv2/FinishBy';
 import { addDays, parseBy } from '@/features/goalv2/model';
 import { TODAY } from '@/features/progress/trends';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { Button, Card, Pill, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useDomain } from '@/lib/domain';
@@ -16,6 +15,7 @@ import { GOAL_DEFAULT, GOAL_VERB, GOALS, NUMERIC_GOALS } from '@/features/progre
 import { StepBtn, SubPage } from '@/features/progress/parts';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function EditGoal() {
   const { c } = useTheme();
@@ -53,9 +53,9 @@ export default function EditGoal() {
           <Txt muted style={{ fontSize: fontSizes.md }}>Measured with assessment tests (deep squat hold, sit-and-reach, shuttle run). Coach Vikram sets the targets with you.</Txt>
         )}
         {g.type === 'Weight loss' && g.target > 15 && (
-          <Animated.View entering={fade()} exiting={fadeOut()} style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
+          <FadeIn exiting={fadeOut()} style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
             <Txt style={{ fontSize: fontSizes.sm, color: c.warn }}>That’s a big target. Coach Vikram may suggest milestones on the way.</Txt>
-          </Animated.View>
+          </FadeIn>
         )}
         <Txt v="label">By (optional)</Txt>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>

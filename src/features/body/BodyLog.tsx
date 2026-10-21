@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ageFrom, daysIn, defaultDob, MAX_AGE, MIN_AGE, MONTHS, parseDob, toDob } from '@/lib/dob';
 import { Pressable, TextInput, View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Polyline } from 'react-native-svg';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -18,10 +17,10 @@ import { useScenarios, useStore } from '@/lib/store';
 import { setShell, useShell } from '@/features/shell/state';
 import { SPARK } from '@/features/today/Trackers';
 import { useTheme } from '@/theme/ThemeProvider';
-import { fade } from '@/theme/motion';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const KG_LB = 2.2046226218;
 const r1 = (n: number) => Math.round(n * 10) / 10;
@@ -141,7 +140,7 @@ function BodyScreen({ title, saveLabel, onSave, children, trend }: { title: stri
         <Txt accessibilityRole="header" style={trend ? { flex: 1, fontFamily: font.semibold, fontSize: fontSizes.lg, marginLeft: 4 } : { flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: fontSizes.lg, marginRight: 44 }}>{title}</Txt>
         {trend ? <TrendsButton label="See weight trend" onPress={trend} /> : null}
       </Row>
-      <Animated.View entering={fade()} style={{ flex: 1, paddingHorizontal: 16 }}>{children}</Animated.View>
+      <FadeIn style={{ flex: 1, paddingHorizontal: 16 }}>{children}</FadeIn>
       <View style={{ paddingHorizontal: 16, paddingTop: 12, paddingBottom: Math.max(insets.bottom, 16) + 8, backgroundColor: c.bg }}>
         <Button kind="accent" label={saveLabel} onPress={onSave} />
       </View>

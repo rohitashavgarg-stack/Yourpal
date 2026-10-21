@@ -1,7 +1,5 @@
 import React from 'react';
 import { router } from 'expo-router';
-import Animated from 'react-native-reanimated';
-import { fade } from '@/theme/motion';
 import { Button, Card, Txt } from '@/components/ui';
 import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
@@ -11,6 +9,7 @@ import { Hint, ListCard, SubPage } from '@/features/progress/parts';
 import { progressStore } from '@/features/progress/store';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const FIRST_ROWS = [{ l: 'Weight', v: '74.5 kg' }, { l: 'Waist', v: '92 cm' }, { l: 'Body fat', v: '27%' }, { l: 'Squat', v: '40 kg' }, { l: 'Deep squat hold', v: '30 s' }];
 
@@ -25,17 +24,17 @@ export default function ProgressAssessments() {
   return (
     <SubPage title="Assessments" fallback="/progress">
       {isNew ? (
-        <Animated.View entering={fade()}>
+        <FadeIn>
           <Card style={{ padding: 24, gap: 8, alignItems: 'center' }}>
             <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl, lineHeight: 26 }}>First assessment</Txt>
             <Txt muted style={{ textAlign: 'center' }}>Sat 10:00 am with Coach Vikram. Your starting point is saved there.</Txt>
           </Card>
-        </Animated.View>
+        </FadeIn>
       ) : (
-        <Animated.View entering={fade()} style={{ gap: 12 }}>
+        <FadeIn style={{ gap: 12 }}>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>{onlyFirst ? 'Starting point: 2 Sep' : 'Starting point: 2 Sep · Latest: 30 Sep'}</Txt>
           <ListCard mono rows={onlyFirst ? FIRST_ROWS : ASSESS_ROWS} />
-        </Animated.View>
+        </FadeIn>
       )}
       <Card style={{ padding: 18, gap: 4 }}>
         <Txt style={{ fontFamily: font.semibold }}>{d.assess === 'Due now' ? 'Reassessment due this week' : isNew ? 'First assessment · Sat 10:00 am' : 'Next reassessment'}</Txt>

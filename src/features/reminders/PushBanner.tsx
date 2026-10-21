@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { Pressy, Txt } from '@/components/ui';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { font } from '@/theme/tokens';
 import { pushStore } from './push';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // What the phone shows when a reminder arrives (a preview, since this prototype cannot receive a real push from a server).
 export function PushBanner() {
@@ -19,7 +19,7 @@ export function PushBanner() {
   if (!shown) return null;
   const open = () => { pushStore.set({ shown: null }); if (shown.key === 'weight') router.push('/log-weight'); };
   return (
-    <Animated.View entering={fade()} exiting={fadeOut()} style={{ position: 'absolute', top: 48, left: 12, right: 12, zIndex: 50 }}>
+    <FadeIn exiting={fadeOut()} style={{ position: 'absolute', top: 48, left: 12, right: 12, zIndex: 50 }}>
       <Pressy accessibilityRole="alert" accessibilityLabel={`${shown.title}. ${shown.body}`} onPress={open} scaleTo={0.98}
         style={{ flexDirection: 'row', gap: 10, alignItems: 'center', padding: 12, borderRadius: radii.lg, backgroundColor: 'rgba(38,40,46,0.96)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.14)' }}>
         <View style={{ width: 38, height: 38, borderRadius: radii.sm, backgroundColor: fixed.blue, alignItems: 'center', justifyContent: 'center' }}>
@@ -33,6 +33,6 @@ export function PushBanner() {
           <Txt style={{ fontSize: 13.5, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>{shown.body}</Txt>
         </View>
       </Pressy>
-    </Animated.View>
+    </FadeIn>
   );
 }

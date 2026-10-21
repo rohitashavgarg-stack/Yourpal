@@ -7,12 +7,13 @@ import { RecordingPresets, requestRecordingPermissionsAsync, setAudioModeAsync, 
 import { Pressy, Txt } from '@/components/ui';
 import { GlassBackdrop } from '@/components/Glass';
 import { useOverlay } from '@/components/Overlay';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { EMOJI_GROUPS } from './emoji';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const fmt = (ms: number) => {
   const s = Math.floor(ms / 1000);
@@ -32,7 +33,7 @@ function EmojiPanel({ onPick }: { onPick: (e: string) => void }) {
   const { c } = useTheme();
   const [g, setG] = useState(0);
   return (
-    <Animated.View entering={fade()} exiting={fadeOut()} style={{ height: 232, borderTopWidth: 1, borderTopColor: c.line }}>
+    <FadeIn exiting={fadeOut()} style={{ height: 232, borderTopWidth: 1, borderTopColor: c.line }}>
       <View style={{ flexDirection: 'row', gap: 6, paddingHorizontal: 12, paddingTop: 8 }}>
         {EMOJI_GROUPS.map((x, i) => (
           <Pressy key={x.key} accessibilityRole="button" accessibilityLabel={`${x.key} emoji`} onPress={() => setG(i)} scaleTo={0.9}
@@ -49,7 +50,7 @@ function EmojiPanel({ onPick }: { onPick: (e: string) => void }) {
           </Pressy>
         ))}
       </ScrollView>
-    </Animated.View>
+    </FadeIn>
   );
 }
 
@@ -158,7 +159,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
       )}
       <View style={{ paddingTop: 10, paddingHorizontal: 12, paddingBottom: emoji ? 6 : bottomInset + 10 }}>
         {rec ? (
-          <Animated.View entering={fade()} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 52, paddingHorizontal: 6, borderRadius: radii.xl, backgroundColor: c.surface }}>
+          <FadeIn style={{ flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 52, paddingHorizontal: 6, borderRadius: radii.xl, backgroundColor: c.surface }}>
             <Pressy accessibilityRole="button" accessibilityLabel="Discard recording" onPress={() => { haptic.warn(); endRec(false); }} scaleTo={0.9} style={circle}>
               <Trash2 size={20} color={c.warn} />
             </Pressy>
@@ -170,7 +171,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
             <Pressy accessibilityRole="button" accessibilityLabel="Send voice message" onPress={() => endRec(true)} scaleTo={0.9} style={[circle, { backgroundColor: c.accent }]}>
               <ArrowUp size={20} strokeWidth={2.4} color={fixed.white} />
             </Pressy>
-          </Animated.View>
+          </FadeIn>
         ) : (
           <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8 }}>
             <Pressy accessibilityRole="button" accessibilityLabel="Attach a photo" onPress={() => { Keyboard.dismiss(); openSheet(<AttachSheet onPick={pick} />, { label: 'Send a photo' }); }} scaleTo={0.9} style={[circle, { width: 46, height: 46, borderRadius: 23, overflow: 'hidden' }, lift]}>
@@ -180,7 +181,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
           <View style={[{ flex: 1, borderRadius: 24, overflow: 'hidden' }, lift]}>
             <GlassBackdrop radius={24} />
             {img && (
-              <Animated.View entering={fade()} exiting={fadeOut()} style={{ padding: 10, paddingBottom: 0, flexDirection: 'row', zIndex: 2 }}>
+              <FadeIn exiting={fadeOut()} style={{ padding: 10, paddingBottom: 0, flexDirection: 'row', zIndex: 2 }}>
                 <View>
                   <Image source={{ uri: img }} accessibilityIgnoresInvertColors style={{ width: 76, height: 76, borderRadius: radii.md, backgroundColor: c.surface3 }} />
                   <Pressy accessibilityRole="button" accessibilityLabel="Remove photo" onPress={() => setImg(undefined)} scaleTo={0.9} hitSlop={10}
@@ -188,7 +189,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
                     <X size={14} color={c.bg} strokeWidth={2.6} />
                   </Pressy>
                 </View>
-              </Animated.View>
+              </FadeIn>
             )}
             <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 2, paddingLeft: 12, paddingRight: 4, zIndex: 2 }}>
               <TextInput

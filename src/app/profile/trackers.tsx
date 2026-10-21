@@ -1,11 +1,11 @@
 import React from 'react';
 import { HEALTH_NAME } from '@/lib/health';
-import Animated from 'react-native-reanimated';
 import { useScenarios } from '@/lib/store';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { LineRow, ListCard, Note, SubPage, Switch } from '@/features/shell/parts';
 import { useShell } from '@/features/shell/state';
 import { fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function Trackers() {
   const { s, set } = useShell();
@@ -32,9 +32,9 @@ export default function Trackers() {
         ))}
       </ListCard>
       {allOff && (
-        <Animated.View entering={fade()} exiting={fadeOut()}>
+        <FadeIn exiting={fadeOut()}>
           <Note tone="soft">With every tracker off, the quick-tracker row disappears from Today and their Progress cards hide.</Note>
-        </Animated.View>
+        </FadeIn>
       )}
     </SubPage>
   );

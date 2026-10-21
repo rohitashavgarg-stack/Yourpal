@@ -1,10 +1,8 @@
 import React from 'react';
 import { PersonAvatar } from '@/components/Brand';
 import { ScrollView, View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { fade } from '@/theme/motion';
 import { Button, Card, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
 import { TODAY_IDX } from '@/lib/data';
@@ -17,6 +15,7 @@ import { applyCoachUpdate, COACH_CHANGES, COACH_HL } from '@/features/plans/cont
 import { Highlight, InfoBox, PageHeader } from '@/features/plans/parts';
 import { setP, usePlans } from '@/features/plans/store';
 import { fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function WhatChanged() {
   const { c } = useTheme();
@@ -60,9 +59,9 @@ export default function WhatChanged() {
         </Card>
         <InfoBox tone="plain">Your earlier edits were replaced by Coach's new version. You can edit again.</InfoBox>
         {mid && (
-          <Animated.View entering={fade()}>
+          <FadeIn>
             <InfoBox tone="warn">You're mid-workout. These changes start from your next session, so today's workout stays as it is.</InfoBox>
-          </Animated.View>
+          </FadeIn>
         )}
         <Button label="Got it" onPress={gotIt} />
       </ScrollView>

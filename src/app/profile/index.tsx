@@ -9,7 +9,6 @@ import { HEALTH_NAME } from '@/lib/health';
 import { useOpenEdgeCases } from '@/web/WebFrame';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
-import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { ArrowRight, Check, ChevronRight, LogOut } from '@/lib/icons';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
@@ -19,12 +18,13 @@ import { useStore, useScenarios } from '@/lib/store';
 import { useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { LineRow, ListCard, Note, SubPage } from '@/features/shell/parts';
 import { resetShell, useShell } from '@/features/shell/state';
 import { goalSummary } from '@/features/shell/goal';
 import { LogoutSheet } from '@/features/shell/sheets';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const maskPhone = (p: string) => {
   const d = (p || '').replace(/\D/g, '');
@@ -84,10 +84,10 @@ export default function Profile() {
       </View>
 
       {s.deleting && (
-        <Animated.View entering={fade()} exiting={fadeOut()} style={{ paddingVertical: 14, paddingHorizontal: 18, borderRadius: radii.lg, backgroundColor: c.warnSoft, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <FadeIn exiting={fadeOut()} style={{ paddingVertical: 14, paddingHorizontal: 18, borderRadius: radii.lg, backgroundColor: c.warnSoft, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
           <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.warn }}>Account scheduled for deletion on 28 Oct. Your programmes keep their own records.</Txt>
           <Button kind="secondary" small label="Cancel" accessibilityLabel="Cancel account deletion" onPress={() => { set({ deleting: false }); toast('Deletion cancelled'); }} />
-        </Animated.View>
+        </FadeIn>
       )}
 
       {/* My goals */}

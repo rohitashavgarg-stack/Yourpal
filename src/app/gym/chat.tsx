@@ -6,7 +6,6 @@ import { ChevronLeft, ChevronRight, Ellipsis, X } from '@/lib/icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { PersonAvatar } from '@/components/Brand';
 import { coachStore, TOPICS } from '@/features/coach/coach';
-import { fade } from '@/theme/motion';
 import { Image } from 'react-native';
 import { GlassBackdrop } from '@/components/Glass';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
@@ -24,6 +23,7 @@ import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { ChatOptionsSheet } from '@/features/gym/sheets';
 import { cardShadow } from '@/features/progress/parts';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const REPLY = "Got it. I'll check it before your session tomorrow.";
 const REPLY_AUDIO = "Thanks for the voice note. I'll listen and reply before your session.";
@@ -166,19 +166,19 @@ export default function CoachChat() {
             </View>
           );
           return (
-            <Animated.View key={`${i}-${m.t}`} entering={fade()} style={{ alignSelf: m.me ? 'flex-end' : 'flex-start', maxWidth: '86%', gap: 3, alignItems: m.me ? 'flex-end' : 'flex-start' }}>
+            <FadeIn key={`${i}-${m.t}`} style={{ alignSelf: m.me ? 'flex-end' : 'flex-start', maxWidth: '86%', gap: 3, alignItems: m.me ? 'flex-end' : 'flex-start' }}>
               {m.ctx ? <Tag label={`from ${m.ctx}`} bg={c.surface2} fg={c.muted} /> : null}
               {m.failed
                 ? <Pressy accessibilityRole="button" accessibilityLabel={`${m.t}. Not sent. Tap to retry`} onPress={() => retry(i)}>{bubble}</Pressy>
                 : m.me ? bubble : <Row style={{ gap: 8, alignItems: 'flex-end' }}><PersonAvatar who="coach" size={28} />{bubble}</Row>}
               <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: m.failed ? c.warn : c.muted }}>{m.meta}</Txt>
-            </Animated.View>
+            </FadeIn>
           );
         })}
         {g.typing && (
-          <Animated.View entering={fade()} accessible accessibilityLabel="Coach Vikram is typing" style={{ alignSelf: 'flex-start', flexDirection: 'row', paddingVertical: 14, paddingHorizontal: 14, borderRadius: 20, backgroundColor: c.surface }}>
+          <FadeIn accessible accessibilityLabel="Coach Vikram is typing" style={{ alignSelf: 'flex-start', flexDirection: 'row', paddingVertical: 14, paddingHorizontal: 14, borderRadius: 20, backgroundColor: c.surface }}>
             <Dot i={0} /><Dot i={1} /><Dot i={2} />
-          </Animated.View>
+          </FadeIn>
         )}
         {!isPT && lastMine && !g.typing && <Txt v="caption" style={{ textAlign: 'center' }}>Coach Vikram will reply here.</Txt>}
         {d.offline && <Txt v="caption" style={{ textAlign: 'center', color: c.warn, fontFamily: font.medium }}>You’re offline · tap a message that didn’t send to retry once you’re back</Txt>}

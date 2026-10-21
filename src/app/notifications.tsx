@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { BellRing } from '@/lib/icons';
 import { Pill, Pressy, Txt } from '@/components/ui';
@@ -10,11 +9,12 @@ import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { goHome, ListCard, Note, ProgLogo, SubPage } from '@/features/shell/parts';
 import { switchProgramme, useShell } from '@/features/shell/state';
 import { useVisibleNotifs } from '@/features/shell/notifs';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function Notifications() {
   const { c } = useTheme();
@@ -70,7 +70,7 @@ export default function Notifications() {
         {list.map((n, i) => {
           const p = byId[n.p];
           return (
-            <Animated.View key={n.id} entering={fade()} exiting={fadeOut()}>
+            <FadeIn key={n.id} exiting={fadeOut()}>
               <Pressy accessibilityRole="button" accessibilityLabel={`${n.unread ? 'Unread. ' : ''}${p.short}: ${n.t}. ${n.s}. ${n.when} ago`} onPress={() => open(n)} scaleTo={0.985}
                 style={{ minHeight: 68, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: i === list.length - 1 ? 0 : 1, borderBottomColor: c.line }}>
                 <ProgLogo p={p} size={40} />
@@ -83,14 +83,14 @@ export default function Notifications() {
                   {n.unread && <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: c.accent }} />}
                 </View>
               </Pressy>
-            </Animated.View>
+            </FadeIn>
           );
         })}
         {list.length === 0 && (
-          <Animated.View entering={fade()} style={{ paddingVertical: 36, paddingHorizontal: 10, alignItems: 'center', gap: 10 }}>
+          <FadeIn style={{ paddingVertical: 36, paddingHorizontal: 10, alignItems: 'center', gap: 10 }}>
             <View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><BellRing size={22} color={c.accentText} /></View>
             <Txt muted style={{ textAlign: 'center' }}>You're all caught up. New updates from your programmes show up here.</Txt>
-          </Animated.View>
+          </FadeIn>
         )}
       </ListCard>
       {progs.length > 1 && <Note center>One inbox for every programme · tapping one from another programme switches to it</Note>}

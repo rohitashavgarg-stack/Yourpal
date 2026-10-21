@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import { useLeaveIfPaused } from '@/lib/logGate';
 import { PersonAvatar } from '@/components/Brand';
 import { ScrollView, TextInput, View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { fade } from '@/theme/motion';
 import { Button, Pill, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useDomain } from '@/lib/domain';
@@ -17,6 +15,7 @@ import { REASONS } from '@/features/plans/content';
 import { BigTitle, InfoBox, PageHeader, ShakeText } from '@/features/plans/parts';
 import { setP } from '@/features/plans/store';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function AskCoach() {
   useLeaveIfPaused();
@@ -61,7 +60,7 @@ export default function AskCoach() {
           {list.map((r) => <Pill key={r} label={r} on={reason === r} onPress={() => { setReason(reason === r ? null : r); setErr(false); }} />)}
         </Row>
         {reason === 'Injury or pain' && (
-          <Animated.View entering={fade()}><InfoBox tone="warn">Pain or injury: skip anything that hurts and tell a floor trainer today.</InfoBox></Animated.View>
+          <FadeIn><InfoBox tone="warn">Pain or injury: skip anything that hurts and tell a floor trainer today.</InfoBox></FadeIn>
         )}
         <View style={{ gap: 6 }}>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>Note (optional)</Txt>

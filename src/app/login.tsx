@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { RoundBtn } from '@/components/bits';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
@@ -18,6 +17,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Step = 'phone' | 'otp' | 'programme';
 
@@ -127,7 +127,7 @@ export default function Login() {
         )}
 
         {step === 'phone' && (
-          <Animated.View key="phone" entering={fade()} exiting={fadeOut()} style={{ gap: 16, flexGrow: 1 }}>
+          <FadeIn key="phone" exiting={fadeOut()} style={{ gap: 16, flexGrow: 1 }}>
             <YourPalLogo height={34} color={isDark ? fixed.white : LOGO_BLUE} />
 
             <View style={{ gap: 6, marginTop: 12 }}>
@@ -147,9 +147,9 @@ export default function Login() {
               returnKeyType="done"
               onSubmitEditing={send}
             />
-            {err === 'invalid' && <Animated.View entering={fade()}><Txt v="caption" color={c.warn}>Enter a 10-digit mobile number.</Txt></Animated.View>}
+            {err === 'invalid' && <FadeIn><Txt v="caption" color={c.warn}>Enter a 10-digit mobile number.</Txt></FadeIn>}
             {err === 'notFound' && (
-              <Animated.View entering={fade()}>
+              <FadeIn>
                 <View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.warnSoft, gap: 10 }}>
                   <Txt v="headline" color={c.warn}>We couldn't find this number</Txt>
                   <Txt color={c.warn} style={{ fontSize: fontSizes.md }}>Please check with your gym's front desk. They can add it to your membership in a minute.</Txt>
@@ -158,7 +158,7 @@ export default function Login() {
                     <Button small kind="secondary" label="Try another number" onPress={() => { setPhone(''); setErr('none'); }} />
                   </Row>
                 </View>
-              </Animated.View>
+              </FadeIn>
             )}
             {err === 'offline' && <OfflineBanner />}
             <View style={{ flexGrow: 1 }} />
@@ -168,11 +168,11 @@ export default function Login() {
               <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>I have a join code from my gym</Txt>
             </Pressy>
             <Txt v="caption" style={{ textAlign: 'center' }}>By continuing you agree to the Terms and Privacy Policy.</Txt>
-          </Animated.View>
+          </FadeIn>
         )}
 
         {step === 'otp' && (
-          <Animated.View key="otp" entering={fade()} style={{ gap: 18, flexGrow: 1 }}>
+          <FadeIn key="otp" style={{ gap: 18, flexGrow: 1 }}>
             <View style={{ gap: 6 }}>
               <Txt v="title">Enter the 6-digit code</Txt>
               <Row style={{ gap: 6, flexWrap: 'wrap' }}>
@@ -180,7 +180,7 @@ export default function Login() {
                 <Pressable accessibilityRole="button" onPress={() => setStep('phone')}><Txt style={{ fontFamily: font.semibold, color: c.accentText }}>Change</Txt></Pressable>
               </Row>
             </View>
-            <Animated.View entering={fade()}>
+            <FadeIn>
               <Row style={{ gap: 12, padding: 12, borderRadius: 20, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line }}>
                 {progs.length > 1 ? (
                   <View style={{ flexDirection: 'row', paddingRight: 14 }}>
@@ -192,33 +192,33 @@ export default function Login() {
                   <Txt v="caption">{progs.length > 1 ? progs.map((p) => p.short).join(' · ') : progs[0].name.includes(' · ') ? progs[0].name.split(' · ')[1] : progs[0].kind}</Txt>
                 </View>
               </Row>
-            </Animated.View>
+            </FadeIn>
             <OtpInput value={code} onChange={(v) => { setCode(v); if (err === 'offline') setErr('none'); }} state={codeState} shakeKey={shake} autoFocus={sc.autoRead !== 'On'} />
-            {reading && <Animated.View entering={fade()}><Txt v="label" color={c.accentText}>Reading the code from SMS…</Txt></Animated.View>}
-            {codeState === 'error' && <Animated.View entering={fade()}><Txt v="label" color={c.warn}>That code didn't match. {3 - tries} {3 - tries === 1 ? 'try' : 'tries'} left.</Txt></Animated.View>}
+            {reading && <FadeIn><Txt v="label" color={c.accentText}>Reading the code from SMS…</Txt></FadeIn>}
+            {codeState === 'error' && <FadeIn><Txt v="label" color={c.warn}>That code didn't match. {3 - tries} {3 - tries === 1 ? 'try' : 'tries'} left.</Txt></FadeIn>}
             {codeState === 'locked' && (
-              <Animated.View entering={fade()}>
+              <FadeIn>
                 <View style={{ padding: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
                   <Txt color={c.warn} style={{ fontFamily: font.semibold }}>Too many wrong tries</Txt>
                   <Txt color={c.warn} style={{ fontSize: fontSizes.md }}>For your safety, try again in 0:{String(lockIn).padStart(2, '0')}, or ask the front desk.</Txt>
                 </View>
-              </Animated.View>
+              </FadeIn>
             )}
-            {codeState === 'ok' && <Animated.View entering={fade()}><Txt v="label" color={c.good}>Verified · setting things up</Txt></Animated.View>}
+            {codeState === 'ok' && <FadeIn><Txt v="label" color={c.good}>Verified · setting things up</Txt></FadeIn>}
             {err === 'offline' && <OfflineBanner />}
             <View style={{ flexGrow: 1 }} />
             <Button kind="secondary" label={resendIn > 0 ? `Resend code in 0:${String(resendIn).padStart(2, '0')}` : 'Resend code'} disabled={resendIn > 0 || codeState === 'locked'} onPress={() => { setResendIn(30); setCode(''); setCodeState('idle'); toast('New code sent to ' + masked); }} />
             <Txt v="caption" style={{ textAlign: 'center' }}>Tip: any 6 digits work in this prototype. Use the edge-case panel to test a wrong code.</Txt>
-          </Animated.View>
+          </FadeIn>
         )}
         {step === 'programme' && (
-          <Animated.View key="programme" entering={fade()} style={{ gap: 14, flexGrow: 1 }}>
+          <FadeIn key="programme" style={{ gap: 14, flexGrow: 1 }}>
             <View style={{ gap: 6 }}>
               <Txt v="title">Where do you want to start?</Txt>
               <Txt muted>Your number is part of {progs.length} programmes. Pick one now. You can switch any time from the name at the top of Today.</Txt>
             </View>
             {progs.map((p, i) => (
-              <Animated.View key={p.id} entering={fade(i * 60)}>
+              <FadeIn key={p.id} delay={i * 60}>
                 <Pressy accessibilityRole="button" accessibilityLabel={`Start with ${p.name}`} onPress={() => finish(p.id)} scaleTo={0.98}
                   style={{ flexDirection: 'row', alignItems: 'center', gap: 14, padding: 14, borderRadius: 24, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line }}>
                   <ProgLogo p={p} size={48} />
@@ -228,11 +228,11 @@ export default function Login() {
                   </View>
                   <ChevronRight size={18} color={c.muted} />
                 </Pressy>
-              </Animated.View>
+              </FadeIn>
             ))}
             <View style={{ flexGrow: 1 }} />
             <Txt v="caption" style={{ textAlign: 'center' }}>Each programme keeps its own plan, progress and data.</Txt>
-          </Animated.View>
+          </FadeIn>
         )}
       </ScrollView>
     </KeyboardAvoidingView>
@@ -242,12 +242,12 @@ export default function Login() {
 function OfflineBanner() {
   const { c } = useTheme();
   return (
-    <Animated.View entering={fade()}>
+    <FadeIn>
       <Row style={{ gap: 10, padding: 14, borderRadius: radii.md, backgroundColor: c.surface2 }}>
         <WifiOff size={18} color={c.muted} />
         <Txt style={{ flex: 1, fontSize: fontSizes.md }} muted>No internet connection. Check Wi-Fi or data and try again.</Txt>
       </Row>
-    </Animated.View>
+    </FadeIn>
   );
 }
 

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ageFrom, defaultDob, fmtDob } from '@/lib/dob';
 import { PersonAvatar } from '@/components/Brand';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { Button, Field, NoteField, Pill, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { haptic } from '@/lib/haptics';
@@ -17,9 +16,10 @@ import { Platform } from 'react-native';
 import { Pressy } from '@/components/ui';
 import { useScenarios, useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { goBack, Label, Note, SubPage, useShake } from '@/features/shell/parts';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const maskNum = (p: string) => (p.replace(/D/g, '').length === 10 ? `+91 ${p.slice(0, 2)}xxxxxx${p.slice(8)}` : '+91 98xxxxxx21');
 
@@ -166,9 +166,9 @@ export default function MyDetails() {
         <Field value={name} onChangeText={(t) => { setName(t); if (err) setErr(0); }} error={!!err} accessibilityLabel="Name" autoCapitalize="words" returnKeyType="done" />
       </View>
       {!!err && (
-        <Animated.View entering={fade()} exiting={fadeOut()} style={shake}>
+        <FadeIn exiting={fadeOut()} style={shake}>
           <Txt style={{ color: c.warn, fontSize: fontSizes.md, paddingHorizontal: 6 }}>Name can't be empty.</Txt>
-        </Animated.View>
+        </FadeIn>
       )}
 
       <Label style={{ marginTop: 16 }}>Mobile number</Label>
@@ -204,9 +204,9 @@ export default function MyDetails() {
         <Pill label="Yes, add note" on={inj === 'Yes'} onPress={() => setInj('Yes')} style={{ flex: 1 }} />
       </Row>
       {inj === 'Yes' && (
-        <Animated.View entering={fade()} exiting={fadeOut()}>
+        <FadeIn exiting={fadeOut()}>
           <NoteField value={note} onChangeText={setNote} placeholder="e.g. left knee pain on lunges, worse when I squat below parallel" accessibilityLabel="Injury note" />
-        </Animated.View>
+        </FadeIn>
       )}
 
     </SubPage>

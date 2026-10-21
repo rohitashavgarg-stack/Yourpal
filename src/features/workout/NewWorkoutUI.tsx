@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Image, Platform, Pressable, ScrollView, View } from 'react-native';
 import { useEvent } from 'expo';
-import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronDown, ChevronLeft, ChevronUp, Ellipsis, Maximize2, Play, X } from '@/lib/icons';
 import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
@@ -10,13 +9,13 @@ import { Ex, ListItem } from '@/lib/data';
 import { Session } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fade } from '@/theme/motion';
 import { mmss } from '@/lib/useNow';
 import { RestPanel } from './RestPanel';
 import { GlassBackdrop } from '@/components/Glass';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { CLIPS, THUMBS } from './clips';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // The only clips we have are the main-lift ones, so a move gets a still only where it is the same movement; the rest show a plain tile.
 const LIST_THUMB: Record<string, string> = { w2: 'dfs', c3: 'dbe' };
@@ -25,7 +24,7 @@ function ClipPopup({ source, onClose }: { source: number; onClose: () => void })
   const player = useVideoPlayer(source, (p) => { p.loop = true; p.muted = true; p.play(); });
   return (
     // Drawn inside the screen (not a Modal) so on the web it stays inside the phone frame.
-    <Animated.View entering={fade()} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, zIndex: 100, elevation: 100 }}>
+    <FadeIn style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, zIndex: 100, elevation: 100 }}>
       <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
         <Pressable accessibilityLabel="Close clip" onPress={onClose} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
         <View style={{ width: '100%', maxHeight: '75%', gap: 12, alignItems: 'flex-end' }}>
@@ -40,7 +39,7 @@ function ClipPopup({ source, onClose }: { source: number; onClose: () => void })
           </View>
         </View>
       </View>
-    </Animated.View>
+    </FadeIn>
   );
 }
 // A still of the move with a play button. Tapping it opens the clip.

@@ -7,10 +7,11 @@ import { useOverlay } from '@/components/Overlay';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { ListCard, SubPage } from '@/features/shell/parts';
 import { useShell } from '@/features/shell/state';
 import { fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const FAQ = [
   { q: 'How do I switch programmes?', a: 'Tap the programme name at the top. It works like switching accounts.' },
@@ -31,7 +32,7 @@ function Item({ q, a, open, onPress, last }: { q: string; a: string; open: boole
         <Txt style={{ flex: 1, fontFamily: font.medium }}>{q}</Txt>
         <Animated.View style={chev}><ChevronDown size={18} color={c.muted} /></Animated.View>
       </View>
-      {open && <Animated.View entering={fade()} exiting={fadeOut()}><Txt muted style={{ fontSize: fontSizes.md }}>{a}</Txt></Animated.View>}
+      {open && <FadeIn exiting={fadeOut()}><Txt muted style={{ fontSize: fontSizes.md }}>{a}</Txt></FadeIn>}
     </Pressy>
   );
 }

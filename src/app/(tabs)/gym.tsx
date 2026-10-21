@@ -1,9 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { ClipboardCheck } from '@/lib/icons';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { PersonAvatar } from '@/components/Brand';
@@ -19,8 +18,7 @@ import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { MembershipCard as MembershipStrip, useMembershipNotice } from '@/features/today/PaymentBanner';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
-
-const Enter = ({ i, children }: { i: number; children: React.ReactNode }) => <Animated.View entering={fade(i * 40)}>{children}</Animated.View>;
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 function MembershipCard() {
   return <MembershipStrip n={useMembershipNotice()} />;
@@ -30,11 +28,11 @@ function BreakCard() {
   const { c, isDark } = useTheme();
   const g = gymStore.use();
   return (
-    <Animated.View entering={fade()} exiting={fadeOut()}
+    <FadeIn exiting={fadeOut()}
       style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 16, paddingHorizontal: 18, gap: 2, borderWidth: 1.5, borderColor: c.accent }, cardShadow(isDark)]}>
       <Txt style={{ fontFamily: font.semibold }}>Membership paused until {dateLabel(g.breakUntil)}</Txt>
       <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Set by the front desk · streak frozen · reminders paused</Txt>
-    </Animated.View>
+    </FadeIn>
   );
 }
 
@@ -139,19 +137,19 @@ export default function Gym() {
   useGymScenarios('Gym');
   return (
     <TabScreen title="Gym" header={<GymHeader />} compactTitle={false}>
-      <Enter i={0}><MembershipCard /></Enter>
+      <FadeIn i={0}><MembershipCard /></FadeIn>
       {d.onBreak && <BreakCard />}
-      <Enter i={1}><AttendanceCard awaiting={awaiting} /></Enter>
-      <Enter i={2}><AssessCard /></Enter>
-      <Enter i={3}><ChatCard /></Enter>
-      <Enter i={4}><PTCard isPT={isPT} /></Enter>
-      <Enter i={5}>
+      <FadeIn i={1}><AttendanceCard awaiting={awaiting} /></FadeIn>
+      <FadeIn i={2}><AssessCard /></FadeIn>
+      <FadeIn i={3}><ChatCard /></FadeIn>
+      <FadeIn i={4}><PTCard isPT={isPT} /></FadeIn>
+      <FadeIn i={5}>
         <ListCard rows={[
           { l: 'Membership & payments', onPress: () => router.push('/gym/membership') },
           { l: 'Membership pauses', onPress: () => router.push('/gym/break') },
           { l: 'Help & support', onPress: () => toast("Help opens the gym's support chat and FAQs") },
         ]} />
-      </Enter>
+      </FadeIn>
     </TabScreen>
   );
 }

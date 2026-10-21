@@ -1,8 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { Phone } from '@/lib/icons';
-import { fade } from '@/theme/motion';
 import { Button, Card, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useDomain } from '@/lib/domain';
@@ -12,6 +10,7 @@ import { Hint, ListCard, SubPage } from '@/features/progress/parts';
 import { membershipView } from '@/features/gym/data';
 import { useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function Membership() {
   const { c } = useTheme();
@@ -24,10 +23,10 @@ export default function Membership() {
   };
   return (
     <SubPage title="Membership" fallback="/gym">
-      <Animated.View key={d.membership} entering={fade()} style={{ padding: 18, borderRadius: radii.xl, backgroundColor: M.rbg, gap: 4, borderWidth: d.membership === 'Active' ? 1 : 0, borderColor: c.line }}>
+      <FadeIn key={d.membership} style={{ padding: 18, borderRadius: radii.xl, backgroundColor: M.rbg, gap: 4, borderWidth: d.membership === 'Active' ? 1 : 0, borderColor: c.line }}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, color: M.rfg }}>{M.rt}</Txt>
         <Txt style={{ fontSize: fontSizes.md, color: M.rfg }}>{M.rs}</Txt>
-      </Animated.View>
+      </FadeIn>
       <ListCard rows={[
         { l: 'Plan', v: 'Annual', muted: true }, { l: 'Member ID', v: 'GLD-4821', muted: true }, { l: 'Started', v: '14 Oct 2025', muted: true },
         { l: 'Ends', v: M.ends, muted: true }, { l: 'Branch', v: 'Vaishali Nagar', muted: true },

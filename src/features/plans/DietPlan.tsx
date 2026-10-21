@@ -7,7 +7,6 @@ import { scheduleOnRN } from 'react-native-worklets';
 import Svg, { Circle } from 'react-native-svg';
 import { router } from 'expo-router';
 import { ChevronDown, Minus, Plus } from '@/lib/icons';
-import { fade } from '@/theme/motion';
 import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark, Tag } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -26,9 +25,9 @@ import { QtySheet } from './QtySheet';
 import { fmtNum, fmtQty, Qty, splitFood, stepFor, unitLabel } from './qty';
 import { DItem, dietItems, dietTotals, setP, useCountUp, usePlans } from './store';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
-const E = ({ i, children }: { i: number; children: React.ReactNode }) => <Animated.View entering={fade(i * 40)}>{children}</Animated.View>;
 
 // ---------- Summary: kcal ring + macro bars ----------
 function KcalRing({ k }: { k: number }) {
@@ -272,10 +271,10 @@ function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
         </View>
       </Row>
       {open && (
-        <Animated.View entering={fade()} style={{ gap: 6, paddingHorizontal: 4, paddingTop: 4, paddingBottom: 6 }}>
+        <FadeIn style={{ gap: 6, paddingHorizontal: 4, paddingTop: 4, paddingBottom: 6 }}>
           {items.map((it) => <ItemRow key={it.key} mid={mid} it={it} simple={simple} />)}
           {!paused && <AteElse onPress={addElse} />}
-        </Animated.View>
+        </FadeIn>
       )}
     </Card>
   );
@@ -300,14 +299,14 @@ export function DietPlan() {
 
   if (p.noPlan) {
     return (
-      <E i={0}>
+      <FadeIn i={0}>
         <Card style={{ padding: 22, gap: 10 }}>
           <Tag label="Diet plan on the way" bg={c.accentSoft} fg={c.accentText} />
           <Txt v="headline">Coach Vikram shares your diet after the assessment</Txt>
           <Txt muted style={{ fontSize: fontSizes.md }}>Until then you can log what you eat.</Txt>
           {!paused && <Button kind="secondary" small label="Log a meal" onPress={() => router.push({ pathname: '/plans/log', params: { meal: dietOpenMeal(d) } })} style={{ alignSelf: 'flex-start' }} />}
         </Card>
-      </E>
+      </FadeIn>
     );
   }
 
@@ -318,7 +317,7 @@ export function DietPlan() {
   const overBy = Math.max(0, Math.round(t.k - KCAL_TARGET));
   return (
     <>
-      <E i={0}>
+      <FadeIn i={0}>
         <Card style={{ paddingVertical: 16, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
           <KcalRing k={t.k} />
           <View style={{ flex: 1, gap: 10, minWidth: 0 }}>
@@ -327,8 +326,8 @@ export function DietPlan() {
             <MacroBar l="Fat" v={t.f} target={MACRO_TARGET.f} col={c.cFat} />
           </View>
         </Card>
-      </E>
-      <E i={1}>
+      </FadeIn>
+      <FadeIn i={1}>
         <Row style={{ gap: 12, flexWrap: 'wrap', paddingHorizontal: 6 }}>
           <Txt v="caption" style={overBy ? { color: c.warn } : undefined}>{overBy ? `${inr(overBy)} kcal over today's target` : `${inr(left)} kcal left`} · planned ~{inr(Math.round(t.plan))}</Txt>
           <View style={{ flex: 1 }} />
@@ -337,13 +336,13 @@ export function DietPlan() {
           ))}
         </Row>
         {overBy > 0 && (
-          <Animated.View entering={fade()} accessibilityRole="alert" style={{ marginTop: 8, padding: 12, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
+          <FadeIn accessibilityRole="alert" style={{ marginTop: 8, padding: 12, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
             <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>You're about {inr(overBy)} kcal over today. That's okay. Keep your next meal light and have some water.</Txt>
-          </Animated.View>
+          </FadeIn>
         )}
-      </E>
-      <E i={1}><Txt v="caption" style={{ paddingHorizontal: 6 }}>Swipe right = eaten · swipe left = swap · tap the amount to change it · hold for more · double tap a meal to mark it all eaten</Txt></E>
-      {MEALS.map((m, i) => <E key={m.id} i={2 + i}><MealCard mid={m.id} open={openId === m.id} /></E>)}
+      </FadeIn>
+      <FadeIn i={1}><Txt v="caption" style={{ paddingHorizontal: 6 }}>Swipe right = eaten · swipe left = swap · tap the amount to change it · hold for more · double tap a meal to mark it all eaten</Txt></FadeIn>
+      {MEALS.map((m, i) => <FadeIn key={m.id} i={2 + i}><MealCard mid={m.id} open={openId === m.id} /></FadeIn>)}
       <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.sm }}>This week: {7 + onPlan} of 12 meals on plan</Txt>
     </>
   );

@@ -1,16 +1,16 @@
 import React from 'react';
-import Animated from 'react-native-reanimated';
 import { BellOff } from '@/lib/icons';
 import { Button, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useScenarios, useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { LineRow, ListCard, Note, SubPage, Switch } from '@/features/shell/parts';
 import { useShell } from '@/features/shell/state';
 import { QUIET_PRESETS, REMINDER_KEYS, REMINDER_LABEL, reminderStore } from '@/features/reminders/reminders';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const PERM = { on: 'Allowed', off: 'Blocked', unset: 'Not asked' } as const;
 
@@ -41,14 +41,14 @@ export default function NotificationSettings() {
   return (
     <SubPage title="Notifications" fallback="/profile">
       {perm === 'off' && (
-        <Animated.View entering={fade()} exiting={fadeOut()} style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.warnSoft, gap: 10 }}>
+        <FadeIn exiting={fadeOut()} style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.warnSoft, gap: 10 }}>
           <Row style={{ gap: 10 }}>
             <BellOff size={18} color={c.warn} />
             <Txt style={{ flex: 1, fontFamily: font.semibold, color: c.warn }}>Notifications are off on this phone</Txt>
           </Row>
           <Txt style={{ fontSize: fontSizes.md, color: c.warn }}>You won't hear about plan changes or Coach replies. Your choices below are kept for when you turn them on.</Txt>
           <Button small kind="primary" label="Turn on notifications" style={{ alignSelf: 'flex-start' }} onPress={() => { setProfile({ notifications: 'on' }); toast('Notifications on'); }} />
-        </Animated.View>
+        </FadeIn>
       )}
       <ListCard>
         {rows.map((r, i) => (

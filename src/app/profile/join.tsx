@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { useLocalSearchParams } from 'expo-router';
 import { Button, Field, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
@@ -8,11 +7,12 @@ import { useOverlay } from '@/components/Overlay';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { Label, Note, SubPage, useShake } from '@/features/shell/parts';
 import { checkCode, setShell } from '@/features/shell/state';
 import { JoinConsentSheet } from '@/features/shell/Switcher';
 import { fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function JoinProgramme() {
   const { c } = useTheme();
@@ -45,7 +45,7 @@ export default function JoinProgramme() {
   return (
     <SubPage title="Join a program" close fallback="/(tabs)">
       <Txt muted style={{ paddingHorizontal: 4 }}>Your gym or clinic gives you an invite link or code.</Txt>
-      {fromLink && <Animated.View entering={fade()} exiting={fadeOut()}><Tag label="Opened from a WhatsApp invite · code filled in" bg={c.goodSoft} fg={c.good} /></Animated.View>}
+      {fromLink && <FadeIn exiting={fadeOut()}><Tag label="Opened from a WhatsApp invite · code filled in" bg={c.goodSoft} fg={c.good} /></FadeIn>}
       <Label>Invite code</Label>
       <View style={{ marginTop: -6 }}>
         <Field value={code} onChangeText={(t) => fill(t.toUpperCase())} placeholder="GLD-4821" autoCapitalize="characters" autoCorrect={false} autoComplete="off"
@@ -53,9 +53,9 @@ export default function JoinProgramme() {
           style={{ fontFamily: font.mono, letterSpacing: 1 }} />
       </View>
       {!!err && (
-        <Animated.View entering={fade()} exiting={fadeOut()} style={shake}>
+        <FadeIn exiting={fadeOut()} style={shake}>
           <Txt accessibilityLiveRegion="polite" style={{ color: c.warn, fontSize: fontSizes.md, paddingHorizontal: 6 }}>{err}</Txt>
-        </Animated.View>
+        </FadeIn>
       )}
       <Button label="Join" disabled={!code.trim()} onPress={() => join()} />
       <Note style={{ fontSize: fontSizes.sm }}>Try YOGA-2024 (new), GLD-4821 (already joined), OLD-0001 (expired) or any other code.</Note>

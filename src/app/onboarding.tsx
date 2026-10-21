@@ -10,7 +10,7 @@ import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'rea
 import { Switch } from '@/features/shell/parts';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { Easing, runOnJS, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GymLogoMark } from '@/components/Brand';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -34,6 +34,7 @@ import { useShell } from '@/features/shell/state';
 import { ProgLogo } from '@/features/shell/parts';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ORDER = ['welcome', 'facility', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
 type Step = (typeof ORDER)[number];
@@ -161,7 +162,7 @@ export default function Onboarding() {
       </View>
 
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 24, paddingTop: 8, gap: 14, flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-        <Animated.View key={step} entering={fade()} exiting={fadeOut()} style={[{ gap: 14 }, step === 'building' && { flex: 1, justifyContent: 'center' }]}>
+        <FadeIn key={step} exiting={fadeOut()} style={[{ gap: 14 }, step === 'building' && { flex: 1, justifyContent: 'center' }]}>
           {step === 'welcome' && <Welcome isPT={isPT} assess={sc.assess} hasGym={dom.hasGym} />}
           {step === 'facility' && <FacilityStep />}
           {step === 'goal' && <GoalStep tried={tried} />}
@@ -177,7 +178,7 @@ export default function Onboarding() {
           {step === 'consent' && <ConsentStep isPT={isPT} />}
           {step === 'building' && <BuildingStep onDone={() => go('ready')} />}
           {step === 'ready' && <ReadyStep assess={sc.assess} />}
-        </Animated.View>
+        </FadeIn>
       </ScrollView>
 
       <View style={{ paddingHorizontal: 20, paddingBottom: insets.bottom + 12, paddingTop: 8, gap: 6, backgroundColor: c.bg }}>
@@ -489,10 +490,10 @@ function BasicsStep({ tried }: { tried: boolean }) {
         {(['No', 'Yes'] as const).map((d) => <Pill key={d} label={d} on={p.injury === d} onPress={() => setProfile({ injury: d })} style={{ flex: 1 }} />)}
       </Row>
       {p.injury === 'Yes' && (
-        <Animated.View entering={fade()} style={{ gap: 6 }}>
+        <FadeIn style={{ gap: 6 }}>
           <NoteField value={p.injuryNote} onChangeText={(t) => setProfile({ injuryNote: t })} placeholder="e.g. lower back pain when bending forward, started two months ago" accessibilityLabel="Describe the injury" error={tried && p.injuryNote.trim().length < 3} />
           <Txt v="caption" color={tried && p.injuryNote.trim().length < 3 ? c.warn : c.muted}>{tried && p.injuryNote.trim().length < 3 ? 'Add a short note about the injury so your first workout is safe.' : 'Coach Vikram sees this before your first workout.'}</Txt>
-        </Animated.View>
+        </FadeIn>
       )}
     </>
   );

@@ -3,7 +3,6 @@ import { useLogGate } from '@/lib/logGate';
 import { PersonAvatar } from '@/components/Brand';
 import { ScrollView, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { fade } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -20,6 +19,7 @@ import { mealById } from '@/features/today/meals';
 import { QuickLogSheet } from '@/features/today/QuickLogSheet';
 import { askCoach } from '@/features/coach/coach';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function FoodDetail() {
   const { gate: logGate } = useLogGate();
@@ -131,7 +131,7 @@ export default function FoodDetail() {
               <Animated.View style={chev}><ChevronDown size={18} color={c.muted} /></Animated.View>
             </Pressy>
             {micro && (
-              <Animated.View entering={fade()} style={{ gap: 10, paddingHorizontal: 4 }}>
+              <FadeIn style={{ gap: 10, paddingHorizontal: 4 }}>
                 {micros.map(([l, v, pct]) => (
                   <View key={l} style={{ gap: 5 }}>
                     <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: fontSizes.sm }}>{l}</Txt><Txt v="mono" muted style={{ fontSize: fontSizes.sm }}>{v} · {pct}%</Txt></Row>
@@ -139,7 +139,7 @@ export default function FoodDetail() {
                   </View>
                 ))}
                 <Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>% of daily value for an adult. A guide, not medical advice.</Txt>
-              </Animated.View>
+              </FadeIn>
             )}
           </Card>
 

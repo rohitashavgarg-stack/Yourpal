@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLeaveIfPaused } from '@/lib/logGate';
 import { ScrollView, TextInput, View } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { fade } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, Path } from 'react-native-svg';
@@ -29,6 +27,7 @@ import { workoutUiStore } from '@/features/workout/ui';
 import { NewExercise, NewList } from '@/features/workout/NewWorkoutUI';
 import { FinishConfirmSheet, FormTipsSheet, SetMenuSheet, SwapSheet, WkApi, WkMenuSheet } from '@/features/workout/WorkoutSheets';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 function Bars({ n, pos, light }: { n: number; pos: number; light?: boolean }) {
   const { c } = useTheme();
@@ -211,19 +210,19 @@ export default function Workout() {
         );
       })}
       {s.rest && (
-        <Animated.View entering={fade()} style={{ gap: 8, padding: 12, borderRadius: radii.md, backgroundColor: c.surface2 }}>
+        <FadeIn style={{ gap: 8, padding: 12, borderRadius: radii.md, backgroundColor: c.surface2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20 }}>How was that set? <Txt muted style={{ fontSize: fontSizes.sm }}>Optional</Txt></Txt>
           <Row style={{ gap: 6 }}>
             {(['Too easy', 'Too hard', 'Pain'] as const).map((l, i) => <Pill key={l} label={l} on={fb === i} onPress={() => setFb(fb === i ? null : (i as 0 | 1 | 2))} />)}
           </Row>
           {fb === 2 && (
-            <Animated.View entering={fade()} style={{ borderRadius: 14, padding: 12, backgroundColor: c.warnSoft, gap: 8 }}>
+            <FadeIn style={{ borderRadius: 14, padding: 12, backgroundColor: c.warnSoft, gap: 8 }}>
               <Txt style={{ fontFamily: font.bold, color: c.warn }}>Pain reported</Txt>
               <Txt style={{ fontSize: fontSizes.md, color: c.warn }}>Stop this exercise. Ask a floor trainer before continuing.</Txt>
               <Button kind="secondary" small label="Ask Coach Vikram" onPress={() => askCoach('Pain during workout', 'I felt pain in my ')} style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,255,255,0.55)' }} />
-            </Animated.View>
+            </FadeIn>
           )}
-        </Animated.View>
+        </FadeIn>
       )}
       <Pressy accessibilityRole="button" onPress={() => A.addSet(s.exIdx)} style={{ height: 48, borderRadius: 24, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
         <Plus size={17} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>Add set</Txt>
@@ -232,7 +231,7 @@ export default function Workout() {
     </View>
   );
   const noteBlock = noteFor != null ? (
-    <Animated.View entering={fade()}>
+    <FadeIn>
       <Card style={{ padding: 14, gap: 10 }}>
         <Txt v="label">Note for {e.sets[noteFor]?.w ? 'warm-up set' : `set ${setLabel(e, noteFor)}`}</Txt>
         <NoteField value={noteDraft} onChangeText={setNoteDraft} placeholder="e.g. felt it in the lower back on the last two reps" autoFocus accessibilityLabel="Set note" minHeight={96} />
@@ -241,7 +240,7 @@ export default function Workout() {
           <Button small label="Save note" onPress={() => { A.setNote(s.exIdx, noteFor, noteDraft.trim()); setNoteFor(null); haptic.light(); }} />
         </Row>
       </Card>
-    </Animated.View>
+    </FadeIn>
   ) : null;
 
   // The new design: full-screen clip with the sets in a bottom sheet (exercises); a simple list with a big timer (warm-up and cool-down).
@@ -271,7 +270,7 @@ export default function Workout() {
 
       <ScrollView ref={scroll} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: isList ? 28 + insets.bottom : dockH + 20, gap: 12 }} keyboardShouldPersistTaps="handled">
         {isList ? (
-          <Animated.View key={s.phase} entering={fade()} style={{ gap: 12 }}>
+          <FadeIn key={s.phase} style={{ gap: 12 }}>
             <View style={{ minHeight: 180, borderRadius: radii.xl, overflow: 'hidden', padding: 16, justifyContent: 'flex-end', gap: 4 }}>
               <HeroBg h={180} />
               <Bars n={n} pos={pos} />
@@ -297,9 +296,9 @@ export default function Workout() {
             <Button kind="outline" label={s.phase === 'cooldown' ? 'Skip cool-down' : 'Skip warm-up'} onPress={() => {
               if (s.phase === 'cooldown') finishNow(); else { A.phase('main'); toast('Warm-up skipped. Take the first set light'); }
             }} />
-          </Animated.View>
+          </FadeIn>
         ) : (
-          <Animated.View key={`ex${s.exIdx}${e.name}`} entering={fade()} style={{ gap: 12 }}>
+          <FadeIn key={`ex${s.exIdx}${e.name}`} style={{ gap: 12 }}>
             <View style={{ height: 300, borderRadius: radii.xl, overflow: 'hidden', backgroundColor: cardBg }}>
               <Bars n={n} pos={pos} light />
               {hasPhoto(e.id) ? (
@@ -335,7 +334,7 @@ export default function Workout() {
 
             {noteBlock}
 
-          </Animated.View>
+          </FadeIn>
         )}
       </ScrollView>
 

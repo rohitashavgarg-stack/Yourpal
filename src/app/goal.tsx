@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useLeaveIfPaused } from '@/lib/logGate';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { Minus, Plus } from '@/lib/icons';
 import { Button, Card, Pill, Row, Txt } from '@/components/ui';
@@ -12,13 +11,14 @@ import { useScenarios, useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { goBack, Note, SubPage } from '@/features/shell/parts';
 import { goalV2Store, kindOf, addDays, fmtDay, parseBy } from '@/features/goalv2/model';
 import { DateSheet, FinishBy } from '@/features/goalv2/FinishBy';
 import { TODAY } from '@/features/progress/trends';
 import { BYS, GDEF, GOAL2, GOALS, goalNote, goalStep, GVERB, isNumeric } from '@/features/shell/goal';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Draft = { type: string; target: number; by: string; g2: string };
 
@@ -86,9 +86,9 @@ export default function Goal() {
             <RoundBtn label="Raise target" onPress={() => patch({ target: Math.round((g.target + step) * 10) / 10 })}><Plus size={22} color={c.ink} /></RoundBtn>
           </Row>
           {note && (
-            <Animated.View key={note.text} entering={fade()} exiting={fadeOut()}>
+            <FadeIn key={note.text} exiting={fadeOut()}>
               {note.warn ? <Note tone="warn">{note.text}</Note> : <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>{note.text}</Txt>}
-            </Animated.View>
+            </FadeIn>
           )}
           {!v2 && (
             <>

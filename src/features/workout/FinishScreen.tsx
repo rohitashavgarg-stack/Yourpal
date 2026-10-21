@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
-import { fade } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
 import { BlurView } from 'expo-blur';
@@ -17,6 +16,7 @@ import { haptic } from '@/lib/haptics';
 import { useDomain } from '@/lib/domain';
 import { fmt1 } from '@/lib/useNow';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const COLORS = ['#3A36C9', '#B9B6FF', fixed.white, '#F2B544', '#1F6E63'];
 const PARTS = Array.from({ length: 34 }, (_, i) => {
@@ -46,10 +46,10 @@ function StreakLine({ done }: { done: number }) {
   const left = Math.max(0, st.target - done);
   const kept = left === 0;
   return (
-    <Animated.View entering={fade(900)} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 10, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: 'rgba(255,138,61,0.14)' }}>
+    <FadeIn delay={900} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 10, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: 'rgba(255,138,61,0.14)' }}>
       <Flame size={18} color={FLAME} fill={kept ? FLAME : 'transparent'} strokeWidth={2} />
       <Txt style={{ flex: 1, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>{kept ? `Week complete · streak now ${st.weeks + (st.kept ? 0 : 1)} weeks` : `${left} more ${left === 1 ? 'session' : 'sessions'} to keep your streak`}</Txt>
-    </Animated.View>
+    </FadeIn>
   );
 }
 
@@ -73,7 +73,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
       </Svg>
       <RoundBtn label="Close" onPress={() => onDone(feel, note)} glass style={{ position: 'absolute', top: insets.top + 8, right: 16 }}><X size={20} color={c.ink} /></RoundBtn>
 
-      <Animated.View entering={fade()} style={{ position: 'absolute', left: 12, right: 12, bottom: Math.max(insets.bottom, 14), borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: c.glassLine,
+      <FadeIn style={{ position: 'absolute', left: 12, right: 12, bottom: Math.max(insets.bottom, 14), borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: c.glassLine,
         shadowColor: '#0F0E3C', shadowOpacity: 0.28, shadowRadius: 60, shadowOffset: { width: 0, height: 24 } }}>
         {/* own radius: on the web a backdrop blur is not clipped by the parent's rounded corners, which left a square showing behind the card */}
         <BlurView intensity={40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: 32 }} />
@@ -92,7 +92,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
             ))}
           </Row>
           <View>
-            <Animated.View entering={fade(350)} style={{ backgroundColor: c.surface, borderRadius: radii.lg, padding: 14, gap: 10 }}>
+            <FadeIn delay={350} style={{ backgroundColor: c.surface, borderRadius: radii.lg, padding: 14, gap: 10 }}>
               <Row style={{ gap: 12 }}>
                 <Pressy accessibilityRole="button" accessibilityLabel="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }}
                   style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
@@ -104,7 +104,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
                 </View>
               </Row>
               <Button kind="outline" small label="Share" icon={<Share size={16} color={c.ink} />} onPress={() => toast('Sharing opens the system share sheet')} />
-            </Animated.View>
+            </FadeIn>
             <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
               {PARTS.map((p, i) => <Particle key={i} p={p} run={run} />)}
             </View>
@@ -134,7 +134,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
           {d.hasGym && <Field value={note} onChangeText={setNote} placeholder="Note for Coach Vikram" accessibilityLabel="Note for Coach Vikram" returnKeyType="done" />}
           <Button label={note.trim() ? 'Send to Coach and finish' : 'Done'} onPress={() => onDone(feel, note)} />
         </View>
-      </Animated.View>
+      </FadeIn>
     </View>
   );
 }

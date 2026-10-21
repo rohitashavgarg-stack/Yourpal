@@ -1,9 +1,7 @@
 import React from 'react';
 import { HEALTH_NAME } from '@/lib/health';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { router, useLocalSearchParams } from 'expo-router';
-import { fade } from '@/theme/motion';
 import { Button, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { StepsSheet } from '@/features/today/StepsCards';
@@ -23,6 +21,7 @@ import { RANGES, Range, shift, trend } from '@/features/progress/trends';
 import { RangeBar, TrendChart } from '@/features/progress/TrendUI';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const TIP_UNIT: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: ' steps', water: ' L', hr: ' bpm', sleep: '', diet: '', cons: ' workouts' };
 
@@ -63,12 +62,12 @@ export default function MetricDetail() {
       <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 8, overflow: 'hidden' }, cardShadow(isDark)]}>
         <CornerGlow color={look.tint} size={320} />
         <View style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: radii.md, backgroundColor: look.tint + '26', alignItems: 'center', justifyContent: 'center' }}><look.Icon size={19} color={look.tint} /></View>
-        <Animated.View key={t.key + 'h'} entering={fade()}>
+        <FadeIn key={t.key + 'h'}>
           <Txt style={{ fontFamily: font.displayBold, fontSize: 42, lineHeight: 52, letterSpacing: -1 }}>
             {t.big}{bigUnit && t.hasData ? <Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: c.muted }}>{bigUnit}</Txt> : null}
           </Txt>
           <Txt muted style={{ fontSize: fontSizes.md }}>{t.hasData ? t.sub : (t.empty ?? '')}</Txt>
-        </Animated.View>
+        </FadeIn>
         <TrendChart t={t} unit={TIP_UNIT[k]} height={190} onSwipe={swipe} color={look.tint} />
       </View>
       {rows.length > 0 && <ListCard rows={rows} />}

@@ -7,10 +7,11 @@ import { useStore } from '@/lib/store';
 import Svg, { Circle, Defs, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button, Pressy, Txt } from '@/components/ui';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { YourPalLogo } from '@/components/YourPalLogo';
 import { font } from '@/theme/tokens';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // One soft blue glow bleeding in from the top-right corner. Radial gradient, so it is blurred with no filter (works on web and native).
 function Glow({ width, height }: { width: number; height: number }) {
@@ -179,14 +180,14 @@ export default function Welcome() {
         <View accessibilityRole="header"><YourPalLogo height={40} color={fixed.white} /></View>
       </View>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
-        <Animated.View key={i} entering={fade()} exiting={fadeOut()}><Mock /></Animated.View>
+        <FadeIn key={i} exiting={fadeOut()}><Mock /></FadeIn>
         <LinearGradient pointerEvents="none" colors={['rgba(0,0,0,0)', fixed.black]} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 100 }} />
       </View>
       <View style={{ paddingHorizontal: 24, paddingBottom: insets.bottom + 20, gap: 14 }}>
-        <Animated.View key={'t' + i} entering={fade()} style={{ gap: 6, minHeight: 124 }}>
+        <FadeIn key={'t' + i} style={{ gap: 6, minHeight: 124 }}>
           <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl4, lineHeight: 38, letterSpacing: -0.9, color: fixed.white }}>{title}</Txt>
           <Txt style={{ fontSize: fontSizes.base, lineHeight: 22, color: 'rgba(255,255,255,0.7)' }}>{sub}</Txt>
-        </Animated.View>
+        </FadeIn>
         <View style={{ flexDirection: 'row', gap: 6, alignItems: 'center' }}>
           {SLIDES.map((_, n) => <Segment key={n} n={n} i={i} onPress={() => setI(n)} label={`Show preview ${n + 1} of ${SLIDES.length}`} />)}
         </View>

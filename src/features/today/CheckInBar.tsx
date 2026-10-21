@@ -1,8 +1,7 @@
 import React from 'react';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { View } from 'react-native';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
-import { fade } from '@/theme/motion';
+import { useAnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Check, MapPin, LocateOff } from '@/lib/icons';
@@ -21,6 +20,7 @@ import { ciTime } from './WeekCard';
 import { useCheckIn } from '@/features/checkin/useCheckIn';
 import { elapsedMin, limitOf } from '@/features/checkin/logic';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export type CiMode = 'none' | 'here' | 'near' | 'in' | 'out' | 'off';
 export function useCiMode(): CiMode {
@@ -38,9 +38,9 @@ function Floating({ children }: { children: React.ReactNode }) {
   const navBottom = Math.max(insets.bottom - 6, 14);
   const a = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 74 }] }));
   return (
-    <Animated.View entering={fade()} style={[{ position: 'absolute', left: 16, right: 16, bottom: navBottom + 74, zIndex: 4 }, a]}>
+    <FadeIn style={[{ position: 'absolute', left: 16, right: 16, bottom: navBottom + 74, zIndex: 4 }, a]}>
       {children}
-    </Animated.View>
+    </FadeIn>
   );
 }
 

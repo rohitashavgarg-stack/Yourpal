@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View } from 'react-native';
 import Animated, { cancelAnimation, Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
 import { Button, Txt } from '@/components/ui';
@@ -10,6 +10,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { mmss } from '@/lib/useNow';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
 const R = 19;
@@ -48,7 +49,7 @@ export function RestPanel({ rest, now, onAdd30, onSkip, onDone, docked }: { rest
   const ringBox = useAnimatedStyle(() => ({ transform: [{ scale: beat.value }] }));
 
   return (
-    <Animated.View entering={fade()} exiting={fadeOut()} accessibilityLabel={finished ? 'Rest done' : `Rest timer, ${mmss(left)} left`} accessibilityLiveRegion="polite"
+    <FadeIn exiting={fadeOut()} accessibilityLabel={finished ? 'Rest done' : `Rest timer, ${mmss(left)} left`} accessibilityLiveRegion="polite"
       style={{ ...(docked ? null : { position: 'absolute', left: 12, right: 12, bottom: Math.max(insets.bottom, 12) + 4 }), minHeight: 68, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line,
         flexDirection: 'row', alignItems: 'center', gap: 12, paddingLeft: 14, paddingRight: 10, paddingVertical: 10,
         shadowColor: fixed.black, shadowOpacity: isDark ? 0.5 : 0.16, shadowRadius: 26, shadowOffset: { width: 0, height: 10 }, elevation: 14 }}>
@@ -64,6 +65,6 @@ export function RestPanel({ rest, now, onAdd30, onSkip, onDone, docked }: { rest
       </View>
       <Button kind="secondary" small label="+30 s" onPress={onAdd30} style={{ paddingHorizontal: 14 }} />
       <Button kind="secondary" small label="Skip" onPress={onSkip} style={{ paddingHorizontal: 14 }} />
-    </Animated.View>
+    </FadeIn>
   );
 }

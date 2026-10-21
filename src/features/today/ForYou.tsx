@@ -24,12 +24,12 @@ import { useGoalV2, progressLine, statusLine } from '@/features/goalv2/model';
 import { fmtT, KCAL_TARGET, MEALS } from '@/lib/data';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fade } from '@/theme/motion';
 import { haptic } from '@/lib/haptics';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
 import { useUpdates } from './TopCards';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // ---------- Slim goal strip: the member's reason for opening the app, in one line ----------
 export function GoalStrip() {
@@ -239,7 +239,7 @@ export function ComebackPlan() {
   const { c, isDark } = useTheme();
   const start = useStartWorkout();
   return (
-    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <FadeIn style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14, overflow: 'hidden' }, cardShadow(isDark)]}>
       <CornerGlow color={FLAME} size={520} />
       <Row style={{ gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}><Flame size={22} color={FLAME} fill={FLAME} /></View>
@@ -251,6 +251,6 @@ export function ComebackPlan() {
         </View>
       </Row>
       <Button label="Start easy session" onPress={() => start()} />
-    </Animated.View>
+    </FadeIn>
   );
 }

@@ -25,6 +25,7 @@ import { ringCentre, StatusChip } from '@/features/goalv2/GoalCard2';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
 const R = 54, CIRC = 2 * Math.PI * R;
@@ -112,7 +113,7 @@ export function PtConfirmCard() {
   const { c, isDark } = useTheme();
   const { openSheet } = useOverlay();
   return (
-    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <FadeIn style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
       <CornerGlow color={c.accent} size={420} />
       <Row style={{ gap: 12 }}>
         <PersonAvatar who="coach" size={44} />
@@ -126,7 +127,7 @@ export function PtConfirmCard() {
         <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} /></View>
       </Row>
       <Txt v="caption" style={{ textAlign: 'center' }}>Not confirmed? It confirms itself on Fri 26 Sep, so your package stays right.</Txt>
-    </Animated.View>
+    </FadeIn>
   );
 }
 
@@ -158,7 +159,7 @@ export function ComebackCard() {
   const pause = useAnimatedStyle(() => ({ opacity: 1 - a.value, transform: [{ scale: 1 - 0.4 * a.value }] }));
   const flame = useAnimatedStyle(() => ({ opacity: a.value, transform: [{ scale: 0.5 + 0.5 * a.value }] }));
   return (
-    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 20, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <FadeIn style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 20, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
       <CornerGlow color={FLAME} size={520} />
       <Row style={{ gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}>
@@ -176,7 +177,7 @@ export function ComebackCard() {
         <View style={{ flex: 1.3 }}><Button label="Start session" onPress={() => { startWorkout(); }} /></View>
         <View style={{ flex: 1 }}><Button kind="outline" label="Re-plan week" onPress={() => router.navigate('/plans')} /></View>
       </Row>
-    </Animated.View>
+    </FadeIn>
   );
 }
 
@@ -216,9 +217,9 @@ function PlanChanges() {
   return (
     <View style={{ gap: 2, paddingLeft: 52 }}>
       {PLAN_CHANGES.map(([a, b], i) => (
-        <Animated.View key={a} entering={fade(i * 150)} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, paddingHorizontal: 10, borderRadius: radii.sm, backgroundColor: c.accentSoft }}>
+        <FadeIn key={a} delay={i * 150} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, paddingHorizontal: 10, borderRadius: radii.sm, backgroundColor: c.accentSoft }}>
           <Txt style={{ fontFamily: font.medium }}>{a}</Txt><Txt v="caption" style={i === 0 ? { fontFamily: font.mono } : undefined}>{b}</Txt>
-        </Animated.View>
+        </FadeIn>
       ))}
     </View>
   );
@@ -292,7 +293,7 @@ export function UpdatesCard() {
             </Animated.View>
           </Animated.View>
           {/* The cross and the dots stay where they are and keep their own fade; they never swipe. */}
-          <Animated.View key={u.key} entering={fade()} pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}>
+          <FadeIn key={u.key} pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}>
             <Pressy accessibilityRole="button" accessibilityLabel="Dismiss this update" onPress={() => { if (u.isPlan) setPlanOpen(false); dismiss(u.key); }} style={{ position: 'absolute', top: -4, right: -6, width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
           <X size={17} color={c.muted} />
         </Pressy>
@@ -301,7 +302,7 @@ export function UpdatesCard() {
                 {live.map((_, k) => <View key={k} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: radii.xs, backgroundColor: k === i ? c.ink : c.surface3 }} />)}
               </View>
             )}
-          </Animated.View>
+          </FadeIn>
         </View>
       </GestureDetector>
     </Card>
@@ -319,12 +320,12 @@ export function UpdatesSheet() {
         {live.map((u) => {
           const fg = u.tone === 'warn' ? c.warn : u.tone === 'good' ? c.good : c.accentText;
           return (
-            <Animated.View key={u.key} entering={fade()} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12, paddingVertical: 12, paddingHorizontal: 4, borderBottomWidth: 1, borderBottomColor: c.line }}>
+            <FadeIn key={u.key} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12, paddingVertical: 12, paddingHorizontal: 4, borderBottomWidth: 1, borderBottomColor: c.line }}>
               <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: fg, marginTop: 6 }} />
               <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.semibold }}>{u.title}</Txt><Txt v="caption">{u.body}</Txt></View>
               {u.btn && <PillBtn tone="soft" h={30} label={u.btn} onPress={() => closeSheet(u.act)} />}
               <Pressy accessibilityRole="button" accessibilityLabel={`Dismiss ${u.title}`} onPress={() => dismiss(u.key)} style={{ width: 36, height: 36, alignItems: 'center', justifyContent: 'center' }}><X size={15} color={c.muted} /></Pressy>
-            </Animated.View>
+            </FadeIn>
           );
         })}
         {!live.length && <Txt muted style={{ paddingVertical: 20 }}>You're all caught up.</Txt>}

@@ -1,9 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { Check, Clock, House, MapPin } from '@/lib/icons';
-import { fade, fadeOut } from '@/theme/motion';
+import { fadeOut } from '@/theme/motion';
 import { Button, Pill, Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
 import { useStore } from '@/lib/store';
@@ -13,6 +12,7 @@ import { cardShadow, Hint, SubPage } from '@/features/progress/parts';
 import { VISITS } from '@/features/gym/data';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Att = { t: string; s: string; tag: string; type: 'c' | 'pt'; icon: 'loc' | 'home' | 'pt' | 'wait'; tone?: 'accent' | 'good' | 'warn'; ptOnly?: boolean; key: string };
 
@@ -69,11 +69,11 @@ export default function Attendance() {
   return (
     <SubPage title="Attendance" fallback="/gym">
       {awaiting && (
-        <Animated.View entering={fade()} exiting={fadeOut()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 8, borderWidth: 1.5, borderColor: c.accent }, cardShadow(isDark)]}>
+        <FadeIn exiting={fadeOut()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 8, borderWidth: 1.5, borderColor: c.accent }, cardShadow(isDark)]}>
           <Txt style={{ fontFamily: font.semibold }}>Confirm your session</Txt>
           <Txt muted style={{ fontSize: fontSizes.md }}>Coach Vikram marked Tue 23 Sep, 6–7 pm as completed</Txt>
           <Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} style={{ height: 48, borderRadius: 24 }} />
-        </Animated.View>
+        </FadeIn>
       )}
       <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 16 }, cardShadow(isDark)]}>
         <Row style={{ justifyContent: 'space-between', marginBottom: 10 }}>
@@ -106,14 +106,14 @@ export default function Attendance() {
         {list.map((r, i) => {
           const t = tone(r); const I = Icon[r.icon];
           return (
-            <Animated.View key={r.key + r.tag} entering={fade()} style={{ minHeight: 60, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, paddingHorizontal: 4, borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
+            <FadeIn key={r.key + r.tag} style={{ minHeight: 60, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, paddingHorizontal: 4, borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
               <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: t.dotBg, alignItems: 'center', justifyContent: 'center' }}><I size={16} strokeWidth={2.4} color={t.dotFg} /></View>
               <View style={{ flex: 1, minWidth: 0 }}>
                 <Txt style={{ fontFamily: font.medium }}>{r.t}</Txt>
                 <Txt v="caption">{r.s}</Txt>
               </View>
               <Tag label={r.tag} bg={t.tagBg} fg={t.tagFg} />
-            </Animated.View>
+            </FadeIn>
           );
         })}
         {list.length === 0 && <Txt muted style={{ paddingVertical: 18, textAlign: 'center' }}>Nothing here for this filter.</Txt>}

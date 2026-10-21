@@ -17,6 +17,7 @@ import { QuickLogSheet } from './QuickLogSheet';
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
 import { useLogGate } from '@/lib/logGate';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | 'part' | 'off' | null }) {
   const { c } = useTheme();
@@ -27,9 +28,9 @@ function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | '
       <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, letterSpacing: -0.3, lineHeight: 16, color: now ? c.bg : c.ink }}>{tt.hm}</Txt>
       <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 12, color: now ? c.bg : c.muted, opacity: now ? 0.7 : 1 }}>{tt.ap}</Txt>
       {badge && (
-        <Animated.View entering={fade()} style={{ position: 'absolute', top: -4, right: -4, width: 18, height: 18, borderRadius: 9, backgroundColor: bg, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: c.surface }}>
+        <FadeIn style={{ position: 'absolute', top: -4, right: -4, width: 18, height: 18, borderRadius: 9, backgroundColor: bg, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: c.surface }}>
           {badge === 'done' ? <Check size={10} strokeWidth={3.5} color={fixed.white} /> : badge === 'part' ? <Minus size={10} strokeWidth={3.5} color={fixed.white} /> : <X size={9} strokeWidth={3.5} color={c.muted} />}
-        </Animated.View>
+        </FadeIn>
       )}
     </View>
   );
@@ -85,7 +86,7 @@ function MealRow({ id, open, bare = false }: { id: MealId; open: boolean; bare?:
         <Chevron open={open} />
       </Pressy>}
       {(open || bare) && (
-        <Animated.View entering={fade()} style={{ gap: 4, paddingBottom: bare ? 0 : 12 }}>
+        <FadeIn style={{ gap: 4, paddingBottom: bare ? 0 : 12 }}>
           {m.items.map((it, k) => {
             const on = x.eaten.includes(k);
             const r = x.repl[k];
@@ -124,7 +125,7 @@ function MealRow({ id, open, bare = false }: { id: MealId; open: boolean; bare?:
               <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: x.skip || v.any ? c.ink : c.muted }}>{allL}</Txt>
             </Pressy>
           </Row>
-        </Animated.View>
+        </FadeIn>
       )}
     </Animated.View>
   );
@@ -188,7 +189,7 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
   const { gate } = useLogGate();
   const answer = gate((msg: string, p: Parameters<typeof patch>[1]) => { const prev = d.meals; patch(id, p); set({ openMeal: null }); toast(msg, { undo: () => set({ meals: prev }) }); });
   return (
-    <Animated.View entering={fade()} style={{ borderRadius: radii.md, backgroundColor: c.warnSoft, padding: 12, gap: 10 }}>
+    <FadeIn style={{ borderRadius: radii.md, backgroundColor: c.warnSoft, padding: 12, gap: 10 }}>
       <Row style={{ gap: 10 }}>
         <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}><Clock size={18} color={c.warn} /></View>
         <View style={{ flex: 1 }}>
@@ -210,7 +211,7 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18 }}>Skipped</Txt>
         </Pressy>
       </Row>
-    </Animated.View>
+    </FadeIn>
   );
 }
 

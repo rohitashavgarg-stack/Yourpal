@@ -14,6 +14,7 @@ import { progressStore } from '@/features/progress/store';
 import { AFTER_PHOTO, BEFORE_PHOTO, photoFor } from '@/features/progress/photoAssets';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const SCRIM = 'rgba(0,0,0,0.55)';
 
@@ -44,7 +45,7 @@ function Compare({ latest }: { latest: string }) {
     .onUpdate((e) => setFromX(e.x))
     .onEnd(() => haptic.light());
   return (
-    <Animated.View entering={fade()}>
+    <FadeIn>
       <GestureDetector gesture={pan}>
         <View collapsable={false} onLayout={(e) => setW(e.nativeEvent.layout.width)} accessible accessibilityRole="adjustable" accessibilityLabel="Compare photos, drag to reveal"
           accessibilityValue={{ min: 0, max: 100, now: pos, text: `${pos}% of Sep 2 shown` }}
@@ -64,7 +65,7 @@ function Compare({ latest }: { latest: string }) {
           </View>
         </View>
       </GestureDetector>
-    </Animated.View>
+    </FadeIn>
   );
 }
 

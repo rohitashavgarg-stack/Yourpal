@@ -3,7 +3,6 @@ import { Image, View } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
-import { fade } from '@/theme/motion';
 import Svg, { Circle, Ellipse } from 'react-native-svg';
 import { Camera, PenLine, Search } from '@/lib/icons';
 import { Button, Chip, Field, Pressy, Row, Segmented, Txt } from '@/components/ui';
@@ -18,6 +17,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { mealById, mealKcal } from './meals';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Mode = 'sugg' | 'scan' | 'write' | 'cat';
 const SUGG = ['2 roti', '1 cup milk', '1 katori dal', '1 banana', '100 g paneer'];
@@ -173,9 +173,9 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
             <Txt style={{ position: 'absolute', left: 0, right: 0, bottom: 12, textAlign: 'center', fontFamily: font.medium, fontSize: fontSizes.sm, color: fixed.white, textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 4 }}>{cap}</Txt>
           </View>
           {scan === 'fail' && (
-            <Animated.View entering={fade()} style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
+            <FadeIn style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
               <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, color: c.warn }}>Couldn't read that.</Txt> Too dark or too close. Try the whole plate in good light, or write it instead.</Txt>
-            </Animated.View>
+            </FadeIn>
           )}
           {perm && !perm.granted && !perm.canAskAgain && (
             <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Camera is off for YourPal. Allow it in Settings, or choose a photo of your plate instead.</Txt>
@@ -213,7 +213,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
       )}
 
       {items.length > 0 && (
-        <Animated.View entering={fade()} style={{ borderRadius: 20, backgroundColor: c.surface2, paddingVertical: 4, paddingHorizontal: 14 }}>
+        <FadeIn style={{ borderRadius: 20, backgroundColor: c.surface2, paddingVertical: 4, paddingHorizontal: 14 }}>
           {items.map((it, i) => (
             <Row key={i} style={{ gap: 8, minHeight: 44, borderBottomWidth: 1, borderBottomColor: c.line }}>
               <Txt style={{ flex: 1, fontFamily: font.medium }}>{it.n}</Txt>
@@ -225,7 +225,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
             <Txt style={{ fontFamily: font.semibold }}>{total} kcal · {prot} g protein</Txt>
             <Txt v="caption">{diff === 0 ? 'Same as plan' : `${diff > 0 ? '+' : '−'}${Math.abs(diff)} kcal vs plan`}</Txt>
           </Row>
-        </Animated.View>
+        </FadeIn>
       )}
       {!(mode === 'scan' && !items.length) && <Button kind="primary" label={logL} disabled={!items.length} onPress={log} />}
     </>

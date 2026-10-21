@@ -7,7 +7,6 @@ import { CalendarCheck, Camera, Check, ClipboardList, Dumbbell, Flame, Footprint
 import { HEALTH_NAME } from '@/lib/health';
 import { PersonAvatar } from '@/components/Brand';
 import { Pressy, Row, Txt } from '@/components/ui';
-import { fade } from '@/theme/motion';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
@@ -15,6 +14,7 @@ import { haptic } from '@/lib/haptics';
 import { Pt, smoothPath } from './path';
 import { planMath } from './plan';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const AP = Animated.createAnimatedComponent(Path);
 
@@ -123,10 +123,10 @@ export function HowStep() {
               <AP d={d} fill="none" stroke={c.ink} strokeWidth={10} strokeLinecap="round" strokeDasharray={`${length}`} animatedProps={line} />
               <AP d={d} fill="none" stroke={c.bg} strokeWidth={4} strokeLinecap="round" strokeDasharray={`${length}`} animatedProps={line} />
             </Svg>
-            <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(200)}><Node p={stops[0]}><Camera size={19} color={c.ink} /></Node><Label p={stops[0]} title="Snap your plate" sub="and your food is logged" /></Animated.View>
-            <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(600)}><Node p={stops[1]}><Dumbbell size={19} color={c.ink} /></Node><Label p={stops[1]} title="A workout built for you" sub="with a demo for every exercise" /></Animated.View>
-            <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(1000)}><Node p={stops[2]}><TrendingUp size={19} color={c.ink} /></Node><Label p={stops[2]} right title="Progress you can see" sub="weight, lifts and records" /></Animated.View>
-            <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(1400)}><Node p={stops[3]} size={52}><View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><Trophy size={22} color={fixed.white} /></View></Node></Animated.View>
+            <FadeIn pointerEvents="box-none" style={StyleAbs} delay={200}><Node p={stops[0]}><Camera size={19} color={c.ink} /></Node><Label p={stops[0]} title="Snap your plate" sub="and your food is logged" /></FadeIn>
+            <FadeIn pointerEvents="box-none" style={StyleAbs} delay={600}><Node p={stops[1]}><Dumbbell size={19} color={c.ink} /></Node><Label p={stops[1]} title="A workout built for you" sub="with a demo for every exercise" /></FadeIn>
+            <FadeIn pointerEvents="box-none" style={StyleAbs} delay={1000}><Node p={stops[2]}><TrendingUp size={19} color={c.ink} /></Node><Label p={stops[2]} right title="Progress you can see" sub="weight, lifts and records" /></FadeIn>
+            <FadeIn pointerEvents="box-none" style={StyleAbs} delay={1400}><Node p={stops[3]} size={52}><View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><Trophy size={22} color={fixed.white} /></View></Node></FadeIn>
           </>
         )}
       </View>
@@ -183,7 +183,7 @@ export function MealStep() {
           </View>
         )}
         {read && (
-          <Animated.View entering={fade()} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 16, gap: 8, backgroundColor: c.surface, borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
+          <FadeIn style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 16, gap: 8, backgroundColor: c.surface, borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
             <Row style={{ gap: 6 }}><Check size={14} strokeWidth={3} color={c.good} /><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.2, color: c.good }}>IDENTIFIED ITEM BY ITEM</Txt></Row>
             <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 26 }}>Rice, dal and roti</Txt>
             {MEAL_ITEMS.map(([n, q]) => (
@@ -193,7 +193,7 @@ export function MealStep() {
               <View><Txt v="caption" style={{ letterSpacing: 1.2 }}>CALORIES</Txt><Txt style={{ fontFamily: font.displayBold, fontSize: 36, lineHeight: 44, letterSpacing: -1 }}>590 <Txt muted style={{ fontFamily: font.semibold, fontSize: fontSizes.xs }}>KCAL</Txt></Txt></View>
               <Row style={{ gap: 12 }}><MacroRing pct={0.55} v={21} l="Protein" /><MacroRing pct={0.75} v={100} l="Carbs" /><MacroRing pct={0.3} v={10} l="Fat" /></Row>
             </Row>
-          </Animated.View>
+          </FadeIn>
         )}
       </View>
     </>
@@ -256,9 +256,9 @@ export function ReadyContent({ assess }: { assess: string }) {
   return (
     <>
       <View style={{ alignItems: 'center', gap: 12, paddingTop: 8 }}>
-        <Animated.View entering={fade()} style={{ width: 60, height: 60, borderRadius: 30, borderWidth: 3, borderColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
+        <FadeIn style={{ width: 60, height: 60, borderRadius: 30, borderWidth: 3, borderColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
           <Check size={30} strokeWidth={2.6} color={c.accent} />
-        </Animated.View>
+        </FadeIn>
         <View style={{ alignItems: 'center' }}>
           <Txt style={{ fontFamily: font.light, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>You're all set,</Txt>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>{p.name || 'Rohitashav Garg'}.</Txt>

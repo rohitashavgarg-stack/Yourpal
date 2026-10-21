@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { HEALTH_NAME } from '@/lib/health';
 import { Image, RefreshControl, View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronRight, Flame, Lock } from '@/lib/icons';
 import { useLook } from '@/features/progress/look';
-import { fade } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Row, Txt } from '@/components/ui';
@@ -29,6 +27,7 @@ import { GoalCard2 } from '@/features/goalv2/GoalCard2';
 import { GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 let firstLoad = true;
 
@@ -194,19 +193,19 @@ export default function Progress() {
   return (
     <TabScreen title="Progress" header={<GymHeader />} compactTitle={false} pinned={v2 ? <RangeBarSlim /> : undefined} pinAfter={v2 && bar.h > 0 && !ps.loading ? bar.y + bar.h - (insets.top + 8 + 56) : undefined}
       refreshControl={<RefreshControl refreshing={ps.refreshing} tintColor={c.accentText} onRefresh={() => { progressStore.set({ refreshing: true }); showProgressLoading(900); }} />}>
-      {v2 && !ps.loading && <Animated.View entering={fade()}><GoalCard2 size="expanded" /></Animated.View>}
+      {v2 && !ps.loading && <FadeIn><GoalCard2 size="expanded" /></FadeIn>}
       {v2 && ps.loading && <Skeleton h={190} />}
       <View onLayout={(e) => setBar({ y: e.nativeEvent.layout.y, h: e.nativeEvent.layout.height })}><RangeBar /></View>
-      {!v2 && (ps.loading ? <Skeleton h={150} /> : <Animated.View entering={fade()}><GoalTickCard /></Animated.View>)}
+      {!v2 && (ps.loading ? <Skeleton h={150} /> : <FadeIn><GoalTickCard /></FadeIn>)}
       {ps.loading ? (
         <>
           <Skeleton h={168} /><Skeleton h={120} /><Skeleton h={120} /><Skeleton h={120} />
         </>
       ) : (
         <>
-          {!v2 && <Animated.View entering={fade(40)}><StreakEntry /></Animated.View>}
+          {!v2 && <FadeIn delay={40}><StreakEntry /></FadeIn>}
           {cards.map((k, i) => (
-            <Animated.View key={k} entering={fade(Math.min(i, 6) * 40)}><ProgressCard k={k} /></Animated.View>
+            <FadeIn key={k} delay={Math.min(i, 6) * 40}><ProgressCard k={k} /></FadeIn>
           ))}
           <Txt v="caption" style={{ textAlign: 'center' }}>No “bad” colours here · changes are shown with arrows and plain words</Txt>
         </>

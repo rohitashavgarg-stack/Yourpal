@@ -6,7 +6,6 @@ import { useLeaveIfPaused } from '@/lib/logGate';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Ellipse } from 'react-native-svg';
 import { CameraOff, PenLine, ScanLine, Search } from '@/lib/icons';
-import { fade } from '@/theme/motion';
 import { Button, Card, Field, Pill, Pressy, Row, Segmented, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark, foodTypeLabel, PillBtn } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -21,6 +20,7 @@ import { useDietActions } from '@/features/plans/dietActions';
 import { PageHeader } from '@/features/plans/parts';
 import { allowedFor, dietItems, Food, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Mode = 'search' | 'write' | 'scan';
 type ScanSt = 'idle' | 'busy' | 'done' | 'fail';
@@ -196,7 +196,7 @@ export default function LogFood() {
         )}
 
         {mode === 'write' && (
-          <Animated.View entering={fade()}>
+          <FadeIn>
             <Card style={{ padding: 16, gap: 12 }}>
               <View style={{ gap: 6 }}>
                 <Txt v="label">What was it?</Txt>
@@ -228,11 +228,11 @@ export default function LogFood() {
                 <Txt style={{ fontSize: fontSizes.md, flex: 1 }}>Save to my foods so I can search it next time</Txt>
               </Pressy>
             </Card>
-          </Animated.View>
+          </FadeIn>
         )}
 
         {mode === 'scan' && (!camOk ? (
-          <Animated.View entering={fade()}>
+          <FadeIn>
             <Card style={{ paddingVertical: 22, paddingHorizontal: 18, gap: 10, alignItems: 'center' }}>
               <View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><CameraOff size={26} color={c.ink} /></View>
               <Txt style={{ fontFamily: font.semibold }}>Camera access is off</Txt>
@@ -240,7 +240,7 @@ export default function LogFood() {
               <Button label="Allow camera" onPress={() => { setP({ camOk: true }); toast('Camera allowed'); }} style={{ alignSelf: 'stretch' }} />
               <Button kind="outline" label="Write it in instead" onPress={toWrite} style={{ alignSelf: 'stretch', height: 48 }} />
             </Card>
-          </Animated.View>
+          </FadeIn>
         ) : (
           <>
             <View accessibilityLiveRegion="polite" accessibilityLabel={cap} style={{ height: 250, borderRadius: radii.xl, overflow: 'hidden', backgroundColor: fixed.dark }}>
@@ -254,16 +254,16 @@ export default function LogFood() {
               <Txt style={{ position: 'absolute', left: 0, right: 0, bottom: 14, textAlign: 'center', fontFamily: font.medium, fontSize: fontSizes.sm, color: fixed.white, textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 4 }}>{cap}</Txt>
             </View>
             {scan === 'fail' && (
-              <Animated.View entering={fade()} style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.warnSoft, gap: 8 }}>
+              <FadeIn style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.warnSoft, gap: 8 }}>
                 <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.warn }}>Couldn't read that.</Txt> Too dark or too close. Try the whole plate in good light.</Txt>
                 <Row style={{ gap: 8 }}>
                   <PillBtn tone="soft" h={40} label="Try again" onPress={goScan} />
                   <PillBtn tone="soft" h={40} label="Search instead" onPress={toSearch} />
                 </Row>
-              </Animated.View>
+              </FadeIn>
             )}
             {scan === 'done' && (
-              <Animated.View entering={fade()}>
+              <FadeIn>
                 <Card style={{ paddingVertical: 14, paddingHorizontal: 16, gap: 6 }}>
                   <Txt v="label">Looks like</Txt>
                   <Row style={{ gap: 8 }}><FoodMark type={SCAN_PHOTO.type} /><Txt style={{ fontFamily: font.semibold, fontSize: 16 }}>{SCAN_PHOTO.n}</Txt></Row>
@@ -272,21 +272,21 @@ export default function LogFood() {
                     <Txt v="caption" accessibilityRole="link" onPress={toSearch} style={{ fontFamily: font.semibold, color: c.accentText }}>search for the exact dish</Txt>.
                   </Txt>
                 </Card>
-              </Animated.View>
+              </FadeIn>
             )}
             {(scan === 'idle' || scan === 'done') && <Button kind="secondary" label={scan === 'done' ? 'Scan again' : 'Take photo'} onPress={goScan} style={{ height: 52 }} />}
           </>
         ))}
 
         {!!cur && (
-          <Animated.View entering={fade()} style={{ gap: 12 }}>
+          <FadeIn style={{ gap: 12 }}>
             <View accessibilityLiveRegion="polite" style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.surface2 }}>
               <Txt v="mono" style={{ fontSize: fontSizes.md }}>{diff}</Txt>
             </View>
             <View accessibilityRole="radiogroup" accessibilityLabel="Portion" style={{ flexDirection: 'row', gap: 8 }}>
               {([['Less', 0.5], ['As shown', 1], ['More', 1.5]] as const).map(([l, v]) => <Pill key={l} label={l} on={portion === v} onPress={() => setPortion(v)} style={{ flex: 1 }} />)}
             </View>
-          </Animated.View>
+          </FadeIn>
         )}
         <Button label={logL} disabled={!cur} onPress={log} />
       </ScrollView>

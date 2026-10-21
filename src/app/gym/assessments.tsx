@@ -1,12 +1,10 @@
 import React from 'react';
 import { PersonAvatar } from '@/components/Brand';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { ClipboardCheck } from '@/lib/icons';
-import { fade } from '@/theme/motion';
 import { Button, Card, Pill, Row, Txt } from '@/components/ui';
 import { PillBtn, Tag } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -18,6 +16,7 @@ import { cardShadow, ListCard, SubPage } from '@/features/progress/parts';
 import { ASSESS } from '@/features/gym/data';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function GymAssessments() {
   const { c, isDark } = useTheme();
@@ -43,20 +42,20 @@ export default function GymAssessments() {
   return (
     <SubPage title="Assessments" fallback="/gym">
       {none ? (
-        <Animated.View entering={fade()} style={{ gap: 12 }}>
+        <FadeIn style={{ gap: 12 }}>
           <Card style={{ paddingVertical: 26, paddingHorizontal: 20, alignItems: 'center', gap: 10 }}>
             <View style={{ width: 64, height: 64, borderRadius: radii.lg, backgroundColor: c.tNutri, alignItems: 'center', justifyContent: 'center' }}><ClipboardCheck size={30} strokeWidth={1.8} color={c.cNutri} /></View>
             <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 31 }}>No assessment yet</Txt>
             <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.md }}>Your first one is Sat 10:00 am with Coach Vikram. Body, strength and mobility tests take about 30 minutes. Your plan is built from it.</Txt>
           </Card>
           <ListCard rows={['Weight, waist and body fat', 'Squat, push-ups, deep squat hold', 'Sit-and-reach and resting heart rate'].map((l) => ({ l, muted: true }))} />
-        </Animated.View>
+        </FadeIn>
       ) : (
         <>
           {due && (
-            <Animated.View entering={fade()} style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.warnSoft }}>
+            <FadeIn style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.warnSoft }}>
               <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontSize: fontSizes.md, color: c.warn, fontFamily: font.semibold }}>Reassessment due this week. </Txt>Book a slot at the front desk or ask Coach Vikram in chat.</Txt>
-            </Animated.View>
+            </FadeIn>
           )}
           <LinearGradient colors={[fixed.blue, '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: radii.xl, padding: 20, gap: 6, overflow: 'hidden' }}>
             <Svg width="100%" height="100%" viewBox="0 0 358 170" preserveAspectRatio="xMidYMid slice" style={{ position: 'absolute', left: 0, top: 0 }}>
@@ -73,7 +72,7 @@ export default function GymAssessments() {
             </View>
           )}
           {ASSESS.map((grp) => (
-            <Animated.View key={`${grp.g}-${showStart}`} entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingTop: 14, paddingHorizontal: 16, paddingBottom: 4 }, cardShadow(isDark)]}>
+            <FadeIn key={`${grp.g}-${showStart}`} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingTop: 14, paddingHorizontal: 16, paddingBottom: 4 }, cardShadow(isDark)]}>
               <Row style={{ gap: 8 }}><View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone] }} /><Txt v="label">{grp.g}</Txt></Row>
               {grp.rows.map(([l, a, b, delta, good], i) => (
                 <Row key={l} style={{ minHeight: 54, gap: 10, borderBottomWidth: i < grp.rows.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
@@ -82,7 +81,7 @@ export default function GymAssessments() {
                   {!showStart && <Tag label={delta} bg={good ? c.goodSoft : c.surface2} fg={good ? c.good : c.muted} style={{ minWidth: 58, alignItems: 'center' }} />}
                 </Row>
               ))}
-            </Animated.View>
+            </FadeIn>
           ))}
           <Card style={{ paddingVertical: 16, paddingHorizontal: 18, gap: 6 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}><PersonAvatar who="coach" size={26} /><Txt v="label">Coach Vikram’s note</Txt></View>

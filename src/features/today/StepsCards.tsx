@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { DotText } from '@/features/trackers/DotText';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { ArrowRightLeft, Flame, Footprints, Plus, X } from '@/lib/icons';
@@ -12,11 +11,11 @@ import { useLogGate } from '@/lib/logGate';
 import { useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fade } from '@/theme/motion';
 import { haptic } from '@/lib/haptics';
 import { HEALTH_NAME } from '@/lib/health';
 import { createStore } from '@/lib/createStore';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // Steps tracker designs to compare. Pick one in the Today edge-case panel.
 export type StepsDesign = 'Current' | 'Ruler' | 'Day bars' | 'Dot matrix' | 'Bars + details';
@@ -249,7 +248,7 @@ export function StepsSheet() {
       <Button kind="accent" label={ok ? `Add ${fmt(steps)} steps` : 'Add steps'} disabled={!ok} onPress={addCustom} />
       <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 18 }}>Manual steps are added on top of your {d.hc ? HEALTH_NAME : 'phone'} count and marked as added by you.</Txt>
       {s.manual.length > 0 && (
-        <Animated.View entering={fade()} style={{ gap: 2 }}>
+        <FadeIn style={{ gap: 2 }}>
           <Txt v="label" style={{ paddingBottom: 4 }}>Added by you today</Txt>
           {s.manual.map((e) => (
             <Row key={e.id} style={{ justifyContent: 'space-between', minHeight: 44 }}>
@@ -262,7 +261,7 @@ export function StepsSheet() {
               </Pressy>
             </Row>
           ))}
-        </Animated.View>
+        </FadeIn>
       )}
       <Button kind="outline" small label="See steps trend" onPress={() => closeSheet(() => router.push({ pathname: '/progress/metric', params: { k: 'steps' } }))} />
     </>

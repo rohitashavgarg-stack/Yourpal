@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { fade } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Skeleton } from '@/components/bits';
@@ -41,9 +39,7 @@ import { goalSizeStore, GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
 import { useGoalV2Rows } from '@/features/goalv2/signs';
 import { DESIGNS, GoalDesign, GoalPace, goalStore, PACES } from '@/features/today/GoalCards';
-const Enter = ({ i, children }: { i: number; children: React.ReactNode }) => (
-  <Animated.View entering={fade(i * 50)}>{children}</Animated.View>
-);
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function Today() {
   const { c } = useTheme();
@@ -151,27 +147,27 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186
         ) : isNew ? (
           <>
             {/* top: the membership strip, then the updates; on a comeback day the comeback card comes first and the updates after the goal */}
-            {comebackNew && <Enter i={0}><ComebackGreeting /></Enter>}
-            {!!payNotice && <Enter i={0}><View style={{ marginTop: 14, marginBottom: comebackNew ? -12 : 6 }} onLayout={(e) => setStripY(e.nativeEvent.layout.y)}><PaymentBanner /></View></Enter>}
-            {comebackNew && <Enter i={0}><WorkoutCard restart /></Enter>}
-            {!comebackNew && <Enter i={0}><TodayGreeting /></Enter>}
-            {!comebackNew && forYou.length > 0 && <Enter i={0}><ForYouStack /></Enter>}
+            {comebackNew && <FadeIn step={50} i={0}><ComebackGreeting /></FadeIn>}
+            {!!payNotice && <FadeIn step={50} i={0}><View style={{ marginTop: 14, marginBottom: comebackNew ? -12 : 6 }} onLayout={(e) => setStripY(e.nativeEvent.layout.y)}><PaymentBanner /></View></FadeIn>}
+            {comebackNew && <FadeIn step={50} i={0}><WorkoutCard restart /></FadeIn>}
+            {!comebackNew && <FadeIn step={50} i={0}><TodayGreeting /></FadeIn>}
+            {!comebackNew && forYou.length > 0 && <FadeIn step={50} i={0}><ForYouStack /></FadeIn>}
             {/* today's calories stay at the top, right under the updates; the cards below follow the time of day (the workout at workout time, the meals at meal time, the week at the end of the day) */}
-            <Enter i={1}>{!assigned ? <NoPlanCard /> : topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</Enter>
-            {comebackNew && forYou.length > 0 && <Enter i={1}><ForYouStack /></Enter>}
-            {order.map((k, i) => <Enter key={k} i={2 + i}>{slots[k]}</Enter>)}
-            <Enter i={7}><DayQuote /></Enter>
+            <FadeIn step={50} i={1}>{!assigned ? <NoPlanCard /> : topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</FadeIn>
+            {comebackNew && forYou.length > 0 && <FadeIn step={50} i={1}><ForYouStack /></FadeIn>}
+            {order.map((k, i) => <FadeIn step={50} key={k} i={2 + i}>{slots[k]}</FadeIn>)}
+            <FadeIn step={50} i={7}><DayQuote /></FadeIn>
           </>
         ) : (
           <>
             {/* account banner and the other things that need an answer come first; on a comeback day the comeback card (the workout) comes right before the goal */}
-            {!!payNotice && <Enter i={0}><PaymentBanner /></Enter>}
-            {ptPending && d.hasGym && <Enter i={0}><PtConfirmCard /></Enter>}
-            {d.todayVariant === 'With updates' && <Enter i={0}><UpdatesCard /></Enter>}
-            {d.todayVariant === 'Comeback' && <Enter i={0}><ComebackCard /></Enter>}
-            <Enter i={1}><StreakChip /></Enter>
-            <Enter i={1}>{!assigned ? <NoPlanCard /> : topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</Enter>
-            {order.map((k, i) => <Enter key={k} i={2 + i}>{slots[k]}</Enter>)}
+            {!!payNotice && <FadeIn step={50} i={0}><PaymentBanner /></FadeIn>}
+            {ptPending && d.hasGym && <FadeIn step={50} i={0}><PtConfirmCard /></FadeIn>}
+            {d.todayVariant === 'With updates' && <FadeIn step={50} i={0}><UpdatesCard /></FadeIn>}
+            {d.todayVariant === 'Comeback' && <FadeIn step={50} i={0}><ComebackCard /></FadeIn>}
+            <FadeIn step={50} i={1}><StreakChip /></FadeIn>
+            <FadeIn step={50} i={1}>{!assigned ? <NoPlanCard /> : topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</FadeIn>
+            {order.map((k, i) => <FadeIn step={50} key={k} i={2 + i}>{slots[k]}</FadeIn>)}
           </>
         )}
       </TabScreen>

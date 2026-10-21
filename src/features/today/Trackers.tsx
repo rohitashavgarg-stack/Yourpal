@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import Animated, { cancelAnimation, Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withRepeat, withSpring, withTiming } from 'react-native-reanimated';
-import { fade } from '@/theme/motion';
 import Svg, { Circle, ClipPath, Defs, G, Line, LinearGradient as SvgGradient, Path, Polyline, Rect, Stop } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { TrendsButton } from '@/components/TrendsButton';
@@ -22,6 +21,7 @@ import { StepsDesign, StepsPreview, StepsTile } from './StepsCards';
 import { TrackerKey } from '@/features/trackers/designs';
 import { AddButton, EnergyDot, EnergyStack, HrDot, SleepDot, SleepStages, WaterDot, WaterGlasses, WeightDot, WeightRuler } from '@/features/trackers/Widgets';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const APath = Animated.createAnimatedComponent(Path);
 const ALine = Animated.createAnimatedComponent(Line);
@@ -373,7 +373,7 @@ export function WaterSheet() {
         <View style={{ gap: 6 }}>
           <Txt style={{ fontFamily: font.display, fontSize: 50, lineHeight: 50 }}>{Math.round(water * 100) / 100}<Txt muted style={{ fontFamily: font.display, fontSize: 24 }}> L</Txt></Txt>
           <Txt muted>Daily target 3 L</Txt>
-          {water >= TARGET && <Animated.View entering={fade()}><Tag label="Target reached" bg={c.goodSoft} fg={c.good} /></Animated.View>}
+          {water >= TARGET && <FadeIn><Tag label="Target reached" bg={c.goodSoft} fg={c.good} /></FadeIn>}
         </View>
       </Row>
       <Row style={{ gap: 8 }}>
@@ -384,9 +384,9 @@ export function WaterSheet() {
         <View>
           <Txt v="label" style={{ paddingBottom: 4 }}>Logged just now</Txt>
           {log.map((k) => (
-            <Animated.View key={k} entering={fade()} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: c.line }}>
+            <FadeIn key={k} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: c.line }}>
               <Txt>Glass</Txt><Txt v="mono" muted>+250 ml</Txt>
-            </Animated.View>
+            </FadeIn>
           ))}
         </View>
       )}
@@ -410,7 +410,7 @@ export function HealthSheet({ k }: { k: HK }) {
       <Txt style={{ fontFamily: font.display, fontSize: 44, lineHeight: 44 }}>{h.big}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.xl }}>{h.unit}</Txt></Txt>
       <Txt muted style={{ fontSize: fontSizes.md }}>{h.sub}</Txt>
       <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 4, height: 90, paddingVertical: 6 }}>
-        {h.bars.map((v, i) => <Animated.View key={i} entering={fade(i * 30)} style={{ flex: 1, height: `${v}%`, borderRadius: radii.xs, backgroundColor: col, opacity: k === 'sleep' ? [1, 0.7, 0.45][i % 3] : 1 }} />)}
+        {h.bars.map((v, i) => <FadeIn key={i} delay={i * 30} style={{ flex: 1, height: `${v}%`, borderRadius: radii.xs, backgroundColor: col, opacity: k === 'sleep' ? [1, 0.7, 0.45][i % 3] : 1 }} />)}
       </View>
       <View>
         {h.rows.map(([l, v]) => (

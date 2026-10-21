@@ -6,13 +6,13 @@ import Svg, { Circle, Line, Path } from 'react-native-svg';
 import { ChevronLeft, ChevronRight } from '@/lib/icons';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
-import { fade } from '@/theme/motion';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { dow, RANGES, Range, shift, sod, START, TODAY, Trend, windowOf } from './trends';
 import { progressStore } from './store';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // ============ Day | Week | Month | Year, with ‹ date › you can also swipe ============
 export function RangeBar() {
@@ -206,9 +206,9 @@ export function TrendChart({ t, unit, height = 170, onSwipe, color }: { t: Trend
     <GestureDetector gesture={swipe}>
       <View collapsable={false} accessible={false} onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)} style={{ gap: 6 }}>
         <Txt accessibilityLiveRegion="polite" v="caption" style={{ minHeight: 18, color: sel != null ? c.ink : c.muted, fontFamily: sel != null ? font.semibold : font.regular }}>{selText}</Txt>
-        <Animated.View key={t.key} entering={fade()} style={{ minHeight: height - 26 }}>
+        <FadeIn key={t.key} style={{ minHeight: height - 26 }}>
           {!t.hasData ? <View style={{ height: chartH, alignItems: 'center', justifyContent: 'center' }}><Txt muted style={{ textAlign: 'center' }}>{t.empty}</Txt></View> : body}
-        </Animated.View>
+        </FadeIn>
         {w > 0 && t.hasData && (
           <View style={{ height: 20, flexDirection: 'row' }}>
             {t.buckets.map((b, i) => (
