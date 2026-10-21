@@ -3,6 +3,7 @@ import { Pressable, Text, TextInput, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
+import { fontSizes } from '@/design-system/tokens';
 
 // Six boxes over a single hidden input: works with paste, SMS autofill and keyboards.
 export function OtpInput({ value, onChange, state, shakeKey, autoFocus }: { value: string; onChange: (v: string) => void; state: 'idle' | 'error' | 'ok' | 'locked'; shakeKey: number; autoFocus?: boolean }) {
@@ -49,7 +50,7 @@ function Box({ d, cur, state: st }: { d: string; cur: boolean; state: string; de
   const bg = st === 'ok' ? c.goodSoft : c.surface;
   return (
     <Animated.View style={[{ flex: 1, height: 58, borderRadius: 18, borderWidth: cur || st !== 'idle' ? 2 : 1, borderColor: border, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }, a]}>
-      <Text style={{ fontFamily: font.display, fontSize: 26, lineHeight: 34, color: st === 'ok' ? c.good : c.ink }}>{d}</Text>
+      <Text style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, color: st === 'ok' ? c.good : c.ink }}>{d}</Text>
     </Animated.View>
   );
   }

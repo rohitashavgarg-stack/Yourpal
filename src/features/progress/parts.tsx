@@ -12,7 +12,7 @@ import { RoundBtn } from '@/components/bits';
 import { useToastLift } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // ---------- Full-screen pushed page: back button, centred title, optional right slot ----------
 export function SubPage({ title, titleIcon, onTitlePress, right, children, footer, scroll = true, toastLift = 24, fallback = '/(tabs)', onBack }: {
@@ -38,9 +38,9 @@ export function SubPage({ title, titleIcon, onTitlePress, right, children, foote
         {titleIcon ? (
           <Pressy accessibilityRole={onTitlePress ? 'button' : undefined} accessibilityLabel={onTitlePress ? `${title}. View profile` : undefined} disabled={!onTitlePress} onPress={onTitlePress} scaleTo={0.97} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, minHeight: 44 }}>
             {titleIcon}
-            <Txt accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.semibold, fontSize: 17 }}>{title}</Txt>
+            <Txt accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.semibold, fontSize: fontSizes.lg }}>{title}</Txt>
           </Pressy>
-        ) : <Txt accessibilityRole="header" numberOfLines={1} style={{ flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: 17 }}>{title}</Txt>}
+        ) : <Txt accessibilityRole="header" numberOfLines={1} style={{ flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: fontSizes.lg }}>{title}</Txt>}
         {right ?? <View style={{ width: 44 }} />}
       </Row>
 
@@ -53,9 +53,9 @@ export function SubPage({ title, titleIcon, onTitlePress, right, children, foote
         {titleIcon ? (
           <Pressy accessibilityRole={onTitlePress ? 'button' : undefined} accessibilityLabel={onTitlePress ? `${title}. View profile` : undefined} disabled={!onTitlePress} onPress={onTitlePress} scaleTo={0.97} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, minHeight: 44 }}>
             {titleIcon}
-            <Txt accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.semibold, fontSize: 17 }}>{title}</Txt>
+            <Txt accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.semibold, fontSize: fontSizes.lg }}>{title}</Txt>
           </Pressy>
-        ) : <Txt accessibilityRole="header" numberOfLines={1} style={{ flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: 17 }}>{title}</Txt>}
+        ) : <Txt accessibilityRole="header" numberOfLines={1} style={{ flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: fontSizes.lg }}>{title}</Txt>}
         {right ?? <View style={{ width: 44 }} />}
       </Row>
 
@@ -122,7 +122,7 @@ export function ListCard({ rows, mono = true, style }: { rows: { l: string; v?: 
               <Txt style={{ fontFamily: r.muted ? font.regular : font.medium, color: r.warn ? c.warn : r.muted ? c.muted : c.ink }}>{r.l}</Txt>
               {r.sub ? <Txt v="caption">{r.sub}</Txt> : null}
             </View>
-            {r.v != null && <Txt v={mono ? 'mono' : 'body'} style={{ fontSize: 13, color: r.muted ? c.ink : c.muted, textAlign: 'right', flexShrink: 1 }}>{r.v}</Txt>}
+            {r.v != null && <Txt v={mono ? 'mono' : 'body'} style={{ fontSize: fontSizes.sm, color: r.muted ? c.ink : c.muted, textAlign: 'right', flexShrink: 1 }}>{r.v}</Txt>}
             {r.right}
             {r.onPress && <ChevronRight size={16} color={c.muted} />}
           </>
@@ -183,7 +183,7 @@ export function StepBtn({ label, sign, onPress }: { label: string; sign: '−' |
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} scaleTo={0.9}
       style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
-      <Txt style={{ fontSize: 20, fontFamily: font.medium }}>{sign}</Txt>
+      <Txt style={{ fontSize: fontSizes.xl, fontFamily: font.medium }}>{sign}</Txt>
     </Pressy>
   );
 }
@@ -197,5 +197,5 @@ export function useShake() {
 }
 
 export function Hint({ children, style }: { children: React.ReactNode; style?: StyleProp<TextStyle> }) {
-  return <Txt v="caption" style={[{ textAlign: 'center', fontSize: 13 }, style]}>{children}</Txt>;
+  return <Txt v="caption" style={[{ textAlign: 'center', fontSize: fontSizes.sm }, style]}>{children}</Txt>;
 }

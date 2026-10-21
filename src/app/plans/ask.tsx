@@ -16,6 +16,7 @@ import { haptic } from '@/lib/haptics';
 import { REASONS } from '@/features/plans/content';
 import { BigTitle, InfoBox, PageHeader, ShakeText } from '@/features/plans/parts';
 import { setP } from '@/features/plans/store';
+import { fontSizes } from '@/design-system/tokens';
 
 export default function AskCoach() {
   useLeaveIfPaused();
@@ -67,11 +68,11 @@ export default function AskCoach() {
           <TextInput accessibilityLabel="Note for Coach Vikram, optional" value={note} onChangeText={setNote} multiline numberOfLines={3}
             placeholder={kind === 'diet' ? 'I eat lunch at the office most days' : 'Want more leg work'} placeholderTextColor={c.muted}
             onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}
-            style={{ minHeight: 96, borderRadius: 22, borderWidth: focus ? 1.5 : 1, borderColor: focus ? c.accent : c.line, backgroundColor: c.surface, color: c.ink, paddingHorizontal: 18, paddingVertical: 14, fontFamily: font.regular, fontSize: 15, lineHeight: 21, textAlignVertical: 'top', outlineStyle: 'none' as any }} />
+            style={{ minHeight: 96, borderRadius: 22, borderWidth: focus ? 1.5 : 1, borderColor: focus ? c.accent : c.line, backgroundColor: c.surface, color: c.ink, paddingHorizontal: 18, paddingVertical: 14, fontFamily: font.regular, fontSize: fontSizes.base, lineHeight: 21, textAlignVertical: 'top', outlineStyle: 'none' as any }} />
         </View>
         <ShakeText text={err ? 'Pick a reason so Coach Vikram knows what to change.' : ''} n={tries} />
         <Button label="Send request" onPress={send} />
-        <Txt muted style={{ fontSize: 13, textAlign: 'center' }}>You'll get a notification when your new plan is ready.</Txt>
+        <Txt muted style={{ fontSize: fontSizes.sm, textAlign: 'center' }}>You'll get a notification when your new plan is ready.</Txt>
       </ScrollView>
     </View>
   );

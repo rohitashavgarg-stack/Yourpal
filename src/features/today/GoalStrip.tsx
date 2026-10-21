@@ -10,7 +10,7 @@ import { Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { fmtDay, fmtVal, Goal2, progressLine, statusLine, useGoalV2 } from '@/features/goalv2/model';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // The goal at the top of Today (Figma "Your Pal Mobile app", node 40151:12923), with no card around it: it sits straight on the page,
 // over a soft blue glow, the goal in one line, a status pill, the progress picture for this kind of goal (GoalVisual), and the numbers underneath.
@@ -58,7 +58,7 @@ function Marker({ g, w, size }: { g: Goal2; w: number; size: VisualSize }) {
     <View style={{ height: 32 }}>
       <View style={{ position: 'absolute', left: bx, width: BW, alignItems: x - bx < 30 ? 'flex-start' : x - bx > BW - 30 ? 'flex-end' : 'center' }}>
         <View style={{ height: 26, paddingHorizontal: 10, borderRadius: 13, backgroundColor: c.ink, justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: c.bg }}>{`${fmtVal(g, g.currentValue)} ${g.unit}`}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.bg }}>{`${fmtVal(g, g.currentValue)} ${g.unit}`}</Txt>
         </View>
       </View>
       <View style={{ position: 'absolute', left: x - 4, top: 22, width: 8, height: 8, backgroundColor: c.ink, transform: [{ rotate: '45deg' }] }} />
@@ -122,14 +122,14 @@ export function GoalStrip({ flat = false }: { flat?: boolean } = {}) {
             {!flat && !small && <Txt style={{ fontSize: 16, lineHeight: 24, color: c.ink }}>Your goal</Txt>}
             <Txt numberOfLines={2} style={small
               ? { fontFamily: font.displayBold, fontSize: 24, lineHeight: 32, letterSpacing: -0.6, color: c.ink }
-              : { fontFamily: font.displayBold, fontSize: long ? 26 : 32, lineHeight: long ? 34 : 42, letterSpacing: long ? -0.8 : -1.2, color: c.ink }}>
-              {g.name}{inlineBy ? ' ' : ''}{inlineBy && <Txt style={{ fontFamily: font.regular, fontSize: small ? 12 : 16, lineHeight: small ? 17 : 24, letterSpacing: small ? 0 : -0.4, color: c.muted }}>{by}</Txt>}
+              : { fontFamily: font.displayBold, fontSize: long ? fontSizes.xl3 : fontSizes.xl4, lineHeight: long ? 34 : 42, letterSpacing: long ? -0.8 : -1.2, color: c.ink }}>
+              {g.name}{inlineBy ? ' ' : ''}{inlineBy && <Txt style={{ fontFamily: font.regular, fontSize: small ? fontSizes.xs : 16, lineHeight: small ? 17 : 24, letterSpacing: small ? 0 : -0.4, color: c.muted }}>{by}</Txt>}
             </Txt>
-            {!flat && (standing || (by && !inlineBy)) ? <Txt style={{ fontSize: small ? 12 : 14, lineHeight: small ? 17 : 20, color: c.muted }}>{standing ?? by}</Txt> : null}
-            {flat && <Txt style={{ fontSize: 15, lineHeight: 22, color: c.muted }}>{g.status === 'reached' ? 'All the way there' : `${Math.round(pct * 100)}% of the way there`}</Txt>}
+            {!flat && (standing || (by && !inlineBy)) ? <Txt style={{ fontSize: small ? fontSizes.xs : fontSizes.md, lineHeight: small ? 17 : 20, color: c.muted }}>{standing ?? by}</Txt> : null}
+            {flat && <Txt style={{ fontSize: fontSizes.base, lineHeight: 22, color: c.muted }}>{g.status === 'reached' ? 'All the way there' : `${Math.round(pct * 100)}% of the way there`}</Txt>}
           </View>
           <View style={{ height: small ? 28 : 40, paddingHorizontal: small ? 12 : 16, borderRadius: 22, backgroundColor: pill.bg, alignItems: 'center', justifyContent: 'center', marginBottom: small ? 0 : 4 }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: small ? 12 : 14, lineHeight: small ? 17 : 20, color: pill.fg }}>{pillText}</Txt>
+            <Txt style={{ fontFamily: font.medium, fontSize: small ? fontSizes.xs : fontSizes.md, lineHeight: small ? 17 : 20, color: pill.fg }}>{pillText}</Txt>
           </View>
         </Row>
         {flat ? <Journey g={g} /> : (
@@ -137,15 +137,15 @@ export function GoalStrip({ flat = false }: { flat?: boolean } = {}) {
             <View style={{ gap: 8 }}>
             <GoalVisual g={g} size={small ? 'mini' : 'compact'} />
             <Row style={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
-              <Txt style={{ fontFamily: font.medium, fontSize: small ? 13 : 15, lineHeight: small ? 19 : 22, color: c.ink }}>
-                {left.big}<Txt style={{ fontFamily: font.regular, fontSize: 12, lineHeight: 18, color: c.muted }}>{`  ${left.small}`}</Txt>
+              <Txt style={{ fontFamily: font.medium, fontSize: small ? fontSizes.sm : fontSizes.base, lineHeight: small ? 19 : 22, color: c.ink }}>
+                {left.big}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xs, lineHeight: 18, color: c.muted }}>{`  ${left.small}`}</Txt>
               </Txt>
               {g.kind === 'consistency' ? (
                 <Row style={{ gap: 4 }}>
                   <Flame size={small ? 14 : 15} color={FLAME} fill={st.weeks ? FLAME : 'transparent'} />
-                  <Txt style={{ fontFamily: font.medium, fontSize: small ? 13 : 14, lineHeight: small ? 19 : 20, color: st.weeks ? FLAME : c.muted }}>{st.weeks ? `${st.weeks} ${st.weeks === 1 ? 'week' : 'weeks'}` : 'No streak yet'}</Txt>
+                  <Txt style={{ fontFamily: font.medium, fontSize: small ? fontSizes.sm : fontSizes.md, lineHeight: small ? 19 : 20, color: st.weeks ? FLAME : c.muted }}>{st.weeks ? `${st.weeks} ${st.weeks === 1 ? 'week' : 'weeks'}` : 'No streak yet'}</Txt>
                 </Row>
-              ) : <Txt style={{ fontFamily: font.medium, fontSize: small ? 13 : 14, lineHeight: small ? 19 : 20, color: c.muted }}>{right}</Txt>}
+              ) : <Txt style={{ fontFamily: font.medium, fontSize: small ? fontSizes.sm : fontSizes.md, lineHeight: small ? 19 : 20, color: c.muted }}>{right}</Txt>}
             </Row>
             </View>
           </>

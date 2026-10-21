@@ -13,6 +13,7 @@ import { LIFT_DATA, LIFT_METRICS, LIFT_TITLES } from '@/features/progress/data';
 import { cardShadow, DrawLine, ListCard, SubPage, toPts } from '@/features/progress/parts';
 import { LiftName, progressStore } from '@/features/progress/store';
 import { useProgressScenarios } from '@/features/progress/scenarios';
+import { fontSizes } from '@/design-system/tokens';
 
 const H = 170;
 
@@ -76,7 +77,7 @@ export default function LiftDetail() {
 
       {L.stall && !ps.stallGone && (
         <Animated.View entering={fade()} exiting={fadeOut()} style={{ padding: 16, borderRadius: 22, backgroundColor: c.accentSoft, flexDirection: 'row', gap: 10, alignItems: 'flex-start' }}>
-          <Txt style={{ flex: 1, fontSize: 14, color: c.accentText }}>
+          <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.accentText }}>
             {isPT ? 'Same weight for 3 weeks. Coach Vikram will adjust this in your next plan.' : 'Same weight for 3 weeks. Try a lighter week, or ask Coach Vikram about personal training.'}
           </Txt>
           <Pressy accessibilityRole="button" accessibilityLabel="Dismiss hint" onPress={() => progressStore.set({ stallGone: true })} style={{ width: 44, height: 44, marginTop: -12, marginRight: -12, alignItems: 'center', justifyContent: 'center' }}>

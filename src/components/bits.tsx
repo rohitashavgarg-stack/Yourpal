@@ -7,7 +7,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { FoodType } from '@/lib/data';
 import { Pressy } from './ui';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // ---------- Veg / egg / non-veg mark (Indian food label style) ----------
 const MARK: Record<FoodType, { c: string; d: string; l: string }> = {
@@ -65,7 +65,7 @@ export function Skeleton({ h, style }: { h: number; style?: StyleProp<ViewStyle>
 export function Tag({ label, bg, fg, style }: { label: string; bg: string; fg: string; style?: StyleProp<ViewStyle> }) {
   return (
     <View style={[{ alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 3, borderRadius: 999, backgroundColor: bg }, style]}>
-      <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: fg }}>{label}</Text>
+      <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: fg }}>{label}</Text>
     </View>
   );
 }
@@ -79,7 +79,7 @@ export function PillBtn({ label, onPress, tone = 'ink', icon, style, h = 36 }: {
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} hitSlop={{ top: (44 - h) / 2, bottom: (44 - h) / 2 }}
       style={[{ height: h, paddingHorizontal: 14, borderRadius: h / 2, backgroundColor: bg, flexDirection: 'row', alignItems: 'center', gap: 5 }, style]}>
       {icon}
-      <Text style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 17, color: fg }}>{label}</Text>
+      <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 17, color: fg }}>{label}</Text>
     </Pressy>
   );
 }
@@ -150,7 +150,7 @@ export function UnitPill<T extends string>({ options, value, onChange, label }: 
         return (
           <Pressy key={o.value} accessibilityRole="tab" accessibilityState={{ selected: on }} onPress={() => onChange(o.value)} scaleTo={0.96}
             style={{ minWidth: 72, height: 44, paddingHorizontal: 16, borderRadius: 22, backgroundColor: on ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 17, letterSpacing: 0.8, color: on ? c.bg : c.muted }}>{o.label.toUpperCase()}</Text>
+            <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 17, letterSpacing: 0.8, color: on ? c.bg : c.muted }}>{o.label.toUpperCase()}</Text>
           </Pressy>
         );
       })}

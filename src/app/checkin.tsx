@@ -22,7 +22,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { GlassBackdrop } from '@/components/Glass';
 import { GymMap, hasRealMap } from '@/features/checkin/GymMap';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 
 // Manual check-in only, only inside the 20 m area. Location is read while this page is open.
@@ -89,7 +89,7 @@ export default function CheckIn() {
           </G>
           <Rect x={136} y={98} width={84} height={58} rx={10} fill={c.surface} stroke={c.line} />
           <Circle cx={178} cy={127} r={34} fill={c.accentSoft} stroke={c.accent} strokeWidth={1.5} strokeDasharray="5 4" opacity={0.9} />
-          <SvgText x={178} y={131} textAnchor="middle" fill={c.ink} fontSize={11} fontWeight="600" fontFamily={font.semibold}>Wulf Fitness</SvgText>
+          <SvgText x={178} y={131} textAnchor="middle" fill={c.ink} fontSize={fontSizes.xs2} fontWeight="600" fontFamily={font.semibold}>Wulf Fitness</SvgText>
           {!off && !inside && <Line x1={178} y1={127} x2={ux} y2={uy} stroke={c.muted} strokeWidth={1.5} strokeDasharray="3 4" />}
           {!off && (
             <>
@@ -109,7 +109,7 @@ export default function CheckIn() {
             <View accessibilityLabel={`GPS accuracy, plus or minus ${refreshing ? 'unknown' : inside ? 6 : 9} metres`} style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', gap: 6, shadowColor: fixed.shadow, shadowOpacity: 0.08, shadowRadius: 10, shadowOffset: { width: 0, height: 3 } }}>
               <GlassBackdrop radius={18} />
               <View style={{ zIndex: 2 }}><Crosshair size={14} color={c.ink} /></View>
-              <Txt style={{ zIndex: 2, fontFamily: font.semibold, fontSize: 13, lineHeight: 18 }}>{`GPS ±${refreshing ? '…' : inside ? 6 : 9} m`}</Txt>
+              <Txt style={{ zIndex: 2, fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18 }}>{`GPS ±${refreshing ? '…' : inside ? 6 : 9} m`}</Txt>
             </View>
           )}
         </View>
@@ -120,7 +120,7 @@ export default function CheckIn() {
         shadowColor: fixed.shadow, shadowOpacity: isDark ? 0 : 0.12, shadowRadius: 30, shadowOffset: { width: 0, height: -10 } }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.regular, fontSize: 28, letterSpacing: -1.1 }}>Wulf Fitness</Txt>
-          <Txt muted style={{ fontSize: 13 }}>Vaishali Nagar, Jaipur · 20 m check-in area</Txt>
+          <Txt muted style={{ fontSize: fontSizes.sm }}>Vaishali Nagar, Jaipur · 20 m check-in area</Txt>
         </View>
         <Animated.View key={status.t} entering={fade()} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, paddingHorizontal: 14, borderRadius: 18, backgroundColor: status.bg }}>
           <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.5)', alignItems: 'center', justifyContent: 'center' }}>
@@ -128,7 +128,7 @@ export default function CheckIn() {
           </View>
           <View style={{ flex: 1 }}>
             <Txt style={{ fontFamily: font.semibold, color: status.fg }}>{status.t}</Txt>
-            <Txt style={{ fontSize: 13, color: status.fg, opacity: 0.85 }}>{status.s}</Txt>
+            <Txt style={{ fontSize: fontSizes.sm, color: status.fg, opacity: 0.85 }}>{status.s}</Txt>
           </View>
         </Animated.View>
         {checkedIn ? (

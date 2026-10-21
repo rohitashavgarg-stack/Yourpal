@@ -10,6 +10,7 @@ import { legDay } from '@/lib/data';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { setLabel } from './session';
+import { fontSizes } from '@/design-system/tokens';
 
 // Screen-level handlers the sheets call (kept in a ref so they are always current).
 export type WkApi = {
@@ -78,7 +79,7 @@ export function SwapSheet({ api }: { api: ApiRef }) {
     <View style={{ gap: 16, paddingBottom: 6 }}>
       <View style={{ gap: 2 }}>
         <Txt style={{ fontFamily: font.semibold, fontSize: 24, lineHeight: 31, letterSpacing: -0.6 }}>Swap {orig.toLowerCase()}</Txt>
-        <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>Machine busy or not feeling it? Pick another exercise.</Txt>
+        <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>Machine busy or not feeling it? Pick another exercise.</Txt>
       </View>
 
       <Pressy accessibilityRole="search" accessibilityLabel="Search all exercises" onPress={() => closeSheet(() => router.push('/exercise-search'))} scaleTo={0.98}
@@ -106,7 +107,7 @@ export function SwapSheet({ api }: { api: ApiRef }) {
           <Pill label="Today only" on={!plan} onPress={() => setPlan(false)} style={{ flex: 1 }} />
           <Pill label="Also update my plan" on={plan} onPress={() => setPlan(true)} style={{ flex: 1 }} />
         </Row>
-        <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Updating the plan notifies Coach Vikram.</Txt>
+        <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Updating the plan notifies Coach Vikram.</Txt>
       </View>
     </View>
   );
@@ -122,13 +123,13 @@ export function SetMenuSheet({ api, i }: { api: ApiRef; i: number }) {
   const lbl = setLabel(e, i);
   return (
     <>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 26, letterSpacing: -0.6 }}>{x.w ? 'Warm-up set' : `Set ${lbl}`}</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl3, letterSpacing: -0.6 }}>{x.w ? 'Warm-up set' : `Set ${lbl}`}</Txt>
       <View>
         <MenuRow icon={null} t="Add a note" onPress={() => api.current.openNote(i)} />
         <MenuRow icon={null} t="Copy to all sets" s="Uses the numbers in the highlighted set" onPress={() => api.current.copyToAll()} />
         <MenuRow icon={null} t="Skip this set" onPress={() => api.current.skipSet(i)} last />
       </View>
-      <Txt muted style={{ fontSize: 13 }}>Coming in v1.5: drop set, to failure, RPE</Txt>
+      <Txt muted style={{ fontSize: fontSizes.sm }}>Coming in v1.5: drop set, to failure, RPE</Txt>
     </>
   );
 }
@@ -138,7 +139,7 @@ export function FinishConfirmSheet({ left, api }: { left: number; api: ApiRef })
   return (
     <>
       <Txt style={{ fontFamily: font.regular, fontSize: 28, letterSpacing: -1.1 }}>Finish workout?</Txt>
-      <Txt muted style={{ fontSize: 14 }}>{left} {left === 1 ? 'set is' : 'sets are'} still open. They will be saved as skipped, and your streak still counts.</Txt>
+      <Txt muted style={{ fontSize: fontSizes.md }}>{left} {left === 1 ? 'set is' : 'sets are'} still open. They will be saved as skipped, and your streak still counts.</Txt>
       <Button kind="accent" label="Finish now" onPress={() => api.current.finishNow()} />
       <Button kind="secondary" label="Keep going" onPress={() => closeSheet()} />
     </>

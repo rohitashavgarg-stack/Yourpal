@@ -20,7 +20,7 @@ import { FOOD, macroLine, RECENT, SCAN_PHOTO } from '@/features/plans/content';
 import { useDietActions } from '@/features/plans/dietActions';
 import { PageHeader } from '@/features/plans/parts';
 import { allowedFor, dietItems, Food, setP, usePlans } from '@/features/plans/store';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 type Mode = 'search' | 'write' | 'scan';
 type ScanSt = 'idle' | 'busy' | 'done' | 'fail';
@@ -42,8 +42,8 @@ function NumField({ label, unit, value, onChange, ph }: { label: string; unit: s
   return (
     <View style={{ flex: 1, height: 52, borderRadius: 26, borderWidth: 1, borderColor: c.line, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16 }}>
       <TextInput accessibilityLabel={label} value={value} onChangeText={(t) => onChange(t.replace(/[^0-9]/g, ''))} keyboardType="number-pad" placeholder={ph} placeholderTextColor={c.muted}
-        style={{ flex: 1, minWidth: 0, fontFamily: font.mono, fontSize: 15, color: c.ink, height: '100%' as any, outlineStyle: 'none' as any }} />
-      <Txt muted style={{ fontSize: 13 }}>{unit}</Txt>
+        style={{ flex: 1, minWidth: 0, fontFamily: font.mono, fontSize: fontSizes.base, color: c.ink, height: '100%' as any, outlineStyle: 'none' as any }} />
+      <Txt muted style={{ fontSize: fontSizes.sm }}>{unit}</Txt>
     </View>
   );
 }
@@ -149,9 +149,9 @@ export default function LogFood() {
         <FoodMark type={f.type ?? 'veg'} />
         <View style={{ flex: 1, minWidth: 0, paddingVertical: 8 }}>
           <Txt style={{ fontFamily: font.medium }}>{f.n}{f.mine ? ' · yours' : ''}</Txt>
-          <Txt v="mono" muted style={{ fontSize: 12 }}>{macroLine(f)}</Txt>
+          <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{macroLine(f)}</Txt>
         </View>
-        <Txt style={{ fontFamily: font.monoBold, fontSize: 13 }}>{f.k} kcal</Txt>
+        <Txt style={{ fontFamily: font.monoBold, fontSize: fontSizes.sm }}>{f.k} kcal</Txt>
       </Pressy>
     );
   };
@@ -187,7 +187,7 @@ export default function LogFood() {
               {res.map((f, i) => foodRow(f, i === res.length - 1))}
               {res.length === 0 && (
                 <View style={{ paddingVertical: 16, paddingHorizontal: 6, gap: 10, alignItems: 'flex-start' }}>
-                  <Txt muted style={{ fontSize: 14 }}>Nothing called "{q}" in the catalogue.</Txt>
+                  <Txt muted style={{ fontSize: fontSizes.md }}>Nothing called "{q}" in the catalogue.</Txt>
                   <PillBtn tone="soft" h={40} label="Write it in instead" onPress={toWrite} />
                 </View>
               )}
@@ -209,7 +209,7 @@ export default function LogFood() {
                     <Pressy key={t} accessibilityRole="radio" accessibilityState={{ selected: wType === t }} accessibilityLabel={foodTypeLabel(t)} onPress={() => setWType(t)}
                       style={{ flex: 1, height: 44, borderRadius: 22, borderWidth: 1, borderColor: wType === t ? c.ink : c.surface3, backgroundColor: wType === t ? c.ink : 'transparent', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                       <FoodMark type={t} />
-                      <Txt style={{ fontFamily: font.medium, fontSize: 14, color: wType === t ? c.bg : c.ink }}>{foodTypeLabel(t)}</Txt>
+                      <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, color: wType === t ? c.bg : c.ink }}>{foodTypeLabel(t)}</Txt>
                     </Pressy>
                   ))}
                 </View>
@@ -225,7 +225,7 @@ export default function LogFood() {
               <Pressy accessibilityRole="checkbox" accessibilityState={{ checked: wSave }} accessibilityLabel="Save to my foods so I can search it next time" onPress={() => setWSave((v) => !v)} scaleTo={0.99}
                 style={{ flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 44 }}>
                 <View pointerEvents="none"><CheckCircle on={wSave} size={28} tone="good" label="Save to my foods" /></View>
-                <Txt style={{ fontSize: 14, flex: 1 }}>Save to my foods so I can search it next time</Txt>
+                <Txt style={{ fontSize: fontSizes.md, flex: 1 }}>Save to my foods so I can search it next time</Txt>
               </Pressy>
             </Card>
           </Animated.View>
@@ -236,7 +236,7 @@ export default function LogFood() {
             <Card style={{ paddingVertical: 22, paddingHorizontal: 18, gap: 10, alignItems: 'center' }}>
               <View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><CameraOff size={26} color={c.ink} /></View>
               <Txt style={{ fontFamily: font.semibold }}>Camera access is off</Txt>
-              <Txt muted style={{ fontSize: 14, textAlign: 'center' }}>Allow the camera to take a photo of your plate. Photos are only used to guess the food and are not saved.</Txt>
+              <Txt muted style={{ fontSize: fontSizes.md, textAlign: 'center' }}>Allow the camera to take a photo of your plate. Photos are only used to guess the food and are not saved.</Txt>
               <Button label="Allow camera" onPress={() => { setP({ camOk: true }); toast('Camera allowed'); }} style={{ alignSelf: 'stretch' }} />
               <Button kind="outline" label="Write it in instead" onPress={toWrite} style={{ alignSelf: 'stretch', height: 48 }} />
             </Card>
@@ -251,11 +251,11 @@ export default function LogFood() {
               </Svg>
               <Bracket pos="tl" /><Bracket pos="tr" /><Bracket pos="bl" /><Bracket pos="br" />
               {scan === 'busy' && <ScanBeam />}
-              <Txt style={{ position: 'absolute', left: 0, right: 0, bottom: 14, textAlign: 'center', fontFamily: font.medium, fontSize: 13, color: fixed.white, textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 4 }}>{cap}</Txt>
+              <Txt style={{ position: 'absolute', left: 0, right: 0, bottom: 14, textAlign: 'center', fontFamily: font.medium, fontSize: fontSizes.sm, color: fixed.white, textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 4 }}>{cap}</Txt>
             </View>
             {scan === 'fail' && (
               <Animated.View entering={fade()} style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.warnSoft, gap: 8 }}>
-                <Txt style={{ fontSize: 14, color: c.warn }}><Txt style={{ fontFamily: font.semibold, fontSize: 14, color: c.warn }}>Couldn't read that.</Txt> Too dark or too close. Try the whole plate in good light.</Txt>
+                <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.warn }}>Couldn't read that.</Txt> Too dark or too close. Try the whole plate in good light.</Txt>
                 <Row style={{ gap: 8 }}>
                   <PillBtn tone="soft" h={40} label="Try again" onPress={goScan} />
                   <PillBtn tone="soft" h={40} label="Search instead" onPress={toSearch} />
@@ -281,7 +281,7 @@ export default function LogFood() {
         {!!cur && (
           <Animated.View entering={fade()} style={{ gap: 12 }}>
             <View accessibilityLiveRegion="polite" style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.surface2 }}>
-              <Txt v="mono" style={{ fontSize: 14 }}>{diff}</Txt>
+              <Txt v="mono" style={{ fontSize: fontSizes.md }}>{diff}</Txt>
             </View>
             <View accessibilityRole="radiogroup" accessibilityLabel="Portion" style={{ flexDirection: 'row', gap: 8 }}>
               {([['Less', 0.5], ['As shown', 1], ['More', 1.5]] as const).map(([l, v]) => <Pill key={l} label={l} on={portion === v} onPress={() => setPortion(v)} style={{ flex: 1 }} />)}

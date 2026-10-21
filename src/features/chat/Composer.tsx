@@ -12,7 +12,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { EMOJI_GROUPS } from './emoji';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const fmt = (ms: number) => {
   const s = Math.floor(ms / 1000);
@@ -37,7 +37,7 @@ function EmojiPanel({ onPick }: { onPick: (e: string) => void }) {
         {EMOJI_GROUPS.map((x, i) => (
           <Pressy key={x.key} accessibilityRole="button" accessibilityLabel={`${x.key} emoji`} onPress={() => setG(i)} scaleTo={0.9}
             style={{ width: 44, height: 40, borderRadius: 14, alignItems: 'center', justifyContent: 'center', backgroundColor: g === i ? c.accentSoft : 'transparent' }}>
-            <Txt style={{ fontSize: 22, lineHeight: 30 }}>{x.icon}</Txt>
+            <Txt style={{ fontSize: fontSizes.xl2, lineHeight: 30 }}>{x.icon}</Txt>
           </Pressy>
         ))}
       </View>
@@ -45,7 +45,7 @@ function EmojiPanel({ onPick }: { onPick: (e: string) => void }) {
         {EMOJI_GROUPS[g].list.map((e) => (
           <Pressy key={e} accessibilityRole="button" accessibilityLabel={e} onPress={() => { haptic.tick(); onPick(e); }} scaleTo={0.8}
             style={{ width: '12.5%', height: 44, alignItems: 'center', justifyContent: 'center' }}>
-            <Txt style={{ fontSize: 26, lineHeight: 34 }}>{e}</Txt>
+            <Txt style={{ fontSize: fontSizes.xl3, lineHeight: 34 }}>{e}</Txt>
           </Pressy>
         ))}
       </ScrollView>
@@ -65,7 +65,7 @@ function AttachSheet({ onPick }: { onPick: (src: 'library' | 'camera') => void }
   );
   return (
     <View style={{ gap: 10, paddingBottom: 8 }}>
-      <Txt v="title" style={{ fontSize: 20, lineHeight: 27 }}>Send a photo</Txt>
+      <Txt v="title" style={{ fontSize: fontSizes.xl, lineHeight: 27 }}>Send a photo</Txt>
       {opt('Choose from gallery', <ImageIcon size={22} color={c.accentText} />, 'library')}
       {opt('Take a photo', <Camera size={22} color={c.accentText} />, 'camera')}
     </View>
@@ -153,7 +153,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
     <View style={{ backgroundColor: c.bg }}>
       {micOff && (
         <View accessibilityRole="alert" style={{ marginHorizontal: 16, marginTop: 10, padding: 10, borderRadius: 14, backgroundColor: c.warnSoft }}>
-          <Txt style={{ fontSize: 13, lineHeight: 19, color: c.warn }}>Microphone is off. Allow it in Settings to send voice messages.</Txt>
+          <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>Microphone is off. Allow it in Settings to send voice messages.</Txt>
         </View>
       )}
       <View style={{ paddingTop: 10, paddingHorizontal: 12, paddingBottom: emoji ? 6 : bottomInset + 10 }}>
@@ -165,7 +165,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
             <Pulse />
             <Txt style={{ flex: 1, fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>
               {fmt(rs.durationMillis || 0)}
-              <Txt muted style={{ fontSize: 14 }}>{'  Recording…'}</Txt>
+              <Txt muted style={{ fontSize: fontSizes.md }}>{'  Recording…'}</Txt>
             </Txt>
             <Pressy accessibilityRole="button" accessibilityLabel="Send voice message" onPress={() => endRec(true)} scaleTo={0.9} style={[circle, { backgroundColor: c.accent }]}>
               <ArrowUp size={20} strokeWidth={2.4} color={fixed.white} />

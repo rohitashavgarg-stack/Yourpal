@@ -9,6 +9,7 @@ import { fade } from '@/theme/motion';
 import { withTiming } from 'react-native-reanimated';
 import { font } from '@/theme/tokens';
 import { ProgressiveBlur } from './Glass';
+import { fontSizes } from '@/design-system/tokens';
 
 // A tab page with an iOS large title that collapses into a compact header,
 // and a scroll that hides / shows the floating nav.
@@ -54,7 +55,7 @@ export function TabScreen({ title, header, children, compactTitle = true, bottom
           </View>
         )}
         {header}
-        {compactTitle && <Animated.Text pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, bottom: 16, textAlign: 'center', fontFamily: font.semibold, fontSize: 17, lineHeight: 24, color: c.ink }, compact]}>{title}</Animated.Text>}
+        {compactTitle && <Animated.Text pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, bottom: 16, textAlign: 'center', fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, color: c.ink }, compact]}>{title}</Animated.Text>}
       </View>
       {pinned && pinOn && (
         <Animated.View style={{ position: 'absolute', top: top + 56, left: 0, right: 0, zIndex: 1, backgroundColor: c.bg, paddingHorizontal: 16, paddingTop: 4, paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: c.line }}>

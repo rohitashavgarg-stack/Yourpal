@@ -33,7 +33,7 @@ import { YourPalLogo } from '@/components/YourPalLogo';
 import { useShell } from '@/features/shell/state';
 import { ProgLogo } from '@/features/shell/parts';
 import Svg, { Circle, Path } from 'react-native-svg';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const ORDER = ['welcome', 'facility', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
 type Step = (typeof ORDER)[number];
@@ -155,7 +155,7 @@ export default function Onboarding() {
         {qn ? <Txt v="label" style={{ textAlign: 'right' }}>{qn} of {QTOTAL}</Txt> : null}
         {questionnaire && (
           <Pressy accessibilityRole="button" accessibilityLabel="Skip all questions and go to Today" onPress={skipAll} scaleTo={0.94} style={{ minHeight: 44, minWidth: 44, justifyContent: 'center', alignItems: 'flex-end', paddingLeft: 6 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.accentText }}>Skip all</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.accentText }}>Skip all</Txt>
           </Pressy>
         )}
       </View>
@@ -187,7 +187,7 @@ export default function Onboarding() {
         ) : step !== 'building' && <Button label={primaryLabel} onPress={next} />}
         {skip && (
           <Pressy accessibilityRole="button" accessibilityLabel={skip.label} onPress={skip.run} scaleTo={0.96} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 21, color: c.ink, opacity: 0.7 }}>{skip.label}</Txt>
+            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 21, color: c.ink, opacity: 0.7 }}>{skip.label}</Txt>
           </Pressy>
         )}
       </View>
@@ -222,7 +222,7 @@ function Welcome({ isPT, assess, hasGym }: { isPT: boolean; assess: string; hasG
     <>
       <View style={{ gap: 12, paddingTop: 8, paddingBottom: 6 }}>
         {hasGym ? <GymLogoMark size={64} /> : <YourPalLogo height={34} color={c.ink} />}
-        <Txt style={{ fontFamily: font.regular, fontSize: 32, lineHeight: 42, letterSpacing: -1.2 }}>{hasGym ? 'Hi Rohitashav, welcome to Wulf Fitness' : 'Hi Rohitashav, welcome to YourPal'}</Txt>
+        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 42, letterSpacing: -1.2 }}>{hasGym ? 'Hi Rohitashav, welcome to Wulf Fitness' : 'Hi Rohitashav, welcome to YourPal'}</Txt>
         <Txt muted>{!hasGym ? 'Answer a few quick questions and your plan is ready.' : isPT ? 'Your PT package is active. Coach Vikram will build your plan.' : 'Your membership is active. Here is how your first week works.'}</Txt>
       </View>
       <Card style={{ gap: 0, padding: 6 }}>
@@ -253,7 +253,7 @@ function Stepper({ value, onChange, step, unit, label }: { value: number; onChan
     <Row style={{ gap: 10 }}>
       <Pressy accessibilityRole="button" accessibilityLabel={'Less ' + label} onPress={() => onChange(Math.max(step, +(value - step).toFixed(1)))} style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Minus size={20} color={c.ink} /></Pressy>
       <View accessibilityLabel={`${label} ${value} ${unit}`} style={{ flex: 1, height: 64, borderRadius: 22, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 6 }}>
-        <Txt style={{ fontFamily: font.display, fontSize: 32, color: c.ink }}>{value}</Txt>
+        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, color: c.ink }}>{value}</Txt>
         <Txt muted>{unit}</Txt>
       </View>
       <Pressy accessibilityRole="button" accessibilityLabel={'More ' + label} onPress={() => onChange(+(value + step).toFixed(1))} style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Plus size={20} color={c.ink} /></Pressy>
@@ -297,7 +297,7 @@ function GoalTile({ goal, on, onPress }: { goal: string; on: boolean; onPress: (
       <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
         <a.Icon size={20} strokeWidth={1.8} color={c.ink} />
       </View>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: c.ink }}>{goal}</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: c.ink }}>{goal}</Txt>
       {on && <View style={{ position: 'absolute', right: 12, top: 12, width: 22, height: 22, borderRadius: 11, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Check size={13} strokeWidth={3} color={c.bg} /></View>}
     </Pressy>
   );
@@ -369,7 +369,7 @@ function SchedStep() {
           return (
             <Pressy key={d} accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={`${d} days a week`} onPress={() => setProfile({ days: d })}
               style={{ flex: 1, height: 72, borderRadius: 22, backgroundColor: on ? c.ink : c.surface, borderWidth: on ? 0 : 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
-              <Txt style={{ fontFamily: font.display, fontSize: 26, color: on ? c.bg : c.ink }}>{d}</Txt>
+              <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, color: on ? c.bg : c.ink }}>{d}</Txt>
               <Txt v="caption" color={on ? c.bg : c.muted}>days</Txt>
             </Pressy>
           );
@@ -440,7 +440,7 @@ function BuildingStep({ onDone }: { onDone: () => void }) {
         <Txt style={{ position: 'absolute', fontFamily: font.displayBold, fontSize: 40, lineHeight: 52 }}>{pct}%</Txt>
       </View>
       <View style={{ alignItems: 'center', gap: 4 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 17 }}>{msg}</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg }}>{msg}</Txt>
         <Txt v="caption">This takes a moment</Txt>
       </View>
     </View>
@@ -569,7 +569,7 @@ function SwipeToStart({ onDone }: { onDone: () => void }) {
         {!hasLiquidGlass && <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: white(isDark ? 0.09 : 0.3) }} />}
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: R, boxShadow: rim } as any} />
         <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: TH + PAD * 2, right: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 6 }, label]}>
-          <Txt style={{ fontFamily: font.medium, fontSize: 17, lineHeight: 24, color: isDark ? white(0.85) : c.ink }}>Swipe to start</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.lg, lineHeight: 24, color: isDark ? white(0.85) : c.ink }}>Swipe to start</Txt>
           <ChevronsRight size={20} color={isDark ? white(0.85) : c.ink} />
         </Animated.View>
         <GestureDetector gesture={pan}>

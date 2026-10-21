@@ -9,6 +9,7 @@ import { StepsDesign, stepsStore } from '@/features/today/StepsCards';
 import { TileFor } from '@/features/today/Trackers';
 import { CATALOG, TrackerKey, designStore } from '@/features/trackers/designs';
 import { SubPage } from '@/features/shell/parts';
+import { fontSizes } from '@/design-system/tokens';
 
 // The widgets only, grouped by category. Tap one to use it on Today.
 function Option({ tracker, design, on, onPick }: { tracker: TrackerKey; design: string; on: boolean; onPick: () => void }) {
@@ -33,12 +34,12 @@ export default function TrackerDesigns() {
     <SubPage title="Tracker designs" fallback="/profile" gap={10}>
       {CATALOG.map((cat) => (
         <View key={cat.category} style={{ gap: 14, marginTop: 8 }}>
-          <Txt style={{ fontFamily: font.light, fontSize: 26, lineHeight: 34, letterSpacing: -0.6, paddingHorizontal: 4 }}>{cat.category}</Txt>
+          <Txt style={{ fontFamily: font.light, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.6, paddingHorizontal: 4 }}>{cat.category}</Txt>
           {cat.trackers.map((t) => {
             const current = t.key === 'steps' ? st.design : D[t.key as Exclude<TrackerKey, 'steps'>];
             return (
               <View key={t.key} style={{ gap: 8 }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: c.muted, paddingHorizontal: 4 }}>{t.title}</Txt>
+                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: c.muted, paddingHorizontal: 4 }}>{t.title}</Txt>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: -16 }} contentContainerStyle={{ gap: 6, paddingHorizontal: 13, paddingVertical: 2 }}>
                   {t.designs.map((dsg) => (
                     <Option key={dsg} tracker={t.key} design={dsg} on={current === dsg}

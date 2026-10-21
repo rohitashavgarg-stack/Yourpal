@@ -5,6 +5,7 @@ import { useScenarios } from '@/lib/store';
 import { fade, fadeOut } from '@/theme/motion';
 import { LineRow, ListCard, Note, SubPage, Switch } from '@/features/shell/parts';
 import { useShell } from '@/features/shell/state';
+import { fontSizes } from '@/design-system/tokens';
 
 export default function Trackers() {
   const { s, set } = useShell();
@@ -24,7 +25,7 @@ export default function Trackers() {
 
   return (
     <SubPage title="Quick trackers" fallback="/profile">
-      <Note style={{ fontSize: 13 }}>Choose which quick trackers show on Today. Trackers are shared across programmes.</Note>
+      <Note style={{ fontSize: fontSizes.sm }}>Choose which quick trackers show on Today. Trackers are shared across programmes.</Note>
       <ListCard>
         {rows.map((r, i) => (
           <LineRow key={r.k} title={r.l} sub={r.s} last={i === rows.length - 1} right={<Switch label={r.l} on={s.trk[r.k]} onChange={flip(r.k)} />} />

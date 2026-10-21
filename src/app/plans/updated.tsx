@@ -16,6 +16,7 @@ import { haptic } from '@/lib/haptics';
 import { applyCoachUpdate, COACH_CHANGES, COACH_HL } from '@/features/plans/content';
 import { Highlight, InfoBox, PageHeader } from '@/features/plans/parts';
 import { setP, usePlans } from '@/features/plans/store';
+import { fontSizes } from '@/design-system/tokens';
 
 export default function WhatChanged() {
   const { c } = useTheme();
@@ -51,7 +52,7 @@ export default function WhatChanged() {
                 <View accessible accessibilityLabel={`${ch.tag}: ${ch.name}, ${ch.meta}`} style={{ flexDirection: 'row', alignItems: 'center', minHeight: 64, gap: 12, paddingHorizontal: 4, borderBottomWidth: i < COACH_CHANGES.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
                   <Tag label={ch.tag} bg={t.bg} fg={t.fg} style={{ alignSelf: 'center' }} />
                   <Txt style={{ flex: 1, fontFamily: font.medium }}>{ch.name}</Txt>
-                  <Txt v="mono" muted style={{ fontSize: 12 }}>{ch.meta}</Txt>
+                  <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{ch.meta}</Txt>
                 </View>
               </Highlight>
             );

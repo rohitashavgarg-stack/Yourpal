@@ -10,6 +10,7 @@ import { ASSESS_ROWS } from '@/features/progress/data';
 import { Hint, ListCard, SubPage } from '@/features/progress/parts';
 import { progressStore } from '@/features/progress/store';
 import { useProgressScenarios } from '@/features/progress/scenarios';
+import { fontSizes } from '@/design-system/tokens';
 
 const FIRST_ROWS = [{ l: 'Weight', v: '74.5 kg' }, { l: 'Waist', v: '92 cm' }, { l: 'Body fat', v: '27%' }, { l: 'Squat', v: '40 kg' }, { l: 'Deep squat hold', v: '30 s' }];
 
@@ -26,7 +27,7 @@ export default function ProgressAssessments() {
       {isNew ? (
         <Animated.View entering={fade()}>
           <Card style={{ padding: 24, gap: 8, alignItems: 'center' }}>
-            <Txt style={{ fontFamily: font.display, fontSize: 20, lineHeight: 26 }}>First assessment</Txt>
+            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl, lineHeight: 26 }}>First assessment</Txt>
             <Txt muted style={{ textAlign: 'center' }}>Sat 10:00 am with Coach Vikram. Your starting point is saved there.</Txt>
           </Card>
         </Animated.View>
@@ -38,7 +39,7 @@ export default function ProgressAssessments() {
       )}
       <Card style={{ padding: 18, gap: 4 }}>
         <Txt style={{ fontFamily: font.semibold }}>{d.assess === 'Due now' ? 'Reassessment due this week' : isNew ? 'First assessment · Sat 10:00 am' : 'Next reassessment'}</Txt>
-        <Txt muted style={{ fontSize: 14 }}>{onlyFirst ? 'Tue 30 Sep with Coach Vikram · book with front desk' : 'This week with Coach Vikram · book with front desk'}</Txt>
+        <Txt muted style={{ fontSize: fontSizes.md }}>{onlyFirst ? 'Tue 30 Sep with Coach Vikram · book with front desk' : 'This week with Coach Vikram · book with front desk'}</Txt>
       </Card>
       {!isPT && <Button kind="outline" label="Talk to Coach about PT" onPress={() => router.push('/gym/pt')} style={{ borderStyle: 'dashed' }} />}
       <Button kind="secondary" label="See full assessment in Gym" onPress={() => router.push('/gym/assessments')} />

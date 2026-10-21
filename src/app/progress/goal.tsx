@@ -15,6 +15,7 @@ import { haptic } from '@/lib/haptics';
 import { GOAL_DEFAULT, GOAL_VERB, GOALS, NUMERIC_GOALS } from '@/features/progress/data';
 import { StepBtn, SubPage } from '@/features/progress/parts';
 import { useProgressScenarios } from '@/features/progress/scenarios';
+import { fontSizes } from '@/design-system/tokens';
 
 export default function EditGoal() {
   const { c } = useTheme();
@@ -45,15 +46,15 @@ export default function EditGoal() {
           <Row style={{ gap: 10 }}>
             <Txt style={{ flex: 1, fontFamily: font.medium }}>{GOAL_VERB[g.type]}</Txt>
             <StepBtn label="Lower target" sign="−" onPress={() => setG({ ...g, target: Math.max(st, Math.round((g.target - st) * 10) / 10) })} />
-            <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.display, fontSize: 29, lineHeight: 38, minWidth: 90, textAlign: 'center' }}>{g.target}</Txt>
+            <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 38, minWidth: 90, textAlign: 'center' }}>{g.target}</Txt>
             <StepBtn label="Raise target" sign="+" onPress={() => setG({ ...g, target: Math.round((g.target + st) * 10) / 10 })} />
           </Row>
         ) : (
-          <Txt muted style={{ fontSize: 14 }}>Measured with assessment tests (deep squat hold, sit-and-reach, shuttle run). Coach Vikram sets the targets with you.</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md }}>Measured with assessment tests (deep squat hold, sit-and-reach, shuttle run). Coach Vikram sets the targets with you.</Txt>
         )}
         {g.type === 'Weight loss' && g.target > 15 && (
           <Animated.View entering={fade()} exiting={fadeOut()} style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: 16, backgroundColor: c.warnSoft }}>
-            <Txt style={{ fontSize: 13, color: c.warn }}>That’s a big target. Coach Vikram may suggest milestones on the way.</Txt>
+            <Txt style={{ fontSize: fontSizes.sm, color: c.warn }}>That’s a big target. Coach Vikram may suggest milestones on the way.</Txt>
           </Animated.View>
         )}
         <Txt v="label">By (optional)</Txt>
@@ -62,7 +63,7 @@ export default function EditGoal() {
           <Pill label="Pick a date" on={false} onPress={() => openSheet(<DateSheet start={parseBy(g.by) ?? addDays(TODAY, 84)} onPick={(by) => setG({ ...g, by })} />, { label: 'Pick a finish date' })} />
         </View>
       </Card>
-      <Txt v="caption" style={{ fontSize: 13, paddingHorizontal: 6 }}>Coach Vikram will be notified. Goals are per programme; quick trackers are shared.</Txt>
+      <Txt v="caption" style={{ fontSize: fontSizes.sm, paddingHorizontal: 6 }}>Coach Vikram will be notified. Goals are per programme; quick trackers are shared.</Txt>
       <Button label="Save goal" onPress={save} />
       <Button kind="secondary" label="Also ask for a new plan" onPress={() => router.navigate('/plans')} />
     </SubPage>

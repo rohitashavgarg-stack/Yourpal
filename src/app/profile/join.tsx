@@ -12,6 +12,7 @@ import { fade, fadeOut } from '@/theme/motion';
 import { Label, Note, SubPage, useShake } from '@/features/shell/parts';
 import { checkCode, setShell } from '@/features/shell/state';
 import { JoinConsentSheet } from '@/features/shell/Switcher';
+import { fontSizes } from '@/design-system/tokens';
 
 export default function JoinProgramme() {
   const { c } = useTheme();
@@ -53,11 +54,11 @@ export default function JoinProgramme() {
       </View>
       {!!err && (
         <Animated.View entering={fade()} exiting={fadeOut()} style={shake}>
-          <Txt accessibilityLiveRegion="polite" style={{ color: c.warn, fontSize: 14, paddingHorizontal: 6 }}>{err}</Txt>
+          <Txt accessibilityLiveRegion="polite" style={{ color: c.warn, fontSize: fontSizes.md, paddingHorizontal: 6 }}>{err}</Txt>
         </Animated.View>
       )}
       <Button label="Join" disabled={!code.trim()} onPress={() => join()} />
-      <Note style={{ fontSize: 13 }}>Try YOGA-2024 (new), GLD-4821 (already joined), OLD-0001 (expired) or any other code.</Note>
+      <Note style={{ fontSize: fontSizes.sm }}>Try YOGA-2024 (new), GLD-4821 (already joined), OLD-0001 (expired) or any other code.</Note>
     </SubPage>
   );
 }

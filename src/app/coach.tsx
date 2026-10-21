@@ -12,10 +12,11 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
 import { askCoach, coachStore, NOTES, TOPICS, WEEKLY } from '@/features/coach/coach';
+import { fontSizes } from '@/design-system/tokens';
 
 const Label = ({ children }: { children: string }) => {
   const { c } = useTheme();
-  return <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, letterSpacing: 1.3, color: c.muted }}>{children}</Txt>;
+  return <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted }}>{children}</Txt>;
 };
 
 // Coach Vikram in one place: who he is, what he said this week, your plan, and what to ask.
@@ -42,8 +43,8 @@ export default function CoachHub() {
           <PersonAvatar who="coach" size={96} />
           {cs.unread && <View accessibilityLabel="Unread reply" style={{ position: 'absolute', right: 5, top: 5, width: 12, height: 12, borderRadius: 6, backgroundColor: c.accent }} />}
         </View>
-        <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: 26, lineHeight: 34, letterSpacing: -0.7 }}>Coach Vikram</Txt>
-        <Txt muted style={{ fontSize: 14 }}>Your trainer · Wulf Fitness</Txt>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.7 }}>Coach Vikram</Txt>
+        <Txt muted style={{ fontSize: fontSizes.md }}>Your trainer · Wulf Fitness</Txt>
         {cs.away
           ? <Tag label="Away until Mon 10:00 am · replies will be slower" bg={c.warnSoft} fg={c.warn} style={{ marginTop: 4, alignSelf: 'center' }} />
           : <Tag label={isPT ? 'Replies within the hour · PT' : 'Usually replies in a few hours'} bg={c.goodSoft} fg={c.good} style={{ marginTop: 4, alignSelf: 'center' }} />}
@@ -57,7 +58,7 @@ export default function CoachHub() {
 
       <Card style={{ gap: 10 }}>
         <Row style={{ justifyContent: 'space-between' }}><Label>THIS WEEK FROM COACH</Label><Txt v="caption">{WEEKLY.when}</Txt></Row>
-        <Txt style={{ fontSize: 15, lineHeight: 23 }}>{WEEKLY.note}</Txt>
+        <Txt style={{ fontSize: fontSizes.base, lineHeight: 23 }}>{WEEKLY.note}</Txt>
         <Row style={{ gap: 6, flexWrap: 'wrap' }}>
           {WEEKLY.focus.map((f) => <Tag key={f} label={f} bg={c.accentSoft} fg={c.accentText} />)}
         </Row>
@@ -82,7 +83,7 @@ export default function CoachHub() {
           {TOPICS.map((t) => (
             <Pressy key={t.l} accessibilityRole="button" onPress={() => askCoach(t.ctx, t.draft)} scaleTo={0.95}
               style={{ height: 44, paddingHorizontal: 16, borderRadius: 22, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}>
-              <Txt style={{ fontFamily: font.medium, fontSize: 14 }}>{t.l}</Txt>
+              <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>{t.l}</Txt>
             </Pressy>
           ))}
         </Row>
@@ -92,8 +93,8 @@ export default function CoachHub() {
         <Label>RECENT FROM COACH</Label>
         {NOTES.map((n, i) => (
           <View key={n.t} style={{ paddingVertical: 12, gap: 3, borderTopWidth: i ? 1 : 0, borderTopColor: c.line, marginTop: i ? 0 : 8 }}>
-            <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontFamily: font.semibold, fontSize: 13 }}>{n.ctx}</Txt><Txt v="caption">{n.when}</Txt></Row>
-            <Txt muted style={{ fontSize: 14 }}>{n.t}</Txt>
+            <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm }}>{n.ctx}</Txt><Txt v="caption">{n.when}</Txt></Row>
+            <Txt muted style={{ fontSize: fontSizes.md }}>{n.t}</Txt>
           </View>
         ))}
       </Card>

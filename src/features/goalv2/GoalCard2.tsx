@@ -11,7 +11,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { fmtDay, Goal2, progressLine, statusLine, useGoalV2 } from './model';
 import { GoalVisual } from './GoalVisual';
 import { useStreak } from '@/features/streak/useStreak';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // Same card on Today (compact) and Progress (expanded): ring on the left, then goal, numbers, status.
 // One goal object feeds it, so the name, percent and unit can never differ between screens.
@@ -42,7 +42,7 @@ export function GoalRing({ g, size = 88, onDark = true }: { g: Goal2; size?: num
             {c.big}{g.kind !== 'consistency' ? <Txt style={{ fontFamily: font.semibold, fontSize: size * 0.14, lineHeight: size * 0.2, color: onDark ? 'rgba(255,255,255,0.7)' : th.muted }}>{c.small}</Txt> : null}
           </Txt>
         )}
-        {g.kind === 'consistency' && !c.check ? <Txt style={{ fontSize: 10, lineHeight: 14, color: onDark ? 'rgba(255,255,255,0.75)' : th.muted }}>this week</Txt> : null}
+        {g.kind === 'consistency' && !c.check ? <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: onDark ? 'rgba(255,255,255,0.75)' : th.muted }}>this week</Txt> : null}
       </View>
     </View>
   );
@@ -53,7 +53,7 @@ export function StatusChip({ g, fg }: { g: Goal2; fg: string }) {
     : statusLine(g);
   return (
     <View style={{ alignSelf: 'flex-start', backgroundColor: fixed.white, borderRadius: 999, paddingHorizontal: 11, paddingVertical: 4 }}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: fg }}>{label}</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 18, color: fg }}>{label}</Txt>
     </View>
   );
 }
@@ -76,11 +76,11 @@ export function GoalCard2({ size }: { size: 'compact' | 'expanded' | 'hero' }) {
         <Row style={{ gap: 14, alignItems: 'center' }}>
           <View style={{ flex: 1, gap: 4, minWidth: 0 }}>
             <Row style={{ justifyContent: 'space-between' }}>
-              <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.85)' }}>Your goal</Txt>
+              <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: 'rgba(255,255,255,0.85)' }}>Your goal</Txt>
               {size !== 'hero' && <ChevronRight size={18} color={fixed.white} />}
             </Row>
-            <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: 26, lineHeight: 33, letterSpacing: -0.6, color: fixed.white }}>{g.name}</Txt>
-            <Txt style={{ fontSize: 14, lineHeight: 20, color: 'rgba(255,255,255,0.88)' }}>{sub}</Txt>
+            <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 33, letterSpacing: -0.6, color: fixed.white }}>{g.name}</Txt>
+            <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: 'rgba(255,255,255,0.88)' }}>{sub}</Txt>
             <StatusChip g={g} fg={look.chipFg} />
           </View>
         </Row>
@@ -91,8 +91,8 @@ export function GoalCard2({ size }: { size: 'compact' | 'expanded' | 'hero' }) {
             <Row style={{ justifyContent: 'space-between' }}>
               {[['Start', fmtDay(g.startDate)], ['End', g.endDate ? fmtDay(g.endDate) : 'No end date'], ['Status', statusLine(g)]].map(([l, v]) => (
                 <View key={l} style={{ gap: 1 }}>
-                  <Txt style={{ fontSize: 11, lineHeight: 16, color: 'rgba(255,255,255,0.75)' }}>{l}</Txt>
-                  <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: fixed.white }}>{v}</Txt>
+                  <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 16, color: 'rgba(255,255,255,0.75)' }}>{l}</Txt>
+                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: fixed.white }}>{v}</Txt>
                 </View>
               ))}
             </Row>
@@ -100,7 +100,7 @@ export function GoalCard2({ size }: { size: 'compact' | 'expanded' | 'hero' }) {
         )}
         {size === 'expanded' && (
           <>
-            <Txt style={{ fontSize: 12, lineHeight: 18, color: 'rgba(255,255,255,0.75)' }}>{g.endDate ? `${fmtDay(g.startDate)} to ${fmtDay(g.endDate)}` : `Since ${fmtDay(g.startDate)}, no end date`}</Txt>
+            <Txt style={{ fontSize: fontSizes.xs, lineHeight: 18, color: 'rgba(255,255,255,0.75)' }}>{g.endDate ? `${fmtDay(g.startDate)} to ${fmtDay(g.endDate)}` : `Since ${fmtDay(g.startDate)}, no end date`}</Txt>
           </>
         )}
       </LinearGradient>

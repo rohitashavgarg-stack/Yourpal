@@ -6,6 +6,7 @@ import { Txt } from './ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
+import { fontSizes } from '@/design-system/tokens';
 
 const ITEM = 72;
 const VISIBLE = 5;
@@ -50,7 +51,7 @@ export function Wheel({ value, onChange, min, max, unit, accessibilityLabel, fmt
         {items.map((n, i) => <Item key={n} n={n} i={i} y={y} fmt={fmt} size={size} />)}
       </Animated.ScrollView>
       <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: (H - ITEM) / 2, height: ITEM, borderTopWidth: 1, borderBottomWidth: 1, borderColor: c.line }} />
-      {!!unit && <Txt pointerEvents="none" style={{ position: 'absolute', right: 24, top: H / 2 - 8, fontFamily: font.semibold, fontSize: 13, letterSpacing: 1.4, color: c.muted }}>{unit}</Txt>}
+      {!!unit && <Txt pointerEvents="none" style={{ position: 'absolute', right: 24, top: H / 2 - 8, fontFamily: font.semibold, fontSize: fontSizes.sm, letterSpacing: 1.4, color: c.muted }}>{unit}</Txt>}
     </View>
   );
 }

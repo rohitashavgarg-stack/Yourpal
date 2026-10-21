@@ -13,7 +13,7 @@ import { haptic } from '@/lib/haptics';
 import { iconFor } from './content';
 import { artIdFor, ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { clipIdFor, THUMBS } from '@/features/workout/clips';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 export const goBackToPlans = () => (router.canGoBack() ? router.back() : router.replace('/plans'));
 
@@ -59,7 +59,7 @@ export function InfoBox({ children, tone = 'accent', style }: { children: React.
   const fg = tone === 'warn' ? c.warn : tone === 'plain' ? c.muted : c.accentText;
   return (
     <View style={[{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: bg }, style]}>
-      {typeof children === 'string' ? <Txt style={{ fontSize: 14, color: fg }}>{children}</Txt> : children}
+      {typeof children === 'string' ? <Txt style={{ fontSize: fontSizes.md, color: fg }}>{children}</Txt> : children}
     </View>
   );
 }
@@ -75,7 +75,7 @@ export function ShakeText({ text, n }: { text: string; n: number }) {
   }, [n, text]);
   const a = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   if (!text) return null;
-  return <Animated.View style={a} accessibilityLiveRegion="assertive"><Txt style={{ color: c.warn, fontSize: 14, paddingHorizontal: 6 }}>{text}</Txt></Animated.View>;
+  return <Animated.View style={a} accessibilityLiveRegion="assertive"><Txt style={{ color: c.warn, fontSize: fontSizes.md, paddingHorizontal: 6 }}>{text}</Txt></Animated.View>;
 }
 
 // Exercise tile: soft blue square with a line drawing and the order number.
@@ -93,7 +93,7 @@ export function ExTile({ name, num, size = 56 }: { name: string; num?: string; s
       {!art && !thumb && <Svg width={size * 0.54} height={size * 0.54} viewBox="0 0 24 24"><Path d={iconFor(name)} fill="none" stroke={c.accentText} strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" /></Svg>}
       {num ? (
         <View style={{ position: 'absolute', left: 4, top: 4, minWidth: 16, height: 16, borderRadius: 8, paddingHorizontal: 3, backgroundColor: 'rgba(0,0,0,0.55)', alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 10, lineHeight: 13, color: fixed.white }}>{num}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 13, color: fixed.white }}>{num}</Txt>
         </View>
       ) : null}
     </View>
@@ -107,7 +107,7 @@ export function Stepper({ label, value, onMinus, onPlus, minusLabel, plusLabel }
     <Row style={{ gap: 10, minHeight: 60 }}>
       <Txt muted style={{ flex: 1 }}>{label}</Txt>
       <RoundBtn label={minusLabel} onPress={onMinus}><Minus size={18} color={c.ink} /></RoundBtn>
-      <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.display, fontSize: 25, minWidth: 76, textAlign: 'center' }}>{value}</Txt>
+      <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.display, fontSize: fontSizes.xl3, minWidth: 76, textAlign: 'center' }}>{value}</Txt>
       <RoundBtn label={plusLabel} onPress={onPlus}><Plus size={18} color={c.ink} /></RoundBtn>
     </Row>
   );

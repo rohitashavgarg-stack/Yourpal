@@ -4,19 +4,19 @@ import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSprin
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, radius, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // ---------- Text ----------
 type Variant = 'display' | 'title' | 'headline' | 'body' | 'label' | 'caption' | 'mono' | 'number';
 const V: Record<Variant, TextStyle> = {
   display: { fontFamily: font.regular, fontSize: 34, letterSpacing: -1.4, lineHeight: 44 },
   title: { fontFamily: font.regular, fontSize: 28, letterSpacing: -1.1, lineHeight: 37 },
-  headline: { fontFamily: font.semibold, fontSize: 17, letterSpacing: -0.2, lineHeight: 25 },
-  body: { fontFamily: font.regular, fontSize: 15, lineHeight: 23 },
-  label: { fontFamily: font.medium, fontSize: 13, lineHeight: 19 },
-  caption: { fontFamily: font.regular, fontSize: 12, lineHeight: 18 },
-  mono: { fontFamily: font.mono, fontSize: 13, lineHeight: 19 },
-  number: { fontFamily: font.display, fontSize: 30, letterSpacing: -0.6, lineHeight: 39 },
+  headline: { fontFamily: font.semibold, fontSize: fontSizes.lg, letterSpacing: -0.2, lineHeight: 25 },
+  body: { fontFamily: font.regular, fontSize: fontSizes.base, lineHeight: 23 },
+  label: { fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19 },
+  caption: { fontFamily: font.regular, fontSize: fontSizes.xs, lineHeight: 18 },
+  mono: { fontFamily: font.mono, fontSize: fontSizes.sm, lineHeight: 19 },
+  number: { fontFamily: font.display, fontSize: fontSizes.xl4, letterSpacing: -0.6, lineHeight: 39 },
 };
 
 export function Txt({ v = 'body', muted, color, style, ...rest }: TextProps & { v?: Variant; muted?: boolean; color?: string }) {
@@ -67,7 +67,7 @@ export function Button({ kind = 'primary', label, onPress, disabled, icon, style
       }, style]}
     >
       {icon}
-      <Text style={{ fontFamily: font.semibold, fontSize: small ? 14 : 16, lineHeight: small ? 18 : 21, color: fg }}>{label}</Text>
+      <Text style={{ fontFamily: font.semibold, fontSize: small ? fontSizes.md : 16, lineHeight: small ? 18 : 21, color: fg }}>{label}</Text>
     </Pressy>
   );
 }
@@ -93,7 +93,7 @@ export function Chip({ label, icon, tone = 'default', onDark, style }: { label: 
   return (
     <View style={[{ height: 28, paddingHorizontal: 11, borderRadius: 14, borderWidth: 1, borderColor: border, flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start' }, style]}>
       {icon}
-      <Text style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: col }}>{label}</Text>
+      <Text style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: col }}>{label}</Text>
     </View>
   );
 }
@@ -109,7 +109,7 @@ export function Pill({ label, on, onPress, style }: { label: string; on: boolean
   }));
   return (
     <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={onPress} style={[{ height: 44, paddingHorizontal: 16, borderRadius: 22, borderWidth: 1, alignItems: 'center', justifyContent: 'center' }, a as any, style]}>
-      <Text style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 18, color: on ? c.bg : c.ink }}>{label}</Text>
+      <Text style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 18, color: on ? c.bg : c.ink }}>{label}</Text>
     </Pressy>
   );
 }
@@ -132,7 +132,7 @@ export function Segmented<T extends string>({ options, value, onChange, icons, a
         return (
           <Pressable key={o.value} accessibilityRole="tab" accessibilityState={{ selected: on }} onPress={() => { haptic.tap(); onChange(o.value); }} style={{ flex: 1, height: 44, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 6 }}>
             {icons?.[o.value]?.(col)}
-            <Text style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 18, color: col }}>{o.label}</Text>
+            <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 18, color: col }}>{o.label}</Text>
           </Pressable>
         );
       })}
@@ -182,7 +182,7 @@ export function NoteField({ value, onChangeText, placeholder, accessibilityLabel
           style={{ minHeight: minHeight - 34, maxHeight: 220, fontFamily: font.medium, fontSize: 16, lineHeight: 23, color: c.ink, padding: 0, outlineStyle: 'none' as any }}
         />
       </View>
-      <Text style={{ alignSelf: 'flex-end', marginTop: 4, marginRight: 8, fontFamily: font.regular, fontSize: 12, lineHeight: 17, color: c.muted }}>{value.length}/{maxLength}</Text>
+      <Text style={{ alignSelf: 'flex-end', marginTop: 4, marginRight: 8, fontFamily: font.regular, fontSize: fontSizes.xs, lineHeight: 17, color: c.muted }}>{value.length}/{maxLength}</Text>
     </View>
   );
 }

@@ -9,6 +9,7 @@ import { haptic } from '@/lib/haptics';
 import { fade, fadeOut } from '@/theme/motion';
 import { LineRow, ListCard, Note, SubPage, Switch } from '@/features/shell/parts';
 import { useShell } from '@/features/shell/state';
+import { fontSizes } from '@/design-system/tokens';
 
 type Phase = 'idle' | 'running' | 'done' | 'failed';
 
@@ -46,7 +47,7 @@ export default function ExportData() {
     <SubPage title="Export my data" fallback="/profile">
       <ListCard style={{ paddingVertical: 18, gap: 8 }}>
         <Txt style={{ fontFamily: font.semibold }}>Your data, in one file</Txt>
-        <Txt muted style={{ fontSize: 14 }}>Workouts, meals, weight, measurements and assessments from every programme. Progress photos are included only if you choose.</Txt>
+        <Txt muted style={{ fontSize: fontSizes.md }}>Workouts, meals, weight, measurements and assessments from every programme. Progress photos are included only if you choose.</Txt>
         <LineRow title="Include progress photos" minH={52} last right={<Switch label="Include progress photos" on={s.expPhotos} onChange={(v) => set({ expPhotos: v })} />} />
         {phase === 'running' && (
           <Animated.View entering={fade()} exiting={fadeOut()} style={{ gap: 6 }}>

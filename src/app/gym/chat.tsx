@@ -23,7 +23,7 @@ import { haptic } from '@/lib/haptics';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { ChatOptionsSheet } from '@/features/gym/sheets';
 import { cardShadow } from '@/features/progress/parts';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const REPLY = "Got it. I'll check it before your session tomorrow.";
 const REPLY_AUDIO = "Thanks for the voice note. I'll listen and reply before your session.";
@@ -104,18 +104,18 @@ export default function CoachChat() {
   const paused = useLogsPaused();
   const footer = paused ? (
     <View style={{ paddingTop: 14, paddingHorizontal: 16, paddingBottom: insets.bottom + 16 }}>
-      <Txt muted style={{ textAlign: 'center', fontSize: 14, lineHeight: 20 }}>Messaging is paused. Renew at Wulf Fitness reception to chat again.</Txt>
+      <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.md, lineHeight: 20 }}>Messaging is paused. Renew at Wulf Fitness reception to chat again.</Txt>
     </View>
   ) : g.blocked ? (
     <View style={{ paddingTop: 14, paddingHorizontal: 16, paddingBottom: (kb ? 0 : insets.bottom) + 16, gap: 8 }}>
-      <Txt muted style={{ textAlign: 'center', fontSize: 14 }}>You blocked this chat. Coach Vikram can’t message you.</Txt>
+      <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.md }}>You blocked this chat. Coach Vikram can’t message you.</Txt>
       <Button kind="secondary" label="Unblock" onPress={() => gymStore.set({ blocked: false })} style={{ height: 48, borderRadius: 24 }} />
     </View>
   ) : (
     <View>
       {ctx ? (
         <Pressy accessibilityRole="button" accessibilityLabel={`About ${ctx}. Remove`} onPress={() => setCtx(undefined)} style={{ alignSelf: 'flex-start', marginLeft: 16, marginTop: 10, height: 32, paddingLeft: 12, paddingRight: 8, borderRadius: 16, backgroundColor: c.accentSoft, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: 12, color: c.accentText }}>About: {ctx}</Txt><X size={14} color={c.accentText} />
+          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, color: c.accentText }}>About: {ctx}</Txt><X size={14} color={c.accentText} />
         </Pressy>
       ) : null}
       <Composer draft={draft} setDraft={setDraft} onSend={send} bottomInset={kb ? 0 : insets.bottom} />
@@ -129,7 +129,7 @@ export default function CoachChat() {
           <PersonAvatar who="coach" size={58} />
           <View style={[{ marginTop: -12, height: 30, paddingLeft: 12, paddingRight: 8, borderRadius: 15, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', gap: 2 }, cardShadow(isDark)]}>
             <GlassBackdrop radius={15} />
-            <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, zIndex: 2 }}>Coach Vikram</Txt>
+            <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, zIndex: 2 }}>Coach Vikram</Txt>
             <View style={{ zIndex: 2 }}><ChevronRight size={14} color={c.muted} /></View>
           </View>
         </Pressy>
@@ -143,14 +143,14 @@ export default function CoachChat() {
       <ScrollView ref={scroll} style={{ flex: 1 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1, paddingTop: 8, paddingHorizontal: 16, paddingBottom: 12, gap: 8 }}>
         {coach.away && (
           <View accessibilityRole="alert" style={{ padding: 12, borderRadius: 16, backgroundColor: c.warnSoft }}>
-            <Txt style={{ fontSize: 13, color: c.warn }}>Coach Vikram is away until Mon 10:00 am, so replies will be slower. Something urgent? Ask the front desk.</Txt>
+            <Txt style={{ fontSize: fontSizes.sm, color: c.warn }}>Coach Vikram is away until Mon 10:00 am, so replies will be slower. Something urgent? Ask the front desk.</Txt>
           </View>
         )}
         {d.chat.length === 0 && (
           <View style={{ flex: 1, justifyContent: 'center', paddingVertical: 30, paddingHorizontal: 20 }}>
             <Txt muted style={{ textAlign: 'center' }}>Start the conversation. Ask Coach Vikram about form, your plan or the gym.</Txt>
             <Row style={{ gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginTop: 14 }}>
-              {TOPICS.map((t) => <Pressy key={t.l} accessibilityRole="button" onPress={() => { setDraft(t.draft); setCtx(t.ctx); }} scaleTo={0.95} style={{ height: 44, paddingHorizontal: 16, borderRadius: 22, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: 14 }}>{t.l}</Txt></Pressy>)}
+              {TOPICS.map((t) => <Pressy key={t.l} accessibilityRole="button" onPress={() => { setDraft(t.draft); setCtx(t.ctx); }} scaleTo={0.95} style={{ height: 44, paddingHorizontal: 16, borderRadius: 22, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>{t.l}</Txt></Pressy>)}
             </Row>
           </View>
         )}
@@ -171,7 +171,7 @@ export default function CoachChat() {
               {m.failed
                 ? <Pressy accessibilityRole="button" accessibilityLabel={`${m.t}. Not sent. Tap to retry`} onPress={() => retry(i)}>{bubble}</Pressy>
                 : m.me ? bubble : <Row style={{ gap: 8, alignItems: 'flex-end' }}><PersonAvatar who="coach" size={28} />{bubble}</Row>}
-              <Txt style={{ fontSize: 11, lineHeight: 15, color: m.failed ? c.warn : c.muted }}>{m.meta}</Txt>
+              <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: m.failed ? c.warn : c.muted }}>{m.meta}</Txt>
             </Animated.View>
           );
         })}

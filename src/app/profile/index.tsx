@@ -24,7 +24,7 @@ import { LineRow, ListCard, Note, SubPage } from '@/features/shell/parts';
 import { resetShell, useShell } from '@/features/shell/state';
 import { goalSummary } from '@/features/shell/goal';
 import { LogoutSheet } from '@/features/shell/sheets';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const maskPhone = (p: string) => {
   const d = (p || '').replace(/\D/g, '');
@@ -75,17 +75,17 @@ export default function Profile() {
           <View style={{ flex: 1, gap: 4, paddingTop: 4 }}>
             <Txt style={{ fontFamily: font.light, fontSize: 28, lineHeight: 36, letterSpacing: -0.8 }} numberOfLines={2}>{p.name || 'Rohitashav Garg'}</Txt>
             <Txt v="mono" muted>{maskPhone(state.phone)}</Txt>
-            {state.sc.member === 'PT member' && <View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, borderRadius: 12, backgroundColor: '#F5B301', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: '#3A2A00' }}>Premium · PT</Txt></View>}
+            {state.sc.member === 'PT member' && <View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, borderRadius: 12, backgroundColor: '#F5B301', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 18, color: '#3A2A00' }}>Premium · PT</Txt></View>}
           </View>
           <Pressy accessibilityRole="button" accessibilityLabel="Edit name and number" onPress={go('/profile/details')} scaleTo={0.94} style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: c.surface, justifyContent: 'center' }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20 }}>Edit</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20 }}>Edit</Txt>
           </Pressy>
         </Row>
       </View>
 
       {s.deleting && (
         <Animated.View entering={fade()} exiting={fadeOut()} style={{ paddingVertical: 14, paddingHorizontal: 18, borderRadius: 22, backgroundColor: c.warnSoft, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <Txt style={{ flex: 1, fontSize: 14, color: c.warn }}>Account scheduled for deletion on 28 Oct. Your programmes keep their own records.</Txt>
+          <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.warn }}>Account scheduled for deletion on 28 Oct. Your programmes keep their own records.</Txt>
           <Button kind="secondary" small label="Cancel" accessibilityLabel="Cancel account deletion" onPress={() => { set({ deleting: false }); toast('Deletion cancelled'); }} />
         </Animated.View>
       )}
@@ -100,8 +100,8 @@ export default function Profile() {
         <Pressy accessibilityRole="button" accessibilityLabel={`Goal: ${g2.name}. Change goal`} onPress={go('/goal')} scaleTo={0.985}
           style={{ minHeight: 64, borderRadius: 22, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <View style={{ flex: 1 }}>
-            <Txt v="caption" style={{ fontSize: 12 }}>Main goal</Txt>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24 }}>{g2.name}</Txt>
+            <Txt v="caption" style={{ fontSize: fontSizes.xs }}>Main goal</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{g2.name}</Txt>
           </View>
           <ChevronRight size={18} color={c.muted} />
         </Pressy>
@@ -142,7 +142,7 @@ function GoalTile({ title, value, onPress }: { title: string; value: string; onP
       style={{ flex: 1, minHeight: 84, borderRadius: 22, backgroundColor: c.surface, padding: 14, justifyContent: 'space-between' }}>
       <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 30, letterSpacing: -0.5 }}>{value}</Txt>
       <Row style={{ justifyContent: 'space-between' }}>
-        <Txt v="caption" style={{ fontSize: 13 }}>{title}</Txt>
+        <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{title}</Txt>
         <ChevronRight size={16} color={c.muted} />
       </Row>
     </Pressy>
@@ -161,8 +161,8 @@ function TrackerPromo({ onPress }: { onPress: () => void }) {
       <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: 28, boxShadow: [{ offsetX: 0, offsetY: 0, blurRadius: 24, spreadDistance: 0, color: 'rgba(255,255,255,0.3)', inset: true }] } as any} />
       <Row style={{ paddingTop: 18, paddingHorizontal: 20, justifyContent: 'space-between' }}>
         <View style={{ gap: 2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.5, color: fixed.white }}>Tracker designs</Txt>
-          <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.6)' }}>Pick how your trackers look</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29, letterSpacing: -0.5, color: fixed.white }}>Tracker designs</Txt>
+          <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: 'rgba(255,255,255,0.6)' }}>Pick how your trackers look</Txt>
         </View>
         <View style={{ width: 52, height: 36, borderRadius: 18, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={18} color={fixed.dark} /></View>
       </Row>
@@ -200,11 +200,11 @@ function BigFooter() {
     <View style={{ marginTop: 14, gap: 14 }}>
       <Row style={{ justifyContent: 'space-between' }}>
         <YourPalLogo height={28} color={c.muted} />
-        <Txt style={{ fontFamily: font.mono, fontSize: 12, lineHeight: 17, color: c.muted, opacity: 0.85 }}>v1.0</Txt>
+        <Txt style={{ fontFamily: font.mono, fontSize: fontSizes.xs, lineHeight: 17, color: c.muted, opacity: 0.85 }}>v1.0</Txt>
       </Row>
       <DashedLine color={c.muted} />
       <Txt style={{ fontFamily: font.semibold, fontSize: 50, lineHeight: 56, letterSpacing: -2.2, color: isDark ? 'rgba(255,255,255,0.13)' : 'rgba(10,20,40,0.10)' }}>{'your health,\nevery day.'}</Txt>
-      <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted, paddingBottom: 18 }}>Built for you · Made in India</Txt>
+      <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.muted, paddingBottom: 18 }}>Built for you · Made in India</Txt>
     </View>
   );
 }

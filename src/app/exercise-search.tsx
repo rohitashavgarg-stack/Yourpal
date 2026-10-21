@@ -16,6 +16,7 @@ import { haptic } from '@/lib/haptics';
 import { askCoach } from '@/features/coach/coach';
 import { ExTile } from '@/features/plans/parts';
 import { useSessionActions } from '@/features/workout/actions';
+import { fontSizes } from '@/design-system/tokens';
 
 const GROUPS = ['All', ...Array.from(new Set(LIBRARY.map((x) => x.g)))];
 
@@ -56,7 +57,7 @@ export default function ExerciseSearch() {
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }}>
         <RoundBtn label="Close" onPress={close} glass><X size={20} color={c.ink} /></RoundBtn>
-        <Txt accessibilityRole="header" style={{ flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: 17, marginRight: 44 }}>Swap {current?.toLowerCase()}</Txt>
+        <Txt accessibilityRole="header" style={{ flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: fontSizes.lg, marginRight: 44 }}>Swap {current?.toLowerCase()}</Txt>
       </Row>
 
       <View style={{ paddingHorizontal: 16, gap: 12, paddingBottom: 8 }}>
@@ -82,7 +83,7 @@ export default function ExerciseSearch() {
           <View style={{ alignItems: 'center', gap: 12, paddingVertical: 36 }}>
             <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Search size={24} color={c.muted} /></View>
             <Txt style={{ fontFamily: font.semibold, textAlign: 'center' }}>No exercise matches “{q.trim()}”</Txt>
-            <Txt muted style={{ textAlign: 'center', fontSize: 14 }}>Try a muscle like chest or legs, or ask Coach Vikram to add it.</Txt>
+            <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.md }}>Try a muscle like chest or legs, or ask Coach Vikram to add it.</Txt>
             <Button kind="secondary" small label="Ask Coach Vikram" icon={<MessageCircle size={16} color={c.ink} />} onPress={() => askCoach('Exercise request', `Can you add ${q.trim()} to my plan? `)} />
           </View>
         )}

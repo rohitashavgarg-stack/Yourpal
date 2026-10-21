@@ -17,7 +17,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { mealById, mealKcal } from './meals';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 type Mode = 'sugg' | 'scan' | 'write' | 'cat';
 const SUGG = ['2 roti', '1 cup milk', '1 katori dal', '1 banana', '100 g paneer'];
@@ -115,7 +115,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
     <>
       <View style={{ gap: 2 }}>
         <Txt style={{ fontFamily: font.regular, fontSize: 28, letterSpacing: -1.1 }}>{repl ? `Swap ${repl.n.toLowerCase()}` : `Add to ${meal.n.toLowerCase()}`}</Txt>
-        <Txt muted style={{ fontSize: 13 }}>{repl ? `Planned: ${repl.q} · ${repl.k} kcal` : `Planned: ${planned} · ${mealKcal(meal)} kcal`}</Txt>
+        <Txt muted style={{ fontSize: fontSizes.sm }}>{repl ? `Planned: ${repl.q} · ${repl.k} kcal` : `Planned: ${planned} · ${mealKcal(meal)} kcal`}</Txt>
       </View>
       <Segmented<Mode> accessibilityLabel="How to log" value={mode} onChange={setMode}
         options={[...(repl ? [{ value: 'sugg' as Mode, label: 'Suggested' }] : []), { value: 'scan', label: 'Scan' }, { value: 'write', label: 'Write' }, { value: 'cat', label: 'Library' }]}
@@ -132,13 +132,13 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
                 <FoodMark type={o.type} />
                 <View style={{ flex: 1 }}>
                   <Txt style={{ fontFamily: font.medium }}>{label}</Txt>
-                  <Txt v="mono" muted style={{ fontSize: 12 }}>≈{o.k} kcal · P {o.p} g{o.coach ? ' · Coach-approved' : ''}</Txt>
+                  <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>≈{o.k} kcal · P {o.p} g{o.coach ? ' · Coach-approved' : ''}</Txt>
                 </View>
                 <CheckCircle on={on} size={30} hit={30} label={label} onPress={() => setPick(on ? null : label)} />
               </Pressy>
             );
           })}
-          {suggestions.length === 0 && <Txt muted style={{ paddingVertical: 16, fontSize: 14 }}>No suggestions for this one. Use Scan, Write or Library.</Txt>}
+          {suggestions.length === 0 && <Txt muted style={{ paddingVertical: 16, fontSize: fontSizes.md }}>No suggestions for this one. Use Scan, Write or Library.</Txt>}
         </View>
       )}
 
@@ -150,7 +150,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
             {SUGG.map((t) => (
               <Pressy key={t} accessibilityRole="button" accessibilityLabel={`Add ${t}`} onPress={() => setText((v) => (v.trim() ? `${v.trim().replace(/,\s*$/, '')}, ${t}` : t))}
                 style={{ height: 34, paddingHorizontal: 12, borderRadius: 17, borderWidth: 1, borderColor: c.surface3, justifyContent: 'center' }}>
-                <Txt style={{ fontFamily: font.medium, fontSize: 13 }}>+ {t}</Txt>
+                <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm }}>+ {t}</Txt>
               </Pressy>
             ))}
           </Row>
@@ -170,15 +170,15 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
             </Svg>)}
             <Bracket pos="tl" /><Bracket pos="tr" /><Bracket pos="bl" /><Bracket pos="br" />
             {scan === 'busy' && <ScanLine />}
-            <Txt style={{ position: 'absolute', left: 0, right: 0, bottom: 12, textAlign: 'center', fontFamily: font.medium, fontSize: 13, color: fixed.white, textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 4 }}>{cap}</Txt>
+            <Txt style={{ position: 'absolute', left: 0, right: 0, bottom: 12, textAlign: 'center', fontFamily: font.medium, fontSize: fontSizes.sm, color: fixed.white, textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 4 }}>{cap}</Txt>
           </View>
           {scan === 'fail' && (
             <Animated.View entering={fade()} style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.warnSoft }}>
-              <Txt style={{ fontSize: 14, color: c.warn }}><Txt style={{ fontFamily: font.semibold, color: c.warn }}>Couldn't read that.</Txt> Too dark or too close. Try the whole plate in good light, or write it instead.</Txt>
+              <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, color: c.warn }}>Couldn't read that.</Txt> Too dark or too close. Try the whole plate in good light, or write it instead.</Txt>
             </Animated.View>
           )}
           {perm && !perm.granted && !perm.canAskAgain && (
-            <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Camera is off for YourPal. Allow it in Settings, or choose a photo of your plate instead.</Txt>
+            <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Camera is off for YourPal. Allow it in Settings, or choose a photo of your plate instead.</Txt>
           )}
           <Button kind="secondary" small disabled={scan === 'busy'} icon={<Camera size={17} color={c.ink} />}
             label={scan === 'busy' ? 'Scanning…' : scan === 'done' || scan === 'fail' ? 'Scan again' : perm && !perm.granted ? (perm.canAskAgain ? 'Allow camera' : 'Try the demo plate') : 'Take photo'}
@@ -197,14 +197,14 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
               return (
                 <Pressy key={f.n} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={f.n} onPress={tog} scaleTo={0.99}
                   style={{ minHeight: 54, borderBottomWidth: 1, borderBottomColor: c.line, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                  <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.medium }}>{f.n}</Txt><Txt v="mono" muted style={{ fontSize: 12 }}>{f.k} kcal · P {f.p} g</Txt></View>
+                  <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.medium }}>{f.n}</Txt><Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{f.k} kcal · P {f.p} g</Txt></View>
                   <CheckCircle on={on} size={30} hit={30} label={f.n} onPress={tog} />
                 </Pressy>
               );
             })}
             {res.length === 0 && (
               <View style={{ paddingVertical: 16, gap: 8, alignItems: 'flex-start' }}>
-                <Txt muted style={{ fontSize: 14 }}>Not in the catalogue.</Txt>
+                <Txt muted style={{ fontSize: fontSizes.md }}>Not in the catalogue.</Txt>
                 <PillBtn tone="soft" label="Write it instead" onPress={() => { setText(q); setMode('write'); }} />
               </View>
             )}

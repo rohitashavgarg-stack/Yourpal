@@ -9,6 +9,7 @@ import { useGoalV2 } from '@/features/goalv2/model';
 import { createStore } from '@/lib/createStore';
 import { LinearGradient } from 'expo-linear-gradient';
 import { font } from '@/theme/tokens';
+import { fontSizes } from '@/design-system/tokens';
 
 // Which card sits at the top of Today: the whole goal (the live goal card) or today's calories. Demo panel only for now.
 export const topCardStore = createStore(() => ({ mode: 'Today card' as 'Goal card' | 'Today card' }));
@@ -25,10 +26,10 @@ function Half({ icon, label, unit, value, of, pct, color }: { icon: React.ReactN
     <View accessible accessibilityLabel={`${label}, ${value} of ${of} ${unit}`} style={{ flex: 1, gap: 6 }}>
       <Row style={{ gap: 7 }}>
         {icon}
-        <Txt style={{ fontFamily: font.regular, fontSize: 14, lineHeight: 20, color: SOFT }}>{label}</Txt>
-        <Txt numberOfLines={1} style={{ flex: 1, textAlign: 'right', fontSize: 13, lineHeight: 18, color: MUTED }}>{unit}</Txt>
+        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: SOFT }}>{label}</Txt>
+        <Txt numberOfLines={1} style={{ flex: 1, textAlign: 'right', fontSize: fontSizes.sm, lineHeight: 18, color: MUTED }}>{unit}</Txt>
       </Row>
-      <Txt style={{ fontFamily: font.regular, fontSize: 36, lineHeight: 44, letterSpacing: -1, color: WHITE }}>{value}<Txt style={{ fontFamily: font.regular, fontSize: 15, lineHeight: 20, color: MUTED, letterSpacing: 0 }}>{` / ${of}`}</Txt></Txt>
+      <Txt style={{ fontFamily: font.regular, fontSize: 36, lineHeight: 44, letterSpacing: -1, color: WHITE }}>{value}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.base, lineHeight: 20, color: MUTED, letterSpacing: 0 }}>{` / ${of}`}</Txt></Txt>
       <View style={{ height: 5, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.18)', overflow: 'hidden' }}>
         <View style={{ width: `${Math.max(0, Math.min(100, pct * 100))}%`, height: '100%', borderRadius: 3, backgroundColor: color }} />
       </View>
@@ -59,10 +60,10 @@ export function TodayBudgetCard() {
         <Row style={{ gap: 12 }}>
           <Target size={22} color={WHITE} />
           <View style={{ flex: 1 }}>
-            <Txt style={{ fontSize: 14, lineHeight: 19, color: SOFT }}>Goal</Txt>
-            <Txt numberOfLines={1} style={{ fontFamily: font.regular, fontSize: 18, lineHeight: 25, color: WHITE }}>{g.name}</Txt>
+            <Txt style={{ fontSize: fontSizes.md, lineHeight: 19, color: SOFT }}>Goal</Txt>
+            <Txt numberOfLines={1} style={{ fontFamily: font.regular, fontSize: fontSizes.lg, lineHeight: 25, color: WHITE }}>{g.name}</Txt>
           </View>
-          <Txt style={{ fontSize: 15, lineHeight: 21, color: SOFT }}>{`${pct}% completed`}</Txt>
+          <Txt style={{ fontSize: fontSizes.base, lineHeight: 21, color: SOFT }}>{`${pct}% completed`}</Txt>
           <ChevronRight size={18} color={WHITE} />
         </Row>
       </Pressy>

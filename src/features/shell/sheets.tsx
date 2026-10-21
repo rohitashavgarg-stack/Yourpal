@@ -7,6 +7,7 @@ import { useDomain } from '@/lib/domain';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { resetShell } from './state';
+import { fontSizes } from '@/design-system/tokens';
 
 // Confirm before logging out: clears this phone's session and goes back to login.
 export function LogoutSheet() {
@@ -21,7 +22,7 @@ export function LogoutSheet() {
   });
   return (
     <>
-      <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: 22, letterSpacing: -0.5 }}>Log out of YourPal?</Txt>
+      <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, letterSpacing: -0.5 }}>Log out of YourPal?</Txt>
       <Txt muted>Your plans and history stay with your programmes. Log in again with your phone number any time.</Txt>
       <Button label="Log out" onPress={out} />
       <Button kind="secondary" label="Stay logged in" onPress={() => closeSheet()} />

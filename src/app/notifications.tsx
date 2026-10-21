@@ -14,6 +14,7 @@ import { fade, fadeOut } from '@/theme/motion';
 import { goHome, ListCard, Note, ProgLogo, SubPage } from '@/features/shell/parts';
 import { switchProgramme, useShell } from '@/features/shell/state';
 import { useVisibleNotifs } from '@/features/shell/notifs';
+import { fontSizes } from '@/design-system/tokens';
 
 export default function Notifications() {
   const { c } = useTheme();
@@ -55,7 +56,7 @@ export default function Notifications() {
     <SubPage title="Notifications" fallback="/(tabs)" right={
       <Pressy accessibilityRole="button" accessibilityLabel="Mark all as read" accessibilityState={{ disabled: unread === 0 }} disabled={unread === 0} onPress={markAll}
         style={{ height: 44, paddingHorizontal: 8, justifyContent: 'center', opacity: unread === 0 ? 0.4 : 1 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 13, color: c.accentText }}>Read all</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.accentText }}>Read all</Txt>
       </Pressy>
     }>
       {filters.length > 2 && (
@@ -75,10 +76,10 @@ export default function Notifications() {
                 <ProgLogo p={p} size={40} />
                 <View style={{ flex: 1, minWidth: 0 }}>
                   <Txt style={{ fontFamily: n.unread ? font.semibold : font.medium }}>{n.t}</Txt>
-                  <Txt muted style={{ fontSize: 13 }} numberOfLines={1}>{n.s}</Txt>
+                  <Txt muted style={{ fontSize: fontSizes.sm }} numberOfLines={1}>{n.s}</Txt>
                 </View>
                 <View style={{ alignItems: 'flex-end', gap: 6 }}>
-                  <Txt v="mono" muted style={{ fontSize: 12 }}>{n.when}</Txt>
+                  <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{n.when}</Txt>
                   {n.unread && <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: c.accent }} />}
                 </View>
               </Pressy>

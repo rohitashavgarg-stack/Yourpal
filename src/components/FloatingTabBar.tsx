@@ -12,7 +12,7 @@ import { ChartLine, ClipboardList, Dumbbell, Sun } from '@/lib/icons';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // ---- Hide-on-scroll: scrolling down hides the nav, scrolling up brings it back ----
 const NavCtx = createContext<{ hidden: SharedValue<number> } | null>(null);
@@ -250,7 +250,7 @@ function PillBar({ state, navigation }: any) {
               style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 3 }}
             >
               <Icon size={22} strokeWidth={on ? 2.3 : 1.9} color={col} />
-              <Text style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 14, color: col }}>{LABELS[r.name] ?? r.name}</Text>
+              <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 14, color: col }}>{LABELS[r.name] ?? r.name}</Text>
             </Pressable>
           );
         })}

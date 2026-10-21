@@ -25,7 +25,7 @@ import { ItemMenuSheet, SwapSheet } from './Sheets';
 import { QtySheet } from './QtySheet';
 import { fmtNum, fmtQty, Qty, splitFood, stepFor, unitLabel } from './qty';
 import { DItem, dietItems, dietTotals, setP, useCountUp, usePlans } from './store';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
 const E = ({ i, children }: { i: number; children: React.ReactNode }) => <Animated.View entering={fade(i * 40)}>{children}</Animated.View>;
@@ -45,8 +45,8 @@ function KcalRing({ k }: { k: number }) {
         <ACircle cx={54} cy={54} r={44} fill="none" stroke={c.cAct} strokeWidth={10} strokeLinecap="round" strokeDasharray={`${C}`} animatedProps={props} transform="rotate(-90 54 54)" />
       </Svg>
       <View style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
-        <Txt style={{ fontFamily: font.display, fontSize: 25 }}>{inr(shown)}</Txt>
-        <Txt style={{ fontSize: 11, color: c.muted, marginTop: -4 }}>of {inr(KCAL_TARGET)} kcal</Txt>
+        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3 }}>{inr(shown)}</Txt>
+        <Txt style={{ fontSize: fontSizes.xs2, color: c.muted, marginTop: -4 }}>of {inr(KCAL_TARGET)} kcal</Txt>
       </View>
     </View>
   );
@@ -61,8 +61,8 @@ function MacroBar({ l, v, target, col }: { l: string; v: number; target: number;
   return (
     <View accessible accessibilityLabel={`${l} ${Math.round(v)} of ${target} grams`} style={{ gap: 4 }}>
       <Row style={{ justifyContent: 'space-between' }}>
-        <Txt style={{ fontFamily: font.medium, fontSize: 13 }}>{l}</Txt>
-        <Txt v="mono" muted style={{ fontSize: 12 }}>{shown} / {target} g</Txt>
+        <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm }}>{l}</Txt>
+        <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{shown} / {target} g</Txt>
       </Row>
       <View style={{ height: 6, borderRadius: 3, backgroundColor: c.surface2, overflow: 'hidden' }}>
         <Animated.View style={[{ height: '100%', borderRadius: 3, backgroundColor: col }, a]} />
@@ -76,8 +76,8 @@ function UndoEatenSheet({ what, onConfirm }: { what: string; onConfirm: () => vo
   const { closeSheet } = useOverlay();
   return (
     <View style={{ gap: 12, paddingBottom: 8 }}>
-      <Txt v="title" style={{ fontSize: 22, lineHeight: 29 }}>Mark as not eaten?</Txt>
-      <Txt muted style={{ fontSize: 15, lineHeight: 22 }}>{what} will go back to your plan and leave today’s totals.</Txt>
+      <Txt v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>Mark as not eaten?</Txt>
+      <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 22 }}>{what} will go back to your plan and leave today’s totals.</Txt>
       <Button kind="primary" label="Mark as not eaten" onPress={() => closeSheet(onConfirm)} />
       <Button kind="secondary" label="Keep as eaten" onPress={() => closeSheet()} />
     </View>
@@ -99,7 +99,7 @@ function QtyControl({ mid, it, qty, locked }: { mid: MealId; it: DItem; qty: Qty
     if (n !== cur) { haptic.tick(); A.setPor(mid, it.key, n / qty.n); }
   };
 
-  if (locked) return <Txt style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: c.muted }}>{text}</Txt>;
+  if (locked) return <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.muted }}>{text}</Txt>;
 
   const b = (label: string, on: () => void, off: boolean, icon: React.ReactNode) => (
     <Pressy accessibilityRole="button" accessibilityLabel={`${label} ${qty.unit || 'piece'}`} disabled={off} onPress={on} scaleTo={0.86} hitSlop={6}
@@ -114,7 +114,7 @@ function QtyControl({ mid, it, qty, locked }: { mid: MealId; it: DItem; qty: Qty
         <Pressy accessibilityRole="button" accessibilityLabel={`Amount ${text}${changed ? ', changed from plan' : ''}. Hold for units and reset`}
           onLongPress={() => { haptic.medium(); openSheet(<QtySheet mid={mid} itemKey={it.key} />, { label: 'Change amount' }); }} delayLongPress={450} scaleTo={0.96}
           style={{ minWidth: 62, height: 32, paddingHorizontal: 4, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: c.accentText }}>{text}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.accentText }}>{text}</Txt>
         </Pressy>
         {b('More', () => go(cur + step), cur >= max, <Plus size={16} color={c.accentText} strokeWidth={2.4} />)}
       </View>
@@ -190,8 +190,8 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
   return (
     <View style={{ borderRadius: 18, overflow: 'hidden' }}>
       <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 18 }, under]}>
-        <Animated.View style={doneL}><Txt style={{ fontFamily: font.semibold, fontSize: 14, color: fixed.dark }}>Eaten</Txt></Animated.View>
-        <Animated.View style={swapL}><Txt style={{ fontFamily: font.semibold, fontSize: 14, color: fixed.white }}>Swap</Txt></Animated.View>
+        <Animated.View style={doneL}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.dark }}>Eaten</Txt></Animated.View>
+        <Animated.View style={swapL}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.white }}>Swap</Txt></Animated.View>
       </Animated.View>
       <GestureDetector gesture={pan}>
         <Animated.View collapsable={false}
@@ -263,7 +263,7 @@ function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
           onPress={tap} scaleTo={0.985} haptics={false} style={{ flex: 1, minHeight: 56, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 10 }}>
           <View style={{ flex: 1 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: 16 }}>{m.n}</Txt>
-            <Txt muted style={{ fontSize: 13 }}>{sub}</Txt>
+            <Txt muted style={{ fontSize: fontSizes.sm }}>{sub}</Txt>
           </View>
           <Chevron open={open} />
         </Pressy>
@@ -286,7 +286,7 @@ function AteElse({ onPress }: { onPress: () => void }) {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Ate something else? Log it" onPress={onPress}
       style={{ height: 44, borderRadius: 22, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-      <Plus size={16} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: 14 }}>Ate something else?</Txt>
+      <Plus size={16} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>Ate something else?</Txt>
     </Pressy>
   );
 }
@@ -304,7 +304,7 @@ export function DietPlan() {
         <Card style={{ padding: 22, gap: 10 }}>
           <Tag label="Diet plan on the way" bg={c.accentSoft} fg={c.accentText} />
           <Txt v="headline">Coach Vikram shares your diet after the assessment</Txt>
-          <Txt muted style={{ fontSize: 14 }}>Until then you can log what you eat.</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md }}>Until then you can log what you eat.</Txt>
           {!paused && <Button kind="secondary" small label="Log a meal" onPress={() => router.push({ pathname: '/plans/log', params: { meal: dietOpenMeal(d) } })} style={{ alignSelf: 'flex-start' }} />}
         </Card>
       </E>
@@ -338,13 +338,13 @@ export function DietPlan() {
         </Row>
         {overBy > 0 && (
           <Animated.View entering={fade()} accessibilityRole="alert" style={{ marginTop: 8, padding: 12, borderRadius: 16, backgroundColor: c.warnSoft }}>
-            <Txt style={{ fontSize: 13, lineHeight: 19, color: c.warn }}>You're about {inr(overBy)} kcal over today. That's okay. Keep your next meal light and have some water.</Txt>
+            <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>You're about {inr(overBy)} kcal over today. That's okay. Keep your next meal light and have some water.</Txt>
           </Animated.View>
         )}
       </E>
       <E i={1}><Txt v="caption" style={{ paddingHorizontal: 6 }}>Swipe right = eaten · swipe left = swap · tap the amount to change it · hold for more · double tap a meal to mark it all eaten</Txt></E>
       {MEALS.map((m, i) => <E key={m.id} i={2 + i}><MealCard mid={m.id} open={openId === m.id} /></E>)}
-      <Txt muted style={{ textAlign: 'center', fontSize: 13 }}>This week: {7 + onPlan} of 12 meals on plan</Txt>
+      <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.sm }}>This week: {7 + onPlan} of 12 meals on plan</Txt>
     </>
   );
 }

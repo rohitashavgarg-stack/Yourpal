@@ -28,7 +28,7 @@ import { showProgressLoading, useProgressScenarios } from '@/features/progress/s
 import { GoalCard2 } from '@/features/goalv2/GoalCard2';
 import { GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 let firstLoad = true;
 
@@ -36,8 +36,8 @@ let firstLoad = true;
 function Big({ big, unit }: { big: string; unit?: string }) {
   const { c } = useTheme();
   return (
-    <Txt style={{ fontFamily: font.display, fontSize: 32, lineHeight: 40, letterSpacing: -0.6 }}>
-      {big}{unit ? <Txt style={{ fontFamily: font.display, fontSize: 18, color: c.muted }}>{unit}</Txt> : null}
+    <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 40, letterSpacing: -0.6 }}>
+      {big}{unit ? <Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: c.muted }}>{unit}</Txt> : null}
     </Txt>
   );
 }
@@ -75,49 +75,49 @@ function ProgressCard({ k }: { k: CardKey }) {
   };
 
   let body: React.ReactNode = null;
-  if (empty) body = <Txt muted style={{ fontSize: 14 }}>{empty}</Txt>;
+  if (empty) body = <Txt muted style={{ fontSize: fontSizes.md }}>{empty}</Txt>;
   else {
     const withSpark = (big: string, unit: string, sub: string, vals: number[]) => (
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
-        <View style={{ flexShrink: 1, gap: 2 }}><Big big={big} unit={unit} /><Txt v="caption" style={{ fontSize: 13 }}>{sub}</Txt></View>
+        <View style={{ flexShrink: 1, gap: 2 }}><Big big={big} unit={unit} /><Txt v="caption" style={{ fontSize: fontSizes.sm }}>{sub}</Txt></View>
         <Spark key={`${ps.range}-${ps.anchor}-${vals.join()}`} vals={vals.length > 1 ? vals : [vals[0] ?? 0, vals[0] ?? 0]} color={tint} />
       </Row>
     );
     const plain = (big: string, unit: string, sub: string) => (
-      <View style={{ gap: 2 }}><Big big={big} unit={unit} /><Txt v="caption" style={{ fontSize: 13 }}>{sub}</Txt></View>
+      <View style={{ gap: 2 }}><Big big={big} unit={unit} /><Txt v="caption" style={{ fontSize: fontSizes.sm }}>{sub}</Txt></View>
     );
     const withBars = (big: string, unit: string, sub: string) => (
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
-        <View style={{ flexShrink: 1, gap: 2 }}><Big big={big} unit={unit} /><Txt v="caption" style={{ fontSize: 13 }}>{sub}</Txt></View>
+        <View style={{ flexShrink: 1, gap: 2 }}><Big big={big} unit={unit} /><Txt v="caption" style={{ fontSize: fontSizes.sm }}>{sub}</Txt></View>
         <MiniBars key={`${ps.range}-${ps.anchor}`} vals={t!.vals} color={tint} w={112} />
       </Row>
     );
     const noData = t && !t.hasData;
     switch (k) {
-      case 'weight': body = noData ? <Txt muted style={{ fontSize: 14 }}>{t!.empty}</Txt> : withSpark(t!.big, ' kg', t!.sub, nums); break;
+      case 'weight': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withSpark(t!.big, ' kg', t!.sub, nums); break;
       case 'lifts': body = withSpark('130', ' kg', 'Leg press · latest PR · 24 Sep', [110, 112, 115, 117.5, 120, 125, 130]); break;
-      case 'hr': body = noData ? <Txt muted style={{ fontSize: 14 }}>{t!.empty}</Txt> : withSpark(t!.big, ' bpm', t!.sub, nums); break;
-      case 'cons': body = noData ? <Txt muted style={{ fontSize: 14 }}>{t!.empty}</Txt> : v2
+      case 'hr': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withSpark(t!.big, ' bpm', t!.sub, nums); break;
+      case 'cons': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : v2
         ? (
           <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
             <View style={{ flexShrink: 1, gap: 2 }}>
               <Big big={`${st.weekDone} of ${st.target}`} unit=" this week" />
-              <Txt v="caption" style={{ fontSize: 13 }}>{st.weekDone >= st.target ? 'Week complete' : `${st.left} to go this week`}</Txt>
+              <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{st.weekDone >= st.target ? 'Week complete' : `${st.left} to go this week`}</Txt>
             </View>
             <MiniBars key={`${ps.range}-${ps.anchor}`} vals={t!.vals} color={tint} w={112} />
           </Row>
         )
         : withBars(t!.big, Number(t!.big) === 1 ? ' workout' : ' workouts', t!.sub); break;
-      case 'diet': body = noData ? <Txt muted style={{ fontSize: 14 }}>{t!.empty}</Txt> : <>{plain(t!.big, ' on plan', t!.sub)}<GrowBar pct={nums.length ? Math.round(nums.reduce((a, b) => a + b, 0) / nums.length) : 0} color={c.good} /></>; break;
-      case 'sleep': body = noData ? <Txt muted style={{ fontSize: 14 }}>{t!.empty}</Txt> : withBars(t!.big, '', t!.sub); break;
-      case 'steps': body = noData ? <Txt muted style={{ fontSize: 14 }}>{t!.empty}</Txt> : withBars(t!.big, ps.range === 'day' ? ' steps' : ' / day', t!.sub); break;
-      case 'water': body = noData ? <Txt muted style={{ fontSize: 14 }}>{t!.empty}</Txt> : withBars(t!.big, ps.range === 'day' ? ' L' : ' L / day', t!.sub); break;
+      case 'diet': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : <>{plain(t!.big, ' on plan', t!.sub)}<GrowBar pct={nums.length ? Math.round(nums.reduce((a, b) => a + b, 0) / nums.length) : 0} color={c.good} /></>; break;
+      case 'sleep': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withBars(t!.big, '', t!.sub); break;
+      case 'steps': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withBars(t!.big, ps.range === 'day' ? ' steps' : ' / day', t!.sub); break;
+      case 'water': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withBars(t!.big, ps.range === 'day' ? ' L' : ' L / day', t!.sub); break;
       case 'meas': body = (
         <Row style={{ gap: 8 }}>
           {[{ l: 'Waist', v: '89 cm', d: '↓3' }, { l: 'Chest', v: '98 cm', d: '—' }, { l: 'Arm', v: '32 cm', d: '↑0.5' }].map((t) => (
             <View key={t.l} style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 12, borderRadius: 16, backgroundColor: c.surface2 }}>
               <Txt v="caption">{t.l}</Txt>
-              <Txt style={{ fontFamily: font.display, fontSize: 20, lineHeight: 26 }}>{t.v}</Txt>
+              <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl, lineHeight: 26 }}>{t.v}</Txt>
               <Txt v="caption">{t.d}</Txt>
             </View>
           ))}
@@ -135,11 +135,11 @@ function ProgressCard({ k }: { k: CardKey }) {
             {['Sep 2', ps.photos[ps.photos.length - 1]?.d ?? 'Sep 30'].map((l, i) => (
               <View key={i} style={{ flex: 1, height: 130, borderRadius: 16, overflow: 'hidden', backgroundColor: c.surface2 }}>
                 <Image source={i === 0 ? BEFORE_PHOTO : AFTER_PHOTO} resizeMode="cover" accessibilityIgnoresInvertColors style={{ width: '100%', height: '100%' }} />
-                <View style={{ position: 'absolute', left: 8, bottom: 8, paddingHorizontal: 9, paddingVertical: 3, borderRadius: 999, backgroundColor: 'rgba(0,0,0,0.55)' }}><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 17, color: fixed.white }}>{l}</Txt></View>
+                <View style={{ position: 'absolute', left: 8, bottom: 8, paddingHorizontal: 9, paddingVertical: 3, borderRadius: 999, backgroundColor: 'rgba(0,0,0,0.55)' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 17, color: fixed.white }}>{l}</Txt></View>
               </View>
             ))}
           </Row>
-          <Row style={{ gap: 6 }}><Lock size={12} color={c.muted} /><Txt v="caption" style={{ fontSize: 13 }}>Only you can see these</Txt></Row>
+          <Row style={{ gap: 6 }}><Lock size={12} color={c.muted} /><Txt v="caption" style={{ fontSize: fontSizes.sm }}>Only you can see these</Txt></Row>
         </>
       ); break;
     }
@@ -151,7 +151,7 @@ function ProgressCard({ k }: { k: CardKey }) {
       {body}
       {connect && (
         <View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: c.surface2, justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: 14 }}>Connect {HEALTH_NAME}</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>Connect {HEALTH_NAME}</Txt>
         </View>
       )}
     </PCard>

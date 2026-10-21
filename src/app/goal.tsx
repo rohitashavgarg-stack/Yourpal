@@ -18,6 +18,7 @@ import { goalV2Store, kindOf, addDays, fmtDay, parseBy } from '@/features/goalv2
 import { DateSheet, FinishBy } from '@/features/goalv2/FinishBy';
 import { TODAY } from '@/features/progress/trends';
 import { BYS, GDEF, GOAL2, GOALS, goalNote, goalStep, GVERB, isNumeric } from '@/features/shell/goal';
+import { fontSizes } from '@/design-system/tokens';
 
 type Draft = { type: string; target: number; by: string; g2: string };
 
@@ -65,8 +66,8 @@ export default function Goal() {
     <SubPage title="Change goal" fallback="/profile" gap={18} footer={<Button kind="accent" label="Save goal" onPress={save} />}>
       <Card style={{ padding: 20, gap: 14, borderRadius: 26 }}>
         <View style={{ gap: 2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24 }}>What do you want to achieve?</Txt>
-          <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Pick your main goal.</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>What do you want to achieve?</Txt>
+          <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Pick your main goal.</Txt>
         </View>
         <Row style={{ gap: 8, flexWrap: 'wrap' }}>
           {GOALS.map((t) => <Pill key={t} label={t} on={g.type === t} onPress={() => pickType(t)} />)}
@@ -76,8 +77,8 @@ export default function Goal() {
       {num ? (
         <Card style={{ padding: 20, gap: 16, borderRadius: 26 }}>
           <View style={{ gap: 2 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24 }}>How much?</Txt>
-            <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{GVERB[g.type]}</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>How much?</Txt>
+            <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{GVERB[g.type]}</Txt>
           </View>
           <Row style={{ justifyContent: 'space-between' }}>
             <RoundBtn label="Lower target" onPress={() => patch({ target: Math.max(step, Math.round((g.target - step) * 10) / 10) })}><Minus size={22} color={c.ink} /></RoundBtn>
@@ -86,14 +87,14 @@ export default function Goal() {
           </Row>
           {note && (
             <Animated.View key={note.text} entering={fade()} exiting={fadeOut()}>
-              {note.warn ? <Note tone="warn">{note.text}</Note> : <Txt muted style={{ fontSize: 14, lineHeight: 21 }}>{note.text}</Txt>}
+              {note.warn ? <Note tone="warn">{note.text}</Note> : <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>{note.text}</Txt>}
             </Animated.View>
           )}
           {!v2 && (
             <>
               <View style={{ height: 1, backgroundColor: c.line }} />
               <View style={{ gap: 10 }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>By when? <Txt muted style={{ fontSize: 13 }}>Optional</Txt></Txt>
+                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>By when? <Txt muted style={{ fontSize: fontSizes.sm }}>Optional</Txt></Txt>
                 <Row style={{ gap: 8, flexWrap: 'wrap' }}>
                   {bys.map((b) => <Pill key={b} label={b} on={g.by === b} onPress={() => patch({ by: b })} />)}
                   <Pill label="Pick a date" on={false} onPress={() => openSheet(<DateSheet start={parseBy(g.by) ?? addDays(TODAY, 84)} onPick={(by) => patch({ by })} />, { label: 'Pick a finish date' })} />
@@ -104,7 +105,7 @@ export default function Goal() {
         </Card>
       ) : note ? (
         <Card style={{ padding: 20, borderRadius: 26 }}>
-          <Txt muted style={{ fontSize: 14, lineHeight: 21 }}>{note.text}</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>{note.text}</Txt>
         </Card>
       ) : null}
 
@@ -112,8 +113,8 @@ export default function Goal() {
 
       <Card style={{ padding: 20, gap: 14, borderRadius: 26 }}>
         <View style={{ gap: 2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24 }}>Anything else? <Txt muted style={{ fontSize: 13 }}>Optional</Txt></Txt>
-          <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>A second goal to work on alongside.</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>Anything else? <Txt muted style={{ fontSize: fontSizes.sm }}>Optional</Txt></Txt>
+          <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>A second goal to work on alongside.</Txt>
         </View>
         <Row style={{ gap: 8, flexWrap: 'wrap' }}>
           {GOAL2.filter((t) => t !== g.type).map((t) => <Pill key={t} label={t} on={g.g2 === t} onPress={() => patch({ g2: t })} />)}
@@ -122,8 +123,8 @@ export default function Goal() {
 
       <View style={{ gap: 14, paddingTop: 4 }}>
         <Button kind="secondary" label="Also ask Coach for a new plan" onPress={askPlan} />
-        {v2 ? <Note center style={{ fontSize: 13 }}>{`Your history stays. Progress for this goal starts from today (${d.weight} kg). ${state.sc.member === 'PT member' ? 'Coach Vikram' : 'Your trainer'} will be notified.`}</Note>
-          : <Note center style={{ fontSize: 13 }}>Goals are per programme; quick trackers are shared.</Note>}
+        {v2 ? <Note center style={{ fontSize: fontSizes.sm }}>{`Your history stays. Progress for this goal starts from today (${d.weight} kg). ${state.sc.member === 'PT member' ? 'Coach Vikram' : 'Your trainer'} will be notified.`}</Note>
+          : <Note center style={{ fontSize: fontSizes.sm }}>Goals are per programme; quick trackers are shared.</Note>}
       </View>
     </SubPage>
   );

@@ -14,7 +14,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import type { Programme } from './state';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 export const goBack = (fallback: string = '/(tabs)') => (router.canGoBack() ? router.back() : router.replace(fallback as any));
 export const goHome = () => (router.canDismiss() ? router.dismissAll() : router.replace('/(tabs)'));
@@ -36,7 +36,7 @@ export function SubPage({ title, right, close, fallback, children, gap = 12, foo
         <RoundBtn label={close ? 'Close' : 'Back'} onPress={() => goBack(fallback)} glass>
           {close ? <X size={20} color={c.ink} /> : <ChevronLeft size={22} color={c.ink} />}
         </RoundBtn>
-        <Txt accessibilityRole="header" numberOfLines={1} style={{ flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: 17 }}>{title}</Txt>
+        <Txt accessibilityRole="header" numberOfLines={1} style={{ flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: fontSizes.lg }}>{title}</Txt>
         <View style={{ minWidth: 44, alignItems: 'flex-end' }}>{right}</View>
       </Row>
       {footer ? (
@@ -108,12 +108,12 @@ export function Label({ children, style }: { children: React.ReactNode; style?: 
 
 export function Note({ children, tone = 'plain', center, style }: { children: React.ReactNode; tone?: 'plain' | 'soft' | 'warn' | 'good'; center?: boolean; style?: any }) {
   const { c } = useTheme();
-  if (tone === 'plain') return <Txt muted style={[{ fontSize: 12, textAlign: center ? 'center' : 'left', paddingHorizontal: 6 }, style]}>{children}</Txt>;
+  if (tone === 'plain') return <Txt muted style={[{ fontSize: fontSizes.xs, textAlign: center ? 'center' : 'left', paddingHorizontal: 6 }, style]}>{children}</Txt>;
   const bg = tone === 'warn' ? c.warnSoft : tone === 'good' ? c.goodSoft : c.surface2;
   const fg = tone === 'warn' ? c.warn : tone === 'good' ? c.good : c.muted;
   return (
     <View style={[{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: bg }, style]}>
-      <Txt style={{ fontSize: 14, color: fg }}>{children}</Txt>
+      <Txt style={{ fontSize: fontSizes.md, color: fg }}>{children}</Txt>
     </View>
   );
 }

@@ -10,7 +10,7 @@ import { font } from '@/theme/tokens';
 import { Hint, ListCard, SubPage } from '@/features/progress/parts';
 import { PT_TOTAL } from '@/features/gym/data';
 import { useGymScenarios } from '@/features/gym/state';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 export default function PersonalTraining() {
   const { d } = useDomain();
@@ -25,15 +25,15 @@ export default function PersonalTraining() {
           <Circle cx={270} cy={40} r={150} fill={fixed.white} opacity={0.1} />
           <Circle cx={270} cy={40} r={90} fill={fixed.white} opacity={0.14} />
         </Svg>
-        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 32, lineHeight: 36, color: '#F4F4F6' }}>Personal{'\n'}training</Txt>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 36, color: '#F4F4F6' }}>Personal{'\n'}training</Txt>
       </LinearGradient>
       <Card style={{ padding: 18, gap: 6 }}>
         <Txt style={{ fontFamily: font.semibold }}>What PT includes</Txt>
-        <Txt muted style={{ fontSize: 14 }}>Personalised workout and diet · plan adjusted from your logs · regular sessions</Txt>
+        <Txt muted style={{ fontSize: fontSizes.md }}>Personalised workout and diet · plan adjusted from your logs · regular sessions</Txt>
       </Card>
       {isPT && <ListCard rows={[{ l: 'Sessions left', v: `${d.ptLeft} of ${PT_TOTAL}` }, { l: 'Next session', v: 'Thu 25 · 6 pm' }, { l: 'Package renews', v: '30 Oct' }]} />}
       <Button label="Talk to Coach Vikram" icon={<PersonAvatar who="coach" size={26} />} onPress={() => router.push('/gym/chat')} />
-      {!isPT && <Hint style={{ fontSize: 12 }}>Shown here and at a few moments (after an assessment, a plateau, a recap), once each and dismissible. Never during a workout.</Hint>}
+      {!isPT && <Hint style={{ fontSize: fontSizes.xs }}>Shown here and at a few moments (after an assessment, a plateau, a recap), once each and dismissible. Never during a workout.</Hint>}
     </SubPage>
   );
 }

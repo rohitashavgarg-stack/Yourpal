@@ -11,6 +11,7 @@ import { haptic } from '@/lib/haptics';
 import { useDietActions } from './dietActions';
 import { dietItems, usePlans } from './store';
 import { fmtNum, splitFood, stepFor, unitLabel } from './qty';
+import { fontSizes } from '@/design-system/tokens';
 
 // Change how much of one food you have. Today only; the plan itself is not edited.
 export function QtySheet({ mid, itemKey }: { mid: MealId; itemKey: string }) {
@@ -43,14 +44,14 @@ export function QtySheet({ mid, itemKey }: { mid: MealId; itemKey: string }) {
   return (
     <View style={{ gap: 14, paddingBottom: 8 }}>
       <View style={{ gap: 2 }}>
-        <Txt v="title" style={{ fontSize: 22, lineHeight: 29 }}>{name}</Txt>
-        <Txt muted style={{ fontSize: 13 }}>Planned: {fmtNum(planned)} {unitLabel(qty.unit)}</Txt>
+        <Txt v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>{name}</Txt>
+        <Txt muted style={{ fontSize: fontSizes.sm }}>Planned: {fmtNum(planned)} {unitLabel(qty.unit)}</Txt>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 6 }}>
         {btn('Less', () => set(cur - step), cur <= step, <Minus size={22} color={c.ink} />)}
         <View style={{ alignItems: 'center' }}>
           <Txt style={{ fontFamily: font.displayBold, fontSize: 48, lineHeight: 60, letterSpacing: -1.2 }}>{fmtNum(cur)}</Txt>
-          <Txt muted style={{ fontSize: 15 }}>{unitLabel(qty.unit)}</Txt>
+          <Txt muted style={{ fontSize: fontSizes.base }}>{unitLabel(qty.unit)}</Txt>
         </View>
         {btn('More', () => set(cur + step), cur >= max, <Plus size={22} color={c.ink} />)}
       </View>

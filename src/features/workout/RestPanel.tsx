@@ -9,7 +9,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { mmss } from '@/lib/useNow';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
 const R = 19;
@@ -59,7 +59,7 @@ export function RestPanel({ rest, now, onAdd30, onSkip, onDone, docked }: { rest
         </Svg>
       </Animated.View>
       <View style={{ flex: 1, minWidth: 0 }}>
-        <Txt style={{ fontFamily: font.display, fontSize: 26, lineHeight: 33 }}>{finished ? 'Go' : mmss(left)}</Txt>
+        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 33 }}>{finished ? 'Go' : mmss(left)}</Txt>
         <Txt v="caption">{finished ? 'Rest done' : 'Rest'}</Txt>
       </View>
       <Button kind="secondary" small label="+30 s" onPress={onAdd30} style={{ paddingHorizontal: 14 }} />

@@ -29,6 +29,7 @@ import { haptic } from '@/lib/haptics';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
 import { useUpdates } from './TopCards';
+import { fontSizes } from '@/design-system/tokens';
 
 // ---------- Slim goal strip: the member's reason for opening the app, in one line ----------
 export function GoalStrip() {
@@ -51,11 +52,11 @@ export function GoalStrip() {
             <Circle cx={29} cy={29} r={R} stroke={c.surface3} strokeWidth={5} fill="none" />
             <Circle cx={29} cy={29} r={R} stroke={c.accent} strokeWidth={5} fill="none" strokeLinecap="round" strokeDasharray={`${C * pct} ${C}`} />
           </Svg>
-          <Txt style={{ position: 'absolute', fontFamily: font.semibold, fontSize: 13, lineHeight: 18 }}>{Math.round(pct * 100)}%</Txt>
+          <Txt style={{ position: 'absolute', fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18 }}>{Math.round(pct * 100)}%</Txt>
         </View>
         <View style={{ flex: 1, gap: 3 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 19, lineHeight: 26, letterSpacing: -0.3 }}>{g.name}</Txt>
-          <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{progressLine(g)} · {extra}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 26, letterSpacing: -0.3 }}>{g.name}</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{progressLine(g)} · {extra}</Txt>
         </View>
       </Row>
     </Pressy>
@@ -152,7 +153,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
               {it.who ? <PersonAvatar who="coach" size={40} /> : <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}>{I ? <I size={19} color={fg} /> : null}</View>}
               <View style={{ flex: 1, gap: 2 }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{it.title}</Txt>
-                {!!it.body && <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{it.body}</Txt>}
+                {!!it.body && <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{it.body}</Txt>}
               </View>
             </Row>
             {it.two ? (
@@ -161,7 +162,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
                 <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} /></View>
               </Row>
             ) : it.btn ? (
-              <Row><Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.bg }}>{it.btn}</Txt></Pressy></Row>
+              <Row><Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.bg }}>{it.btn}</Txt></Pressy></Row>
             ) : null}
           </View>
         </Animated.View>
@@ -243,7 +244,7 @@ export function ComebackPlan() {
       <Row style={{ gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}><Flame size={22} color={FLAME} fill={FLAME} /></View>
         <View style={{ flex: 1, gap: 6 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 27, letterSpacing: -0.5 }}>Your comeback plan with lighter weights</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, letterSpacing: -0.5 }}>Your comeback plan with lighter weights</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>
             {['30 min', '5 exercises'].map((t) => <View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 18 }}>{t}</Txt></View>)}
           </Row>

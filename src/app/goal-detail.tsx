@@ -16,7 +16,7 @@ import { daysBetween, EXTEND_DAYS, fmtDay, fmtVal, Goal2, goalV2Store, useGoalV2
 import { useDrivers, useGoalV2Rows } from '@/features/goalv2/signs';
 import { TODAY } from '@/features/progress/trends';
 import { useStreak } from '@/features/streak/useStreak';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 type Past = { name: string; when: string; result: string; amount?: string };
 const HISTORY: Past[] = [
@@ -30,12 +30,12 @@ function Card({ children, gap = 10, style }: { children: React.ReactNode; gap?: 
 }
 const Label = ({ children }: { children: string }) => {
   const { c } = useTheme();
-  return <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: c.muted }}>{children}</Txt>;
+  return <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}>{children}</Txt>;
 };
 // A section heading above its cards (sentence case, like the rest of the app), with room above it so the page reads in groups.
 function Section({ title }: { title: string }) {
   return (
-    <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25, letterSpacing: -0.3, paddingHorizontal: 4, marginTop: 14, marginBottom: -2 }}>{title}</Txt>
+    <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, letterSpacing: -0.3, paddingHorizontal: 4, marginTop: 14, marginBottom: -2 }}>{title}</Txt>
   );
 }
 
@@ -57,7 +57,7 @@ function LeftTiles({ g }: { g: Goal2 }) {
       {tiles.map((t) => (
         <Card key={t.label} gap={4} style={{ flex: 1, padding: 16 }}>
           <Label>{t.label}</Label>
-          <Txt style={{ fontFamily: font.displayBold, fontSize: 32, lineHeight: 42, letterSpacing: -1, color: c.ink }}>{t.big}<Txt style={{ fontFamily: font.regular, fontSize: 15, lineHeight: 22, letterSpacing: 0, color: c.muted }}>{t.unit}</Txt></Txt>
+          <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl4, lineHeight: 42, letterSpacing: -1, color: c.ink }}>{t.big}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.base, lineHeight: 22, letterSpacing: 0, color: c.muted }}>{t.unit}</Txt></Txt>
           <Txt v="caption">{t.sub}</Txt>
         </Card>
       ))}
@@ -83,7 +83,7 @@ function ProgressChart({ g }: { g: Goal2 }) {
   const ends: [string, string][] = [['Started', fmtDay(g.startDate)], ['Ends', fmtDay(g.endDate!)]];
   return (
     <Card gap={12}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, letterSpacing: -0.2, color: tone }}>{sentence}</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, letterSpacing: -0.2, color: tone }}>{sentence}</Txt>
       <View style={{ height: H }}>
         <Svg width="100%" height={H} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
           <Line x1={pad} y1={yOf(1)} x2={W - pad} y2={yOf(1)} stroke={c.line} strokeWidth={1} />
@@ -95,7 +95,7 @@ function ProgressChart({ g }: { g: Goal2 }) {
         </Svg>
         <View style={{ position: 'absolute', left: `${left}%`, top: Math.max(0, (yOf(g.pct) / H) * H - 38), width: 120, marginLeft: -60, alignItems: 'center' }}>
           <View style={{ height: 26, paddingHorizontal: 10, borderRadius: 13, backgroundColor: c.ink, justifyContent: 'center' }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 17, color: c.bg }}>Today</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 17, color: c.bg }}>Today</Txt>
           </View>
         </View>
       </View>
@@ -103,7 +103,7 @@ function ProgressChart({ g }: { g: Goal2 }) {
         {ends.map(([l, date], i) => (
           <View key={l} style={{ gap: 1, alignItems: i === 0 ? 'flex-start' : 'flex-end' }}>
             <Txt v="caption">{l}</Txt>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{date}</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{date}</Txt>
           </View>
         ))}
       </Row>
@@ -133,12 +133,12 @@ function Drivers({ g }: { g: Goal2 }) {
             <Row key={r.key} style={{ gap: 12 }}>
               <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: col[r.key][0], alignItems: 'center', justifyContent: 'center' }}><I size={19} color={col[r.key][1]} /></View>
               <View style={{ flex: 1, gap: 6 }}>
-                <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20 }}>{r.label}</Txt>
+                <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20 }}>{r.label}</Txt>
                 <View style={{ height: 6, borderRadius: 3, backgroundColor: c.surface3, overflow: 'hidden' }}>
                   <View style={{ width: `${Math.max(4, r.pct * 100)}%`, height: 6, borderRadius: 3, backgroundColor: col[r.key][1] }} />
                 </View>
               </View>
-              <Txt style={{ fontFamily: font.displayBold, fontSize: 22, lineHeight: 30, letterSpacing: -0.4, minWidth: 64, textAlign: 'right' }}>{r.value}<Txt style={{ fontFamily: font.regular, fontSize: 13, lineHeight: 19, color: c.muted, letterSpacing: 0 }}>{r.unit}</Txt></Txt>
+              <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl2, lineHeight: 30, letterSpacing: -0.4, minWidth: 64, textAlign: 'right' }}>{r.value}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.sm, lineHeight: 19, color: c.muted, letterSpacing: 0 }}>{r.unit}</Txt></Txt>
             </Row>
           );
         })}
@@ -156,12 +156,12 @@ function History({ extra }: { extra: Past[] }) {
         <View key={h.name + i} style={{ paddingVertical: 10, borderTopWidth: i ? 1 : 0, borderTopColor: c.line, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: h.result === 'Reached' ? c.goodSoft : c.surface2, alignItems: 'center', justifyContent: 'center' }}>{h.result === 'Reached' ? <Check size={18} color={c.good} strokeWidth={2.6} /> : <Flag size={17} color={c.muted} />}</View>
           <View style={{ flex: 1 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{h.name}</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{h.name}</Txt>
             <Txt v="caption">{h.when}</Txt>
           </View>
           <View style={{ alignItems: 'flex-end', gap: 1 }}>
-            {h.amount ? <Txt style={{ fontFamily: font.displayBold, fontSize: 18, lineHeight: 24, letterSpacing: -0.3 }}>{h.amount}</Txt> : null}
-            <Txt v="caption" style={h.amount ? undefined : { fontSize: 13 }}>{h.result}</Txt>
+            {h.amount ? <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.lg, lineHeight: 24, letterSpacing: -0.3 }}>{h.amount}</Txt> : null}
+            <Txt v="caption" style={h.amount ? undefined : { fontSize: fontSizes.sm }}>{h.result}</Txt>
           </View>
         </View>
       ))}
@@ -202,14 +202,14 @@ export default function GoalDetail() {
   return (
     <SubPage title="Your goal" fallback="/progress" right={
       <Pressy accessibilityRole="button" accessibilityLabel="Change goal" onPress={() => router.push('/goal')} style={{ height: 44, paddingHorizontal: 14, justifyContent: 'center' }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.accentText }}>Change</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.accentText }}>Change</Txt>
       </Pressy>}>
       <GoalTickCard flat />
 
       {behind && !s.finished && (
         <Card gap={12}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25 }}>What would you like to do?</Txt>
-          <Txt muted style={{ fontSize: 14, lineHeight: 21 }}>{`You are a little behind the pace. Moving the target date by 4 weeks gives you room, and ${coach} is told either way. Or keep going as you are.`}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25 }}>What would you like to do?</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>{`You are a little behind the pace. Moving the target date by 4 weeks gives you room, and ${coach} is told either way. Or keep going as you are.`}</Txt>
           <Button kind="primary" label="Move target date" onPress={extend} />
           <Button kind="secondary" label={`Adjust target to ${fmtVal(g, g.targetValue + (g.startValue - g.targetValue) * 0.2)} ${g.unit}`} onPress={adjust} />
         </Card>
@@ -217,8 +217,8 @@ export default function GoalDetail() {
 
       {soon && !s.finished && (
         <Card gap={12}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25 }}>What would you like to do?</Txt>
-          <Txt muted style={{ fontSize: 14, lineHeight: 21 }}>{`Your goal ends ${g.daysLeft != null && g.daysLeft <= 1 ? 'tomorrow' : `in ${g.daysLeft} days`}. Any of these is fine, and ${coach} is told either way.`}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25 }}>What would you like to do?</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>{`Your goal ends ${g.daysLeft != null && g.daysLeft <= 1 ? 'tomorrow' : `in ${g.daysLeft} days`}. Any of these is fine, and ${coach} is told either way.`}</Txt>
           <Button kind="primary" label="Extend by 4 weeks" onPress={extend} />
           <Button kind="secondary" label={`Adjust target to ${fmtVal(g, g.targetValue + (g.startValue - g.targetValue) * 0.2)} ${g.unit}`} onPress={adjust} />
           <Button kind="outline" label="Finish with what I achieved" onPress={finish} />
@@ -227,8 +227,8 @@ export default function GoalDetail() {
 
       {ended && g.kind !== 'consistency' && (
         <Card gap={12}>
-          <Txt style={{ fontFamily: font.display, fontSize: 26, lineHeight: 34, letterSpacing: -0.5 }}>{achieved}</Txt>
-          <Txt muted style={{ fontSize: 14, lineHeight: 21 }}>Your next goal starts from today’s values, so nothing is lost.</Txt>
+          <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.5 }}>{achieved}</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>Your next goal starts from today’s values, so nothing is lost.</Txt>
           <Button kind="accent" label="Set my next goal" onPress={next} />
           <Button kind="secondary" label={s.kept ? 'Kept in history' : 'Keep this as history'} disabled={s.kept} onPress={keep} />
         </Card>
@@ -249,13 +249,13 @@ export default function GoalDetail() {
                   <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><ClipboardCheck size={19} color={c.accentText} /></View>
                   <View style={{ flex: 1 }}>
                     <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{`${g.noun[0].toUpperCase()}${g.noun.slice(1)} test`}</Txt>
-                    <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{assessLine(d.assess).l}</Txt>
+                    <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{assessLine(d.assess).l}</Txt>
                   </View>
                   <ChevronRight size={18} color={c.muted} />
                 </Row>
                 <View style={{ alignSelf: 'flex-start', height: 30, paddingHorizontal: 12, borderRadius: 15, backgroundColor: d.assess === 'Due now' ? c.warnSoft : c.surface2, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   <CalendarClock size={14} color={d.assess === 'Due now' ? c.warn : c.muted} />
-                  <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: d.assess === 'Due now' ? c.warn : c.ink }}>{assessLine(d.assess).s}</Txt>
+                  <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: d.assess === 'Due now' ? c.warn : c.ink }}>{assessLine(d.assess).s}</Txt>
                 </View>
               </Card>
             </Pressy>
@@ -273,7 +273,7 @@ export default function GoalDetail() {
                   <View key={i} style={{ alignItems: 'center', gap: 6 }}>
                     <Txt v="caption">{dl}</Txt>
                     <View style={{ width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: done ? '#F0692C' : c.surface2, borderWidth: i === todayIdx && !done ? 2 : 0, borderColor: '#F0692C' }}>
-                      <Txt style={{ fontSize: 12, lineHeight: 17, color: done ? fixed.white : c.muted }}>{22 + i}</Txt>
+                      <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: done ? fixed.white : c.muted }}>{22 + i}</Txt>
                     </View>
                   </View>
                 );
@@ -293,7 +293,7 @@ export default function GoalDetail() {
               <Flame size={20} color="#F0692C" fill="#F0692C" />
               <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{st.weeks ? `${st.weeks}-week streak` : 'No streak yet'}</Txt>
             </Row>
-            <Txt muted style={{ fontSize: 14, lineHeight: 21 }}>A week counts when you reach your weekly target. Missing a week pauses the streak, it does not erase it.</Txt>
+            <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>A week counts when you reach your weekly target. Missing a week pauses the streak, it does not erase it.</Txt>
           </Card>
         </>
       )}

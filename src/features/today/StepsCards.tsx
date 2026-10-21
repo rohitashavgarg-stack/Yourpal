@@ -16,7 +16,7 @@ import { fade } from '@/theme/motion';
 import { haptic } from '@/lib/haptics';
 import { HEALTH_NAME } from '@/lib/health';
 import { createStore } from '@/lib/createStore';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // Steps tracker designs to compare. Pick one in the Today edge-case panel.
 export type StepsDesign = 'Current' | 'Ruler' | 'Day bars' | 'Dot matrix' | 'Bars + details';
@@ -95,13 +95,13 @@ function CurrentFace({ s }: { s: S }) {
   return (
     <LinearGradient colors={['#5468FF', '#3346E8', '#222FB5']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14, justifyContent: 'space-between' }}>
       <View>
-        <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.8)' }}>Steps</Txt>
-        <Txt style={{ fontFamily: font.displayBold, fontSize: 30, lineHeight: 38, letterSpacing: -0.8, color: fixed.white }}>{fmt(s.total)}</Txt>
+        <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19, color: 'rgba(255,255,255,0.8)' }}>Steps</Txt>
+        <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl4, lineHeight: 38, letterSpacing: -0.8, color: fixed.white }}>{fmt(s.total)}</Txt>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         <View style={{ flex: 1, paddingBottom: 2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 26, color: fixed.white }}>{Math.round(s.pct * 100)}%</Txt>
-          <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.8)' }}>{s.left ? `${fmt(s.left)} to go` : 'Goal reached'}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 26, color: fixed.white }}>{Math.round(s.pct * 100)}%</Txt>
+          <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: 'rgba(255,255,255,0.8)' }}>{s.left ? `${fmt(s.left)} to go` : 'Goal reached'}</Txt>
         </View>
         <View style={{ width: 72, height: 72, alignItems: 'center', justifyContent: 'center' }}>
           <Ring size={72} r={30} stroke={8} pct={s.pct} color={fixed.white} track="rgba(255,255,255,0.25)" />
@@ -120,12 +120,12 @@ function RulerFace({ s }: { s: S }) {
   return (
     <LinearGradient colors={[fixed.black, fixed.dark, fixed.shadow]} style={{ flex: 1, paddingTop: 14, justifyContent: 'space-between' }}>
       <View style={{ paddingHorizontal: 14 }}>
-        <Txt style={{ fontFamily: font.displayBold, fontSize: 32, lineHeight: 40, letterSpacing: -0.8, color: fixed.white }}>{fmt(s.total)}</Txt>
-        <Txt style={{ fontFamily: font.medium, fontSize: 11, lineHeight: 16, letterSpacing: 3, color: 'rgba(255,255,255,0.8)' }}>STEPS</Txt>
+        <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl4, lineHeight: 40, letterSpacing: -0.8, color: fixed.white }}>{fmt(s.total)}</Txt>
+        <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs2, lineHeight: 16, letterSpacing: 3, color: 'rgba(255,255,255,0.8)' }}>STEPS</Txt>
       </View>
       <View>
         <Row style={{ justifyContent: 'space-between', paddingHorizontal: 12, paddingBottom: 4 }}>
-          {labels.map((l) => <Txt key={l} style={{ fontSize: 10, lineHeight: 14, color: 'rgba(255,255,255,0.85)' }}>{l}</Txt>)}
+          {labels.map((l) => <Txt key={l} style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: 'rgba(255,255,255,0.85)' }}>{l}</Txt>)}
         </Row>
         <Row style={{ justifyContent: 'space-between', paddingHorizontal: 6, height: 40, alignItems: 'flex-end' }}>
           {Array.from({ length: TICKS }, (_, i) => {
@@ -143,14 +143,14 @@ function DotFace({ s }: { s: S }) {
   return (
     <LinearGradient colors={['#1F7A52', '#0E3B2C', fixed.dark]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14 }}>
       <Row style={{ gap: 8 }}>
-        <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>Steps</Txt>
+        <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>Steps</Txt>
       </Row>
       <View style={{ marginTop: 22 }}><DotText text={String(s.total)} maxW={132} /></View>
       <Row style={{ marginTop: 'auto', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-        <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.7)' }}>of {fmt(s.goal)}</Txt>
+        <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: 'rgba(255,255,255,0.7)' }}>of {fmt(s.goal)}</Txt>
         <View style={{ gap: 3, alignItems: 'flex-end' }}>
-          <Row style={{ gap: 6 }}><ArrowRightLeft size={13} color={fixed.white} /><Txt style={{ fontSize: 13, lineHeight: 18, color: fixed.white }}><Txt style={{ fontFamily: font.semibold }}>{km(s.total)}</Txt> km</Txt></Row>
-          <Row style={{ gap: 6 }}><Flame size={13} color={fixed.white} /><Txt style={{ fontSize: 13, lineHeight: 18, color: fixed.white }}><Txt style={{ fontFamily: font.semibold }}>{kcalOf(s.total)}</Txt> kcal</Txt></Row>
+          <Row style={{ gap: 6 }}><ArrowRightLeft size={13} color={fixed.white} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 18, color: fixed.white }}><Txt style={{ fontFamily: font.semibold }}>{km(s.total)}</Txt> km</Txt></Row>
+          <Row style={{ gap: 6 }}><Flame size={13} color={fixed.white} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 18, color: fixed.white }}><Txt style={{ fontFamily: font.semibold }}>{kcalOf(s.total)}</Txt> kcal</Txt></Row>
         </View>
       </Row>
     </LinearGradient>
@@ -163,9 +163,9 @@ function BarsPlusFace({ s }: { s: S }) {
   return (
     <LinearGradient colors={['#4B5CF5', '#2F3FD6', '#1E2A9E']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14, justifyContent: 'space-between' }}>
       <View>
-        <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.8)' }}>Steps</Txt>
+        <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19, color: 'rgba(255,255,255,0.8)' }}>Steps</Txt>
         <Txt style={{ fontFamily: font.displayBold, fontSize: 28, lineHeight: 34, letterSpacing: -0.8, color: fixed.white }}>{fmt(s.total)}</Txt>
-        <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.85)' }}>{km(s.total)} km · {kcalOf(s.total)} kcal</Txt>
+        <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: 'rgba(255,255,255,0.85)' }}>{km(s.total)} km · {kcalOf(s.total)} kcal</Txt>
       </View>
       <Row style={{ alignItems: 'flex-end', justifyContent: 'space-between', height: 40 }}>
         {DAY.map((v, i) => <View key={i} style={{ width: 8, height: Math.max(4, (v / max) * 40), borderRadius: 3, backgroundColor: v ? fixed.white : 'rgba(255,255,255,0.22)' }} />)}
@@ -180,16 +180,16 @@ function BarsFace({ s }: { s: S }) {
   return (
     <LinearGradient colors={['#4B5CF5', '#2F3FD6', '#1E2A9E']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14, justifyContent: 'space-between' }}>
       <View>
-        <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.8)' }}>Steps</Txt>
-        <Txt style={{ fontFamily: font.displayBold, fontSize: 30, lineHeight: 38, letterSpacing: -0.8, color: fixed.white }}>{fmt(s.total)}</Txt>
+        <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19, color: 'rgba(255,255,255,0.8)' }}>Steps</Txt>
+        <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl4, lineHeight: 38, letterSpacing: -0.8, color: fixed.white }}>{fmt(s.total)}</Txt>
       </View>
       <View>
         <Row style={{ alignItems: 'flex-end', justifyContent: 'space-between', height: 44 }}>
           {DAY.map((v, i) => <View key={i} style={{ width: 8, height: Math.max(4, (v / max) * 44), borderRadius: 3, backgroundColor: v ? fixed.white : 'rgba(255,255,255,0.22)' }} />)}
         </Row>
         <Row style={{ justifyContent: 'space-between', paddingTop: 4 }}>
-          <Txt style={{ fontSize: 10, lineHeight: 14, color: 'rgba(255,255,255,0.75)' }}>12 am</Txt>
-          <Txt style={{ fontSize: 10, lineHeight: 14, color: 'rgba(255,255,255,0.75)' }}>{s.left ? `${fmt(s.left)} to go` : 'Goal reached'}</Txt>
+          <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: 'rgba(255,255,255,0.75)' }}>12 am</Txt>
+          <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: 'rgba(255,255,255,0.75)' }}>{s.left ? `${fmt(s.left)} to go` : 'Goal reached'}</Txt>
         </Row>
       </View>
     </LinearGradient>
@@ -227,10 +227,10 @@ export function StepsSheet() {
 
   return (
     <>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 26, lineHeight: 34, letterSpacing: -0.6 }}>Steps</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.6 }}>Steps</Txt>
       <View>
-        <Txt style={{ fontFamily: font.display, fontSize: 44, lineHeight: 54 }}>{fmt(s.total)}<Txt muted style={{ fontFamily: font.display, fontSize: 20, lineHeight: 28 }}> / {fmt(s.goal)}</Txt></Txt>
-        <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{`${fmt(s.sensor)} from ${NAME(d)}${s.added ? ` · ${fmt(s.added)} added by you` : ''}`}</Txt>
+        <Txt style={{ fontFamily: font.display, fontSize: 44, lineHeight: 54 }}>{fmt(s.total)}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.xl, lineHeight: 28 }}> / {fmt(s.goal)}</Txt></Txt>
+        <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{`${fmt(s.sensor)} from ${NAME(d)}${s.added ? ` · ${fmt(s.added)} added by you` : ''}`}</Txt>
       </View>
       <Txt v="label">Forgot your phone? Add steps</Txt>
       <Row style={{ gap: 8, flexWrap: 'wrap' }}>
@@ -240,22 +240,22 @@ export function StepsSheet() {
         {(['steps', 'min'] as const).map((m) => (
           <Pressy key={m} accessibilityRole="button" accessibilityLabel={m === 'steps' ? 'Enter steps' : 'Enter walking minutes'} onPress={() => { setMode(m); setTxt(''); haptic.tap(); }}
             style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, justifyContent: 'center', backgroundColor: mode === m ? c.ink : c.surface2 }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: mode === m ? c.bg : c.ink }}>{m === 'steps' ? 'Steps' : 'Walk minutes'}</Txt>
+            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19, color: mode === m ? c.bg : c.ink }}>{m === 'steps' ? 'Steps' : 'Walk minutes'}</Txt>
           </Pressy>
         ))}
       </Row>
       <Field value={txt} onChangeText={setTxt} placeholder={mode === 'steps' ? 'e.g. 3500' : 'e.g. 30'} keyboardType="number-pad" accessibilityLabel={mode === 'steps' ? 'Steps to add' : 'Walking minutes to add'} returnKeyType="done" onSubmitEditing={addCustom} />
-      {mode === 'min' && num > 0 && <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{`About ${fmt(steps)} steps at an easy pace`}</Txt>}
+      {mode === 'min' && num > 0 && <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{`About ${fmt(steps)} steps at an easy pace`}</Txt>}
       <Button kind="accent" label={ok ? `Add ${fmt(steps)} steps` : 'Add steps'} disabled={!ok} onPress={addCustom} />
-      <Txt muted style={{ fontSize: 12, lineHeight: 18 }}>Manual steps are added on top of your {d.hc ? HEALTH_NAME : 'phone'} count and marked as added by you.</Txt>
+      <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 18 }}>Manual steps are added on top of your {d.hc ? HEALTH_NAME : 'phone'} count and marked as added by you.</Txt>
       {s.manual.length > 0 && (
         <Animated.View entering={fade()} style={{ gap: 2 }}>
           <Txt v="label" style={{ paddingBottom: 4 }}>Added by you today</Txt>
           {s.manual.map((e) => (
             <Row key={e.id} style={{ justifyContent: 'space-between', minHeight: 44 }}>
               <View>
-                <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 21 }}>{`+ ${fmt(e.n)} steps`}</Txt>
-                <Txt muted style={{ fontSize: 12, lineHeight: 18 }}>{e.label}</Txt>
+                <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 21 }}>{`+ ${fmt(e.n)} steps`}</Txt>
+                <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 18 }}>{e.label}</Txt>
               </View>
               <Pressy accessibilityRole="button" accessibilityLabel={`Remove ${fmt(e.n)} steps`} onPress={() => remove(e)} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
                 <X size={18} color={c.muted} />

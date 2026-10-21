@@ -10,7 +10,7 @@ import { font } from '@/theme/tokens';
 import { HIST } from '@/features/plans/content';
 import { HistSheet } from '@/features/plans/Sheets';
 import { PageHeader } from '@/features/plans/parts';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 export default function WorkoutHistory() {
   const { c } = useTheme();
@@ -38,7 +38,7 @@ export default function WorkoutHistory() {
             </Pressy>
           ))}
         </Card>
-        <Txt muted style={{ fontSize: 13, textAlign: 'center' }}>Home or travel workouts count toward your streak.</Txt>
+        <Txt muted style={{ fontSize: fontSizes.sm, textAlign: 'center' }}>Home or travel workouts count toward your streak.</Txt>
       </ScrollView>
     </View>
   );

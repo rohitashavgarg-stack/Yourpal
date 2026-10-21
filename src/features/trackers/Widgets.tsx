@@ -7,7 +7,7 @@ import { Pressy, Row, Txt } from '@/components/ui';
 import { font } from '@/theme/tokens';
 import { fmt1 } from '@/lib/useNow';
 import { DotText } from './DotText';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // New tracker widget designs. Plain tiles driven by props, so they can sit on Today, on the designs page and on the Profile card.
 export const TILE = 164;
@@ -22,7 +22,7 @@ export function WTile({ colors, onPress, label, Icon, a11y, children, right, add
       {label ? (
         <Row style={{ gap: 8, minHeight: 26, justifyContent: 'space-between' }}>
           <Row style={{ gap: 8 }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>{label}</Txt>
+            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>{label}</Txt>
           </Row>
           {right}
         </Row>
@@ -57,7 +57,7 @@ export function AddButton({ label, onPress, variant = 'round' }: { label: string
   );
 }
 
-const cap = { fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.7)' } as const;
+const cap = { fontSize: fontSizes.xs, lineHeight: 17, color: 'rgba(255,255,255,0.7)' } as const;
 
 function Segments({ n, on, color, off = 'rgba(255,255,255,0.14)', h = 6, gap = 4, width = W_IN }: { n: number; on: number; color: string; off?: string; h?: number; gap?: number; width?: number }) {
   const w = (width - gap * (n - 1)) / n;
@@ -87,9 +87,9 @@ export function EnergyStack({ onPress }: { onPress?: () => void }) {
       </View>
       <View style={{ position: 'absolute', right: 14, top: 58, alignItems: 'flex-end' }}>
         <Txt style={{ fontFamily: font.displayBold, fontSize: 38, lineHeight: 44, letterSpacing: -1, color: fixed.white }}>69%</Txt>
-        <Txt style={{ fontSize: 14, lineHeight: 20, color: 'rgba(255,255,255,0.75)' }}>of goal</Txt>
+        <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: 'rgba(255,255,255,0.75)' }}>of goal</Txt>
       </View>
-      <Txt style={{ position: 'absolute', right: 14, bottom: 12, fontSize: 14, lineHeight: 20, color: fixed.white }}>320 kcal</Txt>
+      <Txt style={{ position: 'absolute', right: 14, bottom: 12, fontSize: fontSizes.md, lineHeight: 20, color: fixed.white }}>320 kcal</Txt>
     </WTile>
   );
 }
@@ -100,7 +100,7 @@ export function WaterDot({ litres, onPress, onAdd }: { litres: number; onPress?:
   return (
     <WTile colors={['#0E4A8A', '#07192F']} label="Water" Icon={Droplet} a11y={`Water ${fmt1(litres)} of 3 litres, ${fmt1(left)} left`} onPress={onPress} add={{ label: 'Add a glass, 250 millilitres', onPress: onAdd, variant: 'glass' }}>
       <View style={{ marginTop: 22 }}><DotText text={fmt1(litres)} maxW={W_IN - 6} on="#CBE9FF" off="rgba(255,255,255,0.07)" maxDot={9} /></View>
-      <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.75)', marginTop: 'auto' }}>{left > 0 ? 'of 3 L' : 'Goal reached'}</Txt>
+      <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: 'rgba(255,255,255,0.75)', marginTop: 'auto' }}>{left > 0 ? 'of 3 L' : 'Goal reached'}</Txt>
     </WTile>
   );
 }
@@ -108,7 +108,7 @@ export function WaterGlasses({ litres, onPress, onAdd }: { litres: number; onPre
   const glasses = Math.round(litres / 0.25);
   return (
     <WTile colors={['#0B2A4A', '#061424']} label="Water" a11y={`${glasses} of 12 glasses`} onPress={onPress} add={{ label: 'Add a glass, 250 millilitres', onPress: onAdd, variant: 'glass' }}>
-      <Txt style={{ fontFamily: font.displayBold, fontSize: 32, lineHeight: 40, color: fixed.white, marginTop: 10 }}>{glasses}<Txt style={{ fontFamily: font.medium, fontSize: 15, color: 'rgba(255,255,255,0.6)' }}> / 12 </Txt><Txt style={{ fontFamily: font.medium, fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>glasses</Txt></Txt>
+      <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl4, lineHeight: 40, color: fixed.white, marginTop: 10 }}>{glasses}<Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, color: 'rgba(255,255,255,0.6)' }}> / 12 </Txt><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.6)' }}>glasses</Txt></Txt>
       <View style={{ marginTop: 'auto' }}><Segments n={12} on={glasses} color="#27A9FF" h={12} gap={3} /></View>
     </WTile>
   );
@@ -120,7 +120,7 @@ export function WeightDot({ kg, delta, onPress, onAdd }: { kg: number; delta: nu
     <WTile colors={['#14595F', '#061A1D']} label="Weight" Icon={Scale} a11y={`Weight ${fmt1(kg)} kilograms`} onPress={onPress} add={{ label: 'Log weight', onPress: onAdd }}>
       <View style={{ marginTop: 22 }}><DotText text={fmt1(kg)} maxW={W_IN - 6} on="#7FE3D6" /></View>
       <Txt style={{ ...cap, marginTop: 8 }}>kg</Txt>
-      <Txt style={{ fontSize: 12, lineHeight: 17, color: '#7FE3D6', marginTop: 'auto' }}>{delta <= 0 ? '↘' : '↗'} {Math.abs(delta)} kg this week</Txt>
+      <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: '#7FE3D6', marginTop: 'auto' }}>{delta <= 0 ? '↘' : '↗'} {Math.abs(delta)} kg this week</Txt>
     </WTile>
   );
 }
@@ -128,7 +128,7 @@ export function WeightRuler({ kg, onPress, onAdd }: { kg: number; onPress?: () =
   const n = 25;
   return (
     <WTile colors={['#1FB5A6', '#0A6F78', '#0A4A55']} label="Weight" a11y={`Weight ${fmt1(kg)} kilograms`} onPress={onPress} add={{ label: 'Log weight', onPress: onAdd }}>
-      <Txt style={{ fontFamily: font.displayBold, fontSize: 26, lineHeight: 34, color: fixed.white, marginTop: 8 }}>{fmt1(kg)}<Txt style={{ fontFamily: font.medium, fontSize: 13 }}> kg</Txt></Txt>
+      <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl3, lineHeight: 34, color: fixed.white, marginTop: 8 }}>{fmt1(kg)}<Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm }}> kg</Txt></Txt>
       <View style={{ position: 'absolute', left: 14, right: 14, bottom: 34, height: 44, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         {Array.from({ length: n }, (_, i) => <View key={i} style={{ width: 2, height: i % 5 === 0 ? 34 : 20, borderRadius: 1, backgroundColor: i === 12 ? fixed.white : 'rgba(255,255,255,0.5)' }} />)}
       </View>
@@ -153,7 +153,7 @@ export function SleepStages({ onPress }: { onPress?: () => void }) {
   const hs = [4, 7, 10, 6, 9, 12, 8, 5, 9, 6];
   return (
     <WTile colors={['#7E6BFF', '#4A3BC4', '#2B2080']} label="Sleep" Icon={Moon} a11y="Sleep 7 hours 10 minutes" onPress={onPress}>
-      <Txt style={{ fontFamily: font.displayBold, fontSize: 30, lineHeight: 38, color: fixed.white, marginTop: 4 }}>7h 10<Txt style={{ fontFamily: font.medium, fontSize: 14 }}>m</Txt></Txt>
+      <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl4, lineHeight: 38, color: fixed.white, marginTop: 4 }}>7h 10<Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>m</Txt></Txt>
       <Txt style={cap}>11:40 pm – 6:50 am</Txt>
       <View style={{ marginTop: 'auto', flexDirection: 'row', alignItems: 'flex-end', gap: 4, height: 34 }}>
         {hs.map((h, i) => <View key={i} style={{ flex: 1, height: (h / 12) * 34, borderRadius: 5, backgroundColor: i % 3 === 2 ? 'rgba(255,255,255,0.45)' : fixed.white }} />)}
@@ -176,10 +176,10 @@ export function WeekTile({ done = [true, false, true, false, false, false, false
   const n = done.filter(Boolean).length;
   return (
     <WTile colors={[fixed.shadow, fixed.dark]} label="This week" a11y={`${n} of ${of} workouts this week`} onPress={onPress}>
-      <Txt style={{ fontFamily: font.displayBold, fontSize: 32, lineHeight: 40, color: fixed.white, marginTop: 4 }}>{n}<Txt style={{ fontFamily: font.medium, fontSize: 15, color: 'rgba(255,255,255,0.65)' }}> of {of}</Txt></Txt>
+      <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl4, lineHeight: 40, color: fixed.white, marginTop: 4 }}>{n}<Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, color: 'rgba(255,255,255,0.65)' }}> of {of}</Txt></Txt>
       <View style={{ marginTop: 'auto', gap: 6 }}>
         <Row style={{ justifyContent: 'space-between' }}>
-          {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((l, i) => <Txt key={i} style={{ width: 16, textAlign: 'center', fontSize: 10, lineHeight: 14, color: 'rgba(255,255,255,0.6)' }}>{l}</Txt>)}
+          {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((l, i) => <Txt key={i} style={{ width: 16, textAlign: 'center', fontSize: fontSizes.xs2, lineHeight: 14, color: 'rgba(255,255,255,0.6)' }}>{l}</Txt>)}
         </Row>
         <Row style={{ justifyContent: 'space-between' }}>
           {done.map((v, i) => <View key={i} style={{ width: 16, height: 22, borderRadius: 8, backgroundColor: v ? '#FF7A45' : 'rgba(255,255,255,0.12)' }} />)}

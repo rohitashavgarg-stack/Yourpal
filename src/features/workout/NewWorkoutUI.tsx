@@ -16,7 +16,7 @@ import { RestPanel } from './RestPanel';
 import { GlassBackdrop } from '@/components/Glass';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { CLIPS, THUMBS } from './clips';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // The only clips we have are the main-lift ones, so a move gets a still only where it is the same movement; the rest show a plain tile.
 const LIST_THUMB: Record<string, string> = { w2: 'dfs', c3: 'dbe' };
@@ -65,7 +65,7 @@ function FinishPill({ onPress }: { onPress: () => void }) {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Finish workout" onPress={onPress} scaleTo={0.94}
       style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: INK }}>Finish</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: INK }}>Finish</Txt>
     </Pressy>
   );
 }
@@ -99,7 +99,7 @@ function ClipCardInner({ source, thumb, onFull, onHide }: { source: number; thum
         <Pressy accessibilityRole="button" accessibilityLabel="Hide the clip" onPress={onHide} scaleTo={0.94}
           style={{ position: 'absolute', left: 10, top: 10, height: 32, paddingHorizontal: 12, borderRadius: 16, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', flexDirection: 'row', alignItems: 'center', gap: 4, justifyContent: 'center' }}>
           <ChevronUp size={15} color={INK} />
-          <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: INK }}>Hide</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: INK }}>Hide</Txt>
         </Pressy>
       )}
       <Pressy accessibilityRole="button" accessibilityLabel="Full screen" onPress={goFull} scaleTo={0.92}
@@ -120,7 +120,7 @@ function ClipRow({ thumb, onOpen }: { thumb?: number; onOpen: () => void }) {
         {!!thumb && <Image source={thumb} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} />}
         <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}><Play size={10} color={fixed.white} fill={fixed.white} style={{ marginLeft: 1 }} /></View>
       </View>
-      <Txt style={{ flex: 1, fontFamily: font.medium, fontSize: 15, lineHeight: 21 }}>Watch form</Txt>
+      <Txt style={{ flex: 1, fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 21 }}>Watch form</Txt>
       <ChevronDown size={18} color={c.muted} />
     </Pressy>
   );
@@ -152,7 +152,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
         <Row style={{ gap: 10 }}>
           <RoundBtn label="Minimise workout" onPress={onMinimise} glass><X size={20} color={c.ink} /></RoundBtn>
           <View style={{ flex: 1, alignItems: 'center' }}>
-            <Txt accessibilityLabel={`Workout time ${elapsed}`} style={{ fontFamily: font.monoBold, fontSize: 20, lineHeight: 28 }}>{elapsed}</Txt>
+            <Txt accessibilityLabel={`Workout time ${elapsed}`} style={{ fontFamily: font.monoBold, fontSize: fontSizes.xl, lineHeight: 28 }}>{elapsed}</Txt>
           </View>
           <FinishPill onPress={onFinish} />
         </Row>
@@ -160,7 +160,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 16 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <Row style={{ gap: 8, alignItems: 'flex-start' }}>
-          <Txt accessibilityRole="header" style={{ flex: 1, fontFamily: font.display, fontSize: 32, lineHeight: 40, letterSpacing: -0.8 }}>{e.name}</Txt>
+          <Txt accessibilityRole="header" style={{ flex: 1, fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 40, letterSpacing: -0.8 }}>{e.name}</Txt>
           <Pressy accessibilityRole="button" accessibilityLabel="Exercise options: swap, ask coach, form tips, skip" onPress={onMenu} scaleTo={0.92}
             style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
             <Ellipsis size={20} color={c.ink} />
@@ -170,7 +170,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
           ? <ClipCardInner key={e.id} source={source} thumb={THUMBS[e.id]} onFull={() => setPop(true)} onHide={marked ? () => setShown(false) : undefined} />
           : <ClipRow thumb={THUMBS[e.id]} onOpen={() => setShown(true)} />)}
         <View style={{ gap: 8 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 16, letterSpacing: 1.2, color: c.muted }}>MUSCLES FOCUSED</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 16, letterSpacing: 1.2, color: c.muted }}>MUSCLES FOCUSED</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>
             {e.muscles.split('·').map((m) => m.trim()).filter(Boolean).map((m) => <Chip key={m} label={m.charAt(0).toUpperCase() + m.slice(1)} />)}
           </Row>
@@ -244,7 +244,7 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
         <Button kind={allDone || cool ? 'accent' : 'primary'} label={cool ? 'Finish workout' : 'Start main workout'} onPress={cool ? onFinishNow : onMain} />
         {!cool && (
           <Pressy accessibilityRole="button" onPress={onMain} scaleTo={0.96} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: 15, lineHeight: 21, color: c.ink, opacity: 0.7 }}>Skip warm-up</Txt>
+            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 21, color: c.ink, opacity: 0.7 }}>Skip warm-up</Txt>
           </Pressy>
         )}
       </View>

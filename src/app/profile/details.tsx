@@ -19,6 +19,7 @@ import { useScenarios, useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fade, fadeOut } from '@/theme/motion';
 import { goBack, Label, Note, SubPage, useShake } from '@/features/shell/parts';
+import { fontSizes } from '@/design-system/tokens';
 
 const maskNum = (p: string) => (p.replace(/D/g, '').length === 10 ? `+91 ${p.slice(0, 2)}xxxxxx${p.slice(8)}` : '+91 98xxxxxx21');
 
@@ -44,14 +45,14 @@ function ChangePhoneSheet() {
   };
   return (
     <View style={{ gap: 12, paddingBottom: 8 }}>
-      <Txt v="title" style={{ fontSize: 22, lineHeight: 29 }}>{sent ? 'Enter the code' : 'Change mobile number'}</Txt>
-      <Txt muted style={{ fontSize: 14 }}>{sent ? `We sent a 6-digit code to +91 ${num}.` : 'We will send a code to the new number to confirm it is yours. Your gym sees the new number after this.'}</Txt>
+      <Txt v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>{sent ? 'Enter the code' : 'Change mobile number'}</Txt>
+      <Txt muted style={{ fontSize: fontSizes.md }}>{sent ? `We sent a 6-digit code to +91 ${num}.` : 'We will send a code to the new number to confirm it is yours. Your gym sees the new number after this.'}</Txt>
       {sent ? (
         <Field value={code} onChangeText={(t) => { setCode(t.replace(/D/g, '').slice(0, 6)); setErr(''); }} keyboardType="number-pad" placeholder="6-digit code" accessibilityLabel="Verification code" error={!!err} />
       ) : (
         <Field value={num} onChangeText={(t) => { setNum(t.replace(/D/g, '').slice(0, 10)); setErr(''); }} keyboardType="number-pad" prefix="+91" placeholder="New mobile number" accessibilityLabel="New mobile number" error={!!err} />
       )}
-      {!!err && <Txt accessibilityRole="alert" style={{ color: c.warn, fontSize: 14 }}>{err}</Txt>}
+      {!!err && <Txt accessibilityRole="alert" style={{ color: c.warn, fontSize: fontSizes.md }}>{err}</Txt>}
       <Button label={sent ? 'Verify and update' : 'Send code'} onPress={sent ? verify : send} />
     </View>
   );
@@ -69,7 +70,7 @@ function PhotoSheet({ hasCustom, onPick, onRemove }: { hasCustom: boolean; onPic
   );
   return (
     <View style={{ gap: 10, paddingBottom: 8 }}>
-      <Txt v="title" style={{ fontSize: 20, lineHeight: 27 }}>Profile photo</Txt>
+      <Txt v="title" style={{ fontSize: fontSizes.xl, lineHeight: 27 }}>Profile photo</Txt>
       {opt('Choose from gallery', <ImageIcon size={22} color={c.accentText} />, () => onPick('library'))}
       {opt('Take a photo', <Camera size={22} color={c.accentText} />, () => onPick('camera'))}
       {hasCustom && opt('Remove my photo', <Trash2 size={22} color={c.warn} />, onRemove, true)}
@@ -83,7 +84,7 @@ function DobSheet() {
   const [dob, setDob] = useState(state.profile.dob || defaultDob());
   return (
     <View style={{ gap: 12, paddingBottom: 8 }}>
-      <Txt v="title" style={{ fontSize: 22, lineHeight: 29 }}>Date of birth</Txt>
+      <Txt v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>Date of birth</Txt>
       <DobPicker dob={dob} onChange={setDob} />
       <Button label="Save" onPress={() => { setProfile({ dob, age: String(ageFrom(dob)) }); haptic.success(); closeSheet(() => toast('Date of birth updated')); }} />
     </View>
@@ -157,7 +158,7 @@ export default function MyDetails() {
           <PersonAvatar who="me" size={96} photo={photo} />
         </Pressy>
         <Pressy accessibilityRole="button" onPress={() => openSheet(<PhotoSheet hasCustom={hasCustom} onPick={pickPhoto} onRemove={() => setPhoto(null)} />, { label: 'Profile photo' })} scaleTo={0.96} style={{ minHeight: 32, justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.accentText }}>Change photo</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.accentText }}>Change photo</Txt>
         </Pressy>
       </View>
       <Label style={{ marginTop: 16 }}>Name</Label>
@@ -166,7 +167,7 @@ export default function MyDetails() {
       </View>
       {!!err && (
         <Animated.View entering={fade()} exiting={fadeOut()} style={shake}>
-          <Txt style={{ color: c.warn, fontSize: 14, paddingHorizontal: 6 }}>Name can't be empty.</Txt>
+          <Txt style={{ color: c.warn, fontSize: fontSizes.md, paddingHorizontal: 6 }}>Name can't be empty.</Txt>
         </Animated.View>
       )}
 

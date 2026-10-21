@@ -14,6 +14,7 @@ import { useDietActions } from './dietActions';
 import { startCreate, startDietEdit, startWorkoutEdit } from './openers';
 import { BigTitle, ListRow, Stepper } from './parts';
 import { allowedFor, dayPlan, dietItems, DietRow, PEx, setP, usePlans } from './store';
+import { fontSizes } from '@/design-system/tokens';
 
 // ---------- Workout plan menu ----------
 export function PlanMenuSheet() {
@@ -188,7 +189,7 @@ export function ItemMenuSheet({ mid, itemKey }: { mid: MealId; itemKey: string }
         <ListRow label="Always use a swap for this" chevron={false} last={!it.mine} onPress={() => openSheet(<SwapSheet mid={mid} itemKey={it.key} always />, { label: 'Swap item' })} />
         {it.mine && <ListRow label="Delete item" tone={c.warn} chevron={false} last onPress={() => closeSheet(() => A.deleteExtra(mid, it))} />}
       </View>
-      {!it.mine && <Txt v="caption" style={{ fontSize: 13 }}>Items from Coach's plan can be skipped but not deleted.</Txt>}
+      {!it.mine && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Items from Coach's plan can be skipped but not deleted.</Txt>}
     </>
   );
 }
@@ -205,7 +206,7 @@ export function NutritionSheet({ mid, itemKey }: { mid: MealId; itemKey: string 
         {tiles.map(([l, v]) => (
           <View key={l} accessible accessibilityLabel={`${l} ${v}`} style={{ width: '48%', flexGrow: 1, padding: 14, borderRadius: 18, backgroundColor: c.surface2 }}>
             <Txt v="label">{l}</Txt>
-            <Txt style={{ fontFamily: font.display, fontSize: 25 }}>{v}</Txt>
+            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3 }}>{v}</Txt>
           </View>
         ))}
       </View>
@@ -230,7 +231,7 @@ export function SwapSheet({ mid, itemKey, always: always0 }: { mid: MealId; item
       <View>
         {opts.map((o) => (
           <ListRow key={o.n} label={`${o.n}, ${o.q}`} sub={o.coach ? 'Coach-approved' : undefined} chevron={false} a11y={`${o.n}, ${o.q}, about ${o.k} kcal, ${o.p} grams protein${o.coach ? ', coach-approved' : ''}`}
-            right={<Row style={{ gap: 8 }}><FoodMark type={o.type} /><Txt v="mono" muted style={{ fontSize: 12 }}>≈{o.k} · {o.p} g</Txt></Row>} onPress={() => pick(o)} />
+            right={<Row style={{ gap: 8 }}><FoodMark type={o.type} /><Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>≈{o.k} · {o.p} g</Txt></Row>} onPress={() => pick(o)} />
         ))}
         <ListRow label="Search something else" last onPress={() => closeSheet(() => router.push({ pathname: '/plans/log', params: { meal: mid, replace: it.key } }))} />
       </View>
@@ -238,7 +239,7 @@ export function SwapSheet({ mid, itemKey, always: always0 }: { mid: MealId; item
         <Pill label="Today only" on={!always} onPress={() => setAlways(false)} style={{ flex: 1 }} />
         <Pill label="Always use this swap" on={always} onPress={() => setAlways(true)} style={{ flex: 1 }} />
       </Row>
-      <Txt v="caption" style={{ fontSize: 13, color: c.muted }}>Matched on protein first, then calories · filtered for {p.diet.toLowerCase()} · Always use notifies Coach Vikram</Txt>
+      <Txt v="caption" style={{ fontSize: fontSizes.sm, color: c.muted }}>Matched on protein first, then calories · filtered for {p.diet.toLowerCase()} · Always use notifies Coach Vikram</Txt>
     </>
   );
 }

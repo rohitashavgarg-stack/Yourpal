@@ -16,7 +16,7 @@ import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { useDomain } from '@/lib/domain';
 import { fmt1 } from '@/lib/useNow';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const COLORS = ['#3A36C9', '#B9B6FF', fixed.white, '#F2B544', '#1F6E63'];
 const PARTS = Array.from({ length: 34 }, (_, i) => {
@@ -48,7 +48,7 @@ function StreakLine({ done }: { done: number }) {
   return (
     <Animated.View entering={fade(900)} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 10, paddingHorizontal: 14, borderRadius: 16, backgroundColor: 'rgba(255,138,61,0.14)' }}>
       <Flame size={18} color={FLAME} fill={kept ? FLAME : 'transparent'} strokeWidth={2} />
-      <Txt style={{ flex: 1, fontSize: 14, lineHeight: 20, color: c.ink }}>{kept ? `Week complete · streak now ${st.weeks + (st.kept ? 0 : 1)} weeks` : `${left} more ${left === 1 ? 'session' : 'sessions'} to keep your streak`}</Txt>
+      <Txt style={{ flex: 1, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>{kept ? `Week complete · streak now ${st.weeks + (st.kept ? 0 : 1)} weeks` : `${left} more ${left === 1 ? 'session' : 'sessions'} to keep your streak`}</Txt>
     </Animated.View>
   );
 }
@@ -80,13 +80,13 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
         <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: c.glass, borderRadius: 32 }} />
         <View style={{ paddingTop: 22, paddingHorizontal: 18, paddingBottom: 18, gap: 14 }}>
           <View style={{ gap: 4 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 13, color: c.muted }}>Workout done · Leg day</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.muted }}>Workout done · Leg day</Txt>
             <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 38, lineHeight: 36 }}>Nice work, Rohitashav</Txt>
           </View>
           <Row style={{ backgroundColor: c.tile, borderRadius: 20, paddingVertical: 12, paddingHorizontal: 4 }}>
             {[[String(s.mins), ' min', 'Time'], [String(s.sets), '', s.sets === 1 ? 'Set done' : 'Sets done'], [`${s.exercises}/${s.totalEx}`, '', 'Exercises']].map(([v, u, l], i) => (
               <View key={l} style={{ flex: 1, alignItems: 'center', borderLeftWidth: i ? 1 : 0, borderLeftColor: c.line }}>
-                <Txt style={{ fontFamily: font.display, fontSize: 32, lineHeight: 36 }}>{v}<Txt muted style={{ fontFamily: font.display, fontSize: 17 }}>{u}</Txt></Txt>
+                <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 36 }}>{v}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.lg }}>{u}</Txt></Txt>
                 <Txt v="caption">{l}</Txt>
               </View>
             ))}
@@ -99,8 +99,8 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
                   <Trophy size={24} strokeWidth={1.9} color={fixed.white} />
                 </Pressy>
                 <View style={{ flex: 1 }}>
-                  <Txt style={{ fontFamily: font.bold, fontSize: 12, letterSpacing: 0.5, color: c.accent }}>{s.pr ? 'New PR' : 'Logged'}</Txt>
-                  <Txt style={{ fontFamily: font.display, fontSize: 26, lineHeight: 28 }}>{s.pr ? `${s.pr.name} ${fmt1(s.pr.kg)} kg` : `${s.sets} ${s.sets === 1 ? "set" : "sets"} done`}</Txt>
+                  <Txt style={{ fontFamily: font.bold, fontSize: fontSizes.xs, letterSpacing: 0.5, color: c.accent }}>{s.pr ? 'New PR' : 'Logged'}</Txt>
+                  <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 28 }}>{s.pr ? `${s.pr.name} ${fmt1(s.pr.kg)} kg` : `${s.sets} ${s.sets === 1 ? "set" : "sets"} done`}</Txt>
                 </View>
               </Row>
               <Button kind="outline" small label="Share" icon={<Share size={16} color={c.ink} />} onPress={() => toast('Sharing opens the system share sheet')} />
@@ -126,7 +126,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
               {(['Hard', 'Just right', 'Easy'] as Feel[]).map((n) => (
                 <Pressy key={n} accessibilityRole="radio" accessibilityState={{ selected: feel === n }} onPress={() => setFeel(n)}
                   style={{ flex: 1, height: 50, borderRadius: 25, borderWidth: 1, borderColor: feel === n ? c.ink : c.line, backgroundColor: feel === n ? c.ink : c.tile, alignItems: 'center', justifyContent: 'center' }}>
-                  <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: feel === n ? c.bg : c.ink }}>{n}</Txt>
+                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: feel === n ? c.bg : c.ink }}>{n}</Txt>
                 </Pressy>
               ))}
             </View>

@@ -7,6 +7,7 @@ import { Pressy, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { useStreak } from './useStreak';
+import { fontSizes } from '@/design-system/tokens';
 
 export const FLAME = '#FF8A3D';
 
@@ -20,7 +21,7 @@ function WeekRing({ done, total }: { done: number; total: number }) {
         <Circle cx={S / 2} cy={S / 2} r={R} stroke={c.surface3} strokeWidth={4} fill="none" />
         <Circle cx={S / 2} cy={S / 2} r={R} stroke={FLAME} strokeWidth={4} fill="none" strokeLinecap="round" strokeDasharray={`${C * (done / total)} ${C}`} transform={`rotate(-90 ${S / 2} ${S / 2})`} />
       </Svg>
-      <Txt style={{ position: 'absolute', fontFamily: font.semibold, fontSize: 11, lineHeight: 15 }}>{done}/{total}</Txt>
+      <Txt style={{ position: 'absolute', fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15 }}>{done}/{total}</Txt>
     </View>
   );
 }
@@ -38,7 +39,7 @@ export function StreakChip() {
         <Flame size={22} color={FLAME} fill={st.weeks > 0 ? FLAME : 'transparent'} strokeWidth={2} />
       </View>
       <View style={{ flex: 1, minWidth: 0 }}>
-        <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{title}</Txt>
+        <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{title}</Txt>
         <Txt v="caption" numberOfLines={1}>{sub}</Txt>
       </View>
       <WeekRing done={st.weekDone} total={st.target} />

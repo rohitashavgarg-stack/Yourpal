@@ -10,7 +10,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { HEALTH_NAME } from '@/lib/health';
 import { ListCard, SubPage, Switch } from '@/features/shell/parts';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // What YourPal reads from the phone's health store. Colours match the trackers on Today.
 const READS = [
@@ -31,8 +31,8 @@ export default function ConnectedApps() {
   const connect = () => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. ${count} things sync automatically`); };
   const disconnect = () => openSheet(
     <View style={{ gap: 12 }}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29 }}>{`Disconnect ${HEALTH_NAME}?`}</Txt>
-      <Txt muted style={{ fontSize: 14, lineHeight: 21 }}>We stop reading new steps, heart rate and sleep. What is already in YourPal stays. Steps fall back to your phone's own counter. You can reconnect any time.</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29 }}>{`Disconnect ${HEALTH_NAME}?`}</Txt>
+      <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>We stop reading new steps, heart rate and sleep. What is already in YourPal stays. Steps fall back to your phone's own counter. You can reconnect any time.</Txt>
       <Button kind="primary" label="Disconnect" onPress={() => closeSheet(() => { set({ hc: false }); haptic.medium(); toast(`${HEALTH_NAME} disconnected`); })} />
       <Button kind="secondary" label="Keep it connected" onPress={() => closeSheet()} />
     </View>,
@@ -47,10 +47,10 @@ export default function ConnectedApps() {
             <HeartIcon size={28} color="#FF3B5C" />
           </View>
           <View style={{ flex: 1, gap: 2 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 19, lineHeight: 26 }}>{HEALTH_NAME}</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 26 }}>{HEALTH_NAME}</Txt>
             <Row style={{ gap: 6 }}>
               <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: on ? c.good : c.muted }} />
-              <Txt v="caption" style={{ fontSize: 13, color: on ? c.good : c.muted }}>{on ? 'Connected · last synced 5 min ago' : 'Not connected'}</Txt>
+              <Txt v="caption" style={{ fontSize: fontSizes.sm, color: on ? c.good : c.muted }}>{on ? 'Connected · last synced 5 min ago' : 'Not connected'}</Txt>
             </Row>
           </View>
         </Row>
@@ -59,7 +59,7 @@ export default function ConnectedApps() {
 
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, marginTop: 6 }}>
         <Txt v="label">{on ? 'SYNCING' : 'YOU WILL SEE ON TODAY'}</Txt>
-        {on && <Txt v="caption" style={{ fontSize: 12 }}>Tap a switch to pause one</Txt>}
+        {on && <Txt v="caption" style={{ fontSize: fontSizes.xs }}>Tap a switch to pause one</Txt>}
       </Row>
       <ListCard>
         {READS.map(({ Icon, t, s, v, tone }, i) => {
@@ -72,8 +72,8 @@ export default function ConnectedApps() {
                 <Icon size={22} strokeWidth={1.9} color={fg} />
               </View>
               <View style={{ flex: 1, paddingVertical: 10 }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{t}</Txt>
-                <Txt v="caption" style={{ fontSize: 13 }}>{noWatch ? 'Needs a watch or band' : live ? `Today · ${v}` : on ? 'Paused' : s}</Txt>
+                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{t}</Txt>
+                <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{noWatch ? 'Needs a watch or band' : live ? `Today · ${v}` : on ? 'Paused' : s}</Txt>
               </View>
               {on && !noWatch && <Switch label={`Read ${t}`} on={!!metrics[t]} onChange={(val) => { setMetrics((m) => ({ ...m, [t]: val })); haptic.tap(); toast(`${t} ${val ? 'will sync' : 'sync paused'}`); }} />}
             </Row>
@@ -86,13 +86,13 @@ export default function ConnectedApps() {
         <Row style={{ gap: 14, minHeight: 64 }}>
           <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Lock size={17} color={c.ink} /></View>
           <View style={{ flex: 1, paddingVertical: 10 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>Read only</Txt>
-            <Txt v="caption" style={{ fontSize: 13 }}>{`YourPal never writes to ${HEALTH_NAME}. Only you see this data.`}</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>Read only</Txt>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`YourPal never writes to ${HEALTH_NAME}. Only you see this data.`}</Txt>
           </View>
         </Row>
         <Pressy accessibilityRole="button" accessibilityLabel="Manage permissions in Settings" onPress={() => { Linking.openSettings().catch(() => toast('Open Settings on your phone to manage permissions')); }} scaleTo={0.98}
           style={{ flexDirection: 'row', alignItems: 'center', gap: 14, minHeight: 56, borderTopWidth: 1, borderTopColor: c.line }}>
-          <Txt style={{ flex: 1, fontSize: 15, lineHeight: 21, color: c.accentText, fontFamily: font.semibold }}>Manage permissions in Settings</Txt>
+          <Txt style={{ flex: 1, fontSize: fontSizes.base, lineHeight: 21, color: c.accentText, fontFamily: font.semibold }}>Manage permissions in Settings</Txt>
           <ChevronRight size={18} color={c.muted} />
         </Pressy>
       </ListCard>

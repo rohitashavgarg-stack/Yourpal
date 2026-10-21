@@ -17,7 +17,7 @@ import { useScenarios, useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 type Step = 'phone' | 'otp' | 'programme';
 
@@ -152,7 +152,7 @@ export default function Login() {
               <Animated.View entering={fade()}>
                 <View style={{ padding: 16, borderRadius: 22, backgroundColor: c.warnSoft, gap: 10 }}>
                   <Txt v="headline" color={c.warn}>We couldn't find this number</Txt>
-                  <Txt color={c.warn} style={{ fontSize: 14 }}>Please check with your gym's front desk. They can add it to your membership in a minute.</Txt>
+                  <Txt color={c.warn} style={{ fontSize: fontSizes.md }}>Please check with your gym's front desk. They can add it to your membership in a minute.</Txt>
                   <Row style={{ gap: 8 }}>
                     <Button small kind="primary" label="Call front desk" icon={<Phone size={16} color={c.bg} />} onPress={() => toast('Calling Wulf Fitness front desk…')} />
                     <Button small kind="secondary" label="Try another number" onPress={() => { setPhone(''); setErr('none'); }} />
@@ -188,7 +188,7 @@ export default function Login() {
                   </View>
                 ) : <ProgLogo p={progs[0]} size={40} />}
                 <View style={{ flex: 1 }}>
-                  <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{progs.length > 1 ? `Found you in ${progs.length} programmes` : progs[0].name.split(' · ')[0]}</Txt>
+                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{progs.length > 1 ? `Found you in ${progs.length} programmes` : progs[0].name.split(' · ')[0]}</Txt>
                   <Txt v="caption">{progs.length > 1 ? progs.map((p) => p.short).join(' · ') : progs[0].name.includes(' · ') ? progs[0].name.split(' · ')[1] : progs[0].kind}</Txt>
                 </View>
               </Row>
@@ -200,7 +200,7 @@ export default function Login() {
               <Animated.View entering={fade()}>
                 <View style={{ padding: 14, borderRadius: 18, backgroundColor: c.warnSoft }}>
                   <Txt color={c.warn} style={{ fontFamily: font.semibold }}>Too many wrong tries</Txt>
-                  <Txt color={c.warn} style={{ fontSize: 14 }}>For your safety, try again in 0:{String(lockIn).padStart(2, '0')}, or ask the front desk.</Txt>
+                  <Txt color={c.warn} style={{ fontSize: fontSizes.md }}>For your safety, try again in 0:{String(lockIn).padStart(2, '0')}, or ask the front desk.</Txt>
                 </View>
               </Animated.View>
             )}
@@ -245,7 +245,7 @@ function OfflineBanner() {
     <Animated.View entering={fade()}>
       <Row style={{ gap: 10, padding: 14, borderRadius: 18, backgroundColor: c.surface2 }}>
         <WifiOff size={18} color={c.muted} />
-        <Txt style={{ flex: 1, fontSize: 14 }} muted>No internet connection. Check Wi-Fi or data and try again.</Txt>
+        <Txt style={{ flex: 1, fontSize: fontSizes.md }} muted>No internet connection. Check Wi-Fi or data and try again.</Txt>
       </Row>
     </Animated.View>
   );

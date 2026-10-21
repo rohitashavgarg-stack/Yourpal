@@ -21,7 +21,7 @@ import { useLogGate, useLogsPaused } from '@/lib/logGate';
 import { StepsDesign, StepsPreview, StepsTile } from './StepsCards';
 import { TrackerKey } from '@/features/trackers/designs';
 import { AddButton, EnergyDot, EnergyStack, HrDot, SleepDot, SleepStages, WaterDot, WaterGlasses, WeightDot, WeightRuler } from '@/features/trackers/Widgets';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const APath = Animated.createAnimatedComponent(Path);
 const ALine = Animated.createAnimatedComponent(Line);
@@ -161,14 +161,14 @@ export function WaterCard() {
     <View style={{ width: 160, height: 160 }}>
       <Pressy accessibilityRole="button" accessibilityLabel={`Water ${ml} of 3,000 millilitres. Open details`} onPress={() => openSheet(<WaterSheet />, { label: 'Water' })} scaleTo={0.97} style={SQ}>
         <LinearGradient colors={['#070B2B', '#1C2BC0']} start={{ x: 0.1, y: 0 }} end={{ x: 0.9, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
-        <Txt style={{ fontFamily: font.regular, fontSize: 14, lineHeight: 20, color: 'rgba(255,255,255,0.6)', marginTop: 6 }}>Water</Txt>
+        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: 'rgba(255,255,255,0.6)', marginTop: 6 }}>Water</Txt>
         <View style={{ position: 'absolute', left: 16, bottom: 16, width: 32, height: 95 }}>
           <BottleFigma litres={water} id="bottleCard" />
           {hit > 0 && <Ripple key={hit} size={40} color="#7FB4FF" width={2} />}
         </View>
         <View style={{ position: 'absolute', right: 16, bottom: 16, alignItems: 'flex-end' }}>
           <Txt style={{ fontFamily: font.displayBold, fontSize: 28, lineHeight: 39, letterSpacing: -0.8, color: 'rgba(255,255,255,0.9)' }}>{ml.toLocaleString('en-IN')}</Txt>
-          <Txt style={{ fontFamily: font.regular, fontSize: 20, lineHeight: 26, color: fixed.white }}>ml</Txt>
+          <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl, lineHeight: 26, color: fixed.white }}>ml</Txt>
         </View>
       </Pressy>
       {/* Sits above the card press target so tapping it only adds a glass: a 32 px pill (glass + plus) with a 44 px touch area. */}
@@ -185,7 +185,7 @@ export function WaterCard() {
 function sparkY(v: number, h: number, pad: number) { return pad + ((73.2 - v) / (73.2 - 72.0)) * (h - pad * 2); }
 
 const NUM = { fontFamily: font.displayBold, fontSize: 28, lineHeight: 39, letterSpacing: -0.8 } as const;
-const UNIT_TXT = { fontFamily: font.medium, fontSize: 14, lineHeight: 20 } as const;
+const UNIT_TXT = { fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20 } as const;
 
 // One tile for every tracker: same size, same padding, same label and number style.
 function Tile({ bg, label, labelColor, onPress, a11y, right, children, shadow }: {
@@ -195,7 +195,7 @@ function Tile({ bg, label, labelColor, onPress, a11y, right, children, shadow }:
   const body = (
     <>
       <Row style={{ justifyContent: 'space-between', minHeight: 32 }}>
-        <Txt style={{ fontFamily: font.regular, fontSize: 14, lineHeight: 20, color: labelColor ?? c.muted }}>{label}</Txt>
+        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: labelColor ?? c.muted }}>{label}</Txt>
         {right}
       </Row>
       {children}
@@ -226,7 +226,7 @@ export function WeightCard() {
     <Tile bg={isDark ? 'rgba(255,255,255,0.05)' : c.surface} shadow={!isDark} label="Weight" a11y={`Weight ${fmt1(d.weight)} kg, ${diff <= 0 ? 'down' : 'up'} ${Math.abs(diff)} kg this week. Log weight`} onPress={() => (paused ? router.push({ pathname: '/progress/metric', params: { k: 'weight' } }) : router.push('/log-weight'))}
       right={<View style={{ height: 32, minWidth: 32, paddingHorizontal: 8, borderRadius: 24, backgroundColor: isDark ? GLASS : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Plus size={16} color={isDark ? fixed.white : c.accentText} /></View>}>
       <Txt style={{ ...NUM, color: c.ink }}>{fmt1(d.weight)}<Txt style={{ fontFamily: font.regular, fontSize: 16, lineHeight: 22, color: c.muted }}> kg</Txt></Txt>
-      <Txt style={{ fontFamily: font.regular, fontSize: 12, lineHeight: 17, color: diff <= 0 ? c.good : c.warn }}>{sign} {Math.abs(diff)} kg this week</Txt>
+      <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xs, lineHeight: 17, color: diff <= 0 ? c.good : c.warn }}>{sign} {Math.abs(diff)} kg this week</Txt>
       <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
         <Svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
           <Defs><SvgGradient id="wArea" x1="0" y1="0" x2="0" y2="1"><Stop offset="0" stopColor={c.accent} stopOpacity={0.28} /><Stop offset="1" stopColor={c.accent} stopOpacity={0} /></SvgGradient></Defs>
@@ -300,8 +300,8 @@ function ConnectCard() {
     <Pressy accessibilityRole="button" accessibilityLabel={`Connect ${HEALTH_NAME} for steps, heart rate, sleep and energy`} onPress={() => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. Steps, heart rate and sleep sync automatically`); }}
       style={[SQ, { padding: 12, justifyContent: 'space-between', borderWidth: 1, borderStyle: 'dashed', borderColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface3, backgroundColor: isDark ? fixed.dark : c.surface }]}>
       <View style={{ width: 32, height: 32, borderRadius: 20, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface2, alignItems: 'center', justifyContent: 'center' }}><HeartIcon size={20} color="#FF6B7A" /></View>
-      <Txt style={{ fontFamily: font.displayBold, fontSize: 20, lineHeight: 28, color: c.ink }}>{`Connect ${HEALTH_NAME}`}</Txt>
-      <Txt style={{ fontSize: 12, lineHeight: 17, color: c.muted }}>Steps, heart rate, sleep and energy</Txt>
+      <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 28, color: c.ink }}>{`Connect ${HEALTH_NAME}`}</Txt>
+      <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: c.muted }}>Steps, heart rate, sleep and energy</Txt>
     </Pressy>
   );
 }
@@ -362,7 +362,7 @@ export function WaterSheet() {
   return (
     <>
       <Row style={{ justifyContent: 'space-between' }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 26, lineHeight: 34, letterSpacing: -0.6 }}>Water</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.6 }}>Water</Txt>
         <TrendsButton label="See water trend" onPress={() => closeSheet(() => router.push({ pathname: '/progress/metric', params: { k: 'water' } }))} />
       </Row>
       <Row style={{ gap: 20 }}>
@@ -406,9 +406,9 @@ export function HealthSheet({ k }: { k: HK }) {
   const col = k === 'sleep' ? c.cSleep : k === 'hr' ? c.cHeart : c.cAct; // same colour as its Today tile and Progress card
   return (
     <>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 22 }}>{h.t}</Txt>
-      <Txt style={{ fontFamily: font.display, fontSize: 44, lineHeight: 44 }}>{h.big}<Txt muted style={{ fontFamily: font.display, fontSize: 20 }}>{h.unit}</Txt></Txt>
-      <Txt muted style={{ fontSize: 14 }}>{h.sub}</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2 }}>{h.t}</Txt>
+      <Txt style={{ fontFamily: font.display, fontSize: 44, lineHeight: 44 }}>{h.big}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.xl }}>{h.unit}</Txt></Txt>
+      <Txt muted style={{ fontSize: fontSizes.md }}>{h.sub}</Txt>
       <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 4, height: 90, paddingVertical: 6 }}>
         {h.bars.map((v, i) => <Animated.View key={i} entering={fade(i * 30)} style={{ flex: 1, height: `${v}%`, borderRadius: 4, backgroundColor: col, opacity: k === 'sleep' ? [1, 0.7, 0.45][i % 3] : 1 }} />)}
       </View>

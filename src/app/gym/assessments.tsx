@@ -17,7 +17,7 @@ import { font } from '@/theme/tokens';
 import { cardShadow, ListCard, SubPage } from '@/features/progress/parts';
 import { ASSESS } from '@/features/gym/data';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 export default function GymAssessments() {
   const { c, isDark } = useTheme();
@@ -47,7 +47,7 @@ export default function GymAssessments() {
           <Card style={{ paddingVertical: 26, paddingHorizontal: 20, alignItems: 'center', gap: 10 }}>
             <View style={{ width: 64, height: 64, borderRadius: 22, backgroundColor: c.tNutri, alignItems: 'center', justifyContent: 'center' }}><ClipboardCheck size={30} strokeWidth={1.8} color={c.cNutri} /></View>
             <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 31 }}>No assessment yet</Txt>
-            <Txt muted style={{ textAlign: 'center', fontSize: 14 }}>Your first one is Sat 10:00 am with Coach Vikram. Body, strength and mobility tests take about 30 minutes. Your plan is built from it.</Txt>
+            <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.md }}>Your first one is Sat 10:00 am with Coach Vikram. Body, strength and mobility tests take about 30 minutes. Your plan is built from it.</Txt>
           </Card>
           <ListCard rows={['Weight, waist and body fat', 'Squat, push-ups, deep squat hold', 'Sit-and-reach and resting heart rate'].map((l) => ({ l, muted: true }))} />
         </Animated.View>
@@ -55,7 +55,7 @@ export default function GymAssessments() {
         <>
           {due && (
             <Animated.View entering={fade()} style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.warnSoft }}>
-              <Txt style={{ fontSize: 14, color: c.warn }}><Txt style={{ fontSize: 14, color: c.warn, fontFamily: font.semibold }}>Reassessment due this week. </Txt>Book a slot at the front desk or ask Coach Vikram in chat.</Txt>
+              <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontSize: fontSizes.md, color: c.warn, fontFamily: font.semibold }}>Reassessment due this week. </Txt>Book a slot at the front desk or ask Coach Vikram in chat.</Txt>
             </Animated.View>
           )}
           <LinearGradient colors={[fixed.blue, '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: 28, padding: 20, gap: 6, overflow: 'hidden' }}>
@@ -63,9 +63,9 @@ export default function GymAssessments() {
               <Circle cx={300} cy={20} r={120} fill={fixed.white} opacity={0.08} />
               <Path d="M0 140 C 90 110 180 170 260 130 S 340 120 400 140 V 900 H0z" fill={fixed.white} opacity={0.08} />
             </Svg>
-            <Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)' }}>{showStart ? 'Starting assessment · 2 Sep' : 'Reassessment 1 · 30 Sep vs start'}</Txt>
+            <Txt style={{ fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.85)' }}>{showStart ? 'Starting assessment · 2 Sep' : 'Reassessment 1 · 30 Sep vs start'}</Txt>
             <Txt style={{ fontFamily: font.display, fontSize: 34, lineHeight: 44, color: fixed.white }}>{showStart ? '8 tests recorded' : '7 of 8 improved'}</Txt>
-            <Txt style={{ fontSize: 14, color: 'rgba(255,255,255,0.9)' }}>{showStart ? 'Your baseline. Every reassessment is compared with this.' : 'Biggest win: squat +20 kg. Next focus: hip mobility.'}</Txt>
+            <Txt style={{ fontSize: fontSizes.md, color: 'rgba(255,255,255,0.9)' }}>{showStart ? 'Your baseline. Every reassessment is compared with this.' : 'Biggest win: squat +20 kg. Next focus: hip mobility.'}</Txt>
           </LinearGradient>
           {!only && (
             <View accessibilityRole="radiogroup" accessibilityLabel="Which assessment" style={{ flexDirection: 'row', gap: 8 }}>
@@ -97,7 +97,7 @@ export default function GymAssessments() {
       <Card style={{ padding: 18, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
         <View style={{ flex: 1 }}>
           <Txt style={{ fontFamily: font.semibold }}>{nextTitle}</Txt>
-          <Txt v="caption" style={{ fontSize: 13 }}>{nextSub}</Txt>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{nextSub}</Txt>
         </View>
         <PillBtn label={g.asRemind ? 'Reminder on' : 'Remind me'} tone={g.asRemind ? 'ink' : 'soft'} h={40} onPress={remind} />
       </Card>

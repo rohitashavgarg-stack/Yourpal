@@ -28,7 +28,7 @@ import { FinishScreen, FinishStats } from '@/features/workout/FinishScreen';
 import { workoutUiStore } from '@/features/workout/ui';
 import { NewExercise, NewList } from '@/features/workout/NewWorkoutUI';
 import { FinishConfirmSheet, FormTipsSheet, SetMenuSheet, SwapSheet, WkApi, WkMenuSheet } from '@/features/workout/WorkoutSheets';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 function Bars({ n, pos, light }: { n: number; pos: number; light?: boolean }) {
   const { c } = useTheme();
@@ -212,21 +212,21 @@ export default function Workout() {
       })}
       {s.rest && (
         <Animated.View entering={fade()} style={{ gap: 8, padding: 12, borderRadius: 18, backgroundColor: c.surface2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20 }}>How was that set? <Txt muted style={{ fontSize: 13 }}>Optional</Txt></Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20 }}>How was that set? <Txt muted style={{ fontSize: fontSizes.sm }}>Optional</Txt></Txt>
           <Row style={{ gap: 6 }}>
             {(['Too easy', 'Too hard', 'Pain'] as const).map((l, i) => <Pill key={l} label={l} on={fb === i} onPress={() => setFb(fb === i ? null : (i as 0 | 1 | 2))} />)}
           </Row>
           {fb === 2 && (
             <Animated.View entering={fade()} style={{ borderRadius: 14, padding: 12, backgroundColor: c.warnSoft, gap: 8 }}>
               <Txt style={{ fontFamily: font.bold, color: c.warn }}>Pain reported</Txt>
-              <Txt style={{ fontSize: 14, color: c.warn }}>Stop this exercise. Ask a floor trainer before continuing.</Txt>
+              <Txt style={{ fontSize: fontSizes.md, color: c.warn }}>Stop this exercise. Ask a floor trainer before continuing.</Txt>
               <Button kind="secondary" small label="Ask Coach Vikram" onPress={() => askCoach('Pain during workout', 'I felt pain in my ')} style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,255,255,0.55)' }} />
             </Animated.View>
           )}
         </Animated.View>
       )}
       <Pressy accessibilityRole="button" onPress={() => A.addSet(s.exIdx)} style={{ height: 48, borderRadius: 24, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        <Plus size={17} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: 14 }}>Add set</Txt>
+        <Plus size={17} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>Add set</Txt>
       </Pressy>
       {!newUi && <Txt v="caption" style={{ textAlign: 'center', paddingHorizontal: 6, paddingTop: 4 }}>Adjust the highlighted set and tick it · tap a set to edit · swipe right = done, left = swap/skip · hold for options</Txt>}
     </View>
@@ -260,10 +260,10 @@ export default function Workout() {
       <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }}>
         <RoundBtn label="Minimise workout" onPress={minimise} glass><X size={20} color={c.ink} /></RoundBtn>
         <View style={{ flex: 1, alignItems: 'center' }}>
-          <Txt accessibilityLabel={`Elapsed ${elapsed}`} style={{ fontFamily: font.monoBold, fontSize: 22 }}>{elapsed}</Txt>
+          <Txt accessibilityLabel={`Elapsed ${elapsed}`} style={{ fontFamily: font.monoBold, fontSize: fontSizes.xl2 }}>{elapsed}</Txt>
           <Row style={{ gap: 6 }}>
             <Txt v="caption">Leg day</Txt>
-            {d.hc && d.wearable && <Row style={{ gap: 3 }}><Beat><HeartIcon size={11} color="#FF8A96" /></Beat><Txt style={{ fontFamily: font.semibold, fontSize: 12, color: '#FF8A96' }}>{hr} bpm</Txt></Row>}
+            {d.hc && d.wearable && <Row style={{ gap: 3 }}><Beat><HeartIcon size={11} color="#FF8A96" /></Beat><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, color: '#FF8A96' }}>{hr} bpm</Txt></Row>}
           </Row>
         </View>
         <PillBtn label="Finish" h={40} onPress={askFinish} style={{ paddingHorizontal: 16 }} />
@@ -275,9 +275,9 @@ export default function Workout() {
             <View style={{ minHeight: 180, borderRadius: 28, overflow: 'hidden', padding: 16, justifyContent: 'flex-end', gap: 4 }}>
               <HeroBg h={180} />
               <Bars n={n} pos={pos} />
-              <Txt style={{ fontFamily: font.semibold, fontSize: 12, letterSpacing: 0.7, color: '#DDE6FF' }}>{s.phase === 'cooldown' ? 'AFTER YOUR WORKOUT' : 'BEFORE YOU START'}</Txt>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.7, color: '#DDE6FF' }}>{s.phase === 'cooldown' ? 'AFTER YOUR WORKOUT' : 'BEFORE YOU START'}</Txt>
               <Txt style={{ fontFamily: font.display, fontSize: 34, lineHeight: 34, color: '#F4F4F6' }}>{s.phase === 'cooldown' ? 'Cool-down' : 'Warm-up'}</Txt>
-              <Txt style={{ fontSize: 13, color: 'rgba(244,244,246,0.8)' }}>{s.phase === 'cooldown' ? '4 stretches · slow and easy' : '4 moves · no weights'}</Txt>
+              <Txt style={{ fontSize: fontSizes.sm, color: 'rgba(244,244,246,0.8)' }}>{s.phase === 'cooldown' ? '4 stretches · slow and easy' : '4 moves · no weights'}</Txt>
             </View>
             <Card style={{ paddingVertical: 4, paddingHorizontal: 12 }}>
               {list.map((it, i) => {
@@ -314,19 +314,19 @@ export default function Workout() {
               <LinearGradient pointerEvents="none" colors={[`${cardBg}00`, `${cardBg}E6`, cardBg]} locations={[0, 0.5, 1]} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 150 }} />
               <Pressy accessibilityRole="button" accessibilityLabel="Play form video" onPress={() => api.current.formTips()}
                 style={{ position: 'absolute', top: 28, right: 12, zIndex: 10, elevation: 10, height: 38, paddingLeft: 12, paddingRight: 14, borderRadius: 19, backgroundColor: 'rgba(11,14,20,0.82)', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                <Play size={13} color={fixed.white} fill={fixed.white} /><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 17, color: fixed.white }}>Form video</Txt>
+                <Play size={13} color={fixed.white} fill={fixed.white} /><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 17, color: fixed.white }}>Form video</Txt>
               </Pressy>
               <View style={{ position: 'absolute', left: 16, right: 16, bottom: 14, gap: 4 }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: 12, letterSpacing: 0.7, color: cardMuted }}>EXERCISE {s.exIdx + 1} OF {s.ex.length} · {e.muscles.toUpperCase()}</Txt>
+                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.7, color: cardMuted }}>EXERCISE {s.exIdx + 1} OF {s.ex.length} · {e.muscles.toUpperCase()}</Txt>
                 <Row style={{ gap: 8 }}>
-                  <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.display, fontSize: 30, lineHeight: 39, color: cardInk }}>{e.name}</Txt>
+                  <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39, color: cardInk }}>{e.name}</Txt>
                   <Pressy accessibilityRole="button" accessibilityLabel="Exercise options: swap, ask coach, form tips, skip" onPress={() => openSheet(<WkMenuSheet api={api} />, { label: 'Workout options' })}
                     style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: cardChip, alignItems: 'center', justifyContent: 'center' }}>
                     <Ellipsis size={20} color={cardInk} />
                   </Pressy>
                 </Row>
                 <Row style={{ gap: 8 }}>
-                  {e.swapped ? <Tag label="Swapped for today" bg={c.accentSoft} fg={c.accentText} /> : e.last ? <Txt style={{ fontFamily: font.mono, fontSize: 12, color: cardMuted }}>{e.last}</Txt> : null}
+                  {e.swapped ? <Tag label="Swapped for today" bg={c.accentSoft} fg={c.accentText} /> : e.last ? <Txt style={{ fontFamily: font.mono, fontSize: fontSizes.xs, color: cardMuted }}>{e.last}</Txt> : null}
                 </Row>
               </View>
             </View>

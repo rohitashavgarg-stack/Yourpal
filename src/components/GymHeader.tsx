@@ -15,7 +15,7 @@ import { useVisibleNotifs } from '@/features/shell/notifs';
 import { ProgLogo } from '@/features/shell/parts';
 import { useDomain } from '@/lib/domain';
 import { haptic } from '@/lib/haptics';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 export const Avatar = ({ size = 44 }: { size?: number }) => <PersonAvatar who="me" size={size} />;
 export const GymLogo = GymLogoMark;
@@ -51,7 +51,7 @@ export function GymHeader() {
       ) : (
       <Pressy accessibilityRole="button" accessibilityLabel={`Switch programme, current: ${current.short}`} onPress={() => openSheet(<ProgrammeSwitcherSheet />, { label: 'Switch programme' })} onLongPress={jumpLast} delayLongPress={500} style={{ flexShrink: 1, flexDirection: 'row', alignItems: 'center', gap: 10, height: 52 }}>
         <ProgLogo p={current} size={40} />
-        <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 19, lineHeight: 26, letterSpacing: -0.4, flexShrink: 1 }}>{current.short}</Txt>
+        <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 26, letterSpacing: -0.4, flexShrink: 1 }}>{current.short}</Txt>
         {multi && (
           <View style={{ width: 26, height: 26, borderRadius: 13, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
             <GlassBackdrop radius={13} />

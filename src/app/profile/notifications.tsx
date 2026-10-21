@@ -10,6 +10,7 @@ import { fade, fadeOut } from '@/theme/motion';
 import { LineRow, ListCard, Note, SubPage, Switch } from '@/features/shell/parts';
 import { useShell } from '@/features/shell/state';
 import { QUIET_PRESETS, REMINDER_KEYS, REMINDER_LABEL, reminderStore } from '@/features/reminders/reminders';
+import { fontSizes } from '@/design-system/tokens';
 
 const PERM = { on: 'Allowed', off: 'Blocked', unset: 'Not asked' } as const;
 
@@ -45,7 +46,7 @@ export default function NotificationSettings() {
             <BellOff size={18} color={c.warn} />
             <Txt style={{ flex: 1, fontFamily: font.semibold, color: c.warn }}>Notifications are off on this phone</Txt>
           </Row>
-          <Txt style={{ fontSize: 14, color: c.warn }}>You won't hear about plan changes or Coach replies. Your choices below are kept for when you turn them on.</Txt>
+          <Txt style={{ fontSize: fontSizes.md, color: c.warn }}>You won't hear about plan changes or Coach replies. Your choices below are kept for when you turn them on.</Txt>
           <Button small kind="primary" label="Turn on notifications" style={{ alignSelf: 'flex-start' }} onPress={() => { setProfile({ notifications: 'on' }); toast('Notifications on'); }} />
         </Animated.View>
       )}
@@ -55,8 +56,8 @@ export default function NotificationSettings() {
             right={<Switch label={r.l} on={s.notif[r.k] !== false} onChange={flip(r.k)} />} />
         ))}
       </ListCard>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25, marginTop: 8 }}>Reminders</Txt>
-      <Note style={{ fontSize: 13 }}>Small nudges when something is missing. They show in the app and, if you allow it, on your phone.</Note>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, marginTop: 8 }}>Reminders</Txt>
+      <Note style={{ fontSize: fontSizes.sm }}>Small nudges when something is missing. They show in the app and, if you allow it, on your phone.</Note>
       <ListCard>
         {REMINDER_KEYS.map((k, i) => (
           <LineRow key={k} title={REMINDER_LABEL[k].title} sub={REMINDER_LABEL[k].sub} last={i === REMINDER_KEYS.length - 1}
@@ -64,7 +65,7 @@ export default function NotificationSettings() {
         ))}
       </ListCard>
       <ListCard>
-        <LineRow title="Quiet hours" sub="No reminders in the app or on your phone" last right={<Txt style={{ fontFamily: font.semibold, fontSize: 14, color: c.accentText }}>{QUIET_PRESETS[quiet].label}</Txt>}
+        <LineRow title="Quiet hours" sub="No reminders in the app or on your phone" last right={<Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.accentText }}>{QUIET_PRESETS[quiet].label}</Txt>}
           onPress={() => reminderStore.set({ quiet: (quiet + 1) % QUIET_PRESETS.length })} />
       </ListCard>
     </SubPage>

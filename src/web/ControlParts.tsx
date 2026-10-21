@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { font, light } from '@/theme/tokens';
 import { ChevronDown } from '@/lib/icons';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // Building blocks of the demo-controls panels, in the same language as the app: white cards with a hairline, outline chips that turn black
 // when chosen, a tinted track with a black thumb for two or three options, small black icon tiles. The panel always uses the light palette.
@@ -26,7 +26,7 @@ export function PanelCard({ icon: Icon, title, pill, children }: { icon: IconC; 
 }
 
 export const FieldLabel = ({ children }: { children: string }) => (
-  <Text style={{ fontFamily: font.semibold, fontSize: 10.5, lineHeight: 14, letterSpacing: 0.6, color: P.muted, textTransform: 'uppercase' }}>{children}</Text>
+  <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 14, letterSpacing: 0.6, color: P.muted, textTransform: 'uppercase' }}>{children}</Text>
 );
 
 // Two or three options: a tinted track with a black thumb under the chosen one (like the app's Segmented). More options wrap into outline chips.
@@ -42,7 +42,7 @@ export function Choice({ label, options, value, onPick }: { label: string; optio
             return (
               <Pressable key={o} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => onPick(o)}
                 style={{ flex: 1, minHeight: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 6, backgroundColor: on ? P.ink : 'transparent' }}>
-                <Text numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: on ? fixed.white : P.muted }}>{o}</Text>
+                <Text numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: on ? fixed.white : P.muted }}>{o}</Text>
               </Pressable>
             );
           })}
@@ -54,7 +54,7 @@ export function Choice({ label, options, value, onPick }: { label: string; optio
             return (
               <Pressable key={o} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => onPick(o)}
                 style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, borderWidth: 1, borderColor: on ? P.ink : P.chip, backgroundColor: on ? P.ink : 'transparent', justifyContent: 'center' }}>
-                <Text style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: on ? fixed.white : P.ink }}>{o}</Text>
+                <Text style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: on ? fixed.white : P.ink }}>{o}</Text>
               </Pressable>
             );
           })}
@@ -72,7 +72,7 @@ export function Actions({ label, options, onPick }: { label: string; options: st
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
         {options.map((o) => (
           <Pressable key={o} accessibilityRole="button" onPress={() => onPick(o)} style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, borderWidth: 1, borderColor: P.chip, justifyContent: 'center' }}>
-            <Text style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: P.ink }}>{o}</Text>
+            <Text style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: P.ink }}>{o}</Text>
           </Pressable>
         ))}
       </View>
@@ -86,8 +86,8 @@ export function QuickTime({ icon: Icon, label, time, onPress }: { icon: IconC; l
       style={{ flexBasis: '30%', flexGrow: 1, flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 6, paddingHorizontal: 8, borderRadius: 12, borderWidth: 1, borderColor: P.line, backgroundColor: P.bg }}>
       <Icon size={15} color={P.ink} />
       <View>
-        <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: P.ink }}>{label}</Text>
-        <Text style={{ fontFamily: font.regular, fontSize: 10.5, lineHeight: 14, color: P.muted }}>{time}</Text>
+        <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: P.ink }}>{label}</Text>
+        <Text style={{ fontFamily: font.regular, fontSize: fontSizes.xs2, lineHeight: 14, color: P.muted }}>{time}</Text>
       </View>
     </Pressable>
   );
@@ -110,7 +110,7 @@ export function Dropdown({ label, options, value, onPick, placeholder = 'Choose'
     <View style={{ gap: 4 }}>
       <Pressable accessibilityRole="button" accessibilityLabel={`${label}: ${value || placeholder}`} accessibilityState={{ expanded: open }} onPress={() => setOpen((o) => !o)}
         style={{ minHeight: 32, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingHorizontal: 10, borderRadius: 12, backgroundColor: open ? P.track : P.tint }}>
-        <Text numberOfLines={1} style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: P.muted }}>{label}</Text>
+        <Text numberOfLines={1} style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: P.muted }}>{label}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, flexShrink: 1 }}>
           <Text numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 12.5, lineHeight: 17, color: value ? P.ink : P.muted, flexShrink: 1 }}>{value || placeholder}</Text>
           <ChevronDown size={14} color={P.muted} style={{ transform: [{ rotate: open ? '180deg' : '0deg' }] } as any} />
@@ -123,7 +123,7 @@ export function Dropdown({ label, options, value, onPick, placeholder = 'Choose'
             return (
               <Pressable key={o} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => { onPick(o); setOpen(false); }}
                 style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, borderWidth: 1, borderColor: on ? P.ink : P.chip, backgroundColor: on ? P.ink : 'transparent', justifyContent: 'center' }}>
-                <Text style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: on ? fixed.white : P.ink }}>{o}</Text>
+                <Text style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: on ? fixed.white : P.ink }}>{o}</Text>
               </Pressable>
             );
           })}
@@ -148,7 +148,7 @@ export function SwitchChip({ label, on, onPress }: { label: string; on: boolean;
 export function ActionChip({ label, onPress }: { label: string; onPress: () => void }) {
   return (
     <Pressable accessibilityRole="button" onPress={onPress} style={{ height: 32, paddingHorizontal: 12, borderRadius: 16, backgroundColor: P.ink, justifyContent: 'center' }}>
-      <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: fixed.white }}>{label}</Text>
+      <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: fixed.white }}>{label}</Text>
     </Pressable>
   );
 }

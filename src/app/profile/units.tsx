@@ -4,6 +4,7 @@ import { Pill, Row } from '@/components/ui';
 import { useScenarios } from '@/lib/store';
 import { Label, Note, SubPage } from '@/features/shell/parts';
 import { useShell } from '@/features/shell/state';
+import { fontSizes } from '@/design-system/tokens';
 
 export default function Units() {
   const { s, set } = useShell();
@@ -30,8 +31,8 @@ export default function Units() {
           </Row>
         </View>
       ))}
-      <Note style={{ fontSize: 13 }}>Simple shows calories and protein only. Detailed adds carbs, fat and micronutrients.</Note>
-      <Note style={{ fontSize: 13 }}>Equipment can override weight units (e.g. a machine labelled in lb).</Note>
+      <Note style={{ fontSize: fontSizes.sm }}>Simple shows calories and protein only. Detailed adds carbs, fat and micronutrients.</Note>
+      <Note style={{ fontSize: fontSizes.sm }}>Equipment can override weight units (e.g. a machine labelled in lb).</Note>
     </SubPage>
   );
 }

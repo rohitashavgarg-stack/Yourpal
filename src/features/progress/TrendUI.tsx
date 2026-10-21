@@ -12,6 +12,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { dow, RANGES, Range, shift, sod, START, TODAY, Trend, windowOf } from './trends';
 import { progressStore } from './store';
+import { fontSizes } from '@/design-system/tokens';
 
 // ============ Day | Week | Month | Year, with ‹ date › you can also swipe ============
 export function RangeBar() {
@@ -37,7 +38,7 @@ export function RangeBar() {
             <ChevronLeft size={20} color={c.ink} />
           </Pressy>
           <Pressy accessibilityRole="button" accessibilityLabel={`${win.label}. Pick a date`} onPress={() => openSheet(<DateSheet />, { label: 'Pick a date' })} style={{ flex: 1, minHeight: 44, alignItems: 'center', justifyContent: 'center' }}>
-            <Txt accessibilityLiveRegion="polite" numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 15 }}>{win.label}</Txt>
+            <Txt accessibilityLiveRegion="polite" numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.base }}>{win.label}</Txt>
             <Txt v="caption">{win.current ? 'Swipe or tap for a calendar' : 'Tap for a calendar'}</Txt>
           </Pressy>
           <Pressy accessibilityRole="button" accessibilityLabel="Later" disabled={!win.canNext} onPress={() => go(1)} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: win.canNext ? 1 : 0.35 }}>
@@ -47,7 +48,7 @@ export function RangeBar() {
       </GestureDetector>
       {!win.current && (
         <Pressy accessibilityRole="button" onPress={() => { haptic.tick(); progressStore.set({ anchor: sod(TODAY).getTime() }); }} style={{ alignSelf: 'center', height: 32, paddingHorizontal: 14, borderRadius: 16, backgroundColor: c.accentSoft, justifyContent: 'center', marginTop: -2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 12, color: c.accentText }}>Back to today</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, color: c.accentText }}>Back to today</Txt>
         </Pressy>
       )}
     </View>
@@ -77,7 +78,7 @@ export function RangeBarSlim() {
             return (
               <Pressy key={r.value} accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={r.label} onPress={() => { haptic.tick(); progressStore.set({ range: r.value }); }}
                 style={{ flex: 1, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? c.ink : 'transparent' }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: on ? c.bg : c.muted }}>{r.label}</Txt>
+                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: on ? c.bg : c.muted }}>{r.label}</Txt>
               </Pressy>
             );
           })}
@@ -85,7 +86,7 @@ export function RangeBarSlim() {
         <Pressy accessibilityRole="button" accessibilityLabel="Later" disabled={!win.canNext} onPress={() => go(1)} style={[btn, { opacity: win.canNext ? 1 : 0.35 }]}><ChevronRight size={18} color={c.ink} /></Pressy>
       </Row>
       <Pressy accessibilityRole="button" accessibilityLabel={`${win.label}. Pick a date`} onPress={() => openSheet(<DateSheet />, { label: 'Pick a date' })} style={{ alignSelf: 'center', minHeight: 24, paddingHorizontal: 12, justifyContent: 'center' }}>
-        <Txt v="caption" style={{ textAlign: 'center', fontSize: 12, lineHeight: 16 }}>{win.label}</Txt>
+        <Txt v="caption" style={{ textAlign: 'center', fontSize: fontSizes.xs, lineHeight: 16 }}>{win.label}</Txt>
       </Pressy>
     </View>
   );
@@ -110,7 +111,7 @@ function DateSheet() {
     <>
       <Row style={{ justifyContent: 'space-between' }}>
         <Pressy accessibilityRole="button" accessibilityLabel="Previous month" disabled={!canBack} onPress={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: canBack ? 1 : 0.35 }}><ChevronLeft size={20} color={c.ink} /></Pressy>
-        <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: 17 }}>{MONTHS[cursor.getMonth()]} {cursor.getFullYear()}</Txt>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg }}>{MONTHS[cursor.getMonth()]} {cursor.getFullYear()}</Txt>
         <Pressy accessibilityRole="button" accessibilityLabel="Next month" disabled={!canFwd} onPress={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: canFwd ? 1 : 0.35 }}><ChevronRight size={20} color={c.ink} /></Pressy>
       </Row>
       <Row>{['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((l, i) => <Txt key={i} v="caption" style={{ flex: 1, textAlign: 'center' }}>{l}</Txt>)}</Row>
@@ -124,7 +125,7 @@ function DateSheet() {
                 <View key={i} style={{ flex: 1, height: 46, alignItems: 'center', justifyContent: 'center' }}>
                   <Pressy accessibilityRole="button" accessibilityLabel={d.toDateString()} disabled={future} onPress={() => { progressStore.set({ anchor: sod(d).getTime() }); haptic.tick(); closeSheet(); }} scaleTo={0.9}
                     style={{ width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: inWin ? c.accentSoft : 'transparent', borderWidth: isToday ? 1.5 : 0, borderColor: c.accent, opacity: future ? 0.3 : 1 }}>
-                    <Txt style={{ fontFamily: inWin ? font.semibold : font.regular, fontSize: 14, color: inWin ? c.accentText : c.ink }}>{d.getDate()}</Txt>
+                    <Txt style={{ fontFamily: inWin ? font.semibold : font.regular, fontSize: fontSizes.md, color: inWin ? c.accentText : c.ink }}>{d.getDate()}</Txt>
                     {!future && d >= sod(START) && <View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: 2, backgroundColor: c.accent, opacity: 0.6 }} />}
                   </Pressy>
                 </View>
@@ -212,7 +213,7 @@ export function TrendChart({ t, unit, height = 170, onSwipe, color }: { t: Trend
           <View style={{ height: 20, flexDirection: 'row' }}>
             {t.buckets.map((b, i) => (
               <View key={i} style={{ width: colW, height: 20 }}>
-                {!!b.label && <Txt style={{ position: 'absolute', top: 0, left: colW / 2 - 16, width: 32, textAlign: 'center', fontSize: 11, lineHeight: 15, color: sel === i ? c.ink : c.muted }} numberOfLines={1}>{b.label}</Txt>}
+                {!!b.label && <Txt style={{ position: 'absolute', top: 0, left: colW / 2 - 16, width: 32, textAlign: 'center', fontSize: fontSizes.xs2, lineHeight: 15, color: sel === i ? c.ink : c.muted }} numberOfLines={1}>{b.label}</Txt>}
               </View>
             ))}
           </View>

@@ -12,7 +12,7 @@ import { font } from '@/theme/tokens';
 import { cardShadow, Hint, SubPage } from '@/features/progress/parts';
 import { VISITS } from '@/features/gym/data';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 type Att = { t: string; s: string; tag: string; type: 'c' | 'pt'; icon: 'loc' | 'home' | 'pt' | 'wait'; tone?: 'accent' | 'good' | 'warn'; ptOnly?: boolean; key: string };
 
@@ -71,7 +71,7 @@ export default function Attendance() {
       {awaiting && (
         <Animated.View entering={fade()} exiting={fadeOut()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 18, gap: 8, borderWidth: 1.5, borderColor: c.accent }, cardShadow(isDark)]}>
           <Txt style={{ fontFamily: font.semibold }}>Confirm your session</Txt>
-          <Txt muted style={{ fontSize: 14 }}>Coach Vikram marked Tue 23 Sep, 6–7 pm as completed</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md }}>Coach Vikram marked Tue 23 Sep, 6–7 pm as completed</Txt>
           <Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} style={{ height: 48, borderRadius: 24 }} />
         </Animated.View>
       )}
@@ -80,13 +80,13 @@ export default function Attendance() {
           <Txt style={{ fontFamily: font.semibold }}>September</Txt><Txt v="label">18 visits</Txt>
         </Row>
         <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          {'MTWTFSS'.split('').map((l, i) => <Txt key={i} style={{ flex: 1, textAlign: 'center', fontSize: 11, color: c.muted }}>{l}</Txt>)}
+          {'MTWTFSS'.split('').map((l, i) => <Txt key={i} style={{ flex: 1, textAlign: 'center', fontSize: fontSizes.xs2, color: c.muted }}>{l}</Txt>)}
         </View>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', rowGap: 4 }}>
           {cells.map((x, i) => (
             <View key={i} style={{ width: `${100 / 7}%`, alignItems: 'center' }} accessible={!!x.aria} accessibilityLabel={x.aria || undefined}>
               <View style={{ width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center', backgroundColor: x.bg, borderWidth: x.ring || x.today ? 2 : 0, borderColor: x.today ? c.ink : x.ring ?? 'transparent' }}>
-                <Txt style={{ fontSize: 13, fontFamily: x.fw, color: x.fg }}>{x.n}</Txt>
+                <Txt style={{ fontSize: fontSizes.sm, fontFamily: x.fw, color: x.fg }}>{x.n}</Txt>
               </View>
             </View>
           ))}
@@ -118,7 +118,7 @@ export default function Attendance() {
         })}
         {list.length === 0 && <Txt muted style={{ paddingVertical: 18, textAlign: 'center' }}>Nothing here for this filter.</Txt>}
       </View>
-      <Hint style={{ fontSize: 12 }}>Check in from the app when you are at the gym (within 20 m). The front desk can also mark a visit.</Hint>
+      <Hint style={{ fontSize: fontSizes.xs }}>Check in from the app when you are at the gym (within 20 m). The front desk can also mark a visit.</Hint>
     </SubPage>
   );
 }

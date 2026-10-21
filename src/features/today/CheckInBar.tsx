@@ -20,7 +20,7 @@ import { mmss, useNow } from '@/lib/useNow';
 import { ciTime } from './WeekCard';
 import { useCheckIn } from '@/features/checkin/useCheckIn';
 import { elapsedMin, limitOf } from '@/features/checkin/logic';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 export type CiMode = 'none' | 'here' | 'near' | 'in' | 'out' | 'off';
 export function useCiMode(): CiMode {
@@ -55,10 +55,10 @@ function MiniWorkout() {
     <Pressy accessibilityRole="button" accessibilityLabel="Leg day in progress, resume" onPress={() => router.push('/workout')} scaleTo={0.98} style={[BAR, { backgroundColor: fixed.dark }]}>
       <Glow />
       <View style={{ flex: 1, minWidth: 0 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 14, color: fixed.white }}>Leg day · in progress</Txt>
-        <Txt style={{ fontFamily: font.mono, fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>{resting ? `Rest ${mmss((s.rest!.endAt - now) / 1000)}` : mmss((now - s.startAt) / 1000).padStart(5, '0')}</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.white }}>Leg day · in progress</Txt>
+        <Txt style={{ fontFamily: font.mono, fontSize: fontSizes.xs, color: 'rgba(255,255,255,0.7)' }}>{resting ? `Rest ${mmss((s.rest!.endAt - now) / 1000)}` : mmss((now - s.startAt) / 1000).padStart(5, '0')}</Txt>
       </View>
-      <View style={{ height: 40, borderRadius: 20, paddingHorizontal: 16, backgroundColor: fixed.white, justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: 13, color: fixed.dark }}>Resume</Txt></View>
+      <View style={{ height: 40, borderRadius: 20, paddingHorizontal: 16, backgroundColor: fixed.white, justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: fixed.dark }}>Resume</Txt></View>
     </Pressy>
   );
 }
@@ -119,14 +119,14 @@ export function CheckInBar() {
           <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: icBg, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
           <View style={{ flex: 1, minWidth: 0 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 14, color: fg, flexShrink: 1 }}>{title}</Txt>
+              <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fg, flexShrink: 1 }}>{title}</Txt>
               {!!chip && (
                 <View style={{ height: 20, paddingHorizontal: 8, borderRadius: 10, backgroundColor: c.goodSoft, justifyContent: 'center' }}>
-                  <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, color: c.good }}>{chip}</Txt>
+                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, color: c.good }}>{chip}</Txt>
                 </View>
               )}
             </View>
-            <Txt numberOfLines={1} style={{ fontSize: 12, color: fg, opacity: 0.72 }}>{sub}</Txt>
+            <Txt numberOfLines={1} style={{ fontSize: fontSizes.xs, color: fg, opacity: 0.72 }}>{sub}</Txt>
           </View>
         </Pressy>
         {btn && act ? <PillBtn h={36} label={btn} tone={pillTone} onPress={act} style={{ paddingHorizontal: 14 }} /> : null}

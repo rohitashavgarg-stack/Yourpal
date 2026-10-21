@@ -22,6 +22,7 @@ import { COACH_BANNER } from './content';
 import { startCreate } from './openers';
 import { ExTile, Highlight, Moon } from './parts';
 import { DAYL, dateOf, dayPlan, exSub, relDay, usePlans } from './store';
+import { fontSizes } from '@/design-system/tokens';
 
 const E = ({ i, children }: { i: number; children: React.ReactNode }) => <Animated.View entering={fade(i * 40)}>{children}</Animated.View>;
 
@@ -57,8 +58,8 @@ function LockedPlan({ day, locked, children }: { day: string; locked: boolean; c
       <LinearGradient pointerEvents="none" colors={[c.bg + '00', c.bg]} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120 }} />
       <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'flex-start', gap: 10, paddingTop: 110, paddingHorizontal: 44 }}>
         <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}><Lock size={24} color={c.ink} /></View>
-        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 22, lineHeight: 29 }}>This plan is locked</Txt>
-        <Txt style={{ textAlign: 'center', maxWidth: 290, fontSize: 14, lineHeight: 20, color: c.ink }}>{`Renew at Wulf Fitness reception to see what Coach Vikram planned for ${day}. Workouts you logged stay here.`}</Txt>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 29 }}>This plan is locked</Txt>
+        <Txt style={{ textAlign: 'center', maxWidth: 290, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>{`Renew at Wulf Fitness reception to see what Coach Vikram planned for ${day}. Workouts you logged stay here.`}</Txt>
       </View>
     </View>
   );
@@ -80,14 +81,14 @@ export function WorkoutPlan() {
           <Card style={{ gap: 8, borderWidth: 1.5, borderColor: c.accent }}>
             <Tag label="Plan on the way" bg={c.accentSoft} fg={c.accentText} />
             <Txt v="headline">Coach Vikram is preparing your plan</Txt>
-            <Txt muted style={{ fontSize: 14 }}>Usually ready after your assessment</Txt>
+            <Txt muted style={{ fontSize: fontSizes.md }}>Usually ready after your assessment</Txt>
           </Card>
         </E>
         <E i={1}>
           <Card style={{ padding: 18, gap: 10 }}>
             <Txt v="label">Starter workout</Txt>
-            <Txt style={{ fontFamily: font.display, fontSize: 22, letterSpacing: -0.4 }}>Full body basics</Txt>
-            <Txt muted style={{ fontSize: 14 }}>35 min · works for any gym floor</Txt>
+            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2, letterSpacing: -0.4 }}>Full body basics</Txt>
+            <Txt muted style={{ fontSize: fontSizes.md }}>35 min · works for any gym floor</Txt>
             {!paused && <Button kind="accent" label="Start starter workout" onPress={() => startWorkout()} />}
           </Card>
         </E>
@@ -110,7 +111,7 @@ export function WorkoutPlan() {
             <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: c.accent }} />
             <View style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.semibold }}>Coach Vikram updated your plan</Txt>
-              <Txt muted style={{ fontSize: 13 }}>{COACH_BANNER}</Txt>
+              <Txt muted style={{ fontSize: fontSizes.sm }}>{COACH_BANNER}</Txt>
             </View>
             <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>See</Txt>
             <ChevronRight size={16} color={c.accentText} />
@@ -121,7 +122,7 @@ export function WorkoutPlan() {
         <E i={0}>
           <Card style={{ paddingVertical: 14, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
             <Clock size={20} color={c.muted} />
-            <Txt style={{ flex: 1, fontSize: 14 }}><Txt style={{ fontFamily: font.semibold, fontSize: 14 }}>Requested</Txt> · Coach Vikram will update your plan</Txt>
+            <Txt style={{ flex: 1, fontSize: fontSizes.md }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md }}>Requested</Txt> · Coach Vikram will update your plan</Txt>
           </Card>
         </E>
       )}
@@ -144,12 +145,12 @@ export function WorkoutPlan() {
               <View style={{ flex: 1, gap: 2 }}>
                 <Txt v="label">{DAYL[p.day]} {dateOf(p.day, p.week)}{isToday ? ' · Today' : ''}</Txt>
                 <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 34, letterSpacing: -1.4 }}>{plan.name}</Txt>
-                <Row style={{ gap: 8 }}><PersonAvatar who={plan.created ? 'me' : 'coach'} size={22} /><Txt muted style={{ fontSize: 13, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'} · {plan.ex.length} exercises{plan.time && !plan.done ? ` · planned ${plan.time}` : ''}</Txt></Row>
+                <Row style={{ gap: 8 }}><PersonAvatar who={plan.created ? 'me' : 'coach'} size={22} /><Txt muted style={{ fontSize: fontSizes.sm, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'} · {plan.ex.length} exercises{plan.time && !plan.done ? ` · planned ${plan.time}` : ''}</Txt></Row>
               </View>
               {!!plan.done && <View accessibilityLabel="Logged" style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}><Check size={16} color={c.bg} strokeWidth={3} /></View>}
             </Row>
             {!!plan.done && <Txt v="caption" style={{ paddingHorizontal: 4, marginTop: 4 }}>{`Logged ${plan.done.replace(/^Done /, '').split(' · ').join(', ')}`}</Txt>}
-            {!plan.done && rel < 0 && <Txt style={{ paddingHorizontal: 4, marginTop: 4, fontSize: 13, lineHeight: 19, color: c.warn }}>Not logged</Txt>}
+            {!plan.done && rel < 0 && <Txt style={{ paddingHorizontal: 4, marginTop: 4, fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>Not logged</Txt>}
           </E>
           {!!plan.done && (() => {
             const skipped = plan.ex.filter((e) => e.res === 'skip').length;
@@ -161,8 +162,8 @@ export function WorkoutPlan() {
                   <Row>
                     {[[String(logged), `of ${plan.ex.length}`, 'Logged'], [String(skipped), '', 'Not logged'], [String(swapped), '', 'Swapped']].map(([n, of, l], k) => (
                       <View key={l} style={{ flex: 1, paddingLeft: k ? 12 : 0, borderLeftWidth: k ? 1 : 0, borderLeftColor: c.line }}>
-                        <Txt style={{ fontFamily: font.medium, fontSize: 22, lineHeight: 29 }}>{n}{!!of && <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{` ${of}`}</Txt>}</Txt>
-                        <Txt muted style={{ fontSize: 12, lineHeight: 17 }}>{l}</Txt>
+                        <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xl2, lineHeight: 29 }}>{n}{!!of && <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{` ${of}`}</Txt>}</Txt>
+                        <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17 }}>{l}</Txt>
                       </View>
                     ))}
                   </Row>
@@ -187,9 +188,9 @@ export function WorkoutPlan() {
                       <ExTile name={e.name} num={String(i + 1)} />
                       <View style={{ flex: 1, minWidth: 0 }}>
                         <Txt style={{ fontFamily: font.medium }}>{e.name}</Txt>
-                        <Txt v="mono" muted style={{ fontSize: 12 }}>{exSub(e)}</Txt>
-                        {!!plan.done && e.res === 'swap' && <Txt muted style={{ fontSize: 12, lineHeight: 17 }}>{`Swapped from ${e.from}`}</Txt>}
-                        {!!plan.done && e.res === 'skip' && <Txt style={{ fontSize: 12, lineHeight: 17, color: c.warn }}>Not logged</Txt>}
+                        <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{exSub(e)}</Txt>
+                        {!!plan.done && e.res === 'swap' && <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17 }}>{`Swapped from ${e.from}`}</Txt>}
+                        {!!plan.done && e.res === 'skip' && <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: c.warn }}>Not logged</Txt>}
                       </View>
                       {!!tag && <Tag label={tag} bg={e.hl && !e.by ? c.accentSoft : c.surface2} fg={e.hl && !e.by ? c.accentText : c.muted} style={{ alignSelf: 'center' }} />}
                       {plan.done ? (e.res === 'skip'
@@ -203,14 +204,14 @@ export function WorkoutPlan() {
             </Card>
           </E>
           {!!plan.cd?.length && <E i={4}><ListCard dot={c.cNutri} title="Cool-down" rows={plan.cd} /></E>}
-          {rel > 0 && <Txt muted style={{ textAlign: 'center', fontSize: 13 }}>You can start this on {DAYL[p.day]}. Plans open on today by default.</Txt>}
+          {rel > 0 && <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.sm }}>You can start this on {DAYL[p.day]}. Plans open on today by default.</Txt>}
           {!!plan.done && <Button kind="secondary" small label="View in workout history" onPress={() => router.push('/plans/history')} />}
         </LockedPlan>
       ) : (
         <E i={1}>
           <Card style={{ paddingVertical: 28, paddingHorizontal: 22, alignItems: 'center', gap: 10 }}>
             <Moon />
-            <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 22 }}>Rest day</Txt>
+            <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2 }}>Rest day</Txt>
             <Txt muted style={{ textAlign: 'center', maxWidth: 280 }}>Recovery is part of the plan. A walk or a stretch still counts toward your week.</Txt>
             {!paused && <Button kind="secondary" small label={`Create a workout for ${DAYL[p.day]}`} onPress={() => startCreate(d)} style={{ marginTop: 6 }} />}
           </Card>

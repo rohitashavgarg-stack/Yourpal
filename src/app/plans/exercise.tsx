@@ -17,7 +17,7 @@ import { histFor, tipFor } from '@/features/plans/content';
 import { ExTile, PageHeader } from '@/features/plans/parts';
 import { artIdFor, ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { CLIPS, THUMBS, clipIdFor } from '@/features/workout/clips';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // The real clip of the exercise: shows its still until played, then loops silently.
 function PlanClip({ source, thumb, playing }: { source: number; thumb?: number; playing: boolean }) {
@@ -78,7 +78,7 @@ export default function ExerciseDetail() {
           </Svg>
           </>)}
           <View style={{ position: 'absolute', top: 12, left: 12, paddingHorizontal: 10, paddingVertical: 3, borderRadius: 999, backgroundColor: artId || clipId ? 'rgba(11,11,13,0.72)' : 'rgba(255,255,255,0.14)' }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: 12, color: fixed.white }}>{d.offline ? 'Downloaded · plays offline' : 'Licensed form video'}</Txt>
+            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, color: fixed.white }}>{d.offline ? 'Downloaded · plays offline' : 'Licensed form video'}</Txt>
           </View>
           <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
             <Pressy accessibilityRole="button" accessibilityLabel={playing ? 'Pause video' : 'Play form video'} onPress={() => setPlaying((v) => !v)} scaleTo={0.92}
@@ -91,7 +91,7 @@ export default function ExerciseDetail() {
         {sub ? (
           <Row style={{ gap: 12, paddingHorizontal: 4 }}>
             <ExTile name={name} size={44} />
-            <View style={{ flex: 1 }}><Txt v="label">Your plan</Txt><Txt v="mono" style={{ fontSize: 14 }}>{sub}</Txt></View>
+            <View style={{ flex: 1 }}><Txt v="label">Your plan</Txt><Txt v="mono" style={{ fontSize: fontSizes.md }}>{sub}</Txt></View>
           </Row>
         ) : null}
         <View style={{ height: 96, borderRadius: 22, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 16 }}>
@@ -101,12 +101,12 @@ export default function ExerciseDetail() {
           </Svg>
           <View style={{ flex: 1 }}>
             <Txt style={{ fontFamily: font.semibold }}>Machine & setup</Txt>
-            <Txt muted style={{ fontSize: 13 }}>Photo of the station at Wulf Fitness</Txt>
+            <Txt muted style={{ fontSize: fontSizes.sm }}>Photo of the station at Wulf Fitness</Txt>
           </View>
         </View>
         <Card style={{ padding: 18, gap: 6 }}>
           <Txt style={{ fontFamily: font.semibold }}>Tips</Txt>
-          <Txt muted style={{ fontSize: 14 }}>{tipFor(name)}</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md }}>{tipFor(name)}</Txt>
         </Card>
         <Card style={{ padding: 18, gap: 6 }}>
           <Txt style={{ fontFamily: font.semibold }}>Your history</Txt>

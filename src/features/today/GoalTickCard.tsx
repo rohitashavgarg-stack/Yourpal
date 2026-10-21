@@ -12,6 +12,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { fmtDay, fmtVal, Goal2, statusLine, useGoalV2 } from '@/features/goalv2/model';
 import { DEMO, GC, GoalCardState, goalCardStore, LOOK, RIGHT_TEXT, SEGMENTS, STALE_WEIGH_DAYS, SUFFIX, useGoalCardState } from '@/features/today/goalCardState';
+import { fontSizes } from '@/design-system/tokens';
 
 // The goal at the top of Today (Figma "Your Pal Mobile app", node 40151:12923), with no card around it: it sits straight on the page,
 // over a soft blue glow, the goal in one line, a status pill, the progress picture for this kind of goal (GoalVisual), and the numbers underneath.
@@ -65,7 +66,7 @@ function Marker({ g, w, size }: { g: Goal2; w: number; size: VisualSize }) {
     <View style={{ height: 32 }}>
       <View style={{ position: 'absolute', left: bx, width: BW, alignItems: x - bx < 30 ? 'flex-start' : x - bx > BW - 30 ? 'flex-end' : 'center' }}>
         <View style={{ height: 26, paddingHorizontal: 10, borderRadius: 13, backgroundColor: c.ink, justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: c.bg }}>{`${fmtVal(g, g.currentValue)} ${g.unit}`}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.bg }}>{`${fmtVal(g, g.currentValue)} ${g.unit}`}</Txt>
         </View>
       </View>
       <View style={{ position: 'absolute', left: x - 4, top: 22, width: 8, height: 8, backgroundColor: c.ink, transform: [{ rotate: '45deg' }] }} />
@@ -121,11 +122,11 @@ export function GoalTickCard({ flat = false, state: stateProp, weighDays: weighP
       <View style={{ paddingHorizontal: 4, paddingVertical: 4, gap: 16 }}>
         <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 8, flexWrap: 'wrap' }}>
           <View style={{ flexShrink: 1 }}>
-            <Txt numberOfLines={2} style={{ fontFamily: font.displayBold, fontSize: long ? 26 : 32, lineHeight: long ? 34 : 42, letterSpacing: long ? -0.8 : -1.2, color: c.ink }}>{g.name}</Txt>
-            <Txt style={{ fontSize: 15, lineHeight: 22, color: c.muted }}>{g.status === 'reached' ? 'All the way there' : `${Math.round(pct * 100)}% of the way there`}</Txt>
+            <Txt numberOfLines={2} style={{ fontFamily: font.displayBold, fontSize: long ? fontSizes.xl3 : fontSizes.xl4, lineHeight: long ? 34 : 42, letterSpacing: long ? -0.8 : -1.2, color: c.ink }}>{g.name}</Txt>
+            <Txt style={{ fontSize: fontSizes.base, lineHeight: 22, color: c.muted }}>{g.status === 'reached' ? 'All the way there' : `${Math.round(pct * 100)}% of the way there`}</Txt>
           </View>
           <View style={{ minHeight: 40, paddingVertical: 2, paddingHorizontal: 16, borderRadius: 22, backgroundColor: pill.bg, alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: 14, lineHeight: 20, color: pill.fg }}>{label}</Txt>
+            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20, color: pill.fg }}>{label}</Txt>
           </View>
         </Row>
         <Journey g={g} />
@@ -140,7 +141,7 @@ export function GoalTickCard({ flat = false, state: stateProp, weighDays: weighP
     return (
       <Pressy accessibilityRole="link" scaleTo={0.98} onPress={() => router.push('/goal-detail')} accessibilityLabel="No goal set yet. Your coach sets this after your assessment. Open goal details">
         <View style={{ ...box, backgroundColor: GC.emptyBg, borderColor: GC.emptyBorder, borderStyle: 'dashed', gap: 4, marginBottom: 4 }}>
-          <Txt style={{ fontFamily: font.display, fontSize: 20, lineHeight: 26, color: GC.emptyTitle }}>No goal set yet</Txt>
+          <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl, lineHeight: 26, color: GC.emptyTitle }}>No goal set yet</Txt>
           <Txt style={{ fontSize: 13.5, lineHeight: 20, color: GC.emptySub }}>Your coach sets this after your assessment</Txt>
         </View>
       </Pressy>
@@ -164,7 +165,7 @@ export function GoalTickCard({ flat = false, state: stateProp, weighDays: weighP
   const right = rightText ? { text: rightText, color: GC.rest }
     : state === 'comeback' ? null
     : pctText ? (stale ? { text: 'Needs a weigh-in', color: GC.amber } : { text: pctText, color: GC.rest }) : null;
-  const small = { fontSize: 13, lineHeight: 19 };
+  const small = { fontSize: fontSizes.sm, lineHeight: 19 };
   return (
     <Pressy accessibilityRole="link" scaleTo={0.98} onPress={() => router.push('/goal-detail')}
       accessibilityLabel={`${g.name}, ${suffix}. ${leftBold}${leftRest}. ${look.pill.label}.${right ? ` ${right.text}.` : ''} Open goal details`}>
@@ -174,10 +175,10 @@ export function GoalTickCard({ flat = false, state: stateProp, weighDays: weighP
         <Row style={{ alignItems: 'flex-start', justifyContent: 'space-between', columnGap: 8 }}>
           <View style={{ flexShrink: 1 }}>
             <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 32, letterSpacing: -0.24, color: GC.title }}>{g.name}</Txt>
-            <Txt style={{ fontFamily: font.regular, fontSize: 14, lineHeight: 20, color: GC.date }}>{suffix}</Txt>
+            <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: GC.date }}>{suffix}</Txt>
           </View>
           <View style={{ flexShrink: 0, paddingVertical: 6, paddingHorizontal: 13, borderRadius: 999, backgroundColor: look.pill.bg, borderWidth: look.pill.border ? 1 : 0, borderColor: look.pill.border }}>
-            <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: look.pill.fg }}>{look.pill.label}</Txt>
+            <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: look.pill.fg }}>{look.pill.label}</Txt>
           </View>
         </Row>
         {/* the 36-segment bar is for body-weight goals; every other kind keeps its own picture (ticks for body fat, staircase, stopwatch ruler, race lane, workout slots), in the state colour */}

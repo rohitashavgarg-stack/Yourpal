@@ -18,7 +18,7 @@ import { buildExercises, WORKOUT_MIN } from '@/features/workout/session';
 import { rel } from './meals';
 import { useLogGate } from '@/lib/logGate';
 import { createStore } from '@/features/progress/store';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // What the member said about a missed workout (kept for the day): moved to tomorrow or skipped. "I did it" logs it as done instead.
 export const missedWkStore = createStore(() => ({ answer: null as null | 'moved' | 'skipped' }));
@@ -51,7 +51,7 @@ function Title({ name, time, tone = 'default' }: { name: string; time?: string; 
       <Txt style={{ fontFamily: font.regular, fontSize: 34, lineHeight: 42, letterSpacing: -1.4, color: missed ? 'rgba(255,255,255,0.75)' : fixed.white }}>{name}</Txt>
       {!!time && (
         <View style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, backgroundColor: missed ? 'rgba(242,179,91,0.14)' : 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: missed ? AMBER : fixed.white, textDecorationLine: missed ? 'line-through' : 'none' }}>{time}</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: missed ? AMBER : fixed.white, textDecorationLine: missed ? 'line-through' : 'none' }}>{time}</Txt>
         </View>
       )}
     </Row>
@@ -60,12 +60,12 @@ function Title({ name, time, tone = 'default' }: { name: string; time?: string; 
 
 const Btn = ({ label, onPress }: { label: string; onPress: () => void }) => (
   <Pressy accessibilityRole="button" onPress={onPress} style={{ height: 50, borderRadius: 25, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
-    <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: fixed.dark }}>{label}</Txt>
+    <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: fixed.dark }}>{label}</Txt>
   </Pressy>
 );
 const SmallBtn = ({ label, onPress, solid = false }: { label: string; onPress: () => void; solid?: boolean }) => (
   <Pressy accessibilityRole="button" onPress={onPress} style={{ height: 40, paddingHorizontal: 16, borderRadius: 20, backgroundColor: solid ? fixed.white : 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
-    <Txt style={{ fontFamily: solid ? font.semibold : font.medium, fontSize: 14, lineHeight: 20, color: solid ? fixed.dark : fixed.white }}>{label}</Txt>
+    <Txt style={{ fontFamily: solid ? font.semibold : font.medium, fontSize: fontSizes.md, lineHeight: 20, color: solid ? fixed.dark : fixed.white }}>{label}</Txt>
   </Pressy>
 );
 const LiveDot = () => <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: MINT }} />;
@@ -107,8 +107,8 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   const burnedRow = d.hc && d.wearable ? (
     <Row style={{ gap: 8, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.12)' }}>
       <Flame size={15} color={fixed.white} />
-      <Txt style={{ flex: 1, fontSize: 13, lineHeight: 19, color: fixed.white }}>Burned today <Txt style={{ fontFamily: font.monoBold, fontSize: 13, lineHeight: 19, color: fixed.white }}>{burned(d)}</Txt> kcal</Txt>
-      <Txt style={{ fontSize: 12, lineHeight: 17, color: W60 }}>From your watch</Txt>
+      <Txt style={{ flex: 1, fontSize: fontSizes.sm, lineHeight: 19, color: fixed.white }}>Burned today <Txt style={{ fontFamily: font.monoBold, fontSize: fontSizes.sm, lineHeight: 19, color: fixed.white }}>{burned(d)}</Txt> kcal</Txt>
+      <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: W60 }}>From your watch</Txt>
     </Row>
   ) : null;
 
@@ -119,8 +119,8 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
         <Row style={{ gap: 12, alignItems: 'flex-start' }}>
           <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={18} color={c.muted} /></View>
           <View style={{ flex: 1, gap: 2 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, letterSpacing: -0.3, color: c.ink }}>Workouts are paused</Txt>
-            <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>Renew at Wulf Fitness reception to see your plan and start again. Your history stays here.</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, letterSpacing: -0.3, color: c.ink }}>Workouts are paused</Txt>
+            <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}>Renew at Wulf Fitness reception to see your plan and start again. Your history stays here.</Txt>
           </View>
         </Row>
       </View>
@@ -135,11 +135,11 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
         <Row style={{ gap: 12 }}>
           <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center' }}>{moved ? <CalendarClock size={18} color={fixed.white} /> : <X size={18} color={fixed.white} />}</View>
           <View style={{ flex: 1 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: fixed.white }}>{moved ? 'Leg day moved to tomorrow' : 'Leg day skipped today'}</Txt>
-            <Txt style={{ fontSize: 12, lineHeight: 17, color: W60 }}>{moved ? 'Coach Vikram is told' : 'Your plan picks up tomorrow'}</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: fixed.white }}>{moved ? 'Leg day moved to tomorrow' : 'Leg day skipped today'}</Txt>
+            <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: W60 }}>{moved ? 'Coach Vikram is told' : 'Your plan picks up tomorrow'}</Txt>
           </View>
           <Pressy accessibilityRole="button" accessibilityLabel="Undo" onPress={() => missedWkStore.set({ answer: null })} style={{ height: 34, paddingHorizontal: 14, borderRadius: 17, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: fixed.white }}>Undo</Txt>
+            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: fixed.white }}>Undo</Txt>
           </Pressy>
         </Row>
       </Shell>
@@ -151,11 +151,11 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
     return (
       <Shell label="Rest day" colors={[fixed.dark, fixed.shadow, '#1A1636']}>
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
-          <Row style={{ gap: 8 }}><Moon size={17} color={LILAC} /><Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: LILAC }}>Recovery</Txt></Row>
+          <Row style={{ gap: 8 }}><Moon size={17} color={LILAC} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: LILAC }}>Recovery</Txt></Row>
           <Chip label={`Next: Pull, Thu ${fmtT(WKT).full}`} onDark />
         </Row>
         <Title name="Rest day" />
-        <Txt style={{ fontSize: 14, lineHeight: 20, color: 'rgba(255,255,255,0.75)' }}>Muscles grow on rest days. A 20 minute walk still counts.</Txt>
+        <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: 'rgba(255,255,255,0.75)' }}>Muscles grow on rest days. A 20 minute walk still counts.</Txt>
         {burnedRow}
       </Shell>
     );
@@ -171,16 +171,16 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <Row style={{ gap: 8 }}>
             <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: MINT, alignItems: 'center', justifyContent: 'center' }}><Check size={16} strokeWidth={3} color={fixed.dark} /></View>
-            <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: MINT }}>{`Done at ${fmtT(done.b).full}`}</Txt>
+            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: MINT }}>{`Done at ${fmtT(done.b).full}`}</Txt>
           </Row>
           <Chip label={name} onDark />
         </Row>
-        <Txt style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 39, letterSpacing: -1.2, color: fixed.white }}>Workout complete</Txt>
+        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 39, letterSpacing: -1.2, color: fixed.white }}>Workout complete</Txt>
         <Row style={{ gap: 12 }}>
           {stats.map(([v, u, l]) => (
             <View key={l} style={{ flex: 1 }}>
-              <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, color: fixed.white }}>{v}<Txt style={{ fontSize: 13, lineHeight: 19, color: W60 }}>{u}</Txt></Txt>
-              <Txt style={{ fontSize: 11, lineHeight: 16, color: W60 }}>{l}</Txt>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29, color: fixed.white }}>{v}<Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: W60 }}>{u}</Txt></Txt>
+              <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 16, color: W60 }}>{l}</Txt>
             </View>
           ))}
         </Row>
@@ -198,17 +198,17 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
     return (
       <Shell label={`Workout running, ${elapsed} elapsed, ${doneEx} of ${ex.length} exercises`} colors={['#06231B', '#0B3A2C', '#0F5A42']}>
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
-          <Row style={{ gap: 8 }}><LiveDot /><Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: MINT }}>Running</Txt></Row>
+          <Row style={{ gap: 8 }}><LiveDot /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: MINT }}>Running</Txt></Row>
           <Chip label={name} onDark tone="live" />
         </Row>
         <Row style={{ alignItems: 'baseline', gap: 8 }}>
           <Txt style={{ fontFamily: font.monoBold, fontSize: 42, lineHeight: 50, letterSpacing: -1, color: fixed.white }}>{elapsed}</Txt>
-          <Txt style={{ fontSize: 12, lineHeight: 17, color: W60 }}>elapsed</Txt>
+          <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: W60 }}>elapsed</Txt>
         </Row>
         <View style={{ gap: 6 }}>
           <Row style={{ justifyContent: 'space-between' }}>
-            <Txt style={{ fontSize: 13, lineHeight: 19, color: fixed.white }}>{`${doneEx} of ${ex.length} exercises`}</Txt>
-            {next && <Txt style={{ fontSize: 12, lineHeight: 17, color: W60 }}>{`Next: ${next.name}`}</Txt>}
+            <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: fixed.white }}>{`${doneEx} of ${ex.length} exercises`}</Txt>
+            {next && <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: W60 }}>{`Next: ${next.name}`}</Txt>}
           </Row>
           <Row style={{ gap: 4 }}>
             {ex.map((_, i) => <View key={i} style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: i < doneEx ? MINT : 'rgba(255,255,255,0.18)' }} />)}
@@ -226,18 +226,18 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <Coach dim />
           <View style={{ height: 28, paddingHorizontal: 11, borderRadius: 14, borderWidth: 1, borderColor: 'rgba(242,179,91,0.5)', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <Clock size={13} color={AMBER} /><Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17, color: AMBER }}>Missed</Txt>
+            <Clock size={13} color={AMBER} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 17, color: AMBER }}>Missed</Txt>
           </View>
         </Row>
         <Title name={name} time={time} tone="missed" />
-        <Txt style={{ fontSize: 14, lineHeight: 20, color: 'rgba(255,255,255,0.8)' }}>Did you train without the app, or should it move?</Txt>
+        <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: 'rgba(255,255,255,0.8)' }}>Did you train without the app, or should it move?</Txt>
         <Row style={{ gap: 8, flexWrap: 'wrap' }}>
           <SmallBtn solid label="I did it" onPress={didIt} />
           <SmallBtn label="Move to tomorrow" onPress={() => answer('moved')} />
           <SmallBtn label="Skip" onPress={() => answer('skipped')} />
         </Row>
         <Pressy accessibilityRole="button" onPress={() => startWorkout()} hitSlop={8} style={{ alignSelf: 'flex-start', paddingVertical: 2 }}>
-          <Txt style={{ fontSize: 13, lineHeight: 19, color: W60, textDecorationLine: 'underline' }}>Start it now anyway</Txt>
+          <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: W60, textDecorationLine: 'underline' }}>Start it now anyway</Txt>
         </Pressy>
       </Shell>
     );
@@ -250,15 +250,15 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
     return (
       <View accessibilityLabel="Easy session" style={{ borderRadius: 24, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
         <View style={{ gap: 2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 17, lineHeight: 24, letterSpacing: -0.3, color: c.ink }}>Easy session</Txt>
-          <Txt style={{ fontSize: 13, lineHeight: 19, color: c.muted }}>5 exercises, about 30 minutes, lighter weights</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, letterSpacing: -0.3, color: c.ink }}>Easy session</Txt>
+          <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}>5 exercises, about 30 minutes, lighter weights</Txt>
         </View>
         <Row style={{ gap: 8 }}>
           <Pressy accessibilityRole="button" accessibilityLabel="Start the easy session" onPress={() => startWorkout()} style={[btn, { backgroundColor: c.ink }]}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.bg }}>Start</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.bg }}>Start</Txt>
           </Pressy>
           <Pressy accessibilityRole="button" accessibilityLabel="Do today's regular workout instead" onPress={() => startWorkout()} style={[btn, { backgroundColor: c.surface3 }]}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.ink }}>Do regular instead</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>Do regular instead</Txt>
           </Pressy>
         </Row>
       </View>
@@ -273,7 +273,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
         <Coach />
         {due ? (
           <View style={{ height: 28, paddingHorizontal: 11, borderRadius: 14, borderWidth: 1, borderColor: 'rgba(124,240,200,0.6)', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <LiveDot /><Txt style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 17, color: MINT }}>Now</Txt>
+            <LiveDot /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 17, color: MINT }}>Now</Txt>
           </View>
         ) : <Chip label={comeback ? 'Today' : rel(d, WKT).t} onDark />}
       </Row>

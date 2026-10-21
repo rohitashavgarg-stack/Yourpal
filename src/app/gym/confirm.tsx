@@ -16,7 +16,7 @@ import { Hint, ListCard, SubPage, useShake } from '@/features/progress/parts';
 import { PT_TOTAL, STAR_WORDS } from '@/features/gym/data';
 import { FlagSheet } from '@/features/gym/sheets';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const STAR = 'M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z';
 const APath = Animated.createAnimatedComponent(Path);
@@ -77,22 +77,22 @@ export default function ConfirmSession() {
   return (
     <SubPage title="Confirm session" fallback="/gym/attendance">
       <View style={{ padding: 18, borderRadius: 26, backgroundColor: c.accentSoft, gap: 4 }}>
-        <Txt style={{ fontFamily: font.display, fontSize: 25, lineHeight: 33 }}>Tue 23 Sep · 6:00–7:00 pm</Txt>
+        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 33 }}>Tue 23 Sep · 6:00–7:00 pm</Txt>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <PersonAvatar who="coach" size={26} />
-          <Txt style={{ flex: 1, fontSize: 14, color: c.accentText }}>Coach Vikram marked this session as completed</Txt>
+          <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.accentText }}>Coach Vikram marked this session as completed</Txt>
         </View>
       </View>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 17, paddingHorizontal: 4 }}>How was it?</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, paddingHorizontal: 4 }}>How was it?</Txt>
       <View accessibilityRole="radiogroup" accessibilityLabel="Rate the session, 1 to 5 stars" style={{ flexDirection: 'row', justifyContent: 'center', gap: 6 }}>
         {[1, 2, 3, 4, 5].map((n) => <StarBtn key={n} n={n} on={rating >= n} bump={bump} onPress={() => pick(n)} />)}
       </View>
-      <Txt muted accessibilityLiveRegion="polite" style={{ textAlign: 'center', fontSize: 14 }}>{STAR_WORDS[rating]}</Txt>
+      <Txt muted accessibilityLiveRegion="polite" style={{ textAlign: 'center', fontSize: fontSizes.md }}>{STAR_WORDS[rating]}</Txt>
       <Txt v="label" style={{ paddingHorizontal: 6 }}>Remarks (optional)</Txt>
       <View style={{ marginTop: -6 }}><Field value={remarks} onChangeText={setRemarks} placeholder="Worked on squat depth" accessibilityLabel="Remarks, optional" /></View>
       {err && (
         <Animated.View entering={fade()} exiting={fadeOut()} style={shake.style}>
-          <Txt accessibilityRole="alert" style={{ color: c.warn, fontSize: 14, paddingHorizontal: 6 }}>Pick a rating to confirm.</Txt>
+          <Txt accessibilityRole="alert" style={{ color: c.warn, fontSize: fontSizes.md, paddingHorizontal: 6 }}>Pick a rating to confirm.</Txt>
         </Animated.View>
       )}
       {done ? (
@@ -103,8 +103,8 @@ export default function ConfirmSession() {
         <Button label="Confirm session" onPress={confirm} />
       )}
       <ListCard rows={[{ l: "This didn't happen", onPress: () => openSheet(<FlagSheet />, { label: 'Flag session' }) }]} />
-      <Hint style={{ fontSize: 12 }}>We remind you after 24 hours. If you don’t confirm, the session confirms itself on Fri 26 Sep, three days after it happened, without a rating.</Hint>
-      <Hint style={{ fontSize: 12 }}>Your rating and remarks go only to the gym admin, never to Coach Vikram or other members.</Hint>
+      <Hint style={{ fontSize: fontSizes.xs }}>We remind you after 24 hours. If you don’t confirm, the session confirms itself on Fri 26 Sep, three days after it happened, without a rating.</Hint>
+      <Hint style={{ fontSize: fontSizes.xs }}>Your rating and remarks go only to the gym admin, never to Coach Vikram or other members.</Hint>
     </SubPage>
   );
 }

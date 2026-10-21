@@ -9,6 +9,7 @@ import { Domain, plannedMin, totals, useDomain, wkDoneInfo, workoutState } from 
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
+import { fontSizes } from '@/design-system/tokens';
 
 export const ciTime = (d: Domain) => d.ciAt ?? (d.ci === 'Checked in' ? 1098 : null);
 
@@ -61,7 +62,7 @@ export function WeekCard() {
   return (
     <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 10, gap: 14 }}>
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
-        <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 30, letterSpacing: -1.3 }}>This week</Txt>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, letterSpacing: -1.3 }}>This week</Txt>
         <Chip label={`${doneN} of 4 workouts`} icon={<Dumbbell size={13} color={c.ink} />} />
       </Row>
       <View accessibilityLabel="Days this week. Tap a past day for its summary, a future day to open its plan" style={{ flexDirection: 'row' }}>
@@ -70,19 +71,19 @@ export function WeekCard() {
             <Pressy accessibilityRole="button" accessibilityLabel={`${DN[i]} ${x.num}${x.today ? ', today' : ''}${x.fut ? ', open plan' : ', open summary'}`}
               onPress={() => (x.fut ? router.navigate({ pathname: '/plans', params: { day: String(i) } }) : openSheet(<DaySheet i={i} />, { label: 'Day summary' }))}
               style={{ width: 44, height: 58, borderRadius: 22, alignItems: 'center', justifyContent: 'center', gap: 2, backgroundColor: x.today ? c.ink : 'transparent', opacity: x.fut ? 0.55 : 1 }}>
-              <Txt style={{ fontFamily: font.medium, fontSize: 15, color: x.today ? c.bg : c.ink }}>{x.num}</Txt>
-              <Txt style={{ fontSize: 11, color: x.today ? c.bg : c.muted, opacity: x.today ? 0.7 : 1 }}>{x.let}</Txt>
+              <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, color: x.today ? c.bg : c.ink }}>{x.num}</Txt>
+              <Txt style={{ fontSize: fontSizes.xs2, color: x.today ? c.bg : c.muted, opacity: x.today ? 0.7 : 1 }}>{x.let}</Txt>
             </Pressy>
             <Dot kind={x.wk} />
             <Bar w={x.mealW} />
           </View>
         ))}
       </View>
-      <Txt muted style={{ fontSize: 13, paddingHorizontal: 4 }}>{doneN} of 4 workouts · {7 + t.onPlan} of 12 meals on plan · {ciTime(d) != null ? '2 check-ins' : '1 check-in'}</Txt>
+      <Txt muted style={{ fontSize: fontSizes.sm, paddingHorizontal: 4 }}>{doneN} of 4 workouts · {7 + t.onPlan} of 12 meals on plan · {ciTime(d) != null ? '2 check-ins' : '1 check-in'}</Txt>
       <Row style={{ gap: 14, justifyContent: 'center', paddingTop: 2, paddingBottom: 6 }}>
-        <Row style={{ gap: 5 }}><Dot kind="done" /><Txt style={{ fontSize: 11, color: c.muted }}>Workout done</Txt></Row>
-        <Row style={{ gap: 5 }}><Dot kind="" /><Txt style={{ fontSize: 11, color: c.muted }}>Planned</Txt></Row>
-        <Row style={{ gap: 5 }}><Bar w={70} /><Txt style={{ fontSize: 11, color: c.muted }}>Meals on plan</Txt></Row>
+        <Row style={{ gap: 5 }}><Dot kind="done" /><Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>Workout done</Txt></Row>
+        <Row style={{ gap: 5 }}><Dot kind="" /><Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>Planned</Txt></Row>
+        <Row style={{ gap: 5 }}><Bar w={70} /><Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>Meals on plan</Txt></Row>
       </Row>
     </Card>
   );
@@ -99,7 +100,7 @@ export function DaySheet({ i }: { i: number }) {
     <>
       <View style={{ gap: 2 }}>
         <Txt v="label">{x.today ? 'Today so far' : 'Day summary'}</Txt>
-        <Txt style={{ fontFamily: font.regular, fontSize: 30, letterSpacing: -1.3 }}>{DN[i]} {x.num}</Txt>
+        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, letterSpacing: -1.3 }}>{DN[i]} {x.num}</Txt>
       </View>
       <View>
         {rows.map(([I, b, s], k) => (

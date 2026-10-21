@@ -24,7 +24,7 @@ import { progressLine, statusLine, useGoalV2 } from '@/features/goalv2/model';
 import { ringCentre, StatusChip } from '@/features/goalv2/GoalCard2';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
 const R = 54, CIRC = 2 * Math.PI * R;
@@ -40,8 +40,8 @@ export function GoalLine() {
       style={{ backgroundColor: c.surface, borderRadius: 20, paddingVertical: 12, paddingHorizontal: 16 }}>
       <Row style={{ gap: 12 }}>
         <View style={{ flex: 1 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21 }}>{g.name}</Txt>
-          <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{progressLine(g)} · {statusLine(g)}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{g.name}</Txt>
+          <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{progressLine(g)} · {statusLine(g)}</Txt>
         </View>
         <ChevronRight size={18} color={c.muted} />
       </Row>
@@ -89,17 +89,17 @@ export function GoalCard({ soft: compact = false }: { soft?: boolean } = {}) {
             {centre.check ? <Check size={52} color={fixed.white} strokeWidth={3} /> : g2.kind === 'consistency' ? (
               <View style={{ alignItems: 'center' }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 24 : 34, lineHeight: soft ? 30 : undefined, letterSpacing: soft ? -0.6 : -1, color: fixed.white }}>{centre.big}</Txt>
-                {!soft && <Txt style={{ fontSize: 12, lineHeight: 16, color: 'rgba(255,255,255,0.75)' }}>this week</Txt>}
+                {!soft && <Txt style={{ fontSize: fontSizes.xs, lineHeight: 16, color: 'rgba(255,255,255,0.75)' }}>this week</Txt>}
               </View>
             ) : (
-              <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 24 : 34, letterSpacing: -0.6, color: fixed.white }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: soft ? 13 : 18, color: 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
+              <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 24 : 34, letterSpacing: -0.6, color: fixed.white }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: soft ? fontSizes.sm : fontSizes.lg, color: 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
             )}
           </View>
         </View>
         <View style={{ flex: 1, gap: soft ? 4 : 6, minWidth: 0 }}>
-          <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)' }}>Your goal</Txt><ChevronRight size={18} color={fixed.white} /></Row>
-          <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: soft ? 24 : 30, lineHeight: soft ? 29 : 34, color: fixed.white }}>{goal}</Txt>
-          <Txt style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>{sub}</Txt>
+          <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.8)' }}>Your goal</Txt><ChevronRight size={18} color={fixed.white} /></Row>
+          <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: soft ? 24 : fontSizes.xl4, lineHeight: soft ? 29 : 34, color: fixed.white }}>{goal}</Txt>
+          <Txt style={{ fontSize: fontSizes.md, color: 'rgba(255,255,255,0.8)' }}>{sub}</Txt>
           <StatusChip g={g2} fg="#1B3FB8" />
         </View>
       </LinearGradient>
@@ -117,8 +117,8 @@ export function PtConfirmCard() {
       <Row style={{ gap: 12 }}>
         <PersonAvatar who="coach" size={44} />
         <View style={{ flex: 1 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 25, letterSpacing: -0.3 }}>Confirm your PT session</Txt>
-          <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>Coach Vikram marked Tue 23 Sep, 6–7 pm as done.</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, letterSpacing: -0.3 }}>Confirm your PT session</Txt>
+          <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Coach Vikram marked Tue 23 Sep, 6–7 pm as done.</Txt>
         </View>
       </Row>
       <Row style={{ gap: 10 }}>
@@ -141,8 +141,8 @@ export function ComebackGreeting({ inCard = false, onDark = false }: { inCard?: 
   const days = `${d.awayDays} ${d.awayDays === 1 ? 'day' : 'days'}`;
   return (
     <View style={{ gap: 2, flex: inCard ? 1 : undefined, paddingHorizontal: inCard ? 0 : 4 }}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 28, letterSpacing: -0.4, color: onDark ? fixed.white : c.ink }}>{`Good to see you back, ${first}.`}</Txt>
-      <Txt style={{ fontSize: 15, lineHeight: 22, color: onDark ? 'rgba(255,255,255,0.75)' : c.muted }}>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 28, letterSpacing: -0.4, color: onDark ? fixed.white : c.ink }}>{`Good to see you back, ${first}.`}</Txt>
+      <Txt style={{ fontSize: fontSizes.base, lineHeight: 22, color: onDark ? 'rgba(255,255,255,0.75)' : c.muted }}>
         {"It's been "}<Txt style={{ fontFamily: font.semibold, color: onDark ? fixed.white : c.ink }}>{days}</Txt>{`. ${who} picked an easy one to ease you in.`}
       </Txt>
     </View>
@@ -169,7 +169,7 @@ export function ComebackCard() {
       </Row>
       <View style={{ gap: 8 }}>
         <View style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused, not lost</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused, not lost</Txt>
         </View>
       </View>
       <Row style={{ gap: 10 }}>
@@ -265,10 +265,10 @@ export function UpdatesCard() {
       <Row style={{ justifyContent: 'space-between' }}>
         <Row style={{ gap: 8 }}>
           <Txt style={{ fontFamily: font.semibold }}>Updates</Txt>
-          <View style={{ paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, backgroundColor: c.accent }}><Txt style={{ fontFamily: font.semibold, fontSize: 12, color: fixed.white }}>{live.length}</Txt></View>
+          <View style={{ paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, backgroundColor: c.accent }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, color: fixed.white }}>{live.length}</Txt></View>
         </Row>
         <Pressy accessibilityRole="button" onPress={() => openSheet(<UpdatesSheet />, { label: 'Updates' })} style={{ height: 44, justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 13, color: c.accentText }}>See all</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.accentText }}>See all</Txt>
         </Pressy>
       </Row>
       <GestureDetector gesture={swipe}>
@@ -281,7 +281,7 @@ export function UpdatesCard() {
                   <UpdIcon u={u} />
                   <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
                     <Txt style={{ fontFamily: font.semibold }}>{u.title}</Txt>
-                    <Txt muted style={{ fontSize: 14 }}>{u.body}</Txt>
+                    <Txt muted style={{ fontSize: fontSizes.md }}>{u.body}</Txt>
                   </View>
                 </View>
                 {u.isPlan && planOpen && <PlanChanges />}

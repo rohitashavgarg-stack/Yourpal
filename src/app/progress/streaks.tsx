@@ -13,12 +13,13 @@ import { BADGES, Badge, BadgeIcon, streakStore, StreakMode } from '@/features/st
 import { useStreak } from '@/features/streak/useStreak';
 import { StreakHero } from '@/features/streak/StreakHero';
 import { FLAME } from '@/features/streak/StreakChip';
+import { fontSizes } from '@/design-system/tokens';
 
 const ICONS: Record<BadgeIcon, any> = { dumbbell: Dumbbell, flame: Flame, trophy: Trophy, award: Award, medal: Medal, scale: Scale, target: Target, droplets: Droplets, footprints: Footprints, clipboard: ClipboardCheck };
 
 function Label({ children }: { children: string }) {
   const { c } = useTheme();
-  return <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingHorizontal: 4 }}>{children}</Txt>;
+  return <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingHorizontal: 4 }}>{children}</Txt>;
 }
 
 function BadgeCard({ b, weeks }: { b: Badge; weeks: number }) {
@@ -33,13 +34,13 @@ function BadgeCard({ b, weeks }: { b: Badge; weeks: number }) {
       {earned && <CornerGlow color={BADGE_LOOK[b.id].b} size={240} />}
       <BadgeArt id={b.id} icon={Icon} earned={earned} />
       <View style={{ gap: 2, alignItems: 'center' }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, textAlign: 'center', color: earned ? c.ink : c.muted }}>{b.title}</Txt>
-        <Txt v="caption" style={{ fontSize: 12, textAlign: 'center' }}>{earned ? `Earned ${b.earned}` : b.hint}</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, textAlign: 'center', color: earned ? c.ink : c.muted }}>{b.title}</Txt>
+        <Txt v="caption" style={{ fontSize: fontSizes.xs, textAlign: 'center' }}>{earned ? `Earned ${b.earned}` : b.hint}</Txt>
       </View>
       {!earned && b.need ? (
         <View style={{ marginTop: 'auto', gap: 4, alignSelf: 'stretch' }}>
           <GrowBar pct={Math.min(100, Math.round(((have ?? 0) / b.need) * 100))} color={BADGE_LOOK[b.id].b} />
-          <Txt v="caption" style={{ fontSize: 12, textAlign: 'center' }}>{have} of {b.need}</Txt>
+          <Txt v="caption" style={{ fontSize: fontSizes.xs, textAlign: 'center' }}>{have} of {b.need}</Txt>
         </View>
       ) : null}
     </View>
@@ -83,8 +84,8 @@ export default function Streaks() {
       </View>
 
       <View style={{ padding: 14, borderRadius: 20, backgroundColor: c.accentSoft, gap: 2 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: c.accentText }}>1 rest pass a month</Txt>
-        <Txt style={{ fontSize: 13, lineHeight: 19, color: c.accentText, opacity: 0.85 }}>If you miss a week, a rest pass keeps your streak. It is used for you automatically. A membership pause also freezes your streak.</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.accentText }}>1 rest pass a month</Txt>
+        <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.accentText, opacity: 0.85 }}>If you miss a week, a rest pass keeps your streak. It is used for you automatically. A membership pause also freezes your streak.</Txt>
       </View>
 
       {!v2 && (

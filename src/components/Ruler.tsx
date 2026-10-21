@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Txt } from './ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
+import { fontSizes } from '@/design-system/tokens';
 
 const PX = 10;      // pixels per step
 const HALF = 60;    // ticks rendered each side of the anchor
@@ -101,7 +102,7 @@ export function Ruler({ value, onChange, min, max, step, decimals = 0, majorEver
               if (v) {
                 return (
                   <View key={i} style={{ position: 'absolute', top: -i * PX - 1, right: 0, height: 2, flexDirection: 'row', alignItems: 'center' }}>
-                    {major && <Txt style={{ position: 'absolute', right: size + 10, width: 46, textAlign: 'right', fontSize: 13, color: c.muted }}>{label(i * step)}</Txt>}
+                    {major && <Txt style={{ position: 'absolute', right: size + 10, width: 46, textAlign: 'right', fontSize: fontSizes.sm, color: c.muted }}>{label(i * step)}</Txt>}
                     <View style={{ width: size, height: 2, borderRadius: 1, backgroundColor: major ? c.ink : c.surface3 }} />
                   </View>
                 );
@@ -109,7 +110,7 @@ export function Ruler({ value, onChange, min, max, step, decimals = 0, majorEver
               return (
                 <View key={i} style={{ position: 'absolute', left: i * PX - 1, top: 6, width: 2, alignItems: 'center' }}>
                   <View style={{ width: 2, height: size, borderRadius: 1, backgroundColor: major ? c.ink : c.surface3 }} />
-                  {major && <Txt style={{ position: 'absolute', top: 38, width: 60, left: -29, textAlign: 'center', fontSize: 12, color: c.muted }}>{label(i * step)}</Txt>}
+                  {major && <Txt style={{ position: 'absolute', top: 38, width: 60, left: -29, textAlign: 'center', fontSize: fontSizes.xs, color: c.muted }}>{label(i * step)}</Txt>}
                 </View>
               );
             })}

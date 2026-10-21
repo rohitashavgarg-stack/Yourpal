@@ -10,7 +10,7 @@ import { Button, Pressy, Txt } from '@/components/ui';
 import { fade, fadeOut } from '@/theme/motion';
 import { YourPalLogo } from '@/components/YourPalLogo';
 import { font } from '@/theme/tokens';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // One soft blue glow bleeding in from the top-right corner. Radial gradient, so it is blurred with no filter (works on web and native).
 function Glow({ width, height }: { width: number; height: number }) {
@@ -42,38 +42,38 @@ function TodayMock() {
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: fixed.blue }} />
-          <Txt style={{ fontSize: 11, lineHeight: 15, color: fixed.white, fontFamily: font.semibold }}>Your gym</Txt>
+          <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: fixed.white, fontFamily: font.semibold }}>Your gym</Txt>
         </View>
         <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#2A3242' }} />
       </View>
-      <Txt style={{ fontSize: 18, lineHeight: 24, letterSpacing: -0.5, color: fixed.white, fontFamily: font.regular }}>{'Good evening,\nthere'}</Txt>
+      <Txt style={{ fontSize: fontSizes.lg, lineHeight: 24, letterSpacing: -0.5, color: fixed.white, fontFamily: font.regular }}>{'Good evening,\nthere'}</Txt>
       <LinearGradient colors={['#3E7BF0', fixed.blue, '#1D46B5']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: 18, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
         <Svg width={54} height={54} viewBox="0 0 54 54">
           <Circle cx={27} cy={27} r={R} stroke="rgba(255,255,255,0.28)" strokeWidth={5} fill="none" />
           <Circle cx={27} cy={27} r={R} stroke={fixed.white} strokeWidth={5} fill="none" strokeLinecap="round" strokeDasharray={`${C * 0.35} ${C}`} transform="rotate(-90 27 27)" />
         </Svg>
         <View>
-          <Txt style={{ fontSize: 10, lineHeight: 14, color: 'rgba(255,255,255,0.8)' }}>Your goal</Txt>
-          <Txt style={{ fontSize: 20, lineHeight: 26, letterSpacing: -0.6, color: fixed.white, fontFamily: font.semibold }}>Lose 6 kg</Txt>
+          <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: 'rgba(255,255,255,0.8)' }}>Your goal</Txt>
+          <Txt style={{ fontSize: fontSizes.xl, lineHeight: 26, letterSpacing: -0.6, color: fixed.white, fontFamily: font.semibold }}>Lose 6 kg</Txt>
         </View>
       </LinearGradient>
 
       <View style={{ flexDirection: 'row', gap: 8 }}>
         <View style={[TILE, { flex: 1 }]}>
-          <Txt style={{ fontSize: 10, lineHeight: 14, color: DIM }}>Water</Txt>
-          <Txt style={{ fontSize: 17, lineHeight: 23, color: fixed.white, fontFamily: font.semibold }}>1,800 <Txt style={{ fontSize: 10, lineHeight: 14, color: DIM }}>ml</Txt></Txt>
+          <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Water</Txt>
+          <Txt style={{ fontSize: fontSizes.lg, lineHeight: 23, color: fixed.white, fontFamily: font.semibold }}>1,800 <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>ml</Txt></Txt>
         </View>
         <View style={[TILE, { flex: 1 }]}>
-          <Txt style={{ fontSize: 10, lineHeight: 14, color: DIM }}>Weight</Txt>
-          <Txt style={{ fontSize: 17, lineHeight: 23, color: fixed.white, fontFamily: font.semibold }}>72.4 <Txt style={{ fontSize: 10, lineHeight: 14, color: DIM }}>kg</Txt></Txt>
+          <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Weight</Txt>
+          <Txt style={{ fontSize: fontSizes.lg, lineHeight: 23, color: fixed.white, fontFamily: font.semibold }}>72.4 <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>kg</Txt></Txt>
         </View>
       </View>
 
       <View style={[TILE, { gap: 2, padding: 12 }]}>
-        <Txt style={{ fontSize: 10, lineHeight: 14, color: DIM }}>Today's workout · Your coach</Txt>
-        <Txt style={{ fontSize: 20, lineHeight: 26, letterSpacing: -0.6, color: fixed.white, fontFamily: font.regular }}>Leg day</Txt>
+        <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Today's workout · Your coach</Txt>
+        <Txt style={{ fontSize: fontSizes.xl, lineHeight: 26, letterSpacing: -0.6, color: fixed.white, fontFamily: font.regular }}>Leg day</Txt>
         <View style={{ marginTop: 6, height: 30, borderRadius: 15, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontSize: 11, lineHeight: 15, color: fixed.black, fontFamily: font.semibold }}>Start workout</Txt>
+          <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: fixed.black, fontFamily: font.semibold }}>Start workout</Txt>
         </View>
       </View>
     </View>
@@ -85,14 +85,14 @@ function WorkoutMock() {
   const rows: [string, string, string, boolean][] = [['Squat', '4 × 8', '60 kg', true], ['Leg press', '3 × 12', '120 kg', true], ['Lunges', '3 × 10', '20 kg', false], ['Leg curl', '3 × 12', '35 kg', false], ['Plank', '3 × 45 s', '', false]];
   return (
     <View accessible accessibilityLabel="Preview of the workout screen: exercises with sets and weights" style={MOCK_BASE}>
-      <Txt style={{ fontSize: 10, lineHeight: 14, color: DIM, paddingTop: 4 }}>Planned by your coach</Txt>
+      <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM, paddingTop: 4 }}>Planned by your coach</Txt>
       <Txt style={{ fontSize: 24, lineHeight: 31, letterSpacing: -0.6, color: fixed.white, fontFamily: font.semibold }}>Leg day</Txt>
       {rows.map(([n, sets, w, done]) => (
         <View key={n} style={[TILE, { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 9 }]}>
           <View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: done ? fixed.blue : 'transparent', borderWidth: done ? 0 : 1.5, borderColor: 'rgba(255,255,255,0.3)' }} />
           <View style={{ flex: 1 }}>
-            <Txt style={{ fontSize: 12, lineHeight: 17, color: fixed.white, fontFamily: font.semibold }}>{n}</Txt>
-            <Txt style={{ fontSize: 10, lineHeight: 14, color: DIM }}>{sets}{w ? ' · ' + w : ''}</Txt>
+            <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: fixed.white, fontFamily: font.semibold }}>{n}</Txt>
+            <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>{sets}{w ? ' · ' + w : ''}</Txt>
           </View>
         </View>
       ))}
@@ -105,29 +105,29 @@ function ProgressMock() {
   const bars = [0.55, 0.8, 0.7, 0.95, 0.6, 0.85, 0.4];
   return (
     <View accessible accessibilityLabel="Preview of the progress screen: weight trend, weekly streak and steps" style={MOCK_BASE}>
-      <Txt style={{ fontSize: 18, lineHeight: 24, letterSpacing: -0.5, color: fixed.white, paddingTop: 4 }}>Progress</Txt>
+      <Txt style={{ fontSize: fontSizes.lg, lineHeight: 24, letterSpacing: -0.5, color: fixed.white, paddingTop: 4 }}>Progress</Txt>
       <View style={[TILE, { padding: 12, gap: 4 }]}>
-        <Txt style={{ fontSize: 10, lineHeight: 14, color: DIM }}>Weight</Txt>
-        <Txt style={{ fontSize: 22, lineHeight: 29, color: fixed.white, fontFamily: font.semibold }}>72.4 <Txt style={{ fontSize: 11, lineHeight: 15, color: DIM }}>kg · 2.1 down</Txt></Txt>
+        <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Weight</Txt>
+        <Txt style={{ fontSize: fontSizes.xl2, lineHeight: 29, color: fixed.white, fontFamily: font.semibold }}>72.4 <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: DIM }}>kg · 2.1 down</Txt></Txt>
         <Svg width="100%" height={44} viewBox="0 0 200 44" preserveAspectRatio="none"><Path d="M0 8 C30 10 50 18 80 22 S130 30 160 33 S190 36 200 38" stroke="#6FA0FF" strokeWidth={3} fill="none" strokeLinecap="round" /></Svg>
       </View>
       <View style={{ flexDirection: 'row', gap: 8 }}>
         <View style={[TILE, { flex: 1 }]}>
-          <Txt style={{ fontSize: 10, lineHeight: 14, color: DIM }}>Streak</Txt>
-          <Txt style={{ fontSize: 17, lineHeight: 23, color: '#FF8A3D', fontFamily: font.semibold }}>7 weeks</Txt>
+          <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Streak</Txt>
+          <Txt style={{ fontSize: fontSizes.lg, lineHeight: 23, color: '#FF8A3D', fontFamily: font.semibold }}>7 weeks</Txt>
           <View style={{ flexDirection: 'row', gap: 3, marginTop: 4 }}>{[1, 1, 1, 0].map((o, i) => <View key={i} style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: o ? '#FF8A3D' : 'rgba(255,255,255,0.15)' }} />)}</View>
         </View>
         <View style={[TILE, { flex: 1 }]}>
-          <Txt style={{ fontSize: 10, lineHeight: 14, color: DIM }}>Steps</Txt>
-          <Txt style={{ fontSize: 17, lineHeight: 23, color: fixed.white, fontFamily: font.semibold }}>6,436</Txt>
+          <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Steps</Txt>
+          <Txt style={{ fontSize: fontSizes.lg, lineHeight: 23, color: fixed.white, fontFamily: font.semibold }}>6,436</Txt>
           <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3, height: 18, marginTop: 4 }}>{bars.map((b, i) => <View key={i} style={{ flex: 1, height: 18 * b, borderRadius: 2, backgroundColor: '#8A9BFF' }} />)}</View>
         </View>
       </View>
       <View style={[TILE, { flexDirection: 'row', alignItems: 'center', gap: 10 }]}>
         <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: 'rgba(15,138,95,0.25)' }} />
         <View>
-          <Txt style={{ fontSize: 12, lineHeight: 17, color: fixed.white, fontFamily: font.semibold }}>Diet 88% on plan</Txt>
-          <Txt style={{ fontSize: 10, lineHeight: 14, color: DIM }}>This week</Txt>
+          <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: fixed.white, fontFamily: font.semibold }}>Diet 88% on plan</Txt>
+          <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>This week</Txt>
         </View>
       </View>
     </View>
@@ -184,14 +184,14 @@ export default function Welcome() {
       </View>
       <View style={{ paddingHorizontal: 24, paddingBottom: insets.bottom + 20, gap: 14 }}>
         <Animated.View key={'t' + i} entering={fade()} style={{ gap: 6, minHeight: 124 }}>
-          <Txt style={{ fontFamily: font.displayBold, fontSize: 30, lineHeight: 38, letterSpacing: -0.9, color: fixed.white }}>{title}</Txt>
-          <Txt style={{ fontSize: 15, lineHeight: 22, color: 'rgba(255,255,255,0.7)' }}>{sub}</Txt>
+          <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl4, lineHeight: 38, letterSpacing: -0.9, color: fixed.white }}>{title}</Txt>
+          <Txt style={{ fontSize: fontSizes.base, lineHeight: 22, color: 'rgba(255,255,255,0.7)' }}>{sub}</Txt>
         </Animated.View>
         <View style={{ flexDirection: 'row', gap: 6, alignItems: 'center' }}>
           {SLIDES.map((_, n) => <Segment key={n} n={n} i={i} onPress={() => setI(n)} label={`Show preview ${n + 1} of ${SLIDES.length}`} />)}
         </View>
         <Button kind="white" label="Let's begin" onPress={() => router.push('/login')} style={{ marginTop: 4 }} />
-        <Txt style={{ fontSize: 12, lineHeight: 18, textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>Your gym adds your number at the front desk. Sign in with it to join.</Txt>
+        <Txt style={{ fontSize: fontSizes.xs, lineHeight: 18, textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>Your gym adds your number at the front desk. Sign in with it to join.</Txt>
       </View>
     </View>
   );

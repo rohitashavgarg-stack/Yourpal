@@ -14,6 +14,7 @@ import { newEx } from '@/features/plans/content';
 import { LibrarySheet } from '@/features/plans/Sheets';
 import { PageHeader, ShakeText } from '@/features/plans/parts';
 import { DAYL, dayPlan, exSub, PEx, setP, usePlans } from '@/features/plans/store';
+import { fontSizes } from '@/design-system/tokens';
 
 export default function CreateWorkout() {
   useLeaveIfPaused();
@@ -71,22 +72,22 @@ export default function CreateWorkout() {
             {p.cEx.map((e, i) => (
               <Row key={e.id} style={{ minHeight: 56, gap: 10, borderBottomWidth: i < p.cEx.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
                 <Txt style={{ flex: 1, fontFamily: font.medium }}>{e.name}</Txt>
-                <Txt v="mono" muted style={{ fontSize: 12 }}>{exSub(e)}</Txt>
+                <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{exSub(e)}</Txt>
                 <Pressy accessibilityRole="button" accessibilityLabel={`Remove ${e.name}`} onPress={() => setP({ cEx: p.cEx.filter((x) => x.id !== e.id) })}
                   style={{ width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' }}>
                   <X size={16} color={c.muted} />
                 </Pressy>
               </Row>
             ))}
-            {p.cEx.length === 0 && <Txt muted style={{ paddingVertical: 16, fontSize: 14 }}>No exercises yet</Txt>}
+            {p.cEx.length === 0 && <Txt muted style={{ paddingVertical: 16, fontSize: fontSizes.md }}>No exercises yet</Txt>}
           </Card>
         </View>
         <Pressy accessibilityRole="button" onPress={() => openSheet(<LibrarySheet mode="create" />, { label: 'Add exercise' })}
           style={{ height: 48, borderRadius: 24, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: 14 }}>+ Add exercise</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>+ Add exercise</Txt>
         </Pressy>
         <ShakeText text={p.cErr} n={tries} />
-        <Txt muted style={{ fontSize: 13, paddingHorizontal: 6 }}>Added to your plan · Coach Vikram will be notified</Txt>
+        <Txt muted style={{ fontSize: fontSizes.sm, paddingHorizontal: 6 }}>Added to your plan · Coach Vikram will be notified</Txt>
         <Button label="Save workout" onPress={save} />
       </ScrollView>
     </View>

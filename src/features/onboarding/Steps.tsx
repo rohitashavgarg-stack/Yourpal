@@ -14,7 +14,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { Pt, smoothPath } from './path';
 import { planMath } from './plan';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const AP = Animated.createAnimatedComponent(Path);
 
@@ -69,8 +69,8 @@ export function ProjectionStep() {
         {w > 0 && (
           <>
             <View style={{ position: 'absolute', right: 0, top: 0, alignItems: 'flex-end' }}>
-              <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, letterSpacing: 1.4, color: c.muted }}>YOUR GOAL</Txt>
-              <Txt style={{ fontFamily: font.displayBold, fontSize: 22, lineHeight: 28, color: c.accentText }}>{m.target} <Txt style={{ fontFamily: font.semibold, fontSize: 12, color: c.accentText }}>KG</Txt></Txt>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.4, color: c.muted }}>YOUR GOAL</Txt>
+              <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl2, lineHeight: 28, color: c.accentText }}>{m.target} <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, color: c.accentText }}>KG</Txt></Txt>
             </View>
             <View pointerEvents="none" style={{ position: 'absolute', left: end[0] - 20, top: end[1] - 20, width: 40, height: 40, borderRadius: 20, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: c.accentSoft }}>
               <Trophy size={18} color={fixed.white} />
@@ -80,8 +80,8 @@ export function ProjectionStep() {
       </View>
       <View style={{ height: 1, backgroundColor: c.line }} />
       <Row style={{ justifyContent: 'space-between' }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 12, letterSpacing: 1.1, color: c.muted }}>TODAY <Txt style={{ fontFamily: font.displayBold, fontSize: 18, color: c.ink }}>{m.cur} kg</Txt></Txt>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 12, letterSpacing: 1.1, color: c.muted }}>IN {m.weeks} WEEKS</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 1.1, color: c.muted }}>TODAY <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.lg, color: c.ink }}>{m.cur} kg</Txt></Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 1.1, color: c.muted }}>IN {m.weeks} WEEKS</Txt>
       </Row>
       <Txt style={{ textAlign: 'center', fontFamily: font.medium, marginTop: 6 }}>We go with you all the way.</Txt>
       <Txt v="caption" style={{ textAlign: 'center' }}>An estimate. Coach Vikram confirms your pace at the assessment.</Txt>
@@ -106,7 +106,7 @@ export function HowStep() {
   );
   const Label = ({ p, title, sub, right }: { p: Pt; title: string; sub: string; right?: boolean }) => (
     <View style={{ position: 'absolute', top: p[1] - 22, ...(right ? { right: w - p[0] + 34 } : { left: p[0] + 34 }), width: 170, alignItems: right ? 'flex-end' : 'flex-start' }}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, textAlign: right ? 'right' : 'left' }}>{title}</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, textAlign: right ? 'right' : 'left' }}>{title}</Txt>
       <Txt v="caption" style={{ textAlign: right ? 'right' : 'left' }}>{sub}</Txt>
     </View>
   );
@@ -145,7 +145,7 @@ function MacroRing({ pct, v, l }: { pct: number; v: number; l: string }) {
           <Circle cx={26} cy={26} r={R} fill="none" stroke={c.surface3} strokeWidth={4} />
           <Circle cx={26} cy={26} r={R} fill="none" stroke={c.accent} strokeWidth={4} strokeLinecap="round" strokeDasharray={`${C}`} strokeDashoffset={C * (1 - pct)} transform="rotate(-90 26 26)" />
         </Svg>
-        <Txt style={{ position: 'absolute', fontFamily: font.semibold, fontSize: 13, lineHeight: 17 }}>{v}</Txt>
+        <Txt style={{ position: 'absolute', fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 17 }}>{v}</Txt>
       </View>
       <Txt v="caption">{l}</Txt>
     </View>
@@ -173,24 +173,24 @@ export function MealStep() {
           <View style={{ position: 'absolute', left: 14, right: 14, bottom: 14, alignItems: 'center', gap: 10 }}>
             <View style={{ alignSelf: 'stretch', padding: 14, borderRadius: 18, backgroundColor: 'rgba(0,0,0,0.72)' }}>
               <Txt style={{ fontFamily: font.semibold, color: fixed.white }}>This photo is ours.</Txt>
-              <Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)' }}>Tap and see the maths the app does on a meal photo.</Txt>
+              <Txt style={{ fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.7)' }}>Tap and see the maths the app does on a meal photo.</Txt>
             </View>
             <Pressy accessibilityRole="button" accessibilityLabel="See what the app reads" onPress={() => { haptic.success(); setRead(true); }} scaleTo={0.92}
               style={{ width: 68, height: 68, borderRadius: 34, borderWidth: 3, borderColor: 'rgba(255,255,255,0.85)', alignItems: 'center', justifyContent: 'center' }}>
               <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}><Camera size={22} color={fixed.dark} /></View>
             </Pressy>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, letterSpacing: 1.4, color: 'rgba(255,255,255,0.85)' }}>SEE WHAT THE APP READS</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.4, color: 'rgba(255,255,255,0.85)' }}>SEE WHAT THE APP READS</Txt>
           </View>
         )}
         {read && (
           <Animated.View entering={fade()} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 16, gap: 8, backgroundColor: c.surface, borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
-            <Row style={{ gap: 6 }}><Check size={14} strokeWidth={3} color={c.good} /><Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, letterSpacing: 1.2, color: c.good }}>IDENTIFIED ITEM BY ITEM</Txt></Row>
-            <Txt style={{ fontFamily: font.displayBold, fontSize: 20, lineHeight: 26 }}>Rice, dal and roti</Txt>
+            <Row style={{ gap: 6 }}><Check size={14} strokeWidth={3} color={c.good} /><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.2, color: c.good }}>IDENTIFIED ITEM BY ITEM</Txt></Row>
+            <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 26 }}>Rice, dal and roti</Txt>
             {MEAL_ITEMS.map(([n, q]) => (
-              <Row key={n} style={{ justifyContent: 'space-between', minHeight: 32, borderBottomWidth: 1, borderBottomColor: c.line }}><Txt muted style={{ fontSize: 14 }}>{n}</Txt><Txt style={{ fontFamily: font.medium, fontSize: 14 }}>{q}</Txt></Row>
+              <Row key={n} style={{ justifyContent: 'space-between', minHeight: 32, borderBottomWidth: 1, borderBottomColor: c.line }}><Txt muted style={{ fontSize: fontSizes.md }}>{n}</Txt><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>{q}</Txt></Row>
             ))}
             <Row style={{ justifyContent: 'space-between', paddingTop: 4 }}>
-              <View><Txt v="caption" style={{ letterSpacing: 1.2 }}>CALORIES</Txt><Txt style={{ fontFamily: font.displayBold, fontSize: 36, lineHeight: 44, letterSpacing: -1 }}>590 <Txt muted style={{ fontFamily: font.semibold, fontSize: 12 }}>KCAL</Txt></Txt></View>
+              <View><Txt v="caption" style={{ letterSpacing: 1.2 }}>CALORIES</Txt><Txt style={{ fontFamily: font.displayBold, fontSize: 36, lineHeight: 44, letterSpacing: -1 }}>590 <Txt muted style={{ fontFamily: font.semibold, fontSize: fontSizes.xs }}>KCAL</Txt></Txt></View>
               <Row style={{ gap: 12 }}><MacroRing pct={0.55} v={21} l="Protein" /><MacroRing pct={0.75} v={100} l="Carbs" /><MacroRing pct={0.3} v={10} l="Fat" /></Row>
             </Row>
           </Animated.View>
@@ -227,7 +227,7 @@ export function SignStep({ onDrawn }: { onDrawn: (v: boolean) => void }) {
           <View pointerEvents="none" style={{ position: 'absolute', left: 24, right: 24, bottom: 44, height: 1, backgroundColor: c.line }} />
         </View>
       </GestureDetector>
-      <Txt style={{ textAlign: 'center', fontFamily: font.semibold, fontSize: 11, lineHeight: 15, letterSpacing: 1.3, color: c.muted }}>DRAW A ✓ IN THE BOX TO CONFIRM</Txt>
+      <Txt style={{ textAlign: 'center', fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted }}>DRAW A ✓ IN THE BOX TO CONFIRM</Txt>
       <Pressy accessibilityRole="button" onPress={clear} style={{ alignSelf: 'center', height: 44, paddingHorizontal: 16, justifyContent: 'center' }}><Txt muted>Clear</Txt></Pressy>
     </>
   );
@@ -260,17 +260,17 @@ export function ReadyContent({ assess }: { assess: string }) {
           <Check size={30} strokeWidth={2.6} color={c.accent} />
         </Animated.View>
         <View style={{ alignItems: 'center' }}>
-          <Txt style={{ fontFamily: font.light, fontSize: 26, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>You're all set,</Txt>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 26, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>{p.name || 'Rohitashav Garg'}.</Txt>
+          <Txt style={{ fontFamily: font.light, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>You're all set,</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>{p.name || 'Rohitashav Garg'}.</Txt>
         </View>
         <Row style={{ gap: 8 }}>
           <PersonAvatar who="coach" size={28} />
-          <Txt muted style={{ fontSize: 14 }}>Coach Vikram has your answers</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md }}>Coach Vikram has your answers</Txt>
         </Row>
       </View>
 
       <View style={{ gap: 4, padding: 16, borderRadius: 24, backgroundColor: c.surface }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>SHARED WITH YOUR COACH</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>SHARED WITH YOUR COACH</Txt>
         {shared.map(([k, v], i) => (
           <Row key={k} style={{ justifyContent: 'space-between', gap: 12, minHeight: 48, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
             <Txt muted>{k}</Txt>
@@ -280,7 +280,7 @@ export function ReadyContent({ assess }: { assess: string }) {
       </View>
 
       <View style={{ gap: 6, padding: 16, borderRadius: 24, backgroundColor: c.surface }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>WHAT HAPPENS NEXT</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>WHAT HAPPENS NEXT</Txt>
         {next.map(([icon, t, s], i) => (
           <Row key={t} style={{ gap: 14, alignItems: 'flex-start', paddingVertical: 6 }}>
             <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>

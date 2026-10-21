@@ -13,7 +13,7 @@ import { Hint, SubPage } from '@/features/progress/parts';
 import { progressStore } from '@/features/progress/store';
 import { AFTER_PHOTO, BEFORE_PHOTO, photoFor } from '@/features/progress/photoAssets';
 import { useProgressScenarios } from '@/features/progress/scenarios';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const SCRIM = 'rgba(0,0,0,0.55)';
 
@@ -87,7 +87,7 @@ export default function Photos() {
   return (
     <SubPage title="Photos" fallback="/progress" onBack={() => { if (comparing) { setComparing(false); return true; } return false; }}
       right={<View style={{ width: 64, alignItems: 'flex-end' }}><Tag label="Private" bg={c.surface2} fg={c.muted} /></View>}>
-      <Row style={{ gap: 6, paddingHorizontal: 6 }}><Lock size={14} color={c.muted} /><Txt muted style={{ fontSize: 14, flex: 1 }}>Only you can see these. Your trainer can’t.</Txt></Row>
+      <Row style={{ gap: 6, paddingHorizontal: 6 }}><Lock size={14} color={c.muted} /><Txt muted style={{ fontSize: fontSizes.md, flex: 1 }}>Only you can see these. Your trainer can’t.</Txt></Row>
       {!comparing ? (
         <>
           {rows.map((r, ri) => (
@@ -100,7 +100,7 @@ export default function Photos() {
               {r.length === 1 && <View style={{ flex: 1 }} />}
             </Row>
           ))}
-          <Hint style={{ fontSize: 12 }}>Double tap a photo to zoom</Hint>
+          <Hint style={{ fontSize: fontSizes.xs }}>Double tap a photo to zoom</Hint>
           <Button kind="secondary" label="Add photo" icon={<Plus size={18} color={c.ink} />} onPress={add} />
           <Button label="Compare" disabled={ps.photos.length < 2} onPress={() => setComparing(true)} />
           {ps.photos.length < 2 && <Hint>Add one more photo to compare.</Hint>}

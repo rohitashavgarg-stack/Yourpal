@@ -10,7 +10,7 @@ import { font } from '@/theme/tokens';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { useStreak } from './useStreak';
 import { FLAME } from './StreakChip';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 const MILESTONES = [4, 8, 12]; // weeks; matches the streak badges
 const F = 54; // flame size
@@ -51,9 +51,9 @@ export function StreakHero() {
       <CornerGlow color={FLAME} size={300} />
       <Row style={{ alignItems: 'baseline', gap: 10 }}>
         <Txt style={{ fontFamily: font.displayBold, fontSize: 44, lineHeight: 56, letterSpacing: -1.2, color: FLAME }}>{st.weeks}</Txt>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 26, lineHeight: 34, letterSpacing: -0.6 }}>Week streak</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.6 }}>Week streak</Txt>
       </Row>
-      <Txt muted style={{ fontSize: 15, lineHeight: 22 }}>{line}</Txt>
+      <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 22 }}>{line}</Txt>
 
       {/* The bar runs the full width of the card; each flame is centred on its week and kept inside the edges. */}
       <View onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)} style={{ height: F, marginTop: 8 }}>

@@ -16,6 +16,7 @@ import { DiscardSheet, EditItemSheet, LibrarySheet } from '@/features/plans/Shee
 import { InfoBox, PageHeader } from '@/features/plans/parts';
 import { mealName } from '@/features/plans/openers';
 import { dayPlan, DietRow, exSub, getP, PEx, pk, setP, usePlans } from '@/features/plans/store';
+import { fontSizes } from '@/design-system/tokens';
 
 export default function EditPlan() {
   useLeaveIfPaused();
@@ -117,7 +118,7 @@ export default function EditPlan() {
           </Pressy>
         } />
       <ScrollView scrollEnabled={!dragging} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
-        <Txt muted style={{ fontSize: 13, paddingHorizontal: 4 }}>Hold ≡ and drag to reorder · tap a row to change it</Txt>
+        <Txt muted style={{ fontSize: fontSizes.sm, paddingHorizontal: 4 }}>Hold ≡ and drag to reorder · tap a row to change it</Txt>
         <DragList<PEx | DietRow>
           items={dr.rows as (PEx | DietRow)[]} keyOf={keyOf} labelOf={nameOf} onMove={move} onDragging={setDragging}
           renderRow={(r, handle) => {
@@ -134,7 +135,7 @@ export default function EditPlan() {
                     {diet && <FoodMark type={dRow.type} size={12} />}
                     <Txt numberOfLines={1} style={{ fontFamily: font.medium, flexShrink: 1 }}>{nameOf(r)}</Txt>
                   </View>
-                  <Txt v="mono" muted numberOfLines={1} style={{ fontSize: 12 }}>{sub}</Txt>
+                  <Txt v="mono" muted numberOfLines={1} style={{ fontSize: fontSizes.xs }}>{sub}</Txt>
                 </Pressy>
                 {canRemove && (
                   <Pressy accessibilityRole="button" accessibilityLabel={`Remove ${nameOf(r)}`} onPress={() => remove(r)} style={{ width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' }}>
@@ -146,7 +147,7 @@ export default function EditPlan() {
           }} />
         {dr.rows.length === 0 && <Txt muted style={{ textAlign: 'center', padding: 12 }}>Nothing here yet. Add {isDiet ? 'an item' : 'an exercise'} to keep this {isDiet ? 'meal' : 'day'} in your plan.</Txt>}
         <Pressy accessibilityRole="button" onPress={add} style={{ height: 48, borderRadius: 24, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: 14 }}>+ {isDiet ? 'Add item' : 'Add exercise'}</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>+ {isDiet ? 'Add item' : 'Add exercise'}</Txt>
         </Pressy>
         <InfoBox>Coach Vikram will be notified of these changes.</InfoBox>
         <Button label="Save changes" disabled={!dirty} onPress={save} />

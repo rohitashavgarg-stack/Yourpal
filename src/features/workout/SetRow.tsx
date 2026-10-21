@@ -11,7 +11,7 @@ import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fmt1 } from '@/lib/useNow';
 import { setLabel, setText } from './session';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 export type Draft = { k: number; r: number; t: number };
 
@@ -34,16 +34,16 @@ function Stepper({ value, unit, onChange, step, min, label, block }: { value: nu
       onAccessibilityAction={(e) => onChange(Math.max(min, value + (e.nativeEvent.actionName === 'increment' ? step : -step)))}
       style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', height: 44, borderRadius: 22, backgroundColor: c.surface2 }}>
       <Pressable accessibilityLabel={`Minus ${step} ${unit}`} onPress={() => { haptic.tap(); onChange(Math.max(min, Math.round((value - step) * 10) / 10)); }} style={{ width: 34, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ fontSize: 18, lineHeight: 23, color: c.ink }}>−</Text>
+        <Text style={{ fontSize: fontSizes.lg, lineHeight: 23, color: c.ink }}>−</Text>
       </Pressable>
       <GestureDetector gesture={pan}>
         <View collapsable={false} style={{ flex: 1, minWidth: 0, height: 44, flexDirection: 'row', alignItems: 'baseline', justifyContent: 'center', gap: 2, paddingTop: 9, cursor: 'ew-resize' } as any}>
-          <Text style={{ fontFamily: font.display, fontSize: 22, lineHeight: 29, color: c.ink }}>{shown}</Text>
-          <Text style={{ fontSize: 10, lineHeight: 13, color: c.muted }}>{unit}</Text>
+          <Text style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 29, color: c.ink }}>{shown}</Text>
+          <Text style={{ fontSize: fontSizes.xs2, lineHeight: 13, color: c.muted }}>{unit}</Text>
         </View>
       </GestureDetector>
       <Pressable accessibilityLabel={`Plus ${step} ${unit}`} onPress={() => { haptic.tap(); onChange(Math.round((value + step) * 10) / 10); }} style={{ width: 34, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ fontSize: 18, lineHeight: 23, color: c.ink }}>+</Text>
+        <Text style={{ fontSize: fontSizes.lg, lineHeight: 23, color: c.ink }}>+</Text>
       </Pressable>
     </View>
   );
@@ -110,10 +110,10 @@ export function SetRow(p: Props) {
       </Animated.View>
       <Animated.View style={[{ position: 'absolute', top: 0, right: 0, bottom: 0, flexDirection: 'row', gap: 6, padding: 8 }, reveal]}>
         <Pressy accessibilityLabel={`Swap exercise`} onPress={() => { p.onReveal(false); p.onSwap(); }} style={{ width: 66, borderRadius: 16, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 13 }}>Swap</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm }}>Swap</Txt>
         </Pressy>
         <Pressy accessibilityLabel={`Skip set ${lbl}`} onPress={skipOut} style={{ width: 66, borderRadius: 16, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 13, color: c.bg }}>Skip</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.bg }}>Skip</Txt>
         </Pressy>
       </Animated.View>
       <GestureDetector gesture={pan}>
@@ -124,11 +124,11 @@ export function SetRow(p: Props) {
             style={{ flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 60, paddingLeft: 10, paddingRight: 8 }}>
             {x.w ? (
               <View accessibilityLabel="Warm-up set: a lighter set before your working sets. It doesn't count toward your PRs." style={{ height: 24, paddingHorizontal: 7, borderRadius: 12, backgroundColor: c.tAct, justifyContent: 'center' }}>
-                <Text style={{ fontFamily: font.bold, fontSize: 10, lineHeight: 13, color: c.cAct }}>Warm-up</Text>
+                <Text style={{ fontFamily: font.bold, fontSize: fontSizes.xs2, lineHeight: 13, color: c.cAct }}>Warm-up</Text>
               </View>
             ) : (
               <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: 13 }}>{lbl}</Txt>
+                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm }}>{lbl}</Txt>
               </View>
             )}
             {p.active ? (
@@ -146,11 +146,11 @@ export function SetRow(p: Props) {
                 )}
               </View>
             ) : (
-              <Txt style={{ flex: 1, fontFamily: done ? font.monoBold : font.mono, fontSize: 14, color: done ? c.ink : c.muted }}>{val}</Txt>
+              <Txt style={{ flex: 1, fontFamily: done ? font.monoBold : font.mono, fontSize: fontSizes.md, color: done ? c.ink : c.muted }}>{val}</Txt>
             )}
             <CheckCircle on={done} label={`${done ? 'Undo' : 'Log'} set ${lbl}`} onPress={p.onCheck} />
           </Pressable>
-          {!!x.note && <Txt muted style={{ paddingLeft: 54, paddingRight: 14, paddingBottom: 12, fontSize: 13 }}>Note: {x.note}</Txt>}
+          {!!x.note && <Txt muted style={{ paddingLeft: 54, paddingRight: 14, paddingBottom: 12, fontSize: fontSizes.sm }}>Note: {x.note}</Txt>}
         </Animated.View>
       </GestureDetector>
     </View>

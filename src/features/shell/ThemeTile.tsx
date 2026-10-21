@@ -4,7 +4,7 @@ import { Check } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // A small phone drawn in each theme's own colours, so the choice is something you can see.
 const MOCK = {
@@ -37,7 +37,7 @@ export function ThemeTile({ mode, on, onPress }: { mode: 'Light' | 'Dark' | 'Sys
         <View style={{ width: 16, height: 16, borderRadius: 8, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.accent : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
           {on && <Check size={10} strokeWidth={3.5} color={fixed.white} />}
         </View>
-        <Txt style={{ fontFamily: on ? font.semibold : font.medium, fontSize: 14, lineHeight: 20 }}>{mode}</Txt>
+        <Txt style={{ fontFamily: on ? font.semibold : font.medium, fontSize: fontSizes.md, lineHeight: 20 }}>{mode}</Txt>
       </Row>
     </Pressy>
   );

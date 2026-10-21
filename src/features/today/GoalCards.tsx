@@ -12,7 +12,7 @@ import { font } from '@/theme/tokens';
 import { createStore } from '@/features/progress/store';
 import { WEEKLY } from '@/features/coach/coach';
 import { GoalCard } from './TopCards';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 // Goal card designs to compare. Pick one in the Today edge-case panel.
 export type GoalDesign = 'Current' | 'A · Journey bar' | 'B · Ring + context' | 'C · Goal + focus';
@@ -58,7 +58,7 @@ function Shell({ children, label }: { children: React.ReactNode; label: string }
 function Top({ by }: { by: string }) {
   return (
     <Row style={{ justifyContent: 'space-between' }}>
-      <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.85)' }}>Your goal · by {by}</Txt>
+      <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: 'rgba(255,255,255,0.85)' }}>Your goal · by {by}</Txt>
       <ChevronRight size={18} color={fixed.white} />
     </Row>
   );
@@ -70,13 +70,13 @@ function Chip({ g }: { g: ReturnType<typeof useGoalData> }) {
       <Pressy accessibilityRole="button" accessibilityLabel="Log your weight" onPress={() => router.push('/log-weight')} scaleTo={0.95}
         style={{ alignSelf: 'flex-start', height: 38, paddingHorizontal: 14, borderRadius: 19, backgroundColor: fixed.white, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
         <Scale size={16} color="#1B3FB8" />
-        <Txt style={{ fontFamily: font.semibold, fontSize: 13, lineHeight: 18, color: '#1B3FB8' }}>Log your weight</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: '#1B3FB8' }}>Log your weight</Txt>
       </Pressy>
     );
   }
   return (
     <View style={{ alignSelf: 'flex-start', backgroundColor: g.chip.bg, borderRadius: 999, paddingHorizontal: 11, paddingVertical: 4 }}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 18, color: g.chip.fg }}>{g.chip.label}</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 18, color: g.chip.fg }}>{g.chip.label}</Txt>
     </View>
   );
 }
@@ -109,8 +109,8 @@ function DesignA({ g }: { g: ReturnType<typeof useGoalData> }) {
         <Row style={{ justifyContent: 'space-between' }}>
           {[['Start', g.start], ['Now', g.now], ['Goal', g.goal]].map(([l, v]) => (
             <View key={l as string} style={{ alignItems: l === 'Start' ? 'flex-start' : l === 'Goal' ? 'flex-end' : 'center' }}>
-              <Txt style={{ fontFamily: font.semibold, fontSize: 14, lineHeight: 20, color: fixed.white }}>{kg(v as number)} kg</Txt>
-              <Txt style={{ fontSize: 11, lineHeight: 16, color: 'rgba(255,255,255,0.75)' }}>{l}</Txt>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: fixed.white }}>{kg(v as number)} kg</Txt>
+              <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 16, color: 'rgba(255,255,255,0.75)' }}>{l}</Txt>
             </View>
           ))}
         </Row>
@@ -129,15 +129,15 @@ function DesignB({ g }: { g: ReturnType<typeof useGoalData> }) {
         <View style={{ width: 118, height: 118, alignItems: 'center', justifyContent: 'center' }}>
           <Ring size={118} r={50} stroke={11} pct={g.pct} color={fixed.white} track="rgba(255,255,255,0.25)" />
           <View style={{ position: 'absolute', alignItems: 'center' }}>
-            <Txt style={{ fontFamily: font.displayBold, fontSize: 30, lineHeight: 38, letterSpacing: -0.8, color: fixed.white }}>{g.pace === 'Goal reached' ? '0' : kg(g.toGo)}</Txt>
-            <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.8)' }}>kg left</Txt>
+            <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl4, lineHeight: 38, letterSpacing: -0.8, color: fixed.white }}>{g.pace === 'Goal reached' ? '0' : kg(g.toGo)}</Txt>
+            <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: 'rgba(255,255,255,0.8)' }}>kg left</Txt>
           </View>
         </View>
         <View style={{ flex: 1, gap: 8 }}>
           {[['Start', g.start], ['Now', g.now], ['Goal', g.goal]].map(([l, v]) => (
             <Row key={l as string} style={{ justifyContent: 'space-between', borderBottomWidth: l === 'Goal' ? 0 : 1, borderBottomColor: 'rgba(255,255,255,0.2)', paddingBottom: l === 'Goal' ? 0 : 6 }}>
-              <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.8)' }}>{l}</Txt>
-              <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: fixed.white }}>{kg(v as number)} kg</Txt>
+              <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: 'rgba(255,255,255,0.8)' }}>{l}</Txt>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: fixed.white }}>{kg(v as number)} kg</Txt>
             </Row>
           ))}
         </View>
@@ -153,22 +153,22 @@ function DesignC({ g }: { g: ReturnType<typeof useGoalData> }) {
     <Shell label={`Your goal by ${g.by}. ${headline(g)}. ${g.chip.label}. This week: ${WEEKLY.focus.join(', ')}. Open progress`}>
       <Top by={g.by} />
       <Row style={{ justifyContent: 'space-between' }}>
-        <Txt style={{ fontFamily: font.display, fontSize: 32, lineHeight: 41, letterSpacing: -0.8, color: fixed.white, flexShrink: 1 }}>{headline(g)}</Txt>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 18, lineHeight: 24, color: fixed.white }}>{Math.round(g.pct * 100)}%</Txt>
+        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 41, letterSpacing: -0.8, color: fixed.white, flexShrink: 1 }}>{headline(g)}</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, color: fixed.white }}>{Math.round(g.pct * 100)}%</Txt>
       </Row>
       <View style={{ height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.25)', overflow: 'hidden' }}>
         <View style={{ width: `${g.pct * 100}%`, height: '100%', borderRadius: 4, backgroundColor: fixed.white }} />
       </View>
       <Chip g={g} />
       <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.22)' }} />
-      <Txt style={{ fontSize: 12, lineHeight: 17, letterSpacing: 1, color: 'rgba(255,255,255,0.8)' }}>THIS WEEK FROM COACH VIKRAM</Txt>
+      <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, letterSpacing: 1, color: 'rgba(255,255,255,0.8)' }}>THIS WEEK FROM COACH VIKRAM</Txt>
       <View style={{ gap: 8 }}>
         {WEEKLY.focus.map((f, i) => (
           <Row key={f} style={{ gap: 10 }}>
             <View style={{ width: 22, height: 22, borderRadius: 11, alignItems: 'center', justifyContent: 'center', backgroundColor: i === 0 ? fixed.white : 'rgba(255,255,255,0.22)' }}>
               {i === 0 && <Check size={13} color="#1B3FB8" strokeWidth={3} />}
             </View>
-            <Txt style={{ fontSize: 14, lineHeight: 20, color: fixed.white }}>{f}</Txt>
+            <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: fixed.white }}>{f}</Txt>
           </Row>
         ))}
       </View>

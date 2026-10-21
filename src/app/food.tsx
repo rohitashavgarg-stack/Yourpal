@@ -19,7 +19,7 @@ import { font, spring } from '@/theme/tokens';
 import { mealById } from '@/features/today/meals';
 import { QuickLogSheet } from '@/features/today/QuickLogSheet';
 import { askCoach } from '@/features/coach/coach';
-import { fixed } from '@/design-system/tokens';
+import { fontSizes, fixed } from '@/design-system/tokens';
 
 export default function FoodDetail() {
   const { gate: logGate } = useLogGate();
@@ -91,17 +91,17 @@ export default function FoodDetail() {
             <View style={{ width: 66, height: 66, borderRadius: 33, backgroundColor: c.tNutri, alignItems: 'center', justifyContent: 'center' }}><ChefHat size={30} strokeWidth={1.7} color={c.cNutri} /></View>
           </View>
           <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 34, letterSpacing: -1.4, lineHeight: 38 }}>{fd.n}</Txt>
-          <Txt muted style={{ marginTop: 6, fontSize: 14, lineHeight: 20 }}>{desc}</Txt>
+          <Txt muted style={{ marginTop: 6, fontSize: fontSizes.md, lineHeight: 20 }}>{desc}</Txt>
           <Row style={{ gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
             {[['Serving', fd.serve], ['Type', foodTypeLabel(fd.type)], ['Meal', meal.n]].map(([l, v]) => (
               <View key={l} style={{ gap: 2, paddingVertical: 9, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line }}>
-                <Txt style={{ fontSize: 11, color: c.muted }}>{l}</Txt>
-                <Row style={{ gap: 6 }}>{l === 'Type' && <FoodMark type={fd!.type} size={13} />}<Txt style={{ fontFamily: font.semibold, fontSize: 14 }}>{v}</Txt></Row>
+                <Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>{l}</Txt>
+                <Row style={{ gap: 6 }}>{l === 'Type' && <FoodMark type={fd!.type} size={13} />}<Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md }}>{v}</Txt></Row>
               </View>
             ))}
           </Row>
           <Pressy accessibilityRole="button" onPress={() => askCoach(fd!.n, `Is ${fd!.n.toLowerCase()} right for my plan? `)} scaleTo={0.96} style={{ alignSelf: 'flex-start', marginTop: 12, height: 40, paddingHorizontal: 14, borderRadius: 20, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-            <PersonAvatar who="coach" size={22} /><Txt style={{ fontFamily: font.medium, fontSize: 13, color: c.ink }}>Ask Coach about this</Txt>
+            <PersonAvatar who="coach" size={22} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: c.ink }}>Ask Coach about this</Txt>
           </Pressy>
           {(fd.est || !db) && <Chip tone="warn" label="Estimated · numbers are approximate" icon={<Info size={12} color={c.warn} />} style={{ marginTop: 12 }} />}
         </LinearGradient>
@@ -111,7 +111,7 @@ export default function FoodDetail() {
           <Card style={{ padding: 18, gap: 14 }}>
             <Row style={{ gap: 10 }}>
               <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: c.tAct, alignItems: 'center', justifyContent: 'center' }}><Flame size={20} color={c.cAct} /></View>
-              <Txt style={{ fontFamily: font.display, fontSize: 32, lineHeight: 34 }}>{fd.k}</Txt><Txt muted>kcal</Txt>
+              <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 34 }}>{fd.k}</Txt><Txt muted>kcal</Txt>
               <View style={{ flex: 1 }} />
               <Txt v="caption" style={{ textAlign: 'right' }}>{Math.round((fd.k / KCAL_TARGET) * 100)}% of your{'\n'}daily 1,800</Txt>
             </Row>
@@ -119,7 +119,7 @@ export default function FoodDetail() {
               {macros.map((m) => (
                 <View key={m.l} style={{ flex: 1, borderWidth: 1, borderColor: c.line, borderRadius: 18, padding: 12, gap: 6 }}>
                   <Txt v="caption">{m.l}</Txt>
-                  <Txt style={{ fontFamily: font.display, fontSize: 22, lineHeight: 24 }}>{m.v}<Txt muted style={{ fontFamily: font.display, fontSize: 12 }}> g</Txt></Txt>
+                  <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 24 }}>{m.v}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.xs }}> g</Txt></Txt>
                   <View style={{ height: 4, borderRadius: 2, backgroundColor: c.surface2, overflow: 'hidden' }}><View style={{ height: '100%', width: `${Math.min(100, Math.round(m.w * 100))}%`, backgroundColor: m.col, borderRadius: 2 }} /></View>
                 </View>
               ))}
@@ -134,11 +134,11 @@ export default function FoodDetail() {
               <Animated.View entering={fade()} style={{ gap: 10, paddingHorizontal: 4 }}>
                 {micros.map(([l, v, pct]) => (
                   <View key={l} style={{ gap: 5 }}>
-                    <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: 13 }}>{l}</Txt><Txt v="mono" muted style={{ fontSize: 13 }}>{v} · {pct}%</Txt></Row>
+                    <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: fontSizes.sm }}>{l}</Txt><Txt v="mono" muted style={{ fontSize: fontSizes.sm }}>{v} · {pct}%</Txt></Row>
                     <View style={{ height: 4, borderRadius: 2, backgroundColor: c.surface2, overflow: 'hidden' }}><View style={{ height: '100%', width: `${Math.min(100, pct)}%`, backgroundColor: c.cNutri, borderRadius: 2 }} /></View>
                   </View>
                 ))}
-                <Txt style={{ fontSize: 11, color: c.muted }}>% of daily value for an adult. A guide, not medical advice.</Txt>
+                <Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>% of daily value for an adult. A guide, not medical advice.</Txt>
               </Animated.View>
             )}
           </Card>
@@ -149,7 +149,7 @@ export default function FoodDetail() {
               <Card style={{ paddingVertical: 4, paddingHorizontal: 16 }}>
                 {db.ing.map(([n, q, kc], i) => (
                   <Row key={n} style={{ gap: 10, minHeight: 58, borderBottomWidth: i < db.ing.length - 1 ? 1 : 0, borderBottomColor: c.line, borderStyle: 'dashed' }}>
-                    <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.medium }}>{n}</Txt><Txt v="mono" muted style={{ fontSize: 12 }}>{kc} kcal</Txt></View>
+                    <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.medium }}>{n}</Txt><Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{kc} kcal</Txt></View>
                     <Chip label={q} />
                   </Row>
                 ))}
@@ -160,13 +160,13 @@ export default function FoodDetail() {
               <Card style={{ paddingVertical: 8, paddingHorizontal: 16 }}>
                 {db.st.map((t, i) => (
                   <Row key={i} style={{ gap: 12, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: c.line, alignItems: 'flex-start' }}>
-                    <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Txt v="mono" style={{ fontSize: 12 }}>{i + 1}</Txt></View>
-                    <Txt style={{ flex: 1, fontSize: 14, lineHeight: 20 }}>{t}</Txt>
+                    <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Txt v="mono" style={{ fontSize: fontSizes.xs }}>{i + 1}</Txt></View>
+                    <Txt style={{ flex: 1, fontSize: fontSizes.md, lineHeight: 20 }}>{t}</Txt>
                   </Row>
                 ))}
                 <Row style={{ gap: 10, paddingTop: 12, paddingBottom: 8, alignItems: 'flex-start' }}>
                   <MessageCircle size={16} color={c.accentText} />
-                  <Txt muted style={{ flex: 1, fontSize: 13 }}>Coach tip: {db.tip}</Txt>
+                  <Txt muted style={{ flex: 1, fontSize: fontSizes.sm }}>Coach tip: {db.tip}</Txt>
                 </Row>
               </Card>
             </>

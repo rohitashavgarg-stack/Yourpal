@@ -4,6 +4,7 @@ import { Button, Field, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { haptic } from '@/lib/haptics';
 import { font } from '@/theme/tokens';
+import { fontSizes } from '@/design-system/tokens';
 
 type F = { key: string; label: string; unit?: string; ph: string; min?: number; max?: number; text?: boolean };
 
@@ -27,10 +28,10 @@ export function ManualLogSheet({ title, hint, fields, done }: { title: string; h
         <View key={f.key} style={{ gap: 6 }}>
           <Txt v="label">{f.label}</Txt>
           <Field value={v[f.key] ?? ''} onChangeText={(t) => setV((x) => ({ ...x, [f.key]: t }))} placeholder={f.ph} keyboardType={f.text ? 'default' : 'decimal-pad'} accessibilityLabel={f.label} error={bad(f)} />
-          {bad(f) && <Txt style={{ fontSize: 13, lineHeight: 19, color: '#C4610E' }}>{`Enter ${f.min ?? 0} to ${f.max}${f.unit ? ' ' + f.unit : ''}`}</Txt>}
+          {bad(f) && <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: '#C4610E' }}>{`Enter ${f.min ?? 0} to ${f.max}${f.unit ? ' ' + f.unit : ''}`}</Txt>}
         </View>
       ))}
-      {hint ? <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{hint}</Txt> : null}
+      {hint ? <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{hint}</Txt> : null}
       <Button kind="accent" label="Save" disabled={!ok} onPress={save} />
     </View>
   );

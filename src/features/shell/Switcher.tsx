@@ -10,6 +10,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { goHome, ProgLogo } from './parts';
 import { joinProgramme, switchProgramme, useShell } from './state';
+import { fontSizes } from '@/design-system/tokens';
 
 // "Your programs" — switch like switching accounts, or join another.
 export function ProgrammeSwitcherSheet() {
@@ -25,7 +26,7 @@ export function ProgrammeSwitcherSheet() {
   const join = () => closeSheet(() => router.push('/profile/join'));
   return (
     <>
-      <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: 22, letterSpacing: -0.5 }}>Your programs</Txt>
+      <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, letterSpacing: -0.5 }}>Your programs</Txt>
       <View>
         {progs.map((p) => {
           const cur = p.id === s.cur;
@@ -52,7 +53,7 @@ export function ProgrammeSwitcherSheet() {
           <Txt style={{ flex: 1, fontFamily: font.medium }}>Join a program</Txt>
         </Pressy>
       </View>
-      {progs.length === 1 && <Txt muted style={{ fontSize: 13 }}>You're in one programme. When your gym or clinic sends an invite, it shows up here.</Txt>}
+      {progs.length === 1 && <Txt muted style={{ fontSize: fontSizes.sm }}>You're in one programme. When your gym or clinic sends an invite, it shows up here.</Txt>}
     </>
   );
 }
@@ -71,7 +72,7 @@ export function JoinConsentSheet() {
   });
   return (
     <>
-      <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: 22, letterSpacing: -0.5 }}>Join {j.name}?</Txt>
+      <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, letterSpacing: -0.5 }}>Join {j.name}?</Txt>
       <Txt muted>Joining {j.name} shares your name and phone number with them. You choose what else to share.</Txt>
       <Button label="Join" onPress={confirm} />
       <Button kind="secondary" label="Not now" onPress={() => closeSheet()} />

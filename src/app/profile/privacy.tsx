@@ -5,6 +5,7 @@ import { useScenarios, useStore } from '@/lib/store';
 import { font } from '@/theme/tokens';
 import { LineRow, ListCard, ProgLogo, SubPage, Switch } from '@/features/shell/parts';
 import { useShell } from '@/features/shell/state';
+import { fontSizes } from '@/design-system/tokens';
 
 type R = { l: string; s: string; on: boolean; locked?: boolean; toggle?: () => void };
 
@@ -50,7 +51,7 @@ export default function Privacy() {
             <ProgLogo p={b.p} size={32} />
             <Txt style={{ fontFamily: font.semibold, flex: 1 }}>What {b.name} can see</Txt>
           </Row>
-          <Txt muted style={{ fontSize: 13 }}>{b.wording}</Txt>
+          <Txt muted style={{ fontSize: fontSizes.sm }}>{b.wording}</Txt>
           <View>
             {b.rows.map((r, i) => (
               <LineRow key={r.l} title={r.l} sub={r.s} minH={56} last={i === b.rows.length - 1}

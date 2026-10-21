@@ -21,6 +21,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { fade } from '@/theme/motion';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
+import { fontSizes } from '@/design-system/tokens';
 
 const KG_LB = 2.2046226218;
 const r1 = (n: number) => Math.round(n * 10) / 10;
@@ -45,16 +46,16 @@ function BigNumber({ title, big, unit, editable, hint = 'Tap to edit', size = 76
         <Row style={{ alignItems: 'baseline', gap: 6 }}>
           <TextInput autoFocus value={text} onChangeText={(t) => { setText(t); setBad(false); }} keyboardType={editable.kb} onSubmitEditing={commit} onBlur={() => { if (!bad) commit(); }} returnKeyType="done"
             accessibilityLabel={`Type ${title.toLowerCase()}`} style={{ ...numStyle, minWidth: 120, textAlign: align === 'center' ? 'center' : 'left', color: bad ? c.warn : c.ink, outlineStyle: 'none' as any }} />
-          {!!unit && <Txt muted style={{ fontFamily: font.semibold, fontSize: 15, letterSpacing: 1.2 }}>{unit.toUpperCase()}</Txt>}
+          {!!unit && <Txt muted style={{ fontFamily: font.semibold, fontSize: fontSizes.base, letterSpacing: 1.2 }}>{unit.toUpperCase()}</Txt>}
         </Row>
       ) : (
         <Pressable accessibilityRole="button" accessibilityLabel={`${big} ${unit}. Tap to type a number`} onPress={() => { setText(big.replace(/[^\d.]/g, '')); setTyping(true); setBad(false); }}
           style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8, minHeight: Math.round(size * 1.2) }}>
           <Txt style={numStyle}>{big}</Txt>
-          {!!unit && <Txt muted style={{ fontFamily: font.semibold, fontSize: 15, letterSpacing: 1.2 }}>{unit.toUpperCase()}</Txt>}
+          {!!unit && <Txt muted style={{ fontFamily: font.semibold, fontSize: fontSizes.base, letterSpacing: 1.2 }}>{unit.toUpperCase()}</Txt>}
         </Pressable>
       )}
-      <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, letterSpacing: 1.4, color: bad ? c.warn : c.muted }}>{(bad ? editable.hint : hint).toUpperCase()}</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.4, color: bad ? c.warn : c.muted }}>{(bad ? editable.hint : hint).toUpperCase()}</Txt>
     </View>
   );
 }
@@ -124,7 +125,7 @@ export function DobPicker({ dob, onChange }: { dob: string; onChange: (dob: stri
         <Wheel accessibilityLabel="Month" value={p.m} onChange={(m) => set(p.y, m, p.d)} min={1} max={12} size={40} fmt={(n) => MONTHS[n - 1]} />
         <Wheel accessibilityLabel="Year" value={p.y} onChange={(y) => set(y, p.m, p.d)} min={now.getFullYear() - MAX_AGE} max={now.getFullYear() - MIN_AGE} size={40} fmt={(n) => String(n)} />
       </Row>
-      {age != null && <Txt muted style={{ textAlign: 'center', fontSize: 14, lineHeight: 20 }}>{`You are ${age} years old`}</Txt>}
+      {age != null && <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.md, lineHeight: 20 }}>{`You are ${age} years old`}</Txt>}
     </View>
   );
 }
@@ -137,7 +138,7 @@ function BodyScreen({ title, saveLabel, onSave, children, trend }: { title: stri
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }}>
         <RoundBtn label="Close" onPress={back} glass><X size={20} color={c.ink} /></RoundBtn>
-        <Txt accessibilityRole="header" style={trend ? { flex: 1, fontFamily: font.semibold, fontSize: 17, marginLeft: 4 } : { flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: 17, marginRight: 44 }}>{title}</Txt>
+        <Txt accessibilityRole="header" style={trend ? { flex: 1, fontFamily: font.semibold, fontSize: fontSizes.lg, marginLeft: 4 } : { flex: 1, textAlign: 'center', fontFamily: font.semibold, fontSize: fontSizes.lg, marginRight: 44 }}>{title}</Txt>
         {trend ? <TrendsButton label="See weight trend" onPress={trend} /> : null}
       </Row>
       <Animated.View entering={fade()} style={{ flex: 1, paddingHorizontal: 16 }}>{children}</Animated.View>
