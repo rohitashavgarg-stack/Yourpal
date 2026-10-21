@@ -6,6 +6,7 @@
  *   node scripts/visual/capture-cards.js .visual-cards                     a new run, then:
  *   node scripts/visual/compare.js docs/visual-baseline/cards .visual-cards
  *
+ * Add --only=goal- or --only=budget- (names that start with it; comma separated) to capture a part.
  * Files: <outDir>/<theme>/goal-<state>.png, goal-onTrack-stale.png, goal-flat.png, budget-<state>.png, budget-goal-<state>.png
  * Each image is 390 x 320: the card alone at the top of the page.
  */
@@ -13,13 +14,15 @@ const fs = require('fs'); const path = require('path'); const os = require('os')
 const BASE = process.env.APP_URL || 'http://localhost:8082';
 const out = process.argv[2]; if (!out) { console.error('usage: capture-cards.js <outDir>'); process.exit(1); }
 const GOAL_STATES = ['onTrack', 'behind', 'almost', 'complete', 'frozen', 'paused', 'comeback', 'backOn', 'noGoal'];
-const SHOTS = [
+const only = ((process.argv.find((a) => a.startsWith('--only=')) || '').slice(7) || '').split(',').filter(Boolean); // e.g. --only=goal- or --only=budget-
+const ALL = [
   ...GOAL_STATES.map((s) => ['goal-' + s, '/dev-cards?c=goal&s=' + s]),
   ['goal-onTrack-stale', '/dev-cards?c=goal&s=onTrack&w=12'],
   ['goal-flat', '/dev-cards?c=goal&v=flat'],
   ...['default', 'nothing-eaten', 'all-logged', 'workout-done', 'watch'].map((s) => ['budget-' + s, '/dev-cards?c=budget&s=' + s]),
   ...GOAL_STATES.map((s) => ['budget-goal-' + s, '/dev-cards?c=budget&s=default&g=' + s]),
 ];
+const SHOTS = ALL.filter(([name]) => !only.length || only.some((w) => name.startsWith(w)));
 const edge = ['C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Google/Chrome/Application/chrome.exe'].find((p) => fs.existsSync(p));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 (async () => {
