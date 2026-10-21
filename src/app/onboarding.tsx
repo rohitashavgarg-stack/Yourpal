@@ -6,24 +6,23 @@ import { WEEK_TARGET } from '@/features/streak/data';
 import { ageFrom, defaultDob } from '@/lib/dob';
 import { RoundBtn } from '@/components/bits';
 import { PersonAvatar } from '@/components/Brand';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { Switch } from '@/features/shell/parts';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { Easing, runOnJS, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { fadeOut } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GymLogoMark } from '@/components/Brand';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GlassBackdrop, WebLiquidGlass, hasLiquidGlass } from '@/components/Glass';
 import { router } from 'expo-router';
-import { Activity, Bell, CalendarCheck, Check, ChevronLeft, ChevronRight, ChevronsRight, Compass, Dumbbell, Flame, Lock, PersonStanding, Scale, Zap, MessageCircle, Minus, Plus, ShieldCheck, Trophy, UtensilsCrossed } from '@/lib/icons';
-import { Button, Card, Chip, Field, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
+import { Activity, Bell, CalendarCheck, Check, ChevronLeft, ChevronRight, ChevronsRight, Compass, Dumbbell, Flame, Lock, PersonStanding, Scale, Zap, ShieldCheck, Trophy } from '@/lib/icons';
+import { Button, Card, Chip, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useScenarios, useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { KCAL_TARGET, MACRO_TARGET } from '@/lib/data';
 import { DobPicker, HeightPicker, WeightPicker } from '@/features/body/BodyLog';
 import { dirOf, needsTarget, planMath } from '@/features/onboarding/plan';
 import { useDomain } from '@/lib/domain';
@@ -32,7 +31,7 @@ import { HEALTH_NAME } from '@/lib/health';
 import { YourPalLogo } from '@/components/YourPalLogo';
 import { useShell } from '@/features/shell/state';
 import { ProgLogo } from '@/features/shell/parts';
-import Svg, { Circle, Path } from 'react-native-svg';
+import Svg, { Circle } from 'react-native-svg';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
@@ -248,19 +247,6 @@ function InfoRow({ icon, t, s, last, warn }: { icon: React.ReactNode; t: string;
   );
 }
 
-function Stepper({ value, onChange, step, unit, label }: { value: number; onChange: (v: number) => void; step: number; unit: string; label: string }) {
-  const { c } = useTheme();
-  return (
-    <Row style={{ gap: 10 }}>
-      <Pressy accessibilityRole="button" accessibilityLabel={'Less ' + label} onPress={() => onChange(Math.max(step, +(value - step).toFixed(1)))} style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Minus size={20} color={c.ink} /></Pressy>
-      <View accessibilityLabel={`${label} ${value} ${unit}`} style={{ flex: 1, height: 64, borderRadius: radii.lg, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 6 }}>
-        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, color: c.ink }}>{value}</Txt>
-        <Txt muted>{unit}</Txt>
-      </View>
-      <Pressy accessibilityRole="button" accessibilityLabel={'More ' + label} onPress={() => onChange(+(value + step).toFixed(1))} style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Plus size={20} color={c.ink} /></Pressy>
-    </Row>
-  );
-}
 
 function GoalStep({ tried }: { tried: boolean }) {
   const { c } = useTheme();

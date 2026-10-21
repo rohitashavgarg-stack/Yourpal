@@ -20,3 +20,7 @@ node scripts/visual/compare.js docs/visual-baseline .visual-current [--save-diff
 `compare.js` counts pixels where any colour channel differs by more than 8 (of 255) and flags a screen when more than 0.3 percent of its pixels changed. Two runs of the same code give 0.00 percent, so any flagged screen is a real change.
 
 Things that change by themselves and will show up: the quote and greeting wording rotate by the day of the month, so re-take the baseline after midnight. The `?theme=` and `?signedin=1` hooks are in `src/lib/store.tsx`.
+
+## Screens that need a tap
+
+`scripts/visual/capture-flows.js <outDir>` reaches three screens the plain capture cannot: the workout warm-up, the workout in progress (steppers in the set rows) and the plan editor's change-an-exercise sheet (row steppers). They are not in the baseline folder, so run it once before a change and once after, and compare the two folders with `compare.js`.

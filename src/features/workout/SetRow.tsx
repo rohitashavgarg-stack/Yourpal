@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
-import { Gesture, GestureDetector, GestureType } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Check, Play, Square } from '@/lib/icons';
 import { Pressy, Txt } from '@/components/ui';
 import { CheckCircle } from '@/components/bits';
@@ -9,45 +9,12 @@ import { Ex } from '@/lib/data';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { fmt1 } from '@/lib/useNow';
 import { setLabel, setText } from './session';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Stepper } from '@/design-system/primitives/Stepper';
 
 export type Draft = { k: number; r: number; t: number };
 
-// − value + stepper; drag the number sideways to scrub.
-function Stepper({ value, unit, onChange, step, min, label, block }: { value: number; unit: string; onChange: (v: number) => void; step: number; min: number; label: string; block?: GestureType }) {
-  const { c } = useTheme();
-  const base = useRef(value);
-  const last = useRef(value);
-  let pan = Gesture.Pan().runOnJS(true).activeOffsetX([-4, 4])
-    .onBegin(() => { base.current = value; last.current = value; })
-    .onUpdate((e) => {
-      const v = Math.max(min, Math.round((base.current + Math.round(e.translationX / 14) * step) * 10) / 10);
-      if (v !== last.current) { last.current = v; haptic.tap(); onChange(v); }
-    });
-  if (block) pan = pan.blocksExternalGesture(block);
-  const shown = unit === 'kg' ? fmt1(value) : String(value);
-  return (
-    <View accessibilityRole="adjustable" accessibilityLabel={`${label}, ${shown} ${unit}`}
-      accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
-      onAccessibilityAction={(e) => onChange(Math.max(min, value + (e.nativeEvent.actionName === 'increment' ? step : -step)))}
-      style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', height: 44, borderRadius: radii.lg, backgroundColor: c.surface2 }}>
-      <Pressable accessibilityLabel={`Minus ${step} ${unit}`} onPress={() => { haptic.tap(); onChange(Math.max(min, Math.round((value - step) * 10) / 10)); }} style={{ width: 34, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ fontSize: fontSizes.lg, lineHeight: 23, color: c.ink }}>−</Text>
-      </Pressable>
-      <GestureDetector gesture={pan}>
-        <View collapsable={false} style={{ flex: 1, minWidth: 0, height: 44, flexDirection: 'row', alignItems: 'baseline', justifyContent: 'center', gap: 2, paddingTop: 9, cursor: 'ew-resize' } as any}>
-          <Text style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 29, color: c.ink }}>{shown}</Text>
-          <Text style={{ fontSize: fontSizes.xs2, lineHeight: 13, color: c.muted }}>{unit}</Text>
-        </View>
-      </GestureDetector>
-      <Pressable accessibilityLabel={`Plus ${step} ${unit}`} onPress={() => { haptic.tap(); onChange(Math.round((value + step) * 10) / 10); }} style={{ width: 34, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ fontSize: fontSizes.lg, lineHeight: 23, color: c.ink }}>+</Text>
-      </Pressable>
-    </View>
-  );
-}
 
 type Props = {
   e: Ex; i: number; active: boolean; revealed: boolean; justDone: boolean; back: boolean;
@@ -133,11 +100,11 @@ export function SetRow(p: Props) {
             )}
             {p.active ? (
               <View style={{ flex: 1, minWidth: 0, flexDirection: 'row', gap: 6 }}>
-                {(M === 'rw' || M === 'tw') && <Stepper label="Weight" unit="kg" value={p.draft.k} step={p.e.step} min={0} onChange={(k) => p.setDraft({ k })} block={pan} />}
-                {(M === 'rw' || M === 'r') && <Stepper label="Reps" unit="reps" value={p.draft.r} step={1} min={1} onChange={(r) => p.setDraft({ r })} block={pan} />}
+                {(M === 'rw' || M === 'tw') && <Stepper variant="inline" label="Weight" unit="kg" value={p.draft.k} step={p.e.step} min={0} onChange={(k) => p.setDraft({ k })} block={pan} />}
+                {(M === 'rw' || M === 'r') && <Stepper variant="inline" label="Reps" unit="reps" value={p.draft.r} step={1} min={1} onChange={(r) => p.setDraft({ r })} block={pan} />}
                 {(M === 't' || M === 'tw') && (
                   <>
-                    <Stepper label="Duration" unit="s" value={timing ? p.timerLeft! : p.draft.t} step={5} min={5} onChange={(t) => !timing && p.setDraft({ t })} block={pan} />
+                    <Stepper variant="inline" label="Duration" unit="s" value={timing ? p.timerLeft! : p.draft.t} step={5} min={5} onChange={(t) => !timing && p.setDraft({ t })} block={pan} />
                     <Pressy accessibilityRole="button" accessibilityLabel={timing ? 'Stop timer and log' : `Start ${p.draft.t} second timer`} onPress={p.onTimer}
                       style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: timing ? c.warn : c.accent, alignItems: 'center', justifyContent: 'center' }}>
                       {timing ? <Square size={13} color={fixed.white} fill={fixed.white} /> : <Play size={15} color={fixed.white} fill={fixed.white} />}

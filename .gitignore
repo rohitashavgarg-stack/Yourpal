@@ -41,3 +41,5 @@ yarn-error.*
 /android
 .visual-current/
 .visual-diff/
+.visual-flows-before/
+.visual-flows-after/

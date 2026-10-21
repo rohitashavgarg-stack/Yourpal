@@ -4,7 +4,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, with
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { router } from 'expo-router';
-import { ChevronLeft, ChevronRight, Minus, Plus, X } from '@/lib/icons';
+import { ChevronLeft, ChevronRight, X } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { RoundBtn } from '@/components/bits';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -14,6 +14,7 @@ import { iconFor } from './content';
 import { artIdFor, ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { clipIdFor, THUMBS } from '@/features/workout/clips';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Stepper as DSStepper, StepperProps } from '@/design-system/primitives/Stepper';
 
 export const goBackToPlans = () => (router.canGoBack() ? router.back() : router.replace('/plans'));
 
@@ -100,18 +101,6 @@ export function ExTile({ name, num, size = 56 }: { name: string; num?: string; s
   );
 }
 
-// − value + stepper row (sets, reps, time, weight, portion).
-export function Stepper({ label, value, onMinus, onPlus, minusLabel, plusLabel }: { label: string; value: string; onMinus: () => void; onPlus: () => void; minusLabel: string; plusLabel: string }) {
-  const { c } = useTheme();
-  return (
-    <Row style={{ gap: 10, minHeight: 60 }}>
-      <Txt muted style={{ flex: 1 }}>{label}</Txt>
-      <RoundBtn label={minusLabel} onPress={onMinus}><Minus size={18} color={c.ink} /></RoundBtn>
-      <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.display, fontSize: fontSizes.xl3, minWidth: 76, textAlign: 'center' }}>{value}</Txt>
-      <RoundBtn label={plusLabel} onPress={onPlus}><Plus size={18} color={c.ink} /></RoundBtn>
-    </Row>
-  );
-}
 
 // Row background that pulses the accent twice, used for "new from Coach" items.
 export function Highlight({ on, delay = 0, style, children }: { on: boolean; delay?: number; style?: StyleProp<ViewStyle>; children: React.ReactNode }) {
@@ -139,3 +128,6 @@ export function Moon({ size = 64 }: { size?: number }) {
     </Svg>
   );
 }
+
+// The stepper moved to src/design-system/primitives/Stepper.tsx. This is its "row" variant, kept under the old name for the plans screens.
+export function Stepper(props: Omit<Extract<StepperProps, { variant: 'row' }>, 'variant'>) { return <DSStepper variant="row" {...props} />; }
