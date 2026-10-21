@@ -1,6 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Button, Row, Txt } from '@/components/ui';
+import { Plus } from '@/lib/icons';
+import { QuickLogSheet } from './QuickLogSheet';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { fmtT, MealId, MEALS } from '@/lib/data';
 import { itemNow, mealLog, useDomain, useMeals } from '@/lib/domain';
@@ -17,11 +19,13 @@ export function LogMealsSheet({ mealId }: { mealId: MealId }) {
   const { d } = useDomain();
   const { toggleItem } = useMeals();
   const { gate } = useLogGate();
-  const { closeSheet } = useOverlay();
+  const { closeSheet, openSheet } = useOverlay();
   const m = MEALS.find((q) => q.id === mealId)!;
   const x = mealLog(d, mealId);
   const tick = gate((k: number) => { haptic.light(); toggleItem(mealId, k); });
   const eaten = x.eaten.length;
+  // something that is not on the plan: scan the plate, write it or pick from the catalogue (the same sheet the meals card opens)
+  const elseFood = gate(() => closeSheet(() => openSheet(<QuickLogSheet mealId={mealId} mode="scan" />, { label: 'Log a meal' })));
   return (
     <View style={{ gap: 12 }}>
       <View style={{ gap: 2, paddingHorizontal: 4 }}>
@@ -45,6 +49,7 @@ export function LogMealsSheet({ mealId }: { mealId: MealId }) {
           );
         })}
       </View>
+      <Button kind="secondary" label="Ate something else" icon={<Plus size={18} color={c.ink} />} onPress={elseFood} />
       <Button label={eaten ? 'Done' : 'Close'} onPress={() => closeSheet()} />
     </View>
   );
