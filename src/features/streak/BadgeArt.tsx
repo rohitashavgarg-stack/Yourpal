@@ -6,13 +6,14 @@ import { Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import type { BadgeIcon } from './data';
+import { fixed } from '@/design-system/tokens';
 
 export type Shape = 'circle' | 'hex' | 'shield' | 'tile';
 export type Look = { shape: Shape; a: string; b: string; mark?: string };
 
 // One look per badge: its own shape and colour pair so each one is recognisable on sight.
 export const BADGE_LOOK: Record<string, Look> = {
-  first: { shape: 'circle', a: '#6FA0FF', b: '#2F6BEA' },
+  first: { shape: 'circle', a: '#6FA0FF', b: fixed.blue },
   w4: { shape: 'hex', a: '#FFB347', b: '#F0692C', mark: '4' },
   w12: { shape: 'hex', a: '#FF8A5C', b: '#D6342C', mark: '12' },
   pr1: { shape: 'circle', a: '#FFD966', b: '#E0A100' },
@@ -58,8 +59,8 @@ export function BadgeArt({ id, icon: Icon, earned, size = 84 }: { id: string; ic
         {earned ? (
           <>
             <Outline shape={look.shape} fill={`url(#${gid})`} />
-            <G clipPath={`url(#${cid})`}><Ellipse cx={26} cy={18} rx={26} ry={13} fill="#fff" opacity={0.22} transform="rotate(-24 26 18)" /></G>
-            <Outline shape={look.shape} fill="none" stroke="#fff" strokeWidth={1.6} opacity={0.55} />
+            <G clipPath={`url(#${cid})`}><Ellipse cx={26} cy={18} rx={26} ry={13} fill={fixed.white} opacity={0.22} transform="rotate(-24 26 18)" /></G>
+            <Outline shape={look.shape} fill="none" stroke={fixed.white} strokeWidth={1.6} opacity={0.55} />
           </>
         ) : (
           <>
@@ -69,10 +70,10 @@ export function BadgeArt({ id, icon: Icon, earned, size = 84 }: { id: string; ic
         )}
       </Svg>
       <View style={{ position: 'absolute', alignItems: 'center', justifyContent: 'center' }}>
-        <Icon size={size * 0.38} color={earned ? '#fff' : c.muted} strokeWidth={2.2} />
+        <Icon size={size * 0.38} color={earned ? fixed.white : c.muted} strokeWidth={2.2} />
       </View>
       {earned && look.mark ? (
-        <View style={{ position: 'absolute', right: size * 0.04, bottom: size * 0.08, minWidth: size * 0.3, height: size * 0.3, paddingHorizontal: 4, borderRadius: size * 0.15, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ position: 'absolute', right: size * 0.04, bottom: size * 0.08, minWidth: size * 0.3, height: size * 0.3, paddingHorizontal: 4, borderRadius: size * 0.15, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.bold, fontSize: size * 0.18, lineHeight: size * 0.24, color: look.b }}>{look.mark}</Txt>
         </View>
       ) : null}

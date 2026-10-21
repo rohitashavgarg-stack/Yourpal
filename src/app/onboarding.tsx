@@ -33,6 +33,7 @@ import { YourPalLogo } from '@/components/YourPalLogo';
 import { useShell } from '@/features/shell/state';
 import { ProgLogo } from '@/features/shell/parts';
 import Svg, { Circle, Path } from 'react-native-svg';
+import { fixed } from '@/design-system/tokens';
 
 const ORDER = ['welcome', 'facility', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
 type Step = (typeof ORDER)[number];
@@ -572,8 +573,8 @@ function SwipeToStart({ onDone }: { onDone: () => void }) {
           <ChevronsRight size={20} color={isDark ? white(0.85) : c.ink} />
         </Animated.View>
         <GestureDetector gesture={pan}>
-          <Animated.View style={[{ marginLeft: PAD, width: TH, height: TH, borderRadius: TH / 2, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }, thumb]}>
-            <ChevronRight size={26} color="#0B0E14" />
+          <Animated.View style={[{ marginLeft: PAD, width: TH, height: TH, borderRadius: TH / 2, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }, thumb]}>
+            <ChevronRight size={26} color={fixed.dark} />
           </Animated.View>
         </GestureDetector>
       </View>

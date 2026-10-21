@@ -18,6 +18,7 @@ import { CardTitle, cardShadow, GrowBar, ListCard, PCard } from '@/features/prog
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { MembershipCard as MembershipStrip, useMembershipNotice } from '@/features/today/PaymentBanner';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
+import { fixed } from '@/design-system/tokens';
 
 const Enter = ({ i, children }: { i: number; children: React.ReactNode }) => <Animated.View entering={fade(i * 40)}>{children}</Animated.View>;
 
@@ -42,7 +43,7 @@ function AttendanceCard({ awaiting }: { awaiting: boolean }) {
   const cells = Array.from({ length: 30 }, (_, j) => VISITS[j + 1]);
   return (
     <PCard onPress={() => router.push('/gym/attendance')} label={`Attendance, 18 visits this month${awaiting ? ', 1 session to confirm' : ''}`} style={{ gap: 8 }}>
-      <CardTitle title="Attendance" right={awaiting ? <Tag label="1 session to confirm" bg={c.accent} fg="#fff" /> : undefined} />
+      <CardTitle title="Attendance" right={awaiting ? <Tag label="1 session to confirm" bg={c.accent} fg={fixed.white} /> : undefined} />
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
         <View>
           <Txt style={{ fontFamily: font.display, fontSize: 37, lineHeight: 44 }}>18</Txt>

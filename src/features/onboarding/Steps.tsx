@@ -14,6 +14,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { Pt, smoothPath } from './path';
 import { planMath } from './plan';
+import { fixed } from '@/design-system/tokens';
 
 const AP = Animated.createAnimatedComponent(Path);
 
@@ -62,7 +63,7 @@ export function ProjectionStep() {
             <AP d={d} fill="none" stroke={c.accent} strokeOpacity={0.28} strokeWidth={8} strokeLinecap="round" strokeDasharray={`${length}`} animatedProps={line} />
             <AP d={d} fill="none" stroke={c.accent} strokeWidth={3.5} strokeLinecap="round" strokeDasharray={`${length}`} animatedProps={line} />
             <Circle cx={pts[0][0]} cy={pts[0][1]} r={8} fill={c.bg} stroke={c.ink} strokeWidth={2.5} />
-            {[2, 3].map((i) => <Circle key={i} cx={pts[i][0]} cy={pts[i][1]} r={8} fill="#fff" stroke={c.accent} strokeWidth={3} />)}
+            {[2, 3].map((i) => <Circle key={i} cx={pts[i][0]} cy={pts[i][1]} r={8} fill={fixed.white} stroke={c.accent} strokeWidth={3} />)}
           </Svg>
         )}
         {w > 0 && (
@@ -72,7 +73,7 @@ export function ProjectionStep() {
               <Txt style={{ fontFamily: font.displayBold, fontSize: 22, lineHeight: 28, color: c.accentText }}>{m.target} <Txt style={{ fontFamily: font.semibold, fontSize: 12, color: c.accentText }}>KG</Txt></Txt>
             </View>
             <View pointerEvents="none" style={{ position: 'absolute', left: end[0] - 20, top: end[1] - 20, width: 40, height: 40, borderRadius: 20, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: c.accentSoft }}>
-              <Trophy size={18} color="#fff" />
+              <Trophy size={18} color={fixed.white} />
             </View>
           </>
         )}
@@ -125,7 +126,7 @@ export function HowStep() {
             <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(200)}><Node p={stops[0]}><Camera size={19} color={c.ink} /></Node><Label p={stops[0]} title="Snap your plate" sub="and your food is logged" /></Animated.View>
             <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(600)}><Node p={stops[1]}><Dumbbell size={19} color={c.ink} /></Node><Label p={stops[1]} title="A workout built for you" sub="with a demo for every exercise" /></Animated.View>
             <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(1000)}><Node p={stops[2]}><TrendingUp size={19} color={c.ink} /></Node><Label p={stops[2]} right title="Progress you can see" sub="weight, lifts and records" /></Animated.View>
-            <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(1400)}><Node p={stops[3]} size={52}><View style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><Trophy size={22} color="#fff" /></View></Node></Animated.View>
+            <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(1400)}><Node p={stops[3]} size={52}><View style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><Trophy size={22} color={fixed.white} /></View></Node></Animated.View>
           </>
         )}
       </View>
@@ -164,19 +165,19 @@ export function MealStep() {
           <Path d="M0 60 H320 M0 120 H320 M0 180 H320 M0 240 H320 M0 300 H320 M0 360 H320" stroke="rgba(255,255,255,0.04)" strokeWidth={2} />
           <Circle cx={160} cy={200} r={138} fill="#ECE8E1" />
           <Circle cx={160} cy={200} r={112} fill="#F8F5EF" />
-          <Ellipse cx={120} cy={150} rx={44} ry={36} fill="#FFFFFF" /><Ellipse cx={112} cy={140} rx={26} ry={18} fill="#F1EFEA" />
+          <Ellipse cx={120} cy={150} rx={44} ry={36} fill={fixed.white} /><Ellipse cx={112} cy={140} rx={26} ry={18} fill="#F1EFEA" />
           <Circle cx={205} cy={140} r={38} fill="#C9862B" /><Circle cx={205} cy={140} r={28} fill="#DDA13F" /><Circle cx={196} cy={132} r={6} fill="#B5541F" />
           <G><Circle cx={150} cy={218} r={30} fill="#D4A45C" /><Circle cx={150} cy={218} r={22} fill="#E2B970" /><Circle cx={196} cy={226} r={28} fill="#D4A45C" /><Circle cx={196} cy={226} r={20} fill="#E2B970" /></G>
         </Svg>
         {!read && (
           <View style={{ position: 'absolute', left: 14, right: 14, bottom: 14, alignItems: 'center', gap: 10 }}>
             <View style={{ alignSelf: 'stretch', padding: 14, borderRadius: 18, backgroundColor: 'rgba(0,0,0,0.72)' }}>
-              <Txt style={{ fontFamily: font.semibold, color: '#fff' }}>This photo is ours.</Txt>
+              <Txt style={{ fontFamily: font.semibold, color: fixed.white }}>This photo is ours.</Txt>
               <Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)' }}>Tap and see the maths the app does on a meal photo.</Txt>
             </View>
             <Pressy accessibilityRole="button" accessibilityLabel="See what the app reads" onPress={() => { haptic.success(); setRead(true); }} scaleTo={0.92}
               style={{ width: 68, height: 68, borderRadius: 34, borderWidth: 3, borderColor: 'rgba(255,255,255,0.85)', alignItems: 'center', justifyContent: 'center' }}>
-              <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}><Camera size={22} color="#111" /></View>
+              <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}><Camera size={22} color={fixed.dark} /></View>
             </Pressy>
             <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, letterSpacing: 1.4, color: 'rgba(255,255,255,0.85)' }}>SEE WHAT THE APP READS</Txt>
           </View>
@@ -306,7 +307,7 @@ export function HealthStep() {
   return (
     <>
       <View style={{ alignItems: 'center', gap: 14, paddingTop: 6 }}>
-        <View accessibilityLabel={HEALTH_NAME} style={{ width: 88, height: 88, borderRadius: 26, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', ...(isDark ? {} : { shadowColor: '#101828', shadowOpacity: 0.12, shadowRadius: 22, shadowOffset: { width: 0, height: 8 } }) }}>
+        <View accessibilityLabel={HEALTH_NAME} style={{ width: 88, height: 88, borderRadius: 26, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center', ...(isDark ? {} : { shadowColor: fixed.shadow, shadowOpacity: 0.12, shadowRadius: 22, shadowOffset: { width: 0, height: 8 } }) }}>
           <Heart size={46} color="#FF375F" fill="#FF375F" />
         </View>
         <View style={{ alignItems: 'center' }}>

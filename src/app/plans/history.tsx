@@ -10,6 +10,7 @@ import { font } from '@/theme/tokens';
 import { HIST } from '@/features/plans/content';
 import { HistSheet } from '@/features/plans/Sheets';
 import { PageHeader } from '@/features/plans/parts';
+import { fixed } from '@/design-system/tokens';
 
 export default function WorkoutHistory() {
   const { c } = useTheme();
@@ -27,7 +28,7 @@ export default function WorkoutHistory() {
             <Pressy key={h.t} accessibilityRole="button" accessibilityLabel={`${h.t}, ${h.s || 'Logged'}, ${h.m}. Open summary`} onPress={() => open(i)} scaleTo={0.985}
               style={{ minHeight: 64, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 4, borderBottomWidth: i < HIST.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
               <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}>
-                <Check size={16} strokeWidth={2.8} color="#fff" />
+                <Check size={16} strokeWidth={2.8} color={fixed.white} />
               </View>
               <View style={{ flex: 1 }}>
                 <Txt style={{ fontFamily: font.medium }}>{h.t}</Txt>

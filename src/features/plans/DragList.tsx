@@ -6,6 +6,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 import { Menu } from '@/lib/icons';
 import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
+import { fixed } from '@/design-system/tokens';
 
 // Hold ≡ and drag to reorder. Rows have a fixed height so the target slot is a simple division.
 export const ROW_H = 68;
@@ -78,7 +79,7 @@ function DragRow({ i, n, active, dy, label, onStart, onFinish, onKey, render }: 
     </GestureDetector>
   );
   return (
-    <Animated.View style={[{ shadowColor: '#000', shadowRadius: 20, shadowOffset: { width: 0, height: 18 } }, st]}>
+    <Animated.View style={[{ shadowColor: fixed.black, shadowRadius: 20, shadowOffset: { width: 0, height: 18 } }, st]}>
       {render(handle)}
     </Animated.View>
   );

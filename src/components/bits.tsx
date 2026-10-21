@@ -7,6 +7,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { FoodType } from '@/lib/data';
 import { Pressy } from './ui';
+import { fixed } from '@/design-system/tokens';
 
 // ---------- Veg / egg / non-veg mark (Indian food label style) ----------
 const MARK: Record<FoodType, { c: string; d: string; l: string }> = {
@@ -44,7 +45,7 @@ export function CheckCircle({ on, size = 40, tone = 'accent', onPress, label, hi
       style={{ width: Math.max(hit, size), height: Math.max(hit, size), alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
       <Animated.View style={[{ width: size, height: size, borderRadius: size / 2, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' }, box]}>
         <Svg width={size * 0.48} height={size * 0.48} viewBox="0 0 24 24">
-          <APath d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" strokeWidth={2.8} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="24" animatedProps={tick} />
+          <APath d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke={fixed.white} strokeWidth={2.8} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="24" animatedProps={tick} />
         </Svg>
       </Animated.View>
     </Pressy>
@@ -72,8 +73,8 @@ export function Tag({ label, bg, fg, style }: { label: string; bg: string; fg: s
 // ---------- Small black pill button ----------
 export function PillBtn({ label, onPress, tone = 'ink', icon, style, h = 36 }: { label: string; onPress?: () => void; tone?: 'ink' | 'white' | 'soft'; icon?: React.ReactNode; style?: StyleProp<ViewStyle>; h?: number }) {
   const { c } = useTheme();
-  const bg = tone === 'white' ? '#FFFFFF' : tone === 'soft' ? c.surface2 : c.ink;
-  const fg = tone === 'white' ? '#0B0E14' : tone === 'soft' ? c.ink : c.bg;
+  const bg = tone === 'white' ? fixed.white : tone === 'soft' ? c.surface2 : c.ink;
+  const fg = tone === 'white' ? fixed.dark : tone === 'soft' ? c.ink : c.bg;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} hitSlop={{ top: (44 - h) / 2, bottom: (44 - h) / 2 }}
       style={[{ height: h, paddingHorizontal: 14, borderRadius: h / 2, backgroundColor: bg, flexDirection: 'row', alignItems: 'center', gap: 5 }, style]}>
@@ -108,7 +109,7 @@ export function Beat({ children }: { children: React.ReactNode }) {
   return <Animated.View style={a}>{children}</Animated.View>;
 }
 
-export function Glow({ color = '#7CF0C8', size = 10 }: { color?: string; size?: number }) {
+export function Glow({ color = fixed.live, size = 10 }: { color?: string; size?: number }) {
   const o = useSharedValue(0.55);
   useEffect(() => { o.value = withRepeat(withTiming(1, { duration: 1200 }), -1, true); }, []);
   const a = useAnimatedStyle(() => ({ opacity: o.value }));
@@ -123,7 +124,7 @@ export function HeartIcon({ size = 14, color }: { size?: number; color: string }
 export function RoundBtn({ label, onPress, children, bg, style, glass }: { label: string; onPress: () => void; children: React.ReactNode; bg?: string; style?: StyleProp<ViewStyle>; glass?: boolean }) {
   const { c, isDark } = useTheme();
   // Glass buttons get a soft shadow so they still read on a plain page.
-  const rim = glass ? { shadowColor: '#101828', shadowOpacity: isDark ? 0.35 : 0.1, shadowRadius: 10, shadowOffset: { width: 0, height: 3 }, elevation: 3 } : null;
+  const rim = glass ? { shadowColor: fixed.shadow, shadowOpacity: isDark ? 0.35 : 0.1, shadowRadius: 10, shadowOffset: { width: 0, height: 3 }, elevation: 3 } : null;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress}
       style={[{ width: 44, height: 44, borderRadius: 22, backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center' }, rim, style]}>

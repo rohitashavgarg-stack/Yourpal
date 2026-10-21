@@ -10,6 +10,7 @@ import { Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { fmtDay, fmtVal, Goal2, progressLine, statusLine, useGoalV2 } from '@/features/goalv2/model';
+import { fixed } from '@/design-system/tokens';
 
 // The goal at the top of Today (Figma "Your Pal Mobile app", node 40151:12923), with no card around it: it sits straight on the page,
 // over a soft blue glow, the goal in one line, a status pill, the progress picture for this kind of goal (GoalVisual), and the numbers underneath.
@@ -25,7 +26,7 @@ function StripGlow({ small = false }: { small?: boolean }) {
   // Figma blurs a 184 x 68 ellipse by 27 px, so the light reaches ~50 px past it on every side: the ellipse here is that blurred size, with a long, even falloff.
   const g = small ? { rx: 140, ry: 62, cx: 24, cy: 52 } : { rx: 160, ry: 80, cx: 30, cy: 72 }; // centred on the heading, fading out before the header row
   const k = isDark ? 1 : 0.4; // on a light page the glow is a tint, not a light source
-  const core = isDark ? '#1F5FDB' : '#2F6BEA';
+  const core = isDark ? '#1F5FDB' : fixed.blue;
   const edge = isDark ? '#0C307E' : '#5C8DF0';
   return (
     <View pointerEvents="none" style={{ position: 'absolute', left: g.cx - GW / 2, top: g.cy - GH / 2, width: GW, height: GH }}>
@@ -109,7 +110,7 @@ export function GoalStrip({ flat = false }: { flat?: boolean } = {}) {
   const pillText = g.kind === 'consistency' ? (g.currentValue >= g.weeklyTarget ? 'Week complete' : `${g.weeklyTarget - g.currentValue} to go`) : statusLine(g);
   // Today keeps the Figma pill (white on dark). On the goal page the pill colour carries the status: green ahead or reached, amber behind or ending soon.
   const tone = g.status === 'ahead' || g.status === 'reached' ? 'good' : g.status === 'aBitBehind' || g.status === 'endingSoon' ? 'warn' : 'accent';
-  const pill = !flat ? { bg: isDark ? '#fff' : c.accentSoft, fg: isDark ? '#2034E6' : c.accentText }
+  const pill = !flat ? { bg: isDark ? fixed.white : c.accentSoft, fg: isDark ? '#2034E6' : c.accentText }
     : tone === 'good' ? { bg: c.goodSoft, fg: c.good } : tone === 'warn' ? { bg: c.warnSoft, fg: c.warn } : { bg: c.accentSoft, fg: c.accentText };
   return (
     <Pressy accessibilityRole={flat ? undefined : 'link'} scaleTo={flat ? 1 : 0.98} onPress={flat ? undefined : () => router.push('/goal-detail')}

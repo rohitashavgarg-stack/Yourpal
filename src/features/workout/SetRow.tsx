@@ -11,6 +11,7 @@ import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fmt1 } from '@/lib/useNow';
 import { setLabel, setText } from './session';
+import { fixed } from '@/design-system/tokens';
 
 export type Draft = { k: number; r: number; t: number };
 
@@ -104,7 +105,7 @@ export function SetRow(p: Props) {
     <View style={{ borderRadius: 20, overflow: 'hidden', opacity: skipped ? 0.5 : 1 }}>
       <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: 20, justifyContent: 'center' }, under]}>
         <Animated.View style={[{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingLeft: 18 }, doneL]}>
-          <Check size={20} strokeWidth={2.6} color="#fff" /><Txt style={{ fontFamily: font.semibold, color: '#fff' }}>Done</Txt>
+          <Check size={20} strokeWidth={2.6} color={fixed.white} /><Txt style={{ fontFamily: font.semibold, color: fixed.white }}>Done</Txt>
         </Animated.View>
       </Animated.View>
       <Animated.View style={[{ position: 'absolute', top: 0, right: 0, bottom: 0, flexDirection: 'row', gap: 6, padding: 8 }, reveal]}>
@@ -139,7 +140,7 @@ export function SetRow(p: Props) {
                     <Stepper label="Duration" unit="s" value={timing ? p.timerLeft! : p.draft.t} step={5} min={5} onChange={(t) => !timing && p.setDraft({ t })} block={pan} />
                     <Pressy accessibilityRole="button" accessibilityLabel={timing ? 'Stop timer and log' : `Start ${p.draft.t} second timer`} onPress={p.onTimer}
                       style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: timing ? c.warn : c.accent, alignItems: 'center', justifyContent: 'center' }}>
-                      {timing ? <Square size={13} color="#fff" fill="#fff" /> : <Play size={15} color="#fff" fill="#fff" />}
+                      {timing ? <Square size={13} color={fixed.white} fill={fixed.white} /> : <Play size={15} color={fixed.white} fill={fixed.white} />}
                     </Pressy>
                   </>
                 )}

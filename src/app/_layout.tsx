@@ -16,6 +16,7 @@ import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 import { OverlayProvider } from '@/components/Overlay';
 import { EdgeTab, WebFrame, useIsWideWeb } from '@/web/WebFrame';
 import { CheckInEngine } from '@/features/checkin/CheckInEngine';
+import { fixed } from '@/design-system/tokens';
 
 // Screens with an X (close) open from the bottom and close back down. Screens with a back arrow come in from the right and leave to the right.
 // On the phone the native stack does this (see the Stack.Screen options below). The web stack has no transitions, so this wrapper adds them there.
@@ -146,7 +147,7 @@ function Slide({ name, bottom, children }: { name: string; bottom: boolean; chil
         } else if (first) p.value = 1; // eslint-disable-line react-hooks/immutability
       }}>
       {/* On the phone the X screens are drawn over the page underneath (transparent modal), so the dim is drawn here. */}
-      {!isWeb && <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: '#000' }, dim]} />}
+      {!isWeb && <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: fixed.black }, dim]} />}
       <GestureDetector gesture={pan}>
         {/* On the phone these screens are native modals, which sit above the app's own sheet and toast layer, so they carry their own. */}
         <Animated.View style={[{ flex: 1, backgroundColor: c.bg }, style]}>{isWeb ? children : <OverlayProvider>{children}</OverlayProvider>}</Animated.View>

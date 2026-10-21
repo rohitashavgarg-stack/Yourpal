@@ -4,6 +4,7 @@ import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSprin
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, radius, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
+import { fixed } from '@/design-system/tokens';
 
 // ---------- Text ----------
 type Variant = 'display' | 'title' | 'headline' | 'body' | 'label' | 'caption' | 'mono' | 'number';
@@ -51,8 +52,8 @@ export function Button({ kind = 'primary', label, onPress, disabled, icon, style
   kind?: BtnKind; label: string; onPress?: () => void; disabled?: boolean; icon?: React.ReactNode; style?: StyleProp<ViewStyle>; small?: boolean; accessibilityLabel?: string;
 }) {
   const { c } = useTheme();
-  const bg = { primary: c.ink, accent: c.accent, secondary: c.surface2, ghost: 'transparent', white: '#FFFFFF', outline: 'transparent' }[kind];
-  const fg = { primary: c.bg, accent: c.accentInk, secondary: c.ink, ghost: c.accentText, white: '#0B0E14', outline: c.ink }[kind];
+  const bg = { primary: c.ink, accent: c.accent, secondary: c.surface2, ghost: 'transparent', white: fixed.white, outline: 'transparent' }[kind];
+  const fg = { primary: c.bg, accent: c.accentInk, secondary: c.ink, ghost: c.accentText, white: fixed.dark, outline: c.ink }[kind];
   return (
     <Pressy
       accessibilityRole="button"
@@ -77,7 +78,7 @@ export function Card({ style, children, dark: isDarkCard }: { style?: StyleProp<
   return (
     <View style={[{
       backgroundColor: isDarkCard ? c.dark : c.surface, borderRadius: radius.lg, padding: 20,
-      ...(isDark || isDarkCard ? {} : { shadowColor: '#101828', shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 }, elevation: 2 }),
+      ...(isDark || isDarkCard ? {} : { shadowColor: fixed.shadow, shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 }, elevation: 2 }),
     }, style]}>
       {children}
     </View>
@@ -87,7 +88,7 @@ export function Card({ style, children, dark: isDarkCard }: { style?: StyleProp<
 // ---------- Outline chip (reference style) ----------
 export function Chip({ label, icon, tone = 'default', onDark, style }: { label: string; icon?: React.ReactNode; tone?: 'default' | 'good' | 'warn' | 'live'; onDark?: boolean; style?: StyleProp<ViewStyle> }) {
   const { c } = useTheme();
-  const col = tone === 'good' ? c.good : tone === 'warn' ? c.warn : tone === 'live' ? c.live : onDark ? '#FFFFFF' : c.ink;
+  const col = tone === 'good' ? c.good : tone === 'warn' ? c.warn : tone === 'live' ? c.live : onDark ? fixed.white : c.ink;
   const border = tone === 'default' ? (onDark ? 'rgba(255,255,255,0.28)' : c.chipLine) : col;
   return (
     <View style={[{ height: 28, paddingHorizontal: 11, borderRadius: 14, borderWidth: 1, borderColor: border, flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start' }, style]}>
@@ -124,7 +125,7 @@ export function Segmented<T extends string>({ options, value, onChange, icons, a
   const thumb = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   return (
     <View accessibilityRole="tablist" accessibilityLabel={accessibilityLabel} onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)} style={{ flexDirection: 'row', padding: 4, borderRadius: 26, backgroundColor: c.surface2 }}>
-      {seg > 0 && <Animated.View style={[{ position: 'absolute', top: 4, left: 4, width: seg, height: 44, borderRadius: 22, backgroundColor: c.ink, shadowColor: '#101828', shadowOpacity: 0.18, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }, thumb]} />}
+      {seg > 0 && <Animated.View style={[{ position: 'absolute', top: 4, left: 4, width: seg, height: 44, borderRadius: 22, backgroundColor: c.ink, shadowColor: fixed.shadow, shadowOpacity: 0.18, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }, thumb]} />}
       {options.map((o) => {
         const on = o.value === value;
         const col = on ? c.bg : c.muted;

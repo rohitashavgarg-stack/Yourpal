@@ -16,6 +16,7 @@ import { mealById, mealKcal, mealTimeline, mealView, nextMeal } from './meals';
 import { QuickLogSheet } from './QuickLogSheet';
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
 import { useLogGate } from '@/lib/logGate';
+import { fixed } from '@/design-system/tokens';
 
 function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | 'part' | 'off' | null }) {
   const { c } = useTheme();
@@ -27,7 +28,7 @@ function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | '
       <Txt style={{ fontSize: 10, lineHeight: 12, color: now ? c.bg : c.muted, opacity: now ? 0.7 : 1 }}>{tt.ap}</Txt>
       {badge && (
         <Animated.View entering={fade()} style={{ position: 'absolute', top: -4, right: -4, width: 18, height: 18, borderRadius: 9, backgroundColor: bg, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: c.surface }}>
-          {badge === 'done' ? <Check size={10} strokeWidth={3.5} color="#fff" /> : badge === 'part' ? <Minus size={10} strokeWidth={3.5} color="#fff" /> : <X size={9} strokeWidth={3.5} color={c.muted} />}
+          {badge === 'done' ? <Check size={10} strokeWidth={3.5} color={fixed.white} /> : badge === 'part' ? <Minus size={10} strokeWidth={3.5} color={fixed.white} /> : <X size={9} strokeWidth={3.5} color={c.muted} />}
         </Animated.View>
       )}
     </View>

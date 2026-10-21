@@ -10,6 +10,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { HEALTH_NAME } from '@/lib/health';
 import { ListCard, SubPage, Switch } from '@/features/shell/parts';
+import { fixed } from '@/design-system/tokens';
 
 // What YourPal reads from the phone's health store. Colours match the trackers on Today.
 const READS = [
@@ -42,7 +43,7 @@ export default function ConnectedApps() {
     <SubPage title="Connected apps" fallback="/profile">
       <View style={{ backgroundColor: c.surface, borderRadius: 26, padding: 18, gap: 14 }}>
         <Row style={{ gap: 14 }}>
-          <View accessibilityLabel={HEALTH_NAME} style={{ width: 56, height: 56, borderRadius: 18, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: c.line }}>
+          <View accessibilityLabel={HEALTH_NAME} style={{ width: 56, height: 56, borderRadius: 18, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: c.line }}>
             <HeartIcon size={28} color="#FF3B5C" />
           </View>
           <View style={{ flex: 1, gap: 2 }}>

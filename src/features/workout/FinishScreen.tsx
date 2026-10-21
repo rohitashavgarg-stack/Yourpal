@@ -16,8 +16,9 @@ import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { useDomain } from '@/lib/domain';
 import { fmt1 } from '@/lib/useNow';
+import { fixed } from '@/design-system/tokens';
 
-const COLORS = ['#3A36C9', '#B9B6FF', '#FFFFFF', '#F2B544', '#1F6E63'];
+const COLORS = ['#3A36C9', '#B9B6FF', fixed.white, '#F2B544', '#1F6E63'];
 const PARTS = Array.from({ length: 34 }, (_, i) => {
   const a = (i / 34) * Math.PI * 2 + (i % 3) * 0.21, dist = 90 + ((i * 37) % 80);
   return { dx: Math.cos(a) * dist * 1.3, dy: Math.sin(a) * dist * 0.9 + 30, w: 5 + (i % 3) * 2, col: COLORS[i % COLORS.length], delay: 380 + (i % 5) * 25 };
@@ -35,7 +36,7 @@ function PopCheck({ delay }: { delay: number }) {
   const s = useSharedValue(0);
   useEffect(() => { s.value = withDelay(delay, withTiming(1, { duration: 180 })); }, []);
   const a = useAnimatedStyle(() => ({ opacity: s.value }));
-  return <Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }, a]}><Check size={13} strokeWidth={3} color="#fff" /></Animated.View>;
+  return <Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }, a]}><Check size={13} strokeWidth={3} color={fixed.white} /></Animated.View>;
 }
 
 // Streak status for the finish moment: kept, or how many sessions are left this week.
@@ -95,7 +96,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
               <Row style={{ gap: 12 }}>
                 <Pressy accessibilityRole="button" accessibilityLabel="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }}
                   style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
-                  <Trophy size={24} strokeWidth={1.9} color="#fff" />
+                  <Trophy size={24} strokeWidth={1.9} color={fixed.white} />
                 </Pressy>
                 <View style={{ flex: 1 }}>
                   <Txt style={{ fontFamily: font.bold, fontSize: 12, letterSpacing: 0.5, color: c.accent }}>{s.pr ? 'New PR' : 'Logged'}</Txt>

@@ -17,6 +17,7 @@ import { font } from '@/theme/tokens';
 import { cardShadow, ListCard, SubPage } from '@/features/progress/parts';
 import { ASSESS } from '@/features/gym/data';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
+import { fixed } from '@/design-system/tokens';
 
 export default function GymAssessments() {
   const { c, isDark } = useTheme();
@@ -57,13 +58,13 @@ export default function GymAssessments() {
               <Txt style={{ fontSize: 14, color: c.warn }}><Txt style={{ fontSize: 14, color: c.warn, fontFamily: font.semibold }}>Reassessment due this week. </Txt>Book a slot at the front desk or ask Coach Vikram in chat.</Txt>
             </Animated.View>
           )}
-          <LinearGradient colors={['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: 28, padding: 20, gap: 6, overflow: 'hidden' }}>
+          <LinearGradient colors={[fixed.blue, '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: 28, padding: 20, gap: 6, overflow: 'hidden' }}>
             <Svg width="100%" height="100%" viewBox="0 0 358 170" preserveAspectRatio="xMidYMid slice" style={{ position: 'absolute', left: 0, top: 0 }}>
-              <Circle cx={300} cy={20} r={120} fill="#FFFFFF" opacity={0.08} />
-              <Path d="M0 140 C 90 110 180 170 260 130 S 340 120 400 140 V 900 H0z" fill="#FFFFFF" opacity={0.08} />
+              <Circle cx={300} cy={20} r={120} fill={fixed.white} opacity={0.08} />
+              <Path d="M0 140 C 90 110 180 170 260 130 S 340 120 400 140 V 900 H0z" fill={fixed.white} opacity={0.08} />
             </Svg>
             <Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)' }}>{showStart ? 'Starting assessment · 2 Sep' : 'Reassessment 1 · 30 Sep vs start'}</Txt>
-            <Txt style={{ fontFamily: font.display, fontSize: 34, lineHeight: 44, color: '#fff' }}>{showStart ? '8 tests recorded' : '7 of 8 improved'}</Txt>
+            <Txt style={{ fontFamily: font.display, fontSize: 34, lineHeight: 44, color: fixed.white }}>{showStart ? '8 tests recorded' : '7 of 8 improved'}</Txt>
             <Txt style={{ fontSize: 14, color: 'rgba(255,255,255,0.9)' }}>{showStart ? 'Your baseline. Every reassessment is compared with this.' : 'Biggest win: squat +20 kg. Next focus: hip mobility.'}</Txt>
           </LinearGradient>
           {!only && (

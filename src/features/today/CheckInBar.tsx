@@ -20,6 +20,7 @@ import { mmss, useNow } from '@/lib/useNow';
 import { ciTime } from './WeekCard';
 import { useCheckIn } from '@/features/checkin/useCheckIn';
 import { elapsedMin, limitOf } from '@/features/checkin/logic';
+import { fixed } from '@/design-system/tokens';
 
 export type CiMode = 'none' | 'here' | 'near' | 'in' | 'out' | 'off';
 export function useCiMode(): CiMode {
@@ -43,7 +44,7 @@ function Floating({ children }: { children: React.ReactNode }) {
   );
 }
 
-const BAR = { height: 52, borderRadius: 26, flexDirection: 'row', alignItems: 'center', gap: 10, paddingLeft: 12, paddingRight: 6, shadowColor: '#101828', shadowOpacity: 0.08, shadowRadius: 14, shadowOffset: { width: 0, height: 4 }, elevation: 3 } as const;
+const BAR = { height: 52, borderRadius: 26, flexDirection: 'row', alignItems: 'center', gap: 10, paddingLeft: 12, paddingRight: 6, shadowColor: fixed.shadow, shadowOpacity: 0.08, shadowRadius: 14, shadowOffset: { width: 0, height: 4 }, elevation: 3 } as const;
 
 function MiniWorkout() {
   const { d } = useDomain();
@@ -51,13 +52,13 @@ function MiniWorkout() {
   const s = d.session!;
   const resting = s.rest && s.rest.endAt > now;
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel="Leg day in progress, resume" onPress={() => router.push('/workout')} scaleTo={0.98} style={[BAR, { backgroundColor: '#0B0E14' }]}>
+    <Pressy accessibilityRole="button" accessibilityLabel="Leg day in progress, resume" onPress={() => router.push('/workout')} scaleTo={0.98} style={[BAR, { backgroundColor: fixed.dark }]}>
       <Glow />
       <View style={{ flex: 1, minWidth: 0 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 14, color: '#fff' }}>Leg day · in progress</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: 14, color: fixed.white }}>Leg day · in progress</Txt>
         <Txt style={{ fontFamily: font.mono, fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>{resting ? `Rest ${mmss((s.rest!.endAt - now) / 1000)}` : mmss((now - s.startAt) / 1000).padStart(5, '0')}</Txt>
       </View>
-      <View style={{ height: 40, borderRadius: 20, paddingHorizontal: 16, backgroundColor: '#fff', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: 13, color: '#0B0E14' }}>Resume</Txt></View>
+      <View style={{ height: 40, borderRadius: 20, paddingHorizontal: 16, backgroundColor: fixed.white, justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: 13, color: fixed.dark }}>Resume</Txt></View>
     </Pressy>
   );
 }

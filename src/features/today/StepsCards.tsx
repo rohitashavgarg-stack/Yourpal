@@ -16,6 +16,7 @@ import { fade } from '@/theme/motion';
 import { haptic } from '@/lib/haptics';
 import { HEALTH_NAME } from '@/lib/health';
 import { createStore } from '@/lib/createStore';
+import { fixed } from '@/design-system/tokens';
 
 // Steps tracker designs to compare. Pick one in the Today edge-case panel.
 export type StepsDesign = 'Current' | 'Ruler' | 'Day bars' | 'Dot matrix' | 'Bars + details';
@@ -56,7 +57,7 @@ export function StepsTile() {
       </Pressy>
       <Pressy accessibilityRole="button" accessibilityLabel="Add steps manually" onPress={gate(() => openSheet(<StepsSheet />, { label: 'Add steps' }))} hitSlop={10}
         style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: dark ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.22)', zIndex: 3 }}>
-        <Plus size={17} color="#fff" />
+        <Plus size={17} color={fixed.white} />
       </Pressy>
     </View>
     </View>
@@ -83,7 +84,7 @@ export function StepsPreview({ design }: { design: StepsDesign }) {
     <View pointerEvents="none" style={{ width: SQ, height: SQ, borderRadius: 24, overflow: 'hidden' }}>
       <Face design={design} s={s} />
       <View style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: design === 'Ruler' ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.22)' }}>
-        <Plus size={17} color="#fff" />
+        <Plus size={17} color={fixed.white} />
       </View>
     </View>
   );
@@ -95,16 +96,16 @@ function CurrentFace({ s }: { s: S }) {
     <LinearGradient colors={['#5468FF', '#3346E8', '#222FB5']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14, justifyContent: 'space-between' }}>
       <View>
         <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.8)' }}>Steps</Txt>
-        <Txt style={{ fontFamily: font.displayBold, fontSize: 30, lineHeight: 38, letterSpacing: -0.8, color: '#fff' }}>{fmt(s.total)}</Txt>
+        <Txt style={{ fontFamily: font.displayBold, fontSize: 30, lineHeight: 38, letterSpacing: -0.8, color: fixed.white }}>{fmt(s.total)}</Txt>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         <View style={{ flex: 1, paddingBottom: 2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 26, color: '#fff' }}>{Math.round(s.pct * 100)}%</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 26, color: fixed.white }}>{Math.round(s.pct * 100)}%</Txt>
           <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.8)' }}>{s.left ? `${fmt(s.left)} to go` : 'Goal reached'}</Txt>
         </View>
         <View style={{ width: 72, height: 72, alignItems: 'center', justifyContent: 'center' }}>
-          <Ring size={72} r={30} stroke={8} pct={s.pct} color="#fff" track="rgba(255,255,255,0.25)" />
-          <View style={{ position: 'absolute' }}><Footprints size={24} color="#fff" strokeWidth={2.2} /></View>
+          <Ring size={72} r={30} stroke={8} pct={s.pct} color={fixed.white} track="rgba(255,255,255,0.25)" />
+          <View style={{ position: 'absolute' }}><Footprints size={24} color={fixed.white} strokeWidth={2.2} /></View>
         </View>
       </View>
     </LinearGradient>
@@ -117,9 +118,9 @@ function RulerFace({ s }: { s: S }) {
   const lit = Math.round(s.pct * TICKS);
   const labels = ['0', `${(GOAL / 3 / 1000).toFixed(1)}K`, `${((GOAL * 2) / 3 / 1000).toFixed(1)}K`, `${GOAL / 1000}K`];
   return (
-    <LinearGradient colors={['#000000', '#0A0C12', '#171B26']} style={{ flex: 1, paddingTop: 14, justifyContent: 'space-between' }}>
+    <LinearGradient colors={[fixed.black, fixed.dark, fixed.shadow]} style={{ flex: 1, paddingTop: 14, justifyContent: 'space-between' }}>
       <View style={{ paddingHorizontal: 14 }}>
-        <Txt style={{ fontFamily: font.displayBold, fontSize: 32, lineHeight: 40, letterSpacing: -0.8, color: '#fff' }}>{fmt(s.total)}</Txt>
+        <Txt style={{ fontFamily: font.displayBold, fontSize: 32, lineHeight: 40, letterSpacing: -0.8, color: fixed.white }}>{fmt(s.total)}</Txt>
         <Txt style={{ fontFamily: font.medium, fontSize: 11, lineHeight: 16, letterSpacing: 3, color: 'rgba(255,255,255,0.8)' }}>STEPS</Txt>
       </View>
       <View>
@@ -129,7 +130,7 @@ function RulerFace({ s }: { s: S }) {
         <Row style={{ justifyContent: 'space-between', paddingHorizontal: 6, height: 40, alignItems: 'flex-end' }}>
           {Array.from({ length: TICKS }, (_, i) => {
             const on = i < lit;
-            return <View key={i} style={{ width: on ? 2 : 1.5, height: on ? 40 : i % 4 === 0 ? 24 : 16, borderRadius: 1, backgroundColor: on ? '#fff' : 'rgba(255,255,255,0.4)' }} />;
+            return <View key={i} style={{ width: on ? 2 : 1.5, height: on ? 40 : i % 4 === 0 ? 24 : 16, borderRadius: 1, backgroundColor: on ? fixed.white : 'rgba(255,255,255,0.4)' }} />;
           })}
         </Row>
       </View>
@@ -140,7 +141,7 @@ function RulerFace({ s }: { s: S }) {
 // Dark green glass card: dot-matrix steps, with distance and calories.
 function DotFace({ s }: { s: S }) {
   return (
-    <LinearGradient colors={['#1F7A52', '#0E3B2C', '#07130F']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14 }}>
+    <LinearGradient colors={['#1F7A52', '#0E3B2C', fixed.dark]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14 }}>
       <Row style={{ gap: 8 }}>
         <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.9)' }}>Steps</Txt>
       </Row>
@@ -148,8 +149,8 @@ function DotFace({ s }: { s: S }) {
       <Row style={{ marginTop: 'auto', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.7)' }}>of {fmt(s.goal)}</Txt>
         <View style={{ gap: 3, alignItems: 'flex-end' }}>
-          <Row style={{ gap: 6 }}><ArrowRightLeft size={13} color="#fff" /><Txt style={{ fontSize: 13, lineHeight: 18, color: '#fff' }}><Txt style={{ fontFamily: font.semibold }}>{km(s.total)}</Txt> km</Txt></Row>
-          <Row style={{ gap: 6 }}><Flame size={13} color="#fff" /><Txt style={{ fontSize: 13, lineHeight: 18, color: '#fff' }}><Txt style={{ fontFamily: font.semibold }}>{kcalOf(s.total)}</Txt> kcal</Txt></Row>
+          <Row style={{ gap: 6 }}><ArrowRightLeft size={13} color={fixed.white} /><Txt style={{ fontSize: 13, lineHeight: 18, color: fixed.white }}><Txt style={{ fontFamily: font.semibold }}>{km(s.total)}</Txt> km</Txt></Row>
+          <Row style={{ gap: 6 }}><Flame size={13} color={fixed.white} /><Txt style={{ fontSize: 13, lineHeight: 18, color: fixed.white }}><Txt style={{ fontFamily: font.semibold }}>{kcalOf(s.total)}</Txt> kcal</Txt></Row>
         </View>
       </Row>
     </LinearGradient>
@@ -163,11 +164,11 @@ function BarsPlusFace({ s }: { s: S }) {
     <LinearGradient colors={['#4B5CF5', '#2F3FD6', '#1E2A9E']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14, justifyContent: 'space-between' }}>
       <View>
         <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.8)' }}>Steps</Txt>
-        <Txt style={{ fontFamily: font.displayBold, fontSize: 28, lineHeight: 34, letterSpacing: -0.8, color: '#fff' }}>{fmt(s.total)}</Txt>
+        <Txt style={{ fontFamily: font.displayBold, fontSize: 28, lineHeight: 34, letterSpacing: -0.8, color: fixed.white }}>{fmt(s.total)}</Txt>
         <Txt style={{ fontSize: 12, lineHeight: 17, color: 'rgba(255,255,255,0.85)' }}>{km(s.total)} km · {kcalOf(s.total)} kcal</Txt>
       </View>
       <Row style={{ alignItems: 'flex-end', justifyContent: 'space-between', height: 40 }}>
-        {DAY.map((v, i) => <View key={i} style={{ width: 8, height: Math.max(4, (v / max) * 40), borderRadius: 3, backgroundColor: v ? '#fff' : 'rgba(255,255,255,0.22)' }} />)}
+        {DAY.map((v, i) => <View key={i} style={{ width: 8, height: Math.max(4, (v / max) * 40), borderRadius: 3, backgroundColor: v ? fixed.white : 'rgba(255,255,255,0.22)' }} />)}
       </Row>
     </LinearGradient>
   );
@@ -180,11 +181,11 @@ function BarsFace({ s }: { s: S }) {
     <LinearGradient colors={['#4B5CF5', '#2F3FD6', '#1E2A9E']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 14, justifyContent: 'space-between' }}>
       <View>
         <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.8)' }}>Steps</Txt>
-        <Txt style={{ fontFamily: font.displayBold, fontSize: 30, lineHeight: 38, letterSpacing: -0.8, color: '#fff' }}>{fmt(s.total)}</Txt>
+        <Txt style={{ fontFamily: font.displayBold, fontSize: 30, lineHeight: 38, letterSpacing: -0.8, color: fixed.white }}>{fmt(s.total)}</Txt>
       </View>
       <View>
         <Row style={{ alignItems: 'flex-end', justifyContent: 'space-between', height: 44 }}>
-          {DAY.map((v, i) => <View key={i} style={{ width: 8, height: Math.max(4, (v / max) * 44), borderRadius: 3, backgroundColor: v ? '#fff' : 'rgba(255,255,255,0.22)' }} />)}
+          {DAY.map((v, i) => <View key={i} style={{ width: 8, height: Math.max(4, (v / max) * 44), borderRadius: 3, backgroundColor: v ? fixed.white : 'rgba(255,255,255,0.22)' }} />)}
         </Row>
         <Row style={{ justifyContent: 'space-between', paddingTop: 4 }}>
           <Txt style={{ fontSize: 10, lineHeight: 14, color: 'rgba(255,255,255,0.75)' }}>12 am</Txt>

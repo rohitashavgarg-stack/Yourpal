@@ -17,6 +17,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { mealById, mealKcal } from './meals';
+import { fixed } from '@/design-system/tokens';
 
 type Mode = 'sugg' | 'scan' | 'write' | 'cat';
 const SUGG = ['2 roti', '1 cup milk', '1 katori dal', '1 banana', '100 g paneer'];
@@ -25,12 +26,12 @@ function ScanLine() {
   const y = useSharedValue(0);
   useEffect(() => { y.value = withRepeat(withTiming(1, { duration: 800, easing: Easing.inOut(Easing.quad) }), -1, true); }, []);
   const a = useAnimatedStyle(() => ({ top: `${8 + y.value * 80}%` }));
-  return <Animated.View style={[{ position: 'absolute', left: '12%', right: '12%', height: 2, backgroundColor: '#7CF0C8', shadowColor: '#7CF0C8', shadowOpacity: 1, shadowRadius: 8, shadowOffset: { width: 0, height: 0 } }, a]} />;
+  return <Animated.View style={[{ position: 'absolute', left: '12%', right: '12%', height: 2, backgroundColor: fixed.live, shadowColor: fixed.live, shadowOpacity: 1, shadowRadius: 8, shadowOffset: { width: 0, height: 0 } }, a]} />;
 }
 
 function Bracket({ pos }: { pos: 'tl' | 'tr' | 'bl' | 'br' }) {
   const t = pos[0] === 't', l = pos[1] === 'l';
-  return <View style={{ position: 'absolute', width: 30, height: 30, borderColor: '#fff', opacity: 0.9, [t ? 'top' : 'bottom']: 20, [l ? 'left' : 'right']: 20,
+  return <View style={{ position: 'absolute', width: 30, height: 30, borderColor: fixed.white, opacity: 0.9, [t ? 'top' : 'bottom']: 20, [l ? 'left' : 'right']: 20,
     borderTopWidth: t ? 3 : 0, borderBottomWidth: t ? 0 : 3, borderLeftWidth: l ? 3 : 0, borderRightWidth: l ? 0 : 3,
     [`border${t ? 'Top' : 'Bottom'}${l ? 'Left' : 'Right'}Radius`]: 12 }} />;
 }
@@ -158,7 +159,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
 
       {mode === 'scan' && (
         <>
-          <View accessibilityLiveRegion="polite" accessibilityLabel={cap} style={{ height: 210, borderRadius: 24, overflow: 'hidden', backgroundColor: '#0B0F16' }}>
+          <View accessibilityLiveRegion="polite" accessibilityLabel={cap} style={{ height: 210, borderRadius: 24, overflow: 'hidden', backgroundColor: fixed.dark }}>
             {live ? <CameraView ref={cam} facing="back" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
               : shot ? <Image source={{ uri: shot }} accessibilityIgnoresInvertColors resizeMode="cover" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
               : (
@@ -169,7 +170,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
             </Svg>)}
             <Bracket pos="tl" /><Bracket pos="tr" /><Bracket pos="bl" /><Bracket pos="br" />
             {scan === 'busy' && <ScanLine />}
-            <Txt style={{ position: 'absolute', left: 0, right: 0, bottom: 12, textAlign: 'center', fontFamily: font.medium, fontSize: 13, color: '#fff', textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 4 }}>{cap}</Txt>
+            <Txt style={{ position: 'absolute', left: 0, right: 0, bottom: 12, textAlign: 'center', fontFamily: font.medium, fontSize: 13, color: fixed.white, textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 4 }}>{cap}</Txt>
           </View>
           {scan === 'fail' && (
             <Animated.View entering={fade()} style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.warnSoft }}>

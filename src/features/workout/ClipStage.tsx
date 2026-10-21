@@ -5,9 +5,10 @@ import { VideoView, useVideoPlayer } from 'expo-video';
 import { Maximize2, Minimize2, Pause, Play } from '@/lib/icons';
 import { Pressy } from '@/components/ui';
 import { CLIPS, THUMBS } from './clips';
+import { fixed } from '@/design-system/tokens';
 
 // The clips have a white background, so on a white stage the video reads as filling the whole screen.
-export const STAGE_BG = '#FFFFFF';
+export const STAGE_BG = fixed.white;
 
 const IS_WEB = Platform.OS === 'web';
 
@@ -31,12 +32,12 @@ function Clip({ source, thumb, top: top0, bottom: bottom0, wide, setWide }: { so
       <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top, bottom, alignItems: 'center', justifyContent: 'center', zIndex: 5, elevation: 5 }}>
         <Pressy accessibilityRole="button" accessibilityLabel={isPlaying ? 'Pause the clip' : 'Play the clip'} onPress={() => (isPlaying ? player.pause() : player.play())} scaleTo={0.92}
           style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center', opacity: isPlaying ? 0.55 : 1 }}>
-          {isPlaying ? <Pause size={26} color="#fff" fill="#fff" /> : <Play size={26} color="#fff" fill="#fff" style={{ marginLeft: 3 }} />}
+          {isPlaying ? <Pause size={26} color={fixed.white} fill={fixed.white} /> : <Play size={26} color={fixed.white} fill={fixed.white} style={{ marginLeft: 3 }} />}
         </Pressy>
         {/* full screen: the clip in landscape */}
         <Pressy accessibilityRole="button" accessibilityLabel={IS_WEB && wide ? 'Exit full screen' : 'Full screen'} onPress={() => { player.play(); if (IS_WEB) { setWide(!wide); return; } setFull(true); setTimeout(() => view.current?.enterFullscreen(), 60); }} scaleTo={0.92}
-          style={{ position: 'absolute', right: 14, bottom: 12, width: 44, height: 44, borderRadius: 22, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
-          {IS_WEB && wide ? <Minimize2 size={19} color="#0B0E14" /> : <Maximize2 size={19} color="#0B0E14" />}
+          style={{ position: 'absolute', right: 14, bottom: 12, width: 44, height: 44, borderRadius: 22, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
+          {IS_WEB && wide ? <Minimize2 size={19} color={fixed.dark} /> : <Maximize2 size={19} color={fixed.dark} />}
         </Pressy>
       </View>
     </>

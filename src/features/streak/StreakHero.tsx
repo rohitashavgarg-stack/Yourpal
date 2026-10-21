@@ -10,6 +10,7 @@ import { font } from '@/theme/tokens';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { useStreak } from './useStreak';
 import { FLAME } from './StreakChip';
+import { fixed } from '@/design-system/tokens';
 
 const MILESTONES = [4, 8, 12]; // weeks; matches the streak badges
 const F = 54; // flame size
@@ -23,7 +24,7 @@ function Milestone({ n, reached, left }: { n: number; reached: boolean; left: nu
     <View style={{ position: 'absolute', left, top: 3, width: F, height: F, alignItems: 'center', justifyContent: 'center' }}>
       <Flame size={F} color={reached ? '#F0692C' : offLine} fill={reached ? '#F0692C' : off} strokeWidth={1.5} />
       <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', paddingTop: 10 }}>
-        <Txt style={{ fontFamily: font.bold, fontSize: 16, lineHeight: 20, color: reached ? '#fff' : isDark ? '#E3E8F3' : '#4A5468' }}>{n}</Txt>
+        <Txt style={{ fontFamily: font.bold, fontSize: 16, lineHeight: 20, color: reached ? fixed.white : isDark ? '#E3E8F3' : '#4A5468' }}>{n}</Txt>
       </View>
     </View>
   );

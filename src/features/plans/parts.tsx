@@ -13,6 +13,7 @@ import { haptic } from '@/lib/haptics';
 import { iconFor } from './content';
 import { artIdFor, ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { clipIdFor, THUMBS } from '@/features/workout/clips';
+import { fixed } from '@/design-system/tokens';
 
 export const goBackToPlans = () => (router.canGoBack() ? router.back() : router.replace('/plans'));
 
@@ -88,11 +89,11 @@ export function ExTile({ name, num, size = 56 }: { name: string; num?: string; s
     <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ width: size, height: size, borderRadius: 16, backgroundColor: photo ? '#F4F6FA' : c.accentSoft, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
       {thumb ? <Image source={thumb} resizeMode="cover" style={{ position: 'absolute', width: size, height: size }} /> : null}
       {art ? <View style={{ width: size - 4, height: size - 4 }}><ExerciseArt id={art} fill /></View> : null}
-      <Svg width={size} height={size} viewBox="0 0 56 56" style={{ position: 'absolute' }}><Circle cx={46} cy={6} r={26} fill="#FFFFFF" opacity={0.1} /></Svg>
+      <Svg width={size} height={size} viewBox="0 0 56 56" style={{ position: 'absolute' }}><Circle cx={46} cy={6} r={26} fill={fixed.white} opacity={0.1} /></Svg>
       {!art && !thumb && <Svg width={size * 0.54} height={size * 0.54} viewBox="0 0 24 24"><Path d={iconFor(name)} fill="none" stroke={c.accentText} strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" /></Svg>}
       {num ? (
         <View style={{ position: 'absolute', left: 4, top: 4, minWidth: 16, height: 16, borderRadius: 8, paddingHorizontal: 3, backgroundColor: 'rgba(0,0,0,0.55)', alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 10, lineHeight: 13, color: '#fff' }}>{num}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 10, lineHeight: 13, color: fixed.white }}>{num}</Txt>
         </View>
       ) : null}
     </View>

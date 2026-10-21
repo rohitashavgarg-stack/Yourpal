@@ -22,6 +22,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { GlassBackdrop } from '@/components/Glass';
 import { GymMap, hasRealMap } from '@/features/checkin/GymMap';
+import { fixed } from '@/design-system/tokens';
 
 
 // Manual check-in only, only inside the 20 m area. Location is read while this page is open.
@@ -94,7 +95,7 @@ export default function CheckIn() {
             <>
               <Circle cx={ux} cy={uy} r={16} fill="#3478F6" opacity={0.16} />
               <Circle cx={ux} cy={uy} r={10} fill="#3478F6" opacity={0.25} />
-              <Circle cx={ux} cy={uy} r={7} fill="#3478F6" stroke="#fff" strokeWidth={3} />
+              <Circle cx={ux} cy={uy} r={7} fill="#3478F6" stroke={fixed.white} strokeWidth={3} />
             </>
           )}
         </Svg>}
@@ -105,7 +106,7 @@ export default function CheckIn() {
         {/* GPS accuracy: centred between the two buttons, same height row, glass like them. */}
         <View style={{ flex: 1, alignItems: 'center' }}>
           {!off && (
-            <View accessibilityLabel={`GPS accuracy, plus or minus ${refreshing ? 'unknown' : inside ? 6 : 9} metres`} style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', gap: 6, shadowColor: '#101828', shadowOpacity: 0.08, shadowRadius: 10, shadowOffset: { width: 0, height: 3 } }}>
+            <View accessibilityLabel={`GPS accuracy, plus or minus ${refreshing ? 'unknown' : inside ? 6 : 9} metres`} style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', gap: 6, shadowColor: fixed.shadow, shadowOpacity: 0.08, shadowRadius: 10, shadowOffset: { width: 0, height: 3 } }}>
               <GlassBackdrop radius={18} />
               <View style={{ zIndex: 2 }}><Crosshair size={14} color={c.ink} /></View>
               <Txt style={{ zIndex: 2, fontFamily: font.semibold, fontSize: 13, lineHeight: 18 }}>{`GPS ±${refreshing ? '…' : inside ? 6 : 9} m`}</Txt>
@@ -116,7 +117,7 @@ export default function CheckIn() {
       </Row>
 
       <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: c.surface, borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingTop: 20, paddingHorizontal: 20, paddingBottom: Math.max(insets.bottom, 16) + 14, gap: 12,
-        shadowColor: '#101828', shadowOpacity: isDark ? 0 : 0.12, shadowRadius: 30, shadowOffset: { width: 0, height: -10 } }}>
+        shadowColor: fixed.shadow, shadowOpacity: isDark ? 0 : 0.12, shadowRadius: 30, shadowOffset: { width: 0, height: -10 } }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.regular, fontSize: 28, letterSpacing: -1.1 }}>Wulf Fitness</Txt>
           <Txt muted style={{ fontSize: 13 }}>Vaishali Nagar, Jaipur · 20 m check-in area</Txt>

@@ -20,6 +20,7 @@ import { FOOD, macroLine, RECENT, SCAN_PHOTO } from '@/features/plans/content';
 import { useDietActions } from '@/features/plans/dietActions';
 import { PageHeader } from '@/features/plans/parts';
 import { allowedFor, dietItems, Food, setP, usePlans } from '@/features/plans/store';
+import { fixed } from '@/design-system/tokens';
 
 type Mode = 'search' | 'write' | 'scan';
 type ScanSt = 'idle' | 'busy' | 'done' | 'fail';
@@ -32,7 +33,7 @@ function ScanBeam() {
 }
 function Bracket({ pos }: { pos: 'tl' | 'tr' | 'bl' | 'br' }) {
   const t = pos[0] === 't', l = pos[1] === 'l';
-  return <View style={{ position: 'absolute', width: 34, height: 34, borderColor: '#fff', opacity: 0.9, [t ? 'top' : 'bottom']: 22, [l ? 'left' : 'right']: 22,
+  return <View style={{ position: 'absolute', width: 34, height: 34, borderColor: fixed.white, opacity: 0.9, [t ? 'top' : 'bottom']: 22, [l ? 'left' : 'right']: 22,
     borderTopWidth: t ? 3 : 0, borderBottomWidth: t ? 0 : 3, borderLeftWidth: l ? 3 : 0, borderRightWidth: l ? 0 : 3, [`border${t ? 'Top' : 'Bottom'}${l ? 'Left' : 'Right'}Radius`]: 12 }} />;
 }
 
@@ -242,7 +243,7 @@ export default function LogFood() {
           </Animated.View>
         ) : (
           <>
-            <View accessibilityLiveRegion="polite" accessibilityLabel={cap} style={{ height: 250, borderRadius: 26, overflow: 'hidden', backgroundColor: '#0B0F16' }}>
+            <View accessibilityLiveRegion="polite" accessibilityLabel={cap} style={{ height: 250, borderRadius: 26, overflow: 'hidden', backgroundColor: fixed.dark }}>
               <Svg width="100%" height="100%" viewBox="0 0 358 250" preserveAspectRatio="xMidYMid slice" style={{ position: 'absolute', opacity: scan === 'idle' ? 0.55 : 1 }}>
                 <Ellipse cx={179} cy={132} rx={118} ry={84} fill="#E9E4DA" /><Ellipse cx={179} cy={132} rx={96} ry={66} fill="#F7F3EC" />
                 <Circle cx={146} cy={120} r={30} fill="#8C3B2A" /><Circle cx={140} cy={113} r={4} fill="#B5543C" /><Circle cx={154} cy={126} r={3} fill="#B5543C" />
@@ -250,7 +251,7 @@ export default function LogFood() {
               </Svg>
               <Bracket pos="tl" /><Bracket pos="tr" /><Bracket pos="bl" /><Bracket pos="br" />
               {scan === 'busy' && <ScanBeam />}
-              <Txt style={{ position: 'absolute', left: 0, right: 0, bottom: 14, textAlign: 'center', fontFamily: font.medium, fontSize: 13, color: '#fff', textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 4 }}>{cap}</Txt>
+              <Txt style={{ position: 'absolute', left: 0, right: 0, bottom: 14, textAlign: 'center', fontFamily: font.medium, fontSize: 13, color: fixed.white, textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 4 }}>{cap}</Txt>
             </View>
             {scan === 'fail' && (
               <Animated.View entering={fade()} style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.warnSoft, gap: 8 }}>

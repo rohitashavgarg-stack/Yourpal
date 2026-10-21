@@ -1,11 +1,12 @@
 import type { Palette } from '@/theme/tokens';
 import type { Domain } from '@/lib/domain';
+import { fixed } from '@/design-system/tokens';
 
 // Membership is VIEW-ONLY in the app: renewals and freezes happen at the front desk.
 export function membershipView(m: Domain['membership'], c: Palette) {
   return {
     Active: { t: 'Annual · active', sub: 'Expires 14 Oct 2027', bg: c.surface, fg: c.ink, rt: 'Active till 14 Oct 2027', rs: 'Renew early at the front desk. The new period starts after this one ends.', rbg: c.surface, rfg: c.ink, ends: '14 Oct 2027' },
-    Expiring: { t: 'Expires in 12 days', sub: 'Annual · ends 6 Oct · renew at the front desk', bg: c.accent, fg: '#FFFFFF', rt: 'Expires in 12 days', rs: 'Renew at the front desk before 6 Oct to keep your plan and logging without a gap.', rbg: c.accentSoft, rfg: c.accentText, ends: '6 Oct' },
+    Expiring: { t: 'Expires in 12 days', sub: 'Annual · ends 6 Oct · renew at the front desk', bg: c.accent, fg: fixed.white, rt: 'Expires in 12 days', rs: 'Renew at the front desk before 6 Oct to keep your plan and logging without a gap.', rbg: c.accentSoft, rfg: c.accentText, ends: '6 Oct' },
     Expired: { t: 'Membership expired', sub: 'History is still here · renew at the front desk to log again', bg: c.surface2, fg: c.ink, rt: 'Membership expired', rs: 'Your history stays visible. Logging resumes as soon as the front desk renews you.', rbg: c.surface2, rfg: c.ink, ends: '21 Sep' },
   }[m];
 }

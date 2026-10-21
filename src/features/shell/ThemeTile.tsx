@@ -4,11 +4,12 @@ import { Check } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
+import { fixed } from '@/design-system/tokens';
 
 // A small phone drawn in each theme's own colours, so the choice is something you can see.
 const MOCK = {
-  Light: { bg: '#F4F6F9', card: '#FFFFFF', ink: '#14171C', mute: '#C9CFD8' },
-  Dark: { bg: '#0F1218', card: '#1A1F29', ink: '#F1F3F6', mute: '#3A4250' },
+  Light: { bg: '#F4F6F9', card: fixed.white, ink: '#14171C', mute: '#C9CFD8' },
+  Dark: { bg: fixed.dark, card: '#1A1F29', ink: '#F1F3F6', mute: '#3A4250' },
 } as const;
 export function ThemeTile({ mode, on, onPress }: { mode: 'Light' | 'Dark' | 'System'; on: boolean; onPress: () => void }) {
   const { c } = useTheme();
@@ -34,7 +35,7 @@ export function ThemeTile({ mode, on, onPress }: { mode: 'Light' | 'Dark' | 'Sys
       </View>
       <Row style={{ gap: 6 }}>
         <View style={{ width: 16, height: 16, borderRadius: 8, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.accent : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-          {on && <Check size={10} strokeWidth={3.5} color="#fff" />}
+          {on && <Check size={10} strokeWidth={3.5} color={fixed.white} />}
         </View>
         <Txt style={{ fontFamily: on ? font.semibold : font.medium, fontSize: 14, lineHeight: 20 }}>{mode}</Txt>
       </Row>

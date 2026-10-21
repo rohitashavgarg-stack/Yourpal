@@ -23,6 +23,7 @@ import { haptic } from '@/lib/haptics';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { ChatOptionsSheet } from '@/features/gym/sheets';
 import { cardShadow } from '@/features/progress/parts';
+import { fixed } from '@/design-system/tokens';
 
 const REPLY = "Got it. I'll check it before your session tomorrow.";
 const REPLY_AUDIO = "Thanks for the voice note. I'll listen and reply before your session.";
@@ -159,7 +160,7 @@ export default function CoachChat() {
               {m.audio ? <AudioBubble uri={m.audio.uri} dur={m.audio.dur} me={m.me} /> : (
                 <View style={{ gap: m.img && m.t !== 'Photo' ? 6 : 0 }}>
                   {m.img ? <Image source={{ uri: m.img }} accessibilityLabel="Photo" accessibilityIgnoresInvertColors style={{ width: 220, height: 220, borderRadius: 14, backgroundColor: c.surface3 }} /> : null}
-                  {m.img && m.t === 'Photo' ? null : <Txt style={{ color: m.me ? '#fff' : c.ink }}>{m.t}</Txt>}
+                  {m.img && m.t === 'Photo' ? null : <Txt style={{ color: m.me ? fixed.white : c.ink }}>{m.t}</Txt>}
                 </View>
               )}
             </View>

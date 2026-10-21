@@ -21,6 +21,7 @@ import { useLogGate, useLogsPaused } from '@/lib/logGate';
 import { StepsDesign, StepsPreview, StepsTile } from './StepsCards';
 import { TrackerKey } from '@/features/trackers/designs';
 import { AddButton, EnergyDot, EnergyStack, HrDot, SleepDot, SleepStages, WaterDot, WaterGlasses, WeightDot, WeightRuler } from '@/features/trackers/Widgets';
+import { fixed } from '@/design-system/tokens';
 
 const APath = Animated.createAnimatedComponent(Path);
 const ALine = Animated.createAnimatedComponent(Line);
@@ -102,16 +103,16 @@ export function BottleFigma({ litres, id, w = 32, onLight = false }: { litres: n
         <ClipPath id={`${id}Cap`}><Path d={BOTTLE_CAP} /></ClipPath>
         <ClipPath id={`${id}Body`}><Path d={BOTTLE_BODY} /></ClipPath>
         <SvgGradient id={`${id}Water`} x1="0" y1="0" x2="0" y2="1"><Stop offset="0" stopColor="#8CBBFF" stopOpacity={0.95} /><Stop offset="1" stopColor="#3D6BFF" stopOpacity={0.95} /></SvgGradient>
-        <SvgGradient id={`${id}Shine`} x1="10" y1="58.5" x2="5" y2="58.5" gradientUnits="userSpaceOnUse"><Stop offset="0" stopColor="#999999" /><Stop offset="1" stopColor="#FFFFFF" /></SvgGradient>
+        <SvgGradient id={`${id}Shine`} x1="10" y1="58.5" x2="5" y2="58.5" gradientUnits="userSpaceOnUse"><Stop offset="0" stopColor="#999999" /><Stop offset="1" stopColor={fixed.white} /></SvgGradient>
       </Defs>
       <Rect x={7} y={8} width={18} height={2} rx={1} fill="#9294A8" />
-      <Path d={BOTTLE_CAP} fill={onLight ? '#1B2440' : '#fff'} />
+      <Path d={BOTTLE_CAP} fill={onLight ? '#1B2440' : fixed.white} />
       <G clipPath={`url(#${id}Cap)`}>
         {Array.from({ length: 12 }, (_, i) => <Rect key={i} x={9 + i * 1.3} y={0} width={0.3} height={8} fill="#EAE6E6" />)}
       </G>
-      <Path d={BOTTLE_BODY} fill={onLight ? '#2F6BEA' : '#D9D9D9'} fillOpacity={onLight ? 0.08 : 0.1} />
+      <Path d={BOTTLE_BODY} fill={onLight ? fixed.blue : '#D9D9D9'} fillOpacity={onLight ? 0.08 : 0.1} />
       <G clipPath={`url(#${id}Body)`}><ARect animatedProps={water} x={0} width={32} fill={`url(#${id}Water)`} /></G>
-      <Path d={BOTTLE_BODY} fill="none" stroke={onLight ? '#1B2440' : '#fff'} strokeOpacity={onLight ? 0.45 : 0.6} strokeWidth={1} strokeLinejoin="round" />
+      <Path d={BOTTLE_BODY} fill="none" stroke={onLight ? '#1B2440' : fixed.white} strokeOpacity={onLight ? 0.45 : 0.6} strokeWidth={1} strokeLinejoin="round" />
       <Path d="M10 29.4878C10 28.6661 8.88071 28 7.5 28C6.11929 28 5 28.6661 5 29.4878V87.5122C5 88.3339 6.11929 89 7.5 89C8.88071 89 10 88.3339 10 87.5122V29.4878Z" fill={`url(#${id}Shine)`} fillOpacity={0.3} />
     </Svg>
   );
@@ -167,14 +168,14 @@ export function WaterCard() {
         </View>
         <View style={{ position: 'absolute', right: 16, bottom: 16, alignItems: 'flex-end' }}>
           <Txt style={{ fontFamily: font.displayBold, fontSize: 28, lineHeight: 39, letterSpacing: -0.8, color: 'rgba(255,255,255,0.9)' }}>{ml.toLocaleString('en-IN')}</Txt>
-          <Txt style={{ fontFamily: font.regular, fontSize: 20, lineHeight: 26, color: '#fff' }}>ml</Txt>
+          <Txt style={{ fontFamily: font.regular, fontSize: 20, lineHeight: 26, color: fixed.white }}>ml</Txt>
         </View>
       </Pressy>
       {/* Sits above the card press target so tapping it only adds a glass: a 32 px pill (glass + plus) with a 44 px touch area. */}
       <Pressy accessibilityRole="button" accessibilityLabel="Add a glass, 250 millilitres" onPress={() => change(0.25)} scaleTo={0.92} hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
         style={{ position: 'absolute', top: 16, right: 16, height: 32, paddingHorizontal: 8, borderRadius: 24, backgroundColor: GLASS, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4, zIndex: 3 }}>
-        <GlassWater size={20} color="#fff" />
-        <Plus size={16} color="#fff" />
+        <GlassWater size={20} color={fixed.white} />
+        <Plus size={16} color={fixed.white} />
       </Pressy>
     </View>
     </View>
@@ -200,7 +201,7 @@ function Tile({ bg, label, labelColor, onPress, a11y, right, children, shadow }:
       {children}
     </>
   );
-  const style = [SQ, { backgroundColor: bg, gap: 2 }, shadow && { shadowColor: '#101828', shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 } }];
+  const style = [SQ, { backgroundColor: bg, gap: 2 }, shadow && { shadowColor: fixed.shadow, shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 } }];
   return onPress
     ? <Pressy accessibilityRole="button" accessibilityLabel={a11y} onPress={onPress} scaleTo={0.97} style={style}>{body}</Pressy>
     : <View accessible accessibilityLabel={a11y} style={style}>{body}</View>;
@@ -223,7 +224,7 @@ export function WeightCard() {
   return (
     <View style={{ width: 160 }}>
     <Tile bg={isDark ? 'rgba(255,255,255,0.05)' : c.surface} shadow={!isDark} label="Weight" a11y={`Weight ${fmt1(d.weight)} kg, ${diff <= 0 ? 'down' : 'up'} ${Math.abs(diff)} kg this week. Log weight`} onPress={() => (paused ? router.push({ pathname: '/progress/metric', params: { k: 'weight' } }) : router.push('/log-weight'))}
-      right={<View style={{ height: 32, minWidth: 32, paddingHorizontal: 8, borderRadius: 24, backgroundColor: isDark ? GLASS : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Plus size={16} color={isDark ? '#fff' : c.accentText} /></View>}>
+      right={<View style={{ height: 32, minWidth: 32, paddingHorizontal: 8, borderRadius: 24, backgroundColor: isDark ? GLASS : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Plus size={16} color={isDark ? fixed.white : c.accentText} /></View>}>
       <Txt style={{ ...NUM, color: c.ink }}>{fmt1(d.weight)}<Txt style={{ fontFamily: font.regular, fontSize: 16, lineHeight: 22, color: c.muted }}> kg</Txt></Txt>
       <Txt style={{ fontFamily: font.regular, fontSize: 12, lineHeight: 17, color: diff <= 0 ? c.good : c.warn }}>{sign} {Math.abs(diff)} kg this week</Txt>
       <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
@@ -231,7 +232,7 @@ export function WeightCard() {
           <Defs><SvgGradient id="wArea" x1="0" y1="0" x2="0" y2="1"><Stop offset="0" stopColor={c.accent} stopOpacity={0.28} /><Stop offset="1" stopColor={c.accent} stopOpacity={0} /></SvgGradient></Defs>
           <AArea d={area} fill="url(#wArea)" />
           <Path d={line} fill="none" stroke={c.accent} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-          <Circle cx={last[0]} cy={last[1]} r={5} fill="#fff" stroke={c.accent} strokeWidth={2} />
+          <Circle cx={last[0]} cy={last[1]} r={5} fill={fixed.white} stroke={c.accent} strokeWidth={2} />
         </Svg>
       </View>
     </Tile>
@@ -297,7 +298,7 @@ function ConnectCard() {
   const { toast } = useOverlay();
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`Connect ${HEALTH_NAME} for steps, heart rate, sleep and energy`} onPress={() => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. Steps, heart rate and sleep sync automatically`); }}
-      style={[SQ, { padding: 12, justifyContent: 'space-between', borderWidth: 1, borderStyle: 'dashed', borderColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface3, backgroundColor: isDark ? '#0E1116' : c.surface }]}>
+      style={[SQ, { padding: 12, justifyContent: 'space-between', borderWidth: 1, borderStyle: 'dashed', borderColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface3, backgroundColor: isDark ? fixed.dark : c.surface }]}>
       <View style={{ width: 32, height: 32, borderRadius: 20, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface2, alignItems: 'center', justifyContent: 'center' }}><HeartIcon size={20} color="#FF6B7A" /></View>
       <Txt style={{ fontFamily: font.displayBold, fontSize: 20, lineHeight: 28, color: c.ink }}>{`Connect ${HEALTH_NAME}`}</Txt>
       <Txt style={{ fontSize: 12, lineHeight: 17, color: c.muted }}>Steps, heart rate, sleep and energy</Txt>

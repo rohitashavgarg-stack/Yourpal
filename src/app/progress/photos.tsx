@@ -13,6 +13,7 @@ import { Hint, SubPage } from '@/features/progress/parts';
 import { progressStore } from '@/features/progress/store';
 import { AFTER_PHOTO, BEFORE_PHOTO, photoFor } from '@/features/progress/photoAssets';
 import { useProgressScenarios } from '@/features/progress/scenarios';
+import { fixed } from '@/design-system/tokens';
 
 const SCRIM = 'rgba(0,0,0,0.55)';
 
@@ -27,7 +28,7 @@ function PhotoTile({ d, i, zoomed, onDouble }: { d: string; i: number; zoomed: b
     <Pressy accessibilityRole="imagebutton" accessibilityLabel={`Progress photo ${d}${zoomed ? ', zoomed' : ''}. Double tap to zoom`} accessibilityHint="Double tap to zoom" onPress={tap} haptics={false}
       style={{ height: 210, borderRadius: 22, backgroundColor: c.surface, overflow: 'hidden' }}>
       <Animated.View style={[{ flex: 1 }, a]}><Image source={photoFor(i)} resizeMode="cover" accessibilityIgnoresInvertColors style={{ width: '100%', height: '100%' }} /></Animated.View>
-      <Tag label={d} bg={SCRIM} fg="#fff" style={{ position: 'absolute', left: 10, bottom: 10 }} />
+      <Tag label={d} bg={SCRIM} fg={fixed.white} style={{ position: 'absolute', left: 10, bottom: 10 }} />
     </Pressy>
   );
 }
@@ -54,11 +55,11 @@ function Compare({ latest }: { latest: string }) {
           <View style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${pos}%`, overflow: 'hidden' }}>
             <Image source={BEFORE_PHOTO} resizeMode="cover" accessibilityIgnoresInvertColors style={{ width: w || 358, height: 440 }} />
           </View>
-          <Tag label="Sep 2" bg={SCRIM} fg="#fff" style={{ position: 'absolute', left: 12, top: 12 }} />
-          <Tag label={latest} bg={SCRIM} fg="#fff" style={{ position: 'absolute', right: 12, top: 12 }} />
-          <View pointerEvents="none" style={{ position: 'absolute', top: 0, bottom: 0, left: `${pos}%`, width: 2, marginLeft: -1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
-            <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
-              <ChevronsLeftRight size={18} color="#0B0B0D" />
+          <Tag label="Sep 2" bg={SCRIM} fg={fixed.white} style={{ position: 'absolute', left: 12, top: 12 }} />
+          <Tag label={latest} bg={SCRIM} fg={fixed.white} style={{ position: 'absolute', right: 12, top: 12 }} />
+          <View pointerEvents="none" style={{ position: 'absolute', top: 0, bottom: 0, left: `${pos}%`, width: 2, marginLeft: -1, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
+              <ChevronsLeftRight size={18} color={fixed.dark} />
             </View>
           </View>
         </View>

@@ -4,6 +4,7 @@ import { Crown } from '@/lib/icons';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
+import { fixed } from '@/design-system/tokens';
 
 // Drop your real files into assets/brand/ (same names) and they replace the fallbacks below:
 //   wulf-logo.webp (gym) · trainer.jpg (Coach Vikram). The member shows initials unless they add their own photo in My details.
@@ -50,7 +51,7 @@ export function PersonAvatar({ who = 'me', size = 44, ring, square, photo }: { w
   const premium = who === 'me' && state.sc.member === 'PT member' && size >= 36;
   const fallback = (
     <View accessibilityLabel={who === 'coach' ? 'Coach Vikram' : 'You'} style={[box, { backgroundColor: who === 'coach' ? c.accentSoft : c.accent, alignItems: 'center', justifyContent: 'center' }, border]}>
-      <Text style={{ fontFamily: font.semibold, fontSize: Math.round(size * (who === 'coach' ? 0.4 : 0.36)), lineHeight: Math.round(size * 0.5), color: who === 'coach' ? c.accentText : '#fff' }}>{who === 'coach' ? 'V' : initials}</Text>
+      <Text style={{ fontFamily: font.semibold, fontSize: Math.round(size * (who === 'coach' ? 0.4 : 0.36)), lineHeight: Math.round(size * 0.5), color: who === 'coach' ? c.accentText : fixed.white }}>{who === 'coach' ? 'V' : initials}</Text>
     </View>
   );
   const custom = who === 'me' ? (photo !== undefined ? photo : state.profile.photo) : undefined;

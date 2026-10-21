@@ -3,6 +3,7 @@ import { Platform, View } from 'react-native';
 import MapView, { Circle, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { MapPin } from '@/lib/icons';
 import { useTheme } from '@/theme/ThemeProvider';
+import { fixed } from '@/design-system/tokens';
 
 export const hasRealMap = true;
 
@@ -40,15 +41,15 @@ export function GymMap({ where, off }: { where: 'inside' | 'near' | 'far'; off: 
       <Circle center={GYM} radius={CHECKIN_RADIUS_M} strokeColor={c.accent} strokeWidth={2} fillColor={`${c.accent}33`} />
       <Marker coordinate={GYM} title="Wulf Fitness" description="20 m check-in area" anchor={{ x: 0.5, y: 1 }}>
         <View style={{ alignItems: 'center' }}>
-          <View style={{ width: 38, height: 38, borderRadius: 19, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: '#fff' }}>
-            <MapPin size={18} color="#fff" />
+          <View style={{ width: 38, height: 38, borderRadius: 19, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: fixed.white }}>
+            <MapPin size={18} color={fixed.white} />
           </View>
         </View>
       </Marker>
       {!off && (
         <Marker coordinate={me} anchor={{ x: 0.5, y: 0.5 }}>
           <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: 'rgba(52,120,246,0.22)', alignItems: 'center', justifyContent: 'center' }}>
-            <View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: '#3478F6', borderWidth: 3, borderColor: '#fff' }} />
+            <View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: '#3478F6', borderWidth: 3, borderColor: fixed.white }} />
           </View>
         </Marker>
       )}

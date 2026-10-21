@@ -16,6 +16,7 @@ import { Hint, ListCard, SubPage, useShake } from '@/features/progress/parts';
 import { PT_TOTAL, STAR_WORDS } from '@/features/gym/data';
 import { FlagSheet } from '@/features/gym/sheets';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
+import { fixed } from '@/design-system/tokens';
 
 const STAR = 'M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z';
 const APath = Animated.createAnimatedComponent(Path);
@@ -39,7 +40,7 @@ function DoneTick() {
   const p = useSharedValue(0);
   useEffect(() => { p.value = withDelay(100, withTiming(1, { duration: 450, easing: Easing.bezier(0.65, 0, 0.35, 1) })); }, []);
   const ap = useAnimatedProps(() => ({ strokeDashoffset: 24 * (1 - p.value) }));
-  return <Svg width={24} height={24} viewBox="0 0 24 24"><APath d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#06150E" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="24" animatedProps={ap} /></Svg>;
+  return <Svg width={24} height={24} viewBox="0 0 24 24"><APath d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke={fixed.dark} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="24" animatedProps={ap} /></Svg>;
 }
 
 export default function ConfirmSession() {

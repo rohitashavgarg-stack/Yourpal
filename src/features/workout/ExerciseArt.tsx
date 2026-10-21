@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, View } from 'react-native';
 import Svg, { Circle, Line, Rect } from 'react-native-svg';
 import { useTheme } from '@/theme/ThemeProvider';
+import { fixed } from '@/design-system/tokens';
 
 type P = readonly [number, number];
 
@@ -45,7 +46,7 @@ export function ExerciseArt({ id, width = 230, fill }: { id: string; width?: num
     );
   }
   const body = isDark ? '#66718A' : '#B5BFCE';
-  const gear = isDark ? '#EEF1F6' : '#12151C';
+  const gear = isDark ? '#EEF1F6' : fixed.dark;
   const floor = isDark ? '#2C323E' : '#E1E6EC';
   const hi = c.accent;
 

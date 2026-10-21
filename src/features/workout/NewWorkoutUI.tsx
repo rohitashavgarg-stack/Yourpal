@@ -16,6 +16,7 @@ import { RestPanel } from './RestPanel';
 import { GlassBackdrop } from '@/components/Glass';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { CLIPS, THUMBS } from './clips';
+import { fixed } from '@/design-system/tokens';
 
 // The only clips we have are the main-lift ones, so a move gets a still only where it is the same movement; the rest show a plain tile.
 const LIST_THUMB: Record<string, string> = { w2: 'dfs', c3: 'dbe' };
@@ -32,9 +33,9 @@ function ClipPopup({ source, onClose }: { source: number; onClose: () => void })
             style={{ width: 44, height: 44, borderRadius: 22, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
             <GlassBackdrop radius={22} tint="rgba(255,255,255,0.3)" />
             {/* in a View so on the web it is drawn above the glass layer */}
-            <View><X size={20} color="#fff" /></View>
+            <View><X size={20} color={fixed.white} /></View>
           </Pressy>
-          <View style={{ width: '100%', aspectRatio: 1, borderRadius: 24, overflow: 'hidden', backgroundColor: '#FFFFFF' }}>
+          <View style={{ width: '100%', aspectRatio: 1, borderRadius: 24, overflow: 'hidden', backgroundColor: fixed.white }}>
             <VideoView player={player} nativeControls={false} contentFit="contain" allowsPictureInPicture={false} pointerEvents="none" style={{ width: '100%', height: '100%' }} />
           </View>
         </View>
@@ -48,22 +49,22 @@ function MoveThumb({ id, onOpen }: { id: string; onOpen?: () => void }) {
   const key = LIST_THUMB[id];
   const still = key ? THUMBS[key] : undefined;
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel="Watch the clip" disabled={!key} onPress={onOpen} scaleTo={0.94} style={{ width: 64, height: 64, borderRadius: 14, overflow: 'hidden', backgroundColor: still ? '#FFFFFF' : c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+    <Pressy accessibilityRole="button" accessibilityLabel="Watch the clip" disabled={!key} onPress={onOpen} scaleTo={0.94} style={{ width: 64, height: 64, borderRadius: 14, overflow: 'hidden', backgroundColor: still ? fixed.white : c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
       {still ? <Image source={still} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} /> : null}
       <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}>
-        <Play size={12} color="#fff" fill="#fff" style={{ marginLeft: 1 }} />
+        <Play size={12} color={fixed.white} fill={fixed.white} style={{ marginLeft: 1 }} />
       </View>
     </Pressy>
   );
 }
 
-const INK = '#0B0E14'; // text drawn straight on the white clip stage
+const INK = fixed.dark; // text drawn straight on the white clip stage
 
 // Solid pill, top right, on every workout screen: Finish is easy to find.
 function FinishPill({ onPress }: { onPress: () => void }) {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Finish workout" onPress={onPress} scaleTo={0.94}
-      style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
+      style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
       <Txt style={{ fontFamily: font.semibold, fontSize: 15, lineHeight: 21, color: INK }}>Finish</Txt>
     </Pressy>
   );
@@ -84,25 +85,25 @@ function ClipCardInner({ source, thumb, onFull, onHide }: { source: number; thum
     player.play(); setFull(true); setTimeout(() => view.current?.enterFullscreen(), 60);
   };
   return (
-    <View style={{ height: 212, borderRadius: 24, overflow: 'hidden', backgroundColor: '#FFFFFF' }}>
+    <View style={{ height: 212, borderRadius: 24, overflow: 'hidden', backgroundColor: fixed.white }}>
       <VideoView ref={view} player={player} nativeControls={full} contentFit="contain" allowsPictureInPicture={false} fullscreenOptions={{ enable: true, orientation: 'landscape' }} onFullscreenExit={() => setFull(false)} pointerEvents="none" style={{ width: '100%', height: '100%' }} />
       {!isPlaying && !!thumb && <Image source={thumb} resizeMode="contain" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }} />}
       <Pressy accessibilityRole="button" accessibilityLabel={isPlaying ? 'Pause the clip' : 'Play the clip'} onPress={toggle} scaleTo={1} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
         {!isPlaying && (
           <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}>
-            <Play size={26} color="#fff" fill="#fff" style={{ marginLeft: 3 }} />
+            <Play size={26} color={fixed.white} fill={fixed.white} style={{ marginLeft: 3 }} />
           </View>
         )}
       </Pressy>
       {onHide && (
         <Pressy accessibilityRole="button" accessibilityLabel="Hide the clip" onPress={onHide} scaleTo={0.94}
-          style={{ position: 'absolute', left: 10, top: 10, height: 32, paddingHorizontal: 12, borderRadius: 16, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#C9D1DD', flexDirection: 'row', alignItems: 'center', gap: 4, justifyContent: 'center' }}>
+          style={{ position: 'absolute', left: 10, top: 10, height: 32, paddingHorizontal: 12, borderRadius: 16, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', flexDirection: 'row', alignItems: 'center', gap: 4, justifyContent: 'center' }}>
           <ChevronUp size={15} color={INK} />
           <Txt style={{ fontFamily: font.medium, fontSize: 13, lineHeight: 18, color: INK }}>Hide</Txt>
         </Pressy>
       )}
       <Pressy accessibilityRole="button" accessibilityLabel="Full screen" onPress={goFull} scaleTo={0.92}
-        style={{ position: 'absolute', right: 10, bottom: 10, width: 40, height: 40, borderRadius: 20, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
+        style={{ position: 'absolute', right: 10, bottom: 10, width: 40, height: 40, borderRadius: 20, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
         <Maximize2 size={18} color={INK} />
       </Pressy>
     </View>
@@ -115,9 +116,9 @@ function ClipRow({ thumb, onOpen }: { thumb?: number; onOpen: () => void }) {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Show the clip" onPress={onOpen} scaleTo={0.98}
       style={{ flexDirection: 'row', alignItems: 'center', gap: 12, minHeight: 56, paddingVertical: 6, paddingLeft: 6, paddingRight: 14, borderRadius: 20, backgroundColor: c.surface }}>
-      <View style={{ width: 44, height: 44, borderRadius: 14, overflow: 'hidden', backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ width: 44, height: 44, borderRadius: 14, overflow: 'hidden', backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
         {!!thumb && <Image source={thumb} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} />}
-        <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}><Play size={10} color="#fff" fill="#fff" style={{ marginLeft: 1 }} /></View>
+        <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}><Play size={10} color={fixed.white} fill={fixed.white} style={{ marginLeft: 1 }} /></View>
       </View>
       <Txt style={{ flex: 1, fontFamily: font.medium, fontSize: 15, lineHeight: 21 }}>Watch form</Txt>
       <ChevronDown size={18} color={c.muted} />

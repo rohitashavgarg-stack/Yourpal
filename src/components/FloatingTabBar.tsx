@@ -12,6 +12,7 @@ import { ChartLine, ClipboardList, Dumbbell, Sun } from '@/lib/icons';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
+import { fixed } from '@/design-system/tokens';
 
 // ---- Hide-on-scroll: scrolling down hides the nav, scrolling up brings it back ----
 const NavCtx = createContext<{ hidden: SharedValue<number> } | null>(null);
@@ -72,10 +73,10 @@ function CircleNav({ state, navigation, linked }: any) {
               }}
               style={{ width: size, height: size, borderRadius: size / 2, marginLeft: linked && i ? -10 : 0, zIndex: on ? 3 : 1, overflow: 'hidden', alignItems: 'center', justifyContent: 'center',
                 borderWidth: linked ? 3 : hasLiquidGlass ? 0 : 1, borderColor: linked ? c.bg : c.navLine,
-                shadowColor: '#101828', shadowOpacity: 0.16, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: on ? 12 : 8 }}
+                shadowColor: fixed.shadow, shadowOpacity: 0.16, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: on ? 12 : 8 }}
             >
               {on ? <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: `${c.accent}E6` }} /> : <GlassBackdrop radius={size / 2} />}
-              <View pointerEvents="none" style={{ zIndex: 2 }}><Icon size={24} strokeWidth={on ? 2.3 : 1.9} color={on ? '#fff' : c.muted} /></View>
+              <View pointerEvents="none" style={{ zIndex: 2 }}><Icon size={24} strokeWidth={on ? 2.3 : 1.9} color={on ? fixed.white : c.muted} /></View>
             </Pressable>
           );
         })}
@@ -154,14 +155,14 @@ function MergedNav({ state, navigation }: any) {
           // fallback glass: one translucent merged shape, a soft top highlight and a rim that follows only the outer edge
           <Svg width={W + 8} height={D + 8} viewBox={`-4 -4 ${W + 8} ${D + 8}`} style={{ position: 'absolute', left: -4, top: -4 }}>
             <Defs>
-              <Mask id="navInside" x={-4} y={-4} width={W + 8} height={D + 8} maskUnits="userSpaceOnUse">{shapes({ fill: '#fff' })}</Mask>
+              <Mask id="navInside" x={-4} y={-4} width={W + 8} height={D + 8} maskUnits="userSpaceOnUse">{shapes({ fill: fixed.white })}</Mask>
               <Mask id="navOutside" x={-4} y={-4} width={W + 8} height={D + 8} maskUnits="userSpaceOnUse">
-                <Rect x={-4} y={-4} width={W + 8} height={D + 8} fill="#fff" />
-                {shapes({ fill: '#000' })}
+                <Rect x={-4} y={-4} width={W + 8} height={D + 8} fill={fixed.white} />
+                {shapes({ fill: fixed.black })}
               </Mask>
               <SvgGradient id="navShine" x1="0" y1="0" x2="0" y2="1">
-                <Stop offset="0" stopColor="#fff" stopOpacity={isDark ? 0.2 : 0.65} />
-                <Stop offset="0.55" stopColor="#fff" stopOpacity={0} />
+                <Stop offset="0" stopColor={fixed.white} stopOpacity={isDark ? 0.2 : 0.65} />
+                <Stop offset="0.55" stopColor={fixed.white} stopOpacity={0} />
               </SvgGradient>
             </Defs>
             <G mask="url(#navOutside)">{shapes({ fill: line, stroke: line, strokeWidth: 3 })}</G>
@@ -187,7 +188,7 @@ function MergedNav({ state, navigation }: any) {
               }}
               style={{ position: 'absolute', left: i * STEP, top: 0, width: D, height: D, alignItems: 'center', justifyContent: 'center' }}
             >
-              <View pointerEvents="none"><Icon size={24} strokeWidth={on ? 2.3 : 1.9} color={on ? '#fff' : c.muted} /></View>
+              <View pointerEvents="none"><Icon size={24} strokeWidth={on ? 2.3 : 1.9} color={on ? fixed.white : c.muted} /></View>
             </Pressable>
           );
         })}
@@ -225,7 +226,7 @@ function PillBar({ state, navigation }: any) {
       accessibilityRole="tablist"
       onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)}
       style={[{ position: 'absolute', left: 16, right: 16, bottom, height: 64, borderRadius: 32, overflow: 'hidden', borderWidth: hasLiquidGlass ? 0 : 1, borderColor: c.navLine,
-        shadowColor: '#101828', shadowOpacity: 0.16, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 12 }, bar]}
+        shadowColor: fixed.shadow, shadowOpacity: 0.16, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 12 }, bar]}
     >
       <GlassBackdrop radius={32} />
       {seg > 0 && <Animated.View style={[{ position: 'absolute', top: 6, left: 6, width: seg, height: 50, borderRadius: 25, backgroundColor: `${c.accent}D6`, shadowColor: c.accent, shadowOpacity: 0.3, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }, hl]} />}
@@ -233,7 +234,7 @@ function PillBar({ state, navigation }: any) {
         {state.routes.map((r: any, i: number) => {
           const on = state.index === i;
           const Icon = ICONS[r.name] ?? Sun;
-          const col = on ? '#fff' : c.muted;
+          const col = on ? fixed.white : c.muted;
           return (
             <Pressable
               key={r.key}

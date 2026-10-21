@@ -1,6 +1,7 @@
 import { createStore } from '@/lib/createStore';
 import { useDomain } from '@/lib/domain';
 import { Goal2 } from '@/features/goalv2/model';
+import { fixed } from '@/design-system/tokens';
 
 // The states of the Today goal card. One component (GoalTickCard) draws all of them; this file decides which state and holds the look of each.
 export type GoalCardState = 'onTrack' | 'behind' | 'almost' | 'complete' | 'frozen' | 'paused' | 'comeback' | 'backOn' | 'noGoal';
@@ -33,9 +34,9 @@ export function useGoalCardState(g: Goal2): GoalCardState {
 
 // Colours of the goal card, as given in the design spec. The card is a dark card in light and dark mode alike (like the workout card).
 export const GC = {
-  bg: '#1A1D22', border: '#3A3D48', emptyBg: '#0B0C0F', emptyBorder: '#2E3038', emptyTitle: '#8C8E97', emptySub: '#5E6069',
+  bg: '#1A1D22', border: '#3A3D48', emptyBg: fixed.dark, emptyBorder: '#2E3038', emptyTitle: '#8C8E97', emptySub: '#5E6069',
   title: '#F3F4F6', date: 'rgba(243,244,246,0.8)', rest: '#C3C7D0', unfilled: 'rgba(255,255,255,0.2)',
-  mint: '#2EE6A8', amber: '#E8A33D', grey: '#5B5D66', pillWhite: '#FFFFFF', pillInk: '#0B0B0D', outline: '#3A3B42',
+  mint: '#2EE6A8', amber: '#E8A33D', grey: '#5B5D66', pillWhite: fixed.white, pillInk: fixed.dark, outline: '#3A3B42',
 };
 const mint20 = 'rgba(46,230,168,0.2)', amber20 = 'rgba(232,163,61,0.2)';
 type Pill = { label: string; bg: string; fg: string; border?: string };
@@ -43,13 +44,13 @@ const outlined = (label: string): Pill => ({ label, bg: 'transparent', fg: GC.re
 const GREY_GLOW = { color: '#787E8C', a: 0.4 };
 
 export const LOOK: Record<Exclude<GoalCardState, 'noGoal'>, { glow: { color: string; a: number }; pill: Pill; seg: string }> = {
-  onTrack: { glow: { color: '#2F6BEA', a: 0.8 }, pill: { label: 'On track', bg: GC.pillWhite, fg: GC.pillInk }, seg: GC.mint },
+  onTrack: { glow: { color: fixed.blue, a: 0.8 }, pill: { label: 'On track', bg: GC.pillWhite, fg: GC.pillInk }, seg: GC.mint },
   behind: { glow: { color: GC.amber, a: 0.6 }, pill: { label: 'Behind', bg: amber20, fg: GC.amber }, seg: GC.amber },
   almost: { glow: { color: GC.mint, a: 0.6 }, pill: { label: 'Almost there', bg: mint20, fg: GC.mint }, seg: GC.mint },
   complete: { glow: GREY_GLOW, pill: { label: 'Complete', bg: mint20, fg: GC.mint }, seg: GC.mint },
   frozen: { glow: GREY_GLOW, pill: { label: 'Frozen', bg: amber20, fg: GC.amber }, seg: GC.grey },
   paused: { glow: GREY_GLOW, pill: outlined('Paused'), seg: GC.grey },
-  comeback: { glow: { color: '#2F6BEA', a: 0.8 }, pill: outlined('Resumes today'), seg: GC.mint }, // blue and lit like on track: a returning member is not stalled
+  comeback: { glow: { color: fixed.blue, a: 0.8 }, pill: outlined('Resumes today'), seg: GC.mint }, // blue and lit like on track: a returning member is not stalled
   backOn: { glow: { color: GC.mint, a: 0.6 }, pill: { label: 'Back on', bg: mint20, fg: GC.mint }, seg: GC.mint },
 };
 

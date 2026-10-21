@@ -28,6 +28,7 @@ import { showProgressLoading, useProgressScenarios } from '@/features/progress/s
 import { GoalCard2 } from '@/features/goalv2/GoalCard2';
 import { GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
+import { fixed } from '@/design-system/tokens';
 
 let firstLoad = true;
 
@@ -134,7 +135,7 @@ function ProgressCard({ k }: { k: CardKey }) {
             {['Sep 2', ps.photos[ps.photos.length - 1]?.d ?? 'Sep 30'].map((l, i) => (
               <View key={i} style={{ flex: 1, height: 130, borderRadius: 16, overflow: 'hidden', backgroundColor: c.surface2 }}>
                 <Image source={i === 0 ? BEFORE_PHOTO : AFTER_PHOTO} resizeMode="cover" accessibilityIgnoresInvertColors style={{ width: '100%', height: '100%' }} />
-                <View style={{ position: 'absolute', left: 8, bottom: 8, paddingHorizontal: 9, paddingVertical: 3, borderRadius: 999, backgroundColor: 'rgba(0,0,0,0.55)' }}><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 17, color: '#fff' }}>{l}</Txt></View>
+                <View style={{ position: 'absolute', left: 8, bottom: 8, paddingHorizontal: 9, paddingVertical: 3, borderRadius: 999, backgroundColor: 'rgba(0,0,0,0.55)' }}><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 17, color: fixed.white }}>{l}</Txt></View>
               </View>
             ))}
           </Row>

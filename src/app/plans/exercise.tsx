@@ -17,13 +17,14 @@ import { histFor, tipFor } from '@/features/plans/content';
 import { ExTile, PageHeader } from '@/features/plans/parts';
 import { artIdFor, ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { CLIPS, THUMBS, clipIdFor } from '@/features/workout/clips';
+import { fixed } from '@/design-system/tokens';
 
 // The real clip of the exercise: shows its still until played, then loops silently.
 function PlanClip({ source, thumb, playing }: { source: number; thumb?: number; playing: boolean }) {
   const player = useVideoPlayer(source, (p) => { p.loop = true; p.muted = true; });
   useEffect(() => { if (playing) player.play(); else player.pause(); }, [playing, player]);
   return (
-    <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: '#FFFFFF' }}>
+    <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: fixed.white }}>
       <VideoView player={player} nativeControls={false} contentFit="contain" allowsPictureInPicture={false} style={{ width: '100%', height: '100%' }} />
       {!playing && !!thumb && <Image source={thumb} resizeMode="contain" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }} />}
     </View>
@@ -36,7 +37,7 @@ function PlayBar({ dark }: { dark?: boolean }) {
   const a = useAnimatedStyle(() => ({ width: `${w.value * 100}%` }));
   return (
     <View style={{ position: 'absolute', left: 14, right: 14, bottom: 12, height: 4, borderRadius: 2, backgroundColor: dark ? 'rgba(11,11,13,0.15)' : 'rgba(255,255,255,0.25)', overflow: 'hidden' }}>
-      <Animated.View style={[{ height: '100%', backgroundColor: dark ? '#0B0B0D' : '#fff' }, a]} />
+      <Animated.View style={[{ height: '100%', backgroundColor: dark ? fixed.dark : fixed.white }, a]} />
     </View>
   );
 }
@@ -63,7 +64,7 @@ export default function ExerciseDetail() {
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title={name} />
       <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
-        <View style={{ height: artId || clipId ? 250 : 210, borderRadius: 26, overflow: 'hidden', backgroundColor: clipId ? '#FFFFFF' : artId ? lightBg : undefined }}>
+        <View style={{ height: artId || clipId ? 250 : 210, borderRadius: 26, overflow: 'hidden', backgroundColor: clipId ? fixed.white : artId ? lightBg : undefined }}>
           {clipId ? <PlanClip source={CLIPS[clipId]} thumb={THUMBS[clipId]} playing={playing} /> : artId ? (
             <View pointerEvents="none" style={{ position: 'absolute', top: 44, left: 12, right: 12, bottom: 18 }}>
               <ExerciseArt id={artId} fill />
@@ -71,18 +72,18 @@ export default function ExerciseDetail() {
           ) : (<>
           <LinearGradient colors={[c.heroFrom, c.heroMid, c.heroTo]} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
           <Svg width="100%" height="100%" viewBox="0 0 358 210" preserveAspectRatio="xMidYMid slice" style={{ position: 'absolute' }}>
-            <Path d="M0 170 C 90 130 180 200 260 160 S 340 150 400 170 V 900 H0z" fill="#FFFFFF" opacity={0.08} />
-            <Circle cx={270} cy={40} r={150} fill="#FFFFFF" opacity={0.1} />
-            <Circle cx={270} cy={40} r={90} fill="#FFFFFF" opacity={0.14} />
+            <Path d="M0 170 C 90 130 180 200 260 160 S 340 150 400 170 V 900 H0z" fill={fixed.white} opacity={0.08} />
+            <Circle cx={270} cy={40} r={150} fill={fixed.white} opacity={0.1} />
+            <Circle cx={270} cy={40} r={90} fill={fixed.white} opacity={0.14} />
           </Svg>
           </>)}
           <View style={{ position: 'absolute', top: 12, left: 12, paddingHorizontal: 10, paddingVertical: 3, borderRadius: 999, backgroundColor: artId || clipId ? 'rgba(11,11,13,0.72)' : 'rgba(255,255,255,0.14)' }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: 12, color: '#fff' }}>{d.offline ? 'Downloaded · plays offline' : 'Licensed form video'}</Txt>
+            <Txt style={{ fontFamily: font.medium, fontSize: 12, color: fixed.white }}>{d.offline ? 'Downloaded · plays offline' : 'Licensed form video'}</Txt>
           </View>
           <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
             <Pressy accessibilityRole="button" accessibilityLabel={playing ? 'Pause video' : 'Play form video'} onPress={() => setPlaying((v) => !v)} scaleTo={0.92}
               style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: artId || clipId ? 'rgba(11,11,13,0.72)' : 'rgba(255,255,255,0.92)', alignItems: 'center', justifyContent: 'center' }}>
-              {playing ? <Pause size={22} color={artId || clipId ? '#fff' : '#0B0B0D'} fill={artId || clipId ? '#fff' : '#0B0B0D'} /> : <Play size={24} color={artId || clipId ? '#fff' : '#0B0B0D'} fill={artId || clipId ? '#fff' : '#0B0B0D'} style={{ marginLeft: 3 }} />}
+              {playing ? <Pause size={22} color={artId || clipId ? fixed.white : fixed.dark} fill={artId || clipId ? fixed.white : fixed.dark} /> : <Play size={24} color={artId || clipId ? fixed.white : fixed.dark} fill={artId || clipId ? fixed.white : fixed.dark} style={{ marginLeft: 3 }} />}
             </Pressy>
           </View>
           {playing && !clipId && <PlayBar dark={!!artId} />}

@@ -25,6 +25,7 @@ import { ItemMenuSheet, SwapSheet } from './Sheets';
 import { QtySheet } from './QtySheet';
 import { fmtNum, fmtQty, Qty, splitFood, stepFor, unitLabel } from './qty';
 import { DItem, dietItems, dietTotals, setP, useCountUp, usePlans } from './store';
+import { fixed } from '@/design-system/tokens';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
 const E = ({ i, children }: { i: number; children: React.ReactNode }) => <Animated.View entering={fade(i * 40)}>{children}</Animated.View>;
@@ -189,8 +190,8 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
   return (
     <View style={{ borderRadius: 18, overflow: 'hidden' }}>
       <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 18 }, under]}>
-        <Animated.View style={doneL}><Txt style={{ fontFamily: font.semibold, fontSize: 14, color: '#06150E' }}>Eaten</Txt></Animated.View>
-        <Animated.View style={swapL}><Txt style={{ fontFamily: font.semibold, fontSize: 14, color: '#fff' }}>Swap</Txt></Animated.View>
+        <Animated.View style={doneL}><Txt style={{ fontFamily: font.semibold, fontSize: 14, color: fixed.dark }}>Eaten</Txt></Animated.View>
+        <Animated.View style={swapL}><Txt style={{ fontFamily: font.semibold, fontSize: 14, color: fixed.white }}>Swap</Txt></Animated.View>
       </Animated.View>
       <GestureDetector gesture={pan}>
         <Animated.View collapsable={false}

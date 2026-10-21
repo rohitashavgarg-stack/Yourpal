@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { font, light } from '@/theme/tokens';
 import { ChevronDown } from '@/lib/icons';
+import { fixed } from '@/design-system/tokens';
 
 // Building blocks of the demo-controls panels, in the same language as the app: white cards with a hairline, outline chips that turn black
 // when chosen, a tinted track with a black thumb for two or three options, small black icon tiles. The panel always uses the light palette.
@@ -11,7 +12,7 @@ type IconC = React.ComponentType<{ size?: number; color?: string }>;
 
 export function PanelCard({ icon: Icon, title, pill, children }: { icon: IconC; title: string; pill?: { label: string; tone?: 'good' | 'info' }; children: React.ReactNode }) {
   return (
-    <View style={{ backgroundColor: '#fff', borderRadius: 18, borderWidth: 1, borderColor: P.line, padding: 10, gap: 8 }}>
+    <View style={{ backgroundColor: fixed.white, borderRadius: 18, borderWidth: 1, borderColor: P.line, padding: 10, gap: 8 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1 }}>
           <Icon size={15} color={P.ink} />
@@ -41,7 +42,7 @@ export function Choice({ label, options, value, onPick }: { label: string; optio
             return (
               <Pressable key={o} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => onPick(o)}
                 style={{ flex: 1, minHeight: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 6, backgroundColor: on ? P.ink : 'transparent' }}>
-                <Text numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: on ? '#fff' : P.muted }}>{o}</Text>
+                <Text numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: on ? fixed.white : P.muted }}>{o}</Text>
               </Pressable>
             );
           })}
@@ -53,7 +54,7 @@ export function Choice({ label, options, value, onPick }: { label: string; optio
             return (
               <Pressable key={o} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => onPick(o)}
                 style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, borderWidth: 1, borderColor: on ? P.ink : P.chip, backgroundColor: on ? P.ink : 'transparent', justifyContent: 'center' }}>
-                <Text style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: on ? '#fff' : P.ink }}>{o}</Text>
+                <Text style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: on ? fixed.white : P.ink }}>{o}</Text>
               </Pressable>
             );
           })}
@@ -96,8 +97,8 @@ export function ScreenItem({ icon: Icon, label, on, onPress }: { icon: IconC; la
   return (
     <Pressable accessibilityRole="button" accessibilityState={{ selected: on }} onPress={onPress}
       style={{ flexBasis: '47%', flexGrow: 1, flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 30, paddingHorizontal: 10, borderRadius: 15, backgroundColor: on ? P.ink : 'transparent' }}>
-      <Icon size={15} color={on ? '#fff' : P.muted} />
-      <Text numberOfLines={1} style={{ flex: 1, fontFamily: on ? font.semibold : font.medium, fontSize: 12.5, lineHeight: 17, color: on ? '#fff' : P.ink }}>{label}</Text>
+      <Icon size={15} color={on ? fixed.white : P.muted} />
+      <Text numberOfLines={1} style={{ flex: 1, fontFamily: on ? font.semibold : font.medium, fontSize: 12.5, lineHeight: 17, color: on ? fixed.white : P.ink }}>{label}</Text>
     </Pressable>
   );
 }
@@ -122,7 +123,7 @@ export function Dropdown({ label, options, value, onPick, placeholder = 'Choose'
             return (
               <Pressable key={o} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => { onPick(o); setOpen(false); }}
                 style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, borderWidth: 1, borderColor: on ? P.ink : P.chip, backgroundColor: on ? P.ink : 'transparent', justifyContent: 'center' }}>
-                <Text style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: on ? '#fff' : P.ink }}>{o}</Text>
+                <Text style={{ fontFamily: font.medium, fontSize: 12, lineHeight: 16, color: on ? fixed.white : P.ink }}>{o}</Text>
               </Pressable>
             );
           })}
@@ -137,8 +138,8 @@ export function SwitchChip({ label, on, onPress }: { label: string; on: boolean;
   return (
     <Pressable accessibilityRole="switch" accessibilityState={{ checked: on }} accessibilityLabel={label} onPress={onPress}
       style={{ flex: 1, minHeight: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, paddingHorizontal: 6, borderRadius: 15, borderWidth: 1, borderColor: on ? P.ink : P.chip, backgroundColor: on ? P.ink : 'transparent' }}>
-      <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: on ? '#7CF0C8' : P.chip }} />
-      <Text numberOfLines={1} style={{ fontFamily: font.medium, fontSize: 11.5, lineHeight: 15, color: on ? '#fff' : P.ink }}>{label}</Text>
+      <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: on ? fixed.live : P.chip }} />
+      <Text numberOfLines={1} style={{ fontFamily: font.medium, fontSize: 11.5, lineHeight: 15, color: on ? fixed.white : P.ink }}>{label}</Text>
     </Pressable>
   );
 }
@@ -147,7 +148,7 @@ export function SwitchChip({ label, on, onPress }: { label: string; on: boolean;
 export function ActionChip({ label, onPress }: { label: string; onPress: () => void }) {
   return (
     <Pressable accessibilityRole="button" onPress={onPress} style={{ height: 32, paddingHorizontal: 12, borderRadius: 16, backgroundColor: P.ink, justifyContent: 'center' }}>
-      <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: '#fff' }}>{label}</Text>
+      <Text style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 16, color: fixed.white }}>{label}</Text>
     </Pressable>
   );
 }

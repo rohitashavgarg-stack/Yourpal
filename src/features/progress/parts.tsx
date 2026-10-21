@@ -12,6 +12,7 @@ import { RoundBtn } from '@/components/bits';
 import { useToastLift } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
+import { fixed } from '@/design-system/tokens';
 
 // ---------- Full-screen pushed page: back button, centred title, optional right slot ----------
 export function SubPage({ title, titleIcon, onTitlePress, right, children, footer, scroll = true, toastLift = 24, fallback = '/(tabs)', onBack }: {
@@ -68,7 +69,7 @@ export function SubPage({ title, titleIcon, onTitlePress, right, children, foote
 
 // ---------- White data card that is pressable ----------
 export function cardShadow(isDark: boolean): ViewStyle {
-  return isDark ? {} : { shadowColor: '#101828', shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 }, elevation: 2 };
+  return isDark ? {} : { shadowColor: fixed.shadow, shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 }, elevation: 2 };
 }
 export function PCard({ onPress, label, children, style }: { onPress?: () => void; label?: string; children: React.ReactNode; style?: StyleProp<ViewStyle> }) {
   const { c, isDark } = useTheme();

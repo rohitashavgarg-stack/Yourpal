@@ -1,5 +1,6 @@
 import React from 'react';
 import Svg, { Rect } from 'react-native-svg';
+import { fixed } from '@/design-system/tokens';
 
 // 5 × 7 dot-matrix glyphs: rounded squares, lit or dim, like a small LED display.
 const G: Record<string, string[]> = {
@@ -22,7 +23,7 @@ const G: Record<string, string[]> = {
 };
 
 // The text is sized to fit maxW: dots shrink for longer numbers.
-export function DotText({ text, maxW, on = '#fff', off = 'rgba(255,255,255,0.1)', maxDot = 8 }: { text: string; maxW: number; on?: string; off?: string; maxDot?: number }) {
+export function DotText({ text, maxW, on = fixed.white, off = 'rgba(255,255,255,0.1)', maxDot = 8 }: { text: string; maxW: number; on?: string; off?: string; maxDot?: number }) {
   const chars = [...text].map((ch) => G[ch] ?? G[' ']);
   const cols = chars.reduce((a, g) => a + g[0].length + 1, 0) - 1;
   const d = Math.min(maxDot, maxW / (cols * 1.34 - 0.34));

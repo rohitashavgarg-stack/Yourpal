@@ -19,6 +19,7 @@ import { font, spring } from '@/theme/tokens';
 import { mealById } from '@/features/today/meals';
 import { QuickLogSheet } from '@/features/today/QuickLogSheet';
 import { askCoach } from '@/features/coach/coach';
+import { fixed } from '@/design-system/tokens';
 
 export default function FoodDetail() {
   const { gate: logGate } = useLogGate();
@@ -86,7 +87,7 @@ export default function FoodDetail() {
         <LinearGradient colors={[c.tNutri, c.bg]} style={{ paddingTop: insets.top + 12, paddingHorizontal: 16, paddingBottom: 22 }}>
           <RoundBtn label="Close" onPress={close} glass><X size={20} color={c.ink} /></RoundBtn>
           <View style={[{ marginTop: 14, marginBottom: 12, width: 96, height: 96, borderRadius: 48, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' },
-            !isDark && { shadowColor: '#101828', shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 } }]}>
+            !isDark && { shadowColor: fixed.shadow, shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 } }]}>
             <View style={{ width: 66, height: 66, borderRadius: 33, backgroundColor: c.tNutri, alignItems: 'center', justifyContent: 'center' }}><ChefHat size={30} strokeWidth={1.7} color={c.cNutri} /></View>
           </View>
           <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 34, letterSpacing: -1.4, lineHeight: 38 }}>{fd.n}</Txt>

@@ -12,6 +12,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { EMOJI_GROUPS } from './emoji';
+import { fixed } from '@/design-system/tokens';
 
 const fmt = (ms: number) => {
   const s = Math.floor(ms / 1000);
@@ -144,7 +145,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
     haptic.light();
   };
 
-  const lift = { shadowColor: '#101828', shadowOpacity: 0.08, shadowRadius: 14, shadowOffset: { width: 0, height: 4 }, elevation: 3 } as const;
+  const lift = { shadowColor: fixed.shadow, shadowOpacity: 0.08, shadowRadius: 14, shadowOffset: { width: 0, height: 4 }, elevation: 3 } as const;
   const inner = { width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center', marginBottom: 4 } as const;
   const circle = { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' } as const;
 
@@ -167,7 +168,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
               <Txt muted style={{ fontSize: 14 }}>{'  Recording…'}</Txt>
             </Txt>
             <Pressy accessibilityRole="button" accessibilityLabel="Send voice message" onPress={() => endRec(true)} scaleTo={0.9} style={[circle, { backgroundColor: c.accent }]}>
-              <ArrowUp size={20} strokeWidth={2.4} color="#fff" />
+              <ArrowUp size={20} strokeWidth={2.4} color={fixed.white} />
             </Pressy>
           </Animated.View>
         ) : (
@@ -211,7 +212,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
               {canSend ? (
                 <Pressy accessibilityRole="button" accessibilityLabel="Send" onPress={send} scaleTo={0.9} style={[inner, { overflow: 'hidden' }]}>
                   <GlassBackdrop radius={19} tint={`${c.accent}CC`} />
-                  <View style={{ zIndex: 2 }}><Send size={19} color="#fff" style={{ marginLeft: -1 }} /></View>
+                  <View style={{ zIndex: 2 }}><Send size={19} color={fixed.white} style={{ marginLeft: -1 }} /></View>
                 </Pressy>
               ) : (
                 <Pressy accessibilityRole="button" accessibilityLabel="Record a voice message" onPress={startRec} scaleTo={0.9} style={[inner, { overflow: 'hidden' }]}>

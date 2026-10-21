@@ -24,6 +24,7 @@ import { progressLine, statusLine, useGoalV2 } from '@/features/goalv2/model';
 import { ringCentre, StatusChip } from '@/features/goalv2/GoalCard2';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
+import { fixed } from '@/design-system/tokens';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
 const R = 54, CIRC = 2 * Math.PI * R;
@@ -74,30 +75,30 @@ export function GoalCard({ soft: compact = false }: { soft?: boolean } = {}) {
     <Pressy accessibilityRole="link" scaleTo={0.98}
       accessibilityLabel={`Your goal: ${goal.toLowerCase()}. ${sub}, ${statusLine(g2).toLowerCase()}. Eaten ${t.k} of ${KCAL_TARGET} kcal.${d.hc && d.wearable ? ` Burned ${burned(d)}.` : ""} Open goal details`}
       onPress={() => router.push('/goal-detail')}>
-      <LinearGradient colors={['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+      <LinearGradient colors={[fixed.blue, '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
         style={{ borderRadius: soft ? 24 : 28, paddingVertical: soft ? 16 : 18, paddingLeft: soft ? 16 : 16, paddingRight: soft ? 16 : 18, flexDirection: 'row', alignItems: 'center', gap: soft ? 16 : 18, overflow: 'hidden' }}>
         <Svg width={260} height={260} viewBox="0 0 260 260" style={{ position: 'absolute', right: -90, top: -80, opacity: 0.16 }}>
-          <Circle cx={130} cy={130} r={120} fill="none" stroke="#fff" strokeWidth={18} /><Circle cx={130} cy={130} r={78} fill="none" stroke="#fff" strokeWidth={12} />
+          <Circle cx={130} cy={130} r={120} fill="none" stroke={fixed.white} strokeWidth={18} /><Circle cx={130} cy={130} r={78} fill="none" stroke={fixed.white} strokeWidth={12} />
         </Svg>
         <View style={{ width: SZ, height: SZ, borderRadius: SZ / 2, backgroundColor: 'rgba(255,255,255,0.1)' }}>
           <Svg width={SZ} height={SZ} viewBox={`0 0 ${SZ} ${SZ}`}>
             <Circle cx={SZ / 2} cy={SZ / 2} r={RR} stroke="rgba(255,255,255,0.22)" strokeWidth={SW} fill="none" />
-            <ACircle cx={SZ / 2} cy={SZ / 2} r={RR} stroke={soft ? 'rgba(255,255,255,0.92)' : '#fff'} strokeWidth={SW} fill="none" strokeLinecap="round" strokeDasharray={`${CC}`} animatedProps={props} transform={`rotate(-90 ${SZ / 2} ${SZ / 2})`} />
+            <ACircle cx={SZ / 2} cy={SZ / 2} r={RR} stroke={soft ? 'rgba(255,255,255,0.92)' : fixed.white} strokeWidth={SW} fill="none" strokeLinecap="round" strokeDasharray={`${CC}`} animatedProps={props} transform={`rotate(-90 ${SZ / 2} ${SZ / 2})`} />
           </Svg>
           <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
-            {centre.check ? <Check size={52} color="#fff" strokeWidth={3} /> : g2.kind === 'consistency' ? (
+            {centre.check ? <Check size={52} color={fixed.white} strokeWidth={3} /> : g2.kind === 'consistency' ? (
               <View style={{ alignItems: 'center' }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 24 : 34, lineHeight: soft ? 30 : undefined, letterSpacing: soft ? -0.6 : -1, color: '#fff' }}>{centre.big}</Txt>
+                <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 24 : 34, lineHeight: soft ? 30 : undefined, letterSpacing: soft ? -0.6 : -1, color: fixed.white }}>{centre.big}</Txt>
                 {!soft && <Txt style={{ fontSize: 12, lineHeight: 16, color: 'rgba(255,255,255,0.75)' }}>this week</Txt>}
               </View>
             ) : (
-              <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 24 : 34, letterSpacing: -0.6, color: '#fff' }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: soft ? 13 : 18, color: 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
+              <Txt style={{ fontFamily: font.semibold, fontSize: soft ? 24 : 34, letterSpacing: -0.6, color: fixed.white }}>{shown}<Txt style={{ fontFamily: font.semibold, fontSize: soft ? 13 : 18, color: 'rgba(255,255,255,0.6)' }}>%</Txt></Txt>
             )}
           </View>
         </View>
         <View style={{ flex: 1, gap: soft ? 4 : 6, minWidth: 0 }}>
-          <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)' }}>Your goal</Txt><ChevronRight size={18} color="#fff" /></Row>
-          <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: soft ? 24 : 30, lineHeight: soft ? 29 : 34, color: '#fff' }}>{goal}</Txt>
+          <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)' }}>Your goal</Txt><ChevronRight size={18} color={fixed.white} /></Row>
+          <Txt numberOfLines={2} style={{ fontFamily: font.display, fontSize: soft ? 24 : 30, lineHeight: soft ? 29 : 34, color: fixed.white }}>{goal}</Txt>
           <Txt style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>{sub}</Txt>
           <StatusChip g={g2} fg="#1B3FB8" />
         </View>
@@ -140,9 +141,9 @@ export function ComebackGreeting({ inCard = false, onDark = false }: { inCard?: 
   const days = `${d.awayDays} ${d.awayDays === 1 ? 'day' : 'days'}`;
   return (
     <View style={{ gap: 2, flex: inCard ? 1 : undefined, paddingHorizontal: inCard ? 0 : 4 }}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 28, letterSpacing: -0.4, color: onDark ? '#fff' : c.ink }}>{`Good to see you back, ${first}.`}</Txt>
+      <Txt style={{ fontFamily: font.semibold, fontSize: 20, lineHeight: 28, letterSpacing: -0.4, color: onDark ? fixed.white : c.ink }}>{`Good to see you back, ${first}.`}</Txt>
       <Txt style={{ fontSize: 15, lineHeight: 22, color: onDark ? 'rgba(255,255,255,0.75)' : c.muted }}>
-        {"It's been "}<Txt style={{ fontFamily: font.semibold, color: onDark ? '#fff' : c.ink }}>{days}</Txt>{`. ${who} picked an easy one to ease you in.`}
+        {"It's been "}<Txt style={{ fontFamily: font.semibold, color: onDark ? fixed.white : c.ink }}>{days}</Txt>{`. ${who} picked an easy one to ease you in.`}
       </Txt>
     </View>
   );
@@ -264,7 +265,7 @@ export function UpdatesCard() {
       <Row style={{ justifyContent: 'space-between' }}>
         <Row style={{ gap: 8 }}>
           <Txt style={{ fontFamily: font.semibold }}>Updates</Txt>
-          <View style={{ paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, backgroundColor: c.accent }}><Txt style={{ fontFamily: font.semibold, fontSize: 12, color: '#fff' }}>{live.length}</Txt></View>
+          <View style={{ paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, backgroundColor: c.accent }}><Txt style={{ fontFamily: font.semibold, fontSize: 12, color: fixed.white }}>{live.length}</Txt></View>
         </Row>
         <Pressy accessibilityRole="button" onPress={() => openSheet(<UpdatesSheet />, { label: 'Updates' })} style={{ height: 44, justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: 13, color: c.accentText }}>See all</Txt>

@@ -15,11 +15,12 @@ import { useVisibleNotifs } from '@/features/shell/notifs';
 import { ProgLogo } from '@/features/shell/parts';
 import { useDomain } from '@/lib/domain';
 import { haptic } from '@/lib/haptics';
+import { fixed } from '@/design-system/tokens';
 
 export const Avatar = ({ size = 44 }: { size?: number }) => <PersonAvatar who="me" size={size} />;
 export const GymLogo = GymLogoMark;
 
-const lift = { shadowColor: '#101828', shadowOpacity: 0.08, shadowRadius: 12, shadowOffset: { width: 0, height: 3 }, elevation: 3 } as const;
+const lift = { shadowColor: fixed.shadow, shadowOpacity: 0.08, shadowRadius: 12, shadowOffset: { width: 0, height: 3 }, elevation: 3 } as const;
 
 // A rounded glass container; children sit above the blur.
 function GlassShell({ radius, style, children }: { radius: number; style: any; children: React.ReactNode }) {

@@ -12,6 +12,7 @@ import { font } from '@/theme/tokens';
 import { cardShadow, Hint, SubPage } from '@/features/progress/parts';
 import { VISITS } from '@/features/gym/data';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
+import { fixed } from '@/design-system/tokens';
 
 type Att = { t: string; s: string; tag: string; type: 'c' | 'pt'; icon: 'loc' | 'home' | 'pt' | 'wait'; tone?: 'accent' | 'good' | 'warn'; ptOnly?: boolean; key: string };
 
@@ -32,9 +33,9 @@ export default function Attendance() {
     if (v === 'a' && g.sessionState === 'confirmed') v = 'p';
     if (v === 'a' && g.sessionState === 'flagged') v = null;
     let bg = 'transparent', fg = inMonth ? c.ink : c.surface3, fw = font.regular, ring: string | null = null;
-    if (inMonth && v === 'c') { bg = c.accent; fg = '#fff'; fw = font.semibold; }
+    if (inMonth && v === 'c') { bg = c.accent; fg = fixed.white; fw = font.semibold; }
     if (inMonth && v === 'h') bg = c.surface3;
-    if (inMonth && v === 'p') { bg = c.good; fg = '#06150E'; fw = font.semibold; }
+    if (inMonth && v === 'p') { bg = c.good; fg = fixed.dark; fw = font.semibold; }
     if (inMonth && v === 'a') ring = c.good;
     const aria = inMonth ? `${dN} September${v === 'c' ? ', checked in' : v === 'h' ? ', home workout' : v === 'p' ? ', PT session' : v === 'a' ? ', PT session awaiting confirmation' : ''}${dN === 24 ? ', today' : ''}` : '';
     return { n: inMonth ? String(dN) : '', bg, fg, fw, ring, today: dN === 24, aria };
@@ -59,7 +60,7 @@ export default function Attendance() {
 
   const tone = (r: Att) => {
     if (r.tone === 'accent') return { tagBg: c.accentSoft, tagFg: c.accentText, dotBg: c.accentSoft, dotFg: c.accentText };
-    if (r.tone === 'good') return { tagBg: c.goodSoft, tagFg: c.good, dotBg: c.good, dotFg: '#06150E' };
+    if (r.tone === 'good') return { tagBg: c.goodSoft, tagFg: c.good, dotBg: c.good, dotFg: fixed.dark };
     if (r.tone === 'warn') return { tagBg: c.warnSoft, tagFg: c.warn, dotBg: c.warnSoft, dotFg: c.warn };
     return { tagBg: c.surface2, tagFg: c.muted, dotBg: r.type === 'pt' ? c.goodSoft : c.surface2, dotFg: r.type === 'pt' ? c.good : c.ink };
   };

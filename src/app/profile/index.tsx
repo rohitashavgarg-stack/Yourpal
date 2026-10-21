@@ -24,6 +24,7 @@ import { LineRow, ListCard, Note, SubPage } from '@/features/shell/parts';
 import { resetShell, useShell } from '@/features/shell/state';
 import { goalSummary } from '@/features/shell/goal';
 import { LogoutSheet } from '@/features/shell/sheets';
+import { fixed } from '@/design-system/tokens';
 
 const maskPhone = (p: string) => {
   const d = (p || '').replace(/\D/g, '');
@@ -154,16 +155,16 @@ function TrackerPromo({ onPress }: { onPress: () => void }) {
   const W = 134, k = W / STEPS_CARD;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Tracker designs. Choose how your trackers look" onPress={onPress} scaleTo={0.985}
-      style={{ height: 196, borderRadius: 28, overflow: 'hidden', backgroundColor: '#0B0E14' }}>
-      <LinearGradient colors={['#0B0E14', '#161B26']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
+      style={{ height: 196, borderRadius: 28, overflow: 'hidden', backgroundColor: fixed.dark }}>
+      <LinearGradient colors={[fixed.dark, fixed.shadow]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
       {/* soft white glow along the inside edge, lighter than the swipe-to-start button */}
       <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: 28, boxShadow: [{ offsetX: 0, offsetY: 0, blurRadius: 24, spreadDistance: 0, color: 'rgba(255,255,255,0.3)', inset: true }] } as any} />
       <Row style={{ paddingTop: 18, paddingHorizontal: 20, justifyContent: 'space-between' }}>
         <View style={{ gap: 2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.5, color: '#fff' }}>Tracker designs</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: 22, lineHeight: 29, letterSpacing: -0.5, color: fixed.white }}>Tracker designs</Txt>
           <Txt style={{ fontSize: 13, lineHeight: 19, color: 'rgba(255,255,255,0.6)' }}>Pick how your trackers look</Txt>
         </View>
-        <View style={{ width: 52, height: 36, borderRadius: 18, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={18} color="#0B0E14" /></View>
+        <View style={{ width: 52, height: 36, borderRadius: 18, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={18} color={fixed.dark} /></View>
       </Row>
       {/* three kinds of trackers peek up from the bottom: water, heart rate, steps (in front) */}
       <Peek x={-6} rot={-9} dy={-40} k={k}><WaterCard /></Peek>

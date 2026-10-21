@@ -16,6 +16,7 @@ import { daysBetween, EXTEND_DAYS, fmtDay, fmtVal, Goal2, goalV2Store, useGoalV2
 import { useDrivers, useGoalV2Rows } from '@/features/goalv2/signs';
 import { TODAY } from '@/features/progress/trends';
 import { useStreak } from '@/features/streak/useStreak';
+import { fixed } from '@/design-system/tokens';
 
 type Past = { name: string; when: string; result: string; amount?: string };
 const HISTORY: Past[] = [
@@ -272,7 +273,7 @@ export default function GoalDetail() {
                   <View key={i} style={{ alignItems: 'center', gap: 6 }}>
                     <Txt v="caption">{dl}</Txt>
                     <View style={{ width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: done ? '#F0692C' : c.surface2, borderWidth: i === todayIdx && !done ? 2 : 0, borderColor: '#F0692C' }}>
-                      <Txt style={{ fontSize: 12, lineHeight: 17, color: done ? '#fff' : c.muted }}>{22 + i}</Txt>
+                      <Txt style={{ fontSize: 12, lineHeight: 17, color: done ? fixed.white : c.muted }}>{22 + i}</Txt>
                     </View>
                   </View>
                 );

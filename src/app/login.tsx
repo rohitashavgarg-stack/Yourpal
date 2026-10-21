@@ -17,6 +17,7 @@ import { useScenarios, useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
+import { fixed } from '@/design-system/tokens';
 
 type Step = 'phone' | 'otp' | 'programme';
 
@@ -127,7 +128,7 @@ export default function Login() {
 
         {step === 'phone' && (
           <Animated.View key="phone" entering={fade()} exiting={fadeOut()} style={{ gap: 16, flexGrow: 1 }}>
-            <YourPalLogo height={34} color={isDark ? '#fff' : LOGO_BLUE} />
+            <YourPalLogo height={34} color={isDark ? fixed.white : LOGO_BLUE} />
 
             <View style={{ gap: 6, marginTop: 12 }}>
               <Txt v="title">Log in with your phone</Txt>

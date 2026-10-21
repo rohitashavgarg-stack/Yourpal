@@ -14,6 +14,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import type { Programme } from './state';
+import { fixed } from '@/design-system/tokens';
 
 export const goBack = (fallback: string = '/(tabs)') => (router.canGoBack() ? router.back() : router.replace(fallback as any));
 export const goHome = () => (router.canDismiss() ? router.dismissAll() : router.replace('/(tabs)'));
@@ -50,7 +51,7 @@ export function ProgLogo({ p, size = 44 }: { p: Pick<Programme, 'id' | 'logo' | 
   if (p.id === 'gold') return <GymLogoMark size={size} />;
   return (
     <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: p.color, alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-      <Text style={{ color: '#fff', fontFamily: font.bold, fontSize: Math.round(size * 0.4), lineHeight: Math.round(size * 0.52) }}>{p.logo}</Text>
+      <Text style={{ color: fixed.white, fontFamily: font.bold, fontSize: Math.round(size * 0.4), lineHeight: Math.round(size * 0.52) }}>{p.logo}</Text>
     </View>
   );
 }
@@ -68,7 +69,7 @@ export function Switch({ on, onChange, label, locked }: { on: boolean; onChange?
     <Pressy accessibilityRole="switch" accessibilityLabel={label} accessibilityState={{ checked: on, disabled: !!locked }} disabled={locked} haptics={!locked}
       onPress={() => onChange?.(!on)} scaleTo={0.94} hitSlop={6} style={{ opacity: locked ? 0.55 : 1 }}>
       <Animated.View style={[{ width: 52, height: 32, borderRadius: 16, padding: 3 }, track]}>
-        <Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: '#fff', shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 3, shadowOffset: { width: 0, height: 1 } }, knob]} />
+        <Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: fixed.white, shadowColor: fixed.black, shadowOpacity: 0.15, shadowRadius: 3, shadowOffset: { width: 0, height: 1 } }, knob]} />
       </Animated.View>
     </Pressy>
   );
@@ -95,7 +96,7 @@ export function ListCard({ children, style }: { children: React.ReactNode; style
   const { c, isDark } = useTheme();
   return (
     <View style={[{ backgroundColor: c.surface, borderRadius: 28, paddingHorizontal: 18, paddingVertical: 4 },
-      !isDark && { shadowColor: '#101828', shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 }, elevation: 2 }, style]}>
+      !isDark && { shadowColor: fixed.shadow, shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 }, elevation: 2 }, style]}>
       {children}
     </View>
   );

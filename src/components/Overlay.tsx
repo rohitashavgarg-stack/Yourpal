@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
+import { fixed } from '@/design-system/tokens';
 
 // One overlay host for bottom sheets and toasts, rendered inside the phone.
 type SheetOpts = { label?: string; glow?: string }; // glow: a soft radial colour bleeding in from the top-right corner
@@ -155,7 +156,7 @@ function Toast({ msg, undo, onGone, raised, lift }: { msg: string; undo?: () => 
   const a = useAnimatedStyle(() => ({ opacity: o.value, transform: [{ translateY: y.value }] }));
   return (
     <Animated.View accessibilityLiveRegion="polite" accessibilityRole="alert" pointerEvents="box-none"
-      style={[{ position: 'absolute', left: 16, right: 16, ...(raised ? { top: 58 } : { bottom: lift || 104 }), zIndex: 200, elevation: 200, minHeight: 52, borderRadius: 18, backgroundColor: c.ink, flexDirection: 'row', alignItems: 'center', paddingLeft: 16, paddingRight: 6, gap: 8, shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 20, shadowOffset: { width: 0, height: 10 } }, a]}>
+      style={[{ position: 'absolute', left: 16, right: 16, ...(raised ? { top: 58 } : { bottom: lift || 104 }), zIndex: 200, elevation: 200, minHeight: 52, borderRadius: 18, backgroundColor: c.ink, flexDirection: 'row', alignItems: 'center', paddingLeft: 16, paddingRight: 6, gap: 8, shadowColor: fixed.black, shadowOpacity: 0.25, shadowRadius: 20, shadowOffset: { width: 0, height: 10 } }, a]}>
       <Text style={{ flex: 1, fontFamily: font.medium, fontSize: 14, lineHeight: 18, color: c.bg, paddingVertical: 12 }}>{msg}</Text>
       {undo && (
         <Pressable accessibilityRole="button" onPress={() => { haptic.light(); undo(); onGone(); }} style={{ height: 40, paddingHorizontal: 14, borderRadius: 14, backgroundColor: 'rgba(255,255,255,0.16)', justifyContent: 'center' }}>

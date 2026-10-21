@@ -28,12 +28,13 @@ import { FinishScreen, FinishStats } from '@/features/workout/FinishScreen';
 import { workoutUiStore } from '@/features/workout/ui';
 import { NewExercise, NewList } from '@/features/workout/NewWorkoutUI';
 import { FinishConfirmSheet, FormTipsSheet, SetMenuSheet, SwapSheet, WkApi, WkMenuSheet } from '@/features/workout/WorkoutSheets';
+import { fixed } from '@/design-system/tokens';
 
 function Bars({ n, pos, light }: { n: number; pos: number; light?: boolean }) {
   const { c } = useTheme();
   return (
     <View style={{ position: 'absolute', top: 12, left: 14, right: 14, flexDirection: 'row', gap: 4 }}>
-      {Array.from({ length: n }, (_, i) => <View key={i} style={{ flex: 1, height: 3, borderRadius: 2, backgroundColor: i < pos ? '#3563F2' : i === pos ? (light ? c.ink : '#F4F4F6') : (light ? c.surface3 : 'rgba(255,255,255,0.22)') }} />)}
+      {Array.from({ length: n }, (_, i) => <View key={i} style={{ flex: 1, height: 3, borderRadius: 2, backgroundColor: i < pos ? fixed.blue : i === pos ? (light ? c.ink : '#F4F4F6') : (light ? c.surface3 : 'rgba(255,255,255,0.22)') }} />)}
     </View>
   );
 }
@@ -41,10 +42,10 @@ function Bars({ n, pos, light }: { n: number; pos: number; light?: boolean }) {
 function HeroBg({ h }: { h: number }) {
   return (
     <>
-      <LinearGradient colors={['#2F6BEA', '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      <LinearGradient colors={[fixed.blue, '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
       <Svg width="100%" height="100%" viewBox={`0 0 358 ${h}`} preserveAspectRatio="xMidYMid slice" style={{ position: 'absolute' }}>
-        <Path d="M0 170 C 90 130 180 200 260 160 S 340 150 400 170 V 900 H0z" fill="#FFFFFF" opacity={0.08} />
-        <Circle cx={270} cy={40} r={h > 200 ? 170 : 130} fill="#FFFFFF" opacity={0.1} /><Circle cx={270} cy={40} r={h > 200 ? 104 : 80} fill="#FFFFFF" opacity={0.14} />
+        <Path d="M0 170 C 90 130 180 200 260 160 S 340 150 400 170 V 900 H0z" fill={fixed.white} opacity={0.08} />
+        <Circle cx={270} cy={40} r={h > 200 ? 170 : 130} fill={fixed.white} opacity={0.1} /><Circle cx={270} cy={40} r={h > 200 ? 104 : 80} fill={fixed.white} opacity={0.14} />
       </Svg>
     </>
   );
@@ -79,7 +80,7 @@ export default function Workout() {
   // Demo card colours: the illustration is light, so in dark mode the text on it must be dark.
   const photoCard = !!e && hasPhoto(e.id);
   const cardBg = photoCard && isDark ? '#F4F6FA' : c.surface;
-  const cardInk = photoCard && isDark ? '#0B0E14' : c.ink;
+  const cardInk = photoCard && isDark ? fixed.dark : c.ink;
   const cardMuted = photoCard && isDark ? '#5B6577' : c.muted;
   const cardChip = photoCard && isDark ? 'rgba(11,14,20,0.08)' : c.surface2;
   const cur = e ? firstTodo(e) : -1;
@@ -313,7 +314,7 @@ export default function Workout() {
               <LinearGradient pointerEvents="none" colors={[`${cardBg}00`, `${cardBg}E6`, cardBg]} locations={[0, 0.5, 1]} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 150 }} />
               <Pressy accessibilityRole="button" accessibilityLabel="Play form video" onPress={() => api.current.formTips()}
                 style={{ position: 'absolute', top: 28, right: 12, zIndex: 10, elevation: 10, height: 38, paddingLeft: 12, paddingRight: 14, borderRadius: 19, backgroundColor: 'rgba(11,14,20,0.82)', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                <Play size={13} color="#fff" fill="#fff" /><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 17, color: '#fff' }}>Form video</Txt>
+                <Play size={13} color={fixed.white} fill={fixed.white} /><Txt style={{ fontFamily: font.semibold, fontSize: 12, lineHeight: 17, color: fixed.white }}>Form video</Txt>
               </Pressy>
               <View style={{ position: 'absolute', left: 16, right: 16, bottom: 14, gap: 4 }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: 12, letterSpacing: 0.7, color: cardMuted }}>EXERCISE {s.exIdx + 1} OF {s.ex.length} · {e.muscles.toUpperCase()}</Txt>

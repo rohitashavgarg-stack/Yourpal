@@ -2,10 +2,11 @@ import React from 'react';
 import { CalendarCheck, Camera, ClipboardCheck, Dumbbell, Footprints, GlassWater, Heart, Moon, Ruler, Scale, UtensilsCrossed } from '@/lib/icons';
 import { useTheme } from '@/theme/ThemeProvider';
 import type { CardKey } from './data';
+import { fixed } from '@/design-system/tokens';
 
 // One icon and one colour per metric, shared by the Progress card and its trend screen. [light, dark]
 const LOOK: Record<CardKey, { Icon: React.ComponentType<any>; col: [string, string] }> = {
-  weight: { Icon: Scale, col: ['#2F6BEA', '#6FA0FF'] },
+  weight: { Icon: Scale, col: [fixed.blue, '#6FA0FF'] },
   cons: { Icon: CalendarCheck, col: ['#5E9E1A', '#A5D75C'] },
   diet: { Icon: UtensilsCrossed, col: ['#0F8A5F', '#5ED9AE'] },
   lifts: { Icon: Dumbbell, col: ['#C98A00', '#F2C14E'] },

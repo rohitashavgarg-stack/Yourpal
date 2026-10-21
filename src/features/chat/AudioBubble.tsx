@@ -5,6 +5,7 @@ import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { Pressy, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
+import { fixed } from '@/design-system/tokens';
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
@@ -22,7 +23,7 @@ export function AudioBubble({ uri, dur, me }: { uri: string; dur: number; me: bo
   const total = st.duration && st.duration > 0 ? st.duration : dur;
   const pct = total ? Math.min(1, (st.currentTime || 0) / total) : 0;
   const wave = useMemo(() => bars(uri), [uri]);
-  const fg = me ? '#fff' : c.accent;
+  const fg = me ? fixed.white : c.accent;
   const dim = me ? 'rgba(255,255,255,0.4)' : c.line;
 
   useEffect(() => { if (st.didJustFinish) { player.seekTo(0); } }, [st.didJustFinish]);
