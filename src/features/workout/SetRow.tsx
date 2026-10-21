@@ -11,7 +11,7 @@ import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fmt1 } from '@/lib/useNow';
 import { setLabel, setText } from './session';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 export type Draft = { k: number; r: number; t: number };
 
@@ -32,7 +32,7 @@ function Stepper({ value, unit, onChange, step, min, label, block }: { value: nu
     <View accessibilityRole="adjustable" accessibilityLabel={`${label}, ${shown} ${unit}`}
       accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
       onAccessibilityAction={(e) => onChange(Math.max(min, value + (e.nativeEvent.actionName === 'increment' ? step : -step)))}
-      style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', height: 44, borderRadius: 22, backgroundColor: c.surface2 }}>
+      style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', height: 44, borderRadius: radii.lg, backgroundColor: c.surface2 }}>
       <Pressable accessibilityLabel={`Minus ${step} ${unit}`} onPress={() => { haptic.tap(); onChange(Math.max(min, Math.round((value - step) * 10) / 10)); }} style={{ width: 34, height: 44, alignItems: 'center', justifyContent: 'center' }}>
         <Text style={{ fontSize: fontSizes.lg, lineHeight: 23, color: c.ink }}>−</Text>
       </Pressable>
@@ -109,10 +109,10 @@ export function SetRow(p: Props) {
         </Animated.View>
       </Animated.View>
       <Animated.View style={[{ position: 'absolute', top: 0, right: 0, bottom: 0, flexDirection: 'row', gap: 6, padding: 8 }, reveal]}>
-        <Pressy accessibilityLabel={`Swap exercise`} onPress={() => { p.onReveal(false); p.onSwap(); }} style={{ width: 66, borderRadius: 16, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}>
+        <Pressy accessibilityLabel={`Swap exercise`} onPress={() => { p.onReveal(false); p.onSwap(); }} style={{ width: 66, borderRadius: radii.md, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm }}>Swap</Txt>
         </Pressy>
-        <Pressy accessibilityLabel={`Skip set ${lbl}`} onPress={skipOut} style={{ width: 66, borderRadius: 16, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>
+        <Pressy accessibilityLabel={`Skip set ${lbl}`} onPress={skipOut} style={{ width: 66, borderRadius: radii.md, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.bg }}>Skip</Txt>
         </Pressy>
       </Animated.View>
@@ -123,11 +123,11 @@ export function SetRow(p: Props) {
             onPress={() => { if (swiped.current) return; if (p.revealed) p.onReveal(false); else if (x.st === 'todo' && !p.active) { haptic.tap(); p.onActivate(); } }}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 60, paddingLeft: 10, paddingRight: 8 }}>
             {x.w ? (
-              <View accessibilityLabel="Warm-up set: a lighter set before your working sets. It doesn't count toward your PRs." style={{ height: 24, paddingHorizontal: 7, borderRadius: 12, backgroundColor: c.tAct, justifyContent: 'center' }}>
+              <View accessibilityLabel="Warm-up set: a lighter set before your working sets. It doesn't count toward your PRs." style={{ height: 24, paddingHorizontal: 7, borderRadius: radii.sm, backgroundColor: c.tAct, justifyContent: 'center' }}>
                 <Text style={{ fontFamily: font.bold, fontSize: fontSizes.xs2, lineHeight: 13, color: c.cAct }}>Warm-up</Text>
               </View>
             ) : (
-              <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+              <View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm }}>{lbl}</Txt>
               </View>
             )}
@@ -139,7 +139,7 @@ export function SetRow(p: Props) {
                   <>
                     <Stepper label="Duration" unit="s" value={timing ? p.timerLeft! : p.draft.t} step={5} min={5} onChange={(t) => !timing && p.setDraft({ t })} block={pan} />
                     <Pressy accessibilityRole="button" accessibilityLabel={timing ? 'Stop timer and log' : `Start ${p.draft.t} second timer`} onPress={p.onTimer}
-                      style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: timing ? c.warn : c.accent, alignItems: 'center', justifyContent: 'center' }}>
+                      style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: timing ? c.warn : c.accent, alignItems: 'center', justifyContent: 'center' }}>
                       {timing ? <Square size={13} color={fixed.white} fill={fixed.white} /> : <Play size={15} color={fixed.white} fill={fixed.white} />}
                     </Pressy>
                   </>

@@ -12,7 +12,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { EMOJI_GROUPS } from './emoji';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const fmt = (ms: number) => {
   const s = Math.floor(ms / 1000);
@@ -36,7 +36,7 @@ function EmojiPanel({ onPick }: { onPick: (e: string) => void }) {
       <View style={{ flexDirection: 'row', gap: 6, paddingHorizontal: 12, paddingTop: 8 }}>
         {EMOJI_GROUPS.map((x, i) => (
           <Pressy key={x.key} accessibilityRole="button" accessibilityLabel={`${x.key} emoji`} onPress={() => setG(i)} scaleTo={0.9}
-            style={{ width: 44, height: 40, borderRadius: 14, alignItems: 'center', justifyContent: 'center', backgroundColor: g === i ? c.accentSoft : 'transparent' }}>
+            style={{ width: 44, height: 40, borderRadius: radii.sm, alignItems: 'center', justifyContent: 'center', backgroundColor: g === i ? c.accentSoft : 'transparent' }}>
             <Txt style={{ fontSize: fontSizes.xl2, lineHeight: 30 }}>{x.icon}</Txt>
           </Pressy>
         ))}
@@ -147,7 +147,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
 
   const lift = { shadowColor: fixed.shadow, shadowOpacity: 0.08, shadowRadius: 14, shadowOffset: { width: 0, height: 4 }, elevation: 3 } as const;
   const inner = { width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center', marginBottom: 4 } as const;
-  const circle = { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' } as const;
+  const circle = { width: 44, height: 44, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center' } as const;
 
   return (
     <View style={{ backgroundColor: c.bg }}>
@@ -158,7 +158,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
       )}
       <View style={{ paddingTop: 10, paddingHorizontal: 12, paddingBottom: emoji ? 6 : bottomInset + 10 }}>
         {rec ? (
-          <Animated.View entering={fade()} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 52, paddingHorizontal: 6, borderRadius: 28, backgroundColor: c.surface }}>
+          <Animated.View entering={fade()} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 52, paddingHorizontal: 6, borderRadius: radii.xl, backgroundColor: c.surface }}>
             <Pressy accessibilityRole="button" accessibilityLabel="Discard recording" onPress={() => { haptic.warn(); endRec(false); }} scaleTo={0.9} style={circle}>
               <Trash2 size={20} color={c.warn} />
             </Pressy>
@@ -182,9 +182,9 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
             {img && (
               <Animated.View entering={fade()} exiting={fadeOut()} style={{ padding: 10, paddingBottom: 0, flexDirection: 'row', zIndex: 2 }}>
                 <View>
-                  <Image source={{ uri: img }} accessibilityIgnoresInvertColors style={{ width: 76, height: 76, borderRadius: 16, backgroundColor: c.surface3 }} />
+                  <Image source={{ uri: img }} accessibilityIgnoresInvertColors style={{ width: 76, height: 76, borderRadius: radii.md, backgroundColor: c.surface3 }} />
                   <Pressy accessibilityRole="button" accessibilityLabel="Remove photo" onPress={() => setImg(undefined)} scaleTo={0.9} hitSlop={10}
-                    style={{ position: 'absolute', top: -6, right: -6, width: 24, height: 24, borderRadius: 12, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>
+                    style={{ position: 'absolute', top: -6, right: -6, width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>
                     <X size={14} color={c.bg} strokeWidth={2.6} />
                   </Pressy>
                 </View>

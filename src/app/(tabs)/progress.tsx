@@ -28,7 +28,7 @@ import { showProgressLoading, useProgressScenarios } from '@/features/progress/s
 import { GoalCard2 } from '@/features/goalv2/GoalCard2';
 import { GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 let firstLoad = true;
 
@@ -115,7 +115,7 @@ function ProgressCard({ k }: { k: CardKey }) {
       case 'meas': body = (
         <Row style={{ gap: 8 }}>
           {[{ l: 'Waist', v: '89 cm', d: '↓3' }, { l: 'Chest', v: '98 cm', d: '—' }, { l: 'Arm', v: '32 cm', d: '↑0.5' }].map((t) => (
-            <View key={t.l} style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 12, borderRadius: 16, backgroundColor: c.surface2 }}>
+            <View key={t.l} style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 12, borderRadius: radii.md, backgroundColor: c.surface2 }}>
               <Txt v="caption">{t.l}</Txt>
               <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl, lineHeight: 26 }}>{t.v}</Txt>
               <Txt v="caption">{t.d}</Txt>
@@ -133,9 +133,9 @@ function ProgressCard({ k }: { k: CardKey }) {
         <>
           <Row style={{ gap: 8 }}>
             {['Sep 2', ps.photos[ps.photos.length - 1]?.d ?? 'Sep 30'].map((l, i) => (
-              <View key={i} style={{ flex: 1, height: 130, borderRadius: 16, overflow: 'hidden', backgroundColor: c.surface2 }}>
+              <View key={i} style={{ flex: 1, height: 130, borderRadius: radii.md, overflow: 'hidden', backgroundColor: c.surface2 }}>
                 <Image source={i === 0 ? BEFORE_PHOTO : AFTER_PHOTO} resizeMode="cover" accessibilityIgnoresInvertColors style={{ width: '100%', height: '100%' }} />
-                <View style={{ position: 'absolute', left: 8, bottom: 8, paddingHorizontal: 9, paddingVertical: 3, borderRadius: 999, backgroundColor: 'rgba(0,0,0,0.55)' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 17, color: fixed.white }}>{l}</Txt></View>
+                <View style={{ position: 'absolute', left: 8, bottom: 8, paddingHorizontal: 9, paddingVertical: 3, borderRadius: radii.pill, backgroundColor: 'rgba(0,0,0,0.55)' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 17, color: fixed.white }}>{l}</Txt></View>
               </View>
             ))}
           </Row>

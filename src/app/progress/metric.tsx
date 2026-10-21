@@ -22,7 +22,7 @@ import { progressStore } from '@/features/progress/store';
 import { RANGES, Range, shift, trend } from '@/features/progress/trends';
 import { RangeBar, TrendChart } from '@/features/progress/TrendUI';
 import { useProgressScenarios } from '@/features/progress/scenarios';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 const TIP_UNIT: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: ' steps', water: ' L', hr: ' bpm', sleep: '', diet: '', cons: ' workouts' };
 
@@ -60,9 +60,9 @@ export default function MetricDetail() {
   return (
     <SubPage title={METRIC_TITLES[k]} fallback="/progress">
       <RangeBar />
-      <View style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 18, gap: 8, overflow: 'hidden' }, cardShadow(isDark)]}>
+      <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 8, overflow: 'hidden' }, cardShadow(isDark)]}>
         <CornerGlow color={look.tint} size={320} />
-        <View style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: 18, backgroundColor: look.tint + '26', alignItems: 'center', justifyContent: 'center' }}><look.Icon size={19} color={look.tint} /></View>
+        <View style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: radii.md, backgroundColor: look.tint + '26', alignItems: 'center', justifyContent: 'center' }}><look.Icon size={19} color={look.tint} /></View>
         <Animated.View key={t.key + 'h'} entering={fade()}>
           <Txt style={{ fontFamily: font.displayBold, fontSize: 42, lineHeight: 52, letterSpacing: -1 }}>
             {t.big}{bigUnit && t.hasData ? <Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: c.muted }}>{bigUnit}</Txt> : null}
@@ -77,7 +77,7 @@ export default function MetricDetail() {
       {k === 'diet' && <Button label="Log a meal" onPress={() => openSheet(<QuickLogSheet mealId={nextMeal(d) ?? 'sn'} mode="write" />, { label: 'Log a meal' })} />}
       {(k === 'hr' || k === 'sleep' || k === 'meas' || k === 'cons') && <Button label={LOG_SHEETS[k].button} onPress={() => openSheet(<ManualLogSheet {...LOG_SHEETS[k].props} />, { label: LOG_SHEETS[k].props.title })} />}
       {k === 'weight' && (paused ? (
-        <View style={{ padding: 16, borderRadius: 22, backgroundColor: c.surface2, gap: 4 }}>
+        <View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.surface2, gap: 4 }}>
           <Txt style={{ fontFamily: font.semibold }}>Logging paused</Txt>
           <Txt muted style={{ fontSize: fontSizes.md }}>Your membership has expired. History stays here; renew at the front desk to log again.</Txt>
         </View>

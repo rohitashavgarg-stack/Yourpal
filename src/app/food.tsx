@@ -19,7 +19,7 @@ import { font, spring } from '@/theme/tokens';
 import { mealById } from '@/features/today/meals';
 import { QuickLogSheet } from '@/features/today/QuickLogSheet';
 import { askCoach } from '@/features/coach/coach';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 export default function FoodDetail() {
   const { gate: logGate } = useLogGate();
@@ -94,7 +94,7 @@ export default function FoodDetail() {
           <Txt muted style={{ marginTop: 6, fontSize: fontSizes.md, lineHeight: 20 }}>{desc}</Txt>
           <Row style={{ gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
             {[['Serving', fd.serve], ['Type', foodTypeLabel(fd.type)], ['Meal', meal.n]].map(([l, v]) => (
-              <View key={l} style={{ gap: 2, paddingVertical: 9, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line }}>
+              <View key={l} style={{ gap: 2, paddingVertical: 9, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line }}>
                 <Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>{l}</Txt>
                 <Row style={{ gap: 6 }}>{l === 'Type' && <FoodMark type={fd!.type} size={13} />}<Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md }}>{v}</Txt></Row>
               </View>
@@ -110,22 +110,22 @@ export default function FoodDetail() {
           <Txt style={{ fontFamily: font.semibold, paddingHorizontal: 4, paddingTop: 4 }}>Nutrition</Txt>
           <Card style={{ padding: 18, gap: 14 }}>
             <Row style={{ gap: 10 }}>
-              <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: c.tAct, alignItems: 'center', justifyContent: 'center' }}><Flame size={20} color={c.cAct} /></View>
+              <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.tAct, alignItems: 'center', justifyContent: 'center' }}><Flame size={20} color={c.cAct} /></View>
               <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 34 }}>{fd.k}</Txt><Txt muted>kcal</Txt>
               <View style={{ flex: 1 }} />
               <Txt v="caption" style={{ textAlign: 'right' }}>{Math.round((fd.k / KCAL_TARGET) * 100)}% of your{'\n'}daily 1,800</Txt>
             </Row>
             <Row style={{ gap: 8 }}>
               {macros.map((m) => (
-                <View key={m.l} style={{ flex: 1, borderWidth: 1, borderColor: c.line, borderRadius: 18, padding: 12, gap: 6 }}>
+                <View key={m.l} style={{ flex: 1, borderWidth: 1, borderColor: c.line, borderRadius: radii.md, padding: 12, gap: 6 }}>
                   <Txt v="caption">{m.l}</Txt>
                   <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 24 }}>{m.v}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.xs }}> g</Txt></Txt>
-                  <View style={{ height: 4, borderRadius: 2, backgroundColor: c.surface2, overflow: 'hidden' }}><View style={{ height: '100%', width: `${Math.min(100, Math.round(m.w * 100))}%`, backgroundColor: m.col, borderRadius: 2 }} /></View>
+                  <View style={{ height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}><View style={{ height: '100%', width: `${Math.min(100, Math.round(m.w * 100))}%`, backgroundColor: m.col, borderRadius: radii.xs }} /></View>
                 </View>
               ))}
             </Row>
             <Pressy accessibilityRole="button" accessibilityState={{ expanded: micro }} onPress={() => setMicro((v) => !v)} scaleTo={0.985}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: c.surface2, borderRadius: 18, paddingVertical: 12, paddingHorizontal: 14 }}>
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: c.surface2, borderRadius: radii.md, paddingVertical: 12, paddingHorizontal: 14 }}>
               <Leaf size={20} color={c.cNutri} />
               <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.semibold }}>Micronutrients</Txt><Txt v="caption">Fibre, vitamins and minerals</Txt></View>
               <Animated.View style={chev}><ChevronDown size={18} color={c.muted} /></Animated.View>
@@ -135,7 +135,7 @@ export default function FoodDetail() {
                 {micros.map(([l, v, pct]) => (
                   <View key={l} style={{ gap: 5 }}>
                     <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: fontSizes.sm }}>{l}</Txt><Txt v="mono" muted style={{ fontSize: fontSizes.sm }}>{v} · {pct}%</Txt></Row>
-                    <View style={{ height: 4, borderRadius: 2, backgroundColor: c.surface2, overflow: 'hidden' }}><View style={{ height: '100%', width: `${Math.min(100, pct)}%`, backgroundColor: c.cNutri, borderRadius: 2 }} /></View>
+                    <View style={{ height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}><View style={{ height: '100%', width: `${Math.min(100, pct)}%`, backgroundColor: c.cNutri, borderRadius: radii.xs }} /></View>
                   </View>
                 ))}
                 <Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>% of daily value for an adult. A guide, not medical advice.</Txt>

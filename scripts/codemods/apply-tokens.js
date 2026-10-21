@@ -80,10 +80,18 @@ function scan(file, kinds) {
   const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, file.endsWith('x') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
   const edits = []; const left = []; const used = new Set(); const log = [];
   const lineOf = (n) => sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1;
-  const numeric = (leaf, steps, ns, kind, skip) => {
+  const dim = (obj) => { // literal width / height in the same style object, if any
+    if (!obj || !ts.isObjectLiteralExpression(obj)) return null; const d = [];
+    for (const pr of obj.properties) if (ts.isPropertyAssignment(pr) && ['width', 'height'].includes(keyName(pr.name) || '') && ts.isNumericLiteral(pr.initializer)) d.push(Number(pr.initializer.text));
+    return d.length ? Math.min(...d) : null;
+  };
+  const numeric = (leaf, steps, ns, kind, skip, owner) => {
     const v = Number(leaf.text);
     if (kind === 'radii' && v >= 500) { if (kinds.includes(kind)) { edits.push({ s: leaf.getStart(sf), e: leaf.getEnd(), t: 'radii.pill' }); used.add('radii'); } return; } // a full pill
     const r = snap(v, steps, skip);
+    // A smaller radius can turn a circle or a pill into a rounded square. Only shrink a radius when the same style object has a literal
+    // width or height that is clearly larger than twice the radius; otherwise leave it for review.
+    if (r.name && kind === 'radii' && !r.exact && r.step < v) { const m = dim(owner); if (m == null || v * 2 > m - 2) { left.push({ kind, file, line: lineOf(leaf), value: v, nearest: { k: r.name, s: r.step, d: r.d }, tie: null, reason: 'may be a circle or pill, and the nearest step is smaller' }); return; } }
     if (r.name && kinds.includes(kind)) { edits.push({ s: leaf.getStart(sf), e: leaf.getEnd(), t: ns + '.' + r.name }); used.add(ns); if (!r.exact) log.push({ file, line: lineOf(leaf), from: v, to: ns + '.' + r.name + ' (' + r.step + ')' }); }
     else if (!r.name) left.push({ kind, file, line: lineOf(leaf), value: v, nearest: r.nearest, tie: r.tie });
   };
@@ -92,7 +100,7 @@ function scan(file, kinds) {
       const name = ts.isPropertyAssignment(n) ? keyName(n.name) : n.name.getText(sf);
       const init = ts.isPropertyAssignment(n) ? n.initializer : (n.initializer && ts.isJsxExpression(n.initializer) ? n.initializer.expression : null);
       if (name && FONT_KEYS.includes(name)) numericLeaves(init).forEach((l) => numeric(l, FONT, 'fontSizes', 'fontSizes'));
-      if (name && RADIUS_KEYS.includes(name)) numericLeaves(init).forEach((l) => numeric(l, RAD, 'radii', 'radii', ['pill']));
+      if (name && RADIUS_KEYS.includes(name)) numericLeaves(init).forEach((l) => numeric(l, RAD, 'radii', 'radii', ['pill'], ts.isPropertyAssignment(n) ? n.parent : null));
     }
     if (ts.isStringLiteral(n) || ts.isNoSubstitutionTemplateLiteral(n)) {
       const p = n.parent; const v = n.text;
@@ -192,7 +200,7 @@ function review() {
   L.push('');
   L.push('Scale: ' + Object.entries(FONT).map(([k, v]) => k + ' ' + v).join(', ') + '.');
   L.push('');
-  const why = (r) => (r.tie ? 'tie between ' + r.nearest.k + ' (' + r.nearest.s + ') and ' + r.tie.k + ' (' + r.tie.s + ')' : 'more than 2 px from any step');
+  const why = (r) => (r.reason ? r.reason : r.tie ? 'tie between ' + r.nearest.k + ' (' + r.nearest.s + ') and ' + r.tie.k + ' (' + r.tie.s + ')' : 'more than 2 px from any step');
   tbl(['Location', 'Value', 'Nearest step', 'Distance', 'Why not changed'], rows.fontSizes.sort((a, b) => a.value - b.value || a.file.localeCompare(b.file) || a.line - b.line).map((r) => [rel(r.file, r.line), r.value, '`fontSizes.' + r.nearest.k + '` (' + r.nearest.s + ')', r.nearest.d, why(r)]));
   L.push('## 5. Radii');
   L.push('');

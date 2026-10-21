@@ -6,7 +6,7 @@ import { Pressy, Row, Txt } from '@/components/ui';
 import { useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 // Membership is view-only in the app: this only tells the member what is going on and points to the membership page.
 // One card design for the membership everywhere (the Today banner and the Gym tab card), full card width:
@@ -43,7 +43,7 @@ export function MembershipCard({ n }: { n: Notice }) {
     <Pressy accessibilityRole="button" accessibilityLabel={`${n.title}. ${n.line} ${n.act ?? ''} See plan`} onPress={() => router.push('/gym/membership')} scaleTo={0.98}
       style={{ alignSelf: 'stretch', borderRadius: 20, backgroundColor: warn ? c.warnSoft : c.surface, paddingVertical: 12, paddingHorizontal: 14 }}>
       <Row style={{ gap: 12, alignItems: 'flex-start' }}>
-        <View style={{ width: 36, height: 36, borderRadius: 12, backgroundColor: fg + '2E', alignItems: 'center', justifyContent: 'center' }}><Icon size={17} color={fg} /></View>
+        <View style={{ width: 36, height: 36, borderRadius: radii.sm, backgroundColor: fg + '2E', alignItems: 'center', justifyContent: 'center' }}><Icon size={17} color={fg} /></View>
         <View style={{ flex: 1, gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: c.ink }}>{n.title}</Txt>
           <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.ink, opacity: 0.8 }}>{n.line}</Txt>
@@ -69,7 +69,7 @@ export function PaymentBanner() {
       <Pressy accessibilityRole="button" accessibilityLabel={`${n.title}. ${n.line} View plan`} onPress={() => router.push('/gym/membership')} scaleTo={1}
         style={{ flex: 1, paddingVertical: 14, paddingLeft: 16, paddingRight: n.once ? 4 : 16 }}>
         <Row style={{ gap: 12 }}>
-          <View style={{ width: 40, height: 40, borderRadius: 13, backgroundColor: c.warn + '2E', alignItems: 'center', justifyContent: 'center' }}><Icon size={18} color={c.warn} /></View>
+          <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.warn + '2E', alignItems: 'center', justifyContent: 'center' }}><Icon size={18} color={c.warn} /></View>
           <View style={{ flex: 1, gap: 1 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: c.ink }}>{n.title}</Txt>
             <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{n.line}</Txt>

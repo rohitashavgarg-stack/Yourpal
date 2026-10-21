@@ -24,7 +24,7 @@ import { LineRow, ListCard, Note, SubPage } from '@/features/shell/parts';
 import { resetShell, useShell } from '@/features/shell/state';
 import { goalSummary } from '@/features/shell/goal';
 import { LogoutSheet } from '@/features/shell/sheets';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const maskPhone = (p: string) => {
   const d = (p || '').replace(/\D/g, '');
@@ -75,16 +75,16 @@ export default function Profile() {
           <View style={{ flex: 1, gap: 4, paddingTop: 4 }}>
             <Txt style={{ fontFamily: font.light, fontSize: 28, lineHeight: 36, letterSpacing: -0.8 }} numberOfLines={2}>{p.name || 'Rohitashav Garg'}</Txt>
             <Txt v="mono" muted>{maskPhone(state.phone)}</Txt>
-            {state.sc.member === 'PT member' && <View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, borderRadius: 12, backgroundColor: '#F5B301', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 18, color: '#3A2A00' }}>Premium · PT</Txt></View>}
+            {state.sc.member === 'PT member' && <View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, borderRadius: radii.sm, backgroundColor: '#F5B301', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 18, color: '#3A2A00' }}>Premium · PT</Txt></View>}
           </View>
-          <Pressy accessibilityRole="button" accessibilityLabel="Edit name and number" onPress={go('/profile/details')} scaleTo={0.94} style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: c.surface, justifyContent: 'center' }}>
+          <Pressy accessibilityRole="button" accessibilityLabel="Edit name and number" onPress={go('/profile/details')} scaleTo={0.94} style={{ height: 44, paddingHorizontal: 18, borderRadius: radii.lg, backgroundColor: c.surface, justifyContent: 'center' }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20 }}>Edit</Txt>
           </Pressy>
         </Row>
       </View>
 
       {s.deleting && (
-        <Animated.View entering={fade()} exiting={fadeOut()} style={{ paddingVertical: 14, paddingHorizontal: 18, borderRadius: 22, backgroundColor: c.warnSoft, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <Animated.View entering={fade()} exiting={fadeOut()} style={{ paddingVertical: 14, paddingHorizontal: 18, borderRadius: radii.lg, backgroundColor: c.warnSoft, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
           <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.warn }}>Account scheduled for deletion on 28 Oct. Your programmes keep their own records.</Txt>
           <Button kind="secondary" small label="Cancel" accessibilityLabel="Cancel account deletion" onPress={() => { set({ deleting: false }); toast('Deletion cancelled'); }} />
         </Animated.View>
@@ -98,7 +98,7 @@ export default function Profile() {
           <GoalTile title="Water" value="3 L" onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'water' } })} />
         </Row>
         <Pressy accessibilityRole="button" accessibilityLabel={`Goal: ${g2.name}. Change goal`} onPress={go('/goal')} scaleTo={0.985}
-          style={{ minHeight: 64, borderRadius: 22, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          style={{ minHeight: 64, borderRadius: radii.lg, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <View style={{ flex: 1 }}>
             <Txt v="caption" style={{ fontSize: fontSizes.xs }}>Main goal</Txt>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{g2.name}</Txt>
@@ -139,7 +139,7 @@ function GoalTile({ title, value, onPress }: { title: string; value: string; onP
   const { c } = useTheme();
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`${title} goal ${value}. Edit`} onPress={onPress} scaleTo={0.97}
-      style={{ flex: 1, minHeight: 84, borderRadius: 22, backgroundColor: c.surface, padding: 14, justifyContent: 'space-between' }}>
+      style={{ flex: 1, minHeight: 84, borderRadius: radii.lg, backgroundColor: c.surface, padding: 14, justifyContent: 'space-between' }}>
       <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 30, letterSpacing: -0.5 }}>{value}</Txt>
       <Row style={{ justifyContent: 'space-between' }}>
         <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{title}</Txt>
@@ -155,16 +155,16 @@ function TrackerPromo({ onPress }: { onPress: () => void }) {
   const W = 134, k = W / STEPS_CARD;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Tracker designs. Choose how your trackers look" onPress={onPress} scaleTo={0.985}
-      style={{ height: 196, borderRadius: 28, overflow: 'hidden', backgroundColor: fixed.dark }}>
+      style={{ height: 196, borderRadius: radii.xl, overflow: 'hidden', backgroundColor: fixed.dark }}>
       <LinearGradient colors={[fixed.dark, fixed.shadow]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
       {/* soft white glow along the inside edge, lighter than the swipe-to-start button */}
-      <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: 28, boxShadow: [{ offsetX: 0, offsetY: 0, blurRadius: 24, spreadDistance: 0, color: 'rgba(255,255,255,0.3)', inset: true }] } as any} />
+      <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: radii.xl, boxShadow: [{ offsetX: 0, offsetY: 0, blurRadius: 24, spreadDistance: 0, color: 'rgba(255,255,255,0.3)', inset: true }] } as any} />
       <Row style={{ paddingTop: 18, paddingHorizontal: 20, justifyContent: 'space-between' }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29, letterSpacing: -0.5, color: fixed.white }}>Tracker designs</Txt>
           <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: 'rgba(255,255,255,0.6)' }}>Pick how your trackers look</Txt>
         </View>
-        <View style={{ width: 52, height: 36, borderRadius: 18, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={18} color={fixed.dark} /></View>
+        <View style={{ width: 52, height: 36, borderRadius: radii.md, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={18} color={fixed.dark} /></View>
       </Row>
       {/* three kinds of trackers peek up from the bottom: water, heart rate, steps (in front) */}
       <Peek x={-6} rot={-9} dy={-40} k={k}><WaterCard /></Peek>

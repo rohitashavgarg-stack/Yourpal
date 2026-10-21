@@ -9,7 +9,7 @@ import { useGoalV2 } from '@/features/goalv2/model';
 import { createStore } from '@/lib/createStore';
 import { LinearGradient } from 'expo-linear-gradient';
 import { font } from '@/theme/tokens';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 // Which card sits at the top of Today: the whole goal (the live goal card) or today's calories. Demo panel only for now.
 export const topCardStore = createStore(() => ({ mode: 'Today card' as 'Goal card' | 'Today card' }));
@@ -30,8 +30,8 @@ function Half({ icon, label, unit, value, of, pct, color }: { icon: React.ReactN
         <Txt numberOfLines={1} style={{ flex: 1, textAlign: 'right', fontSize: fontSizes.sm, lineHeight: 18, color: MUTED }}>{unit}</Txt>
       </Row>
       <Txt style={{ fontFamily: font.regular, fontSize: 36, lineHeight: 44, letterSpacing: -1, color: WHITE }}>{value}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.base, lineHeight: 20, color: MUTED, letterSpacing: 0 }}>{` / ${of}`}</Txt></Txt>
-      <View style={{ height: 5, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.18)', overflow: 'hidden' }}>
-        <View style={{ width: `${Math.max(0, Math.min(100, pct * 100))}%`, height: '100%', borderRadius: 3, backgroundColor: color }} />
+      <View style={{ height: 5, borderRadius: radii.xs, backgroundColor: 'rgba(255,255,255,0.18)', overflow: 'hidden' }}>
+        <View style={{ width: `${Math.max(0, Math.min(100, pct * 100))}%`, height: '100%', borderRadius: radii.xs, backgroundColor: color }} />
       </View>
     </View>
   );
@@ -47,7 +47,7 @@ export function TodayBudgetCard() {
   const burn = live ? burned(d) : done ? wkDoneInfo(d).k : 0;
   const pct = Math.round(Math.max(0, Math.min(1, g.pct)) * 100);
   return (
-    <View style={{ borderRadius: 28, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
+    <View style={{ borderRadius: radii.xl, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
       <LinearGradient colors={['#1B1D22', '#1E2438', '#2A3860']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
       <Row style={{ gap: 16, alignItems: 'flex-start', paddingHorizontal: 18, paddingTop: 18, paddingBottom: 16 }}>
         <Half icon={<UtensilsCrossed size={17} color={MINT} />} label="Eat today" unit="kcal" value={inr(eaten)} of={inr(KCAL_TARGET)} pct={eaten / KCAL_TARGET} color={MINT} />

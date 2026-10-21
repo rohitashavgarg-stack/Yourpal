@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, View } from 'react-native';
 import Svg, { Circle, Line, Rect } from 'react-native-svg';
 import { useTheme } from '@/theme/ThemeProvider';
-import { fixed } from '@/design-system/tokens';
+import { radii, fixed } from '@/design-system/tokens';
 
 type P = readonly [number, number];
 
@@ -40,7 +40,7 @@ export function ExerciseArt({ id, width = 230, fill }: { id: string; width?: num
     const h = Math.round(w / photo.ratio);
     const mr = photo.mr ? photo.mr + (isDark ? 20 : 0) : 0;
     return (
-      <View accessibilityLabel="Exercise demonstration" style={{ width: w + (isDark ? 24 : 0), height: h + (isDark ? 16 : 0), borderRadius: 26, marginRight: mr, marginTop: photo.mt ?? 0, backgroundColor: isDark ? '#F4F6FA' : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+      <View accessibilityLabel="Exercise demonstration" style={{ width: w + (isDark ? 24 : 0), height: h + (isDark ? 16 : 0), borderRadius: radii.xl, marginRight: mr, marginTop: photo.mt ?? 0, backgroundColor: isDark ? '#F4F6FA' : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
         <Image source={photo.src} resizeMode="contain" accessibilityIgnoresInvertColors style={{ width: w, height: h, ...(isDark ? null : ({ mixBlendMode: 'multiply' } as any)) }} />
       </View>
     );

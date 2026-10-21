@@ -25,7 +25,7 @@ import { ItemMenuSheet, SwapSheet } from './Sheets';
 import { QtySheet } from './QtySheet';
 import { fmtNum, fmtQty, Qty, splitFood, stepFor, unitLabel } from './qty';
 import { DItem, dietItems, dietTotals, setP, useCountUp, usePlans } from './store';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
 const E = ({ i, children }: { i: number; children: React.ReactNode }) => <Animated.View entering={fade(i * 40)}>{children}</Animated.View>;
@@ -64,8 +64,8 @@ function MacroBar({ l, v, target, col }: { l: string; v: number; target: number;
         <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm }}>{l}</Txt>
         <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{shown} / {target} g</Txt>
       </Row>
-      <View style={{ height: 6, borderRadius: 3, backgroundColor: c.surface2, overflow: 'hidden' }}>
-        <Animated.View style={[{ height: '100%', borderRadius: 3, backgroundColor: col }, a]} />
+      <View style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>
+        <Animated.View style={[{ height: '100%', borderRadius: radii.xs, backgroundColor: col }, a]} />
       </View>
     </View>
   );
@@ -103,7 +103,7 @@ function QtyControl({ mid, it, qty, locked }: { mid: MealId; it: DItem; qty: Qty
 
   const b = (label: string, on: () => void, off: boolean, icon: React.ReactNode) => (
     <Pressy accessibilityRole="button" accessibilityLabel={`${label} ${qty.unit || 'piece'}`} disabled={off} onPress={on} scaleTo={0.86} hitSlop={6}
-      style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center', opacity: off ? 0.35 : 1 }}>
+      style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center', opacity: off ? 0.35 : 1 }}>
       {icon}
     </Pressy>
   );
@@ -118,7 +118,7 @@ function QtyControl({ mid, it, qty, locked }: { mid: MealId; it: DItem; qty: Qty
         </Pressy>
         {b('More', () => go(cur + step), cur >= max, <Plus size={16} color={c.accentText} strokeWidth={2.4} />)}
       </View>
-      {changed && <View accessibilityLabel="Changed from plan" style={{ position: 'absolute', top: 0, right: 0, width: 8, height: 8, borderRadius: 4, backgroundColor: c.warn }} />}
+      {changed && <View accessibilityLabel="Changed from plan" style={{ position: 'absolute', top: 0, right: 0, width: 8, height: 8, borderRadius: radii.xs, backgroundColor: c.warn }} />}
     </View>
   );
 }
@@ -188,14 +188,14 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
     : `~${kShown} kcal · P ${Math.round(it.p * it.por)} · C ${Math.round(it.c * it.por)} · F ${Math.round(it.f * it.por)} g`;
 
   return (
-    <View style={{ borderRadius: 18, overflow: 'hidden' }}>
-      <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 18 }, under]}>
+    <View style={{ borderRadius: radii.md, overflow: 'hidden' }}>
+      <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: radii.md, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 18 }, under]}>
         <Animated.View style={doneL}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.dark }}>Eaten</Txt></Animated.View>
         <Animated.View style={swapL}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.white }}>Swap</Txt></Animated.View>
       </Animated.View>
       <GestureDetector gesture={pan}>
         <Animated.View collapsable={false}
-          style={[{ minHeight: 64, borderRadius: 18, paddingLeft: 12, paddingRight: 4, flexDirection: 'row', alignItems: 'center', gap: 8 }, fg]}>
+          style={[{ minHeight: 64, borderRadius: radii.md, paddingLeft: 12, paddingRight: 4, flexDirection: 'row', alignItems: 'center', gap: 8 }, fg]}>
           <Animated.View style={[{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, minWidth: 0 }, content]}>
             <FoodMark type={it.type} />
             <View style={{ flex: 1, minWidth: 0 }}>
@@ -285,7 +285,7 @@ function AteElse({ onPress }: { onPress: () => void }) {
   const { c } = useTheme();
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Ate something else? Log it" onPress={onPress}
-      style={{ height: 44, borderRadius: 22, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+      style={{ height: 44, borderRadius: radii.lg, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
       <Plus size={16} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>Ate something else?</Txt>
     </Pressy>
   );
@@ -337,7 +337,7 @@ export function DietPlan() {
           ))}
         </Row>
         {overBy > 0 && (
-          <Animated.View entering={fade()} accessibilityRole="alert" style={{ marginTop: 8, padding: 12, borderRadius: 16, backgroundColor: c.warnSoft }}>
+          <Animated.View entering={fade()} accessibilityRole="alert" style={{ marginTop: 8, padding: 12, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
             <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>You're about {inr(overBy)} kcal over today. That's okay. Keep your next meal light and have some water.</Txt>
           </Animated.View>
         )}

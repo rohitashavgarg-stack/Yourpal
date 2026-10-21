@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { font, light } from '@/theme/tokens';
 import { ChevronDown } from '@/lib/icons';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // Building blocks of the demo-controls panels, in the same language as the app: white cards with a hairline, outline chips that turn black
 // when chosen, a tinted track with a black thumb for two or three options, small black icon tiles. The panel always uses the light palette.
@@ -12,13 +12,13 @@ type IconC = React.ComponentType<{ size?: number; color?: string }>;
 
 export function PanelCard({ icon: Icon, title, pill, children }: { icon: IconC; title: string; pill?: { label: string; tone?: 'good' | 'info' }; children: React.ReactNode }) {
   return (
-    <View style={{ backgroundColor: fixed.white, borderRadius: 18, borderWidth: 1, borderColor: P.line, padding: 10, gap: 8 }}>
+    <View style={{ backgroundColor: fixed.white, borderRadius: radii.md, borderWidth: 1, borderColor: P.line, padding: 10, gap: 8 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1 }}>
           <Icon size={15} color={P.ink} />
           <Text numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 13.5, lineHeight: 19, color: P.ink }}>{title}</Text>
         </View>
-        {pill ? <View style={{ height: 22, paddingHorizontal: 8, borderRadius: 11, borderWidth: 1, borderColor: P.chip, justifyContent: 'center' }}><Text numberOfLines={1} style={{ fontFamily: font.medium, fontSize: 11.5, lineHeight: 16, color: P.ink }}>{pill.label}</Text></View> : null}
+        {pill ? <View style={{ height: 22, paddingHorizontal: 8, borderRadius: radii.sm, borderWidth: 1, borderColor: P.chip, justifyContent: 'center' }}><Text numberOfLines={1} style={{ fontFamily: font.medium, fontSize: 11.5, lineHeight: 16, color: P.ink }}>{pill.label}</Text></View> : null}
       </View>
       {children}
     </View>
@@ -36,7 +36,7 @@ export function Choice({ label, options, value, onPick }: { label: string; optio
     <View style={{ gap: 4 }}>
       <FieldLabel>{label}</FieldLabel>
       {seg ? (
-        <View style={{ flexDirection: 'row', padding: 2, borderRadius: 16, backgroundColor: P.tint }}>
+        <View style={{ flexDirection: 'row', padding: 2, borderRadius: radii.md, backgroundColor: P.tint }}>
           {options.map((o) => {
             const on = o === value;
             return (
@@ -83,7 +83,7 @@ export function Actions({ label, options, onPick }: { label: string; options: st
 export function QuickTime({ icon: Icon, label, time, onPress }: { icon: IconC; label: string; time: string; onPress: () => void }) {
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={`Jump to ${label}, ${time}`} onPress={onPress}
-      style={{ flexBasis: '30%', flexGrow: 1, flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 6, paddingHorizontal: 8, borderRadius: 12, borderWidth: 1, borderColor: P.line, backgroundColor: P.bg }}>
+      style={{ flexBasis: '30%', flexGrow: 1, flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 6, paddingHorizontal: 8, borderRadius: radii.sm, borderWidth: 1, borderColor: P.line, backgroundColor: P.bg }}>
       <Icon size={15} color={P.ink} />
       <View>
         <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: P.ink }}>{label}</Text>
@@ -109,7 +109,7 @@ export function Dropdown({ label, options, value, onPick, placeholder = 'Choose'
   return (
     <View style={{ gap: 4 }}>
       <Pressable accessibilityRole="button" accessibilityLabel={`${label}: ${value || placeholder}`} accessibilityState={{ expanded: open }} onPress={() => setOpen((o) => !o)}
-        style={{ minHeight: 32, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingHorizontal: 10, borderRadius: 12, backgroundColor: open ? P.track : P.tint }}>
+        style={{ minHeight: 32, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingHorizontal: 10, borderRadius: radii.sm, backgroundColor: open ? P.track : P.tint }}>
         <Text numberOfLines={1} style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: P.muted }}>{label}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, flexShrink: 1 }}>
           <Text numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 12.5, lineHeight: 17, color: value ? P.ink : P.muted, flexShrink: 1 }}>{value || placeholder}</Text>
@@ -138,7 +138,7 @@ export function SwitchChip({ label, on, onPress }: { label: string; on: boolean;
   return (
     <Pressable accessibilityRole="switch" accessibilityState={{ checked: on }} accessibilityLabel={label} onPress={onPress}
       style={{ flex: 1, minHeight: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, paddingHorizontal: 6, borderRadius: 15, borderWidth: 1, borderColor: on ? P.ink : P.chip, backgroundColor: on ? P.ink : 'transparent' }}>
-      <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: on ? fixed.live : P.chip }} />
+      <View style={{ width: 6, height: 6, borderRadius: radii.xs, backgroundColor: on ? fixed.live : P.chip }} />
       <Text numberOfLines={1} style={{ fontFamily: font.medium, fontSize: 11.5, lineHeight: 15, color: on ? fixed.white : P.ink }}>{label}</Text>
     </Pressable>
   );
@@ -147,7 +147,7 @@ export function SwitchChip({ label, on, onPress }: { label: string; on: boolean;
 // A one-off button: runs something, nothing stays selected.
 export function ActionChip({ label, onPress }: { label: string; onPress: () => void }) {
   return (
-    <Pressable accessibilityRole="button" onPress={onPress} style={{ height: 32, paddingHorizontal: 12, borderRadius: 16, backgroundColor: P.ink, justifyContent: 'center' }}>
+    <Pressable accessibilityRole="button" onPress={onPress} style={{ height: 32, paddingHorizontal: 12, borderRadius: radii.md, backgroundColor: P.ink, justifyContent: 'center' }}>
       <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: fixed.white }}>{label}</Text>
     </Pressable>
   );

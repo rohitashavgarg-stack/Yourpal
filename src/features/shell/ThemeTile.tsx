@@ -4,7 +4,7 @@ import { Check } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // A small phone drawn in each theme's own colours, so the choice is something you can see.
 const MOCK = {
@@ -17,20 +17,20 @@ export function ThemeTile({ mode, on, onPress }: { mode: 'Light' | 'Dark' | 'Sys
     const m = MOCK[t];
     return (
       <View style={[{ flex: 1, backgroundColor: m.bg, padding: 8, gap: 5 }, style]}>
-        <View style={{ width: 22, height: 5, borderRadius: 3, backgroundColor: m.ink, opacity: 0.8 }} />
+        <View style={{ width: 22, height: 5, borderRadius: radii.xs, backgroundColor: m.ink, opacity: 0.8 }} />
         <View style={{ height: 22, borderRadius: 7, backgroundColor: c.accent }} />
-        <View style={{ height: 14, borderRadius: 6, backgroundColor: m.card }} />
-        <View style={{ height: 14, borderRadius: 6, backgroundColor: m.card }} />
+        <View style={{ height: 14, borderRadius: radii.xs, backgroundColor: m.card }} />
+        <View style={{ height: 14, borderRadius: radii.xs, backgroundColor: m.card }} />
         <View style={{ flexDirection: 'row', gap: 4 }}>
-          <View style={{ flex: 1, height: 5, borderRadius: 3, backgroundColor: m.mute }} />
-          <View style={{ flex: 1, height: 5, borderRadius: 3, backgroundColor: m.mute }} />
+          <View style={{ flex: 1, height: 5, borderRadius: radii.xs, backgroundColor: m.mute }} />
+          <View style={{ flex: 1, height: 5, borderRadius: radii.xs, backgroundColor: m.mute }} />
         </View>
       </View>
     );
   };
   return (
     <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={`${mode} theme`} onPress={onPress} scaleTo={0.97} style={{ flex: 1, gap: 8, alignItems: 'center' }}>
-      <View style={{ width: '100%', height: 116, borderRadius: 18, overflow: 'hidden', borderWidth: on ? 2.5 : 1, borderColor: on ? c.accent : c.line, flexDirection: 'row' }}>
+      <View style={{ width: '100%', height: 116, borderRadius: radii.md, overflow: 'hidden', borderWidth: on ? 2.5 : 1, borderColor: on ? c.accent : c.line, flexDirection: 'row' }}>
         {mode === 'System' ? (<><Phone t="Light" /><Phone t="Dark" /></>) : <Phone t={mode} />}
       </View>
       <Row style={{ gap: 6 }}>

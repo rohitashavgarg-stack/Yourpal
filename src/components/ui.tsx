@@ -4,7 +4,7 @@ import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSprin
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, radius, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // ---------- Text ----------
 type Variant = 'display' | 'title' | 'headline' | 'body' | 'label' | 'caption' | 'mono' | 'number';
@@ -62,7 +62,7 @@ export function Button({ kind = 'primary', label, onPress, disabled, icon, style
       disabled={disabled}
       onPress={onPress}
       style={[{
-        height: small ? 44 : 56, borderRadius: small ? 22 : 28, backgroundColor: bg, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+        height: small ? 44 : 56, borderRadius: small ? radii.lg : radii.xl, backgroundColor: bg, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
         paddingHorizontal: 20, opacity: disabled ? 0.4 : 1, borderWidth: kind === 'outline' ? 1 : 0, borderColor: c.line,
       }, style]}
     >
@@ -108,7 +108,7 @@ export function Pill({ label, on, onPress, style }: { label: string; on: boolean
     borderColor: interpolateColor(p.value, [0, 1], [c.surface3, c.ink]),
   }));
   return (
-    <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={onPress} style={[{ height: 44, paddingHorizontal: 16, borderRadius: 22, borderWidth: 1, alignItems: 'center', justifyContent: 'center' }, a as any, style]}>
+    <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={onPress} style={[{ height: 44, paddingHorizontal: 16, borderRadius: radii.lg, borderWidth: 1, alignItems: 'center', justifyContent: 'center' }, a as any, style]}>
       <Text style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 18, color: on ? c.bg : c.ink }}>{label}</Text>
     </Pressy>
   );
@@ -124,8 +124,8 @@ export function Segmented<T extends string>({ options, value, onChange, icons, a
   useEffect(() => { x.value = withSpring(idx * seg, spring.snappy); }, [idx, seg]);
   const thumb = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   return (
-    <View accessibilityRole="tablist" accessibilityLabel={accessibilityLabel} onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)} style={{ flexDirection: 'row', padding: 4, borderRadius: 26, backgroundColor: c.surface2 }}>
-      {seg > 0 && <Animated.View style={[{ position: 'absolute', top: 4, left: 4, width: seg, height: 44, borderRadius: 22, backgroundColor: c.ink, shadowColor: fixed.shadow, shadowOpacity: 0.18, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }, thumb]} />}
+    <View accessibilityRole="tablist" accessibilityLabel={accessibilityLabel} onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)} style={{ flexDirection: 'row', padding: 4, borderRadius: radii.xl, backgroundColor: c.surface2 }}>
+      {seg > 0 && <Animated.View style={[{ position: 'absolute', top: 4, left: 4, width: seg, height: 44, borderRadius: radii.lg, backgroundColor: c.ink, shadowColor: fixed.shadow, shadowOpacity: 0.18, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }, thumb]} />}
       {options.map((o) => {
         const on = o.value === value;
         const col = on ? c.bg : c.muted;
@@ -145,7 +145,7 @@ export const Field = React.forwardRef<TextInput, TextInputProps & { error?: bool
   const { c } = useTheme();
   const [focus, setFocus] = React.useState(false);
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', height: 56, borderRadius: 28, borderWidth: focus || error ? 1.5 : 1, borderColor: error ? c.warn : focus ? c.accent : c.line, backgroundColor: c.surface, paddingHorizontal: 18, gap: 10 }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', height: 56, borderRadius: radii.xl, borderWidth: focus || error ? 1.5 : 1, borderColor: error ? c.warn : focus ? c.accent : c.line, backgroundColor: c.surface, paddingHorizontal: 18, gap: 10 }}>
       {prefix ? <Text style={{ fontFamily: font.medium, fontSize: 16, lineHeight: 21, color: c.muted }}>{prefix}</Text> : null}
       <TextInput
         ref={ref}
@@ -166,7 +166,7 @@ export function NoteField({ value, onChangeText, placeholder, accessibilityLabel
   const [focus, setFocus] = React.useState(false);
   return (
     <View>
-      <View style={{ minHeight, borderRadius: 22, borderWidth: focus || error ? 1.5 : 1, borderColor: error ? c.warn : focus ? c.accent : c.line, backgroundColor: c.surface, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 8 }}>
+      <View style={{ minHeight, borderRadius: radii.lg, borderWidth: focus || error ? 1.5 : 1, borderColor: error ? c.warn : focus ? c.accent : c.line, backgroundColor: c.surface, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 8 }}>
         <TextInput
           value={value}
           onChangeText={onChangeText}

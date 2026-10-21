@@ -13,7 +13,7 @@ import { Hint, SubPage } from '@/features/progress/parts';
 import { progressStore } from '@/features/progress/store';
 import { AFTER_PHOTO, BEFORE_PHOTO, photoFor } from '@/features/progress/photoAssets';
 import { useProgressScenarios } from '@/features/progress/scenarios';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const SCRIM = 'rgba(0,0,0,0.55)';
 
@@ -26,7 +26,7 @@ function PhotoTile({ d, i, zoomed, onDouble }: { d: string; i: number; zoomed: b
   const tap = () => { const now = Date.now(); if (now - last.current < 320) { last.current = 0; onDouble(); } else last.current = now; };
   return (
     <Pressy accessibilityRole="imagebutton" accessibilityLabel={`Progress photo ${d}${zoomed ? ', zoomed' : ''}. Double tap to zoom`} accessibilityHint="Double tap to zoom" onPress={tap} haptics={false}
-      style={{ height: 210, borderRadius: 22, backgroundColor: c.surface, overflow: 'hidden' }}>
+      style={{ height: 210, borderRadius: radii.lg, backgroundColor: c.surface, overflow: 'hidden' }}>
       <Animated.View style={[{ flex: 1 }, a]}><Image source={photoFor(i)} resizeMode="cover" accessibilityIgnoresInvertColors style={{ width: '100%', height: '100%' }} /></Animated.View>
       <Tag label={d} bg={SCRIM} fg={fixed.white} style={{ position: 'absolute', left: 10, bottom: 10 }} />
     </Pressy>
@@ -50,7 +50,7 @@ function Compare({ latest }: { latest: string }) {
           accessibilityValue={{ min: 0, max: 100, now: pos, text: `${pos}% of Sep 2 shown` }}
           accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
           onAccessibilityAction={(e) => setPos((p) => (e.nativeEvent.actionName === 'increment' ? Math.min(100, p + 5) : Math.max(0, p - 5)))}
-          style={{ height: 440, borderRadius: 26, overflow: 'hidden', backgroundColor: c.surface, cursor: 'ew-resize' as any }}>
+          style={{ height: 440, borderRadius: radii.xl, overflow: 'hidden', backgroundColor: c.surface, cursor: 'ew-resize' as any }}>
           <Image source={AFTER_PHOTO} resizeMode="cover" accessibilityIgnoresInvertColors style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
           <View style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${pos}%`, overflow: 'hidden' }}>
             <Image source={BEFORE_PHOTO} resizeMode="cover" accessibilityIgnoresInvertColors style={{ width: w || 358, height: 440 }} />
@@ -58,7 +58,7 @@ function Compare({ latest }: { latest: string }) {
           <Tag label="Sep 2" bg={SCRIM} fg={fixed.white} style={{ position: 'absolute', left: 12, top: 12 }} />
           <Tag label={latest} bg={SCRIM} fg={fixed.white} style={{ position: 'absolute', right: 12, top: 12 }} />
           <View pointerEvents="none" style={{ position: 'absolute', top: 0, bottom: 0, left: `${pos}%`, width: 2, marginLeft: -1, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
-            <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
               <ChevronsLeftRight size={18} color={fixed.dark} />
             </View>
           </View>

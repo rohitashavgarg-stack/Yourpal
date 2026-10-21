@@ -3,7 +3,7 @@ import { Platform, View } from 'react-native';
 import MapView, { Circle, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { MapPin } from '@/lib/icons';
 import { useTheme } from '@/theme/ThemeProvider';
-import { fixed } from '@/design-system/tokens';
+import { radii, fixed } from '@/design-system/tokens';
 
 export const hasRealMap = true;
 
@@ -48,7 +48,7 @@ export function GymMap({ where, off }: { where: 'inside' | 'near' | 'far'; off: 
       </Marker>
       {!off && (
         <Marker coordinate={me} anchor={{ x: 0.5, y: 0.5 }}>
-          <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: 'rgba(52,120,246,0.22)', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ width: 34, height: 34, borderRadius: radii.md, backgroundColor: 'rgba(52,120,246,0.22)', alignItems: 'center', justifyContent: 'center' }}>
             <View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: '#3478F6', borderWidth: 3, borderColor: fixed.white }} />
           </View>
         </Marker>

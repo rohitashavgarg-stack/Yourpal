@@ -22,7 +22,7 @@ import { COACH_BANNER } from './content';
 import { startCreate } from './openers';
 import { ExTile, Highlight, Moon } from './parts';
 import { DAYL, dateOf, dayPlan, exSub, relDay, usePlans } from './store';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 const E = ({ i, children }: { i: number; children: React.ReactNode }) => <Animated.View entering={fade(i * 40)}>{children}</Animated.View>;
 
@@ -30,7 +30,7 @@ function ListCard({ dot, title, rows }: { dot: string; title: string; rows: { n:
   return (
     <View style={{ gap: 8 }}>
       <Row style={{ gap: 6, paddingHorizontal: 6 }}>
-        <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: dot }} />
+        <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot }} />
         <Txt v="label">{title}</Txt>
       </Row>
       <Card style={{ paddingVertical: 6, paddingHorizontal: 16 }}>
@@ -57,7 +57,7 @@ function LockedPlan({ day, locked, children }: { day: string; locked: boolean; c
       <LinearGradient pointerEvents="none" colors={[c.bg, c.bg + '00']} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 70 }} />
       <LinearGradient pointerEvents="none" colors={[c.bg + '00', c.bg]} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120 }} />
       <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'flex-start', gap: 10, paddingTop: 110, paddingHorizontal: 44 }}>
-        <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}><Lock size={24} color={c.ink} /></View>
+        <View style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}><Lock size={24} color={c.ink} /></View>
         <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 29 }}>This plan is locked</Txt>
         <Txt style={{ textAlign: 'center', maxWidth: 290, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>{`Renew at Wulf Fitness reception to see what Coach Vikram planned for ${day}. Workouts you logged stay here.`}</Txt>
       </View>
@@ -107,7 +107,7 @@ export function WorkoutPlan() {
       {showUpdated && (
         <E i={0}>
           <Pressy accessibilityRole="button" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See what changed`} onPress={openUpdated} scaleTo={0.98}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 16, paddingHorizontal: 18, borderRadius: 28, backgroundColor: c.surface, borderWidth: 1.5, borderColor: c.accent }}>
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 16, paddingHorizontal: 18, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1.5, borderColor: c.accent }}>
             <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: c.accent }} />
             <View style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.semibold }}>Coach Vikram updated your plan</Txt>
@@ -129,7 +129,7 @@ export function WorkoutPlan() {
       {d.planReq === 'ready' && (
         <E i={0}>
           <Pressy accessibilityRole="button" accessibilityLabel="Your new plan is ready. View" onPress={openUpdated} scaleTo={0.98}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, paddingHorizontal: 18, borderRadius: 28, backgroundColor: c.surface, borderWidth: 1.5, borderColor: c.good }}>
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, paddingHorizontal: 18, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1.5, borderColor: c.good }}>
             <Check size={20} strokeWidth={2.4} color={c.good} />
             <Txt style={{ flex: 1, fontFamily: font.semibold }}>Your new plan is ready</Txt>
             <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>View</Txt>
@@ -168,7 +168,7 @@ export function WorkoutPlan() {
                     ))}
                   </Row>
                   <Row style={{ gap: 3 }}>
-                    {plan.ex.map((e) => <View key={e.id} accessibilityLabel={e.res === 'skip' ? 'Not logged' : 'Logged'} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: e.res === 'skip' ? c.surface3 : c.ink }} />)}
+                    {plan.ex.map((e) => <View key={e.id} accessibilityLabel={e.res === 'skip' ? 'Not logged' : 'Logged'} style={{ flex: 1, height: 4, borderRadius: radii.xs, backgroundColor: e.res === 'skip' ? c.surface3 : c.ink }} />)}
                   </Row>
                 </Card>
               </E>
@@ -194,8 +194,8 @@ export function WorkoutPlan() {
                       </View>
                       {!!tag && <Tag label={tag} bg={e.hl && !e.by ? c.accentSoft : c.surface2} fg={e.hl && !e.by ? c.accentText : c.muted} style={{ alignSelf: 'center' }} />}
                       {plan.done ? (e.res === 'skip'
-                        ? <View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: 12, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.muted }} />
-                        : <View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={14} color={c.bg} strokeWidth={3} /></View>)
+                        ? <View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.muted }} />
+                        : <View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={14} color={c.bg} strokeWidth={3} /></View>)
                         : <ChevronRight size={16} color={c.muted} />}
                     </Pressy>
                   </Highlight>

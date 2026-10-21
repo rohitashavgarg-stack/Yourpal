@@ -11,7 +11,7 @@ import { useOverlay } from '@/components/Overlay';
 import { haptic } from '@/lib/haptics';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 // The "Log meal" card in the updates opens this for the meal that is due (lunch, dinner...): its food items, each with its own tick,
 // like the meals card. Ticking an item logs it as eaten, a second tap takes it back.
@@ -38,7 +38,7 @@ export function LogMealsSheet({ mealId }: { mealId: MealId }) {
           const on = x.eaten.includes(k);
           const n = itemNow(d, mealId, k);
           return (
-            <Row key={k} style={{ gap: 10, minHeight: 56, paddingLeft: 12, paddingRight: 4, paddingVertical: 4, borderRadius: 18, backgroundColor: on ? (isDark ? '#1E4A3F' : c.goodSoft) : c.surface2, borderWidth: on ? 1 : 0, borderColor: c.good + '66' }}>
+            <Row key={k} style={{ gap: 10, minHeight: 56, paddingLeft: 12, paddingRight: 4, paddingVertical: 4, borderRadius: radii.md, backgroundColor: on ? (isDark ? '#1E4A3F' : c.goodSoft) : c.surface2, borderWidth: on ? 1 : 0, borderColor: c.good + '66' }}>
               <FoodMark type={it.type} />
               <View style={{ flex: 1, minWidth: 0 }}>
                 <Txt style={{ fontFamily: font.medium }}>{n.n}</Txt>

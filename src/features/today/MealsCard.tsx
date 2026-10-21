@@ -16,14 +16,14 @@ import { mealById, mealKcal, mealTimeline, mealView, nextMeal } from './meals';
 import { QuickLogSheet } from './QuickLogSheet';
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
 import { useLogGate } from '@/lib/logGate';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 function Capsule({ t, now, badge }: { t: number; now: boolean; badge: 'done' | 'part' | 'off' | null }) {
   const { c } = useTheme();
   const tt = fmtT(t);
   const bg = badge === 'done' ? c.good : badge === 'part' ? c.accent : c.surface3;
   return (
-    <View style={{ width: 54, minHeight: 54, borderRadius: 14, borderWidth: 1, borderColor: now ? c.ink : c.chipLine, backgroundColor: now ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center', paddingVertical: 6 }}>
+    <View style={{ width: 54, minHeight: 54, borderRadius: radii.sm, borderWidth: 1, borderColor: now ? c.ink : c.chipLine, backgroundColor: now ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center', paddingVertical: 6 }}>
       <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, letterSpacing: -0.3, lineHeight: 16, color: now ? c.bg : c.ink }}>{tt.hm}</Txt>
       <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 12, color: now ? c.bg : c.muted, opacity: now ? 0.7 : 1 }}>{tt.ap}</Txt>
       {badge && (
@@ -90,7 +90,7 @@ function MealRow({ id, open, bare = false }: { id: MealId; open: boolean; bare?:
             const on = x.eaten.includes(k);
             const r = x.repl[k];
             return (
-              <Row key={k} style={{ gap: 10, minHeight: 52, paddingLeft: 12, paddingRight: 4, paddingVertical: 4, borderRadius: 18, backgroundColor: on ? (isDark ? '#1E4A3F' : c.goodSoft) : c.surface2, borderWidth: on ? 1 : 0, borderColor: c.good + '66' }}>
+              <Row key={k} style={{ gap: 10, minHeight: 52, paddingLeft: 12, paddingRight: 4, paddingVertical: 4, borderRadius: radii.md, backgroundColor: on ? (isDark ? '#1E4A3F' : c.goodSoft) : c.surface2, borderWidth: on ? 1 : 0, borderColor: c.good + '66' }}>
                 <FoodMark type={it.type} />
                 <Pressy accessibilityRole="button" accessibilityLabel={`${r ? r.n : it.n}: nutrition, recipe and swap`} onPress={() => openFood(k, false)} scaleTo={0.98} style={{ flex: 1, minWidth: 0, paddingVertical: 4 }}>
                   <Txt style={{ fontFamily: font.medium, color: x.skip ? c.muted : c.ink, textDecorationLine: x.skip ? 'line-through' : 'none' }}>{r ? r.n : it.n}</Txt>
@@ -103,7 +103,7 @@ function MealRow({ id, open, bare = false }: { id: MealId; open: boolean; bare?:
             );
           })}
           {x.extra.map((e, j) => (
-            <Row key={`x${j}`} style={{ gap: 10, minHeight: 52, paddingLeft: 12, paddingRight: 4, paddingVertical: 4, borderRadius: 18, backgroundColor: c.accentSoft }}>
+            <Row key={`x${j}`} style={{ gap: 10, minHeight: 52, paddingLeft: 12, paddingRight: 4, paddingVertical: 4, borderRadius: radii.md, backgroundColor: c.accentSoft }}>
               <FoodMark type={e.type ?? 'veg'} />
               <Pressy accessibilityRole="button" accessibilityLabel={`${e.n}: details`} onPress={() => openFood(j, true)} scaleTo={0.98} style={{ flex: 1, minWidth: 0, paddingVertical: 4 }}>
                 <Txt style={{ fontFamily: font.medium }}>{e.n}</Txt>
@@ -152,8 +152,8 @@ export function MealsCard({ timeline = false }: { timeline?: boolean } = {}) {
           <Txt style={{ fontSize: fontSizes.xs, color: over ? c.warn : c.muted }}>{over ? `${t.k - KCAL_TARGET} kcal over` : `${inr(KCAL_TARGET - t.k)} kcal left`}</Txt>
         </Row>
         <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 28 }}>{inr(t.k)}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.md }}> / {inr(KCAL_TARGET)} kcal</Txt></Txt>
-        <View style={{ height: 5, borderRadius: 3, backgroundColor: `${c.cAct}26`, overflow: 'hidden' }}>
-          <Animated.View style={[{ height: '100%', borderRadius: 3, backgroundColor: c.cAct }, bar]} />
+        <View style={{ height: 5, borderRadius: radii.xs, backgroundColor: `${c.cAct}26`, overflow: 'hidden' }}>
+          <Animated.View style={[{ height: '100%', borderRadius: radii.xs, backgroundColor: c.cAct }, bar]} />
         </View>
         <Txt v="caption">Protein {t.p} / {MACRO_TARGET.p} g</Txt>
         {over && <Txt style={{ fontSize: fontSizes.xs, lineHeight: 18, color: c.warn }}>{"Above today's target. A lighter next meal evens it out."}</Txt>}
@@ -188,9 +188,9 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
   const { gate } = useLogGate();
   const answer = gate((msg: string, p: Parameters<typeof patch>[1]) => { const prev = d.meals; patch(id, p); set({ openMeal: null }); toast(msg, { undo: () => set({ meals: prev }) }); });
   return (
-    <Animated.View entering={fade()} style={{ borderRadius: 18, backgroundColor: c.warnSoft, padding: 12, gap: 10 }}>
+    <Animated.View entering={fade()} style={{ borderRadius: radii.md, backgroundColor: c.warnSoft, padding: 12, gap: 10 }}>
       <Row style={{ gap: 10 }}>
-        <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}><Clock size={18} color={c.warn} /></View>
+        <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}><Clock size={18} color={c.warn} /></View>
         <View style={{ flex: 1 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{`${m.n} wasn't logged`}</Txt>
           <Txt v="caption">{more ? `Planned for ${fmtT(m.t).full}. ${more} more to catch up.` : `Planned for ${fmtT(m.t).full}`}</Txt>
@@ -198,15 +198,15 @@ function MissedRow({ id, more }: { id: MealId; more: number }) {
       </Row>
       <Row style={{ gap: 8 }}>
         <Pressy accessibilityRole="button" accessibilityLabel={`I ate ${m.n.toLowerCase()} as planned`} onPress={() => answer(`${m.n} logged as planned`, { eaten: m.items.map((_, k) => k), skip: false, at: m.t })}
-          style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.ink, justifyContent: 'center' }}>
+          style={{ height: 36, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.ink, justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.bg }}>I ate it</Txt>
         </Pressy>
         <Pressy accessibilityRole="button" accessibilityLabel={`I ate something else for ${m.n.toLowerCase()}`} onPress={gate(() => openSheet(<QuickLogSheet mealId={id} mode="scan" />, { label: 'Log a meal' }))}
-          style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.surface, justifyContent: 'center' }}>
+          style={{ height: 36, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.surface, justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18 }}>Something else</Txt>
         </Pressy>
         <Pressy accessibilityRole="button" accessibilityLabel={`I skipped ${m.n.toLowerCase()}`} onPress={() => answer(`${m.n} skipped`, { skip: true, eaten: [] })}
-          style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.surface, justifyContent: 'center' }}>
+          style={{ height: 36, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.surface, justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18 }}>Skipped</Txt>
         </Pressy>
       </Row>
@@ -276,7 +276,7 @@ export function MealNowCard() {
     return (
       <View accessibilityLabel="Meal logging is paused" style={{ borderRadius: 24, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
         <Row style={{ gap: 12, alignItems: 'flex-start' }}>
-          <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={18} color={c.muted} /></View>
+          <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={18} color={c.muted} /></View>
           <View style={{ flex: 1, gap: 2 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, letterSpacing: -0.3 }}>Meal logging is paused</Txt>
             <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Renew at Wulf Fitness reception to log again. Your meals and plan stay here.</Txt>
@@ -307,8 +307,8 @@ export function MealNowCard() {
             return (
               <Pressy key={q.id} accessibilityRole="button" accessibilityLabel={`${q.n}, ${x.skip ? 'skipped' : 'logged'}. Open`} scaleTo={0.98} onPress={() => set({ openMeal: q.id })}
                 style={{ minHeight: 56, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 4, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
-                {x.skip ? <View style={{ width: 24, height: 24, borderRadius: 12, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.muted }} />
-                  : <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={14} color={c.bg} strokeWidth={3} /></View>}
+                {x.skip ? <View style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.muted }} />
+                  : <View style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={14} color={c.bg} strokeWidth={3} /></View>}
                 <View style={{ flex: 1 }}>
                   <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 22 }}>{q.n}</Txt>
                   <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{x.skip ? 'Skipped' : `${mv.kcal} kcal${x.at != null ? ', ' + fmtT(x.at).full : ''}`}</Txt>
@@ -326,7 +326,7 @@ export function MealNowCard() {
       <MealsBackdrop />
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
-        <View style={{ borderRadius: 999, backgroundColor: isDark ? 'rgba(10,12,16,0.22)' : 'rgba(255,255,255,0.45)' }}>
+        <View style={{ borderRadius: radii.pill, backgroundColor: isDark ? 'rgba(10,12,16,0.22)' : 'rgba(255,255,255,0.45)' }}>
           <Chip label={`${t.done} of 4 done`} icon={<UtensilsCrossed size={13} color={c.ink} />} style={{ height: 38, borderRadius: 19, paddingHorizontal: 14 }} />
         </View>
       </Row>

@@ -12,7 +12,7 @@ import { font } from '@/theme/tokens';
 import { createStore } from '@/features/progress/store';
 import { WEEKLY } from '@/features/coach/coach';
 import { GoalCard } from './TopCards';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // Goal card designs to compare. Pick one in the Today edge-case panel.
 export type GoalDesign = 'Current' | 'A · Journey bar' | 'B · Ring + context' | 'C · Goal + focus';
@@ -45,7 +45,7 @@ const kg = (n: number) => `${n.toFixed(1)}`;
 function Shell({ children, label }: { children: React.ReactNode; label: string }) {
   return (
     <Pressy accessibilityRole="link" accessibilityLabel={label} scaleTo={0.98} onPress={() => router.navigate('/progress')}>
-      <LinearGradient colors={[fixed.blue, '#3B86EA', '#4FB0E6']} locations={[0, 0.6, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: 28, padding: 18, overflow: 'hidden', gap: 14 }}>
+      <LinearGradient colors={[fixed.blue, '#3B86EA', '#4FB0E6']} locations={[0, 0.6, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: radii.xl, padding: 18, overflow: 'hidden', gap: 14 }}>
         <Svg width={220} height={220} viewBox="0 0 220 220" style={{ position: 'absolute', right: -80, top: -90, opacity: 0.16 }}>
           <Circle cx={110} cy={110} r={100} fill={fixed.white} />
         </Svg>
@@ -75,7 +75,7 @@ function Chip({ g }: { g: ReturnType<typeof useGoalData> }) {
     );
   }
   return (
-    <View style={{ alignSelf: 'flex-start', backgroundColor: g.chip.bg, borderRadius: 999, paddingHorizontal: 11, paddingVertical: 4 }}>
+    <View style={{ alignSelf: 'flex-start', backgroundColor: g.chip.bg, borderRadius: radii.pill, paddingHorizontal: 11, paddingVertical: 4 }}>
       <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 18, color: g.chip.fg }}>{g.chip.label}</Txt>
     </View>
   );
@@ -92,7 +92,7 @@ function JourneyBar({ g }: { g: ReturnType<typeof useGoalData> }) {
     <View style={{ height: 30, justifyContent: 'center', marginHorizontal: 9 }}>
       <View style={{ height: 14, borderRadius: 7, backgroundColor: 'rgba(255,255,255,0.25)' }}>
         <Animated.View style={[{ height: 14, borderRadius: 7, backgroundColor: fixed.white }, fill]}>
-          <View style={{ position: 'absolute', right: -9, top: -4, width: 22, height: 22, borderRadius: 11, backgroundColor: fixed.white, borderWidth: 5, borderColor: fixed.blue }} />
+          <View style={{ position: 'absolute', right: -9, top: -4, width: 22, height: 22, borderRadius: radii.sm, backgroundColor: fixed.white, borderWidth: 5, borderColor: fixed.blue }} />
         </Animated.View>
       </View>
     </View>
@@ -156,8 +156,8 @@ function DesignC({ g }: { g: ReturnType<typeof useGoalData> }) {
         <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 41, letterSpacing: -0.8, color: fixed.white, flexShrink: 1 }}>{headline(g)}</Txt>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, color: fixed.white }}>{Math.round(g.pct * 100)}%</Txt>
       </Row>
-      <View style={{ height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.25)', overflow: 'hidden' }}>
-        <View style={{ width: `${g.pct * 100}%`, height: '100%', borderRadius: 4, backgroundColor: fixed.white }} />
+      <View style={{ height: 8, borderRadius: radii.xs, backgroundColor: 'rgba(255,255,255,0.25)', overflow: 'hidden' }}>
+        <View style={{ width: `${g.pct * 100}%`, height: '100%', borderRadius: radii.xs, backgroundColor: fixed.white }} />
       </View>
       <Chip g={g} />
       <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.22)' }} />
@@ -165,7 +165,7 @@ function DesignC({ g }: { g: ReturnType<typeof useGoalData> }) {
       <View style={{ gap: 8 }}>
         {WEEKLY.focus.map((f, i) => (
           <Row key={f} style={{ gap: 10 }}>
-            <View style={{ width: 22, height: 22, borderRadius: 11, alignItems: 'center', justifyContent: 'center', backgroundColor: i === 0 ? fixed.white : 'rgba(255,255,255,0.22)' }}>
+            <View style={{ width: 22, height: 22, borderRadius: radii.sm, alignItems: 'center', justifyContent: 'center', backgroundColor: i === 0 ? fixed.white : 'rgba(255,255,255,0.22)' }}>
               {i === 0 && <Check size={13} color="#1B3FB8" strokeWidth={3} />}
             </View>
             <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: fixed.white }}>{f}</Txt>

@@ -7,7 +7,7 @@ import { Pressy, Row, Txt } from '@/components/ui';
 import { font } from '@/theme/tokens';
 import { fmt1 } from '@/lib/useNow';
 import { DotText } from './DotText';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // New tracker widget designs. Plain tiles driven by props, so they can sit on Today, on the designs page and on the Profile card.
 export const TILE = 164;
@@ -31,7 +31,7 @@ export function WTile({ colors, onPress, label, Icon, a11y, children, right, add
       {add ? <AddButton label={add.label} onPress={add.onPress} variant={add.variant} /> : null}
     </>
   );
-  const style = { width: TILE, height: TILE, borderRadius: 28, overflow: 'hidden', padding: 14 } as const;
+  const style = { width: TILE, height: TILE, borderRadius: radii.xl, overflow: 'hidden', padding: 14 } as const;
   return onPress
     ? <Pressy accessibilityRole="button" accessibilityLabel={a11y} onPress={onPress} scaleTo={0.97} style={style}>{inner}</Pressy>
     : <View accessible accessibilityLabel={a11y} style={style}>{inner}</View>;
@@ -44,7 +44,7 @@ export function AddButton({ label, onPress, variant = 'round' }: { label: string
   if (variant === 'glass') {
     return (
       <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} disabled={!onPress} scaleTo={0.92}
-        style={{ position: 'absolute', top: 10, right: 10, height: 44, minWidth: 74, paddingHorizontal: 12, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.16)', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, zIndex: 3 }}>
+        style={{ position: 'absolute', top: 10, right: 10, height: 44, minWidth: 74, paddingHorizontal: 12, borderRadius: radii.lg, backgroundColor: 'rgba(255,255,255,0.16)', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, zIndex: 3 }}>
         <GlassWater size={18} color={fixed.white} />
         <CirclePlus size={18} color={fixed.white} />
       </Pressy>

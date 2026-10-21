@@ -17,7 +17,7 @@ import { font } from '@/theme/tokens';
 import { cardShadow, ListCard, SubPage } from '@/features/progress/parts';
 import { ASSESS } from '@/features/gym/data';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 export default function GymAssessments() {
   const { c, isDark } = useTheme();
@@ -45,7 +45,7 @@ export default function GymAssessments() {
       {none ? (
         <Animated.View entering={fade()} style={{ gap: 12 }}>
           <Card style={{ paddingVertical: 26, paddingHorizontal: 20, alignItems: 'center', gap: 10 }}>
-            <View style={{ width: 64, height: 64, borderRadius: 22, backgroundColor: c.tNutri, alignItems: 'center', justifyContent: 'center' }}><ClipboardCheck size={30} strokeWidth={1.8} color={c.cNutri} /></View>
+            <View style={{ width: 64, height: 64, borderRadius: radii.lg, backgroundColor: c.tNutri, alignItems: 'center', justifyContent: 'center' }}><ClipboardCheck size={30} strokeWidth={1.8} color={c.cNutri} /></View>
             <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 31 }}>No assessment yet</Txt>
             <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.md }}>Your first one is Sat 10:00 am with Coach Vikram. Body, strength and mobility tests take about 30 minutes. Your plan is built from it.</Txt>
           </Card>
@@ -58,7 +58,7 @@ export default function GymAssessments() {
               <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontSize: fontSizes.md, color: c.warn, fontFamily: font.semibold }}>Reassessment due this week. </Txt>Book a slot at the front desk or ask Coach Vikram in chat.</Txt>
             </Animated.View>
           )}
-          <LinearGradient colors={[fixed.blue, '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: 28, padding: 20, gap: 6, overflow: 'hidden' }}>
+          <LinearGradient colors={[fixed.blue, '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: radii.xl, padding: 20, gap: 6, overflow: 'hidden' }}>
             <Svg width="100%" height="100%" viewBox="0 0 358 170" preserveAspectRatio="xMidYMid slice" style={{ position: 'absolute', left: 0, top: 0 }}>
               <Circle cx={300} cy={20} r={120} fill={fixed.white} opacity={0.08} />
               <Path d="M0 140 C 90 110 180 170 260 130 S 340 120 400 140 V 900 H0z" fill={fixed.white} opacity={0.08} />
@@ -73,8 +73,8 @@ export default function GymAssessments() {
             </View>
           )}
           {ASSESS.map((grp) => (
-            <Animated.View key={`${grp.g}-${showStart}`} entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: 28, paddingTop: 14, paddingHorizontal: 16, paddingBottom: 4 }, cardShadow(isDark)]}>
-              <Row style={{ gap: 8 }}><View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: dot[grp.tone] }} /><Txt v="label">{grp.g}</Txt></Row>
+            <Animated.View key={`${grp.g}-${showStart}`} entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingTop: 14, paddingHorizontal: 16, paddingBottom: 4 }, cardShadow(isDark)]}>
+              <Row style={{ gap: 8 }}><View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone] }} /><Txt v="label">{grp.g}</Txt></Row>
               {grp.rows.map(([l, a, b, delta, good], i) => (
                 <Row key={l} style={{ minHeight: 54, gap: 10, borderBottomWidth: i < grp.rows.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
                   <Txt style={{ flex: 1, fontFamily: font.medium }}>{l}</Txt>
@@ -88,7 +88,7 @@ export default function GymAssessments() {
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}><PersonAvatar who="coach" size={26} /><Txt v="label">Coach Vikram’s note</Txt></View>
             <Txt>“{showStart ? 'Good base. Squat depth is shallow, so we start light and work on mobility first.' : 'Squat depth is much better. Keep the evening walks. Sit-and-reach has not moved, so I added two stretches to your cool-down.'}”</Txt>
           </Card>
-          <View style={[{ backgroundColor: c.surface, borderRadius: 28, paddingHorizontal: 16, paddingBottom: 4 }, cardShadow(isDark)]}>
+          <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingHorizontal: 16, paddingBottom: 4 }, cardShadow(isDark)]}>
             <Txt v="label" style={{ paddingTop: 14 }}>History</Txt>
             <ListCard style={{ paddingHorizontal: 0, shadowOpacity: 0, elevation: 0 }} rows={hist.map((h) => ({ l: h.t, sub: h.s, onPress: only ? undefined : () => gymStore.set({ asView: h.v as 0 | 1 }), right: (showStart ? 1 : 0) === h.v && !only ? <Tag label="Viewing" bg={c.accentSoft} fg={c.accentText} /> : undefined }))} />
           </View>

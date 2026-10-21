@@ -28,13 +28,13 @@ import { FinishScreen, FinishStats } from '@/features/workout/FinishScreen';
 import { workoutUiStore } from '@/features/workout/ui';
 import { NewExercise, NewList } from '@/features/workout/NewWorkoutUI';
 import { FinishConfirmSheet, FormTipsSheet, SetMenuSheet, SwapSheet, WkApi, WkMenuSheet } from '@/features/workout/WorkoutSheets';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 function Bars({ n, pos, light }: { n: number; pos: number; light?: boolean }) {
   const { c } = useTheme();
   return (
     <View style={{ position: 'absolute', top: 12, left: 14, right: 14, flexDirection: 'row', gap: 4 }}>
-      {Array.from({ length: n }, (_, i) => <View key={i} style={{ flex: 1, height: 3, borderRadius: 2, backgroundColor: i < pos ? fixed.blue : i === pos ? (light ? c.ink : '#F4F4F6') : (light ? c.surface3 : 'rgba(255,255,255,0.22)') }} />)}
+      {Array.from({ length: n }, (_, i) => <View key={i} style={{ flex: 1, height: 3, borderRadius: radii.xs, backgroundColor: i < pos ? fixed.blue : i === pos ? (light ? c.ink : '#F4F4F6') : (light ? c.surface3 : 'rgba(255,255,255,0.22)') }} />)}
     </View>
   );
 }
@@ -211,7 +211,7 @@ export default function Workout() {
         );
       })}
       {s.rest && (
-        <Animated.View entering={fade()} style={{ gap: 8, padding: 12, borderRadius: 18, backgroundColor: c.surface2 }}>
+        <Animated.View entering={fade()} style={{ gap: 8, padding: 12, borderRadius: radii.md, backgroundColor: c.surface2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20 }}>How was that set? <Txt muted style={{ fontSize: fontSizes.sm }}>Optional</Txt></Txt>
           <Row style={{ gap: 6 }}>
             {(['Too easy', 'Too hard', 'Pain'] as const).map((l, i) => <Pill key={l} label={l} on={fb === i} onPress={() => setFb(fb === i ? null : (i as 0 | 1 | 2))} />)}
@@ -272,7 +272,7 @@ export default function Workout() {
       <ScrollView ref={scroll} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: isList ? 28 + insets.bottom : dockH + 20, gap: 12 }} keyboardShouldPersistTaps="handled">
         {isList ? (
           <Animated.View key={s.phase} entering={fade()} style={{ gap: 12 }}>
-            <View style={{ minHeight: 180, borderRadius: 28, overflow: 'hidden', padding: 16, justifyContent: 'flex-end', gap: 4 }}>
+            <View style={{ minHeight: 180, borderRadius: radii.xl, overflow: 'hidden', padding: 16, justifyContent: 'flex-end', gap: 4 }}>
               <HeroBg h={180} />
               <Bars n={n} pos={pos} />
               <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.7, color: '#DDE6FF' }}>{s.phase === 'cooldown' ? 'AFTER YOUR WORKOUT' : 'BEFORE YOU START'}</Txt>
@@ -300,7 +300,7 @@ export default function Workout() {
           </Animated.View>
         ) : (
           <Animated.View key={`ex${s.exIdx}${e.name}`} entering={fade()} style={{ gap: 12 }}>
-            <View style={{ height: 300, borderRadius: 28, overflow: 'hidden', backgroundColor: cardBg }}>
+            <View style={{ height: 300, borderRadius: radii.xl, overflow: 'hidden', backgroundColor: cardBg }}>
               <Bars n={n} pos={pos} light />
               {hasPhoto(e.id) ? (
                 <View pointerEvents="none" style={{ position: 'absolute', top: 44, left: 10, right: 10, bottom: 64 }}>
@@ -321,7 +321,7 @@ export default function Workout() {
                 <Row style={{ gap: 8 }}>
                   <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39, color: cardInk }}>{e.name}</Txt>
                   <Pressy accessibilityRole="button" accessibilityLabel="Exercise options: swap, ask coach, form tips, skip" onPress={() => openSheet(<WkMenuSheet api={api} />, { label: 'Workout options' })}
-                    style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: cardChip, alignItems: 'center', justifyContent: 'center' }}>
+                    style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: cardChip, alignItems: 'center', justifyContent: 'center' }}>
                     <Ellipsis size={20} color={cardInk} />
                   </Pressy>
                 </Row>
@@ -349,7 +349,7 @@ export default function Workout() {
           <Row style={{ gap: 10 }}>
             {s.exIdx > 0 && (
               <Pressy accessibilityRole="button" accessibilityLabel={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92}
-                style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+                style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
                 <ChevronLeft size={22} color={c.ink} />
               </Pressy>
             )}

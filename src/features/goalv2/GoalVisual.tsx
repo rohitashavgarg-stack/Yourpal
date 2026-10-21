@@ -5,7 +5,7 @@ import { Flag } from '@/lib/icons';
 import { Row } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Goal2 } from './model';
-import { fixed } from '@/design-system/tokens';
+import { radii, fixed } from '@/design-system/tokens';
 
 // One progress picture per kind of goal, always the full width, in two sizes (compact on Today and the Progress card, large on the goal page).
 //  weight / muscle / body fat: the value moves steadily from start to target, so a row of ticks that fill.
@@ -72,7 +72,7 @@ export function GoalVisual({ g, size = 'compact', onColor, color, share: sharePr
       <Row style={{ gap: mini ? 6 : 8 }}>
         {Array.from({ length: g.weeklyTarget }, (_, i) => {
           const done = i < g.currentValue, next = i === g.currentValue;
-          return <View key={i} style={{ flex: 1, height: h, borderRadius: big ? 16 : h / 2, backgroundColor: done ? fill : next ? 'transparent' : track, borderWidth: next ? 1.5 : 0, borderStyle: 'dashed', borderColor: ring }} />;
+          return <View key={i} style={{ flex: 1, height: h, borderRadius: big ? radii.md : h / 2, backgroundColor: done ? fill : next ? 'transparent' : track, borderWidth: next ? 1.5 : 0, borderStyle: 'dashed', borderColor: ring }} />;
         })}
       </Row>
     );
@@ -83,7 +83,7 @@ export function GoalVisual({ g, size = 'compact', onColor, color, share: sharePr
     return (
       <View style={{ height: hi, flexDirection: 'row', alignItems: 'flex-end', gap: mini ? 3 : 4 }}>
         {Array.from({ length: n }, (_, i) => (
-          <View key={i} style={{ flex: 1, height: lo + ((hi - lo) * i) / (n - 1), borderRadius: big ? 5 : mini ? 3 : 4, backgroundColor: i < on ? fill : track }} />
+          <View key={i} style={{ flex: 1, height: lo + ((hi - lo) * i) / (n - 1), borderRadius: big ? 5 : mini ? radii.xs : radii.xs, backgroundColor: i < on ? fill : track }} />
         ))}
       </View>
     );

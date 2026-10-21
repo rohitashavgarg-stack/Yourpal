@@ -16,7 +16,7 @@ import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { useDomain } from '@/lib/domain';
 import { fmt1 } from '@/lib/useNow';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const COLORS = ['#3A36C9', '#B9B6FF', fixed.white, '#F2B544', '#1F6E63'];
 const PARTS = Array.from({ length: 34 }, (_, i) => {
@@ -46,7 +46,7 @@ function StreakLine({ done }: { done: number }) {
   const left = Math.max(0, st.target - done);
   const kept = left === 0;
   return (
-    <Animated.View entering={fade(900)} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 10, paddingHorizontal: 14, borderRadius: 16, backgroundColor: 'rgba(255,138,61,0.14)' }}>
+    <Animated.View entering={fade(900)} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 10, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: 'rgba(255,138,61,0.14)' }}>
       <Flame size={18} color={FLAME} fill={kept ? FLAME : 'transparent'} strokeWidth={2} />
       <Txt style={{ flex: 1, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>{kept ? `Week complete · streak now ${st.weeks + (st.kept ? 0 : 1)} weeks` : `${left} more ${left === 1 ? 'session' : 'sessions'} to keep your streak`}</Txt>
     </Animated.View>
@@ -92,10 +92,10 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
             ))}
           </Row>
           <View>
-            <Animated.View entering={fade(350)} style={{ backgroundColor: c.surface, borderRadius: 22, padding: 14, gap: 10 }}>
+            <Animated.View entering={fade(350)} style={{ backgroundColor: c.surface, borderRadius: radii.lg, padding: 14, gap: 10 }}>
               <Row style={{ gap: 12 }}>
                 <Pressy accessibilityRole="button" accessibilityLabel="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }}
-                  style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
+                  style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
                   <Trophy size={24} strokeWidth={1.9} color={fixed.white} />
                 </Pressy>
                 <View style={{ flex: 1 }}>

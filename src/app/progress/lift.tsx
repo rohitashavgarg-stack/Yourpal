@@ -13,7 +13,7 @@ import { LIFT_DATA, LIFT_METRICS, LIFT_TITLES } from '@/features/progress/data';
 import { cardShadow, DrawLine, ListCard, SubPage, toPts } from '@/features/progress/parts';
 import { LiftName, progressStore } from '@/features/progress/store';
 import { useProgressScenarios } from '@/features/progress/scenarios';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 const H = 170;
 
@@ -50,7 +50,7 @@ export default function LiftDetail() {
         {LIFT_METRICS.map((l, i) => <Pill key={l} label={l} on={ps.metric === i} onPress={() => { progressStore.set({ metric: i as 0 | 1 | 2 }); setTip(null); }} style={{ flex: 1, paddingHorizontal: 8 }} />)}
       </View>
 
-      <View style={[{ backgroundColor: c.surface, borderRadius: 28, paddingTop: 16, paddingHorizontal: 12, paddingBottom: 12, gap: 6 }, cardShadow(isDark)]} onLayout={(e) => setW(e.nativeEvent.layout.width)}>
+      <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingTop: 16, paddingHorizontal: 12, paddingBottom: 12, gap: 6 }, cardShadow(isDark)]} onLayout={(e) => setW(e.nativeEvent.layout.width)}>
         <Row style={{ justifyContent: 'space-between', paddingHorizontal: 6, minHeight: 26 }}>
           <Txt v="label">{LIFT_TITLES[ps.metric]}</Txt>
           {tip !== null && <Animated.View entering={fade()} exiting={fadeOut()}><Tag label={`Week ${tip + 1} · ${vals[tip]}${unit}`} bg={c.ink} fg={c.bg} /></Animated.View>}
@@ -76,7 +76,7 @@ export default function LiftDetail() {
       <ListCard mono rows={[{ l: L.pr, v: L.prd }, { l: L.last, v: '24 Sep' }]} />
 
       {L.stall && !ps.stallGone && (
-        <Animated.View entering={fade()} exiting={fadeOut()} style={{ padding: 16, borderRadius: 22, backgroundColor: c.accentSoft, flexDirection: 'row', gap: 10, alignItems: 'flex-start' }}>
+        <Animated.View entering={fade()} exiting={fadeOut()} style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.accentSoft, flexDirection: 'row', gap: 10, alignItems: 'flex-start' }}>
           <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.accentText }}>
             {isPT ? 'Same weight for 3 weeks. Coach Vikram will adjust this in your next plan.' : 'Same weight for 3 weeks. Try a lighter week, or ask Coach Vikram about personal training.'}
           </Txt>

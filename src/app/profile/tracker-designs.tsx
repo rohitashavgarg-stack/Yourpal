@@ -9,7 +9,7 @@ import { StepsDesign, stepsStore } from '@/features/today/StepsCards';
 import { TileFor } from '@/features/today/Trackers';
 import { CATALOG, TrackerKey, designStore } from '@/features/trackers/designs';
 import { SubPage } from '@/features/shell/parts';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 // The widgets only, grouped by category. Tap one to use it on Today.
 function Option({ tracker, design, on, onPick }: { tracker: TrackerKey; design: string; on: boolean; onPick: () => void }) {
@@ -18,7 +18,7 @@ function Option({ tracker, design, on, onPick }: { tracker: TrackerKey; design: 
     <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={`${design} design`} onPress={onPick} scaleTo={0.97} style={{ padding: 3, borderRadius: 31, borderWidth: 2, borderColor: on ? c.ink : 'transparent' }}>
       <View pointerEvents="none"><TileFor tracker={tracker} design={design} interactive={false} /></View>
       {on && (
-        <View style={{ position: 'absolute', right: 10, bottom: 10, width: 24, height: 24, borderRadius: 12, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ position: 'absolute', right: 10, bottom: 10, width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>
           <Check size={14} strokeWidth={3} color={c.bg} />
         </View>
       )}

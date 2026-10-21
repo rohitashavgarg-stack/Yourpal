@@ -14,7 +14,7 @@ import { fade, fadeOut } from '@/theme/motion';
 import { goHome, ListCard, Note, ProgLogo, SubPage } from '@/features/shell/parts';
 import { switchProgramme, useShell } from '@/features/shell/state';
 import { useVisibleNotifs } from '@/features/shell/notifs';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 export default function Notifications() {
   const { c } = useTheme();
@@ -80,7 +80,7 @@ export default function Notifications() {
                 </View>
                 <View style={{ alignItems: 'flex-end', gap: 6 }}>
                   <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{n.when}</Txt>
-                  {n.unread && <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: c.accent }} />}
+                  {n.unread && <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: c.accent }} />}
                 </View>
               </Pressy>
             </Animated.View>
@@ -88,7 +88,7 @@ export default function Notifications() {
         })}
         {list.length === 0 && (
           <Animated.View entering={fade()} style={{ paddingVertical: 36, paddingHorizontal: 10, alignItems: 'center', gap: 10 }}>
-            <View style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><BellRing size={22} color={c.accentText} /></View>
+            <View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><BellRing size={22} color={c.accentText} /></View>
             <Txt muted style={{ textAlign: 'center' }}>You're all caught up. New updates from your programmes show up here.</Txt>
           </Animated.View>
         )}

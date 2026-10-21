@@ -15,7 +15,7 @@ import { useVisibleNotifs } from '@/features/shell/notifs';
 import { ProgLogo } from '@/features/shell/parts';
 import { useDomain } from '@/lib/domain';
 import { haptic } from '@/lib/haptics';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 export const Avatar = ({ size = 44 }: { size?: number }) => <PersonAvatar who="me" size={size} />;
 export const GymLogo = GymLogoMark;
@@ -62,15 +62,15 @@ export function GymHeader() {
       )}
       <View style={{ flex: 1 }} />
       {/* The bell has its own round glass button; the profile photo stands on its own beside it. */}
-      <View style={[{ width: 44, height: 44, borderRadius: 22 }, lift]}>
+      <View style={[{ width: 44, height: 44, borderRadius: radii.lg }, lift]}>
         <GlassShell radius={22} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-          <Pressy accessibilityRole="button" accessibilityLabel={unread ? `Notifications, ${unread} unread` : 'Notifications'} onPress={() => router.push('/notifications')} style={{ width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' }}>
+          <Pressy accessibilityRole="button" accessibilityLabel={unread ? `Notifications, ${unread} unread` : 'Notifications'} onPress={() => router.push('/notifications')} style={{ width: 44, height: 44, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center' }}>
             <Bell size={19} color={c.ink} />
-            {unread > 0 && <View style={{ position: 'absolute', top: 10, right: 11, width: 8, height: 8, borderRadius: 4, backgroundColor: c.accent }} />}
+            {unread > 0 && <View style={{ position: 'absolute', top: 10, right: 11, width: 8, height: 8, borderRadius: radii.xs, backgroundColor: c.accent }} />}
           </Pressy>
         </GlassShell>
       </View>
-      <Pressy accessibilityRole="button" accessibilityLabel="Profile" onPress={() => router.push('/profile')} style={[{ width: 44, height: 44, borderRadius: 22 }, lift]} hitSlop={4}>
+      <Pressy accessibilityRole="button" accessibilityLabel="Profile" onPress={() => router.push('/profile')} style={[{ width: 44, height: 44, borderRadius: radii.lg }, lift]} hitSlop={4}>
         <Avatar size={44} />
       </Pressy>
     </Row>

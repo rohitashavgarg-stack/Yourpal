@@ -15,7 +15,7 @@ import { haptic } from '@/lib/haptics';
 import { GOAL_DEFAULT, GOAL_VERB, GOALS, NUMERIC_GOALS } from '@/features/progress/data';
 import { StepBtn, SubPage } from '@/features/progress/parts';
 import { useProgressScenarios } from '@/features/progress/scenarios';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 export default function EditGoal() {
   const { c } = useTheme();
@@ -53,7 +53,7 @@ export default function EditGoal() {
           <Txt muted style={{ fontSize: fontSizes.md }}>Measured with assessment tests (deep squat hold, sit-and-reach, shuttle run). Coach Vikram sets the targets with you.</Txt>
         )}
         {g.type === 'Weight loss' && g.target > 15 && (
-          <Animated.View entering={fade()} exiting={fadeOut()} style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: 16, backgroundColor: c.warnSoft }}>
+          <Animated.View entering={fade()} exiting={fadeOut()} style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
             <Txt style={{ fontSize: fontSizes.sm, color: c.warn }}>That’s a big target. Coach Vikram may suggest milestones on the way.</Txt>
           </Animated.View>
         )}

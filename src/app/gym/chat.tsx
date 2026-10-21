@@ -23,7 +23,7 @@ import { haptic } from '@/lib/haptics';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { ChatOptionsSheet } from '@/features/gym/sheets';
 import { cardShadow } from '@/features/progress/parts';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const REPLY = "Got it. I'll check it before your session tomorrow.";
 const REPLY_AUDIO = "Thanks for the voice note. I'll listen and reply before your session.";
@@ -34,7 +34,7 @@ function Dot({ i }: { i: number }) {
   const o = useSharedValue(0.3);
   useEffect(() => { o.value = withDelay(i * 150, withRepeat(withSequence(withTiming(1, { duration: 350 }), withTiming(0.3, { duration: 650 })), -1, false)); }, []);
   const a = useAnimatedStyle(() => ({ opacity: o.value }));
-  return <Animated.View style={[{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.muted, marginHorizontal: 2 }, a]} />;
+  return <Animated.View style={[{ width: 6, height: 6, borderRadius: radii.xs, backgroundColor: c.muted, marginHorizontal: 2 }, a]} />;
 }
 
 // How far the keyboard covers the screen (iOS only; Android resizes the window itself). The chat adds it as bottom padding.
@@ -114,7 +114,7 @@ export default function CoachChat() {
   ) : (
     <View>
       {ctx ? (
-        <Pressy accessibilityRole="button" accessibilityLabel={`About ${ctx}. Remove`} onPress={() => setCtx(undefined)} style={{ alignSelf: 'flex-start', marginLeft: 16, marginTop: 10, height: 32, paddingLeft: 12, paddingRight: 8, borderRadius: 16, backgroundColor: c.accentSoft, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        <Pressy accessibilityRole="button" accessibilityLabel={`About ${ctx}. Remove`} onPress={() => setCtx(undefined)} style={{ alignSelf: 'flex-start', marginLeft: 16, marginTop: 10, height: 32, paddingLeft: 12, paddingRight: 8, borderRadius: radii.md, backgroundColor: c.accentSoft, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, color: c.accentText }}>About: {ctx}</Txt><X size={14} color={c.accentText} />
         </Pressy>
       ) : null}
@@ -142,7 +142,7 @@ export default function CoachChat() {
       </View>
       <ScrollView ref={scroll} style={{ flex: 1 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1, paddingTop: 8, paddingHorizontal: 16, paddingBottom: 12, gap: 8 }}>
         {coach.away && (
-          <View accessibilityRole="alert" style={{ padding: 12, borderRadius: 16, backgroundColor: c.warnSoft }}>
+          <View accessibilityRole="alert" style={{ padding: 12, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
             <Txt style={{ fontSize: fontSizes.sm, color: c.warn }}>Coach Vikram is away until Mon 10:00 am, so replies will be slower. Something urgent? Ask the front desk.</Txt>
           </View>
         )}
@@ -150,7 +150,7 @@ export default function CoachChat() {
           <View style={{ flex: 1, justifyContent: 'center', paddingVertical: 30, paddingHorizontal: 20 }}>
             <Txt muted style={{ textAlign: 'center' }}>Start the conversation. Ask Coach Vikram about form, your plan or the gym.</Txt>
             <Row style={{ gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginTop: 14 }}>
-              {TOPICS.map((t) => <Pressy key={t.l} accessibilityRole="button" onPress={() => { setDraft(t.draft); setCtx(t.ctx); }} scaleTo={0.95} style={{ height: 44, paddingHorizontal: 16, borderRadius: 22, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>{t.l}</Txt></Pressy>)}
+              {TOPICS.map((t) => <Pressy key={t.l} accessibilityRole="button" onPress={() => { setDraft(t.draft); setCtx(t.ctx); }} scaleTo={0.95} style={{ height: 44, paddingHorizontal: 16, borderRadius: radii.lg, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>{t.l}</Txt></Pressy>)}
             </Row>
           </View>
         )}
@@ -159,7 +159,7 @@ export default function CoachChat() {
             <View style={{ flexShrink: 1, paddingVertical: m.img ? 6 : 10, paddingHorizontal: m.img ? 6 : 14, borderRadius: 20, backgroundColor: m.me ? c.accent : c.surface }}>
               {m.audio ? <AudioBubble uri={m.audio.uri} dur={m.audio.dur} me={m.me} /> : (
                 <View style={{ gap: m.img && m.t !== 'Photo' ? 6 : 0 }}>
-                  {m.img ? <Image source={{ uri: m.img }} accessibilityLabel="Photo" accessibilityIgnoresInvertColors style={{ width: 220, height: 220, borderRadius: 14, backgroundColor: c.surface3 }} /> : null}
+                  {m.img ? <Image source={{ uri: m.img }} accessibilityLabel="Photo" accessibilityIgnoresInvertColors style={{ width: 220, height: 220, borderRadius: radii.sm, backgroundColor: c.surface3 }} /> : null}
                   {m.img && m.t === 'Photo' ? null : <Txt style={{ color: m.me ? fixed.white : c.ink }}>{m.t}</Txt>}
                 </View>
               )}

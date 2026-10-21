@@ -31,7 +31,7 @@ import { setP as setPlans } from '@/features/plans/store';
 import { greetStore } from '@/features/today/TodayGreeting';
 import { GREETING_STATES, GreetingState } from '@/lib/microcopy';
 import { Bell } from '@/lib/icons';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const PHONE_W = 390, PHONE_H = 844;
 // Which version of the edge-case panel is showing: the first one (a long list) or the structured one (cards).
@@ -93,7 +93,7 @@ function StatusBarMock() {
   return (
     <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 47, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 30, paddingTop: 6 }}>
       <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 20, color: c.ink }}>9:41</Text>
-      <View style={{ position: 'absolute', left: 140, top: 11, width: 110, height: 32, borderRadius: 16, backgroundColor: fixed.black }} />
+      <View style={{ position: 'absolute', left: 140, top: 11, width: 110, height: 32, borderRadius: radii.md, backgroundColor: fixed.black }} />
       <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: c.ink }}>5G  100%</Text>
     </View>
   );
@@ -113,11 +113,11 @@ function TimeSlider({ minutes, onPick }: { minutes: number; onPick: (min: number
         onStartShouldSetResponder={() => true} onMoveShouldSetResponder={() => true}
         onResponderGrant={(e) => from(e.nativeEvent.locationX)} onResponderMove={(e) => from(e.nativeEvent.locationX)}
         style={{ height: 30, justifyContent: 'center' }}>
-        <View pointerEvents="none" style={{ height: 4, borderRadius: 2, backgroundColor: P.track }}>
-          <View style={{ width: `${pct}%`, height: 4, borderRadius: 2, backgroundColor: P.ink }} />
+        <View pointerEvents="none" style={{ height: 4, borderRadius: radii.xs, backgroundColor: P.track }}>
+          <View style={{ width: `${pct}%`, height: 4, borderRadius: radii.xs, backgroundColor: P.ink }} />
         </View>
-        {[0, 6, 12, 18, 23].map((h) => <View key={h} pointerEvents="none" style={{ position: 'absolute', left: `${(h / 23) * 100}%`, marginLeft: -3, top: 12, width: 6, height: 6, borderRadius: 3, backgroundColor: h <= hour ? P.ink : P.chip }} />)}
-        <View pointerEvents="none" style={{ position: 'absolute', left: `${pct}%`, marginLeft: -11, top: 4, width: 22, height: 22, borderRadius: 11, backgroundColor: fixed.white, borderWidth: 2, borderColor: P.ink, shadowColor: fixed.black, shadowOpacity: 0.15, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } }} />
+        {[0, 6, 12, 18, 23].map((h) => <View key={h} pointerEvents="none" style={{ position: 'absolute', left: `${(h / 23) * 100}%`, marginLeft: -3, top: 12, width: 6, height: 6, borderRadius: radii.xs, backgroundColor: h <= hour ? P.ink : P.chip }} />)}
+        <View pointerEvents="none" style={{ position: 'absolute', left: `${pct}%`, marginLeft: -11, top: 4, width: 22, height: 22, borderRadius: radii.sm, backgroundColor: fixed.white, borderWidth: 2, borderColor: P.ink, shadowColor: fixed.black, shadowOpacity: 0.15, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } }} />
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         {['12 am', '6 am', '12 pm', '6 pm', '11 pm'].map((l) => <Text key={l} style={{ fontFamily: font.regular, fontSize: fontSizes.xs2, lineHeight: 15, color: P.muted }}>{l}</Text>)}
@@ -255,7 +255,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       {dd('Missed')}
       {sit.current === 'Comeback' && dd('Days away (Comeback)', 'Days away')}
       <Text style={{ fontFamily: font.regular, fontSize: 11.5, lineHeight: 16, color: P.muted }}>{SITUATION_HINT[sit.current]}</Text>
-      {!!d.autoNote && <View style={{ backgroundColor: '#FFF4E0', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: '#9A5A00' }}>{d.autoNote}</Text></View>}
+      {!!d.autoNote && <View style={{ backgroundColor: '#FFF4E0', borderRadius: radii.sm, paddingVertical: 8, paddingHorizontal: 12 }}><Text style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: '#9A5A00' }}>{d.autoNote}</Text></View>}
     </PanelCard>
   );
   const memberCard = (
@@ -307,7 +307,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
   const columnsOf: React.ReactNode[][] = [[timeCard, situationCard, memberCard, reminderCard, goCard]];
   return (
     <View style={{ gap: 8 }}>
-      <View style={{ backgroundColor: fixed.white, borderRadius: 18, borderWidth: 1, borderColor: P.line, paddingVertical: 8, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+      <View style={{ backgroundColor: fixed.white, borderRadius: radii.md, borderWidth: 1, borderColor: P.line, paddingVertical: 8, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
         <View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: P.ink, alignItems: 'center', justifyContent: 'center' }}><SlidersHorizontal size={15} color={fixed.white} /></View>
         <View style={{ flex: 1 }}>
           <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 19, letterSpacing: -0.2, color: P.ink }}>Demo controls</Text>
@@ -317,7 +317,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
           {open ? <Minus size={18} color={P.muted} /> : <Plus size={18} color={P.muted} />}
         </Pressable>
       </View>
-      {!!note && <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, zIndex: 20, backgroundColor: '#E6F6EE', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 12, shadowColor: fixed.shadow, shadowOpacity: 0.15, shadowRadius: 8 }}><Text style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
+      {!!note && <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, zIndex: 20, backgroundColor: '#E6F6EE', borderRadius: radii.sm, paddingVertical: 8, paddingHorizontal: 12, shadowColor: fixed.shadow, shadowOpacity: 0.15, shadowRadius: 8 }}><Text style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: '#0F8A5F' }}>✓ {note}</Text></View>}
       {open && (
         <View style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
           {columnsOf.map((items, i) => <View key={i} style={{ flex: 1, gap: 8, minWidth: 0 }}>{items.map((x, k) => <React.Fragment key={k}>{x}</React.Fragment>)}</View>)}
@@ -351,7 +351,7 @@ export function EdgeTab() {
   const { c } = useTheme();
   return (
     <Pressable accessibilityRole="button" accessibilityLabel="Scenarios and edge cases" onPress={() => openSheet(<View style={{ backgroundColor: fixed.white, borderRadius: 20, padding: 12 }}><PanelBody onDone={(m) => closeSheet(() => toast(m))} /></View>, { label: 'Edge cases' })}
-      style={{ position: 'absolute', right: 0, top: '46%', width: 22, height: 52, borderTopLeftRadius: 12, borderBottomLeftRadius: 12, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', opacity: 0.9 }}>
+      style={{ position: 'absolute', right: 0, top: '46%', width: 22, height: 52, borderTopLeftRadius: radii.sm, borderBottomLeftRadius: radii.sm, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', opacity: 0.9 }}>
       <SlidersHorizontal size={13} color={fixed.white} />
     </Pressable>
   );

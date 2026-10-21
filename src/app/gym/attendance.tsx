@@ -12,7 +12,7 @@ import { font } from '@/theme/tokens';
 import { cardShadow, Hint, SubPage } from '@/features/progress/parts';
 import { VISITS } from '@/features/gym/data';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 type Att = { t: string; s: string; tag: string; type: 'c' | 'pt'; icon: 'loc' | 'home' | 'pt' | 'wait'; tone?: 'accent' | 'good' | 'warn'; ptOnly?: boolean; key: string };
 
@@ -69,13 +69,13 @@ export default function Attendance() {
   return (
     <SubPage title="Attendance" fallback="/gym">
       {awaiting && (
-        <Animated.View entering={fade()} exiting={fadeOut()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 18, gap: 8, borderWidth: 1.5, borderColor: c.accent }, cardShadow(isDark)]}>
+        <Animated.View entering={fade()} exiting={fadeOut()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 8, borderWidth: 1.5, borderColor: c.accent }, cardShadow(isDark)]}>
           <Txt style={{ fontFamily: font.semibold }}>Confirm your session</Txt>
           <Txt muted style={{ fontSize: fontSizes.md }}>Coach Vikram marked Tue 23 Sep, 6–7 pm as completed</Txt>
           <Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} style={{ height: 48, borderRadius: 24 }} />
         </Animated.View>
       )}
-      <View style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 16 }, cardShadow(isDark)]}>
+      <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 16 }, cardShadow(isDark)]}>
         <Row style={{ justifyContent: 'space-between', marginBottom: 10 }}>
           <Txt style={{ fontFamily: font.semibold }}>September</Txt><Txt v="label">18 visits</Txt>
         </Row>
@@ -102,12 +102,12 @@ export default function Attendance() {
           {['All', 'Check-ins', 'PT sessions'].map((l, i) => <Pill key={l} label={l} on={g.attFilter === i} onPress={() => gymStore.set({ attFilter: i as any })} style={{ flex: 1, paddingHorizontal: 8 }} />)}
         </View>
       )}
-      <View style={[{ backgroundColor: c.surface, borderRadius: 28, paddingVertical: 4, paddingHorizontal: 16 }, cardShadow(isDark)]}>
+      <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 4, paddingHorizontal: 16 }, cardShadow(isDark)]}>
         {list.map((r, i) => {
           const t = tone(r); const I = Icon[r.icon];
           return (
             <Animated.View key={r.key + r.tag} entering={fade()} style={{ minHeight: 60, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, paddingHorizontal: 4, borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-              <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: t.dotBg, alignItems: 'center', justifyContent: 'center' }}><I size={16} strokeWidth={2.4} color={t.dotFg} /></View>
+              <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: t.dotBg, alignItems: 'center', justifyContent: 'center' }}><I size={16} strokeWidth={2.4} color={t.dotFg} /></View>
               <View style={{ flex: 1, minWidth: 0 }}>
                 <Txt style={{ fontFamily: font.medium }}>{r.t}</Txt>
                 <Txt v="caption">{r.s}</Txt>

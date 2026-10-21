@@ -17,7 +17,7 @@ import { useScenarios, useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 type Step = 'phone' | 'otp' | 'programme';
 
@@ -150,7 +150,7 @@ export default function Login() {
             {err === 'invalid' && <Animated.View entering={fade()}><Txt v="caption" color={c.warn}>Enter a 10-digit mobile number.</Txt></Animated.View>}
             {err === 'notFound' && (
               <Animated.View entering={fade()}>
-                <View style={{ padding: 16, borderRadius: 22, backgroundColor: c.warnSoft, gap: 10 }}>
+                <View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.warnSoft, gap: 10 }}>
                   <Txt v="headline" color={c.warn}>We couldn't find this number</Txt>
                   <Txt color={c.warn} style={{ fontSize: fontSizes.md }}>Please check with your gym's front desk. They can add it to your membership in a minute.</Txt>
                   <Row style={{ gap: 8 }}>
@@ -184,7 +184,7 @@ export default function Login() {
               <Row style={{ gap: 12, padding: 12, borderRadius: 20, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line }}>
                 {progs.length > 1 ? (
                   <View style={{ flexDirection: 'row', paddingRight: 14 }}>
-                    {progs.map((p, i) => <View key={p.id} style={{ marginRight: -14, zIndex: 10 - i, borderRadius: 22, borderWidth: 2, borderColor: c.surface }}><ProgLogo p={p} size={36} /></View>)}
+                    {progs.map((p, i) => <View key={p.id} style={{ marginRight: -14, zIndex: 10 - i, borderRadius: radii.lg, borderWidth: 2, borderColor: c.surface }}><ProgLogo p={p} size={36} /></View>)}
                   </View>
                 ) : <ProgLogo p={progs[0]} size={40} />}
                 <View style={{ flex: 1 }}>
@@ -198,7 +198,7 @@ export default function Login() {
             {codeState === 'error' && <Animated.View entering={fade()}><Txt v="label" color={c.warn}>That code didn't match. {3 - tries} {3 - tries === 1 ? 'try' : 'tries'} left.</Txt></Animated.View>}
             {codeState === 'locked' && (
               <Animated.View entering={fade()}>
-                <View style={{ padding: 14, borderRadius: 18, backgroundColor: c.warnSoft }}>
+                <View style={{ padding: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
                   <Txt color={c.warn} style={{ fontFamily: font.semibold }}>Too many wrong tries</Txt>
                   <Txt color={c.warn} style={{ fontSize: fontSizes.md }}>For your safety, try again in 0:{String(lockIn).padStart(2, '0')}, or ask the front desk.</Txt>
                 </View>
@@ -243,7 +243,7 @@ function OfflineBanner() {
   const { c } = useTheme();
   return (
     <Animated.View entering={fade()}>
-      <Row style={{ gap: 10, padding: 14, borderRadius: 18, backgroundColor: c.surface2 }}>
+      <Row style={{ gap: 10, padding: 14, borderRadius: radii.md, backgroundColor: c.surface2 }}>
         <WifiOff size={18} color={c.muted} />
         <Txt style={{ flex: 1, fontSize: fontSizes.md }} muted>No internet connection. Check Wi-Fi or data and try again.</Txt>
       </Row>

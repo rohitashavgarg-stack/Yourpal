@@ -12,7 +12,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { fmtDay, fmtVal, Goal2, statusLine, useGoalV2 } from '@/features/goalv2/model';
 import { DEMO, GC, GoalCardState, goalCardStore, LOOK, RIGHT_TEXT, SEGMENTS, STALE_WEIGH_DAYS, SUFFIX, useGoalCardState } from '@/features/today/goalCardState';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 // The goal at the top of Today (Figma "Your Pal Mobile app", node 40151:12923), with no card around it: it sits straight on the page,
 // over a soft blue glow, the goal in one line, a status pill, the progress picture for this kind of goal (GoalVisual), and the numbers underneath.
@@ -49,7 +49,7 @@ export function Glow({ color, a, side = 'left' }: { color: string; a: number; si
 function Segments({ filled, color }: { filled: number; color: string }) {
   return (
     <View style={{ flexDirection: 'row', gap: 2 }}>
-      {Array.from({ length: SEGMENTS }, (_, i) => <View key={i} style={{ flex: 1, height: 14, borderRadius: 2, backgroundColor: i < filled ? color : GC.unfilled }} />)}
+      {Array.from({ length: SEGMENTS }, (_, i) => <View key={i} style={{ flex: 1, height: 14, borderRadius: radii.xs, backgroundColor: i < filled ? color : GC.unfilled }} />)}
     </View>
   );
 }
@@ -125,7 +125,7 @@ export function GoalTickCard({ flat = false, state: stateProp, weighDays: weighP
             <Txt numberOfLines={2} style={{ fontFamily: font.displayBold, fontSize: long ? fontSizes.xl3 : fontSizes.xl4, lineHeight: long ? 34 : 42, letterSpacing: long ? -0.8 : -1.2, color: c.ink }}>{g.name}</Txt>
             <Txt style={{ fontSize: fontSizes.base, lineHeight: 22, color: c.muted }}>{g.status === 'reached' ? 'All the way there' : `${Math.round(pct * 100)}% of the way there`}</Txt>
           </View>
-          <View style={{ minHeight: 40, paddingVertical: 2, paddingHorizontal: 16, borderRadius: 22, backgroundColor: pill.bg, alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
+          <View style={{ minHeight: 40, paddingVertical: 2, paddingHorizontal: 16, borderRadius: radii.lg, backgroundColor: pill.bg, alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20, color: pill.fg }}>{label}</Txt>
           </View>
         </Row>
@@ -177,7 +177,7 @@ export function GoalTickCard({ flat = false, state: stateProp, weighDays: weighP
             <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 32, letterSpacing: -0.24, color: GC.title }}>{g.name}</Txt>
             <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: GC.date }}>{suffix}</Txt>
           </View>
-          <View style={{ flexShrink: 0, paddingVertical: 6, paddingHorizontal: 13, borderRadius: 999, backgroundColor: look.pill.bg, borderWidth: look.pill.border ? 1 : 0, borderColor: look.pill.border }}>
+          <View style={{ flexShrink: 0, paddingVertical: 6, paddingHorizontal: 13, borderRadius: radii.pill, backgroundColor: look.pill.bg, borderWidth: look.pill.border ? 1 : 0, borderColor: look.pill.border }}>
             <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: look.pill.fg }}>{look.pill.label}</Txt>
           </View>
         </Row>

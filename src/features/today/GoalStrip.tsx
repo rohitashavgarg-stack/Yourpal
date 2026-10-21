@@ -10,7 +10,7 @@ import { Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { fmtDay, fmtVal, Goal2, progressLine, statusLine, useGoalV2 } from '@/features/goalv2/model';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // The goal at the top of Today (Figma "Your Pal Mobile app", node 40151:12923), with no card around it: it sits straight on the page,
 // over a soft blue glow, the goal in one line, a status pill, the progress picture for this kind of goal (GoalVisual), and the numbers underneath.
@@ -128,7 +128,7 @@ export function GoalStrip({ flat = false }: { flat?: boolean } = {}) {
             {!flat && (standing || (by && !inlineBy)) ? <Txt style={{ fontSize: small ? fontSizes.xs : fontSizes.md, lineHeight: small ? 17 : 20, color: c.muted }}>{standing ?? by}</Txt> : null}
             {flat && <Txt style={{ fontSize: fontSizes.base, lineHeight: 22, color: c.muted }}>{g.status === 'reached' ? 'All the way there' : `${Math.round(pct * 100)}% of the way there`}</Txt>}
           </View>
-          <View style={{ height: small ? 28 : 40, paddingHorizontal: small ? 12 : 16, borderRadius: 22, backgroundColor: pill.bg, alignItems: 'center', justifyContent: 'center', marginBottom: small ? 0 : 4 }}>
+          <View style={{ height: small ? 28 : 40, paddingHorizontal: small ? 12 : 16, borderRadius: radii.lg, backgroundColor: pill.bg, alignItems: 'center', justifyContent: 'center', marginBottom: small ? 0 : 4 }}>
             <Txt style={{ fontFamily: font.medium, fontSize: small ? fontSizes.xs : fontSizes.md, lineHeight: small ? 17 : 20, color: pill.fg }}>{pillText}</Txt>
           </View>
         </Row>

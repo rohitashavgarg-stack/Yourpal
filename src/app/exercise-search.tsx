@@ -16,7 +16,7 @@ import { haptic } from '@/lib/haptics';
 import { askCoach } from '@/features/coach/coach';
 import { ExTile } from '@/features/plans/parts';
 import { useSessionActions } from '@/features/workout/actions';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 const GROUPS = ['All', ...Array.from(new Set(LIBRARY.map((x) => x.g)))];
 
@@ -81,7 +81,7 @@ export default function ExerciseSearch() {
         ))}
         {list.length === 0 && (
           <View style={{ alignItems: 'center', gap: 12, paddingVertical: 36 }}>
-            <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Search size={24} color={c.muted} /></View>
+            <View style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Search size={24} color={c.muted} /></View>
             <Txt style={{ fontFamily: font.semibold, textAlign: 'center' }}>No exercise matches “{q.trim()}”</Txt>
             <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.md }}>Try a muscle like chest or legs, or ask Coach Vikram to add it.</Txt>
             <Button kind="secondary" small label="Ask Coach Vikram" icon={<MessageCircle size={16} color={c.ink} />} onPress={() => askCoach('Exercise request', `Can you add ${q.trim()} to my plan? `)} />

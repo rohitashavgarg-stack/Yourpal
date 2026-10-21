@@ -20,7 +20,7 @@ import { mmss, useNow } from '@/lib/useNow';
 import { ciTime } from './WeekCard';
 import { useCheckIn } from '@/features/checkin/useCheckIn';
 import { elapsedMin, limitOf } from '@/features/checkin/logic';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 export type CiMode = 'none' | 'here' | 'near' | 'in' | 'out' | 'off';
 export function useCiMode(): CiMode {
@@ -44,7 +44,7 @@ function Floating({ children }: { children: React.ReactNode }) {
   );
 }
 
-const BAR = { height: 52, borderRadius: 26, flexDirection: 'row', alignItems: 'center', gap: 10, paddingLeft: 12, paddingRight: 6, shadowColor: fixed.shadow, shadowOpacity: 0.08, shadowRadius: 14, shadowOffset: { width: 0, height: 4 }, elevation: 3 } as const;
+const BAR = { height: 52, borderRadius: radii.xl, flexDirection: 'row', alignItems: 'center', gap: 10, paddingLeft: 12, paddingRight: 6, shadowColor: fixed.shadow, shadowOpacity: 0.08, shadowRadius: 14, shadowOffset: { width: 0, height: 4 }, elevation: 3 } as const;
 
 function MiniWorkout() {
   const { d } = useDomain();
@@ -116,12 +116,12 @@ export function CheckInBar() {
     <Floating>
       <View accessibilityRole="summary" style={[BAR, { backgroundColor: bg }, border && { borderWidth: 1, borderColor: c.line }]}>
         <Pressy accessibilityRole={open ? 'button' : undefined} accessibilityLabel={label} disabled={!open} onPress={open ?? undefined} scaleTo={0.98} haptics={false} style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 10, height: 52 }}>
-          <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: icBg, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
+          <View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: icBg, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
           <View style={{ flex: 1, minWidth: 0 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fg, flexShrink: 1 }}>{title}</Txt>
               {!!chip && (
-                <View style={{ height: 20, paddingHorizontal: 8, borderRadius: 10, backgroundColor: c.goodSoft, justifyContent: 'center' }}>
+                <View style={{ height: 20, paddingHorizontal: 8, borderRadius: radii.sm, backgroundColor: c.goodSoft, justifyContent: 'center' }}>
                   <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, color: c.good }}>{chip}</Txt>
                 </View>
               )}
@@ -131,7 +131,7 @@ export function CheckInBar() {
         </Pressy>
         {btn && act ? <PillBtn h={36} label={btn} tone={pillTone} onPress={act} style={{ paddingHorizontal: 14 }} /> : null}
         {progress != null && (
-          <View pointerEvents="none" style={{ position: 'absolute', left: 18, right: 18, bottom: 0, height: 3, borderRadius: 2, backgroundColor: c.goodSoft, overflow: 'hidden' }}>
+          <View pointerEvents="none" style={{ position: 'absolute', left: 18, right: 18, bottom: 0, height: 3, borderRadius: radii.xs, backgroundColor: c.goodSoft, overflow: 'hidden' }}>
             <View style={{ width: `${Math.round(progress * 100)}%`, height: '100%', backgroundColor: c.good }} />
           </View>
         )}

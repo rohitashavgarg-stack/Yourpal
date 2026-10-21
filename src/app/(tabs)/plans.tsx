@@ -20,7 +20,7 @@ import { DietMenuSheet, PlanMenuSheet } from '@/features/plans/Sheets';
 import { applyCoachUpdate, COACH_HL } from '@/features/plans/content';
 import { haptic } from '@/lib/haptics';
 import { DAYL, DAYN, dateOf, monthOf, dayPlan, Diet, resetPlans, setP, usePlans } from '@/features/plans/store';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 const JUMP: [string, number][] = [['Today (Wed)', TODAY_IDX], ['Past day (Mon)', 0], ['Rest day (Tue)', 1], ['Future (Thu)', 3]];
 
@@ -49,7 +49,7 @@ function DayStrip() {
     <View style={{ gap: 6 }}>
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, minHeight: 32 }}>
         <Txt v="label" accessibilityLiveRegion="polite">{cur === 0 ? `This week · ${range}` : cur < 0 ? `${range} · earlier` : `${range} · coming up`}</Txt>
-        {cur !== 0 && <Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => goto(THIS)} style={{ height: 32, paddingHorizontal: 12, borderRadius: 16, backgroundColor: c.accentSoft, justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, color: c.accentText }}>This week</Txt></Pressy>}
+        {cur !== 0 && <Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => goto(THIS)} style={{ height: 32, paddingHorizontal: 12, borderRadius: radii.md, backgroundColor: c.accentSoft, justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, color: c.accentText }}>This week</Txt></Pressy>}
       </Row>
       <View onLayout={(e) => setW(e.nativeEvent.layout.width)}>
         <ScrollView ref={ref} horizontal pagingEnabled showsHorizontalScrollIndicator={false} accessibilityLabel="Weeks, swipe for earlier or later weeks" scrollEventThrottle={16}
@@ -71,13 +71,13 @@ function DayStrip() {
                   <Pressy key={i} accessibilityRole="button" accessibilityState={{ selected: on }}
                     accessibilityLabel={`${DAYL[i]} ${dateOf(i, wk)} ${monthOf(i, wk)}${isToday ? ', today' : ''}${isW ? (plan ? `${locked ? "" : ", " + plan.name}${logged ? ', logged' : locked ? ', locked' : missed ? ', not logged' : ''}` : ', rest day') : ''}`}
                     onPress={() => setP({ day: i, week: wk })} scaleTo={0.94}
-                    style={{ flex: 1, height: 60, borderRadius: 22, alignItems: 'center', justifyContent: 'center', gap: 1, backgroundColor: on ? c.ink : 'transparent', borderWidth: isToday ? 1.5 : 0, borderColor: c.accent }}>
+                    style={{ flex: 1, height: 60, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center', gap: 1, backgroundColor: on ? c.ink : 'transparent', borderWidth: isToday ? 1.5 : 0, borderColor: c.accent }}>
                     <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: on ? c.bg : c.ink, opacity: 0.7 }}>{l}</Txt>
                     <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 21, color: on ? c.bg : c.ink }}>{dateOf(i, wk)}</Txt>
                     {locked ? <Lock size={11} color={c.muted} />
                       : logged ? <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={9} color={c.bg} strokeWidth={4} /></View>
                       : missed ? <View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.warn }} />
-                      : <View style={{ width: 4, height: 4, borderRadius: 2, backgroundColor: dot }} />}
+                      : <View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />}
                   </Pressy>
                 );
               })}
@@ -140,14 +140,14 @@ export default function Plans() {
     <View style={{ flex: 1 }}>
     <TabScreen title="Plans" header={<GymHeader />} compactTitle={false} bottomPad={canStart ? 190 : 130}>
       {d.offline && (
-        <Animated.View entering={fade()} style={{ paddingVertical: 8, paddingHorizontal: 14, borderRadius: 16, backgroundColor: c.warnSoft }}>
+        <Animated.View entering={fade()} style={{ paddingVertical: 8, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: c.warn }}>You're offline · changes save on this phone and sync later</Txt>
         </Animated.View>
       )}
       {paused && (
         <View accessibilityLabel="Plans are view only" style={{ borderRadius: 20, backgroundColor: c.surface2, padding: 14 }}>
           <Row style={{ gap: 12, alignItems: 'flex-start' }}>
-            <View style={{ width: 36, height: 36, borderRadius: 12, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={17} color={c.muted} /></View>
+            <View style={{ width: 36, height: 36, borderRadius: radii.sm, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={17} color={c.muted} /></View>
             <View style={{ flex: 1, gap: 2 }}>
               <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>Plans are view only</Txt>
               <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Renew at Wulf Fitness reception to start workouts, log meals or change your plan.</Txt>
@@ -162,7 +162,7 @@ export default function Plans() {
             icons={{ workout: (col) => <Dumbbell size={16} color={col} />, diet: (col) => <UtensilsCrossed size={16} color={col} /> }} />
         </View>
         {!paused && <Pressy accessibilityRole="button" accessibilityLabel={isW ? 'Plan menu' : 'Diet menu'} onPress={openMenu}
-          style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+          style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
           <MoreHorizontal size={22} color={c.ink} />
         </Pressy>}
       </Row>

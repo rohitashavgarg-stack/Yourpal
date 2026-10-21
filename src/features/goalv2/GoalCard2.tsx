@@ -11,7 +11,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { fmtDay, Goal2, progressLine, statusLine, useGoalV2 } from './model';
 import { GoalVisual } from './GoalVisual';
 import { useStreak } from '@/features/streak/useStreak';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // Same card on Today (compact) and Progress (expanded): ring on the left, then goal, numbers, status.
 // One goal object feeds it, so the name, percent and unit can never differ between screens.
@@ -52,7 +52,7 @@ export function StatusChip({ g, fg }: { g: Goal2; fg: string }) {
     ? (g.status === 'reached' ? 'Week complete' : `${g.weeklyTarget - g.currentValue} to go this week`)
     : statusLine(g);
   return (
-    <View style={{ alignSelf: 'flex-start', backgroundColor: fixed.white, borderRadius: 999, paddingHorizontal: 11, paddingVertical: 4 }}>
+    <View style={{ alignSelf: 'flex-start', backgroundColor: fixed.white, borderRadius: radii.pill, paddingHorizontal: 11, paddingVertical: 4 }}>
       <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 18, color: fg }}>{label}</Txt>
     </View>
   );
@@ -69,7 +69,7 @@ export function GoalCard2({ size }: { size: 'compact' | 'expanded' | 'hero' }) {
   return (
     <Wrap {...wrapProps}>
       <LinearGradient colors={look.colors as any} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-        style={{ borderRadius: 28, padding: size === 'expanded' ? 20 : 18, gap: 14, overflow: 'hidden', borderWidth: highlight ? 1.5 : 0, borderColor: 'rgba(255,255,255,0.55)' }}>
+        style={{ borderRadius: radii.xl, padding: size === 'expanded' ? 20 : 18, gap: 14, overflow: 'hidden', borderWidth: highlight ? 1.5 : 0, borderColor: 'rgba(255,255,255,0.55)' }}>
         <Svg width={240} height={240} viewBox="0 0 240 240" style={{ position: 'absolute', right: -80, top: -90, opacity: highlight ? 0.22 : 0.15 }}>
           <Circle cx={120} cy={120} r={110} fill="none" stroke={fixed.white} strokeWidth={16} /><Circle cx={120} cy={120} r={70} fill="none" stroke={fixed.white} strokeWidth={10} />
         </Svg>

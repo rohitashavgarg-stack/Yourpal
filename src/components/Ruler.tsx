@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Txt } from './ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 const PX = 10;      // pixels per step
 const HALF = 60;    // ticks rendered each side of the anchor
@@ -118,8 +118,8 @@ export function Ruler({ value, onChange, min, max, step, decimals = 0, majorEver
         </View>
       </GestureDetector>
       {v
-        ? <View pointerEvents="none" style={{ position: 'absolute', right: 0, top: len / 2 - 1.5, width: 38, height: 3, borderRadius: 2, backgroundColor: c.accent }} />
-        : <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: len / 2 - 1.5, width: 3, height: 46, borderRadius: 2, backgroundColor: c.accent }} />}
+        ? <View pointerEvents="none" style={{ position: 'absolute', right: 0, top: len / 2 - 1.5, width: 38, height: 3, borderRadius: radii.xs, backgroundColor: c.accent }} />
+        : <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: len / 2 - 1.5, width: 3, height: 46, borderRadius: radii.xs, backgroundColor: c.accent }} />}
       {v ? (
         <>
           <LinearGradient pointerEvents="none" colors={[fade, fade + '00']} style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 64 }} />

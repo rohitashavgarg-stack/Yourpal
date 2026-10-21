@@ -19,7 +19,7 @@ import { useScenarios, useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fade, fadeOut } from '@/theme/motion';
 import { goBack, Label, Note, SubPage, useShake } from '@/features/shell/parts';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 const maskNum = (p: string) => (p.replace(/D/g, '').length === 10 ? `+91 ${p.slice(0, 2)}xxxxxx${p.slice(8)}` : '+91 98xxxxxx21');
 
@@ -172,13 +172,13 @@ export default function MyDetails() {
       )}
 
       <Label style={{ marginTop: 16 }}>Mobile number</Label>
-      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: 22, backgroundColor: c.surface }}>
+      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.surface }}>
         <Txt v="mono" style={{ flex: 1 }}>{maskNum(state.phone)}</Txt>
         <Button small kind="secondary" label="Change" accessibilityLabel="Change mobile number" onPress={() => openSheet(<ChangePhoneSheet />, { label: 'Change mobile number' })} />
       </Row>
 
       <Label style={{ marginTop: 16 }}>Body details</Label>
-      <View style={{ marginTop: -6, borderRadius: 22, backgroundColor: c.surface, overflow: 'hidden' }}>
+      <View style={{ marginTop: -6, borderRadius: radii.lg, backgroundColor: c.surface, overflow: 'hidden' }}>
         <BodyRow label="Date of birth" value={p.dob ? `${fmtDob(p.dob)} · ${ageFrom(p.dob)} yrs` : p.age ? `${p.age} years` : 'Add'} onPress={() => openSheet(<DobSheet />, { label: 'Date of birth' })} />
         <BodyRow label="Height" value={p.heightCm ? `${p.heightCm} cm` : 'Add'} onPress={() => router.push('/log-height')} />
         <BodyRow label="Weight" last value={shell.unitsW === 'lb' ? `${(d.weight * 2.20462).toFixed(1)} lb` : `${d.weight.toFixed(1)} kg`} onPress={() => router.push('/log-weight')} />

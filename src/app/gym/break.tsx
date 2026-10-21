@@ -10,7 +10,7 @@ import { font } from '@/theme/tokens';
 import { cardShadow, GrowBar, SubPage } from '@/features/progress/parts';
 import { PAUSE_HISTORY, PAUSE_TOTAL } from '@/features/gym/data';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 // View-only: pauses are set by the front desk. The member sees status, history and how many are left.
 export default function MembershipPauses() {
@@ -36,7 +36,7 @@ export default function MembershipPauses() {
         </View>
       )}
 
-      <View style={[{ padding: 18, borderRadius: 28, backgroundColor: c.surface, gap: 10 }, cardShadow(isDark)]}>
+      <View style={[{ padding: 18, borderRadius: radii.xl, backgroundColor: c.surface, gap: 10 }, cardShadow(isDark)]}>
         <Txt v="label">PAUSES LEFT</Txt>
         <Row style={{ alignItems: 'baseline', gap: 6 }}>
           <Txt style={{ fontFamily: font.displayBold, fontSize: 40, lineHeight: 52, letterSpacing: -1.2 }}>{left}</Txt>

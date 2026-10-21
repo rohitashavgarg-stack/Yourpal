@@ -9,7 +9,7 @@ import { Domain, plannedMin, totals, useDomain, wkDoneInfo, workoutState } from 
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 export const ciTime = (d: Domain) => d.ciAt ?? (d.ci === 'Checked in' ? 1098 : null);
 
@@ -44,11 +44,11 @@ function days(d: Domain, planAt: string): Day[] {
 function Dot({ kind }: { kind: 'done' | 'rest' | '' }) {
   const { c } = useTheme();
   if (kind === 'rest') return <View style={{ width: 8, height: 8 }} />;
-  return <View style={{ width: 8, height: 8, borderRadius: 4, borderWidth: 1.5, borderColor: kind === 'done' ? c.accent : c.surface3, backgroundColor: kind === 'done' ? c.accent : 'transparent' }} />;
+  return <View style={{ width: 8, height: 8, borderRadius: radii.xs, borderWidth: 1.5, borderColor: kind === 'done' ? c.accent : c.surface3, backgroundColor: kind === 'done' ? c.accent : 'transparent' }} />;
 }
 function Bar({ w }: { w: number }) {
   const { c } = useTheme();
-  return <View style={{ width: 22, height: 4, borderRadius: 2, backgroundColor: c.surface2, overflow: 'hidden' }}><View style={{ width: `${w}%`, height: '100%', backgroundColor: c.good, borderRadius: 2 }} /></View>;
+  return <View style={{ width: 22, height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}><View style={{ width: `${w}%`, height: '100%', backgroundColor: c.good, borderRadius: radii.xs }} /></View>;
 }
 
 export function WeekCard() {
@@ -70,7 +70,7 @@ export function WeekCard() {
           <View key={x.num} style={{ flex: 1, alignItems: 'center', gap: 6, borderLeftWidth: i ? 1 : 0, borderLeftColor: c.line }}>
             <Pressy accessibilityRole="button" accessibilityLabel={`${DN[i]} ${x.num}${x.today ? ', today' : ''}${x.fut ? ', open plan' : ', open summary'}`}
               onPress={() => (x.fut ? router.navigate({ pathname: '/plans', params: { day: String(i) } }) : openSheet(<DaySheet i={i} />, { label: 'Day summary' }))}
-              style={{ width: 44, height: 58, borderRadius: 22, alignItems: 'center', justifyContent: 'center', gap: 2, backgroundColor: x.today ? c.ink : 'transparent', opacity: x.fut ? 0.55 : 1 }}>
+              style={{ width: 44, height: 58, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center', gap: 2, backgroundColor: x.today ? c.ink : 'transparent', opacity: x.fut ? 0.55 : 1 }}>
               <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, color: x.today ? c.bg : c.ink }}>{x.num}</Txt>
               <Txt style={{ fontSize: fontSizes.xs2, color: x.today ? c.bg : c.muted, opacity: x.today ? 0.7 : 1 }}>{x.let}</Txt>
             </Pressy>

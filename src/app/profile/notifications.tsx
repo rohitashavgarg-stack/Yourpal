@@ -10,7 +10,7 @@ import { fade, fadeOut } from '@/theme/motion';
 import { LineRow, ListCard, Note, SubPage, Switch } from '@/features/shell/parts';
 import { useShell } from '@/features/shell/state';
 import { QUIET_PRESETS, REMINDER_KEYS, REMINDER_LABEL, reminderStore } from '@/features/reminders/reminders';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 const PERM = { on: 'Allowed', off: 'Blocked', unset: 'Not asked' } as const;
 
@@ -41,7 +41,7 @@ export default function NotificationSettings() {
   return (
     <SubPage title="Notifications" fallback="/profile">
       {perm === 'off' && (
-        <Animated.View entering={fade()} exiting={fadeOut()} style={{ padding: 16, borderRadius: 22, backgroundColor: c.warnSoft, gap: 10 }}>
+        <Animated.View entering={fade()} exiting={fadeOut()} style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.warnSoft, gap: 10 }}>
           <Row style={{ gap: 10 }}>
             <BellOff size={18} color={c.warn} />
             <Txt style={{ flex: 1, fontFamily: font.semibold, color: c.warn }}>Notifications are off on this phone</Txt>

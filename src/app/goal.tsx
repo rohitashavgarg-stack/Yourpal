@@ -18,7 +18,7 @@ import { goalV2Store, kindOf, addDays, fmtDay, parseBy } from '@/features/goalv2
 import { DateSheet, FinishBy } from '@/features/goalv2/FinishBy';
 import { TODAY } from '@/features/progress/trends';
 import { BYS, GDEF, GOAL2, GOALS, goalNote, goalStep, GVERB, isNumeric } from '@/features/shell/goal';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 type Draft = { type: string; target: number; by: string; g2: string };
 
@@ -64,7 +64,7 @@ export default function Goal() {
 
   return (
     <SubPage title="Change goal" fallback="/profile" gap={18} footer={<Button kind="accent" label="Save goal" onPress={save} />}>
-      <Card style={{ padding: 20, gap: 14, borderRadius: 26 }}>
+      <Card style={{ padding: 20, gap: 14, borderRadius: radii.xl }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>What do you want to achieve?</Txt>
           <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Pick your main goal.</Txt>
@@ -75,7 +75,7 @@ export default function Goal() {
       </Card>
 
       {num ? (
-        <Card style={{ padding: 20, gap: 16, borderRadius: 26 }}>
+        <Card style={{ padding: 20, gap: 16, borderRadius: radii.xl }}>
           <View style={{ gap: 2 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>How much?</Txt>
             <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{GVERB[g.type]}</Txt>
@@ -104,14 +104,14 @@ export default function Goal() {
           )}
         </Card>
       ) : note ? (
-        <Card style={{ padding: 20, borderRadius: 26 }}>
+        <Card style={{ padding: 20, borderRadius: radii.xl }}>
           <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>{note.text}</Txt>
         </Card>
       ) : null}
 
-      {needsDate(g.type) && <Card style={{ padding: 20, borderRadius: 26 }}><FinishBy by={g.by} onChange={(by) => patch({ by })} /></Card>}
+      {needsDate(g.type) && <Card style={{ padding: 20, borderRadius: radii.xl }}><FinishBy by={g.by} onChange={(by) => patch({ by })} /></Card>}
 
-      <Card style={{ padding: 20, gap: 14, borderRadius: 26 }}>
+      <Card style={{ padding: 20, gap: 14, borderRadius: radii.xl }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>Anything else? <Txt muted style={{ fontSize: fontSizes.sm }}>Optional</Txt></Txt>
           <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>A second goal to work on alongside.</Txt>

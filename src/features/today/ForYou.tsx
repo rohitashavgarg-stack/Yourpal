@@ -29,7 +29,7 @@ import { haptic } from '@/lib/haptics';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
 import { useUpdates } from './TopCards';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 // ---------- Slim goal strip: the member's reason for opening the app, in one line ----------
 export function GoalStrip() {
@@ -45,7 +45,7 @@ export function GoalStrip() {
     : kind === 'Muscle gain' || kind === 'Strength' ? `Protein ${t.p} g today` : statusLine(g);
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`Your goal: ${g.name}. ${progressLine(g)}. ${statusLine(g)}`} onPress={() => router.navigate('/(tabs)/progress')} scaleTo={0.98}
-      style={{ backgroundColor: c.surface, borderRadius: 26, paddingVertical: 18, paddingHorizontal: 18 }}>
+      style={{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 18, paddingHorizontal: 18 }}>
       <Row style={{ gap: 16 }}>
         <View style={{ width: 58, height: 58, alignItems: 'center', justifyContent: 'center' }}>
           <Svg width={58} height={58} viewBox="0 0 58 58" style={{ transform: [{ rotate: '-90deg' }] }}>
@@ -150,7 +150,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
         <Animated.View style={content}>
           <View style={{ gap: 12 }}>
             <Row style={{ gap: 12, alignItems: 'flex-start', paddingRight: it.critical ? 0 : 28 }}>
-              {it.who ? <PersonAvatar who="coach" size={40} /> : <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}>{I ? <I size={19} color={fg} /> : null}</View>}
+              {it.who ? <PersonAvatar who="coach" size={40} /> : <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}>{I ? <I size={19} color={fg} /> : null}</View>}
               <View style={{ flex: 1, gap: 2 }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{it.title}</Txt>
                 {!!it.body && <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{it.body}</Txt>}
@@ -183,7 +183,7 @@ function Dot({ k, n, prog }: { k: number; n: number; prog: SharedValue<number> }
     const near = 1 - Math.min(1, Math.abs(wrapD(k, prog.value, n)));
     return { width: 6 + 10 * near, opacity: 0.35 + 0.65 * near };
   });
-  return <Animated.View style={[{ height: 6, borderRadius: 3, backgroundColor: c.ink }, st]} />;
+  return <Animated.View style={[{ height: 6, borderRadius: radii.xs, backgroundColor: c.ink }, st]} />;
 }
 
 
@@ -239,10 +239,10 @@ export function ComebackPlan() {
   const { c, isDark } = useTheme();
   const start = useStartWorkout();
   return (
-    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 18, gap: 14, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14, overflow: 'hidden' }, cardShadow(isDark)]}>
       <CornerGlow color={FLAME} size={520} />
       <Row style={{ gap: 12 }}>
-        <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}><Flame size={22} color={FLAME} fill={FLAME} /></View>
+        <View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}><Flame size={22} color={FLAME} fill={FLAME} /></View>
         <View style={{ flex: 1, gap: 6 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, letterSpacing: -0.5 }}>Your comeback plan with lighter weights</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>

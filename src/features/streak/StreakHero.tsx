@@ -10,7 +10,7 @@ import { font } from '@/theme/tokens';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { useStreak } from './useStreak';
 import { FLAME } from './StreakChip';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const MILESTONES = [4, 8, 12]; // weeks; matches the streak badges
 const F = 54; // flame size
@@ -47,7 +47,7 @@ export function StreakHero() {
   const next = MILESTONES.find((m) => st.weeks < m);
 
   return (
-    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 20, gap: 8, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 20, gap: 8, overflow: 'hidden' }, cardShadow(isDark)]}>
       <CornerGlow color={FLAME} size={300} />
       <Row style={{ alignItems: 'baseline', gap: 10 }}>
         <Txt style={{ fontFamily: font.displayBold, fontSize: 44, lineHeight: 56, letterSpacing: -1.2, color: FLAME }}>{st.weeks}</Txt>

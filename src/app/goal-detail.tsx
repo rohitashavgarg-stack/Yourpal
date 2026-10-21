@@ -16,7 +16,7 @@ import { daysBetween, EXTEND_DAYS, fmtDay, fmtVal, Goal2, goalV2Store, useGoalV2
 import { useDrivers, useGoalV2Rows } from '@/features/goalv2/signs';
 import { TODAY } from '@/features/progress/trends';
 import { useStreak } from '@/features/streak/useStreak';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 type Past = { name: string; when: string; result: string; amount?: string };
 const HISTORY: Past[] = [
@@ -109,7 +109,7 @@ function ProgressChart({ g }: { g: Goal2 }) {
       </Row>
       <Row style={{ gap: 16, justifyContent: 'center' }}>
         <Row style={{ gap: 6 }}><View style={{ width: 16, height: 0, borderTopWidth: 2, borderStyle: 'dashed', borderColor: c.muted }} /><Txt v="caption">Pace you need</Txt></Row>
-        <Row style={{ gap: 6 }}><View style={{ width: 16, height: 3, borderRadius: 2, backgroundColor: c.accent }} /><Txt v="caption">You</Txt></Row>
+        <Row style={{ gap: 6 }}><View style={{ width: 16, height: 3, borderRadius: radii.xs, backgroundColor: c.accent }} /><Txt v="caption">You</Txt></Row>
       </Row>
     </Card>
   );
@@ -134,8 +134,8 @@ function Drivers({ g }: { g: Goal2 }) {
               <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: col[r.key][0], alignItems: 'center', justifyContent: 'center' }}><I size={19} color={col[r.key][1]} /></View>
               <View style={{ flex: 1, gap: 6 }}>
                 <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20 }}>{r.label}</Txt>
-                <View style={{ height: 6, borderRadius: 3, backgroundColor: c.surface3, overflow: 'hidden' }}>
-                  <View style={{ width: `${Math.max(4, r.pct * 100)}%`, height: 6, borderRadius: 3, backgroundColor: col[r.key][1] }} />
+                <View style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface3, overflow: 'hidden' }}>
+                  <View style={{ width: `${Math.max(4, r.pct * 100)}%`, height: 6, borderRadius: radii.xs, backgroundColor: col[r.key][1] }} />
                 </View>
               </View>
               <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl2, lineHeight: 30, letterSpacing: -0.4, minWidth: 64, textAlign: 'right' }}>{r.value}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.sm, lineHeight: 19, color: c.muted, letterSpacing: 0 }}>{r.unit}</Txt></Txt>
@@ -154,7 +154,7 @@ function History({ extra }: { extra: Past[] }) {
     <Card gap={4}>
       {all.map((h, i) => (
         <View key={h.name + i} style={{ paddingVertical: 10, borderTopWidth: i ? 1 : 0, borderTopColor: c.line, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-          <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: h.result === 'Reached' ? c.goodSoft : c.surface2, alignItems: 'center', justifyContent: 'center' }}>{h.result === 'Reached' ? <Check size={18} color={c.good} strokeWidth={2.6} /> : <Flag size={17} color={c.muted} />}</View>
+          <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: h.result === 'Reached' ? c.goodSoft : c.surface2, alignItems: 'center', justifyContent: 'center' }}>{h.result === 'Reached' ? <Check size={18} color={c.good} strokeWidth={2.6} /> : <Flag size={17} color={c.muted} />}</View>
           <View style={{ flex: 1 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{h.name}</Txt>
             <Txt v="caption">{h.when}</Txt>
@@ -272,7 +272,7 @@ export default function GoalDetail() {
                 return (
                   <View key={i} style={{ alignItems: 'center', gap: 6 }}>
                     <Txt v="caption">{dl}</Txt>
-                    <View style={{ width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: done ? '#F0692C' : c.surface2, borderWidth: i === todayIdx && !done ? 2 : 0, borderColor: '#F0692C' }}>
+                    <View style={{ width: 34, height: 34, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center', backgroundColor: done ? '#F0692C' : c.surface2, borderWidth: i === todayIdx && !done ? 2 : 0, borderColor: '#F0692C' }}>
                       <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: done ? fixed.white : c.muted }}>{22 + i}</Txt>
                     </View>
                   </View>

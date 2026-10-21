@@ -18,7 +18,7 @@ import { CardTitle, cardShadow, GrowBar, ListCard, PCard } from '@/features/prog
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { MembershipCard as MembershipStrip, useMembershipNotice } from '@/features/today/PaymentBanner';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const Enter = ({ i, children }: { i: number; children: React.ReactNode }) => <Animated.View entering={fade(i * 40)}>{children}</Animated.View>;
 
@@ -31,7 +31,7 @@ function BreakCard() {
   const g = gymStore.use();
   return (
     <Animated.View entering={fade()} exiting={fadeOut()}
-      style={[{ backgroundColor: c.surface, borderRadius: 28, paddingVertical: 16, paddingHorizontal: 18, gap: 2, borderWidth: 1.5, borderColor: c.accent }, cardShadow(isDark)]}>
+      style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 16, paddingHorizontal: 18, gap: 2, borderWidth: 1.5, borderColor: c.accent }, cardShadow(isDark)]}>
       <Txt style={{ fontFamily: font.semibold }}>Membership paused until {dateLabel(g.breakUntil)}</Txt>
       <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Set by the front desk · streak frozen · reminders paused</Txt>
     </Animated.View>
@@ -50,7 +50,7 @@ function AttendanceCard({ awaiting }: { awaiting: boolean }) {
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>visits this month</Txt>
         </View>
         <View importantForAccessibility="no-hide-descendants" style={{ width: 10 * 8 + 9 * 3, flexDirection: 'row', flexWrap: 'wrap', gap: 3 }}>
-          {cells.map((v, i) => <View key={i} style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: v && v !== 'x' ? (v === 'h' ? c.surface3 : c.accent) : c.surface2 }} />)}
+          {cells.map((v, i) => <View key={i} style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: v && v !== 'x' ? (v === 'h' ? c.surface3 : c.accent) : c.surface2 }} />)}
         </View>
       </Row>
       <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last: Wed 24 · 6:42 pm · Location</Txt>
@@ -69,7 +69,7 @@ function AssessCard() {
     <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${big}. ${sub}`} style={{ gap: 8 }}>
       <CardTitle title="Assessments" right={due ? <Tag label="Due this week" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>View ›</Txt>} />
       <Row style={{ gap: 14 }}>
-        <View style={{ width: 52, height: 52, borderRadius: 18, backgroundColor: c.tNutri, alignItems: 'center', justifyContent: 'center' }}><ClipboardCheck size={26} strokeWidth={1.8} color={c.cNutri} /></View>
+        <View style={{ width: 52, height: 52, borderRadius: radii.md, backgroundColor: c.tNutri, alignItems: 'center', justifyContent: 'center' }}><ClipboardCheck size={26} strokeWidth={1.8} color={c.cNutri} /></View>
         <View style={{ flex: 1, minWidth: 0 }}>
           <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34 }}>{big}</Txt>
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{sub}</Txt>

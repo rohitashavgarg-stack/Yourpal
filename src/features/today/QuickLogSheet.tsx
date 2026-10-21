@@ -17,7 +17,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { mealById, mealKcal } from './meals';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 type Mode = 'sugg' | 'scan' | 'write' | 'cat';
 const SUGG = ['2 roti', '1 cup milk', '1 katori dal', '1 banana', '100 g paneer'];
@@ -149,7 +149,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>
             {SUGG.map((t) => (
               <Pressy key={t} accessibilityRole="button" accessibilityLabel={`Add ${t}`} onPress={() => setText((v) => (v.trim() ? `${v.trim().replace(/,\s*$/, '')}, ${t}` : t))}
-                style={{ height: 34, paddingHorizontal: 12, borderRadius: 17, borderWidth: 1, borderColor: c.surface3, justifyContent: 'center' }}>
+                style={{ height: 34, paddingHorizontal: 12, borderRadius: radii.md, borderWidth: 1, borderColor: c.surface3, justifyContent: 'center' }}>
                 <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm }}>+ {t}</Txt>
               </Pressy>
             ))}
@@ -159,7 +159,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
 
       {mode === 'scan' && (
         <>
-          <View accessibilityLiveRegion="polite" accessibilityLabel={cap} style={{ height: 210, borderRadius: 24, overflow: 'hidden', backgroundColor: fixed.dark }}>
+          <View accessibilityLiveRegion="polite" accessibilityLabel={cap} style={{ height: 210, borderRadius: radii.lg, overflow: 'hidden', backgroundColor: fixed.dark }}>
             {live ? <CameraView ref={cam} facing="back" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
               : shot ? <Image source={{ uri: shot }} accessibilityIgnoresInvertColors resizeMode="cover" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
               : (
@@ -173,7 +173,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
             <Txt style={{ position: 'absolute', left: 0, right: 0, bottom: 12, textAlign: 'center', fontFamily: font.medium, fontSize: fontSizes.sm, color: fixed.white, textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 4 }}>{cap}</Txt>
           </View>
           {scan === 'fail' && (
-            <Animated.View entering={fade()} style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: 18, backgroundColor: c.warnSoft }}>
+            <Animated.View entering={fade()} style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
               <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, color: c.warn }}>Couldn't read that.</Txt> Too dark or too close. Try the whole plate in good light, or write it instead.</Txt>
             </Animated.View>
           )}

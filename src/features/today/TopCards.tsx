@@ -24,7 +24,7 @@ import { progressLine, statusLine, useGoalV2 } from '@/features/goalv2/model';
 import { ringCentre, StatusChip } from '@/features/goalv2/GoalCard2';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
 const R = 54, CIRC = 2 * Math.PI * R;
@@ -76,7 +76,7 @@ export function GoalCard({ soft: compact = false }: { soft?: boolean } = {}) {
       accessibilityLabel={`Your goal: ${goal.toLowerCase()}. ${sub}, ${statusLine(g2).toLowerCase()}. Eaten ${t.k} of ${KCAL_TARGET} kcal.${d.hc && d.wearable ? ` Burned ${burned(d)}.` : ""} Open goal details`}
       onPress={() => router.push('/goal-detail')}>
       <LinearGradient colors={[fixed.blue, '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-        style={{ borderRadius: soft ? 24 : 28, paddingVertical: soft ? 16 : 18, paddingLeft: soft ? 16 : 16, paddingRight: soft ? 16 : 18, flexDirection: 'row', alignItems: 'center', gap: soft ? 16 : 18, overflow: 'hidden' }}>
+        style={{ borderRadius: soft ? 24 : radii.xl, paddingVertical: soft ? 16 : 18, paddingLeft: soft ? 16 : 16, paddingRight: soft ? 16 : 18, flexDirection: 'row', alignItems: 'center', gap: soft ? 16 : 18, overflow: 'hidden' }}>
         <Svg width={260} height={260} viewBox="0 0 260 260" style={{ position: 'absolute', right: -90, top: -80, opacity: 0.16 }}>
           <Circle cx={130} cy={130} r={120} fill="none" stroke={fixed.white} strokeWidth={18} /><Circle cx={130} cy={130} r={78} fill="none" stroke={fixed.white} strokeWidth={12} />
         </Svg>
@@ -112,7 +112,7 @@ export function PtConfirmCard() {
   const { c, isDark } = useTheme();
   const { openSheet } = useOverlay();
   return (
-    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 18, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
       <CornerGlow color={c.accent} size={420} />
       <Row style={{ gap: 12 }}>
         <PersonAvatar who="coach" size={44} />
@@ -158,17 +158,17 @@ export function ComebackCard() {
   const pause = useAnimatedStyle(() => ({ opacity: 1 - a.value, transform: [{ scale: 1 - 0.4 * a.value }] }));
   const flame = useAnimatedStyle(() => ({ opacity: a.value, transform: [{ scale: 0.5 + 0.5 * a.value }] }));
   return (
-    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 20, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <Animated.View entering={fade()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 20, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
       <CornerGlow color={FLAME} size={520} />
       <Row style={{ gap: 12 }}>
-        <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}>
           <Animated.View style={[{ position: 'absolute' }, pause]}><Pause size={20} color={FLAME} fill={FLAME} /></Animated.View>
           <Animated.View style={[{ position: 'absolute' }, flame]}><Flame size={22} color={FLAME} fill={FLAME} /></Animated.View>
         </View>
         <ComebackGreeting inCard />
       </Row>
       <View style={{ gap: 8 }}>
-        <View style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 4 }}>
+        <View style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: radii.pill, paddingHorizontal: 12, paddingVertical: 4 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 18, color: isDark ? '#FFB27A' : '#B5500F' }}>Streak paused, not lost</Txt>
         </View>
       </View>
@@ -207,7 +207,7 @@ function UpdIcon({ u }: { u: Upd }) {
   const fg = u.tone === 'warn' ? c.warn : u.tone === 'good' ? c.good : c.accentText;
   const I = u.icon;
   if (['pt', 'plan', 'reply'].includes(u.key)) return <PersonAvatar who="coach" size={40} />;
-  return <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}><I size={19} color={fg} /></View>;
+  return <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}><I size={19} color={fg} /></View>;
 }
 
 const PLAN_CHANGES: [string, string][] = [['+ Walking lunges', '3×10'], ['− Leg extension', 'Leg day'], ['Squat 60 → 62.5 kg', 'Leg day']];
@@ -216,7 +216,7 @@ function PlanChanges() {
   return (
     <View style={{ gap: 2, paddingLeft: 52 }}>
       {PLAN_CHANGES.map(([a, b], i) => (
-        <Animated.View key={a} entering={fade(i * 150)} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, paddingHorizontal: 10, borderRadius: 12, backgroundColor: c.accentSoft }}>
+        <Animated.View key={a} entering={fade(i * 150)} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, paddingHorizontal: 10, borderRadius: radii.sm, backgroundColor: c.accentSoft }}>
           <Txt style={{ fontFamily: font.medium }}>{a}</Txt><Txt v="caption" style={i === 0 ? { fontFamily: font.mono } : undefined}>{b}</Txt>
         </Animated.View>
       ))}
@@ -265,7 +265,7 @@ export function UpdatesCard() {
       <Row style={{ justifyContent: 'space-between' }}>
         <Row style={{ gap: 8 }}>
           <Txt style={{ fontFamily: font.semibold }}>Updates</Txt>
-          <View style={{ paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, backgroundColor: c.accent }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, color: fixed.white }}>{live.length}</Txt></View>
+          <View style={{ paddingHorizontal: 8, paddingVertical: 2, borderRadius: radii.pill, backgroundColor: c.accent }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, color: fixed.white }}>{live.length}</Txt></View>
         </Row>
         <Pressy accessibilityRole="button" onPress={() => openSheet(<UpdatesSheet />, { label: 'Updates' })} style={{ height: 44, justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.accentText }}>See all</Txt>
@@ -298,7 +298,7 @@ export function UpdatesCard() {
         </Pressy>
             {live.length > 1 && (
               <View pointerEvents="none" style={{ position: 'absolute', right: 0, bottom: 0, height: 44, flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                {live.map((_, k) => <View key={k} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: 3, backgroundColor: k === i ? c.ink : c.surface3 }} />)}
+                {live.map((_, k) => <View key={k} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: radii.xs, backgroundColor: k === i ? c.ink : c.surface3 }} />)}
               </View>
             )}
           </Animated.View>

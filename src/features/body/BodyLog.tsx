@@ -21,7 +21,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { fade } from '@/theme/motion';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 const KG_LB = 2.2046226218;
 const r1 = (n: number) => Math.round(n * 10) / 10;
@@ -219,7 +219,7 @@ export function WeightScreen() {
           <View style={{ gap: 18 }}>
             <Trend kg={kg} unit={unit} />
             <Pressy accessibilityRole="button" accessibilityLabel={`Date: ${DAYS[day].full}. Change`} onPress={() => openSheet(<DateSheet value={day} onPick={setDay} />, { label: 'Weighed on' })}
-              style={{ minHeight: 56, borderRadius: 18, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              style={{ minHeight: 56, borderRadius: radii.md, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
               <CalendarDays size={19} color={c.muted} />
               <View style={{ flex: 1 }}><Txt v="caption">Date</Txt><Txt style={{ fontFamily: font.semibold }}>{DAYS[day].full}</Txt></View>
               <ChevronRight size={18} color={c.muted} />

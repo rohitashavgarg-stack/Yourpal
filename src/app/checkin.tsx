@@ -22,7 +22,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { GlassBackdrop } from '@/components/Glass';
 import { GymMap, hasRealMap } from '@/features/checkin/GymMap';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 
 // Manual check-in only, only inside the 20 m area. Location is read while this page is open.
@@ -106,7 +106,7 @@ export default function CheckIn() {
         {/* GPS accuracy: centred between the two buttons, same height row, glass like them. */}
         <View style={{ flex: 1, alignItems: 'center' }}>
           {!off && (
-            <View accessibilityLabel={`GPS accuracy, plus or minus ${refreshing ? 'unknown' : inside ? 6 : 9} metres`} style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', gap: 6, shadowColor: fixed.shadow, shadowOpacity: 0.08, shadowRadius: 10, shadowOffset: { width: 0, height: 3 } }}>
+            <View accessibilityLabel={`GPS accuracy, plus or minus ${refreshing ? 'unknown' : inside ? 6 : 9} metres`} style={{ height: 36, paddingHorizontal: 14, borderRadius: radii.md, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', gap: 6, shadowColor: fixed.shadow, shadowOpacity: 0.08, shadowRadius: 10, shadowOffset: { width: 0, height: 3 } }}>
               <GlassBackdrop radius={18} />
               <View style={{ zIndex: 2 }}><Crosshair size={14} color={c.ink} /></View>
               <Txt style={{ zIndex: 2, fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18 }}>{`GPS ±${refreshing ? '…' : inside ? 6 : 9} m`}</Txt>
@@ -122,8 +122,8 @@ export default function CheckIn() {
           <Txt style={{ fontFamily: font.regular, fontSize: 28, letterSpacing: -1.1 }}>Wulf Fitness</Txt>
           <Txt muted style={{ fontSize: fontSizes.sm }}>Vaishali Nagar, Jaipur · 20 m check-in area</Txt>
         </View>
-        <Animated.View key={status.t} entering={fade()} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, paddingHorizontal: 14, borderRadius: 18, backgroundColor: status.bg }}>
-          <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.5)', alignItems: 'center', justifyContent: 'center' }}>
+        <Animated.View key={status.t} entering={fade()} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: status.bg }}>
+          <View style={{ width: 34, height: 34, borderRadius: radii.md, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.5)', alignItems: 'center', justifyContent: 'center' }}>
             {off ? <LocateOff size={17} color={status.fg} /> : <MapPin size={17} color={status.fg} />}
           </View>
           <View style={{ flex: 1 }}>

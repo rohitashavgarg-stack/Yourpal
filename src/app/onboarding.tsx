@@ -33,7 +33,7 @@ import { YourPalLogo } from '@/components/YourPalLogo';
 import { useShell } from '@/features/shell/state';
 import { ProgLogo } from '@/features/shell/parts';
 import Svg, { Circle, Path } from 'react-native-svg';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const ORDER = ['welcome', 'facility', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
 type Step = (typeof ORDER)[number];
@@ -201,8 +201,8 @@ function Progress({ n, total }: { n: number; total: number }) {
   useEffect(() => { w.value = withSpring(n / total, spring.soft); }, [n, total]);
   const a = useAnimatedStyle(() => ({ width: `${w.value * 100}%` as any }));
   return (
-    <View accessibilityRole="progressbar" accessibilityValue={{ now: n, min: 0, max: total }} style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: c.surface2, overflow: 'hidden' }}>
-      <Animated.View style={[{ height: '100%', borderRadius: 3, backgroundColor: c.accent }, a]} />
+    <View accessibilityRole="progressbar" accessibilityValue={{ now: n, min: 0, max: total }} style={{ flex: 1, height: 6, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>
+      <Animated.View style={[{ height: '100%', borderRadius: radii.xs, backgroundColor: c.accent }, a]} />
     </View>
   );
 }
@@ -251,12 +251,12 @@ function Stepper({ value, onChange, step, unit, label }: { value: number; onChan
   const { c } = useTheme();
   return (
     <Row style={{ gap: 10 }}>
-      <Pressy accessibilityRole="button" accessibilityLabel={'Less ' + label} onPress={() => onChange(Math.max(step, +(value - step).toFixed(1)))} style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Minus size={20} color={c.ink} /></Pressy>
-      <View accessibilityLabel={`${label} ${value} ${unit}`} style={{ flex: 1, height: 64, borderRadius: 22, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 6 }}>
+      <Pressy accessibilityRole="button" accessibilityLabel={'Less ' + label} onPress={() => onChange(Math.max(step, +(value - step).toFixed(1)))} style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Minus size={20} color={c.ink} /></Pressy>
+      <View accessibilityLabel={`${label} ${value} ${unit}`} style={{ flex: 1, height: 64, borderRadius: radii.lg, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 6 }}>
         <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, color: c.ink }}>{value}</Txt>
         <Txt muted>{unit}</Txt>
       </View>
-      <Pressy accessibilityRole="button" accessibilityLabel={'More ' + label} onPress={() => onChange(+(value + step).toFixed(1))} style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Plus size={20} color={c.ink} /></Pressy>
+      <Pressy accessibilityRole="button" accessibilityLabel={'More ' + label} onPress={() => onChange(+(value + step).toFixed(1))} style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Plus size={20} color={c.ink} /></Pressy>
     </Row>
   );
 }
@@ -293,12 +293,12 @@ function GoalTile({ goal, on, onPress }: { goal: string; on: boolean; onPress: (
   // Quiet card: the surface colour, a thin line, one small icon. The selected card gets a darker line.
   return (
     <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onPress} scaleTo={0.97}
-      style={{ width: '48.5%', height: 108, borderRadius: 22, backgroundColor: c.surface, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, padding: 14, justifyContent: 'space-between' }}>
+      style={{ width: '48.5%', height: 108, borderRadius: radii.lg, backgroundColor: c.surface, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, padding: 14, justifyContent: 'space-between' }}>
       <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
         <a.Icon size={20} strokeWidth={1.8} color={c.ink} />
       </View>
       <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: c.ink }}>{goal}</Txt>
-      {on && <View style={{ position: 'absolute', right: 12, top: 12, width: 22, height: 22, borderRadius: 11, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Check size={13} strokeWidth={3} color={c.bg} /></View>}
+      {on && <View style={{ position: 'absolute', right: 12, top: 12, width: 22, height: 22, borderRadius: radii.sm, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Check size={13} strokeWidth={3} color={c.bg} /></View>}
     </Pressy>
   );
 }
@@ -314,7 +314,7 @@ function FacilityStep() {
         const on = s.cur === g.id;
         return (
           <Pressy key={g.id} accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={() => setShell({ cur: g.id })}
-            style={{ minHeight: 72, borderRadius: 22, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            style={{ minHeight: 72, borderRadius: radii.lg, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
             <ProgLogo p={g} size={44} />
             <View style={{ flex: 1, paddingVertical: 12 }}>
               <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{g.name}</Txt>
@@ -340,7 +340,7 @@ function ExpStep({ tried }: { tried: boolean }) {
         const on = state.profile.exp === e.l;
         return (
           <Pressy key={e.l} accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={() => setProfile({ exp: e.l })}
-            style={{ minHeight: 72, borderRadius: 22, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, backgroundColor: c.surface, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            style={{ minHeight: 72, borderRadius: radii.lg, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, backgroundColor: c.surface, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
             <View style={{ flex: 1, paddingVertical: 12 }}>
               <Txt style={{ fontFamily: font.semibold, fontSize: 16 }}>{e.l}</Txt>
               <Txt v="caption">{e.s}</Txt>
@@ -368,7 +368,7 @@ function SchedStep() {
           const on = p.days === d;
           return (
             <Pressy key={d} accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={`${d} days a week`} onPress={() => setProfile({ days: d })}
-              style={{ flex: 1, height: 72, borderRadius: 22, backgroundColor: on ? c.ink : c.surface, borderWidth: on ? 0 : 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+              style={{ flex: 1, height: 72, borderRadius: radii.lg, backgroundColor: on ? c.ink : c.surface, borderWidth: on ? 0 : 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
               <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, color: on ? c.bg : c.ink }}>{d}</Txt>
               <Txt v="caption" color={on ? c.bg : c.muted}>days</Txt>
             </Pressy>

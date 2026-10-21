@@ -16,7 +16,7 @@ import { fade } from '@/theme/motion';
 import { haptic } from '@/lib/haptics';
 import { HEALTH_NAME } from '@/lib/health';
 import { createStore } from '@/lib/createStore';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // Steps tracker designs to compare. Pick one in the Today edge-case panel.
 export type StepsDesign = 'Current' | 'Ruler' | 'Day bars' | 'Dot matrix' | 'Bars + details';
@@ -168,7 +168,7 @@ function BarsPlusFace({ s }: { s: S }) {
         <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: 'rgba(255,255,255,0.85)' }}>{km(s.total)} km · {kcalOf(s.total)} kcal</Txt>
       </View>
       <Row style={{ alignItems: 'flex-end', justifyContent: 'space-between', height: 40 }}>
-        {DAY.map((v, i) => <View key={i} style={{ width: 8, height: Math.max(4, (v / max) * 40), borderRadius: 3, backgroundColor: v ? fixed.white : 'rgba(255,255,255,0.22)' }} />)}
+        {DAY.map((v, i) => <View key={i} style={{ width: 8, height: Math.max(4, (v / max) * 40), borderRadius: radii.xs, backgroundColor: v ? fixed.white : 'rgba(255,255,255,0.22)' }} />)}
       </Row>
     </LinearGradient>
   );
@@ -185,7 +185,7 @@ function BarsFace({ s }: { s: S }) {
       </View>
       <View>
         <Row style={{ alignItems: 'flex-end', justifyContent: 'space-between', height: 44 }}>
-          {DAY.map((v, i) => <View key={i} style={{ width: 8, height: Math.max(4, (v / max) * 44), borderRadius: 3, backgroundColor: v ? fixed.white : 'rgba(255,255,255,0.22)' }} />)}
+          {DAY.map((v, i) => <View key={i} style={{ width: 8, height: Math.max(4, (v / max) * 44), borderRadius: radii.xs, backgroundColor: v ? fixed.white : 'rgba(255,255,255,0.22)' }} />)}
         </Row>
         <Row style={{ justifyContent: 'space-between', paddingTop: 4 }}>
           <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: 'rgba(255,255,255,0.75)' }}>12 am</Txt>
@@ -239,7 +239,7 @@ export function StepsSheet() {
       <Row style={{ gap: 8 }}>
         {(['steps', 'min'] as const).map((m) => (
           <Pressy key={m} accessibilityRole="button" accessibilityLabel={m === 'steps' ? 'Enter steps' : 'Enter walking minutes'} onPress={() => { setMode(m); setTxt(''); haptic.tap(); }}
-            style={{ height: 36, paddingHorizontal: 14, borderRadius: 18, justifyContent: 'center', backgroundColor: mode === m ? c.ink : c.surface2 }}>
+            style={{ height: 36, paddingHorizontal: 14, borderRadius: radii.md, justifyContent: 'center', backgroundColor: mode === m ? c.ink : c.surface2 }}>
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19, color: mode === m ? c.bg : c.ink }}>{m === 'steps' ? 'Steps' : 'Walk minutes'}</Txt>
           </Pressy>
         ))}

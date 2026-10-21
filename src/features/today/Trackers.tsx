@@ -21,7 +21,7 @@ import { useLogGate, useLogsPaused } from '@/lib/logGate';
 import { StepsDesign, StepsPreview, StepsTile } from './StepsCards';
 import { TrackerKey } from '@/features/trackers/designs';
 import { AddButton, EnergyDot, EnergyStack, HrDot, SleepDot, SleepStages, WaterDot, WaterGlasses, WeightDot, WeightRuler } from '@/features/trackers/Widgets';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const APath = Animated.createAnimatedComponent(Path);
 const ALine = Animated.createAnimatedComponent(Line);
@@ -83,7 +83,7 @@ function useWater() {
 // ---------- cards ----------
 
 // ---------- Water and Steps: square feature tiles ----------
-const SQ = { width: 160, height: 160, borderRadius: 24, padding: 16, overflow: 'hidden' } as const;
+const SQ = { width: 160, height: 160, borderRadius: radii.lg, padding: 16, overflow: 'hidden' } as const;
 const GLASS = 'rgba(255,255,255,0.16)';
 
 // The glass bottle from Figma (Bottle.svg, 32 x 95): cap, grooves, outline and highlight are the static art; the water is drawn inside the
@@ -410,7 +410,7 @@ export function HealthSheet({ k }: { k: HK }) {
       <Txt style={{ fontFamily: font.display, fontSize: 44, lineHeight: 44 }}>{h.big}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.xl }}>{h.unit}</Txt></Txt>
       <Txt muted style={{ fontSize: fontSizes.md }}>{h.sub}</Txt>
       <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 4, height: 90, paddingVertical: 6 }}>
-        {h.bars.map((v, i) => <Animated.View key={i} entering={fade(i * 30)} style={{ flex: 1, height: `${v}%`, borderRadius: 4, backgroundColor: col, opacity: k === 'sleep' ? [1, 0.7, 0.45][i % 3] : 1 }} />)}
+        {h.bars.map((v, i) => <Animated.View key={i} entering={fade(i * 30)} style={{ flex: 1, height: `${v}%`, borderRadius: radii.xs, backgroundColor: col, opacity: k === 'sleep' ? [1, 0.7, 0.45][i % 3] : 1 }} />)}
       </View>
       <View>
         {h.rows.map(([l, v]) => (

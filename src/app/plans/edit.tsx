@@ -16,7 +16,7 @@ import { DiscardSheet, EditItemSheet, LibrarySheet } from '@/features/plans/Shee
 import { InfoBox, PageHeader } from '@/features/plans/parts';
 import { mealName } from '@/features/plans/openers';
 import { dayPlan, DietRow, exSub, getP, PEx, pk, setP, usePlans } from '@/features/plans/store';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 export default function EditPlan() {
   useLeaveIfPaused();
@@ -113,7 +113,7 @@ export default function EditPlan() {
       <PageHeader title={title} icon="close" onClose={close}
         right={
           <Pressy accessibilityRole="button" accessibilityLabel="Save" accessibilityState={{ disabled: !dirty }} disabled={!dirty} onPress={save}
-            style={{ height: 44, paddingHorizontal: 12, borderRadius: 22, justifyContent: 'center', opacity: dirty ? 1 : 0.4 }}>
+            style={{ height: 44, paddingHorizontal: 12, borderRadius: radii.lg, justifyContent: 'center', opacity: dirty ? 1 : 0.4 }}>
             <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>Save</Txt>
           </Pressy>
         } />
@@ -138,7 +138,7 @@ export default function EditPlan() {
                   <Txt v="mono" muted numberOfLines={1} style={{ fontSize: fontSizes.xs }}>{sub}</Txt>
                 </Pressy>
                 {canRemove && (
-                  <Pressy accessibilityRole="button" accessibilityLabel={`Remove ${nameOf(r)}`} onPress={() => remove(r)} style={{ width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' }}>
+                  <Pressy accessibilityRole="button" accessibilityLabel={`Remove ${nameOf(r)}`} onPress={() => remove(r)} style={{ width: 44, height: 44, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center' }}>
                     <Minus size={18} color={c.muted} />
                   </Pressy>
                 )}

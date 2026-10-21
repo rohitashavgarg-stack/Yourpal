@@ -14,7 +14,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import type { Programme } from './state';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 export const goBack = (fallback: string = '/(tabs)') => (router.canGoBack() ? router.back() : router.replace(fallback as any));
 export const goHome = () => (router.canDismiss() ? router.dismissAll() : router.replace('/(tabs)'));
@@ -68,7 +68,7 @@ export function Switch({ on, onChange, label, locked }: { on: boolean; onChange?
   return (
     <Pressy accessibilityRole="switch" accessibilityLabel={label} accessibilityState={{ checked: on, disabled: !!locked }} disabled={locked} haptics={!locked}
       onPress={() => onChange?.(!on)} scaleTo={0.94} hitSlop={6} style={{ opacity: locked ? 0.55 : 1 }}>
-      <Animated.View style={[{ width: 52, height: 32, borderRadius: 16, padding: 3 }, track]}>
+      <Animated.View style={[{ width: 52, height: 32, borderRadius: radii.md, padding: 3 }, track]}>
         <Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: fixed.white, shadowColor: fixed.black, shadowOpacity: 0.15, shadowRadius: 3, shadowOffset: { width: 0, height: 1 } }, knob]} />
       </Animated.View>
     </Pressy>
@@ -95,7 +95,7 @@ export function LineRow({ title, sub, right, onPress, color, last, minH = 60, a1
 export function ListCard({ children, style }: { children: React.ReactNode; style?: StyleProp<ViewStyle> }) {
   const { c, isDark } = useTheme();
   return (
-    <View style={[{ backgroundColor: c.surface, borderRadius: 28, paddingHorizontal: 18, paddingVertical: 4 },
+    <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingHorizontal: 18, paddingVertical: 4 },
       !isDark && { shadowColor: fixed.shadow, shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 }, elevation: 2 }, style]}>
       {children}
     </View>

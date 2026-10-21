@@ -12,7 +12,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
 import { askCoach, coachStore, NOTES, TOPICS, WEEKLY } from '@/features/coach/coach';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 const Label = ({ children }: { children: string }) => {
   const { c } = useTheme();
@@ -67,7 +67,7 @@ export default function CoachHub() {
       <Pressy accessibilityRole="button" accessibilityLabel="Your plan. Leg day updated Wednesday. Open plans" onPress={() => router.navigate('/plans')} scaleTo={0.98}>
         <Card style={{ gap: 4 }}>
           <Row style={{ gap: 12 }}>
-            <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><ClipboardList size={19} color={c.accentText} /></View>
+            <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><ClipboardList size={19} color={c.accentText} /></View>
             <View style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.semibold }}>Your plan</Txt>
               <Txt v="caption">Leg day updated Wed 24 · Romanian deadlift added</Txt>
@@ -82,7 +82,7 @@ export default function CoachHub() {
         <Row style={{ gap: 8, flexWrap: 'wrap' }}>
           {TOPICS.map((t) => (
             <Pressy key={t.l} accessibilityRole="button" onPress={() => askCoach(t.ctx, t.draft)} scaleTo={0.95}
-              style={{ height: 44, paddingHorizontal: 16, borderRadius: 22, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}>
+              style={{ height: 44, paddingHorizontal: 16, borderRadius: radii.lg, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}>
               <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>{t.l}</Txt>
             </Pressy>
           ))}

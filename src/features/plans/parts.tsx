@@ -13,7 +13,7 @@ import { haptic } from '@/lib/haptics';
 import { iconFor } from './content';
 import { artIdFor, ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { clipIdFor, THUMBS } from '@/features/workout/clips';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 export const goBackToPlans = () => (router.canGoBack() ? router.back() : router.replace('/plans'));
 
@@ -86,7 +86,7 @@ export function ExTile({ name, num, size = 56 }: { name: string; num?: string; s
   const art = thumb ? undefined : artIdFor(name);
   const photo = !!thumb || (!!art && hasPhoto(art));
   return (
-    <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ width: size, height: size, borderRadius: 16, backgroundColor: photo ? '#F4F6FA' : c.accentSoft, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+    <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ width: size, height: size, borderRadius: radii.md, backgroundColor: photo ? '#F4F6FA' : c.accentSoft, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
       {thumb ? <Image source={thumb} resizeMode="cover" style={{ position: 'absolute', width: size, height: size }} /> : null}
       {art ? <View style={{ width: size - 4, height: size - 4 }}><ExerciseArt id={art} fill /></View> : null}
       <Svg width={size} height={size} viewBox="0 0 56 56" style={{ position: 'absolute' }}><Circle cx={46} cy={6} r={26} fill={fixed.white} opacity={0.1} /></Svg>

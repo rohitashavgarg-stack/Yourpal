@@ -12,7 +12,7 @@ import { RoundBtn } from '@/components/bits';
 import { useToastLift } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // ---------- Full-screen pushed page: back button, centred title, optional right slot ----------
 export function SubPage({ title, titleIcon, onTitlePress, right, children, footer, scroll = true, toastLift = 24, fallback = '/(tabs)', onBack }: {
@@ -75,7 +75,7 @@ export function PCard({ onPress, label, children, style }: { onPress?: () => voi
   const { c, isDark } = useTheme();
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} scaleTo={0.98}
-      style={[{ backgroundColor: c.surface, borderRadius: 28, padding: 18, gap: 10 }, cardShadow(isDark), style]}>
+      style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 10 }, cardShadow(isDark), style]}>
       {children}
     </Pressy>
   );
@@ -102,7 +102,7 @@ export function CardTitle({ title, right, icon, tint }: { title: string; right?:
   return (
     <Row style={{ justifyContent: 'space-between', gap: 8 }}>
       <Row style={{ gap: 10, flexShrink: 1 }}>
-        {icon ? <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: (tint ?? c.accent) + '26', alignItems: 'center', justifyContent: 'center' }}>{icon}</View> : null}
+        {icon ? <View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: (tint ?? c.accent) + '26', alignItems: 'center', justifyContent: 'center' }}>{icon}</View> : null}
         <Txt v="label" style={{ flexShrink: 1 }}>{title}</Txt>
       </Row>
       {right ?? <ChevronRight size={16} color={c.muted} />}
@@ -114,7 +114,7 @@ export function CardTitle({ title, right, icon, tint }: { title: string; right?:
 export function ListCard({ rows, mono = true, style }: { rows: { l: string; v?: string; sub?: string; right?: React.ReactNode; onPress?: () => void; muted?: boolean; warn?: boolean }[]; mono?: boolean; style?: StyleProp<ViewStyle> }) {
   const { c, isDark } = useTheme();
   return (
-    <View style={[{ backgroundColor: c.surface, borderRadius: 28, paddingVertical: 4, paddingHorizontal: 16 }, cardShadow(isDark), style]}>
+    <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 4, paddingHorizontal: 16 }, cardShadow(isDark), style]}>
       {rows.map((r, i) => {
         const inner = (
           <>
@@ -182,7 +182,7 @@ export function StepBtn({ label, sign, onPress }: { label: string; sign: '−' |
   const { c } = useTheme();
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} scaleTo={0.9}
-      style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+      style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
       <Txt style={{ fontSize: fontSizes.xl, fontFamily: font.medium }}>{sign}</Txt>
     </Pressy>
   );

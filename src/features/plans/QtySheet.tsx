@@ -11,7 +11,7 @@ import { haptic } from '@/lib/haptics';
 import { useDietActions } from './dietActions';
 import { dietItems, usePlans } from './store';
 import { fmtNum, splitFood, stepFor, unitLabel } from './qty';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 // Change how much of one food you have. Today only; the plan itself is not edited.
 export function QtySheet({ mid, itemKey }: { mid: MealId; itemKey: string }) {
@@ -36,7 +36,7 @@ export function QtySheet({ mid, itemKey }: { mid: MealId; itemKey: string }) {
   };
   const btn = (label: string, on: () => void, off: boolean, icon: React.ReactNode) => (
     <Pressy accessibilityRole="button" accessibilityLabel={label} disabled={off} onPress={on} scaleTo={0.9}
-      style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: off ? 0.35 : 1 }}>
+      style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: off ? 0.35 : 1 }}>
       {icon}
     </Pressy>
   );

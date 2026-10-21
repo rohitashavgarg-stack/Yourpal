@@ -14,7 +14,7 @@ import { useDietActions } from './dietActions';
 import { startCreate, startDietEdit, startWorkoutEdit } from './openers';
 import { BigTitle, ListRow, Stepper } from './parts';
 import { allowedFor, dayPlan, dietItems, DietRow, PEx, setP, usePlans } from './store';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 // ---------- Workout plan menu ----------
 export function PlanMenuSheet() {
@@ -204,7 +204,7 @@ export function NutritionSheet({ mid, itemKey }: { mid: MealId; itemKey: string 
       <BigTitle>{it.n}</BigTitle>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         {tiles.map(([l, v]) => (
-          <View key={l} accessible accessibilityLabel={`${l} ${v}`} style={{ width: '48%', flexGrow: 1, padding: 14, borderRadius: 18, backgroundColor: c.surface2 }}>
+          <View key={l} accessible accessibilityLabel={`${l} ${v}`} style={{ width: '48%', flexGrow: 1, padding: 14, borderRadius: radii.md, backgroundColor: c.surface2 }}>
             <Txt v="label">{l}</Txt>
             <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3 }}>{v}</Txt>
           </View>
@@ -251,7 +251,7 @@ export function HistSheet({ h }: { h: Hist }) {
     <>
       <BigTitle>{h.t}</BigTitle>
       <Txt muted style={{ marginTop: -6 }}>{h.s || 'Logged'} · {h.m}</Txt>
-      <View style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 18, backgroundColor: c.surface2, gap: 4 }}>
+      <View style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: radii.md, backgroundColor: c.surface2, gap: 4 }}>
         {h.b.split('\n').map((l) => <Txt key={l} v="mono">{l}</Txt>)}
       </View>
     </>

@@ -14,7 +14,7 @@ import { newEx } from '@/features/plans/content';
 import { LibrarySheet } from '@/features/plans/Sheets';
 import { PageHeader, ShakeText } from '@/features/plans/parts';
 import { DAYL, dayPlan, exSub, PEx, setP, usePlans } from '@/features/plans/store';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 export default function CreateWorkout() {
   useLeaveIfPaused();
@@ -74,7 +74,7 @@ export default function CreateWorkout() {
                 <Txt style={{ flex: 1, fontFamily: font.medium }}>{e.name}</Txt>
                 <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{exSub(e)}</Txt>
                 <Pressy accessibilityRole="button" accessibilityLabel={`Remove ${e.name}`} onPress={() => setP({ cEx: p.cEx.filter((x) => x.id !== e.id) })}
-                  style={{ width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' }}>
+                  style={{ width: 44, height: 44, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center' }}>
                   <X size={16} color={c.muted} />
                 </Pressy>
               </Row>

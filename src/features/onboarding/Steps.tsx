@@ -14,7 +14,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { Pt, smoothPath } from './path';
 import { planMath } from './plan';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const AP = Animated.createAnimatedComponent(Path);
 
@@ -126,7 +126,7 @@ export function HowStep() {
             <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(200)}><Node p={stops[0]}><Camera size={19} color={c.ink} /></Node><Label p={stops[0]} title="Snap your plate" sub="and your food is logged" /></Animated.View>
             <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(600)}><Node p={stops[1]}><Dumbbell size={19} color={c.ink} /></Node><Label p={stops[1]} title="A workout built for you" sub="with a demo for every exercise" /></Animated.View>
             <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(1000)}><Node p={stops[2]}><TrendingUp size={19} color={c.ink} /></Node><Label p={stops[2]} right title="Progress you can see" sub="weight, lifts and records" /></Animated.View>
-            <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(1400)}><Node p={stops[3]} size={52}><View style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><Trophy size={22} color={fixed.white} /></View></Node></Animated.View>
+            <Animated.View pointerEvents="box-none" style={StyleAbs} entering={fade(1400)}><Node p={stops[3]} size={52}><View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><Trophy size={22} color={fixed.white} /></View></Node></Animated.View>
           </>
         )}
       </View>
@@ -171,7 +171,7 @@ export function MealStep() {
         </Svg>
         {!read && (
           <View style={{ position: 'absolute', left: 14, right: 14, bottom: 14, alignItems: 'center', gap: 10 }}>
-            <View style={{ alignSelf: 'stretch', padding: 14, borderRadius: 18, backgroundColor: 'rgba(0,0,0,0.72)' }}>
+            <View style={{ alignSelf: 'stretch', padding: 14, borderRadius: radii.md, backgroundColor: 'rgba(0,0,0,0.72)' }}>
               <Txt style={{ fontFamily: font.semibold, color: fixed.white }}>This photo is ours.</Txt>
               <Txt style={{ fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.7)' }}>Tap and see the maths the app does on a meal photo.</Txt>
             </View>
@@ -221,7 +221,7 @@ export function SignStep({ onDrawn }: { onDrawn: (v: boolean) => void }) {
     <>
       <View style={{ paddingTop: 8 }}><Headline size={28} bold="Are you committed to following the plan" light="Coach Vikram builds for you?" /></View>
       <GestureDetector gesture={pan}>
-        <View collapsable={false} accessible accessibilityLabel="Signature box. Draw a tick with your finger to confirm" style={{ height: 260, borderRadius: 28, borderWidth: 1.5, borderStyle: 'dashed', borderColor: drawn ? c.accent : c.chipLine, backgroundColor: c.surface, overflow: 'hidden' }}>
+        <View collapsable={false} accessible accessibilityLabel="Signature box. Draw a tick with your finger to confirm" style={{ height: 260, borderRadius: radii.xl, borderWidth: 1.5, borderStyle: 'dashed', borderColor: drawn ? c.accent : c.chipLine, backgroundColor: c.surface, overflow: 'hidden' }}>
           {!path && <View pointerEvents="none" style={{ ...StyleAbs, alignItems: 'center', justifyContent: 'center' }}><Check size={84} strokeWidth={1.6} color={c.accent} style={{ opacity: 0.28 }} /></View>}
           <Svg width="100%" height="100%" style={{ position: 'absolute' }}><Path d={path} fill="none" stroke={c.accent} strokeWidth={4.5} strokeLinecap="round" strokeLinejoin="round" /></Svg>
           <View pointerEvents="none" style={{ position: 'absolute', left: 24, right: 24, bottom: 44, height: 1, backgroundColor: c.line }} />
@@ -283,7 +283,7 @@ export function ReadyContent({ assess }: { assess: string }) {
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>WHAT HAPPENS NEXT</Txt>
         {next.map(([icon, t, s], i) => (
           <Row key={t} style={{ gap: 14, alignItems: 'flex-start', paddingVertical: 6 }}>
-            <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
+            <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
             <View style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.semibold }}>{i + 1}. {t}</Txt>
               <Txt v="caption">{s}</Txt>
@@ -307,7 +307,7 @@ export function HealthStep() {
   return (
     <>
       <View style={{ alignItems: 'center', gap: 14, paddingTop: 6 }}>
-        <View accessibilityLabel={HEALTH_NAME} style={{ width: 88, height: 88, borderRadius: 26, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center', ...(isDark ? {} : { shadowColor: fixed.shadow, shadowOpacity: 0.12, shadowRadius: 22, shadowOffset: { width: 0, height: 8 } }) }}>
+        <View accessibilityLabel={HEALTH_NAME} style={{ width: 88, height: 88, borderRadius: radii.xl, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center', ...(isDark ? {} : { shadowColor: fixed.shadow, shadowOpacity: 0.12, shadowRadius: 22, shadowOffset: { width: 0, height: 8 } }) }}>
           <Heart size={46} color="#FF375F" fill="#FF375F" />
         </View>
         <View style={{ alignItems: 'center' }}>

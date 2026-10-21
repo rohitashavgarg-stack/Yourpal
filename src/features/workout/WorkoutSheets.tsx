@@ -10,7 +10,7 @@ import { legDay } from '@/lib/data';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { setLabel } from './session';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 // Screen-level handlers the sheets call (kept in a ref so they are always current).
 export type WkApi = {
@@ -83,7 +83,7 @@ export function SwapSheet({ api }: { api: ApiRef }) {
       </View>
 
       <Pressy accessibilityRole="search" accessibilityLabel="Search all exercises" onPress={() => closeSheet(() => router.push('/exercise-search'))} scaleTo={0.98}
-        style={{ height: 56, borderRadius: 28, backgroundColor: c.surface2, borderWidth: 1.5, borderColor: c.accent, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 18 }}>
+        style={{ height: 56, borderRadius: radii.xl, backgroundColor: c.surface2, borderWidth: 1.5, borderColor: c.accent, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 18 }}>
         <Search size={20} color={c.accentText} strokeWidth={2.2} />
         <Txt style={{ flex: 1, fontFamily: font.medium, fontSize: 16, color: c.muted }}>Search all exercises</Txt>
         <ChevronRight size={18} color={c.muted} />
@@ -93,7 +93,7 @@ export function SwapSheet({ api }: { api: ApiRef }) {
         <Txt v="label">Suggested swaps</Txt>
         {alts.map((a) => (
           <Pressy key={a.n} accessibilityRole="button" accessibilityLabel={`${a.n}. ${a.s}`} onPress={() => api.current.swapTo(a.n, plan)} scaleTo={0.985}
-            style={{ minHeight: 60, flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 16, borderRadius: 18, backgroundColor: c.surface2 }}>
+            style={{ minHeight: 60, flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 16, borderRadius: radii.md, backgroundColor: c.surface2 }}>
             <Txt style={{ flex: 1, fontFamily: font.semibold }}>{a.n}</Txt>
             <Tag label={a.s} bg={c.goodSoft} fg={c.good} style={{ alignSelf: 'center' }} />
           </Pressy>

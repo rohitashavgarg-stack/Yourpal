@@ -17,7 +17,7 @@ import { histFor, tipFor } from '@/features/plans/content';
 import { ExTile, PageHeader } from '@/features/plans/parts';
 import { artIdFor, ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { CLIPS, THUMBS, clipIdFor } from '@/features/workout/clips';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // The real clip of the exercise: shows its still until played, then loops silently.
 function PlanClip({ source, thumb, playing }: { source: number; thumb?: number; playing: boolean }) {
@@ -36,7 +36,7 @@ function PlayBar({ dark }: { dark?: boolean }) {
   useEffect(() => { w.value = withRepeat(withTiming(1, { duration: 6000, easing: Easing.linear }), -1, false); return () => cancelAnimation(w); }, []);
   const a = useAnimatedStyle(() => ({ width: `${w.value * 100}%` }));
   return (
-    <View style={{ position: 'absolute', left: 14, right: 14, bottom: 12, height: 4, borderRadius: 2, backgroundColor: dark ? 'rgba(11,11,13,0.15)' : 'rgba(255,255,255,0.25)', overflow: 'hidden' }}>
+    <View style={{ position: 'absolute', left: 14, right: 14, bottom: 12, height: 4, borderRadius: radii.xs, backgroundColor: dark ? 'rgba(11,11,13,0.15)' : 'rgba(255,255,255,0.25)', overflow: 'hidden' }}>
       <Animated.View style={[{ height: '100%', backgroundColor: dark ? fixed.dark : fixed.white }, a]} />
     </View>
   );
@@ -64,7 +64,7 @@ export default function ExerciseDetail() {
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title={name} />
       <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
-        <View style={{ height: artId || clipId ? 250 : 210, borderRadius: 26, overflow: 'hidden', backgroundColor: clipId ? fixed.white : artId ? lightBg : undefined }}>
+        <View style={{ height: artId || clipId ? 250 : 210, borderRadius: radii.xl, overflow: 'hidden', backgroundColor: clipId ? fixed.white : artId ? lightBg : undefined }}>
           {clipId ? <PlanClip source={CLIPS[clipId]} thumb={THUMBS[clipId]} playing={playing} /> : artId ? (
             <View pointerEvents="none" style={{ position: 'absolute', top: 44, left: 12, right: 12, bottom: 18 }}>
               <ExerciseArt id={artId} fill />
@@ -77,7 +77,7 @@ export default function ExerciseDetail() {
             <Circle cx={270} cy={40} r={90} fill={fixed.white} opacity={0.14} />
           </Svg>
           </>)}
-          <View style={{ position: 'absolute', top: 12, left: 12, paddingHorizontal: 10, paddingVertical: 3, borderRadius: 999, backgroundColor: artId || clipId ? 'rgba(11,11,13,0.72)' : 'rgba(255,255,255,0.14)' }}>
+          <View style={{ position: 'absolute', top: 12, left: 12, paddingHorizontal: 10, paddingVertical: 3, borderRadius: radii.pill, backgroundColor: artId || clipId ? 'rgba(11,11,13,0.72)' : 'rgba(255,255,255,0.14)' }}>
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, color: fixed.white }}>{d.offline ? 'Downloaded · plays offline' : 'Licensed form video'}</Txt>
           </View>
           <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
@@ -94,7 +94,7 @@ export default function ExerciseDetail() {
             <View style={{ flex: 1 }}><Txt v="label">Your plan</Txt><Txt v="mono" style={{ fontSize: fontSizes.md }}>{sub}</Txt></View>
           </Row>
         ) : null}
-        <View style={{ height: 96, borderRadius: 22, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 16 }}>
+        <View style={{ height: 96, borderRadius: radii.lg, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 16 }}>
           <Svg width={64} height={64} viewBox="0 0 64 64">
             <Rect x={4} y={4} width={56} height={56} rx={16} fill={c.surface2} />
             <Path d="M18 46V18h6v10h16V18h6v28h-6V34H24v12z" fill={c.muted} />

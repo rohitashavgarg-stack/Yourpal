@@ -5,7 +5,7 @@ import { VideoView, useVideoPlayer } from 'expo-video';
 import { Maximize2, Minimize2, Pause, Play } from '@/lib/icons';
 import { Pressy } from '@/components/ui';
 import { CLIPS, THUMBS } from './clips';
-import { fixed } from '@/design-system/tokens';
+import { radii, fixed } from '@/design-system/tokens';
 
 // The clips have a white background, so on a white stage the video reads as filling the whole screen.
 export const STAGE_BG = fixed.white;
@@ -36,7 +36,7 @@ function Clip({ source, thumb, top: top0, bottom: bottom0, wide, setWide }: { so
         </Pressy>
         {/* full screen: the clip in landscape */}
         <Pressy accessibilityRole="button" accessibilityLabel={IS_WEB && wide ? 'Exit full screen' : 'Full screen'} onPress={() => { player.play(); if (IS_WEB) { setWide(!wide); return; } setFull(true); setTimeout(() => view.current?.enterFullscreen(), 60); }} scaleTo={0.92}
-          style={{ position: 'absolute', right: 14, bottom: 12, width: 44, height: 44, borderRadius: 22, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
+          style={{ position: 'absolute', right: 14, bottom: 12, width: 44, height: 44, borderRadius: radii.lg, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
           {IS_WEB && wide ? <Minimize2 size={19} color={fixed.dark} /> : <Maximize2 size={19} color={fixed.dark} />}
         </Pressy>
       </View>

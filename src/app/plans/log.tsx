@@ -20,7 +20,7 @@ import { FOOD, macroLine, RECENT, SCAN_PHOTO } from '@/features/plans/content';
 import { useDietActions } from '@/features/plans/dietActions';
 import { PageHeader } from '@/features/plans/parts';
 import { allowedFor, dietItems, Food, setP, usePlans } from '@/features/plans/store';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 type Mode = 'search' | 'write' | 'scan';
 type ScanSt = 'idle' | 'busy' | 'done' | 'fail';
@@ -40,7 +40,7 @@ function Bracket({ pos }: { pos: 'tl' | 'tr' | 'bl' | 'br' }) {
 function NumField({ label, unit, value, onChange, ph }: { label: string; unit: string; value: string; onChange: (v: string) => void; ph: string }) {
   const { c } = useTheme();
   return (
-    <View style={{ flex: 1, height: 52, borderRadius: 26, borderWidth: 1, borderColor: c.line, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16 }}>
+    <View style={{ flex: 1, height: 52, borderRadius: radii.xl, borderWidth: 1, borderColor: c.line, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16 }}>
       <TextInput accessibilityLabel={label} value={value} onChangeText={(t) => onChange(t.replace(/[^0-9]/g, ''))} keyboardType="number-pad" placeholder={ph} placeholderTextColor={c.muted}
         style={{ flex: 1, minWidth: 0, fontFamily: font.mono, fontSize: fontSizes.base, color: c.ink, height: '100%' as any, outlineStyle: 'none' as any }} />
       <Txt muted style={{ fontSize: fontSizes.sm }}>{unit}</Txt>
@@ -207,7 +207,7 @@ export default function LogFood() {
                 <View accessibilityRole="radiogroup" accessibilityLabel="Food type" style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   {(['veg', 'egg', 'nv'] as FoodType[]).map((t) => (
                     <Pressy key={t} accessibilityRole="radio" accessibilityState={{ selected: wType === t }} accessibilityLabel={foodTypeLabel(t)} onPress={() => setWType(t)}
-                      style={{ flex: 1, height: 44, borderRadius: 22, borderWidth: 1, borderColor: wType === t ? c.ink : c.surface3, backgroundColor: wType === t ? c.ink : 'transparent', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                      style={{ flex: 1, height: 44, borderRadius: radii.lg, borderWidth: 1, borderColor: wType === t ? c.ink : c.surface3, backgroundColor: wType === t ? c.ink : 'transparent', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                       <FoodMark type={t} />
                       <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, color: wType === t ? c.bg : c.ink }}>{foodTypeLabel(t)}</Txt>
                     </Pressy>
@@ -243,7 +243,7 @@ export default function LogFood() {
           </Animated.View>
         ) : (
           <>
-            <View accessibilityLiveRegion="polite" accessibilityLabel={cap} style={{ height: 250, borderRadius: 26, overflow: 'hidden', backgroundColor: fixed.dark }}>
+            <View accessibilityLiveRegion="polite" accessibilityLabel={cap} style={{ height: 250, borderRadius: radii.xl, overflow: 'hidden', backgroundColor: fixed.dark }}>
               <Svg width="100%" height="100%" viewBox="0 0 358 250" preserveAspectRatio="xMidYMid slice" style={{ position: 'absolute', opacity: scan === 'idle' ? 0.55 : 1 }}>
                 <Ellipse cx={179} cy={132} rx={118} ry={84} fill="#E9E4DA" /><Ellipse cx={179} cy={132} rx={96} ry={66} fill="#F7F3EC" />
                 <Circle cx={146} cy={120} r={30} fill="#8C3B2A" /><Circle cx={140} cy={113} r={4} fill="#B5543C" /><Circle cx={154} cy={126} r={3} fill="#B5543C" />

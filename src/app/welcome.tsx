@@ -10,7 +10,7 @@ import { Button, Pressy, Txt } from '@/components/ui';
 import { fade, fadeOut } from '@/theme/motion';
 import { YourPalLogo } from '@/components/YourPalLogo';
 import { font } from '@/theme/tokens';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // One soft blue glow bleeding in from the top-right corner. Radial gradient, so it is blurred with no filter (works on web and native).
 function Glow({ width, height }: { width: number; height: number }) {
@@ -31,7 +31,7 @@ function Glow({ width, height }: { width: number; height: number }) {
 }
 
 const MOCK_BASE = { width: 252, height: 372, borderTopLeftRadius: 34, borderTopRightRadius: 34, backgroundColor: fixed.dark, borderWidth: 1.5, borderBottomWidth: 0, borderColor: 'rgba(255,255,255,0.22)', padding: 12, gap: 8, overflow: 'hidden' } as const;
-const TILE = { backgroundColor: fixed.shadow, borderRadius: 16, padding: 10, borderWidth: 1, borderColor: 'rgba(255,255,255,0.10)' } as const;
+const TILE = { backgroundColor: fixed.shadow, borderRadius: radii.md, padding: 10, borderWidth: 1, borderColor: 'rgba(255,255,255,0.10)' } as const;
 const DIM = 'rgba(255,255,255,0.6)';
 
 // A tiny, static picture of the Today tab so people see what they get before signing in.
@@ -41,13 +41,13 @@ function TodayMock() {
     <View accessible accessibilityLabel="Preview of the Today screen: your goal, water and weight trackers, and today's workout" style={MOCK_BASE}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: fixed.blue }} />
+          <View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: fixed.blue }} />
           <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: fixed.white, fontFamily: font.semibold }}>Your gym</Txt>
         </View>
-        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#2A3242' }} />
+        <View style={{ width: 20, height: 20, borderRadius: radii.sm, backgroundColor: '#2A3242' }} />
       </View>
       <Txt style={{ fontSize: fontSizes.lg, lineHeight: 24, letterSpacing: -0.5, color: fixed.white, fontFamily: font.regular }}>{'Good evening,\nthere'}</Txt>
-      <LinearGradient colors={['#3E7BF0', fixed.blue, '#1D46B5']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: 18, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+      <LinearGradient colors={['#3E7BF0', fixed.blue, '#1D46B5']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: radii.md, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
         <Svg width={54} height={54} viewBox="0 0 54 54">
           <Circle cx={27} cy={27} r={R} stroke="rgba(255,255,255,0.28)" strokeWidth={5} fill="none" />
           <Circle cx={27} cy={27} r={R} stroke={fixed.white} strokeWidth={5} fill="none" strokeLinecap="round" strokeDasharray={`${C * 0.35} ${C}`} transform="rotate(-90 27 27)" />
@@ -115,12 +115,12 @@ function ProgressMock() {
         <View style={[TILE, { flex: 1 }]}>
           <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Streak</Txt>
           <Txt style={{ fontSize: fontSizes.lg, lineHeight: 23, color: '#FF8A3D', fontFamily: font.semibold }}>7 weeks</Txt>
-          <View style={{ flexDirection: 'row', gap: 3, marginTop: 4 }}>{[1, 1, 1, 0].map((o, i) => <View key={i} style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: o ? '#FF8A3D' : 'rgba(255,255,255,0.15)' }} />)}</View>
+          <View style={{ flexDirection: 'row', gap: 3, marginTop: 4 }}>{[1, 1, 1, 0].map((o, i) => <View key={i} style={{ flex: 1, height: 6, borderRadius: radii.xs, backgroundColor: o ? '#FF8A3D' : 'rgba(255,255,255,0.15)' }} />)}</View>
         </View>
         <View style={[TILE, { flex: 1 }]}>
           <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Steps</Txt>
           <Txt style={{ fontSize: fontSizes.lg, lineHeight: 23, color: fixed.white, fontFamily: font.semibold }}>6,436</Txt>
-          <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3, height: 18, marginTop: 4 }}>{bars.map((b, i) => <View key={i} style={{ flex: 1, height: 18 * b, borderRadius: 2, backgroundColor: '#8A9BFF' }} />)}</View>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3, height: 18, marginTop: 4 }}>{bars.map((b, i) => <View key={i} style={{ flex: 1, height: 18 * b, borderRadius: radii.xs, backgroundColor: '#8A9BFF' }} />)}</View>
         </View>
       </View>
       <View style={[TILE, { flexDirection: 'row', alignItems: 'center', gap: 10 }]}>
@@ -154,8 +154,8 @@ function Segment({ n, i, onPress, label }: { n: number; i: number; onPress: () =
   const fill = useAnimatedStyle(() => ({ width: `${p.value * 100}%` }));
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} hitSlop={{ top: 14, bottom: 14 }} scaleTo={0.97}
-      style={{ width: 28, height: 4, borderRadius: 2, backgroundColor: 'rgba(255,255,255,0.28)', overflow: 'hidden' }}>
-      <Animated.View style={[{ height: '100%', borderRadius: 2, backgroundColor: fixed.white }, fill]} />
+      style={{ width: 28, height: 4, borderRadius: radii.xs, backgroundColor: 'rgba(255,255,255,0.28)', overflow: 'hidden' }}>
+      <Animated.View style={[{ height: '100%', borderRadius: radii.xs, backgroundColor: fixed.white }, fill]} />
     </Pressy>
   );
 }

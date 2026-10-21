@@ -10,7 +10,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { goHome, ProgLogo } from './parts';
 import { joinProgramme, switchProgramme, useShell } from './state';
-import { fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 
 // "Your programs" — switch like switching accounts, or join another.
 export function ProgrammeSwitcherSheet() {
@@ -47,7 +47,7 @@ export function ProgrammeSwitcherSheet() {
         })}
         <Pressy accessibilityRole="button" accessibilityLabel="Join a program" onPress={join} scaleTo={0.985}
           style={{ minHeight: 64, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10 }}>
-          <View style={{ width: 44, height: 44, borderRadius: 22, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.chipLine, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ width: 44, height: 44, borderRadius: radii.lg, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.chipLine, alignItems: 'center', justifyContent: 'center' }}>
             <Plus size={20} color={c.muted} />
           </View>
           <Txt style={{ flex: 1, fontFamily: font.medium }}>Join a program</Txt>

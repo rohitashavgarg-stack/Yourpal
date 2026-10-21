@@ -10,7 +10,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { HEALTH_NAME } from '@/lib/health';
 import { ListCard, SubPage, Switch } from '@/features/shell/parts';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // What YourPal reads from the phone's health store. Colours match the trackers on Today.
 const READS = [
@@ -41,15 +41,15 @@ export default function ConnectedApps() {
 
   return (
     <SubPage title="Connected apps" fallback="/profile">
-      <View style={{ backgroundColor: c.surface, borderRadius: 26, padding: 18, gap: 14 }}>
+      <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14 }}>
         <Row style={{ gap: 14 }}>
-          <View accessibilityLabel={HEALTH_NAME} style={{ width: 56, height: 56, borderRadius: 18, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: c.line }}>
+          <View accessibilityLabel={HEALTH_NAME} style={{ width: 56, height: 56, borderRadius: radii.md, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: c.line }}>
             <HeartIcon size={28} color="#FF3B5C" />
           </View>
           <View style={{ flex: 1, gap: 2 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 26 }}>{HEALTH_NAME}</Txt>
             <Row style={{ gap: 6 }}>
-              <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: on ? c.good : c.muted }} />
+              <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: on ? c.good : c.muted }} />
               <Txt v="caption" style={{ fontSize: fontSizes.sm, color: on ? c.good : c.muted }}>{on ? 'Connected · last synced 5 min ago' : 'Not connected'}</Txt>
             </Row>
           </View>
@@ -84,7 +84,7 @@ export default function ConnectedApps() {
       <Txt v="label" style={{ paddingHorizontal: 4, marginTop: 6 }}>PRIVACY</Txt>
       <ListCard>
         <Row style={{ gap: 14, minHeight: 64 }}>
-          <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Lock size={17} color={c.ink} /></View>
+          <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Lock size={17} color={c.ink} /></View>
           <View style={{ flex: 1, paddingVertical: 10 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>Read only</Txt>
             <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`YourPal never writes to ${HEALTH_NAME}. Only you see this data.`}</Txt>

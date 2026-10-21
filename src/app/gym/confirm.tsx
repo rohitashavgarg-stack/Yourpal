@@ -16,7 +16,7 @@ import { Hint, ListCard, SubPage, useShake } from '@/features/progress/parts';
 import { PT_TOTAL, STAR_WORDS } from '@/features/gym/data';
 import { FlagSheet } from '@/features/gym/sheets';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const STAR = 'M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z';
 const APath = Animated.createAnimatedComponent(Path);
@@ -76,7 +76,7 @@ export default function ConfirmSession() {
 
   return (
     <SubPage title="Confirm session" fallback="/gym/attendance">
-      <View style={{ padding: 18, borderRadius: 26, backgroundColor: c.accentSoft, gap: 4 }}>
+      <View style={{ padding: 18, borderRadius: radii.xl, backgroundColor: c.accentSoft, gap: 4 }}>
         <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 33 }}>Tue 23 Sep · 6:00–7:00 pm</Txt>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <PersonAvatar who="coach" size={26} />
@@ -96,7 +96,7 @@ export default function ConfirmSession() {
         </Animated.View>
       )}
       {done ? (
-        <Animated.View entering={fade()} accessible accessibilityLabel="Session confirmed" style={{ alignSelf: 'center', width: 56, height: 56, borderRadius: 28, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}>
+        <Animated.View entering={fade()} accessible accessibilityLabel="Session confirmed" style={{ alignSelf: 'center', width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}>
           <DoneTick />
         </Animated.View>
       ) : (

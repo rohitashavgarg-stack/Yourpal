@@ -18,7 +18,7 @@ import { buildExercises, WORKOUT_MIN } from '@/features/workout/session';
 import { rel } from './meals';
 import { useLogGate } from '@/lib/logGate';
 import { createStore } from '@/features/progress/store';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // What the member said about a missed workout (kept for the day): moved to tomorrow or skipped. "I did it" logs it as done instead.
 export const missedWkStore = createStore(() => ({ answer: null as null | 'moved' | 'skipped' }));
@@ -68,7 +68,7 @@ const SmallBtn = ({ label, onPress, solid = false }: { label: string; onPress: (
     <Txt style={{ fontFamily: solid ? font.semibold : font.medium, fontSize: fontSizes.md, lineHeight: 20, color: solid ? fixed.dark : fixed.white }}>{label}</Txt>
   </Pressy>
 );
-const LiveDot = () => <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: MINT }} />;
+const LiveDot = () => <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: MINT }} />;
 
 function Shell({ colors, edge, children, compact = false, label }: { colors: string[]; edge?: string; children: React.ReactNode; compact?: boolean; label: string }) {
   return (
@@ -117,7 +117,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
     return (
       <View accessibilityLabel="Workouts are paused" style={{ borderRadius: 24, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
         <Row style={{ gap: 12, alignItems: 'flex-start' }}>
-          <View style={{ width: 40, height: 40, borderRadius: 14, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={18} color={c.muted} /></View>
+          <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={18} color={c.muted} /></View>
           <View style={{ flex: 1, gap: 2 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, letterSpacing: -0.3, color: c.ink }}>Workouts are paused</Txt>
             <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}>Renew at Wulf Fitness reception to see your plan and start again. Your history stays here.</Txt>
@@ -133,12 +133,12 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
     return (
       <Shell compact label={moved ? 'Leg day moved to tomorrow' : 'Leg day skipped today'} colors={[fixed.dark, '#0E1B45', '#13327A']}>
         <Row style={{ gap: 12 }}>
-          <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center' }}>{moved ? <CalendarClock size={18} color={fixed.white} /> : <X size={18} color={fixed.white} />}</View>
+          <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center' }}>{moved ? <CalendarClock size={18} color={fixed.white} /> : <X size={18} color={fixed.white} />}</View>
           <View style={{ flex: 1 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: fixed.white }}>{moved ? 'Leg day moved to tomorrow' : 'Leg day skipped today'}</Txt>
             <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: W60 }}>{moved ? 'Coach Vikram is told' : 'Your plan picks up tomorrow'}</Txt>
           </View>
-          <Pressy accessibilityRole="button" accessibilityLabel="Undo" onPress={() => missedWkStore.set({ answer: null })} style={{ height: 34, paddingHorizontal: 14, borderRadius: 17, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
+          <Pressy accessibilityRole="button" accessibilityLabel="Undo" onPress={() => missedWkStore.set({ answer: null })} style={{ height: 34, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: fixed.white }}>Undo</Txt>
           </Pressy>
         </Row>
@@ -211,7 +211,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
             {next && <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: W60 }}>{`Next: ${next.name}`}</Txt>}
           </Row>
           <Row style={{ gap: 4 }}>
-            {ex.map((_, i) => <View key={i} style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: i < doneEx ? MINT : 'rgba(255,255,255,0.18)' }} />)}
+            {ex.map((_, i) => <View key={i} style={{ flex: 1, height: 6, borderRadius: radii.xs, backgroundColor: i < doneEx ? MINT : 'rgba(255,255,255,0.18)' }} />)}
           </Row>
         </View>
         <Btn label="Resume workout" onPress={() => router.push('/workout')} />
@@ -246,7 +246,7 @@ export function WorkoutCard({ restart = false }: { restart?: boolean } = {}) {
   // comeback day: the greeting is plain text above (see ComebackGreeting), and the workout is one small grey card: the easy session,
   // with Start as the main button and today's planned workout as the quiet one. (Both open the same builder for now.)
   if (comeback) {
-    const btn = { flex: 1, height: 44, borderRadius: 22, alignItems: 'center' as const, justifyContent: 'center' as const };
+    const btn = { flex: 1, height: 44, borderRadius: radii.lg, alignItems: 'center' as const, justifyContent: 'center' as const };
     return (
       <View accessibilityLabel="Easy session" style={{ borderRadius: 24, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
         <View style={{ gap: 2 }}>

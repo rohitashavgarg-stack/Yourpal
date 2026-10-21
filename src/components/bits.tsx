@@ -7,7 +7,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
 import { FoodType } from '@/lib/data';
 import { Pressy } from './ui';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // ---------- Veg / egg / non-veg mark (Indian food label style) ----------
 const MARK: Record<FoodType, { c: string; d: string; l: string }> = {
@@ -58,13 +58,13 @@ export function Skeleton({ h, style }: { h: number; style?: StyleProp<ViewStyle>
   const t = useSharedValue(0);
   useEffect(() => { t.value = withRepeat(withTiming(1, { duration: 1300, easing: Easing.linear }), -1, false); }, []);
   const a = useAnimatedStyle(() => ({ backgroundColor: interpolateColor(Math.sin(t.value * Math.PI), [0, 1], [c.sk, c.skHi]) }));
-  return <Animated.View style={[{ height: h, borderRadius: 28 }, a, style]} />;
+  return <Animated.View style={[{ height: h, borderRadius: radii.xl }, a, style]} />;
 }
 
 // ---------- Small pill tag (filled) ----------
 export function Tag({ label, bg, fg, style }: { label: string; bg: string; fg: string; style?: StyleProp<ViewStyle> }) {
   return (
-    <View style={[{ alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 3, borderRadius: 999, backgroundColor: bg }, style]}>
+    <View style={[{ alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 3, borderRadius: radii.pill, backgroundColor: bg }, style]}>
       <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: fg }}>{label}</Text>
     </View>
   );
@@ -127,9 +127,9 @@ export function RoundBtn({ label, onPress, children, bg, style, glass }: { label
   const rim = glass ? { shadowColor: fixed.shadow, shadowOpacity: isDark ? 0.35 : 0.1, shadowRadius: 10, shadowOffset: { width: 0, height: 3 }, elevation: 3 } : null;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress}
-      style={[{ width: 44, height: 44, borderRadius: 22, backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center' }, rim, style]}>
+      style={[{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center' }, rim, style]}>
       {glass ? (
-        <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: 22, overflow: 'hidden' }}>
+        <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radii.lg, overflow: 'hidden' }}>
           <GlassBackdrop radius={22} tint={Platform.OS === 'web' ? (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.82)') : undefined} />
         </View>
       ) : null}
@@ -144,12 +144,12 @@ export const popIn = (delay: number) => withSequence(withTiming(0, { duration: d
 export function UnitPill<T extends string>({ options, value, onChange, label }: { options: { value: T; label: string }[]; value: T; onChange: (v: T) => void; label: string }) {
   const { c } = useTheme();
   return (
-    <View accessibilityRole="tablist" accessibilityLabel={label} style={{ flexDirection: 'row', alignSelf: 'center', padding: 4, borderRadius: 26, backgroundColor: c.surface2 }}>
+    <View accessibilityRole="tablist" accessibilityLabel={label} style={{ flexDirection: 'row', alignSelf: 'center', padding: 4, borderRadius: radii.xl, backgroundColor: c.surface2 }}>
       {options.map((o) => {
         const on = o.value === value;
         return (
           <Pressy key={o.value} accessibilityRole="tab" accessibilityState={{ selected: on }} onPress={() => onChange(o.value)} scaleTo={0.96}
-            style={{ minWidth: 72, height: 44, paddingHorizontal: 16, borderRadius: 22, backgroundColor: on ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+            style={{ minWidth: 72, height: 44, paddingHorizontal: 16, borderRadius: radii.lg, backgroundColor: on ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
             <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 17, letterSpacing: 0.8, color: on ? c.bg : c.muted }}>{o.label.toUpperCase()}</Text>
           </Pressy>
         );

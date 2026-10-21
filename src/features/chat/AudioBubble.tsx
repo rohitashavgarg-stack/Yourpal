@@ -5,7 +5,7 @@ import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { Pressy, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
-import { fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
@@ -39,7 +39,7 @@ export function AudioBubble({ uri, dur, me }: { uri: string; dur: number; me: bo
         {st.playing ? <Pause size={18} color={fg} fill={fg} /> : <Play size={18} color={fg} fill={fg} />}
       </Pressy>
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 2, height: 28 }}>
-        {wave.map((h, i) => <View key={i} style={{ flex: 1, height: h, borderRadius: 2, backgroundColor: i / wave.length < pct ? fg : dim }} />)}
+        {wave.map((h, i) => <View key={i} style={{ flex: 1, height: h, borderRadius: radii.xs, backgroundColor: i / wave.length < pct ? fg : dim }} />)}
       </View>
       <Txt style={{ fontSize: fontSizes.xs, lineHeight: 18, minWidth: 34, textAlign: 'right', color: me ? 'rgba(255,255,255,0.9)' : c.muted }}>{fmt(st.playing ? total - (st.currentTime || 0) : total)}</Txt>
     </View>
