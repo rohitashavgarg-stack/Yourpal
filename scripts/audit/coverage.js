@@ -67,6 +67,24 @@ function classify(tag, s) {
   return null;
 }
 
+// A short description of the look, so the same hand-built element on different screens can be counted together.
+function signature(kind, s) {
+  const w = num(s, 'width'), h = num(s, 'height'), mh = num(s, 'minHeight');
+  const br = (s.match(/borderRadius:\s*([\w.]+)/) || [])[1] || '';
+  const bgm = (s.match(/backgroundColor:\s*([^,}]+)/) || [])[1] || '';
+  const bg = bgm.trim().replace(/\s+/g, ' ').slice(0, 24);
+  const pad = (s.match(/\bpadding:\s*(\d+)/) || [])[1];
+  const bw = /borderWidth/.test(s) ? ' with a line' : '';
+  if (kind === 'icon badge') return (w && w <= 14 ? 'dot ' + w + ' px' : 'icon tile ' + w + ' px, radius ' + br);
+  if (kind === 'bar') return 'bar ' + (h || '?') + ' px high, radius ' + br;
+  if (kind === 'chip') return 'chip ' + h + ' px high, radius ' + br + bw;
+  if (kind === 'icon button') return 'icon button ' + (w || h || '?') + ' px, radius ' + br;
+  if (kind === 'button or pill') return 'button ' + (h || mh || 'auto') + ' px high, radius ' + br;
+  if (kind === 'card') return 'card radius ' + br + ', fill ' + bg + (pad ? ', padding ' + pad : '');
+  if (kind === 'input') return 'text input';
+  return kind;
+}
+
 function scan(f) {
   const sf = parse(f); const hand = []; const ds = new Map(); const locals = [];
   const dsNames = new Set();
@@ -80,7 +98,7 @@ function scan(f) {
       if (dsNames.has(tag)) ds.set(tag, (ds.get(tag) || 0) + 1);
       const k = classify(tag, styleText(n, sf));
       let top = n.parent; let fn = ''; while (top && top.parent && !ts.isSourceFile(top.parent)) top = top.parent; if (top && (ts.isFunctionDeclaration(top) || ts.isVariableStatement(top))) { fn = ts.isFunctionDeclaration(top) ? (top.name ? top.name.text : '') : top.declarationList.declarations[0].name.getText(sf); }
-      if (k) hand.push({ kind: k, fn, line: sf.getLineAndCharacterOfPosition(n.getStart()).line + 1, tag, text: textOf(n, sf).replace(/\s+/g, ' ').slice(0, 110) });
+      if (k) hand.push({ kind: k, sig: signature(k, styleText(n, sf)), fn, line: sf.getLineAndCharacterOfPosition(n.getStart()).line + 1, tag, text: textOf(n, sf).replace(/\s+/g, ' ').slice(0, 110) });
     }
     ts.forEachChild(n, v);
   })(sf);

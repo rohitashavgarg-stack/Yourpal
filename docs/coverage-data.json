@@ -46,6 +46,7 @@
    "hand": [
     {
      "kind": "button or pill",
+     "sig": "button auto px high, radius 20",
      "fn": "GoalLine",
      "line": 40,
      "tag": "Pressy",
@@ -54,6 +55,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 44 px, radius radii.lg",
      "fn": "ComebackCard",
      "line": 165,
      "tag": "View",
@@ -62,6 +64,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 40 px, radius radii.sm",
      "fn": "UpdIcon",
      "line": 211,
      "tag": "View",
@@ -70,6 +73,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 6 px high, radius radii.xs",
      "fn": "UpdatesCard",
      "line": 302,
      "tag": "View",
@@ -78,6 +82,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "dot 10 px",
      "fn": "UpdatesSheet",
      "line": 324,
      "tag": "View",
@@ -86,6 +91,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.card, fill c.surface, padding 16",
      "fn": "StackCard",
      "line": 118,
      "tag": "View",
@@ -94,6 +100,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 40 px, radius radii.sm",
      "fn": "StackCard",
      "line": 122,
      "tag": "View",
@@ -102,6 +109,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 40 px high, radius 20",
      "fn": "StackCard",
      "line": 134,
      "tag": "Pressy",
@@ -110,6 +118,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 6 px high, radius radii.xs",
      "fn": "PagerDot",
      "line": 155,
      "tag": "Animated.View",
@@ -118,6 +127,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 44 px, radius radii.lg",
      "fn": "ComebackPlan",
      "line": 214,
      "tag": "View",
@@ -126,6 +136,7 @@
     },
     {
      "kind": "chip",
+     "sig": "chip 28 px high, radius 14 with a line",
      "fn": "ComebackPlan",
      "line": 218,
      "tag": "View",
@@ -134,6 +145,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius 20, fill fixed.white",
      "fn": "MiniWorkout",
      "line": 61,
      "tag": "View",
@@ -142,6 +154,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 32 px, radius radii.md",
      "fn": "CheckInBar",
      "line": 119,
      "tag": "View",
@@ -150,6 +163,7 @@
     },
     {
      "kind": "chip",
+     "sig": "chip 20 px high, radius radii.sm",
      "fn": "CheckInBar",
      "line": 124,
      "tag": "View",
@@ -158,6 +172,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 3 px high, radius radii.xs",
      "fn": "CheckInBar",
      "line": 134,
      "tag": "View",
@@ -166,6 +181,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.card, fill c.surface, padding 16",
      "fn": "NoPlanCard",
      "line": 13,
      "tag": "View",
@@ -174,6 +190,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 40 px, radius radii.sm",
      "fn": "NoPlanCard",
      "line": 14,
      "tag": "View",
@@ -182,6 +199,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 38 px, radius radii.sm",
      "fn": "PushBanner",
      "line": 25,
      "tag": "View",
@@ -295,6 +313,7 @@
    "hand": [
     {
      "kind": "button or pill",
+     "sig": "button 32 px high, radius radii.md",
      "fn": "DayStrip",
      "line": 51,
      "tag": "Pressy",
@@ -303,6 +322,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 60 px high, radius radii.lg",
      "fn": "DayStrip",
      "line": 70,
      "tag": "Pressy",
@@ -311,6 +331,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "dot 14 px",
      "fn": "DayStrip",
      "line": 77,
      "tag": "View",
@@ -319,6 +340,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "dot 12 px",
      "fn": "DayStrip",
      "line": 78,
      "tag": "View",
@@ -327,6 +349,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "dot 4 px",
      "fn": "DayStrip",
      "line": 79,
      "tag": "View",
@@ -335,6 +358,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius 20, fill c.surface2, padding 14",
      "fn": "Plans",
      "line": 147,
      "tag": "View",
@@ -343,6 +367,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 36 px, radius radii.sm",
      "fn": "Plans",
      "line": 149,
      "tag": "View",
@@ -351,6 +376,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 52 px, radius radii.xl",
      "fn": "Plans",
      "line": 163,
      "tag": "Pressy",
@@ -359,6 +385,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 56 px, radius radii.xl",
      "fn": "LockedPlan",
      "line": 41,
      "tag": "View",
@@ -367,6 +394,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button auto px high, radius radii.xl",
      "fn": "WorkoutPlan",
      "line": 90,
      "tag": "Pressy",
@@ -375,6 +403,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "dot 10 px",
      "fn": "WorkoutPlan",
      "line": 92,
      "tag": "View",
@@ -383,6 +412,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button auto px high, radius radii.xl",
      "fn": "WorkoutPlan",
      "line": 112,
      "tag": "Pressy",
@@ -391,6 +421,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 28 px, radius 14",
      "fn": "WorkoutPlan",
      "line": 131,
      "tag": "View",
@@ -399,6 +430,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 4 px high, radius radii.xs",
      "fn": "WorkoutPlan",
      "line": 152,
      "tag": "View",
@@ -407,6 +439,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
      "line": 178,
      "tag": "View",
@@ -415,6 +448,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
      "line": 179,
      "tag": "View",
@@ -423,6 +457,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 6 px high, radius radii.xs",
      "fn": "MacroBar",
      "line": 67,
      "tag": "View",
@@ -431,6 +466,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 32 px, radius radii.md",
      "fn": "QtyControl",
      "line": 105,
      "tag": "Pressy",
@@ -439,6 +475,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius 19, fill c.accentSoft",
      "fn": "QtyControl",
      "line": 112,
      "tag": "View",
@@ -447,6 +484,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "dot 8 px",
      "fn": "QtyControl",
      "line": 121,
      "tag": "View",
@@ -455,6 +493,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 44 px high, radius radii.lg",
      "fn": "AteElse",
      "line": 279,
      "tag": "Pressy",
@@ -463,6 +502,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 56 px, radius radii.xl",
      "fn": "QtySheet",
      "line": 38,
      "tag": "Pressy",
@@ -566,6 +606,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.md, fill c.surface2",
      "fn": "ProgressCard",
      "line": 117,
      "tag": "View",
@@ -574,6 +615,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius 20, fill c.surface2",
      "fn": "ProgressCard",
      "line": 152,
      "tag": "View",
@@ -582,6 +624,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 48 px, radius radii.card",
      "fn": "StreakEntry",
      "line": 165,
      "tag": "View",
@@ -612,6 +655,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "icon tile 34 px, radius radii.md",
      "fn": "CheckIn",
      "line": 125,
      "tag": "View",
@@ -651,6 +695,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "dot 12 px",
      "fn": "CoachHub",
      "line": 41,
      "tag": "View",
@@ -659,6 +704,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 40 px, radius radii.sm",
      "fn": "CoachHub",
      "line": 67,
      "tag": "View",
@@ -667,6 +713,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 44 px high, radius radii.lg",
      "fn": "CoachHub",
      "line": 81,
      "tag": "Pressy",
@@ -710,6 +757,7 @@
    "hand": [
     {
      "kind": "button or pill",
+     "sig": "button 68 px high, radius 20",
      "fn": "ExerciseSearch",
      "line": 72,
      "tag": "Pressy",
@@ -718,6 +766,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 56 px, radius radii.xl",
      "fn": "ExerciseSearch",
      "line": 84,
      "tag": "View",
@@ -757,6 +806,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.md, fill c.surface",
      "fn": "FoodDetail",
      "line": 97,
      "tag": "View",
@@ -765,6 +815,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 40 px high, radius 20",
      "fn": "FoodDetail",
      "line": 103,
      "tag": "Pressy",
@@ -773,6 +824,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 40 px, radius radii.sm",
      "fn": "FoodDetail",
      "line": 113,
      "tag": "View",
@@ -781,6 +833,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 4 px high, radius radii.xs",
      "fn": "FoodDetail",
      "line": 123,
      "tag": "View",
@@ -789,6 +842,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button auto px high, radius radii.md",
      "fn": "FoodDetail",
      "line": 127,
      "tag": "Pressy",
@@ -797,6 +851,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 4 px high, radius radii.xs",
      "fn": "FoodDetail",
      "line": 138,
      "tag": "View",
@@ -805,6 +860,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 26 px, radius 13",
      "fn": "FoodDetail",
      "line": 163,
      "tag": "View",
@@ -857,6 +913,7 @@
    "hand": [
     {
      "kind": "chip",
+     "sig": "chip 26 px high, radius 13",
      "fn": "ProgressChart",
      "line": 91,
      "tag": "View",
@@ -865,6 +922,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 3 px high, radius radii.xs",
      "fn": "ProgressChart",
      "line": 106,
      "tag": "View",
@@ -873,6 +931,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 40 px, radius 20",
      "fn": "Drivers",
      "line": 128,
      "tag": "View",
@@ -881,6 +940,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 6 px high, radius radii.xs",
      "fn": "Drivers",
      "line": 131,
      "tag": "View",
@@ -889,6 +949,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 6 px high, radius radii.xs",
      "fn": "Drivers",
      "line": 132,
      "tag": "View",
@@ -897,6 +958,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 36 px, radius radii.md",
      "fn": "History",
      "line": 151,
      "tag": "View",
@@ -905,6 +967,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 40 px, radius 20",
      "fn": "GoalDetail",
      "line": 243,
      "tag": "View",
@@ -913,6 +976,7 @@
     },
     {
      "kind": "chip",
+     "sig": "chip 30 px high, radius 15",
      "fn": "GoalDetail",
      "line": 250,
      "tag": "View",
@@ -921,6 +985,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 34 px, radius radii.md",
      "fn": "GoalDetail",
      "line": 269,
      "tag": "View",
@@ -1000,6 +1065,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "dot 8 px",
      "fn": "GymAssessments",
      "line": 76,
      "tag": "View",
@@ -1008,6 +1074,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.xl, fill c.surface",
      "fn": "GymAssessments",
      "line": 90,
      "tag": "View",
@@ -1040,6 +1107,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.xl, fill c.surface, padding 16",
      "fn": "Attendance",
      "line": 78,
      "tag": "View",
@@ -1048,6 +1116,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 38 px, radius 19",
      "fn": "Attendance",
      "line": 88,
      "tag": "View",
@@ -1056,6 +1125,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "dot 10 px",
      "fn": "Attendance",
      "line": 96,
      "tag": "View",
@@ -1064,6 +1134,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.xl, fill c.surface",
      "fn": "Attendance",
      "line": 105,
      "tag": "View",
@@ -1072,6 +1143,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 36 px, radius radii.md",
      "fn": "Attendance",
      "line": 110,
      "tag": "View",
@@ -1102,6 +1174,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.card, fill c.surface, padding 16",
      "fn": "MembershipPauses",
      "line": 33,
      "tag": "View",
@@ -1110,6 +1183,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.xl, fill c.surface, padding 18",
      "fn": "MembershipPauses",
      "line": 39,
      "tag": "View",
@@ -1118,6 +1192,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.card, fill c.surface, padding 18",
      "fn": "MembershipPauses",
      "line": 51,
      "tag": "View",
@@ -1126,6 +1201,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.card, fill c.surface, padding 16",
      "fn": "MembershipPauses",
      "line": 53,
      "tag": "View",
@@ -1155,6 +1231,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "dot 6 px",
      "fn": "TypingDot",
      "line": 37,
      "tag": "Animated.View",
@@ -1163,6 +1240,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 32 px high, radius radii.md",
      "fn": "CoachChat",
      "line": 117,
      "tag": "Pressy",
@@ -1171,6 +1249,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.md, fill c.warnSoft, padding 12",
      "fn": "CoachChat",
      "line": 145,
      "tag": "View",
@@ -1179,6 +1258,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 44 px high, radius radii.lg",
      "fn": "CoachChat",
      "line": 153,
      "tag": "Pressy",
@@ -1187,6 +1267,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius 20, fill m.me ? c.accent : c.surf",
      "fn": "CoachChat",
      "line": 159,
      "tag": "View",
@@ -1195,6 +1276,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 40 px, radius 20",
      "fn": "AudioBubble",
      "line": 37,
      "tag": "Pressy",
@@ -1203,6 +1285,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "dot 10 px",
      "fn": "Pulse",
      "line": 29,
      "tag": "Animated.View",
@@ -1211,6 +1294,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 44 px, radius radii.sm",
      "fn": "EmojiPanel",
      "line": 39,
      "tag": "Pressy",
@@ -1219,6 +1303,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 60 px high, radius 20",
      "fn": "AttachSheet",
      "line": 61,
      "tag": "Pressy",
@@ -1227,6 +1312,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius 14, fill c.warnSoft, padding 10",
      "fn": "Composer",
      "line": 156,
      "tag": "View",
@@ -1235,6 +1321,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 24 px, radius radii.sm",
      "fn": "Composer",
      "line": 187,
      "tag": "Pressy",
@@ -1243,6 +1330,7 @@
     },
     {
      "kind": "input",
+     "sig": "text input",
      "fn": "Composer",
      "line": 195,
      "tag": "TextInput",
@@ -1289,6 +1377,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.xl, fill c.accentSoft, padding 18",
      "fn": "ConfirmSession",
      "line": 80,
      "tag": "View",
@@ -1328,6 +1417,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.lg, fill c.surface2",
      "fn": "Membership",
      "line": 43,
      "tag": "View",
@@ -1438,6 +1528,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.lg, fill c.warnSoft, padding 16",
      "fn": "Login",
      "line": 153,
      "tag": "View",
@@ -1446,6 +1537,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.md, fill c.warnSoft, padding 14",
      "fn": "Login",
      "line": 201,
      "tag": "View",
@@ -1454,6 +1546,7 @@
     },
     {
      "kind": "input",
+     "sig": "text input",
      "fn": "OtpInput",
      "line": 25,
      "tag": "TextInput",
@@ -1510,6 +1603,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "dot 8 px",
      "fn": "Notifications",
      "line": 83,
      "tag": "View",
@@ -1518,6 +1612,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 52 px, radius radii.xl",
      "fn": "Notifications",
      "line": 91,
      "tag": "View",
@@ -1561,6 +1656,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "icon tile 56 px, radius 20",
      "fn": "Onboarding",
      "line": 120,
      "tag": "View",
@@ -1569,6 +1665,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 6 px high, radius radii.xs",
      "fn": "StepProgress",
      "line": 204,
      "tag": "View",
@@ -1577,6 +1674,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 108 px high, radius radii.lg",
      "fn": "GoalChoiceTile",
      "line": 282,
      "tag": "Pressy",
@@ -1585,6 +1683,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 40 px, radius 20",
      "fn": "GoalChoiceTile",
      "line": 284,
      "tag": "View",
@@ -1593,6 +1692,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 22 px, radius radii.sm",
      "fn": "GoalChoiceTile",
      "line": 288,
      "tag": "View",
@@ -1601,6 +1701,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 72 px high, radius radii.lg",
      "fn": "FacilityStep",
      "line": 303,
      "tag": "Pressy",
@@ -1609,6 +1710,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 26 px, radius 13",
      "fn": "FacilityStep",
      "line": 310,
      "tag": "View",
@@ -1617,6 +1719,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 72 px high, radius radii.lg",
      "fn": "ExpStep",
      "line": 329,
      "tag": "Pressy",
@@ -1625,6 +1728,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 26 px, radius 13",
      "fn": "ExpStep",
      "line": 335,
      "tag": "View",
@@ -1633,6 +1737,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 72 px high, radius radii.lg",
      "fn": "SchedStep",
      "line": 357,
      "tag": "Pressy",
@@ -1641,6 +1746,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 40 px, radius 20",
      "fn": "ProjectionStep",
      "line": 75,
      "tag": "View",
@@ -1649,6 +1755,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 52 px, radius radii.xl",
      "fn": "HowStep",
      "line": 129,
      "tag": "View",
@@ -1657,6 +1764,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.md, fill 'rgba(0, padding 14",
      "fn": "MealStep",
      "line": 174,
      "tag": "View",
@@ -1665,6 +1773,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 68 px, radius 34",
      "fn": "MealStep",
      "line": 178,
      "tag": "Pressy",
@@ -1673,6 +1782,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 50 px, radius 25",
      "fn": "MealStep",
      "line": 180,
      "tag": "View",
@@ -1681,6 +1791,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.card, fill c.surface, padding 16",
      "fn": "ReadyContent",
      "line": 272,
      "tag": "View",
@@ -1689,6 +1800,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.card, fill c.surface, padding 16",
      "fn": "ReadyContent",
      "line": 282,
      "tag": "View",
@@ -1697,6 +1809,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 36 px, radius radii.md",
      "fn": "ReadyContent",
      "line": 286,
      "tag": "View",
@@ -1705,6 +1818,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 40 px, radius 20",
      "fn": "HealthStep",
      "line": 322,
      "tag": "View",
@@ -1761,6 +1875,7 @@
    "hand": [
     {
      "kind": "input",
+     "sig": "text input",
      "fn": "AskCoach",
      "line": 67,
      "tag": "TextInput",
@@ -1800,6 +1915,7 @@
    "hand": [
     {
      "kind": "button or pill",
+     "sig": "button 48 px high, radius radii.card",
      "fn": "CreateWorkout",
      "line": 85,
      "tag": "Pressy",
@@ -1851,6 +1967,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius 20, fill c.surface",
      "fn": "EditPlan",
      "line": 130,
      "tag": "View",
@@ -1859,6 +1976,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 48 px high, radius radii.card",
      "fn": "EditPlan",
      "line": 149,
      "tag": "Pressy",
@@ -1918,6 +2036,7 @@
    "hand": [
     {
      "kind": "bar",
+     "sig": "bar 4 px high, radius radii.xs",
      "fn": "PlayBar",
      "line": 39,
      "tag": "View",
@@ -1926,6 +2045,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 64 px, radius 32",
      "fn": "ExerciseDetail",
      "line": 84,
      "tag": "Pressy",
@@ -1934,6 +2054,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.lg, fill c.surface",
      "fn": "ExerciseDetail",
      "line": 97,
      "tag": "View",
@@ -1974,6 +2095,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "icon tile 36 px, radius radii.md",
      "fn": "WorkoutHistory",
      "line": 30,
      "tag": "View",
@@ -2019,6 +2141,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.xl, fill c.surface",
      "fn": "NumField",
      "line": 38,
      "tag": "View",
@@ -2027,6 +2150,7 @@
     },
     {
      "kind": "input",
+     "sig": "text input",
      "fn": "NumField",
      "line": 39,
      "tag": "TextInput",
@@ -2035,6 +2159,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 60 px high, radius 14",
      "fn": "LogFood",
      "line": 142,
      "tag": "Pressy",
@@ -2043,6 +2168,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 44 px high, radius radii.lg",
      "fn": "LogFood",
      "line": 204,
      "tag": "Pressy",
@@ -2051,6 +2177,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 56 px, radius 20",
      "fn": "LogFood",
      "line": 232,
      "tag": "View",
@@ -2059,6 +2186,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius 20, fill c.surface2",
      "fn": "LogFood",
      "line": 278,
      "tag": "View",
@@ -2138,6 +2266,7 @@
    "hand": [
     {
      "kind": "bar",
+     "sig": "bar 5 px high, radius radii.xs",
      "fn": "ThemeTile",
      "line": 20,
      "tag": "View",
@@ -2146,6 +2275,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 5 px high, radius radii.xs",
      "fn": "ThemeTile",
      "line": 25,
      "tag": "View",
@@ -2154,6 +2284,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 5 px high, radius radii.xs",
      "fn": "ThemeTile",
      "line": 26,
      "tag": "View",
@@ -2162,6 +2293,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 16 px, radius 8",
      "fn": "ThemeTile",
      "line": 37,
      "tag": "View",
@@ -2187,6 +2319,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.card, fill c.warnSoft, padding 18",
      "fn": "DeleteAccount",
      "line": 35,
      "tag": "View",
@@ -2221,6 +2354,7 @@
    "hand": [
     {
      "kind": "button or pill",
+     "sig": "button 60 px high, radius 20",
      "fn": "PhotoSheet",
      "line": 65,
      "tag": "Pressy",
@@ -2292,6 +2426,7 @@
    "hand": [
     {
      "kind": "bar",
+     "sig": "bar 8 px high, radius radii.xs",
      "fn": "ExportData",
      "line": 55,
      "tag": "View",
@@ -2328,6 +2463,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.xl, fill c.surface, padding 18",
      "fn": "ConnectedApps",
      "line": 44,
      "tag": "View",
@@ -2336,6 +2472,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 56 px, radius radii.md",
      "fn": "ConnectedApps",
      "line": 46,
      "tag": "View",
@@ -2344,6 +2481,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "dot 8 px",
      "fn": "ConnectedApps",
      "line": 52,
      "tag": "View",
@@ -2352,6 +2490,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 44 px, radius 15",
      "fn": "ConnectedApps",
      "line": 71,
      "tag": "View",
@@ -2360,6 +2499,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 36 px, radius radii.md",
      "fn": "ConnectedApps",
      "line": 87,
      "tag": "View",
@@ -2421,6 +2561,7 @@
    "hand": [
     {
      "kind": "chip",
+     "sig": "chip 24 px high, radius radii.sm",
      "fn": "Profile",
      "line": 78,
      "tag": "View",
@@ -2429,6 +2570,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 44 px high, radius radii.lg",
      "fn": "Profile",
      "line": 80,
      "tag": "Pressy",
@@ -2437,6 +2579,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 64 px high, radius radii.lg",
      "fn": "Profile",
      "line": 100,
      "tag": "Pressy",
@@ -2445,6 +2588,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 84 px high, radius radii.lg",
      "fn": "GoalSummaryTile",
      "line": 141,
      "tag": "Pressy",
@@ -2453,6 +2597,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 196 px high, radius radii.xl",
      "fn": "TrackerPromo",
      "line": 157,
      "tag": "Pressy",
@@ -2605,6 +2750,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "icon tile 24 px, radius radii.sm",
      "fn": "Option",
      "line": 21,
      "tag": "View",
@@ -2724,6 +2870,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.xl, fill c.surface",
      "fn": "LiftDetail",
      "line": 53,
      "tag": "View",
@@ -2754,6 +2901,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.xl, fill c.surface, padding 18",
      "fn": "MetricDetail",
      "line": 62,
      "tag": "View",
@@ -2762,6 +2910,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 36 px, radius radii.md",
      "fn": "MetricDetail",
      "line": 64,
      "tag": "View",
@@ -2770,6 +2919,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.lg, fill c.surface2, padding 16",
      "fn": "MetricDetail",
      "line": 79,
      "tag": "View",
@@ -2831,6 +2981,7 @@
    "hand": [
     {
      "kind": "button or pill",
+     "sig": "button 210 px high, radius radii.lg",
      "fn": "PhotoTile",
      "line": 29,
      "tag": "Pressy",
@@ -2839,6 +2990,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 44 px, radius radii.lg",
      "fn": "Compare",
      "line": 62,
      "tag": "View",
@@ -2870,6 +3022,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.card, fill c.surface",
      "fn": "BadgeCard",
      "line": 29,
      "tag": "View",
@@ -2878,6 +3031,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.card, fill c.surface, padding 16",
      "fn": "Streaks",
      "line": 70,
      "tag": "View",
@@ -2886,6 +3040,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius 20, fill c.accentSoft, padding 14",
      "fn": "Streaks",
      "line": 83,
      "tag": "View",
@@ -2894,6 +3049,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 24 px, radius radii.sm",
      "fn": "BadgeArt",
      "line": 81,
      "tag": "View",
@@ -2933,6 +3089,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "icon tile 22 px, radius radii.sm",
      "fn": "TodayMock",
      "line": 45,
      "tag": "View",
@@ -2941,6 +3098,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 20 px, radius radii.sm",
      "fn": "TodayMock",
      "line": 48,
      "tag": "View",
@@ -2949,6 +3107,7 @@
     },
     {
      "kind": "chip",
+     "sig": "chip 30 px high, radius 15",
      "fn": "TodayMock",
      "line": 76,
      "tag": "View",
@@ -2957,6 +3116,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 18 px, radius 9",
      "fn": "WorkoutMock",
      "line": 93,
      "tag": "View",
@@ -2965,6 +3125,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 6 px high, radius radii.xs",
      "fn": "ProgressMock",
      "line": 119,
      "tag": "View",
@@ -2973,6 +3134,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 28 px, radius 14",
      "fn": "ProgressMock",
      "line": 128,
      "tag": "View",
@@ -2981,6 +3143,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 28 px, radius radii.xs",
      "fn": "Segment",
      "line": 157,
      "tag": "Pressy",
@@ -3016,6 +3179,7 @@
    "hand": [
     {
      "kind": "bar",
+     "sig": "bar 3 px high, radius radii.xs",
      "fn": "Bars",
      "line": 36,
      "tag": "View",
@@ -3024,6 +3188,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 48 px high, radius radii.card",
      "fn": "Workout",
      "line": 227,
      "tag": "Pressy",
@@ -3032,6 +3197,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 38 px high, radius 19",
      "fn": "Workout",
      "line": 314,
      "tag": "Pressy",
@@ -3040,6 +3206,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 44 px, radius radii.lg",
      "fn": "Workout",
      "line": 322,
      "tag": "Pressy",
@@ -3048,6 +3215,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 56 px, radius radii.xl",
      "fn": "Workout",
      "line": 350,
      "tag": "Pressy",
@@ -3056,6 +3224,7 @@
     },
     {
      "kind": "chip",
+     "sig": "chip 24 px high, radius radii.sm",
      "fn": "SetRow",
      "line": 93,
      "tag": "View",
@@ -3064,6 +3233,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 32 px, radius radii.md",
      "fn": "SetRow",
      "line": 97,
      "tag": "View",
@@ -3072,6 +3242,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 44 px, radius radii.lg",
      "fn": "SetRow",
      "line": 108,
      "tag": "Pressy",
@@ -3080,6 +3251,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 26 px, radius 13",
      "fn": "PopCheck",
      "line": 39,
      "tag": "Animated.View",
@@ -3088,6 +3260,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 52 px, radius radii.xl",
      "fn": "FinishScreen",
      "line": 97,
      "tag": "Pressy",
@@ -3096,6 +3269,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 50 px high, radius 25",
      "fn": "FinishScreen",
      "line": 127,
      "tag": "Pressy",
@@ -3104,6 +3278,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 64 px, radius radii.sm",
      "fn": "MoveThumb",
      "line": 51,
      "tag": "Pressy",
@@ -3112,6 +3287,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 26 px, radius 13",
      "fn": "MoveThumb",
      "line": 53,
      "tag": "View",
@@ -3120,6 +3296,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 44 px high, radius radii.lg",
      "fn": "FinishPill",
      "line": 65,
      "tag": "Pressy",
@@ -3128,6 +3305,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 32 px high, radius radii.md",
      "fn": "ClipCardInner",
      "line": 98,
      "tag": "Pressy",
@@ -3136,6 +3314,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 40 px, radius 20",
      "fn": "ClipCardInner",
      "line": 104,
      "tag": "Pressy",
@@ -3144,6 +3323,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 56 px high, radius 20",
      "fn": "ClipRow",
      "line": 116,
      "tag": "Pressy",
@@ -3152,6 +3332,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 44 px, radius radii.sm",
      "fn": "ClipRow",
      "line": 118,
      "tag": "View",
@@ -3160,6 +3341,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 22 px, radius radii.sm",
      "fn": "ClipRow",
      "line": 120,
      "tag": "View",
@@ -3168,6 +3350,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 4 px high, radius radii.xs",
      "fn": "NewExercise",
      "line": 149,
      "tag": "View",
@@ -3176,6 +3359,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 44 px, radius radii.lg",
      "fn": "NewExercise",
      "line": 163,
      "tag": "Pressy",
@@ -3184,6 +3368,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 56 px, radius radii.xl",
      "fn": "NewExercise",
      "line": 186,
      "tag": "Pressy",
@@ -3192,6 +3377,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius 20, fill c.surface2, padding 16",
      "fn": "FormTipsSheet",
      "line": 62,
      "tag": "View",
@@ -3200,6 +3386,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 56 px high, radius radii.xl",
      "fn": "WorkoutSwapSheet",
      "line": 85,
      "tag": "Pressy",
@@ -3208,6 +3395,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 60 px high, radius radii.md",
      "fn": "WorkoutSwapSheet",
      "line": 95,
      "tag": "Pressy",
@@ -3318,6 +3506,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "dot 8 px",
      "fn": "GymHeader",
      "line": 69,
      "tag": "View",
@@ -3342,6 +3531,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.xl, fill c.surface2, padding 4",
      "fn": "UnitPill",
      "line": 126,
      "tag": "View",
@@ -3350,6 +3540,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 44 px high, radius radii.lg",
      "fn": "UnitPill",
      "line": 130,
      "tag": "Pressy",
@@ -3369,6 +3560,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.xl, fill c.surface2, padding 4",
      "fn": "Segmented",
      "line": 57,
      "tag": "View",
@@ -3385,6 +3577,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "icon tile 32 px, radius radii.md",
      "fn": "CardTitle",
      "line": 50,
      "tag": "View",
@@ -3407,6 +3600,7 @@
    "hand": [
     {
      "kind": "button or pill",
+     "sig": "button 8 px high, radius size",
      "fn": "CircleNav",
      "line": 63,
      "tag": "Pressable",
@@ -3423,6 +3617,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "icon tile 44 px, radius radii.lg",
      "fn": "ProgrammeSwitcherSheet",
      "line": 50,
      "tag": "View",
@@ -3443,6 +3638,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "icon tile 26 px, radius 13",
      "fn": "Switch",
      "line": 44,
      "tag": "Animated.View",
@@ -3451,6 +3647,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius 20, fill bg",
      "fn": "Note",
      "line": 75,
      "tag": "View",
@@ -3542,6 +3739,7 @@
    "hand": [
     {
      "kind": "button or pill",
+     "sig": "button 60 px high, radius 30",
      "fn": "StreakChip",
      "line": 36,
      "tag": "Pressy",
@@ -3550,6 +3748,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 40 px, radius 20",
      "fn": "StreakChip",
      "line": 38,
      "tag": "View",
@@ -3569,6 +3768,7 @@
    "hand": [
     {
      "kind": "icon button",
+     "sig": "icon button 30 px, radius 15",
      "fn": "StepsTile",
      "line": 57,
      "tag": "Pressy",
@@ -3577,6 +3777,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 30 px, radius 15",
      "fn": "StepsPreview",
      "line": 85,
      "tag": "View",
@@ -3585,6 +3786,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 36 px high, radius radii.md",
      "fn": "StepsSheet",
      "line": 240,
      "tag": "Pressy",
@@ -3616,6 +3818,7 @@
    "hand": [
     {
      "kind": "button or pill",
+     "sig": "button 44 px high, radius radii.lg",
      "fn": "AddButton",
      "line": 46,
      "tag": "Pressy",
@@ -3636,6 +3839,7 @@
    "hand": [
     {
      "kind": "button or pill",
+     "sig": "button 34 px high, radius radii.md",
      "fn": "QuickLogSheet",
      "line": 145,
      "tag": "Pressy",
@@ -3662,6 +3866,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.md, fill c.surface2, padding 14",
      "fn": "NutritionSheet",
      "line": 207,
      "tag": "View",
@@ -3670,6 +3875,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.md, fill c.surface2",
      "fn": "HistSheet",
      "line": 254,
      "tag": "View",
@@ -3735,6 +3941,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius 20, fill bg",
      "fn": "InfoBox",
      "line": 62,
      "tag": "View",
@@ -3756,6 +3963,7 @@
    "hand": [
     {
      "kind": "icon button",
+     "sig": "icon button 44 px, radius radii.lg",
      "fn": "RangeBar",
      "line": 37,
      "tag": "Pressy",
@@ -3764,6 +3972,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 44 px, radius radii.lg",
      "fn": "RangeBar",
      "line": 44,
      "tag": "Pressy",
@@ -3772,6 +3981,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 32 px high, radius radii.md",
      "fn": "RangeBar",
      "line": 50,
      "tag": "Pressy",
@@ -3780,6 +3990,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.md, fill c.surface2, padding 2",
      "fn": "RangeBarSlim",
      "line": 75,
      "tag": "View",
@@ -3788,6 +3999,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 32 px high, radius radii.md",
      "fn": "RangeBarSlim",
      "line": 79,
      "tag": "Pressy",
@@ -3796,6 +4008,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 44 px, radius radii.lg",
      "fn": "CalendarSheet",
      "line": 113,
      "tag": "Pressy",
@@ -3804,6 +4017,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 44 px, radius radii.lg",
      "fn": "CalendarSheet",
      "line": 115,
      "tag": "Pressy",
@@ -3812,6 +4026,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 40 px, radius 20",
      "fn": "CalendarSheet",
      "line": 126,
      "tag": "Pressy",
@@ -3820,6 +4035,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "dot 4 px",
      "fn": "CalendarSheet",
      "line": 129,
      "tag": "View",
@@ -3828,6 +4044,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 3 px high, radius radii.xs",
      "fn": "TrendChart",
      "line": 177,
      "tag": "View",
@@ -3885,6 +4102,7 @@
    "hand": [
     {
      "kind": "input",
+     "sig": "text input",
      "fn": "BigNumber",
      "line": 46,
      "tag": "TextInput",
@@ -3893,6 +4111,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 56 px high, radius radii.md",
      "fn": "WeightScreen",
      "line": 220,
      "tag": "Pressy",
@@ -3934,6 +4153,7 @@
    "hand": [
     {
      "kind": "bar",
+     "sig": "bar 2 px high, radius 1",
      "fn": "Ruler",
      "line": 106,
      "tag": "View",
@@ -3942,6 +4162,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 3 px high, radius radii.xs",
      "fn": "Ruler",
      "line": 121,
      "tag": "View",
@@ -3976,6 +4197,7 @@
    "hand": [
     {
      "kind": "icon badge",
+     "sig": "icon tile 38 px, radius 19",
      "fn": "GymMap",
      "line": 44,
      "tag": "View",
@@ -3984,6 +4206,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 34 px, radius radii.md",
      "fn": "GymMap",
      "line": 51,
      "tag": "View",
@@ -3992,6 +4215,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 16 px, radius 8",
      "fn": "GymMap",
      "line": 52,
      "tag": "View",
@@ -4008,6 +4232,7 @@
    "hand": [
     {
      "kind": "icon button",
+     "sig": "icon button 64 px, radius 32",
      "fn": "Clip",
      "line": 33,
      "tag": "Pressy",
@@ -4016,6 +4241,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 44 px, radius radii.lg",
      "fn": "Clip",
      "line": 38,
      "tag": "Pressy",
@@ -4034,6 +4260,7 @@
    "hand": [
     {
      "kind": "card",
+     "sig": "card radius radii.md, fill fixed.white, padding 10",
      "fn": "PanelCard",
      "line": 15,
      "tag": "View",
@@ -4042,6 +4269,7 @@
     },
     {
      "kind": "chip",
+     "sig": "chip 22 px high, radius radii.sm with a line",
      "fn": "PanelCard",
      "line": 21,
      "tag": "View",
@@ -4050,6 +4278,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.md, fill P.tint, padding 2",
      "fn": "Choice",
      "line": 39,
      "tag": "View",
@@ -4058,6 +4287,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 28 px high, radius 14",
      "fn": "Choice",
      "line": 43,
      "tag": "Pressable",
@@ -4066,6 +4296,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 28 px high, radius 14",
      "fn": "Choice",
      "line": 55,
      "tag": "Pressable",
@@ -4074,6 +4305,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 28 px high, radius 14",
      "fn": "Actions",
      "line": 74,
      "tag": "Pressable",
@@ -4082,6 +4314,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button auto px high, radius radii.sm",
      "fn": "QuickTime",
      "line": 85,
      "tag": "Pressable",
@@ -4090,6 +4323,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 30 px high, radius 15",
      "fn": "ScreenItem",
      "line": 98,
      "tag": "Pressable",
@@ -4098,6 +4332,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 32 px high, radius radii.sm",
      "fn": "Dropdown",
      "line": 111,
      "tag": "Pressable",
@@ -4106,6 +4341,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 28 px high, radius 14",
      "fn": "Dropdown",
      "line": 124,
      "tag": "Pressable",
@@ -4114,6 +4350,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 30 px high, radius 15",
      "fn": "SwitchChip",
      "line": 139,
      "tag": "Pressable",
@@ -4122,6 +4359,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "dot 6 px",
      "fn": "SwitchChip",
      "line": 141,
      "tag": "View",
@@ -4130,6 +4368,7 @@
     },
     {
      "kind": "button or pill",
+     "sig": "button 32 px high, radius radii.md",
      "fn": "ActionChip",
      "line": 150,
      "tag": "Pressable",
@@ -4146,6 +4385,7 @@
    "hand": [
     {
      "kind": "bar",
+     "sig": "bar 4 px high, radius radii.xs",
      "fn": "TimeSlider",
      "line": 116,
      "tag": "View",
@@ -4154,6 +4394,7 @@
     },
     {
      "kind": "bar",
+     "sig": "bar 4 px high, radius radii.xs",
      "fn": "TimeSlider",
      "line": 117,
      "tag": "View",
@@ -4162,6 +4403,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "dot 6 px",
      "fn": "TimeSlider",
      "line": 119,
      "tag": "View",
@@ -4170,6 +4412,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 22 px, radius radii.sm",
      "fn": "TimeSlider",
      "line": 120,
      "tag": "View",
@@ -4178,6 +4421,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius radii.md, fill fixed.white",
      "fn": "PanelBody",
      "line": 310,
      "tag": "View",
@@ -4186,6 +4430,7 @@
     },
     {
      "kind": "icon badge",
+     "sig": "icon tile 30 px, radius 15",
      "fn": "PanelBody",
      "line": 311,
      "tag": "View",
@@ -4194,6 +4439,7 @@
     },
     {
      "kind": "icon button",
+     "sig": "icon button 30 px, radius 15",
      "fn": "PanelBody",
      "line": 316,
      "tag": "Pressable",
@@ -4202,6 +4448,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius 20, fill fixed.white, padding 12",
      "fn": "useOpenEdgeCases",
      "line": 345,
      "tag": "View",
@@ -4210,6 +4457,7 @@
     },
     {
      "kind": "card",
+     "sig": "card radius 20, fill fixed.white, padding 12",
      "fn": "EdgeTab",
      "line": 353,
      "tag": "View",
