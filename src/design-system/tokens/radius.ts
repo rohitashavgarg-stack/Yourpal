@@ -1,3 +1,9 @@
 // Radius tokens.
 // `radius` is the object that was in src/theme/tokens.ts. Kept as it was (components/ui.tsx reads radius.lg).
 export const radius = { sm: 14, md: 20, lg: 28, pill: 999 };
+
+// Radius scale, 6 steps (5 sizes and the pill). The sizes are values that are used a lot (counts from docs/design-system-audit.md section 3.4):
+// 4, 12 (18 uses), 18 (44), 22 (63), 28 (38), and 999 for a full pill.
+// Values 1 to 2 px from a step snap to it in the codemod; 20 sits between 18 and 22 and 15 sits between 12 and 18, so those go to docs/tokens-review.md.
+export const radii = { xs: 4, sm: 12, md: 18, lg: 22, xl: 28, pill: 999 } as const;
+export type RadiusStep = keyof typeof radii;
