@@ -5,10 +5,8 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Gym (routes)
 
 - Files: `app/(tabs)/gym.tsx`
-- Library components used: Txt x20, FadeIn x7, Row x3, Pressy x1
-- Hand-built:
-  - `app/(tabs)/gym.tsx:51` icon badge: `<View key={i} style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: v && `
-  - `app/(tabs)/gym.tsx:70` icon badge: `<View style={{ width: 52, height: 52, borderRadius: radii.md, backgroundColor: c.tNutri, a`
+- Library components used: Txt x20, FadeIn x7, Row x3, StatusDot x1, IconBadge x1, Pressy x1
+- Hand-built: none
 
 ## Today (routes)
 

@@ -19,6 +19,8 @@ import { MembershipCard as MembershipStrip, useMembershipNotice } from '@/featur
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { StatusDot } from '@/design-system/primitives/StatusDot';
 
 function GymMembership() {
   return <MembershipStrip n={useMembershipNotice()} />;
@@ -48,7 +50,7 @@ function AttendanceCard({ awaiting }: { awaiting: boolean }) {
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>visits this month</Txt>
         </View>
         <View importantForAccessibility="no-hide-descendants" style={{ width: 10 * 8 + 9 * 3, flexDirection: 'row', flexWrap: 'wrap', gap: 3 }}>
-          {cells.map((v, i) => <View key={i} style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: v && v !== 'x' ? (v === 'h' ? c.surface3 : c.accent) : c.surface2 }} />)}
+          {cells.map((v, i) => <StatusDot key={i} size={8} color={v && v !== 'x' ? (v === 'h' ? c.surface3 : c.accent) : c.surface2} />)}
         </View>
       </Row>
       <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last: Wed 24 · 6:42 pm · Location</Txt>
@@ -67,7 +69,7 @@ function AssessCard() {
     <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${big}. ${sub}`} style={{ gap: 8 }}>
       <CardTitle title="Assessments" right={due ? <Tag label="Due this week" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>View ›</Txt>} />
       <Row style={{ gap: 14 }}>
-        <View style={{ width: 52, height: 52, borderRadius: radii.md, backgroundColor: c.tNutri, alignItems: 'center', justifyContent: 'center' }}><ClipboardCheck size={26} strokeWidth={1.8} color={c.cNutri} /></View>
+        <IconBadge size={52} radius={radii.md} bg={c.tNutri}><ClipboardCheck size={26} strokeWidth={1.8} color={c.cNutri} /></IconBadge>
         <View style={{ flex: 1, minWidth: 0 }}>
           <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34 }}>{big}</Txt>
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{sub}</Txt>

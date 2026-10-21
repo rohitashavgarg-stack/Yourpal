@@ -3,8 +3,8 @@
   "id": "route:/gym",
   "screen": "Gym",
   "group": "Routes",
-  "status": "not started",
-  "hand": 2,
+  "status": "done",
+  "hand": 0,
   "files": [
    "app/(tabs)/gym.tsx"
   ]

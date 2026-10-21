@@ -1,1 +1,5 @@
-{}
+{
+ "route:/gym": {
+  "status": "done"
+ }
+}

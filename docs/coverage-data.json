@@ -6,28 +6,13 @@
    "files": [
     "app/(tabs)/gym.tsx"
    ],
-   "hand": [
-    {
-     "kind": "icon badge",
-     "fn": "AttendanceCard",
-     "line": 51,
-     "tag": "View",
-     "text": "<View key={i} style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: v && v !== 'x' ? (v === '",
-     "file": "app/(tabs)/gym.tsx"
-    },
-    {
-     "kind": "icon badge",
-     "fn": "AssessCard",
-     "line": 70,
-     "tag": "View",
-     "text": "<View style={{ width: 52, height: 52, borderRadius: radii.md, backgroundColor: c.tNutri, alignItems: 'center',",
-     "file": "app/(tabs)/gym.tsx"
-    }
-   ],
+   "hand": [],
    "ds": {
     "FadeIn": 7,
     "Txt": 20,
     "Row": 3,
+    "StatusDot": 1,
+    "IconBadge": 1,
     "Pressy": 1
    },
    "sheets": [],
