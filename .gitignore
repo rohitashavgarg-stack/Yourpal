@@ -43,3 +43,4 @@ yarn-error.*
 .visual-diff/
 .visual-flows-before/
 .visual-flows-after/
+.visual-cards/
