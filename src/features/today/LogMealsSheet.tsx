@@ -1,62 +1,51 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Check } from '@/lib/icons';
-import { Button, Pressy, Row, Txt } from '@/components/ui';
-import { fmtT, MEALS } from '@/lib/data';
-import { mealLog, useDomain } from '@/lib/domain';
-import { useMeals } from '@/lib/domain';
+import { Button, Row, Txt } from '@/components/ui';
+import { CheckCircle, FoodMark } from '@/components/bits';
+import { fmtT, MealId, MEALS } from '@/lib/data';
+import { itemNow, mealLog, useDomain, useMeals } from '@/lib/domain';
 import { useLogGate } from '@/lib/logGate';
 import { useOverlay } from '@/components/Overlay';
 import { haptic } from '@/lib/haptics';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { mealKcal, mealView } from './meals';
 
-// The "Log meal" card in the updates opens this: every meal of the day in a list, one tick each. A tick logs the whole meal as eaten,
-// a second tap takes it back. Each meal can still be opened on the meals card to log single items or something else.
-export function LogMealsSheet() {
-  const { c } = useTheme();
+// The "Log meal" card in the updates opens this for the meal that is due (lunch, dinner...): its food items, each with its own tick,
+// like the meals card. Ticking an item logs it as eaten, a second tap takes it back.
+export function LogMealsSheet({ mealId }: { mealId: MealId }) {
+  const { c, isDark } = useTheme();
   const { d } = useDomain();
-  const { patch } = useMeals();
+  const { toggleItem } = useMeals();
   const { gate } = useLogGate();
   const { closeSheet } = useOverlay();
-  const toggle = gate((id: (typeof MEALS)[number]['id']) => {
-    const m = MEALS.find((q) => q.id === id)!;
-    const x = mealLog(d, id);
-    const full = x.eaten.length === m.items.length;
-    haptic.light();
-    if (full) patch(id, { eaten: [] });
-    else patch(id, { eaten: m.items.map((_, k) => k), skip: false, at: x.at ?? d.min });
-  });
+  const m = MEALS.find((q) => q.id === mealId)!;
+  const x = mealLog(d, mealId);
+  const tick = gate((k: number) => { haptic.light(); toggleItem(mealId, k); });
+  const eaten = x.eaten.length;
   return (
     <View style={{ gap: 12 }}>
       <View style={{ gap: 2, paddingHorizontal: 4 }}>
-        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 24, lineHeight: 32, letterSpacing: -0.4 }}>Log your meals</Txt>
-        <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>Tick the meals you have eaten.</Txt>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 24, lineHeight: 32, letterSpacing: -0.4 }}>{`Log your ${m.n.toLowerCase()}`}</Txt>
+        <Txt muted style={{ fontSize: 14, lineHeight: 20 }}>{`${fmtT(m.t).full}. Tick what you ate.`}</Txt>
       </View>
-      <View>
-        {MEALS.map((m, i) => {
-          const x = mealLog(d, m.id);
-          const v = mealView(d, m);
-          const done = x.eaten.length === m.items.length;
-          const skipped = !!x.skip;
+      <View style={{ gap: 4 }}>
+        {m.items.map((it, k) => {
+          const on = x.eaten.includes(k);
+          const n = itemNow(d, mealId, k);
           return (
-            <Pressy key={m.id} accessibilityRole="checkbox" accessibilityState={{ checked: done }} accessibilityLabel={`${m.n}, ${fmtT(m.t).full}`} scaleTo={0.98} onPress={() => toggle(m.id)}
-              style={{ minHeight: 64, flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 4, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
-              {done
-                ? <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={16} color={c.bg} strokeWidth={3} /></View>
-                : <View style={{ width: 28, height: 28, borderRadius: 14, borderWidth: 1.5, borderStyle: skipped ? 'dashed' : 'solid', borderColor: c.muted }} />}
-              <View style={{ flex: 1 }}>
-                <Txt style={{ fontFamily: font.medium, fontSize: 16, lineHeight: 23 }}>{m.n}</Txt>
-                <Txt muted style={{ fontSize: 13, lineHeight: 19 }}>{skipped ? 'Skipped' : `${fmtT(m.t).full}, ${v.any ? v.kcal : mealKcal(m)} kcal`}</Txt>
+            <Row key={k} style={{ gap: 10, minHeight: 56, paddingLeft: 12, paddingRight: 4, paddingVertical: 4, borderRadius: 18, backgroundColor: on ? (isDark ? '#1E4A3F' : c.goodSoft) : c.surface2, borderWidth: on ? 1 : 0, borderColor: c.good + '66' }}>
+              <FoodMark type={it.type} />
+              <View style={{ flex: 1, minWidth: 0 }}>
+                <Txt style={{ fontFamily: font.medium }}>{n.n}</Txt>
+                <Txt v="caption">{it.q}</Txt>
               </View>
-            </Pressy>
+              <Txt v="caption" style={{ alignSelf: 'center' }}>{`${n.k} kcal`}</Txt>
+              <CheckCircle on={on} size={28} tone="good" label={`${on ? 'Unmark' : 'Mark'} ${n.n} as eaten`} onPress={() => tick(k)} />
+            </Row>
           );
         })}
       </View>
-      <Row>
-        <View style={{ flex: 1 }}><Button label="Done" onPress={() => closeSheet()} /></View>
-      </Row>
+      <Button label={eaten ? 'Done' : 'Close'} onPress={() => closeSheet()} />
     </View>
   );
 }

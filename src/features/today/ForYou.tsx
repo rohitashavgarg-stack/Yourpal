@@ -96,7 +96,7 @@ export function useForYou(): Item[] {
     const meal = nm ? MEALS.find((m) => m.id === nm) : undefined;
     if (meal && d.min >= meal.t - 30) {
       const late = d.min > meal.t + 60;
-      out.push({ key: 'log-meal', title: 'Log your ' + meal.n.toLowerCase(), body: late ? 'It was due at ' + fmtT(meal.t).full + '. Log it, or skip it if you missed it.' : 'It is time for ' + meal.n.toLowerCase() + '. Log it when you eat.', tone: 'accent', icon: UtensilsCrossed, btn: 'Log meal', act: () => openSheet(<LogMealsSheet />, { label: 'Log meals' }) });
+      out.push({ key: 'log-meal', title: 'Log your ' + meal.n.toLowerCase(), body: late ? 'It was due at ' + fmtT(meal.t).full + '. Log it, or skip it if you missed it.' : 'It is time for ' + meal.n.toLowerCase() + '. Log it when you eat.', tone: 'accent', icon: UtensilsCrossed, btn: 'Log meal', act: () => openSheet(<LogMealsSheet mealId={meal.id} />, { label: 'Log meal' }) });
     }
     const planned = plannedMin(state.profile.time);
     if (workoutState(d) === 'todo' && d.min - planned > MISSED_AFTER && !missedWk.answer && !live.some((u) => u.key === 'log')) {
