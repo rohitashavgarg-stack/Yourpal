@@ -33,13 +33,13 @@ export function TodayGreeting() {
     day: new Date().getDate(), clock: (m: number) => fmtT(m).full, noPlan: !planStore.use().assigned,
   };
   const ctx = forceCtx(base, g.state);
-  const { top, lead, hl } = greeting(ctx, first);
+  const { top, lead, hl, tail } = greeting(ctx, first);
   const size = top.length > 19 ? 28 : 32; // "Good afternoon, Rohitashav" would wrap at 32, so both lines step down together
   const big = { fontFamily: font.regular, fontSize: size, lineHeight: Math.round(size * 1.25), letterSpacing: -0.6, color: c.muted } as const; // both lines: light, grey; the key phrase is brighter
   return (
-    <View accessible accessibilityLabel={`${top}. ${lead ? lead + ' ' : ''}${hl}`} style={{ paddingHorizontal: 4, gap: 0 }}>
+    <View accessible accessibilityLabel={`${top}. ${lead ? lead + ' ' : ''}${hl}${tail ?? ''}`} style={{ paddingHorizontal: 4, gap: 0 }}>
       <Txt style={big}>{top}</Txt>
-      <Txt accessibilityRole="header" style={big}>{lead ? lead + ' ' : ''}<Txt style={[big, { color: c.ink }]}>{hl}</Txt></Txt>
+      <Txt accessibilityRole="header" style={big}>{lead ? lead + ' ' : ''}<Txt style={[big, { color: c.ink }]}>{hl}</Txt>{tail ?? ''}</Txt>
     </View>
   );
 }

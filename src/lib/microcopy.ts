@@ -17,7 +17,8 @@ export type TodayCtx = {
 
 // The top of Today is two lines in one quiet grey: a greeting with the name ("Hey! Rohitashav"), then a line whose key phrase is brighter
 // ("It's your" in grey, "Leg day" in white). The name is only in the first line. The day of the month rotates the greeting wording.
-export type Greeting = { top: string; lead: string; hl: string };
+// tail: optional grey words after the bright phrase ("1 of 4 workouts" + " this week").
+export type Greeting = { top: string; lead: string; hl: string; tail?: string };
 
 const pick = (day: number, key: number, list: string[]) => list[(day + key) % list.length];
 // the time of day first, then the shorter ones; the screen shrinks both lines a little when the first one is long
@@ -33,7 +34,7 @@ export function greeting(c: TodayCtx, first: string): Greeting {
   if (c.workout === 'done') return c.weeks > 0 ? g(['Good job! {n}', 'Well done! {n}'], 3, '', `${c.weeks} week streak`) : g(['Good job! {n}', 'Well done! {n}'], 3, 'Workout', 'done');
   if (c.workout === 'todo' && c.min < c.planned) return g(timeGreet(c), 4, "It's your", 'Leg day');
   if (c.nextMeal) return g(timeGreet(c), 5, 'Next up is', c.nextMeal);
-  return g(timeGreet(c), 6, '', `${c.weekDone} of ${c.target} this week`);
+  return { ...g(timeGreet(c), 6, '', `${c.weekDone} of ${c.target} workouts`), tail: ' this week' };
 }
 
 // The demo panel previews every state of the greeting. Each one is a context that makes it return that moment's text.
