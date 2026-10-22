@@ -37,7 +37,7 @@ if (!files.length) { console.log('No changed TypeScript files under src/.'); pro
 const out = path.join(os.tmpdir(), `yp-lint-${process.pid}.json`);
 try {
   execSync(`npx eslint -f json -o "${out}" ${files.map((f) => `"${f}"`).join(' ')}`, { stdio: 'inherit', env: { ...process.env, YP_LINT_STRICT: '1' } });
-} catch { /* eslint exits 1 when it finds errors; the report is still written */ }
+} catch { /* the linter exits 1 when it finds errors; the report is still written */ }
 const report = JSON.parse(fs.readFileSync(out, 'utf8'));
 fs.rmSync(out, { force: true });
 

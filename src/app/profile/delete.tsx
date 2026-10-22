@@ -34,7 +34,7 @@ export default function DeleteAccount() {
     <SubPage title="Delete account" fallback="/profile">
       <View style={{ padding: 18, borderRadius: radii.card, backgroundColor: c.warnSoft, gap: 6 }}>
         <Txt style={{ fontFamily: font.semibold, color: c.warn }}>Delete your YourPal account</Txt>
-        <Txt style={{ fontSize: fontSizes.md, color: c.warn }}>You'll leave every programme and lose your history in the app after 30 days. You can cancel any time before then.</Txt>
+        <Txt style={{ fontSize: fontSizes.md, color: c.warn }}>You&apos;ll leave every programme and lose your history in the app after 30 days. You can cancel any time before then.</Txt>
       </View>
       <Label>Type DELETE to confirm</Label>
       <View style={{ marginTop: -6 }}>

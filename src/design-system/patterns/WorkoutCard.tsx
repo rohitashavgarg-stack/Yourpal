@@ -141,7 +141,7 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: fixed.white }}>{moved ? `${name} moved to tomorrow` : `${name} skipped today`}</Txt>
             <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: W60 }}>{moved ? 'Coach Vikram is told' : 'Your plan picks up tomorrow'}</Txt>
           </View>
-          <Pressy accessibilityRole="button" accessibilityLabel="Undo" onPress={onUndo} style={{ height: 34, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
+          <Pressy accessibilityRole="button" accessibilityLabel="Undo" onPress={onUndo} hitSlop={{ top: 5, bottom: 5 }} style={{ height: 34, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: fixed.white }}>Undo</Txt>
           </Pressy>
         </Row>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability -- reanimated shared values are written from gesture and animation callbacks */
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { scheduleOnRN } from 'react-native-worklets';

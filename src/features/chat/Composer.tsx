@@ -13,6 +13,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { EMOJI_GROUPS } from './emoji';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { IconButton } from '@/design-system/primitives/Button';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const fmt = (ms: number) => {
@@ -184,10 +185,9 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
               <FadeIn exiting={fadeOut()} style={{ padding: 10, paddingBottom: 0, flexDirection: 'row', zIndex: 2 }}>
                 <View>
                   <Image source={{ uri: img }} accessibilityIgnoresInvertColors style={{ width: 76, height: 76, borderRadius: radii.md, backgroundColor: c.surface3 }} />
-                  <Pressy accessibilityRole="button" accessibilityLabel="Remove photo" onPress={() => setImg(undefined)} scaleTo={0.9} hitSlop={10}
-                    style={{ position: 'absolute', top: -6, right: -6, width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>
+                  <IconButton label="Remove photo" onPress={() => setImg(undefined)} scaleTo={0.9} hitSlop={10} size={24} radius={radii.sm} bg={c.ink} style={{ position: 'absolute', top: -6, right: -6 }}>
                     <X size={14} color={c.bg} strokeWidth={2.6} />
-                  </Pressy>
+                  </IconButton>
                 </View>
               </FadeIn>
             )}

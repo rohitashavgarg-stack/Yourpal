@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values are written from gesture and animation callbacks; refs are read and written in gesture-handler callbacks, not during render */
 import React, { useEffect, useRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';

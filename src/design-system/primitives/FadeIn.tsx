@@ -1,5 +1,5 @@
 import React from 'react';
-import Animated from 'react-native-reanimated';
+import Animated, { useReducedMotion } from 'react-native-reanimated';
 import { fade } from '@/design-system/tokens';
 
 type Props = Omit<React.ComponentProps<typeof Animated.View>, 'entering'> & {
@@ -20,5 +20,7 @@ type Props = Omit<React.ComponentProps<typeof Animated.View>, 'entering'> & {
  *   <FadeIn delay={120} style={...}>      explicit delay
  */
 export function FadeIn({ i, step = 40, delay, children, ...rest }: Props) {
-  return <Animated.View entering={fade(delay ?? (i ?? 0) * step)} {...rest}>{children}</Animated.View>;
+  // with the system's reduce-motion setting on, the content is simply there: no fade
+  const reduce = useReducedMotion();
+  return <Animated.View entering={reduce ? undefined : fade(delay ?? (i ?? 0) * step)} {...rest}>{children}</Animated.View>;
 }

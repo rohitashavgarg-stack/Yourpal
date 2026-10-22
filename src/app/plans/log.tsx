@@ -190,7 +190,7 @@ export default function LogFood() {
               {res.map((f, i) => foodRow(f, i === res.length - 1))}
               {res.length === 0 && (
                 <View style={{ paddingVertical: 16, paddingHorizontal: 6, gap: 10, alignItems: 'flex-start' }}>
-                  <Txt muted style={{ fontSize: fontSizes.md }}>Nothing called "{q}" in the catalogue.</Txt>
+                  <Txt muted style={{ fontSize: fontSizes.md }}>Nothing called &quot;{q}&quot; in the catalogue.</Txt>
                   <PillBtn tone="soft" h={40} label="Write it in instead" onPress={toWrite} />
                 </View>
               )}
@@ -258,7 +258,7 @@ export default function LogFood() {
             </View>
             {scan === 'fail' && (
               <FadeIn style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.warnSoft, gap: 8 }}>
-                <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.warn }}>Couldn't read that.</Txt> Too dark or too close. Try the whole plate in good light.</Txt>
+                <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.warn }}>Couldn&apos;t read that.</Txt> Too dark or too close. Try the whole plate in good light.</Txt>
                 <Row style={{ gap: 8 }}>
                   <PillBtn tone="soft" h={40} label="Try again" onPress={goScan} />
                   <PillBtn tone="soft" h={40} label="Search instead" onPress={toSearch} />

@@ -89,7 +89,7 @@ export default function Notifications() {
         {list.length === 0 && (
           <FadeIn style={{ paddingVertical: 36, paddingHorizontal: 10, alignItems: 'center', gap: 10 }}>
             <View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><BellRing size={22} color={c.accentText} /></View>
-            <Txt muted style={{ textAlign: 'center' }}>You're all caught up. New updates from your programmes show up here.</Txt>
+            <Txt muted style={{ textAlign: 'center' }}>You&apos;re all caught up. New updates from your programmes show up here.</Txt>
           </FadeIn>
         )}
       </ListCard>

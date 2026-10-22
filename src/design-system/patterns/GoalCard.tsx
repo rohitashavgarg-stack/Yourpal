@@ -163,7 +163,7 @@ export function GoalCard({ variant = 'card', state: stateProp, weighDays: weighP
     const unit = g.unit === '%' ? '%' : ` ${g.unit}`;
     const amount = g.kind === 'consistency' ? `${g.currentValue} of ${g.weeklyTarget} this week` : `${fmtVal(g, lostS)} of ${fmtVal(g, total)}${unit} ${g.kind === 'agility' ? 'faster' : verb}`;
     const staleS = kgGoal && weighDays >= STALE_WEIGH_DAYS && state !== 'complete' && state !== 'backOn';
-    const line = none ? 'Set one to see your progress here' : staleS ? 'Needs a weigh-in' : [amount, by].filter(Boolean).join(', ');
+    const line = none ? '' : staleS ? 'Needs a weigh-in' : [amount, by].filter(Boolean).join(', ');
     const lineColor = staleS ? GC.amber : STRIP.muted;
     const look = none ? null : LOOK[state];
     // on track reads as good news in mint here; the other states keep their own pill

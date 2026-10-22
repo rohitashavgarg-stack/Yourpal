@@ -330,7 +330,7 @@ export function UpdatesSheet() {
             </FadeIn>
           );
         })}
-        {!live.length && <Txt muted style={{ paddingVertical: 20 }}>You're all caught up.</Txt>}
+        {!live.length && <Txt muted style={{ paddingVertical: 20 }}>You&apos;re all caught up.</Txt>}
       </View>
       <Txt v="caption">Older updates are in Notifications.</Txt>
     </>

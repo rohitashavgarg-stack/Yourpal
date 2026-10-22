@@ -1,6 +1,7 @@
 // https://docs.expo.dev/guides/using-eslint/
 const { defineConfig } = require('eslint/config');
 const expoConfig = require("eslint-config-expo/flat");
+const globals = require("globals");
 
 // Design-system guard: no hard-coded hex colours, border radii or font sizes.
 // Use the tokens instead: colours from useTheme() or `fixed` / `onDark` / `gradients` in '@/design-system/tokens', `radii` or `round(h)`, `fontSizes`.
@@ -27,7 +28,12 @@ const guard = (level) => [
 module.exports = defineConfig([
   expoConfig,
   {
-    ignores: ["dist/*", "storybook-static/*"],
+    ignores: ["dist/*", "storybook-static/*", "handoff/*"],
+  },
+  {
+    // Node scripts (screenshots, audits, codemods): CommonJS with Node globals
+    files: ["scripts/**/*.js"],
+    languageOptions: { sourceType: "commonjs", globals: { ...globals.node } },
   },
   {
     files: ["src/**/*.{ts,tsx}"],

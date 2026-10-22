@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect -- the effect resets local state when its input changes, as designed */
 import { useEffect, useState } from 'react';
 
 // Re-renders every `ms` while `active`, returning Date.now(). Used by timers.

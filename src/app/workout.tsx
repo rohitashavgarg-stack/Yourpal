@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect -- the effect resets local state when its input changes, as designed */
 import React, { useEffect, useRef, useState } from 'react';
 import { useLeaveIfPaused } from '@/lib/logGate';
 import { ScrollView, TextInput, View } from 'react-native';

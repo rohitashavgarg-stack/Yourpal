@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability -- reanimated shared values are written from gesture and animation callbacks */
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useDomain } from '@/lib/domain';
 import { LayoutChangeEvent, Platform, Pressable, Text, View } from 'react-native';

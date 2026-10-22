@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs, react-hooks/use-memo -- refs are read and written in gesture-handler callbacks, not during render; the hook takes its dependency list from its caller */
 import { useFocusEffect } from 'expo-router';
 import { devParam } from './devParams';
 import React, { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';

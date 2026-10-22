@@ -44,7 +44,8 @@ export function Button({ kind = 'primary', size, small, height, label, onPress, 
   const s = sz === 'compact' && height ? { ...SIZE.compact, h: height, r: height / 2 } : SIZE[sz];
   const bg = { primary: c.ink, accent: c.accent, secondary: c.surface2, ghost: 'transparent', white: fixed.white, outline: 'transparent', glass: 'rgba(255,255,255,0.12)' }[kind];
   const fg = { primary: c.bg, accent: c.accentInk, secondary: c.ink, ghost: c.accentText, white: fixed.dark, outline: c.ink, glass: fixed.white }[kind];
-  const slop = sz === 'compact' ? { top: (44 - s.h) / 2, bottom: (44 - s.h) / 2 } : undefined;
+  // shorter than 44 (tight 40, compact 36 or less): the tap area still reaches 44 px
+  const slop = s.h < 44 ? { top: (44 - s.h) / 2, bottom: (44 - s.h) / 2 } : undefined;
   return (
     <Pressy
       accessibilityRole="button"
@@ -82,18 +83,20 @@ export type IconButtonProps = {
   /** An outline: line colour and width. */
   borderColor?: string;
   borderWidth?: number;
-  /** Not pressable. Dim it with `style` (opacity). */
+  /** Not pressable, and announced as disabled. Dim it with `style` (opacity). */
   disabled?: boolean;
+  /** Extra tap area around a small button, so it still reaches 44 px. */
+  hitSlop?: number | { top?: number; bottom?: number; left?: number; right?: number };
   style?: StyleProp<ViewStyle>;
 };
 
 /** A rounded square (44 px by default) with one icon or sign in it: close, back, minus, plus, play. */
-export function IconButton({ label, onPress, children, bg, style, glass, scaleTo, size = 44, radius = radii.lg, borderColor, borderWidth, disabled }: IconButtonProps) {
+export function IconButton({ label, onPress, children, bg, style, glass, scaleTo, size = 44, radius = radii.lg, borderColor, borderWidth, disabled, hitSlop }: IconButtonProps) {
   const { c, isDark } = useTheme();
   // Glass buttons get a soft shadow so they still read on a plain page.
   const rim = glass ? { shadowColor: fixed.shadow, shadowOpacity: isDark ? 0.35 : 0.1, shadowRadius: 10, shadowOffset: { width: 0, height: 3 }, elevation: 3 } : null;
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} scaleTo={scaleTo} disabled={disabled}
+    <Pressy accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: !!disabled }} onPress={onPress} scaleTo={scaleTo} disabled={disabled} hitSlop={hitSlop}
       style={[{ width: size, height: size, borderRadius: radius, backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center', ...(borderWidth ? { borderWidth, borderColor } : null) }, rim, style]}>
       {glass ? (
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radii.lg, overflow: 'hidden' }}>

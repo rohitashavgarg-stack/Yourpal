@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components -- small helper components defined in the parent keep their current behaviour */
 import React from 'react';
 import { View } from 'react-native';
 import { Check } from '@/lib/icons';

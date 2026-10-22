@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components, react-hooks/refs -- small helper components defined in the parent keep their current behaviour; refs are read and written in gesture-handler callbacks, not during render */
 import React, { useEffect, useRef, useState } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
 import Animated, { Easing, useAnimatedProps, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
@@ -249,9 +250,9 @@ export function ReadyContent({ assess }: { assess: string }) {
     ['Injuries', p.injury === 'Yes' ? 'Shared with your coach' : 'None'],
   ];
   const next: [React.ReactNode, string, string][] = [
-    [<CalendarCheck size={17} color={c.ink} />, booked ? 'Assessment · Sat 10:00 am' : 'Book your assessment', booked ? 'A 30-minute check-in with Coach Vikram: measurements, movement and your goal.' : 'Ask at the front desk. Coach Vikram builds your plan from it.'],
-    [<ClipboardList size={17} color={c.ink} />, 'Your plan lands on Today', "Workouts and meals from Coach Vikram. We'll notify you when it arrives."],
-    [<Dumbbell size={17} color={c.ink} />, 'Start training', 'Until then, log your meals, water and weight.'],
+    [<CalendarCheck key="book" size={17} color={c.ink} />, booked ? 'Assessment · Sat 10:00 am' : 'Book your assessment', booked ? 'A 30-minute check-in with Coach Vikram: measurements, movement and your goal.' : 'Ask at the front desk. Coach Vikram builds your plan from it.'],
+    [<ClipboardList key="plan" size={17} color={c.ink} />, 'Your plan lands on Today', "Workouts and meals from Coach Vikram. We'll notify you when it arrives."],
+    [<Dumbbell key="train" size={17} color={c.ink} />, 'Start training', 'Until then, log your meals, water and weight.'],
   ];
   return (
     <>
@@ -260,7 +261,7 @@ export function ReadyContent({ assess }: { assess: string }) {
           <Check size={30} strokeWidth={2.6} color={c.accent} />
         </FadeIn>
         <View style={{ alignItems: 'center' }}>
-          <Txt style={{ fontFamily: font.light, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>You're all set,</Txt>
+          <Txt style={{ fontFamily: font.light, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>You&apos;re all set,</Txt>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>{p.name || 'Rohitashav Garg'}.</Txt>
         </View>
         <Row style={{ gap: 8 }}>
@@ -299,10 +300,10 @@ export function ReadyContent({ assess }: { assess: string }) {
 export function HealthStep() {
   const { c, isDark } = useTheme();
   const rows: [React.ReactNode, string, string][] = [
-    [<Footprints size={20} color={c.ink} />, 'Steps', 'Daily count and goal streaks'],
-    [<Heart size={20} color={c.ink} />, 'Heart rate', 'Resting and during workouts'],
-    [<Moon size={20} color={c.ink} />, 'Sleep', 'How rested you are for training'],
-    [<Flame size={20} color={c.ink} />, 'Active energy', 'Calories burned today'],
+    [<Footprints key="steps" size={20} color={c.ink} />, 'Steps', 'Daily count and goal streaks'],
+    [<Heart key="hr" size={20} color={c.ink} />, 'Heart rate', 'Resting and during workouts'],
+    [<Moon key="sleep" size={20} color={c.ink} />, 'Sleep', 'How rested you are for training'],
+    [<Flame key="kcal" size={20} color={c.ink} />, 'Active energy', 'Calories burned today'],
   ];
   return (
     <>

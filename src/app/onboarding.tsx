@@ -181,7 +181,7 @@ export default function Onboarding() {
       </ScrollView>
 
       <View style={{ paddingHorizontal: 20, paddingBottom: insets.bottom + 12, paddingTop: 8, gap: 6, backgroundColor: c.bg }}>
-        {sc.net === 'Offline' && showChrome && <Txt v="caption" style={{ textAlign: 'center' }}>You're offline. Answers are saved on this phone and sync later.</Txt>}
+        {sc.net === 'Offline' && showChrome && <Txt v="caption" style={{ textAlign: 'center' }}>You&apos;re offline. Answers are saved on this phone and sync later.</Txt>}
         {step === 'ready' ? (
           <SwipeToStart onDone={() => { finishGoal(); set({ onboarded: true }); haptic.success(); router.replace('/(tabs)'); toast("You're all set. Your plan fills in after the assessment"); }} />
         ) : step !== 'building' && <Button label={primaryLabel} onPress={next} />}
@@ -258,7 +258,7 @@ function GoalStep({ tried }: { tried: boolean }) {
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
         {GOALS.map((g) => <GoalChoiceTile key={g} goal={g} on={p.goal === g} onPress={() => setProfile({ goal: g, goalTarget: 0, targetKg: '', goal2: p.goal2 === g ? 'None' : p.goal2 })} />)}
       </View>
-      {tried && !p.goal && <Txt v="caption" color={c.warn}>Pick a goal, or "Not sure yet".</Txt>}
+      {tried && !p.goal && <Txt v="caption" color={c.warn}>Pick a goal, or &quot;Not sure yet&quot;.</Txt>}
     </>
   );
 }
@@ -362,7 +362,7 @@ function SchedStep() {
           );
         })}
       </Row>
-      {p.days >= 6 && <Txt v="caption">6 days is a lot to start with. We'll keep two of them light.</Txt>}
+      {p.days >= 6 && <Txt v="caption">6 days is a lot to start with. We&apos;ll keep two of them light.</Txt>}
       <Txt v="label" style={{ marginTop: 8 }}>Usual time</Txt>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         {['Early morning', 'Morning', 'Afternoon', 'Evening', 'Changes a lot'].map((t) => <Pill key={t} label={t} on={p.time === t} onPress={() => setProfile({ time: t })} />)}

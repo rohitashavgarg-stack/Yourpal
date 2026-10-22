@@ -71,7 +71,7 @@ export function ResetSheet({ kind }: { kind: 'workout' | 'diet' }) {
   };
   return (
     <>
-      <BigTitle>Reset to Coach's version?</BigTitle>
+      <BigTitle>Reset to Coach&apos;s version?</BigTitle>
       <Txt muted>{kind === 'diet' ? "Your swaps, portions and order changes are removed. What you've already logged stays." : 'Your edits and workouts you created are removed. Coach Vikram\'s plan comes back as it was.'}</Txt>
       <Button label="Reset plan" onPress={reset} />
       <Button kind="secondary" label="Keep my edits" onPress={() => closeSheet()} />
@@ -84,7 +84,7 @@ export function DiscardSheet() {
   return (
     <>
       <BigTitle>Discard your changes?</BigTitle>
-      <Txt muted>You changed this plan but haven't saved it.</Txt>
+      <Txt muted>You changed this plan but haven&apos;t saved it.</Txt>
       <Button label="Discard" onPress={() => closeSheet(() => { setP({ draft: null }); router.back(); })} />
       <Button kind="secondary" label="Keep editing" onPress={() => closeSheet()} />
     </>
@@ -114,7 +114,7 @@ export function LibrarySheet({ mode }: { mode: 'edit' | 'create' | 'browse' }) {
           <ListRow key={x.n} label={x.n} sub={x.g} last={i === res.length - 1} chevron={false} a11y={`${mode === 'browse' ? 'View' : 'Add'} ${x.n}, ${x.g}`}
             right={<Txt style={{ fontFamily: font.semibold, color: c.accentText }}>{mode === 'browse' ? 'View' : 'Add'}</Txt>} onPress={() => pick(x.n)} />
         ))}
-        {res.length === 0 && <Txt muted style={{ paddingVertical: 18 }}>No exercises match "{q}".</Txt>}
+        {res.length === 0 && <Txt muted style={{ paddingVertical: 18 }}>No exercises match &quot;{q}&quot;.</Txt>}
       </View>
     </>
   );
@@ -189,7 +189,7 @@ export function ItemMenuSheet({ mid, itemKey }: { mid: MealId; itemKey: string }
         <ListRow label="Always use a swap for this" chevron={false} last={!it.mine} onPress={() => openSheet(<DietSwapSheet mid={mid} itemKey={it.key} always />, { label: 'Swap item' })} />
         {it.mine && <ListRow label="Delete item" tone={c.warn} chevron={false} last onPress={() => closeSheet(() => A.deleteExtra(mid, it))} />}
       </View>
-      {!it.mine && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Items from Coach's plan can be skipped but not deleted.</Txt>}
+      {!it.mine && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Items from Coach&apos;s plan can be skipped but not deleted.</Txt>}
     </>
   );
 }

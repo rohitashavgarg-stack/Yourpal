@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect -- the effect resets local state when its input changes, as designed */
 import React, { useEffect, useRef, useState } from 'react';
 import { useLogsPaused } from '@/lib/logGate';
 import { ScrollView, View } from 'react-native';
@@ -141,7 +142,7 @@ export default function Plans() {
     <TabScreen title="Plans" header={<GymHeader />} compactTitle={false} bottomPad={canStart ? 190 : 130}>
       {d.offline && (
         <FadeIn style={{ paddingVertical: 8, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: c.warn }}>You're offline · changes save on this phone and sync later</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: c.warn }}>You&apos;re offline · changes save on this phone and sync later</Txt>
         </FadeIn>
       )}
       {paused && (

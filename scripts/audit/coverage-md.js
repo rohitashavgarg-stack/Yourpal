@@ -53,7 +53,7 @@ for (const f of fs.readdirSync('src', { recursive: true }).map(String).filter((x
   const t = src(f);
   for (const m of t.matchAll(/^(?:export )?function ([A-Z][A-Za-z]*(?:Sheet|JoinCode))\b/gm)) sheetDefs.push({ name: m[1], file: f.split(path.sep).join('/'), line: t.slice(0, m.index).split('\n').length });
 }
-const useSites = (name, defFile) => {
+const sitesOf = (name, defFile) => {
   const out = [];
   for (const f of fs.readdirSync('src', { recursive: true }).map(String).filter((x) => /\.tsx$/.test(x) && !x.startsWith('design-system'))) {
     const lines = src(f).split('\n');
@@ -62,7 +62,7 @@ const useSites = (name, defFile) => {
   return out;
 };
 for (const s of sheetDefs) {
-  const sites = useSites(s.name, s.file).filter((x) => !x.startsWith(s.file + ':' + s.line));
+  const sites = sitesOf(s.name, s.file).filter((x) => !x.startsWith(s.file + ':' + s.line));
   const screens = [...new Set(sites.map((x) => SCREEN(x.split(':')[0])))];
   rows.push({ id: 'sheet:' + s.name, group: 'Bottom sheets', screen: s.name, route: '(sheet) ' + s.file + ':' + s.line, reach: screens.length ? 'Opened from ' + screens.slice(0, 4).join(', ') : 'Opened from code (no direct tag)', hand: hitsByFn(s.file, [s.name]), states: [], files: [s.file] });
 }

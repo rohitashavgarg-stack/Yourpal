@@ -35,7 +35,7 @@ export function Banner({ variant, icon, tone, title, line, act, once, onPress, o
     const Icon = icon === 'pause' ? Pause : Clock;
     return (
       <View style={{ marginHorizontal: -16, backgroundColor: c.warnSoft, flexDirection: 'row', alignItems: 'center' }}>
-        <Pressy accessibilityRole="button" accessibilityLabel={`${title}. ${line} View plan`} onPress={onPress} scaleTo={1}
+        <Pressy accessibilityRole="button" accessibilityLabel={`${title}. ${line} See plan`} onPress={onPress} scaleTo={1}
           style={{ flex: 1, paddingVertical: 14, paddingLeft: 16, paddingRight: once ? 4 : 16 }}>
           <Row style={{ gap: 12 }}>
             <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.warn + '2E', alignItems: 'center', justifyContent: 'center' }}><Icon size={18} color={c.warn} /></View>
@@ -44,7 +44,7 @@ export function Banner({ variant, icon, tone, title, line, act, once, onPress, o
               <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{line}</Txt>
             </View>
             <View style={{ minHeight: 40, paddingHorizontal: 16, borderRadius: round(40), borderWidth: 1, borderColor: c.ink + '55', alignItems: 'center', justifyContent: 'center' }}>
-              <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>View plan</Txt>
+              <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>See plan</Txt>
             </View>
           </Row>
         </Pressy>

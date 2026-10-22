@@ -171,7 +171,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx, back
           </View>
           {scan === 'fail' && (
             <FadeIn style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
-              <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, color: c.warn }}>Couldn't read that.</Txt> Too dark or too close. Try the whole plate in good light, or write it instead.</Txt>
+              <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, color: c.warn }}>Couldn&apos;t read that.</Txt> Too dark or too close. Try the whole plate in good light, or write it instead.</Txt>
             </FadeIn>
           )}
           {perm && !perm.granted && !perm.canAskAgain && (

@@ -83,7 +83,7 @@ export function WeekCard({ days, workouts, meals, summary, onDayPress }: WeekCar
       <View accessibilityLabel="Days this week. Tap a past day for its summary, a future day to open its plan" style={{ flexDirection: 'row', gap: 4 }}>
         {days.map((x, i) => (
           <Pressy key={x.num} accessibilityRole="button" accessibilityLabel={`${x.name} ${x.num}${x.today ? ', today' : ''}${x.future ? ', open plan' : ', open summary'}`}
-            onPress={() => onDayPress(i)} scaleTo={0.96}
+            onPress={() => onDayPress(i)} scaleTo={0.96} hitSlop={{ left: 2, right: 2 }} /* a column is about 41 px wide on a 375 px phone; the slop fills the 4 px gap */
             style={{ flex: 1, alignItems: 'center', gap: 10, paddingTop: 8, paddingBottom: 10, borderRadius: radii.md, backgroundColor: x.today ? c.surface2 : 'transparent' }}>
             <View style={{ height: 34, alignItems: 'center', justifyContent: 'center' }}>
               <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: x.future ? c.muted : c.muted, opacity: x.future ? 0.6 : 1 }}>{x.letter}</Txt>

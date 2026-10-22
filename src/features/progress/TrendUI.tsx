@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect -- the effect resets local state when its input changes, as designed */
 import React, { useEffect, useState } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';

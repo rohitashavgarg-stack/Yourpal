@@ -59,7 +59,7 @@ export default function ExportData() {
           </FadeIn>
         )}
         {phase === 'done' && <FadeIn><Note tone="good">Ready · saved to Downloads as yourpal-export.zip</Note></FadeIn>}
-        {phase === 'failed' && <FadeIn><Note tone="warn">Couldn't finish the export. You're offline — try again when you're connected.</Note></FadeIn>}
+        {phase === 'failed' && <FadeIn><Note tone="warn">Couldn&apos;t finish the export. You&apos;re offline — try again when you&apos;re connected.</Note></FadeIn>}
       </ListCard>
       <Button label={phase === 'done' ? 'Export again' : phase === 'failed' ? 'Try again' : 'Prepare export'} disabled={phase === 'running'} onPress={start} />
     </SubPage>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect -- the effect resets local state when its input changes, as designed */
 import React, { useEffect, useRef, useState } from 'react';
 import { RoundBtn } from '@/components/bits';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
@@ -132,7 +133,7 @@ export default function Login() {
 
             <View style={{ gap: 6, marginTop: 12 }}>
               <Txt v="title">Log in with your phone</Txt>
-              <Txt muted>Use the number you gave your gym. We'll text you a code.</Txt>
+              <Txt muted>Use the number you gave your gym. We&apos;ll text you a code.</Txt>
             </View>
             <Field
               prefix="+91"
@@ -151,8 +152,8 @@ export default function Login() {
             {err === 'notFound' && (
               <FadeIn>
                 <View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.warnSoft, gap: 10 }}>
-                  <Txt v="headline" color={c.warn}>We couldn't find this number</Txt>
-                  <Txt color={c.warn} style={{ fontSize: fontSizes.md }}>Please check with your gym's front desk. They can add it to your membership in a minute.</Txt>
+                  <Txt v="headline" color={c.warn}>We couldn&apos;t find this number</Txt>
+                  <Txt color={c.warn} style={{ fontSize: fontSizes.md }}>Please check with your gym&apos;s front desk. They can add it to your membership in a minute.</Txt>
                   <Row style={{ gap: 8 }}>
                     <Button small kind="primary" label="Call front desk" icon={<Phone size={16} color={c.bg} />} onPress={() => toast('Calling Wulf Fitness front desk…')} />
                     <Button small kind="secondary" label="Try another number" onPress={() => { setPhone(''); setErr('none'); }} />
@@ -195,7 +196,7 @@ export default function Login() {
             </FadeIn>
             <OtpInput value={code} onChange={(v) => { setCode(v); if (err === 'offline') setErr('none'); }} state={codeState} shakeKey={shake} autoFocus={sc.autoRead !== 'On'} />
             {reading && <FadeIn><Txt v="label" color={c.accentText}>Reading the code from SMS…</Txt></FadeIn>}
-            {codeState === 'error' && <FadeIn><Txt v="label" color={c.warn}>That code didn't match. {3 - tries} {3 - tries === 1 ? 'try' : 'tries'} left.</Txt></FadeIn>}
+            {codeState === 'error' && <FadeIn><Txt v="label" color={c.warn}>That code didn&apos;t match. {3 - tries} {3 - tries === 1 ? 'try' : 'tries'} left.</Txt></FadeIn>}
             {codeState === 'locked' && (
               <FadeIn>
                 <View style={{ padding: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
@@ -265,7 +266,7 @@ function JoinCode({ onDone }: { onDone: () => void }) {
       <Txt v="title">Join with a code</Txt>
       <Txt muted>Your gym shares a code on WhatsApp or at the front desk. Try GOLD21.</Txt>
       <Field value={v} onChangeText={(t) => { setV(t.toUpperCase()); setBad(false); }} autoCapitalize="characters" placeholder="e.g. GOLD21" accessibilityLabel="Join code" error={bad} />
-      {bad && <Txt v="caption" color={c.warn}>That code isn't active. Check it with the front desk.</Txt>}
+      {bad && <Txt v="caption" color={c.warn}>That code isn&apos;t active. Check it with the front desk.</Txt>}
       <Button label="Join gym" onPress={ok} disabled={v.length < 4} />
     </View>
   );

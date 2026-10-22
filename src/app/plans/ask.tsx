@@ -71,7 +71,7 @@ export default function AskCoach() {
         </View>
         <ShakeText text={err ? 'Pick a reason so Coach Vikram knows what to change.' : ''} n={tries} />
         <Button label="Send request" onPress={send} />
-        <Txt muted style={{ fontSize: fontSizes.sm, textAlign: 'center' }}>You'll get a notification when your new plan is ready.</Txt>
+        <Txt muted style={{ fontSize: fontSizes.sm, textAlign: 'center' }}>You&apos;ll get a notification when your new plan is ready.</Txt>
       </ScrollView>
     </View>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability -- reanimated shared values are written from gesture and animation callbacks */
 import React, { useCallback, useEffect, useState } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
 import Animated, { Easing, useAnimatedReaction, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';

@@ -32,7 +32,7 @@ export default function ConnectedApps() {
   const disconnect = () => openSheet(
     <View style={{ gap: 12 }}>
       <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29 }}>{`Disconnect ${HEALTH_NAME}?`}</Txt>
-      <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>We stop reading new steps, heart rate and sleep. What is already in YourPal stays. Steps fall back to your phone's own counter. You can reconnect any time.</Txt>
+      <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>We stop reading new steps, heart rate and sleep. What is already in YourPal stays. Steps fall back to your phone&apos;s own counter. You can reconnect any time.</Txt>
       <Button kind="primary" label="Disconnect" onPress={() => closeSheet(() => { set({ hc: false }); haptic.medium(); toast(`${HEALTH_NAME} disconnected`); })} />
       <Button kind="secondary" label="Keep it connected" onPress={() => closeSheet()} />
     </View>,

@@ -71,7 +71,7 @@ function TodayMock() {
       </View>
 
       <View style={[TILE, { gap: 2, padding: 12 }]}>
-        <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Today's workout · Your coach</Txt>
+        <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Today&apos;s workout · Your coach</Txt>
         <Txt style={{ fontSize: fontSizes.xl, lineHeight: 26, letterSpacing: -0.6, color: fixed.white, fontFamily: font.regular }}>Leg day</Txt>
         <View style={{ marginTop: 6, height: 30, borderRadius: 15, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
           <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: fixed.black, fontFamily: font.semibold }}>Start workout</Txt>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability, react-hooks/purity, react-hooks/refs -- reanimated shared values are written from gesture and animation callbacks; Date.now() is read inside event handlers, not during render; refs are read and written in gesture-handler callbacks, not during render */
 import React, { useEffect, useRef, useState } from 'react';
 import { useLogGate, useLogsPaused } from '@/lib/logGate';
 import { View } from 'react-native';
@@ -319,7 +320,7 @@ export function DietPlan() {
         </Row>
         {overBy > 0 && (
           <FadeIn accessibilityRole="alert" style={{ marginTop: 8, padding: 12, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
-            <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>You're about {inr(overBy)} kcal over today. That's okay. Keep your next meal light and have some water.</Txt>
+            <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>You&apos;re about {inr(overBy)} kcal over today. That&apos;s okay. Keep your next meal light and have some water.</Txt>
           </FadeIn>
         )}
       </FadeIn>

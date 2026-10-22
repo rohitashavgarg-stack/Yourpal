@@ -12,7 +12,7 @@ export default function Appearance() {
       <Row style={{ gap: 10, alignItems: 'flex-start' }}>
         {(['Light', 'Dark', 'System'] as const).map((m) => <ThemeTile key={m} mode={m} on={state.sc.theme === m} onPress={() => { haptic.tap(); setSc({ theme: m }); }} />)}
       </Row>
-      <Note>System follows your phone's light or dark setting.</Note>
+      <Note>System follows your phone&apos;s light or dark setting.</Note>
     </SubPage>
   );
 }
