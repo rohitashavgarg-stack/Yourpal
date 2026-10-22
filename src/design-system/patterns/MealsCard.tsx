@@ -124,14 +124,18 @@ function MealItems({ meal, onLogMeal }: Pick<MealsCardProps, 'onLogMeal'> & { me
       <FadeIn style={{ gap: 12, paddingBottom: 0 }}>
         <View accessible accessibilityLabel={`${meal.name}: ${line}`} style={{ paddingHorizontal: 4 }}>
           {rows.map((r, k) => {
+            // logged meal: what was eaten is ticked and struck through (a done list), what was not eaten gets an amber Skipped tag
             const eaten = meal.status === 'logged' && r.eaten;
-            const left = meal.status === 'logged' && !r.eaten; // not eaten although the meal is logged: skipped
-            const dim = meal.skipped || left;
+            const left = meal.status === 'logged' && !r.eaten;
+            const quiet = meal.skipped || left;
             return (
-              <Row key={k} style={{ gap: 10, minHeight: 40, borderTopWidth: k ? 1 : 0, borderTopColor: c.line }}>
-                {eaten ? <IconBadge size={22} bg={c.good}><Check size={13} strokeWidth={3.5} color={c.bg} /></IconBadge> : <View style={{ opacity: dim ? 0.45 : 1 }}><FoodMark type={r.type} /></View>}
-                <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 22, color: dim ? c.muted : c.ink, textDecorationLine: dim ? 'line-through' : 'none' }}>{r.name}</Txt>
-                {!!r.amount && <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: c.muted, textDecorationLine: dim ? 'line-through' : 'none' }}>{r.amount}</Txt>}
+              <Row key={k} style={{ gap: 10, minHeight: 44, borderTopWidth: k ? 1 : 0, borderTopColor: c.line }}>
+                {eaten ? <IconBadge size={18} bg={c.good}><Check size={11} strokeWidth={3.5} color={c.bg} /></IconBadge>
+                  : left ? <View style={{ width: 18, height: 18, borderRadius: 9, borderWidth: 1.5, borderColor: c.chipLine }} />
+                  : <View style={{ opacity: meal.skipped ? 0.45 : 1 }}><FoodMark type={r.type} /></View>}
+                <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 22, color: quiet ? c.muted : c.ink, textDecorationLine: eaten ? 'line-through' : 'none' }}>{r.name}</Txt>
+                {left ? <View style={{ paddingHorizontal: 8, height: 22, borderRadius: 11, backgroundColor: c.warnSoft, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: c.warn }}>Skipped</Txt></View>
+                  : !!r.amount && <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: c.muted, textDecorationLine: eaten ? 'line-through' : 'none' }}>{r.amount}</Txt>}
               </Row>
             );
           })}
