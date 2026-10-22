@@ -50,10 +50,12 @@ export function TodayWeekCard() {
   const list = days(d, fmtT(plannedMin(state.profile.time)).full);
   const t = totals(d);
   const doneN = 1 + (workoutState(d) === 'done' ? 1 : 0);
-  const week: WeekDay[] = list.map((x, i) => ({ num: x.num, letter: x.let, name: DN[i], workout: x.wk, mealsPct: x.mealW, future: x.fut, today: x.today }));
+  const week: WeekDay[] = list.map((x, i) => ({ num: x.num, letter: x.let, name: DN[i], workout: x.wk, mealsOnPlan: x.fut ? 0 : Math.round(x.mealW / 25), future: x.fut, today: x.today }));
   const onDayPress = (i: number) => (list[i].fut ? router.navigate({ pathname: '/plans', params: { day: String(i) } }) : openSheet(<DaySheet i={i} />, { label: 'Day summary' }));
-  return <WeekCardPattern days={week} workoutsDone={doneN} onDayPress={onDayPress}
-    summary={`You have done ${doneN} of 4 workouts, kept ${7 + t.onPlan} of 12 meals on plan and checked in ${ciTime(d) != null ? 'twice' : 'once'} this week.`} />;
+  const checkIns = ciTime(d) != null ? 2 : 1;
+  const mealsOn = 7 + t.onPlan;
+  return <WeekCardPattern days={week} workouts={{ done: doneN, target: 4 }} meals={{ onPlan: mealsOn, total: 12 }} onDayPress={onDayPress}
+    summary={`This week: ${doneN} of 4 workouts, ${mealsOn} of 12 meals on plan, ${checkIns} ${checkIns === 1 ? 'check-in' : 'check-ins'}.`} />;
 }
 export { TodayWeekCard as WeekCard }; // the old name, so existing imports keep working
 
