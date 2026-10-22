@@ -15,6 +15,7 @@ import { GlassBackdrop } from '@/components/Glass';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { CLIPS, THUMBS } from './clips';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { IconButton } from '@/design-system/primitives/Button';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // The only clips we have are the main-lift ones, so a move gets a still only where it is the same movement; the rest show a plain tile.
@@ -101,10 +102,9 @@ function ClipCardInner({ source, thumb, onFull, onHide }: { source: number; thum
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: INK }}>Hide</Txt>
         </Pressy>
       )}
-      <Pressy accessibilityRole="button" accessibilityLabel="Full screen" onPress={goFull} scaleTo={0.92}
-        style={{ position: 'absolute', right: 10, bottom: 10, width: 40, height: 40, borderRadius: 20, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
+      <IconButton label="Full screen" onPress={goFull} scaleTo={0.92} size={40} radius={20} bg={fixed.white} borderWidth={1} borderColor="#C9D1DD" style={{ position: 'absolute', right: 10, bottom: 10 }}>
         <Maximize2 size={18} color={INK} />
-      </Pressy>
+      </IconButton>
     </View>
   );
 }
@@ -160,10 +160,9 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 16 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <Row style={{ gap: 8, alignItems: 'flex-start' }}>
           <Txt accessibilityRole="header" style={{ flex: 1, fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 40, letterSpacing: -0.8 }}>{e.name}</Txt>
-          <Pressy accessibilityRole="button" accessibilityLabel="Exercise options: swap, ask coach, form tips, skip" onPress={onMenu} scaleTo={0.92}
-            style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
+          <IconButton label="Exercise options: swap, ask coach, form tips, skip" onPress={onMenu} scaleTo={0.92} style={{ marginTop: 2 }}>
             <Ellipsis size={20} color={c.ink} />
-          </Pressy>
+          </IconButton>
         </Row>
         {source != null && (clipOpen
           ? <ClipCardInner key={e.id} source={source} thumb={THUMBS[e.id]} onFull={() => setPop(true)} onHide={marked ? () => setShown(false) : undefined} />

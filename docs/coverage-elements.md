@@ -159,14 +159,13 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Coach chat (routes)
 
 - Files: `app/gym/chat.tsx`, `features/chat/AudioBubble.tsx`, `features/chat/Composer.tsx`, `features/chat/emoji.ts`
-- Library components used: Txt x19, Pressy x15, FadeIn x5, Row x2, Button x1
+- Library components used: Txt x19, Pressy x14, FadeIn x5, Row x2, Button x1, IconButton x1
 - Hand-built:
   - `app/gym/chat.tsx:37` icon badge: `<Animated.View style={[{ width: 6, height: 6, borderRadius: radii.xs, backgroundColor: c.m`
   - `app/gym/chat.tsx:117` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'About ${ctx}. Remove'} onPress={()`
   - `app/gym/chat.tsx:145` card: `<View accessibilityRole="alert" style={{ padding: 12, borderRadius: radii.md, backgroundCo`
   - `app/gym/chat.tsx:153` button or pill: `<Pressy key={t.l} accessibilityRole="button" onPress={() => { setDraft(t.draft); setCtx(t.`
   - `app/gym/chat.tsx:159` card: `<View style={{ flexShrink: 1, paddingVertical: m.img ? 6 : 10, paddingHorizontal: m.img ? `
-  - `features/chat/AudioBubble.tsx:37` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={st.playing ? 'Pause voice message' `
   - `features/chat/Composer.tsx:29` icon badge: `<Animated.View style={[{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#FF4D4F`
   - `features/chat/Composer.tsx:39` icon button: `<Pressy key={x.key} accessibilityRole="button" accessibilityLabel={'${x.key} emoji'} onPre`
   - `features/chat/Composer.tsx:156` card: `<View accessibilityRole="alert" style={{ marginHorizontal: 16, marginTop: 10, padding: 10,`
@@ -470,29 +469,25 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Active workout (routes)
 
 - Files: `app/workout.tsx`, `features/workout/SetRow.tsx`, `features/workout/RestPanel.tsx`, `features/workout/FinishScreen.tsx`, `features/workout/NewWorkoutUI.tsx`, `features/workout/WorkoutSheets.tsx`
-- Library components used: Txt x74, Pressy x23, Row x22, Button x14, FadeIn x10, Pill x3, Card x3, Stepper x3, NoteField x1, Field x1, Chip x1
+- Library components used: Txt x74, Row x22, Pressy x19, Button x14, FadeIn x10, IconButton x4, Pill x3, Card x3, Stepper x3, NoteField x1, Field x1, Chip x1
 - States and edge cases: Wearable (Health Connect): Connected, Not connected; Phase: Warm-up, Main, Cool-down; (action) Rest timer: jump to last 5 s; (action) Log all sets of this exercise; (action) Finish screen
 - Hand-built:
-  - `app/workout.tsx:36` bar: `<View key={i} style={{ flex: 1, height: 3, borderRadius: radii.xs, backgroundColor: i < po`
-  - `app/workout.tsx:227` button or pill: `<Pressy accessibilityRole="button" onPress={() => A.addSet(s.exIdx)} style={{ height: 48, `
-  - `app/workout.tsx:314` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Play form video" onPress={() => api`
-  - `app/workout.tsx:322` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Exercise options: swap, ask coach, `
+  - `app/workout.tsx:37` bar: `<View key={i} style={{ flex: 1, height: 3, borderRadius: radii.xs, backgroundColor: i < po`
+  - `app/workout.tsx:228` button or pill: `<Pressy accessibilityRole="button" onPress={() => A.addSet(s.exIdx)} style={{ height: 48, `
+  - `app/workout.tsx:315` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Play form video" onPress={() => api`
   - `app/workout.tsx:350` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={'Back to ${prevName}'} onPress={pre`
-  - `features/workout/SetRow.tsx:93` chip: `<View accessibilityLabel="Warm-up set: a lighter set before your working sets. It doesn't `
-  - `features/workout/SetRow.tsx:97` icon badge: `<View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: c.surface2,`
-  - `features/workout/SetRow.tsx:108` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={timing ? 'Stop timer and log' : 'St`
+  - `features/workout/SetRow.tsx:94` chip: `<View accessibilityLabel="Warm-up set: a lighter set before your working sets. It doesn't `
+  - `features/workout/SetRow.tsx:98` icon badge: `<View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: c.surface2,`
   - `features/workout/FinishScreen.tsx:39` icon badge: `<Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.accen`
-  - `features/workout/NewWorkoutUI.tsx:51` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Watch the clip" disabled={!key} onP`
-  - `features/workout/NewWorkoutUI.tsx:53` icon badge: `<View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.`
-  - `features/workout/NewWorkoutUI.tsx:65` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Finish workout" onPress={onPress} s`
-  - `features/workout/NewWorkoutUI.tsx:98` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Hide the clip" onPress={onHide} sca`
-  - `features/workout/NewWorkoutUI.tsx:104` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Full screen" onPress={goFull} scale`
+  - `features/workout/NewWorkoutUI.tsx:52` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Watch the clip" disabled={!key} onP`
+  - `features/workout/NewWorkoutUI.tsx:54` icon badge: `<View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.`
+  - `features/workout/NewWorkoutUI.tsx:66` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Finish workout" onPress={onPress} s`
+  - `features/workout/NewWorkoutUI.tsx:99` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Hide the clip" onPress={onHide} sca`
   - `features/workout/NewWorkoutUI.tsx:116` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Show the clip" onPress={onOpen} sca`
   - `features/workout/NewWorkoutUI.tsx:118` icon badge: `<View style={{ width: 44, height: 44, borderRadius: radii.sm, overflow: 'hidden', backgrou`
   - `features/workout/NewWorkoutUI.tsx:120` icon badge: `<View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: 'rgba(11,14`
   - `features/workout/NewWorkoutUI.tsx:149` bar: `<View key={i} style={{ flex: 1, height: 4, borderRadius: radii.xs, backgroundColor: i <= p`
-  - `features/workout/NewWorkoutUI.tsx:163` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Exercise options: swap, ask coach, `
-  - `features/workout/NewWorkoutUI.tsx:186` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={'Back to ${prevName}'} onPress={pre`
+  - `features/workout/NewWorkoutUI.tsx:185` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={'Back to ${prevName}'} onPress={pre`
 
 ## App shell (layout, floating tab bar host, overlays) (routes)
 
@@ -749,9 +744,6 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `features/progress/TrendUI.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `features/progress/TrendUI.tsx:113` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Previous month" disabled={!canBack}`
-  - `features/progress/TrendUI.tsx:115` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Next month" disabled={!canFwd} onPr`
-  - `features/progress/TrendUI.tsx:126` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={d.toDateString()} disabled={future}`
   - `features/progress/TrendUI.tsx:129` icon badge: `<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.x`
 
 ## LogoutSheet (bottom sheets)
@@ -1100,11 +1092,9 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `features/progress/TrendUI.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `features/progress/TrendUI.tsx:37` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Earlier" disabled={!win.canPrev} on`
-  - `features/progress/TrendUI.tsx:44` icon button: `<Pressy accessibilityRole="button" accessibilityLabel="Later" disabled={!win.canNext} onPr`
-  - `features/progress/TrendUI.tsx:50` button or pill: `<Pressy accessibilityRole="button" onPress={() => { haptic.tick(); progressStore.set({ anc`
-  - `features/progress/TrendUI.tsx:75` card: `<View accessibilityRole="radiogroup" accessibilityLabel="Period" style={{ flex: 1, flexDir`
-  - `features/progress/TrendUI.tsx:79` button or pill: `<Pressy key={r.value} accessibilityRole="radio" accessibilityState={{ selected: on }} acce`
+  - `features/progress/TrendUI.tsx:51` button or pill: `<Pressy accessibilityRole="button" onPress={() => { haptic.tick(); progressStore.set({ anc`
+  - `features/progress/TrendUI.tsx:76` card: `<View accessibilityRole="radiogroup" accessibilityLabel="Period" style={{ flex: 1, flexDir`
+  - `features/progress/TrendUI.tsx:80` button or pill: `<Pressy key={r.value} accessibilityRole="radio" accessibilityState={{ selected: on }} acce`
   - `features/progress/TrendUI.tsx:177` bar: `<View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2`
 
 ## features/goalv2/FinishBy.tsx (shared components and features)
@@ -1149,6 +1139,5 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `features/workout/ClipStage.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `features/workout/ClipStage.tsx:33` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={isPlaying ? 'Pause the clip' : 'Pla`
-  - `features/workout/ClipStage.tsx:38` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={IS_WEB && wide ? 'Exit full screen'`
+  - `features/workout/ClipStage.tsx:34` icon button: `<Pressy accessibilityRole="button" accessibilityLabel={isPlaying ? 'Pause the clip' : 'Pla`
 

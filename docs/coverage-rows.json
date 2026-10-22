@@ -155,7 +155,7 @@
   "screen": "Coach chat",
   "group": "Routes",
   "status": "not started",
-  "hand": 11,
+  "hand": 10,
   "files": [
    "app/gym/chat.tsx",
    "features/chat/AudioBubble.tsx",
@@ -538,7 +538,7 @@
   "screen": "Active workout",
   "group": "Routes",
   "status": "not started",
-  "hand": 20,
+  "hand": 16,
   "files": [
    "app/workout.tsx",
    "features/workout/SetRow.tsx",
@@ -948,7 +948,7 @@
   "screen": "CalendarSheet",
   "group": "Bottom sheets",
   "status": "not started",
-  "hand": 4,
+  "hand": 1,
   "files": [
    "features/progress/TrendUI.tsx"
   ]
@@ -1468,7 +1468,7 @@
   "screen": "features/progress/TrendUI.tsx",
   "group": "Shared components and features",
   "status": "not started",
-  "hand": 6,
+  "hand": 4,
   "files": [
    "features/progress/TrendUI.tsx"
   ]
@@ -1528,7 +1528,7 @@
   "screen": "features/workout/ClipStage.tsx",
   "group": "Shared components and features",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "features/workout/ClipStage.tsx"
   ]

@@ -27,6 +27,7 @@ import { workoutUiStore } from '@/features/workout/ui';
 import { NewExercise, NewList } from '@/features/workout/NewWorkoutUI';
 import { FinishConfirmSheet, FormTipsSheet, SetMenuSheet, SwapSheet, WkApi, WkMenuSheet } from '@/features/workout/WorkoutSheets';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { IconButton } from '@/design-system/primitives/Button';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 function Bars({ n, pos, light }: { n: number; pos: number; light?: boolean }) {
@@ -319,10 +320,9 @@ export default function Workout() {
                 <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.7, color: cardMuted }}>EXERCISE {s.exIdx + 1} OF {s.ex.length} · {e.muscles.toUpperCase()}</Txt>
                 <Row style={{ gap: 8 }}>
                   <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39, color: cardInk }}>{e.name}</Txt>
-                  <Pressy accessibilityRole="button" accessibilityLabel="Exercise options: swap, ask coach, form tips, skip" onPress={() => openSheet(<WkMenuSheet api={api} />, { label: 'Workout options' })}
-                    style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: cardChip, alignItems: 'center', justifyContent: 'center' }}>
+                  <IconButton label="Exercise options: swap, ask coach, form tips, skip" onPress={() => openSheet(<WkMenuSheet api={api} />, { label: 'Workout options' })} bg={cardChip}>
                     <Ellipsis size={20} color={cardInk} />
-                  </Pressy>
+                  </IconButton>
                 </Row>
                 <Row style={{ gap: 8 }}>
                   {e.swapped ? <Tag label="Swapped for today" bg={c.accentSoft} fg={c.accentText} /> : e.last ? <Txt style={{ fontFamily: font.mono, fontSize: fontSizes.xs, color: cardMuted }}>{e.last}</Txt> : null}

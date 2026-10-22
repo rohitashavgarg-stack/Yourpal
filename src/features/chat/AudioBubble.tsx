@@ -5,6 +5,7 @@ import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { Pressy, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
+import { IconButton } from '@/design-system/primitives/Button';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
@@ -34,10 +35,9 @@ export function AudioBubble({ uri, dur, me }: { uri: string; dur: number; me: bo
   };
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, minWidth: 210 }}>
-      <Pressy accessibilityRole="button" accessibilityLabel={st.playing ? 'Pause voice message' : 'Play voice message'} onPress={toggle} scaleTo={0.9}
-        style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: me ? 'rgba(255,255,255,0.22)' : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}>
+      <IconButton label={st.playing ? 'Pause voice message' : 'Play voice message'} onPress={toggle} scaleTo={0.9} size={40} radius={20} bg={me ? 'rgba(255,255,255,0.22)' : c.accentSoft}>
         {st.playing ? <Pause size={18} color={fg} fill={fg} /> : <Play size={18} color={fg} fill={fg} />}
-      </Pressy>
+      </IconButton>
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 2, height: 28 }}>
         {wave.map((h, i) => <View key={i} style={{ flex: 1, height: h, borderRadius: radii.xs, backgroundColor: i / wave.length < pct ? fg : dim }} />)}
       </View>

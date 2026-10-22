@@ -41,7 +41,7 @@
 
 ## IconButton
 
-A 44 px rounded square (`radii.lg`) with one icon or sign. Props: `label` (spoken), `onPress`, `children`, `bg` (default soft surface), `glass` (frosted, for photos and maps), `scaleTo` (press scale, 0.97; the stepper uses 0.9). `StepBtn` is an IconButton with a minus or plus sign.
+A rounded square with one icon or sign: 44 px with radius `radii.lg` by default. Props: `label` (spoken), `onPress`, `children`, `bg` (default soft surface), `glass` (frosted, for photos and maps), `scaleTo` (press scale, 0.97; the stepper uses 0.9), `size` (px, default 44), `radius` (px, default `radii.lg`; half the size makes a circle), `borderWidth` and `borderColor` (an outline), `disabled` (dim it with `style` opacity). `StepBtn` is an IconButton with a minus or plus sign. Used for the Plan, Trend and calendar arrows, the exercise menu, the timer button, the clip full-screen buttons and the voice-message play button.
 
 ## Old name to new
 

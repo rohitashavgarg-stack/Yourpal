@@ -1275,15 +1275,6 @@
      "file": "app/gym/chat.tsx"
     },
     {
-     "kind": "icon button",
-     "sig": "icon button 40 px, radius 20",
-     "fn": "AudioBubble",
-     "line": 37,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={st.playing ? 'Pause voice message' : 'Play voice messag",
-     "file": "features/chat/AudioBubble.tsx"
-    },
-    {
      "kind": "icon badge",
      "sig": "dot 10 px",
      "fn": "Pulse",
@@ -1341,9 +1332,10 @@
    "ds": {
     "Txt": 19,
     "Button": 1,
-    "Pressy": 15,
+    "Pressy": 14,
     "Row": 2,
-    "FadeIn": 5
+    "FadeIn": 5,
+    "IconButton": 1
    },
    "sheets": [
     {
@@ -3181,7 +3173,7 @@
      "kind": "bar",
      "sig": "bar 3 px high, radius radii.xs",
      "fn": "Bars",
-     "line": 36,
+     "line": 37,
      "tag": "View",
      "text": "<View key={i} style={{ flex: 1, height: 3, borderRadius: radii.xs, backgroundColor: i < pos ? fixed.blue : i =",
      "file": "app/workout.tsx"
@@ -3190,7 +3182,7 @@
      "kind": "button or pill",
      "sig": "button 48 px high, radius radii.card",
      "fn": "Workout",
-     "line": 227,
+     "line": 228,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" onPress={() => A.addSet(s.exIdx)} style={{ height: 48, borderRadius: radii.",
      "file": "app/workout.tsx"
@@ -3199,18 +3191,9 @@
      "kind": "button or pill",
      "sig": "button 38 px high, radius 19",
      "fn": "Workout",
-     "line": 314,
+     "line": 315,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Play form video\" onPress={() => api.current.formTips()}",
-     "file": "app/workout.tsx"
-    },
-    {
-     "kind": "icon button",
-     "sig": "icon button 44 px, radius radii.lg",
-     "fn": "Workout",
-     "line": 322,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Exercise options: swap, ask coach, form tips, skip\" onP",
      "file": "app/workout.tsx"
     },
     {
@@ -3226,7 +3209,7 @@
      "kind": "chip",
      "sig": "chip 24 px high, radius radii.sm",
      "fn": "SetRow",
-     "line": 93,
+     "line": 94,
      "tag": "View",
      "text": "<View accessibilityLabel=\"Warm-up set: a lighter set before your working sets. It doesn't count toward your PR",
      "file": "features/workout/SetRow.tsx"
@@ -3235,18 +3218,9 @@
      "kind": "icon badge",
      "sig": "icon tile 32 px, radius radii.md",
      "fn": "SetRow",
-     "line": 97,
+     "line": 98,
      "tag": "View",
      "text": "<View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center",
-     "file": "features/workout/SetRow.tsx"
-    },
-    {
-     "kind": "icon button",
-     "sig": "icon button 44 px, radius radii.lg",
-     "fn": "SetRow",
-     "line": 108,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={timing ? 'Stop timer and log' : `Start ${p.draft.t} sec",
      "file": "features/workout/SetRow.tsx"
     },
     {
@@ -3280,7 +3254,7 @@
      "kind": "icon button",
      "sig": "icon button 64 px, radius radii.sm",
      "fn": "MoveThumb",
-     "line": 51,
+     "line": 52,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Watch the clip\" disabled={!key} onPress={onOpen} scaleT",
      "file": "features/workout/NewWorkoutUI.tsx"
@@ -3289,7 +3263,7 @@
      "kind": "icon badge",
      "sig": "icon tile 26 px, radius 13",
      "fn": "MoveThumb",
-     "line": 53,
+     "line": 54,
      "tag": "View",
      "text": "<View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'c",
      "file": "features/workout/NewWorkoutUI.tsx"
@@ -3298,7 +3272,7 @@
      "kind": "button or pill",
      "sig": "button 44 px high, radius radii.lg",
      "fn": "FinishPill",
-     "line": 65,
+     "line": 66,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Finish workout\" onPress={onPress} scaleTo={0.94} style=",
      "file": "features/workout/NewWorkoutUI.tsx"
@@ -3307,18 +3281,9 @@
      "kind": "button or pill",
      "sig": "button 32 px high, radius radii.md",
      "fn": "ClipCardInner",
-     "line": 98,
+     "line": 99,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Hide the clip\" onPress={onHide} scaleTo={0.94} style={{",
-     "file": "features/workout/NewWorkoutUI.tsx"
-    },
-    {
-     "kind": "icon button",
-     "sig": "icon button 40 px, radius 20",
-     "fn": "ClipCardInner",
-     "line": 104,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Full screen\" onPress={goFull} scaleTo={0.92} style={{ p",
      "file": "features/workout/NewWorkoutUI.tsx"
     },
     {
@@ -3359,18 +3324,9 @@
     },
     {
      "kind": "icon button",
-     "sig": "icon button 44 px, radius radii.lg",
-     "fn": "NewExercise",
-     "line": 163,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Exercise options: swap, ask coach, form tips, skip\" onP",
-     "file": "features/workout/NewWorkoutUI.tsx"
-    },
-    {
-     "kind": "icon button",
      "sig": "icon button 56 px, radius radii.xl",
      "fn": "NewExercise",
-     "line": 186,
+     "line": 185,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92} ",
      "file": "features/workout/NewWorkoutUI.tsx"
@@ -3409,9 +3365,10 @@
     "FadeIn": 10,
     "Pill": 3,
     "Button": 14,
-    "Pressy": 23,
+    "Pressy": 19,
     "Card": 3,
     "NoteField": 1,
+    "IconButton": 4,
     "Stepper": 3,
     "Field": 1,
     "Chip": 1
@@ -3420,42 +3377,42 @@
     {
      "comp": "SwapSheet",
      "label": "Swap exercise",
-     "line": 112,
+     "line": 113,
      "in": "Workout",
      "file": "app/workout.tsx"
     },
     {
      "comp": "SetMenuSheet",
      "label": "Set options",
-     "line": 113,
+     "line": 114,
      "in": "Workout",
      "file": "app/workout.tsx"
     },
     {
      "comp": "FormTipsSheet",
      "label": "Form tips",
-     "line": 119,
+     "line": 120,
      "in": "Workout",
      "file": "app/workout.tsx"
     },
     {
      "comp": "FinishConfirmSheet",
      "label": "Finish workout",
-     "line": 165,
+     "line": 166,
      "in": "askFinish",
      "file": "app/workout.tsx"
     },
     {
      "comp": "WkMenuSheet",
      "label": "Workout options",
-     "line": 253,
+     "line": 254,
      "in": "Workout",
      "file": "app/workout.tsx"
     },
     {
      "comp": "WkMenuSheet",
      "label": "Workout options",
-     "line": 322,
+     "line": 323,
      "in": "Workout",
      "file": "app/workout.tsx"
     }
@@ -3962,28 +3919,10 @@
    "file": "features/progress/TrendUI.tsx",
    "hand": [
     {
-     "kind": "icon button",
-     "sig": "icon button 44 px, radius radii.lg",
-     "fn": "RangeBar",
-     "line": 37,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Earlier\" disabled={!win.canPrev} onPress={() => go(-1)}",
-     "file": "features/progress/TrendUI.tsx"
-    },
-    {
-     "kind": "icon button",
-     "sig": "icon button 44 px, radius radii.lg",
-     "fn": "RangeBar",
-     "line": 44,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Later\" disabled={!win.canNext} onPress={() => go(1)} st",
-     "file": "features/progress/TrendUI.tsx"
-    },
-    {
      "kind": "button or pill",
      "sig": "button 32 px high, radius radii.md",
      "fn": "RangeBar",
-     "line": 50,
+     "line": 51,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" onPress={() => { haptic.tick(); progressStore.set({ anchor: sod(TODAY).getT",
      "file": "features/progress/TrendUI.tsx"
@@ -3992,7 +3931,7 @@
      "kind": "card",
      "sig": "card radius radii.md, fill c.surface2, padding 2",
      "fn": "RangeBarSlim",
-     "line": 75,
+     "line": 76,
      "tag": "View",
      "text": "<View accessibilityRole=\"radiogroup\" accessibilityLabel=\"Period\" style={{ flex: 1, flexDirection: 'row', gap: ",
      "file": "features/progress/TrendUI.tsx"
@@ -4001,36 +3940,9 @@
      "kind": "button or pill",
      "sig": "button 32 px high, radius radii.md",
      "fn": "RangeBarSlim",
-     "line": 79,
+     "line": 80,
      "tag": "Pressy",
      "text": "<Pressy key={r.value} accessibilityRole=\"radio\" accessibilityState={{ selected: on }} accessibilityLabel={r.la",
-     "file": "features/progress/TrendUI.tsx"
-    },
-    {
-     "kind": "icon button",
-     "sig": "icon button 44 px, radius radii.lg",
-     "fn": "CalendarSheet",
-     "line": 113,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Previous month\" disabled={!canBack} onPress={() => setC",
-     "file": "features/progress/TrendUI.tsx"
-    },
-    {
-     "kind": "icon button",
-     "sig": "icon button 44 px, radius radii.lg",
-     "fn": "CalendarSheet",
-     "line": 115,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Next month\" disabled={!canFwd} onPress={() => setCursor",
-     "file": "features/progress/TrendUI.tsx"
-    },
-    {
-     "kind": "icon button",
-     "sig": "icon button 40 px, radius 20",
-     "fn": "CalendarSheet",
-     "line": 126,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={d.toDateString()} disabled={future} onPress={() => { pr",
      "file": "features/progress/TrendUI.tsx"
     },
     {
@@ -4055,7 +3967,8 @@
    "ds": {
     "Segmented": 1,
     "Row": 6,
-    "Pressy": 13,
+    "IconButton": 5,
+    "Pressy": 8,
     "Txt": 12,
     "FadeIn": 1
    },
@@ -4063,14 +3976,14 @@
     {
      "comp": "CalendarSheet",
      "label": "Pick a date",
-     "line": 40,
+     "line": 41,
      "in": "RangeBar",
      "file": "features/progress/TrendUI.tsx"
     },
     {
      "comp": "CalendarSheet",
      "label": "Pick a date",
-     "line": 88,
+     "line": 89,
      "in": "RangeBarSlim",
      "file": "features/progress/TrendUI.tsx"
     }
@@ -4234,23 +4147,15 @@
      "kind": "icon button",
      "sig": "icon button 64 px, radius 32",
      "fn": "Clip",
-     "line": 33,
+     "line": 34,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={isPlaying ? 'Pause the clip' : 'Play the clip'} onPress",
-     "file": "features/workout/ClipStage.tsx"
-    },
-    {
-     "kind": "icon button",
-     "sig": "icon button 44 px, radius radii.lg",
-     "fn": "Clip",
-     "line": 38,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={IS_WEB && wide ? 'Exit full screen' : 'Full screen'} on",
      "file": "features/workout/ClipStage.tsx"
     }
    ],
    "ds": {
-    "Pressy": 2
+    "Pressy": 1,
+    "IconButton": 1
    },
    "sheets": [],
    "scenarios": []

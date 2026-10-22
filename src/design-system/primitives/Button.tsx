@@ -75,17 +75,26 @@ export type IconButtonProps = {
   glass?: boolean;
   /** Press scale. Default 0.97; the stepper buttons use 0.9. */
   scaleTo?: number;
+  /** Width and height in px. Default 44. */
+  size?: number;
+  /** Corner radius in px. Default `radii.lg`; use half the size for a circle. */
+  radius?: number;
+  /** An outline: line colour and width. */
+  borderColor?: string;
+  borderWidth?: number;
+  /** Not pressable. Dim it with `style` (opacity). */
+  disabled?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
-/** A 44 px rounded square with one icon or sign in it: close, back, minus, plus. */
-export function IconButton({ label, onPress, children, bg, style, glass, scaleTo }: IconButtonProps) {
+/** A rounded square (44 px by default) with one icon or sign in it: close, back, minus, plus, play. */
+export function IconButton({ label, onPress, children, bg, style, glass, scaleTo, size = 44, radius = radii.lg, borderColor, borderWidth, disabled }: IconButtonProps) {
   const { c, isDark } = useTheme();
   // Glass buttons get a soft shadow so they still read on a plain page.
   const rim = glass ? { shadowColor: fixed.shadow, shadowOpacity: isDark ? 0.35 : 0.1, shadowRadius: 10, shadowOffset: { width: 0, height: 3 }, elevation: 3 } : null;
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} scaleTo={scaleTo}
-      style={[{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center' }, rim, style]}>
+    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} scaleTo={scaleTo} disabled={disabled}
+      style={[{ width: size, height: size, borderRadius: radius, backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center', ...(borderWidth ? { borderWidth, borderColor } : null) }, rim, style]}>
       {glass ? (
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radii.lg, overflow: 'hidden' }}>
           <GlassBackdrop radius={22} tint={Platform.OS === 'web' ? (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.82)') : undefined} />

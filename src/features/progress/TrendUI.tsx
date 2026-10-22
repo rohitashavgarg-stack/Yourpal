@@ -12,6 +12,7 @@ import { haptic } from '@/lib/haptics';
 import { dow, RANGES, Range, shift, sod, START, TODAY, Trend, windowOf } from './trends';
 import { progressStore } from './store';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { IconButton } from '@/design-system/primitives/Button';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // ============ Day | Week | Month | Year, with ‹ date › you can also swipe ============
@@ -34,16 +35,16 @@ export function RangeBar() {
       <Segmented<Range> accessibilityLabel="Period" value={ps.range} onChange={(range) => progressStore.set({ range })} options={RANGES} />
       <GestureDetector gesture={swipe}>
         <Row collapsable={false} style={{ gap: 8 }}>
-          <Pressy accessibilityRole="button" accessibilityLabel="Earlier" disabled={!win.canPrev} onPress={() => go(-1)} style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: win.canPrev ? 1 : 0.35 }}>
+          <IconButton label="Earlier" disabled={!win.canPrev} onPress={() => go(-1)} style={{ opacity: win.canPrev ? 1 : 0.35 }}>
             <ChevronLeft size={20} color={c.ink} />
-          </Pressy>
+          </IconButton>
           <Pressy accessibilityRole="button" accessibilityLabel={`${win.label}. Pick a date`} onPress={() => openSheet(<CalendarSheet />, { label: 'Pick a date' })} style={{ flex: 1, minHeight: 44, alignItems: 'center', justifyContent: 'center' }}>
             <Txt accessibilityLiveRegion="polite" numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.base }}>{win.label}</Txt>
             <Txt v="caption">{win.current ? 'Swipe or tap for a calendar' : 'Tap for a calendar'}</Txt>
           </Pressy>
-          <Pressy accessibilityRole="button" accessibilityLabel="Later" disabled={!win.canNext} onPress={() => go(1)} style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: win.canNext ? 1 : 0.35 }}>
+          <IconButton label="Later" disabled={!win.canNext} onPress={() => go(1)} style={{ opacity: win.canNext ? 1 : 0.35 }}>
             <ChevronRight size={20} color={c.ink} />
-          </Pressy>
+          </IconButton>
         </Row>
       </GestureDetector>
       {!win.current && (
@@ -110,9 +111,9 @@ export function CalendarSheet() {
   return (
     <>
       <Row style={{ justifyContent: 'space-between' }}>
-        <Pressy accessibilityRole="button" accessibilityLabel="Previous month" disabled={!canBack} onPress={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))} style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: canBack ? 1 : 0.35 }}><ChevronLeft size={20} color={c.ink} /></Pressy>
+        <IconButton label="Previous month" disabled={!canBack} onPress={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))} style={{ opacity: canBack ? 1 : 0.35 }}><ChevronLeft size={20} color={c.ink} /></IconButton>
         <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg }}>{MONTHS[cursor.getMonth()]} {cursor.getFullYear()}</Txt>
-        <Pressy accessibilityRole="button" accessibilityLabel="Next month" disabled={!canFwd} onPress={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))} style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: canFwd ? 1 : 0.35 }}><ChevronRight size={20} color={c.ink} /></Pressy>
+        <IconButton label="Next month" disabled={!canFwd} onPress={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))} style={{ opacity: canFwd ? 1 : 0.35 }}><ChevronRight size={20} color={c.ink} /></IconButton>
       </Row>
       <Row>{['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((l, i) => <Txt key={i} v="caption" style={{ flex: 1, textAlign: 'center' }}>{l}</Txt>)}</Row>
       <View>
@@ -123,11 +124,10 @@ export function CalendarSheet() {
               const future = d > TODAY, inWin = d >= win.start && d <= win.end, isToday = sod(d).getTime() === sod(TODAY).getTime();
               return (
                 <View key={i} style={{ flex: 1, height: 46, alignItems: 'center', justifyContent: 'center' }}>
-                  <Pressy accessibilityRole="button" accessibilityLabel={d.toDateString()} disabled={future} onPress={() => { progressStore.set({ anchor: sod(d).getTime() }); haptic.tick(); closeSheet(); }} scaleTo={0.9}
-                    style={{ width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: inWin ? c.accentSoft : 'transparent', borderWidth: isToday ? 1.5 : 0, borderColor: c.accent, opacity: future ? 0.3 : 1 }}>
+                  <IconButton label={d.toDateString()} disabled={future} onPress={() => { progressStore.set({ anchor: sod(d).getTime() }); haptic.tick(); closeSheet(); }} scaleTo={0.9} size={40} radius={20} bg={inWin ? c.accentSoft : 'transparent'} borderWidth={isToday ? 1.5 : 0} borderColor={c.accent} style={{ opacity: future ? 0.3 : 1 }}>
                     <Txt style={{ fontFamily: inWin ? font.semibold : font.regular, fontSize: fontSizes.md, color: inWin ? c.accentText : c.ink }}>{d.getDate()}</Txt>
                     {!future && d >= sod(START) && <View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.xs, backgroundColor: c.accent, opacity: 0.6 }} />}
-                  </Pressy>
+                  </IconButton>
                 </View>
               );
             })}

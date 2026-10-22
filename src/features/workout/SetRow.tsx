@@ -11,6 +11,7 @@ import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { setLabel, setText } from './session';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { IconButton } from '@/design-system/primitives/Button';
 import { Stepper } from '@/design-system/primitives/Stepper';
 
 export type Draft = { k: number; r: number; t: number };
@@ -105,10 +106,9 @@ export function SetRow(p: Props) {
                 {(M === 't' || M === 'tw') && (
                   <>
                     <Stepper variant="inline" label="Duration" unit="s" value={timing ? p.timerLeft! : p.draft.t} step={5} min={5} onChange={(t) => !timing && p.setDraft({ t })} block={pan} />
-                    <Pressy accessibilityRole="button" accessibilityLabel={timing ? 'Stop timer and log' : `Start ${p.draft.t} second timer`} onPress={p.onTimer}
-                      style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: timing ? c.warn : c.accent, alignItems: 'center', justifyContent: 'center' }}>
+                    <IconButton label={timing ? 'Stop timer and log' : `Start ${p.draft.t} second timer`} onPress={p.onTimer} bg={timing ? c.warn : c.accent}>
                       {timing ? <Square size={13} color={fixed.white} fill={fixed.white} /> : <Play size={15} color={fixed.white} fill={fixed.white} />}
-                    </Pressy>
+                    </IconButton>
                   </>
                 )}
               </View>
