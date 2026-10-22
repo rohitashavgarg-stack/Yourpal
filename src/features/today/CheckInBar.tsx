@@ -73,8 +73,9 @@ export function CheckInBar() {
   const paused = useLogsPaused();
   const now = useNow(mode === 'in', 15000);
   if (d.session) return <Floating><MiniWorkout /></Floating>;
-  if (mode === 'none' || paused) return null;
   const st = workoutState(d);
+  // the workout is done for today: no nudge to check in; a member who is checked in still sees the timer and Check out
+  if (mode === 'none' || paused || (st === 'done' && mode !== 'in')) return null;
   const at = ciTime(d);
   let bg: string = c.surface, fg: string = c.ink, icBg: string = c.surface2, title = '', sub = '', btn = '', act: (() => void) | null = null, border = true;
   let icon = <MapPin size={17} color={fg} />;

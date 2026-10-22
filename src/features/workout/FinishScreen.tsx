@@ -4,11 +4,11 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withSpri
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
 import { BlurView } from 'expo-blur';
-import { Check, Flame, Share, Trophy, X } from '@/lib/icons';
+import { Check, Flame, Share, Trophy } from '@/lib/icons';
 import { FLAME } from '@/features/streak/StreakChip';
 import { useStreak } from '@/features/streak/useStreak';
 import { Button, Field, Pressy, Row, Txt } from '@/components/ui';
-import { RoundBtn, Tag } from '@/components/bits';
+import { Tag } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
@@ -71,7 +71,6 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
         <Circle cx={96} cy={170} r={150} fill={c.moon} />
         <Circle cx={114} cy={156} r={150} fill="none" stroke={c.moonRing} strokeWidth={1.5} opacity={0.5} />
       </Svg>
-      <RoundBtn label="Close" onPress={() => onDone(feel, note)} glass style={{ position: 'absolute', top: insets.top + 8, right: 16 }}><X size={20} color={c.ink} /></RoundBtn>
 
       <FadeIn style={{ position: 'absolute', left: 12, right: 12, bottom: Math.max(insets.bottom, 14), borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: c.glassLine,
         shadowColor: '#0F0E3C', shadowOpacity: 0.28, shadowRadius: 60, shadowOffset: { width: 0, height: 24 } }}>

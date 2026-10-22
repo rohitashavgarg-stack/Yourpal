@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
+import Svg, { Circle, Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
 import { ChevronRight, Flame, Target } from '@/lib/icons';
 import { GoalVisual, goalShare, markerX, VisualSize } from '@/features/goalv2/GoalVisual';
 import { useStreak } from '@/features/streak/useStreak';
@@ -28,10 +28,10 @@ export const goalSizeStore = createStore(() => ({ size: 'Smaller' as GoalSize })
 
 // The glow of the Today card: a radial ellipse (about 300 x 230) behind the content, 50 px past the left edge and 80 px below the bottom, so only part of it
 // shows, clipped by the card's rounded corners. Its colour comes from the state.
-export function RadialGlow({ color, a, side = 'left' }: { color: string; a: number; side?: 'left' | 'right' }) {
+export function RadialGlow({ color, a, side = 'left', top }: { color: string; a: number; side?: 'left' | 'right'; top?: boolean }) {
   const W = 340, H = 260;
   return (
-    <View pointerEvents="none" style={{ position: 'absolute', ...(side === 'left' ? { left: -60 } : { right: -60 }), bottom: -90, width: W, height: H }}>
+    <View pointerEvents="none" style={{ position: 'absolute', ...(side === 'left' ? { left: -60 } : { right: -60 }), ...(top ? { top: -130 } : { bottom: -90 }), width: W, height: H }}>
       <Svg width={W} height={H}>
         <Defs>
           <RadialGradient id={`goalGlow-${color}`} cx="50%" cy="50%" r="50%">
@@ -97,22 +97,33 @@ function Journey({ g }: { g: Goal2 }) {
   );
 }
 
-// The strip variant: one row with the goal name and, on the right, how far the member got in the goal's own words ("1.6 of 6.0 kg"),
-// in the colour of the state. Complete and Back on say the state in words instead; a weight or muscle goal whose last weigh-in is 10 days
-// or more old says "Needs a weigh-in" in amber; no goal says so in the name.
-const STRIP = { white: '#F3F4F6', soft: '#C9CDD6' };
-function GoalStripRow({ name, right, rightColor, none }: { name: string; right: string; rightColor: string; none: boolean }) {
+// The strip variant: the goal row at the top of the Daily budget card on Today. A thin ring with the share done in it, the goal name with
+// the state pill beside it, and one line under it: how far the member got in the goal's own words and the end date ("1.6 of 6.0 kg lost, by 30 Nov").
+// A weight or muscle goal whose last weigh-in is 10 days or more old says "Needs a weigh-in" in amber; no goal says so in the name.
+const STRIP = { white: '#F3F4F6', soft: '#C9CDD6', muted: '#9AA0AD', track: 'rgba(255,255,255,0.14)' };
+const RING = 44, RW = 3.5;
+function GoalStripRow({ name, line, lineColor, pct, ringColor, pill, none }: { name: string; line: string; lineColor: string; pct: number; ringColor: string; pill?: { label: string; bg: string; fg: string }; none: boolean }) {
+  const r = (RING - RW) / 2, len = 2 * Math.PI * r;
   return (
-    <Pressy accessibilityRole="link" accessibilityLabel={none ? 'No goal set yet. Open' : `Your goal: ${name}, ${right}. Open`} onPress={() => router.push('/goal-detail')} scaleTo={0.98}
-      style={{ minHeight: 64, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.14)', backgroundColor: 'rgba(255,255,255,0.07)', paddingHorizontal: 18, justifyContent: 'center' }}>
-      <Row style={{ gap: 12 }}>
-        <Target size={22} color={none ? GC.emptyTitle : STRIP.white} />
-        <View style={{ flex: 1 }}>
-          <Txt style={{ fontSize: fontSizes.md, lineHeight: 19, color: STRIP.soft }}>Goal</Txt>
-          <Txt numberOfLines={1} style={{ fontFamily: font.regular, fontSize: fontSizes.lg, lineHeight: 25, color: none ? GC.emptyTitle : STRIP.white }}>{name}</Txt>
+    <Pressy accessibilityRole="link" accessibilityLabel={none ? 'No goal set yet. Open' : `Your goal: ${name}, ${Math.round(pct * 100)} percent${pill ? `, ${pill.label}` : ''}. ${line}. Open`} onPress={() => router.push('/goal-detail')} scaleTo={0.98}
+      style={{ minHeight: 76, paddingHorizontal: 18, paddingVertical: 14, justifyContent: 'center' }}>
+      <Row style={{ gap: 14 }}>
+        <View style={{ width: RING, height: RING, alignItems: 'center', justifyContent: 'center' }}>
+          <Svg width={RING} height={RING} style={{ position: 'absolute' }}>
+            <Circle cx={RING / 2} cy={RING / 2} r={r} stroke={STRIP.track} strokeWidth={RW} fill="none" />
+            {!none && pct > 0 && <Circle cx={RING / 2} cy={RING / 2} r={r} stroke={ringColor} strokeWidth={RW} fill="none" strokeLinecap="round"
+              strokeDasharray={`${len} ${len}`} strokeDashoffset={len * (1 - Math.min(1, pct))} transform={`rotate(-90 ${RING / 2} ${RING / 2})`} />}
+          </Svg>
+          {none ? <Target size={18} color={GC.emptyTitle} /> : <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, color: STRIP.white }}>{`${Math.round(pct * 100)}%`}</Txt>}
         </View>
-        {!!right && <Txt style={{ fontSize: fontSizes.base, lineHeight: 21, color: rightColor }}>{right}</Txt>}
-        <ChevronRight size={18} color={STRIP.white} />
+        <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
+          <Row style={{ gap: 8 }}>
+            <Txt numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, color: none ? GC.emptyTitle : STRIP.white }}>{name}</Txt>
+            {!!pill && <View style={{ height: 22, paddingHorizontal: 9, borderRadius: 11, backgroundColor: pill.bg, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: pill.fg }}>{pill.label}</Txt></View>}
+          </Row>
+          {!!line && <Txt numberOfLines={1} style={{ fontSize: fontSizes.sm, lineHeight: 18, color: lineColor }}>{line}</Txt>}
+        </View>
+        <ChevronRight size={18} color={STRIP.muted} />
       </Row>
     </Pressy>
   );
@@ -150,12 +161,15 @@ export function GoalCard({ variant = 'card', state: stateProp, weighDays: weighP
     const sampleS = demo && kgGoal && !none ? DEMO[state] : null; // the same sample numbers the card shows when a state is pinned
     const lostS = sampleS ? sampleS.lost : done;
     const unit = g.unit === '%' ? '%' : ` ${g.unit}`;
-    const line = g.kind === 'consistency' ? `${g.currentValue} of ${g.weeklyTarget} this week` : `${fmtVal(g, lostS)} of ${fmtVal(g, total)}${unit}${g.kind === 'agility' ? ' faster' : ''}`;
-    const inWords = state === 'complete' || state === 'backOn';
-    const staleS = kgGoal && weighDays >= STALE_WEIGH_DAYS && !inWords;
-    const right = none ? '' : inWords ? LOOK[state].pill!.label : staleS ? 'Needs a weigh-in' : line;
-    const rightColor = staleS ? GC.amber : state === 'behind' ? GC.amber : state === 'almost' || inWords ? GC.mint : STRIP.soft;
-    return <GoalStripRow name={none ? 'No goal set yet' : g.name} right={right} rightColor={rightColor} none={none} />;
+    const amount = g.kind === 'consistency' ? `${g.currentValue} of ${g.weeklyTarget} this week` : `${fmtVal(g, lostS)} of ${fmtVal(g, total)}${unit} ${g.kind === 'agility' ? 'faster' : verb}`;
+    const staleS = kgGoal && weighDays >= STALE_WEIGH_DAYS && state !== 'complete' && state !== 'backOn';
+    const line = none ? 'Set one to see your progress here' : staleS ? 'Needs a weigh-in' : [amount, by].filter(Boolean).join(', ');
+    const lineColor = staleS ? GC.amber : STRIP.muted;
+    const look = none ? null : LOOK[state];
+    // on track reads as good news in mint here; the other states keep their own pill
+    const pill = look?.pill ? (state === 'onTrack' ? { label: look.pill.label, bg: 'rgba(46,230,168,0.16)', fg: GC.mint } : look.pill) : undefined;
+    const share = sampleS ? sampleS.pct : pct;
+    return <GoalStripRow name={none ? 'No goal set yet' : g.name} line={line} lineColor={lineColor} pct={state === 'complete' ? 1 : share} ringColor={look?.seg ?? GC.mint} pill={pill} none={none} />;
   }
 
   // ---- the goal page keeps its own header (no card around it, status colours): unchanged ----

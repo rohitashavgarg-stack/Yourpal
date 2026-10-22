@@ -1,9 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Flame, UtensilsCrossed } from '@/lib/icons';
 import { Row, Txt } from '@/components/ui';
-import { GoalCard } from '@/design-system/patterns/GoalCard';
+import { GoalCard, RadialGlow } from '@/design-system/patterns/GoalCard';
 import { GoalCardState } from '@/features/today/goalCardState';
 import { font } from '@/theme/tokens';
 import { radii, fontSizes } from '@/design-system/tokens';
@@ -39,9 +38,8 @@ function Half({ icon, label, unit, value, of, pct, color }: { icon: React.ReactN
       <Row style={{ gap: 7 }}>
         {icon}
         <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: SOFT }}>{label}</Txt>
-        <Txt numberOfLines={1} style={{ flex: 1, textAlign: 'right', fontSize: fontSizes.sm, lineHeight: 18, color: MUTED }}>{unit}</Txt>
-      </Row>
-      <Txt style={{ fontFamily: font.regular, fontSize: 36, lineHeight: 44, letterSpacing: -1, color: WHITE }}>{value}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.base, lineHeight: 20, color: MUTED, letterSpacing: 0 }}>{` / ${of}`}</Txt></Txt>
+              </Row>
+      <Txt style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 38, letterSpacing: -0.8, color: WHITE }}>{value}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.base, lineHeight: 20, color: MUTED, letterSpacing: 0 }}>{` / ${of}`}</Txt></Txt>
       <View style={{ height: 5, borderRadius: radii.xs, backgroundColor: 'rgba(255,255,255,0.18)', overflow: 'hidden' }}>
         <View style={{ width: `${Math.max(0, Math.min(100, pct * 100))}%`, height: '100%', borderRadius: radii.xs, backgroundColor: color }} />
       </View>
@@ -54,9 +52,12 @@ const SOURCE_WORD: Record<BudgetBurnSource, string> = { plan: 'planned', done: '
 export function BudgetCard({ eaten, eatTarget, burned, burnTarget, burnSource = 'plan', goalState }: BudgetCardProps) {
   return (
     <View style={{ borderRadius: radii.xl, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
-      <LinearGradient colors={['#1B1D22', '#1E2438', '#2A3860']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      {/* charcoal with a soft blue glow from the top right corner */}
+      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#1A1D22' }} />
+      <RadialGlow color="#2F6BEA" a={0.32} side="right" top />
       <GoalCard variant="strip" state={goalState} />
-      <Row style={{ gap: 16, alignItems: 'flex-start', paddingHorizontal: 18, paddingTop: 18, paddingBottom: 16 }}>
+      <View style={{ height: 1, marginHorizontal: 18, backgroundColor: 'rgba(255,255,255,0.1)' }} />
+      <Row style={{ gap: 16, alignItems: 'flex-start', paddingHorizontal: 18, paddingTop: 14, paddingBottom: 18 }}>
         <Half icon={<UtensilsCrossed size={17} color={MINT} />} label="Eat today" unit="kcal" value={inr(eaten)} of={inr(eatTarget)} pct={eaten / eatTarget} color={MINT} />
         <View style={{ width: 1, alignSelf: 'stretch', backgroundColor: 'rgba(255,255,255,0.12)' }} />
         <Half icon={<Flame size={17} color={BURN} />} label="Burn today" unit="kcal" value={inr(burned)} of={burnSource === 'watch' ? inr(burnTarget) : `${inr(burnTarget)} ${SOURCE_WORD[burnSource]}`} pct={burned / burnTarget} color={BURN} />
