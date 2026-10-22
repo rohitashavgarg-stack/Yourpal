@@ -162,7 +162,7 @@ export default function LogFood() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title={replaceIt ? `Swap ${replaceIt.n.toLowerCase()}` : 'What did you eat?'} icon="close" />
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: 16, gap: 12 }}>
         {!replaceIt && !forEdit && (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6 }}>
             {MEALS.map((m) => <Pill key={m.id} label={m.n} on={meal === m.id} onPress={() => setMeal(m.id)} />)}
@@ -291,8 +291,11 @@ export default function LogFood() {
             </View>
           </FadeIn>
         )}
-        <Button label={logL} disabled={!cur} onPress={log} />
       </ScrollView>
+      {/* the log button stays in view at the bottom while the list scrolls */}
+      <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 16), backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>
+        <Button label={logL} disabled={!cur} onPress={log} />
+      </View>
     </View>
   );
 }
