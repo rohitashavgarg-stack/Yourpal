@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Dimensions, Keyboard, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -18,6 +18,17 @@ export type SheetProps = {
   /** The sheet hands its animated close function to this callback so the host can close it. */
   registerClose: (fn: (after?: () => void) => void) => void;
 };
+
+// What a sheet pins under its scrolling content (the main button), set from inside the content with <SheetFooter>.
+const FooterCtx = createContext<((n: React.ReactNode) => void) | null>(null);
+
+/** Keeps its children at the bottom of the sheet, outside the scroll, so the button stays in view on long lists. */
+export function SheetFooter({ children }: { children: React.ReactNode }) {
+  const setFooter = useContext(FooterCtx);
+  useLayoutEffect(() => { setFooter?.(children); });
+  useEffect(() => () => setFooter?.(null), [setFooter]);
+  return setFooter ? null : <>{children}</>;
+}
 
 // How much of the screen the on-screen keyboard covers (0 on web and when it is hidden).
 function useKeyboardHeight() {
@@ -45,6 +56,7 @@ export function Sheet({ children, label, glow, onClosed, registerClose }: SheetP
   const y = useSharedValue(900);
   const back = useSharedValue(0);
   const afterRef = useRef<(() => void) | undefined>(undefined);
+  const [footer, setFooter] = useState<React.ReactNode>(null);
 
   const finish = useCallback(() => { onClosed(); afterRef.current?.(); }, [onClosed]);
   const close = useCallback((after?: () => void) => {
@@ -97,8 +109,9 @@ export function Sheet({ children, label, glow, onClosed, registerClose }: SheetP
           </View>
         </GestureDetector>
         <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 8, gap: 12 }} keyboardShouldPersistTaps="handled">
-          {children}
+          <FooterCtx.Provider value={setFooter}>{children}</FooterCtx.Provider>
         </ScrollView>
+        {footer ? <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>{footer}</View> : null}
       </Animated.View>
     </View>
   );

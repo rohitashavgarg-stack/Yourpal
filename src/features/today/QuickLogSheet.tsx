@@ -5,6 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import Svg, { Circle, Ellipse } from 'react-native-svg';
 import { Camera, PenLine, Search } from '@/lib/icons';
+import { SheetFooter } from '@/design-system/primitives/Sheet';
 import { Button, Chip, Field, Pressy, Row, Segmented, Txt } from '@/components/ui';
 import { CheckCircle, PillBtn } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -223,7 +224,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx, back
           </Row>
         </FadeIn>
       )}
-      {!(mode === 'scan' && !items.length) && <Button kind="primary" label={logL} disabled={!items.length} onPress={log} />}
+      {!(mode === 'scan' && !items.length) && <SheetFooter><Button kind="primary" label={logL} disabled={!items.length} onPress={log} /></SheetFooter>}
     </>
   );
 }
