@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import Svg, { Circle, Line, Path } from 'react-native-svg';
-import { CalendarClock, Check, ChevronRight, ClipboardCheck, Dumbbell, Flag, Flame, Scale, Target, UtensilsCrossed } from '@/lib/icons';
+import { CalendarClock, Check, ChevronRight, ClipboardCheck, Dumbbell, Flag, Flame, Scale, UtensilsCrossed } from '@/lib/icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
@@ -11,7 +11,7 @@ import { useScenarios, useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { cardShadow, SubPage } from '@/features/progress/parts';
+import { SubPage } from '@/features/progress/parts';
 import { GoalTickCard } from '@/features/today/GoalTickCard';
 import { daysBetween, EXTEND_DAYS, fmtDay, fmtVal, Goal2, goalV2Store, useGoalV2 } from '@/features/goalv2/model';
 import { useDrivers, useGoalV2Rows } from '@/features/goalv2/signs';
@@ -170,7 +170,7 @@ function assessLine(a: string) {
 }
 
 export default function GoalDetail() {
-  const { c, isDark } = useTheme();
+  const { c } = useTheme();
   const { d } = useDomain();
   const { state } = useStore();
   const { toast } = useOverlay();
@@ -197,14 +197,12 @@ export default function GoalDetail() {
   return (
     <SubPage title="Your goal" fallback="/progress" backdrop={
       // a soft blue wash at the top, fading into the page, like the food page
-      <LinearGradient pointerEvents="none" colors={[c.accentSoft, c.bg]} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 340 }} />
+      <LinearGradient pointerEvents="none" colors={[c.accentSoft, c.bg]} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 200 }} />
     } right={
       <Pressy accessibilityRole="button" accessibilityLabel="Change goal" onPress={() => router.push('/goal')} style={{ height: 44, paddingHorizontal: 14, justifyContent: 'center' }}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.accentText }}>Change</Txt>
       </Pressy>}>
-      <View style={[{ width: 84, height: 84, borderRadius: 42, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }, cardShadow(isDark)]}>
-        <View style={{ width: 58, height: 58, borderRadius: 29, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Target size={28} strokeWidth={1.8} color={c.accentText} /></View>
-      </View>
+      <View style={{ height: 12 }} />
       <GoalTickCard flat />
 
       {behind && !s.finished && (
