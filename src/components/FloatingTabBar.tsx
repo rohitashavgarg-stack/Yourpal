@@ -228,13 +228,13 @@ function PillBar({ state, navigation }: any) {
       style={[{ position: 'absolute', left: 16, right: 16, bottom, height: 64, borderRadius: 32, overflow: 'hidden', borderWidth: hasLiquidGlass ? 0 : 1, borderColor: c.navLine,
         shadowColor: fixed.shadow, shadowOpacity: 0.16, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 12 }, bar]}
     >
-      <GlassBackdrop radius={32} />
+      <GlassBackdrop radius={32} frost={70} />
       {seg > 0 && <Animated.View style={[{ position: 'absolute', top: 6, left: 6, width: seg, height: 50, borderRadius: 25, backgroundColor: `${c.accent}D6`, shadowColor: c.accent, shadowOpacity: 0.3, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }, hl]} />}
       <View style={{ flex: 1, flexDirection: 'row', padding: 6 }}>
         {state.routes.map((r: any, i: number) => {
           const on = state.index === i;
           const Icon = ICONS[r.name] ?? Sun;
-          const col = on ? fixed.white : c.muted;
+          const col = on ? fixed.white : isDark ? 'rgba(243,244,246,0.86)' : c.muted; // dark mode: the tabs that are not selected are near-white, so they read clearly
           return (
             <Pressable
               key={r.key}

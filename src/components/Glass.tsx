@@ -12,10 +12,16 @@ try { native = Platform.OS === 'ios' && isLiquidGlassAvailable(); } catch { nati
 
 export const hasLiquidGlass = native;
 
-export function GlassBackdrop({ radius, tint }: { radius: number; tint?: string }) {
+// frost: a blur strength (0 to 100) laid under the glass for a more frosted look, and a light frosted tint on top. Used by the tab bar.
+export function GlassBackdrop({ radius, tint, frost }: { radius: number; tint?: string; frost?: number }) {
   const { c, isDark } = useTheme();
   if (native) {
-    return <GlassView glassEffectStyle="regular" tintColor={tint} colorScheme={isDark ? 'dark' : 'light'} style={[StyleSheet.absoluteFill, { borderRadius: radius }]} pointerEvents="none" />;
+    return (
+      <>
+        {!!frost && <BlurView intensity={frost} tint={isDark ? 'dark' : 'light'} style={[StyleSheet.absoluteFill, { borderRadius: radius, overflow: 'hidden' }]} pointerEvents="none" />}
+        <GlassView glassEffectStyle="regular" tintColor={tint ?? (frost ? (isDark ? 'rgba(30,32,38,0.35)' : 'rgba(255,255,255,0.35)') : undefined)} colorScheme={isDark ? 'dark' : 'light'} style={[StyleSheet.absoluteFill, { borderRadius: radius }]} pointerEvents="none" />
+      </>
+    );
   }
   if (Platform.OS === 'web') {
     // A single CSS backdrop blur. (Stacked expo-blur layers multiply their saturation on the web and smear colours.)
@@ -23,7 +29,7 @@ export function GlassBackdrop({ radius, tint }: { radius: number; tint?: string 
   }
   return (
     <>
-      <BlurView intensity={40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', inset: 0 } as any} />
+      <BlurView intensity={frost ?? 40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', inset: 0 } as any} />
       <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: tint ?? c.navBg }} />
     </>
   );
