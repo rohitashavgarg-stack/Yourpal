@@ -37,7 +37,7 @@ export function TodayGreeting() {
   const size = 28; // one size for every greeting, so "Hello! Rohitashav" and "Good afternoon, Rohitashav" look the same
   const big = { fontFamily: font.regular, fontSize: size, lineHeight: Math.round(size * 1.25), letterSpacing: -0.6, color: c.muted } as const; // both lines: light, grey; the key phrase is brighter
   return (
-    <View accessible accessibilityLabel={`${top}. ${lead ? lead + ' ' : ''}${hl}${tail ?? ''}`} style={{ paddingHorizontal: 4, gap: 0 }}>
+    <View accessible accessibilityLabel={`${top}. ${lead ? lead + ' ' : ''}${hl}${tail ?? ''}`} style={{ paddingHorizontal: 4, paddingTop: 12, gap: 0 }}>
       <Txt style={big}>{top}</Txt>
       <Txt accessibilityRole="header" style={big}>{lead ? lead + ' ' : ''}<Txt style={[big, { color: c.ink }]}>{hl}</Txt>{tail ?? ''}</Txt>
     </View>
