@@ -66,7 +66,7 @@ export function GymHeader() {
         <GlassShell radius={22} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
           <Pressy accessibilityRole="button" accessibilityLabel={unread ? `Notifications, ${unread} unread` : 'Notifications'} onPress={() => router.push('/notifications')} style={{ width: 44, height: 44, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center' }}>
             <Bell size={19} color={c.ink} />
-            {unread > 0 && <View style={{ position: 'absolute', top: 10, right: 11, width: 8, height: 8, borderRadius: radii.xs, backgroundColor: c.danger }} />}
+            {unread > 0 && <View style={{ position: 'absolute', top: 9, right: 10, width: 10, height: 10, borderRadius: 5, backgroundColor: c.danger }} />}
           </Pressy>
         </GlassShell>
       </View>
