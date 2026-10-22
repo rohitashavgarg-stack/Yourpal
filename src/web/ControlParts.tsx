@@ -103,32 +103,22 @@ export function ScreenItem({ icon: Icon, label, on, onPress }: { icon: IconC; la
   );
 }
 
-// A row that shows the chosen value and opens its options right under it: for anything with more than a few options, so the panel stays short.
-export function Dropdown({ label, options, value, onPick, placeholder = 'Choose' }: { label: string; options: string[]; value: string; onPick: (v: string) => void; placeholder?: string }) {
-  const [open, setOpen] = useState(false);
+// A labelled row of chips: every option is visible at once and the chosen one is filled. (It used to collapse into a dropdown; the name is kept so the panel code did not change.)
+export function Dropdown({ label, options, value, onPick, placeholder }: { label: string; options: string[]; value: string; onPick: (v: string) => void; placeholder?: string }) {
   return (
-    <View style={{ gap: 4 }}>
-      <Pressable accessibilityRole="button" accessibilityLabel={`${label}: ${value || placeholder}`} accessibilityState={{ expanded: open }} onPress={() => setOpen((o) => !o)}
-        style={{ minHeight: 32, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingHorizontal: 10, borderRadius: radii.sm, backgroundColor: open ? P.track : P.tint }}>
-        <Text numberOfLines={1} style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: P.muted }}>{label}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, flexShrink: 1 }}>
-          <Text numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: 12.5, lineHeight: 17, color: value ? P.ink : P.muted, flexShrink: 1 }}>{value || placeholder}</Text>
-          <ChevronDown size={14} color={P.muted} style={{ transform: [{ rotate: open ? '180deg' : '0deg' }] } as any} />
-        </View>
-      </Pressable>
-      {open && (
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, paddingBottom: 2 }}>
-          {options.map((o) => {
-            const on = o === value;
-            return (
-              <Pressable key={o} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => { onPick(o); setOpen(false); }}
-                style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, borderWidth: 1, borderColor: on ? P.ink : P.chip, backgroundColor: on ? P.ink : 'transparent', justifyContent: 'center' }}>
-                <Text style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: on ? fixed.white : P.ink }}>{o}</Text>
-              </Pressable>
-            );
-          })}
-        </View>
-      )}
+    <View style={{ gap: 6 }}>
+      <Text numberOfLines={1} accessibilityRole="header" style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: P.muted, paddingHorizontal: 2 }}>{placeholder && !value ? `${label}: ${placeholder}` : label}</Text>
+      <View accessibilityRole="radiogroup" accessibilityLabel={label} style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
+        {options.map((o) => {
+          const on = o === value;
+          return (
+            <Pressable key={o} accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={() => onPick(o)}
+              style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, borderWidth: 1, borderColor: on ? P.ink : P.chip, backgroundColor: on ? P.ink : 'transparent', justifyContent: 'center' }}>
+              <Text style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: on ? fixed.white : P.ink }}>{o}</Text>
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }

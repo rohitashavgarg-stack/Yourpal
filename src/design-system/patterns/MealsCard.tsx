@@ -142,7 +142,7 @@ function MealItems({ meal, onLogMeal }: Pick<MealsCardProps, 'onLogMeal'> & { me
   );
 }
 
-// The small filled pill next to the meal name: in front of it for the time, after it for Logged and Skipped: the time (text only), "Logged 7:10 am" in soft green once it is logged, or "Skipped". No outline, like the time pill on the workout card.
+// The small filled pill after the meal name: the time (text only), "Logged 7:10 am" in soft green once it is logged, or "Skipped".
 function StatusPill({ status, time, loggedAt }: { status: ShownMeal['status']; time: string; loggedAt?: string }) {
   const { c, isDark } = useTheme();
   const logged = status === 'logged', skipped = status === 'skipped';
@@ -221,9 +221,8 @@ export function MealsCard(p: MealsCardProps) {
       {p.ask && <MissedPrompt ask={p.ask} onLog={p.onAskLog} />}
       <View style={{ paddingHorizontal: 4, gap: 8 }}>
         <Row style={{ gap: 10 }}>
-          {meal.status === 'todo' && <StatusPill status={meal.status} time={meal.meta.time} loggedAt={meal.loggedAt} />}
           <Txt style={{ flexShrink: 1, fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, letterSpacing: -0.4 }}>{meal.name}</Txt>
-          {meal.status !== 'todo' && <StatusPill status={meal.status} time={meal.meta.time} loggedAt={meal.loggedAt} />}
+          <StatusPill status={meal.status} time={meal.meta.time} loggedAt={meal.loggedAt} />
         </Row>
         <MetaRow color={c.muted} dividerColor={c.line} items={[
           { icon: <Flame size={14} color={c.muted} />, text: meal.meta.kcal },
