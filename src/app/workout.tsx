@@ -347,10 +347,9 @@ export default function Workout() {
           )}
           <Row style={{ gap: 10 }}>
             {s.exIdx > 0 && (
-              <Pressy accessibilityRole="button" accessibilityLabel={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92}
-                style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+              <IconButton label={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92} size={56} radius={radii.xl} bg={c.surface} borderWidth={1} borderColor={c.line}>
                 <ChevronLeft size={22} color={c.ink} />
-              </Pressy>
+              </IconButton>
             )}
             <Button kind={cur < 0 || e.sets.some((x) => x.st === 'done') ? 'accent' : 'secondary'} label={cur < 0 || e.sets.some((x) => x.st === 'done') ? `Next: ${nextName}` : `Skip to ${nextName}`} onPress={nextEx} style={{ flex: 1 }} />
           </Row>

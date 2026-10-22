@@ -40,13 +40,12 @@
   "screen": "Plans",
   "group": "Routes",
   "status": "not started",
-  "hand": 21,
+  "hand": 18,
   "files": [
    "app/(tabs)/plans.tsx",
    "features/plans/WorkoutPlan.tsx",
    "features/plans/DietPlan.tsx",
-   "features/plans/QtySheet.tsx",
-   "features/plans/qty.ts"
+   "features/plans/QtySheet.tsx"
   ]
  },
  {
@@ -75,7 +74,7 @@
   "screen": "Coach",
   "group": "Routes",
   "status": "not started",
-  "hand": 3,
+  "hand": 2,
   "files": [
    "app/coach.tsx"
   ]
@@ -293,7 +292,7 @@
   "screen": "Exercise",
   "group": "Routes",
   "status": "not started",
-  "hand": 3,
+  "hand": 2,
   "files": [
    "app/plans/exercise.tsx"
   ]
@@ -313,7 +312,7 @@
   "screen": "What did you eat?",
   "group": "Routes",
   "status": "not started",
-  "hand": 6,
+  "hand": 7,
   "files": [
    "app/plans/log.tsx"
   ]
@@ -538,7 +537,7 @@
   "screen": "Active workout",
   "group": "Routes",
   "status": "not started",
-  "hand": 16,
+  "hand": 14,
   "files": [
    "app/workout.tsx",
    "features/workout/SetRow.tsx",
@@ -706,7 +705,7 @@
   "screen": "Onboarding: Building your plan",
   "group": "Onboarding steps",
   "status": "not started",
-  "hand": 3,
+  "hand": 2,
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/Steps.tsx"
@@ -828,7 +827,7 @@
   "screen": "QtySheet",
   "group": "Bottom sheets",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "features/plans/QtySheet.tsx"
   ]
@@ -988,7 +987,7 @@
   "screen": "LogMealsSheet",
   "group": "Bottom sheets",
   "status": "not started",
-  "hand": 0,
+  "hand": 4,
   "files": [
    "features/today/LogMealsSheet.tsx"
   ]
@@ -1178,7 +1177,7 @@
   "screen": "Workout finish screen (confetti and stats)",
   "group": "Overlays and popups",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "features/workout/FinishScreen.tsx"
   ]
@@ -1434,16 +1433,6 @@
   ]
  },
  {
-  "id": "shared:features/today/QuickLogSheet.tsx",
-  "screen": "features/today/QuickLogSheet.tsx",
-  "group": "Shared components and features",
-  "status": "not started",
-  "hand": 0,
-  "files": [
-   "features/today/QuickLogSheet.tsx"
-  ]
- },
- {
   "id": "shared:features/plans/Sheets.tsx",
   "screen": "features/plans/Sheets.tsx",
   "group": "Shared components and features",
@@ -1461,6 +1450,16 @@
   "hand": 1,
   "files": [
    "features/plans/parts.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/today/QuickLogSheet.tsx",
+  "screen": "features/today/QuickLogSheet.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/QuickLogSheet.tsx"
   ]
  },
  {
@@ -1521,16 +1520,6 @@
   "hand": 3,
   "files": [
    "features/checkin/GymMap.native.tsx"
-  ]
- },
- {
-  "id": "shared:features/workout/ClipStage.tsx",
-  "screen": "features/workout/ClipStage.tsx",
-  "group": "Shared components and features",
-  "status": "not started",
-  "hand": 1,
-  "files": [
-   "features/workout/ClipStage.tsx"
   ]
  }
 ]

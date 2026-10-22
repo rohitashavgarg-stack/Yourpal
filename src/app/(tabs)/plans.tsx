@@ -6,6 +6,7 @@ import { Check, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/ic
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
+import { IconButton } from '@/design-system/primitives/Button';
 import { useOverlay } from '@/components/Overlay';
 import { basePlans, TODAY_IDX } from '@/lib/data';
 import { useDomain } from '@/lib/domain';
@@ -160,10 +161,9 @@ export default function Plans() {
             options={[{ value: 'workout', label: 'Workout' }, { value: 'diet', label: 'Diet' }]}
             icons={{ workout: (col) => <Dumbbell size={16} color={col} />, diet: (col) => <UtensilsCrossed size={16} color={col} /> }} />
         </View>
-        {!paused && <Pressy accessibilityRole="button" accessibilityLabel={isW ? 'Plan menu' : 'Diet menu'} onPress={openMenu}
-          style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+        {!paused && <IconButton label={isW ? 'Plan menu' : 'Diet menu'} onPress={openMenu} size={52} radius={radii.xl} bg={c.surface} borderWidth={1} borderColor={c.line}>
           <MoreHorizontal size={22} color={c.ink} />
-        </Pressy>}
+        </IconButton>}
       </Row>
       <DayStrip />
       <View key={p.seg} style={{ gap: 12 }}>

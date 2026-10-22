@@ -8,6 +8,7 @@ import { Check, Flame, Share, Trophy } from '@/lib/icons';
 import { FLAME } from '@/features/streak/StreakChip';
 import { useStreak } from '@/features/streak/useStreak';
 import { Button, Field, Pressy, Row, Txt } from '@/components/ui';
+import { IconButton } from '@/design-system/primitives/Button';
 import { Tag } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -93,10 +94,9 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
           <View>
             <FadeIn delay={350} style={{ backgroundColor: c.surface, borderRadius: radii.lg, padding: 14, gap: 10 }}>
               <Row style={{ gap: 12 }}>
-                <Pressy accessibilityRole="button" accessibilityLabel="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }}
-                  style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
+                <IconButton label="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }} size={52} radius={radii.xl} bg={c.accent}>
                   <Trophy size={24} strokeWidth={1.9} color={fixed.white} />
-                </Pressy>
+                </IconButton>
                 <View style={{ flex: 1 }}>
                   <Txt style={{ fontFamily: font.bold, fontSize: fontSizes.xs, letterSpacing: 0.5, color: c.accent }}>{s.pr ? 'New PR' : 'Logged'}</Txt>
                   <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 28 }}>{s.pr ? `${s.pr.name} ${fmt1(s.pr.kg)} kg` : `${s.sets} ${s.sets === 1 ? "set" : "sets"} done`}</Txt>

@@ -182,10 +182,9 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
         {cur >= 0 && marked && <Txt v="caption" style={{ textAlign: 'center' }}>{left} set{left === 1 ? '' : 's'} not done · you can come back to them</Txt>}
         <Row style={{ gap: 10 }}>
           {s.exIdx > 0 && (
-            <Pressy accessibilityRole="button" accessibilityLabel={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92}
-              style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+            <IconButton label={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92} size={56} radius={radii.xl} bg={c.surface} borderWidth={1} borderColor={c.line}>
               <ChevronLeft size={22} color={c.ink} />
-            </Pressy>
+            </IconButton>
           )}
           <Button kind={none ? 'accent' : 'secondary'} label={none ? `Next: ${nextName}` : `Skip to ${nextName}`} onPress={nextEx} style={{ flex: 1 }} />
         </Row>

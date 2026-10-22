@@ -7,6 +7,7 @@ import { CalendarCheck, Camera, Check, ClipboardList, Dumbbell, Flame, Footprint
 import { HEALTH_NAME } from '@/lib/health';
 import { PersonAvatar } from '@/components/Brand';
 import { Pressy, Row, Txt } from '@/components/ui';
+import { IconButton } from '@/design-system/primitives/Button';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
@@ -175,10 +176,9 @@ export function MealStep() {
               <Txt style={{ fontFamily: font.semibold, color: fixed.white }}>This photo is ours.</Txt>
               <Txt style={{ fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.7)' }}>Tap and see the maths the app does on a meal photo.</Txt>
             </View>
-            <Pressy accessibilityRole="button" accessibilityLabel="See what the app reads" onPress={() => { haptic.success(); setRead(true); }} scaleTo={0.92}
-              style={{ width: 68, height: 68, borderRadius: 34, borderWidth: 3, borderColor: 'rgba(255,255,255,0.85)', alignItems: 'center', justifyContent: 'center' }}>
+            <IconButton label="See what the app reads" onPress={() => { haptic.success(); setRead(true); }} scaleTo={0.92} size={68} radius={34} bg="transparent" borderWidth={3} borderColor="rgba(255,255,255,0.85)">
               <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}><Camera size={22} color={fixed.dark} /></View>
-            </Pressy>
+            </IconButton>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.4, color: 'rgba(255,255,255,0.85)' }}>SEE WHAT THE APP READS</Txt>
           </View>
         )}
