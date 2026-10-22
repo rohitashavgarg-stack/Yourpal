@@ -20,4 +20,4 @@ Branch: `design-system-handoff` (not merged into main). Resume with "Continue fr
 Notes
 - Commit 0c811d9 (IconBadge, StatusDot) and the capture tooling (scripts/visual) are kept.
 - Step 2 needed two Storybook-only shims: require() of images and clips becomes an import, and expo-router is a no-op stand-in (.storybook/mocks/expo-router.tsx). The app is unchanged by them.
-- ThemeProvider gained an optional  prop (Storybook pins light or dark); the app does not pass it.
+- ThemeProvider gained an optional `scheme` prop (Storybook pins light or dark); the app does not pass it.
