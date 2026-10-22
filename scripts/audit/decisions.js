@@ -57,7 +57,7 @@ if (kind === 'cards') {
     if (!/cardShadow/.test(s)) diff.push('Card adds the light-mode shadow; this has none');
     if (bw) diff.push('border ' + bw);
     if (/overflow/.test(s)) diff.push('clips its content (overflow hidden)');
-    if (/flexDirection: 'row'/.test(s) && /height:/.test(s)) diff.push('a field, not a card');
+    if (h.file.includes('plans/log')) diff.push('a field, not a card');
     md += `| \`${h.file}:${h.line}\` | radius ${rad}, padding ${pad || 'per side'}, fill ${bg}, ${shadow}${gap ? ', gap ' + gap : ''}${bw ? ', border ' + bw : ''} | ${near === 'compact' ? CARD.compact : CARD.default} | ${diff.join('; ')} |\n`;
   }
 }
