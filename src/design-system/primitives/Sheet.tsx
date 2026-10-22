@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values and refs are mutated from gesture / animation callbacks */
 import React, { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Dimensions, Keyboard, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
@@ -89,7 +90,7 @@ export function Sheet({ children, label, glow, onClosed, registerClose }: SheetP
         accessibilityViewIsModal
         accessibilityLabel={label}
         onLayout={(e) => setH(e.nativeEvent.layout.height)}
-        style={[{ position: 'absolute', left: 0, right: 0, bottom: kb, maxHeight: kb ? Math.max(260, winH - kb - insets.top - 12) : '88%', backgroundColor: c.surface, borderTopLeftRadius: 30, borderTopRightRadius: 30, overflow: 'hidden', paddingBottom: kb ? 12 : Math.max(insets.bottom, 16) }, sheetStyle]}
+        style={[{ position: 'absolute', left: 0, right: 0, bottom: kb, maxHeight: kb ? Math.max(260, winH - kb - insets.top - 12) : '88%', backgroundColor: c.surface, borderTopLeftRadius: radii.sheet, borderTopRightRadius: radii.sheet, overflow: 'hidden', paddingBottom: kb ? 12 : Math.max(insets.bottom, 16) }, sheetStyle]}
       >
         {glow ? (
           <Svg pointerEvents="none" width="100%" height="100%" style={StyleSheet.absoluteFill}>

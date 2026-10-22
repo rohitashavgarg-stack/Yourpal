@@ -90,6 +90,37 @@ export const fixed = {
 } as const;
 export type FixedColor = keyof typeof fixed;
 
+// Colours on the dark Today cards (budget, goal strip, workout), the same in both themes because those cards are always dark.
+export const onDark = {
+  card: '#1A1D22',       // the charcoal of the Daily budget card
+  text: '#F3F4F6',       // main text on a dark card
+  soft: '#C9CDD6',       // labels on a dark card
+  muted: '#9AA0AD',      // quiet text on a dark card
+  mint: '#2EE6A8',       // eat bar and good news on a dark card
+  burn: '#FF9A4D',       // burn bar
+  amber: '#F2B35B',      // missed workout, warnings on a dark card
+  lilac: '#B9A8FF',      // rest day accents
+  bottleInk: '#1B2440',  // the water bottle outline on a light tile
+  bottleFill: '#D9D9D9', // the water bottle body on the blue tile
+  waterTop: '#8CBBFF',   // the water in the bottle, top
+  waterDeep: '#3D6BFF',  // the water in the bottle, bottom
+  capShade: '#999999',   // the bottle cap gradient start
+  capLine: '#9294A8',    // the line on the bottle cap
+  capRidge: '#EAE6E6',   // the ridges on the bottle cap
+  ripple: '#7FB4FF',     // the ripple when water reaches the target
+  heart: '#FF6B7A',      // the heart icon on the Connect tile
+} as const;
+
+// Gradients of the dark cards: from the top left to the bottom right.
+export const gradients = {
+  workoutPlanned: [fixed.dark, '#0E1B45', '#13327A'],
+  workoutRest: [fixed.dark, fixed.shadow, '#1A1636'],
+  workoutDone: [fixed.dark, '#0D2A22', '#124A3A'],
+  workoutLive: ['#06231B', '#0B3A2C', '#0F5A42'],
+  workoutMissed: ['#17140F', '#17140F', '#1B1710'],
+  water: ['#070B2B', '#1C2BC0'],
+} as const;
+
 // Semantic roles. They point at palette values, so they follow the theme. fg = text or icon, bg = soft background.
 export function semantic(p: Palette) {
   return {

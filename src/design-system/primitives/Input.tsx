@@ -12,14 +12,14 @@ export const Field = React.forwardRef<TextInput, TextInputProps & { error?: bool
   const [focus, setFocus] = React.useState(false);
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', height: 56, borderRadius: radii.xl, borderWidth: focus || error ? 1.5 : 1, borderColor: error ? c.warn : focus ? c.accent : c.line, backgroundColor: c.surface, paddingHorizontal: 18, gap: 10 }}>
-      {prefix ? <Text style={{ fontFamily: font.medium, fontSize: 16, lineHeight: 21, color: c.muted }}>{prefix}</Text> : null}
+      {prefix ? <Text style={{ fontFamily: font.medium, fontSize: fontSizes.basePlus, lineHeight: 21, color: c.muted }}>{prefix}</Text> : null}
       <TextInput
         ref={ref}
         placeholderTextColor={c.muted}
         {...rest}
         onFocus={(e) => { setFocus(true); rest.onFocus?.(e); }}
         onBlur={(e) => { setFocus(false); rest.onBlur?.(e); }}
-        style={[{ flex: 1, fontFamily: font.medium, fontSize: 16, color: c.ink, height: '100%' as any, outlineStyle: 'none' as any }, style]}
+        style={[{ flex: 1, fontFamily: font.medium, fontSize: fontSizes.basePlus, color: c.ink, height: '100%' as any, outlineStyle: 'none' as any }, style]}
       />
     </View>
   );
@@ -45,7 +45,7 @@ export function NoteField({ value, onChangeText, placeholder, accessibilityLabel
           textAlignVertical="top"
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
-          style={{ minHeight: minHeight - 34, maxHeight: 220, fontFamily: font.medium, fontSize: 16, lineHeight: 23, color: c.ink, padding: 0, outlineStyle: 'none' as any }}
+          style={{ minHeight: minHeight - 34, maxHeight: 220, fontFamily: font.medium, fontSize: fontSizes.basePlus, lineHeight: 23, color: c.ink, padding: 0, outlineStyle: 'none' as any }}
         />
       </View>
       <Text style={{ alignSelf: 'flex-end', marginTop: 4, marginRight: 8, fontFamily: font.regular, fontSize: fontSizes.xs, lineHeight: 17, color: c.muted }}>{value.length}/{maxLength}</Text>

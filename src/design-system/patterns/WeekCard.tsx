@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Check, Dumbbell, Moon, UtensilsCrossed } from '@/lib/icons';
 import { Card, Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
-import { font, fontSizes, radii } from '@/design-system/tokens';
+import { font, fontSizes, radii, round } from '@/design-system/tokens';
 
 export type WeekDay = {
   /** Day of the month. */
@@ -37,9 +37,9 @@ const MARK = 24;
 function Stat({ icon, label, value, of }: { icon: React.ReactNode; label: string; value: number; of?: number }) {
   const { c } = useTheme();
   return (
-    <View style={{ flex: 1, minWidth: 0, borderRadius: 14, backgroundColor: c.surface2, paddingHorizontal: 10, paddingTop: 10, paddingBottom: 9 }}>
+    <View style={{ flex: 1, minWidth: 0, borderRadius: radii.tile, backgroundColor: c.surface2, paddingHorizontal: 10, paddingTop: 10, paddingBottom: 9 }}>
       <Row style={{ gap: 5 }}>{icon}<Txt numberOfLines={1} style={{ flexShrink: 1, fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>{label}</Txt></Row>
-      <Txt style={{ marginTop: 4, fontFamily: font.semibold, fontSize: 22, lineHeight: 29, color: c.ink }}>
+      <Txt style={{ marginTop: 4, fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29, color: c.ink }}>
         {value}{of != null ? <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: c.muted }}>{`/${of}`}</Txt> : null}
       </Txt>
     </View>
@@ -62,7 +62,7 @@ function MealsMark({ day }: { day: WeekDay }) {
   return (
     <View style={{ width: MARK, height: MARK, flexDirection: 'row', flexWrap: 'wrap', alignContent: 'center', justifyContent: 'center', gap: 3 }}>
       {[0, 1, 2, 3].map((i) => (
-        <View key={i} style={{ width: 7, height: 7, borderRadius: 3.5, backgroundColor: day.future ? c.surface2 : i < day.mealsOnPlan ? c.good : c.surface3 }} />
+        <View key={i} style={{ width: 7, height: 7, borderRadius: round(7), backgroundColor: day.future ? c.surface2 : i < day.mealsOnPlan ? c.good : c.surface3 }} />
       ))}
     </View>
   );
@@ -96,12 +96,12 @@ export function WeekCard({ days, workouts, meals, summary, onDayPress }: WeekCar
       </View>
       <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 18 }}>
         <Row style={{ gap: 6 }}>
-          <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={9} strokeWidth={3.5} color={c.bg} /></View>
+          <View style={{ width: 14, height: 14, borderRadius: round(14), backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={9} strokeWidth={3.5} color={c.bg} /></View>
           <Txt style={{ fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>Workout</Txt>
         </Row>
         <Row style={{ gap: 6 }}>
           <View style={{ width: 12, flexDirection: 'row', flexWrap: 'wrap', gap: 2 }}>
-            {[0, 1, 2, 3].map((i) => <View key={i} style={{ width: 5, height: 5, borderRadius: 2.5, backgroundColor: i < 3 ? c.good : c.surface3 }} />)}
+            {[0, 1, 2, 3].map((i) => <View key={i} style={{ width: 5, height: 5, borderRadius: round(5), backgroundColor: i < 3 ? c.good : c.surface3 }} />)}
           </View>
           <Txt style={{ fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>Meals on plan</Txt>
         </Row>

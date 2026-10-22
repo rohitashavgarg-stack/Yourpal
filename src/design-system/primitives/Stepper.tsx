@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values and refs are mutated from gesture / animation callbacks */
 import React, { useRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { Gesture, GestureDetector, GestureType } from 'react-native-gesture-handler';

@@ -8,7 +8,7 @@ import { Pressy, Row, Txt } from '@/components/ui';
 import { Beat, HeartIcon } from '@/components/bits';
 import { fmt1 } from '@/lib/useNow';
 import { useTheme } from '@/theme/ThemeProvider';
-import { font, fontSizes, fixed, radii } from '@/design-system/tokens';
+import { font, fontSizes, fixed, radii, onDark, gradients, round } from '@/design-system/tokens';
 
 /**
  * The quick trackers row on Today: square 160 px tiles in a sideways scroll.
@@ -47,7 +47,7 @@ export function TrackerRow({ connected, wearable, weight, steps, connect, water,
 const TARGET = 3;
 const SQ = { width: 160, height: 160, borderRadius: radii.lg, padding: 16, overflow: 'hidden' } as const;
 const GLASS = 'rgba(255,255,255,0.16)';
-const NUM = { fontFamily: font.displayBold, fontSize: 28, lineHeight: 39, letterSpacing: -0.8 } as const;
+const NUM = { fontFamily: font.displayBold, fontSize: fontSizes.xl3Plus, lineHeight: 39, letterSpacing: -0.8 } as const;
 const UNIT_TXT = { fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20 } as const;
 
 // One tile for every tracker: same size, same padding, same label and number style.
@@ -96,17 +96,17 @@ export function BottleFigma({ litres, id, w = 32, onLight = false }: { litres: n
       <Defs>
         <ClipPath id={`${id}Cap`}><Path d={BOTTLE_CAP} /></ClipPath>
         <ClipPath id={`${id}Body`}><Path d={BOTTLE_BODY} /></ClipPath>
-        <SvgGradient id={`${id}Water`} x1="0" y1="0" x2="0" y2="1"><Stop offset="0" stopColor="#8CBBFF" stopOpacity={0.95} /><Stop offset="1" stopColor="#3D6BFF" stopOpacity={0.95} /></SvgGradient>
-        <SvgGradient id={`${id}Shine`} x1="10" y1="58.5" x2="5" y2="58.5" gradientUnits="userSpaceOnUse"><Stop offset="0" stopColor="#999999" /><Stop offset="1" stopColor={fixed.white} /></SvgGradient>
+        <SvgGradient id={`${id}Water`} x1="0" y1="0" x2="0" y2="1"><Stop offset="0" stopColor={onDark.waterTop} stopOpacity={0.95} /><Stop offset="1" stopColor={onDark.waterDeep} stopOpacity={0.95} /></SvgGradient>
+        <SvgGradient id={`${id}Shine`} x1="10" y1="58.5" x2="5" y2="58.5" gradientUnits="userSpaceOnUse"><Stop offset="0" stopColor={onDark.capShade} /><Stop offset="1" stopColor={fixed.white} /></SvgGradient>
       </Defs>
-      <Rect x={7} y={8} width={18} height={2} rx={1} fill="#9294A8" />
-      <Path d={BOTTLE_CAP} fill={onLight ? '#1B2440' : fixed.white} />
+      <Rect x={7} y={8} width={18} height={2} rx={1} fill={onDark.capLine} />
+      <Path d={BOTTLE_CAP} fill={onLight ? onDark.bottleInk : fixed.white} />
       <G clipPath={`url(#${id}Cap)`}>
-        {Array.from({ length: 12 }, (_, i) => <Rect key={i} x={9 + i * 1.3} y={0} width={0.3} height={8} fill="#EAE6E6" />)}
+        {Array.from({ length: 12 }, (_, i) => <Rect key={i} x={9 + i * 1.3} y={0} width={0.3} height={8} fill={onDark.capRidge} />)}
       </G>
-      <Path d={BOTTLE_BODY} fill={onLight ? fixed.blue : '#D9D9D9'} fillOpacity={onLight ? 0.08 : 0.1} />
+      <Path d={BOTTLE_BODY} fill={onLight ? fixed.blue : onDark.bottleFill} fillOpacity={onLight ? 0.08 : 0.1} />
       <G clipPath={`url(#${id}Body)`}><ARect animatedProps={water} x={0} width={32} fill={`url(#${id}Water)`} /></G>
-      <Path d={BOTTLE_BODY} fill="none" stroke={onLight ? '#1B2440' : fixed.white} strokeOpacity={onLight ? 0.45 : 0.6} strokeWidth={1} strokeLinejoin="round" />
+      <Path d={BOTTLE_BODY} fill="none" stroke={onLight ? onDark.bottleInk : fixed.white} strokeOpacity={onLight ? 0.45 : 0.6} strokeWidth={1} strokeLinejoin="round" />
       <Path d="M10 29.4878C10 28.6661 8.88071 28 7.5 28C6.11929 28 5 28.6661 5 29.4878V87.5122C5 88.3339 6.11929 89 7.5 89C8.88071 89 10 88.3339 10 87.5122V29.4878Z" fill={`url(#${id}Shine)`} fillOpacity={0.3} />
     </Svg>
   );
@@ -128,14 +128,14 @@ export function WaterTile({ litres, hit = 0, onPress, onAdd }: WaterTileProps) {
     <View style={{ width: 160 }}>
     <View style={{ width: 160, height: 160 }}>
       <Pressy accessibilityRole="button" accessibilityLabel={`Water ${ml} of 3,000 millilitres. Open details`} onPress={onPress} scaleTo={0.97} style={SQ}>
-        <LinearGradient colors={['#070B2B', '#1C2BC0']} start={{ x: 0.1, y: 0 }} end={{ x: 0.9, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+        <LinearGradient colors={gradients.water} start={{ x: 0.1, y: 0 }} end={{ x: 0.9, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
         <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: 'rgba(255,255,255,0.6)', marginTop: 6 }}>Water</Txt>
         <View style={{ position: 'absolute', left: 16, bottom: 16, width: 32, height: 95 }}>
           <BottleFigma litres={litres} id="bottleCard" />
-          {hit > 0 && <Ripple key={hit} size={40} color="#7FB4FF" width={2} />}
+          {hit > 0 && <Ripple key={hit} size={40} color={onDark.ripple} width={2} />}
         </View>
         <View style={{ position: 'absolute', right: 16, bottom: 16, alignItems: 'flex-end' }}>
-          <Txt style={{ fontFamily: font.displayBold, fontSize: 28, lineHeight: 39, letterSpacing: -0.8, color: 'rgba(255,255,255,0.9)' }}>{ml.toLocaleString('en-IN')}</Txt>
+          <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl3Plus, lineHeight: 39, letterSpacing: -0.8, color: 'rgba(255,255,255,0.9)' }}>{ml.toLocaleString('en-IN')}</Txt>
           <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl, lineHeight: 26, color: fixed.white }}>ml</Txt>
         </View>
       </Pressy>
@@ -175,7 +175,7 @@ export function WeightTile({ kg, delta, series, onPress }: WeightTileProps) {
     <View style={{ width: 160 }}>
     <TrackerTile bg={isDark ? 'rgba(255,255,255,0.05)' : c.surface} shadow={!isDark} label="Weight" a11y={`Weight ${fmt1(kg)} kg, ${delta <= 0 ? 'down' : 'up'} ${Math.abs(delta)} kg this week. Log weight`} onPress={onPress}
       right={<View style={{ height: 32, minWidth: 32, paddingHorizontal: 8, borderRadius: radii.card, backgroundColor: isDark ? GLASS : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Plus size={16} color={isDark ? fixed.white : c.accentText} /></View>}>
-      <Txt style={{ ...NUM, color: c.ink }}>{fmt1(kg)}<Txt style={{ fontFamily: font.regular, fontSize: 16, lineHeight: 22, color: c.muted }}> kg</Txt></Txt>
+      <Txt style={{ ...NUM, color: c.ink }}>{fmt1(kg)}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.basePlus, lineHeight: 22, color: c.muted }}> kg</Txt></Txt>
       <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xs, lineHeight: 17, color: delta <= 0 ? c.good : c.warn }}>{sign} {Math.abs(delta)} kg this week</Txt>
       <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
         <Svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
@@ -213,7 +213,7 @@ export function HealthTile({ kind, onPress }: HealthTileProps) {
       <TrackerTile bg={c.tSleep} label="Sleep" labelColor={c.cSleep} a11y="Sleep 7 hours 10 minutes, open details" onPress={onPress}>
         <Txt style={{ ...NUM, color: c.ink }}>7h 10<Txt muted style={UNIT_TXT}>m</Txt></Txt>
         <Txt v="caption">11:40 pm – 6:50 am</Txt>
-        <View style={{ flexDirection: 'row', height: 10, borderRadius: 5, overflow: 'hidden', marginTop: 'auto' }}>
+        <View style={{ flexDirection: 'row', height: 10, borderRadius: round(10), overflow: 'hidden', marginTop: 'auto' }}>
           <View style={{ width: '22%', backgroundColor: c.cSleep, opacity: 0.7 }} /><View style={{ width: '48%', backgroundColor: c.cSleep }} /><View style={{ width: '18%', backgroundColor: c.cSleep, opacity: 0.45 }} /><View style={{ width: '12%', backgroundColor: c.surface3 }} />
         </View>
       </TrackerTile>
@@ -223,8 +223,8 @@ export function HealthTile({ kind, onPress }: HealthTileProps) {
     <TrackerTile bg={c.tAct} label="Active energy" labelColor={c.cAct} a11y="Active energy 320 of 450 kilocalories, open details" onPress={onPress}>
       <Txt style={{ ...NUM, color: c.ink }}>320<Txt muted style={UNIT_TXT}> kcal</Txt></Txt>
       <Txt v="caption">Goal 450 kcal</Txt>
-      <View style={{ height: 10, borderRadius: 5, backgroundColor: 'rgba(196,97,14,0.15)', overflow: 'hidden', marginTop: 'auto' }}>
-        <View style={{ width: `${Math.round((320 / 450) * 100)}%`, height: '100%', borderRadius: 5, backgroundColor: c.cAct }} />
+      <View style={{ height: 10, borderRadius: round(10), backgroundColor: 'rgba(196,97,14,0.15)', overflow: 'hidden', marginTop: 'auto' }}>
+        <View style={{ width: `${Math.round((320 / 450) * 100)}%`, height: '100%', borderRadius: round(10), backgroundColor: c.cAct }} />
       </View>
     </TrackerTile>
   );
@@ -238,7 +238,7 @@ export function ConnectTile({ name, onPress }: ConnectTileProps) {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`Connect ${name} for steps, heart rate, sleep and energy`} onPress={onPress}
       style={[SQ, { padding: 12, justifyContent: 'space-between', borderWidth: 1, borderStyle: 'dashed', borderColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface3, backgroundColor: isDark ? fixed.dark : c.surface }]}>
-      <View style={{ width: 32, height: 32, borderRadius: 20, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface2, alignItems: 'center', justifyContent: 'center' }}><HeartIcon size={20} color="#FF6B7A" /></View>
+      <View style={{ width: 32, height: 32, borderRadius: radii.block, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface2, alignItems: 'center', justifyContent: 'center' }}><HeartIcon size={20} color={onDark.heart} /></View>
       <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 28, color: c.ink }}>{`Connect ${name}`}</Txt>
       <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: c.muted }}>Steps, heart rate, sleep and energy</Txt>
     </Pressy>
