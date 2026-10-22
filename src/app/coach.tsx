@@ -38,7 +38,6 @@ export default function CoachHub() {
       <View style={{ alignItems: 'center', gap: 6, paddingTop: 4 }}>
         <View>
           <PersonAvatar who="coach" size={96} />
-          {cs.unread && <View accessibilityLabel="Unread reply" style={{ position: 'absolute', right: 5, top: 5, width: 12, height: 12, borderRadius: 6, backgroundColor: c.accent }} />}
         </View>
         <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.7 }}>Coach Vikram</Txt>
         <Txt muted style={{ fontSize: fontSizes.md }}>Your trainer · Wulf Fitness</Txt>
