@@ -49,8 +49,8 @@ export function LogMealsSheet({ mealId }: { mealId: MealId }) {
   );
   return (
     <View style={{ gap: 12 }}>
-      <View style={{ borderRadius: radii.card, borderWidth: 1, borderColor: c.line, padding: 12, gap: 8 }}>
-        <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, paddingBottom: 2 }}>
+      <View style={{ gap: 8 }}>
+        <Row style={{ justifyContent: 'space-between', paddingBottom: 2 }}>
           <View style={{ flex: 1, gap: 2 }}>
             <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{m.n}</Txt>
             <Txt v="caption">{`${m.items.length} items · ~${kcal} kcal · P ${prot} g`}</Txt>

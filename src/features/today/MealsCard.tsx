@@ -68,6 +68,8 @@ export function TodayMealNowCard() {
       protein: `${protein} g protein`,
     },
     skipped: !!x.skip,
+    status: x.skip ? 'skipped' : v.full ? 'logged' : v.any ? 'partial' : 'todo',
+    loggedAt: fmtT(x.at ?? m.t).full,
     items: m.items.map((it, k) => {
       const r = x.repl[k];
       const por = x.por?.[k] ?? 1; const q = !r ? parseQty(it.q) : null;

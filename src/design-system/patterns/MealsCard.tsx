@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
-import { Beef, Check, ChevronRight, Clock, Flame, Lock, Plus, UtensilsCrossed } from '@/lib/icons';
+import { Beef, Check, ChevronRight, Clock, Flame, Lock, Plus, Salad, UtensilsCrossed, X } from '@/lib/icons';
 import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { FoodType } from '@/lib/data';
@@ -28,6 +28,10 @@ export type ShownMeal = {
   name: string;
   /** Under the name, each with an icon and a thin line between: the time (or a status word), "650 kcal planned" or "290 kcal eaten", "22 g protein". */
   meta: { time: string; kcal: string; protein: string };
+  /** todo: nothing logged. partial: some foods logged. logged: all of them (the card shows when, and "Edit log"). skipped. */
+  status: 'todo' | 'partial' | 'logged' | 'skipped';
+  /** logged: the time it was logged, "1:10 pm". */
+  loggedAt?: string;
   /** The member skipped it: names are greyed and struck through. */
   skipped: boolean;
   items: MealItemRow[];
@@ -118,10 +122,10 @@ function MealItems({ meal, onLogMeal }: Pick<MealsCardProps, 'onLogMeal'> & { me
     <Animated.View layout={LinearTransition.duration(180)}>
       <FadeIn style={{ gap: 12, paddingBottom: 0 }}>
         <View accessible accessibilityLabel={`${meal.name}: ${line}`} style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start', paddingHorizontal: 4 }}>
-          <IconBadge size={36} radius={radii.sm} bg={c.surface2}><UtensilsCrossed size={18} color={c.muted} /></IconBadge>
+          <IconBadge size={36} radius={radii.sm} bg={meal.status === 'logged' ? c.goodSoft : c.surface2}>{meal.status === 'logged' ? <Check size={18} strokeWidth={3} color={c.good} /> : <Salad size={18} color={c.muted} />}</IconBadge>
           <Txt style={{ flex: 1, minWidth: 0, fontSize: fontSizes.base, lineHeight: 24, paddingTop: 5, color: meal.skipped ? c.muted : c.ink, textDecorationLine: meal.skipped ? 'line-through' : 'none' }}>{line}</Txt>
         </View>
-        <Button kind="primary" label="Log meal" onPress={onLogMeal} />
+        <Button kind={meal.status === 'logged' ? 'secondary' : 'primary'} label={meal.status === 'logged' ? 'Edit log' : 'Log meal'} onPress={onLogMeal} />
       </FadeIn>
     </Animated.View>
   );
@@ -189,10 +193,14 @@ export function MealsCard(p: MealsCardProps) {
       </Row>
       <DotRule top={-4} />
       {p.ask && <MissedPrompt ask={p.ask} onLog={p.onAskLog} />}
-      <View style={{ paddingHorizontal: 4, gap: 4 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, letterSpacing: -0.4 }}>{meal.name}</Txt>
+      <View style={{ paddingHorizontal: 4, gap: 8 }}>
+        <Row style={{ gap: 10 }}>
+          {meal.status === 'logged' ? <Chip tone="good" label={`Logged ${meal.loggedAt ?? ''}`.trim()} icon={<Check size={13} strokeWidth={3} color={c.good} />} />
+            : meal.status === 'skipped' ? <Chip label="Skipped" icon={<X size={13} color={c.muted} />} />
+            : <Chip label={meal.meta.time} icon={<Clock size={13} color={c.ink} />} style={{ borderColor: isDark ? 'rgba(255,255,255,0.18)' : c.chipLine, backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)' }} />}
+          <Txt style={{ flexShrink: 1, fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, letterSpacing: -0.4 }}>{meal.name}</Txt>
+        </Row>
         <MetaRow color={c.muted} dividerColor={c.line} items={[
-          { icon: <Clock size={14} color={c.muted} />, text: meal.meta.time },
           { icon: <Flame size={14} color={c.muted} />, text: meal.meta.kcal },
           { icon: <Beef size={14} color={c.muted} />, text: meal.meta.protein },
         ]} />

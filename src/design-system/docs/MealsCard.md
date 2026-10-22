@@ -4,8 +4,8 @@
 
 | `state` | Look |
 |---|---|
-| now | the meal on screen: its name, a line of icons (time, kcal, protein), the foods in one line with one food icon ("2 bowl dal, 4 roti, 1 bowl salad") and one **Log meal** button. The card does not log: the button opens the log sheet (`LogMealsSheet`, the same one the update card opens), where each item has a tick and an amount stepper (halves for a katori, 25 for grams) and the calories follow. `ask` adds the "Did you have lunch?" prompt with a Log button |
+| now (logged: a green chip "Logged 7:10 am" in front of the name, a green tick in place of the food icon, and a grey **Edit log** button; skipped: a "Skipped" chip) | the meal on screen: its name, a line of icons (time, kcal, protein), the foods in one line with one food icon ("2 bowl dal, 4 roti, 1 bowl salad") and one **Log meal** button. The card does not log: the button opens the log sheet (`LogMealsSheet`, the same one the update card opens), where each item has a tick and an amount stepper (halves for a katori, 25 for grams) and the calories follow. `ask` adds the "Did you have lunch?" prompt with a Log button |
 | complete | all meals logged: plain list, tap to open |
 | paused | membership ended: logging off, day total shown (`pausedLine`) |
 
-Data props: `done`, `total`, `meal` (name, meta {time, kcal, protein}, skipped, items with their amount, extras), `ask`, `rows`, `completeLine`. Callbacks: `onLogMeal`, `onAskLog`, `onOpenMeal`. Images: `meals-now`, `-missed`, `-complete`, `-paused`, `-other`, `-nothing`.
+Data props: `done`, `total`, `meal` (name, meta {time, kcal, protein}, status todo / partial / logged / skipped, loggedAt, skipped, items with their amount, extras), `ask`, `rows`, `completeLine`. Callbacks: `onLogMeal`, `onAskLog`, `onOpenMeal`. Images: `meals-now`, `-missed`, `-complete`, `-paused`, `-other`, `-nothing`.

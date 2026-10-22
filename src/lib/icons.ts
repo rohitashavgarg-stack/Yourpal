@@ -28,6 +28,7 @@ export { default as Crosshair } from 'lucide-react-native/icons/crosshair';
 export { default as Crown } from 'lucide-react-native/icons/crown';
 export { default as Droplets } from 'lucide-react-native/icons/droplets';
 export { default as Beef } from 'lucide-react-native/icons/beef';
+export { default as Salad } from 'lucide-react-native/icons/salad';
 export { default as Dumbbell } from 'lucide-react-native/icons/dumbbell';
 export { default as Ellipsis } from 'lucide-react-native/icons/ellipsis';
 export { default as Flame } from 'lucide-react-native/icons/flame';
