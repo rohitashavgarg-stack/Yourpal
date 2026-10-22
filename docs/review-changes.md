@@ -28,16 +28,15 @@ Storybook: Patterns / BudgetCard / No Goal, and Patterns / GoalCard / Strip All 
 <a id="sheet-LogMealsSheet"></a>
 ### Log meal sheet (`sheet-LogMealsSheet`, `sheet-LogMealsSheet-extra`)
 
-| Element | Old | New |
-|---|---|---|
 No visible change. "Ate something else?" and "Skip meal" use Button size `fill` (no side padding, gap 6 px), which is exactly what they had.
 
 <a id="plans"></a>
 ### Plans, diet day and week header (`plans`, `state-plans-diet`)
 
+The diet card's "Ate something else?" is unchanged (Button size `fill`).
+
 | Element | Old | New |
 |---|---|---|
-| Diet card "Ate something else?" | exact (Button size `fill`) | exact |
 | "This week" pill corner radius (shown away from this week) | 18 px | 16 px (both fully round at 32 px high) |
 
 <a id="plans-create"></a>
