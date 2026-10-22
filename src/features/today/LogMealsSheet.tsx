@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Minus, Plus } from '@/lib/icons';
 import { QuickLogSheet } from './QuickLogSheet';
-import { CheckCircle, FoodMark } from '@/components/bits';
+import { CheckCircle, FoodMark, Tag } from '@/components/bits';
 import { MealId, MEALS } from '@/lib/data';
 import { itemNow, mealLog, useDomain, useMeals } from '@/lib/domain';
 import { useLogGate } from '@/lib/logGate';
@@ -90,16 +90,24 @@ export function LogMealsSheet({ mealId }: { mealId: MealId }) {
             </Row>
           );
         })}
-        {x.extra.map((e, j) => (
-          <Row key={`x${j}`} style={{ gap: 8, minHeight: 64, paddingLeft: 12, paddingRight: 4, borderRadius: radii.md, backgroundColor: c.goodSoft }}>
-            <FoodMark type={e.type ?? 'veg'} />
-            <View style={{ flex: 1, minWidth: 0, gap: 4, paddingVertical: 10 }}>
-              <Txt numberOfLines={2} style={{ fontFamily: font.medium }}>{e.n}</Txt>
-              <Txt v="caption" numberOfLines={1}>{`Added by you · ~${e.k} kcal · P ${e.p} · C ${Math.round((e.k * 0.5) / 4)} · F ${Math.round((e.k * 0.3) / 9)} g`}</Txt>
-            </View>
-            <CheckCircle on size={40} tone="good" label={`Remove ${e.n}`} onPress={() => removeExtra(j)} />
-          </Row>
-        ))}
+        {x.extra.map((e, j) => {
+          // like the Plans diet card: "Poha" with "1 plate" under it, then "Eaten · ~250 kcal", and a "Yours" tag
+          const cut = e.n.lastIndexOf(', ');
+          const name = cut > 0 ? e.n.slice(0, cut) : e.n;
+          const amount = cut > 0 ? e.n.slice(cut + 2) : '';
+          return (
+            <Row key={`x${j}`} style={{ gap: 8, minHeight: 64, paddingLeft: 12, paddingRight: 4, borderRadius: radii.md, backgroundColor: c.goodSoft }}>
+              <FoodMark type={e.type ?? 'veg'} />
+              <View style={{ flex: 1, minWidth: 0, gap: 4, paddingVertical: 10 }}>
+                <Txt numberOfLines={2} style={{ fontFamily: font.medium }}>{name}</Txt>
+                {!!amount && <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.muted }}>{amount}</Txt>}
+                <Txt v="caption" numberOfLines={1}>{`Eaten · ~${e.k} kcal`}</Txt>
+              </View>
+              <Tag label="Yours" bg={c.accentSoft} fg={c.accentText} style={{ alignSelf: 'center' }} />
+              <CheckCircle on size={40} tone="good" label={`Remove ${e.n}`} onPress={() => removeExtra(j)} />
+            </Row>
+          );
+        })}
         <Row style={{ gap: 8 }}>
           <Pressy accessibilityRole="button" accessibilityLabel="Ate something else? Log it" onPress={elseFood}
             style={{ flex: 1.5, height: 44, borderRadius: radii.lg, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
