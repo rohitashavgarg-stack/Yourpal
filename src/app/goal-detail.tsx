@@ -2,7 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import Svg, { Circle, Line, Path } from 'react-native-svg';
-import { CalendarClock, Check, ChevronRight, ClipboardCheck, Dumbbell, Flag, Flame, Scale, UtensilsCrossed } from '@/lib/icons';
+import { CalendarClock, Check, ChevronRight, ClipboardCheck, Dumbbell, Flag, Flame, Scale, Target, UtensilsCrossed } from '@/lib/icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useDomain } from '@/lib/domain';
@@ -169,7 +170,7 @@ function assessLine(a: string) {
 }
 
 export default function GoalDetail() {
-  const { c } = useTheme();
+  const { c, isDark } = useTheme();
   const { d } = useDomain();
   const { state } = useStore();
   const { toast } = useOverlay();
@@ -194,10 +195,16 @@ export default function GoalDetail() {
   const extra: Past[] = s.finished || s.kept ? [{ name: g.name, when: `${fmtDay(g.startDate)} to ${fmtDay(TODAY)}`, result: s.finished ? 'Finished' : 'Reached', amount: s.finished ? `${Math.round(g.pct * 100)}%` : undefined }] : [];
 
   return (
-    <SubPage title="Your goal" fallback="/progress" right={
+    <SubPage title="Your goal" fallback="/progress" backdrop={
+      // a soft blue wash at the top, fading into the page, like the food page
+      <LinearGradient pointerEvents="none" colors={[c.accentSoft, c.bg]} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 340 }} />
+    } right={
       <Pressy accessibilityRole="button" accessibilityLabel="Change goal" onPress={() => router.push('/goal')} style={{ height: 44, paddingHorizontal: 14, justifyContent: 'center' }}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.accentText }}>Change</Txt>
       </Pressy>}>
+      <View style={[{ width: 84, height: 84, borderRadius: 42, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }, cardShadow(isDark)]}>
+        <View style={{ width: 58, height: 58, borderRadius: 29, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Target size={28} strokeWidth={1.8} color={c.accentText} /></View>
+      </View>
       <GoalTickCard flat />
 
       {behind && !s.finished && (

@@ -39,6 +39,8 @@ export type SubPageProps = {
   // shell
   close?: boolean;
   gap?: number;
+  /** Drawn behind the top of the content and scrolls with it (for example a tinted gradient). Position it absolutely from the top. */
+  backdrop?: React.ReactNode;
   // progress
   titleIcon?: React.ReactNode;
   onTitlePress?: () => void;
@@ -49,7 +51,7 @@ export type SubPageProps = {
 
 function ToastLift({ value }: { value: number }) { useToastLift(value); return null; }
 
-export function SubPage({ title, children, right, footer, fallback, variant = 'shell', close, gap = 12, titleIcon, onTitlePress, scroll = true, toastLift = 24, onBack }: SubPageProps) {
+export function SubPage({ title, children, right, footer, fallback, variant = 'shell', close, gap = 12, titleIcon, onTitlePress, scroll = true, toastLift = 24, onBack, backdrop }: SubPageProps) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { scrolled, onScroll } = useScrolled();
@@ -78,6 +80,7 @@ export function SubPage({ title, children, right, footer, fallback, variant = 's
         <>
           <ScrollView onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled"
             contentContainerStyle={shell ? { paddingHorizontal: 16, paddingTop: headH + 4, paddingBottom: footer ? 24 : 40 + insets.bottom, gap } : { paddingHorizontal: 16, paddingTop: insets.top + 12 + 44 + 8 + 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
+            {backdrop}
             {shell ? <View style={{ gap }}>{children}</View> : children}
           </ScrollView>
           {/* The header floats over the content so the glass buttons have something to blur as it scrolls underneath. */}
