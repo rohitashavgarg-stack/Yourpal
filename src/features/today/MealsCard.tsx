@@ -5,7 +5,8 @@ import { fmtT, KCAL_TARGET, MACRO_TARGET, MealId, MEALS } from '@/lib/data';
 import { mealLog, totals, useDomain, useMeals } from '@/lib/domain';
 import { inr } from '@/lib/useNow';
 import { mealById, mealKcal, mealView } from './meals';
-import { QuickLogSheet } from './QuickLogSheet';
+import { LogMealsSheet } from './LogMealsSheet';
+import { fmtQty, parseQty } from '@/features/plans/qty';
 import { useLogGate } from '@/lib/logGate';
 import { toastCopy } from '@/lib/microcopy';
 import { MealsCard as MealsCardPattern, MealsCardState, MealTone, ShownMeal } from '@/design-system/patterns/MealsCard';
@@ -52,26 +53,8 @@ export function TodayMealNowCard() {
   };
   const text = (id: MealId) => { const tn = tone(id); return tn === 'skipped' ? 'Skipped' : tn === 'logged' ? 'Logged' : tn === 'missed' ? 'Not logged' : tn === 'now' ? 'Now' : fmtT(mealById(id).t).full; };
 
-  const withUndo = (msg: string, fn: () => void) => { const prev = d.meals; fn(); toast(msg, { undo: () => set({ meals: prev }) }); };
-  const toggle = gate((k: number) => {
-    const willFull = !x.eaten.includes(k) && x.eaten.length + 1 === m.items.length;
-    if (willFull) withUndo(toastCopy.mealDone(m.n, mealKcal(m)), () => toggleItem(shown, k));
-    else toggleItem(shown, k);
-  });
-  const removeExtra = gate((j: number) => {
-    const gone = x.extra[j];
-    withUndo(toastCopy.removed(gone?.n ?? 'item'), () => patch(shown, { extra: x.extra.filter((_, i) => i !== j) }));
-  });
-  const all = gate(() => {
-    if (x.skip) patch(shown, { skip: false });
-    else if (v.full) patch(shown, { eaten: [] });
-    else if (v.any) withUndo(toastCopy.mealMarked(m.n), () => patch(shown, { eaten: m.items.map((_, k) => k), at: x.at ?? d.min }));
-    else withUndo(toastCopy.mealSkipped(m.n), () => patch(shown, { skip: true, eaten: [] }));
-  });
-  const allL = x.skip ? 'Undo skip' : v.full ? 'Unmark all' : v.any ? 'Mark rest eaten' : 'Skip meal';
   const openFood = (k: number, extra: boolean) => router.push({ pathname: '/food', params: { mid: shown, k: String(k), extra: extra ? '1' : '0' } });
-  const ateElse = (id: MealId) => gate(() => openSheet(<QuickLogSheet mealId={id} mode="scan" />, { label: 'Log a meal' }));
-  const answer = gate((id: MealId, msg: string, p: Parameters<typeof patch>[1]) => { const prev = d.meals; patch(id, p); set({ openMeal: null }); toast(msg, { undo: () => set({ meals: prev }) }); });
+  const openLog = (id: MealId) => gate(() => openSheet(<LogMealsSheet mealId={id} />, { label: 'Log meal' }));
 
   const state: MealsCardState = paused ? 'paused' : t.done === MEALS.length && !picked ? 'complete' : 'now';
   const shownMeal: ShownMeal = {
@@ -82,11 +65,10 @@ export function TodayMealNowCard() {
     skipped: !!x.skip,
     items: m.items.map((it, k) => {
       const r = x.repl[k];
-      return { name: r ? r.n : it.n, sub: r ? `Instead of ${it.n.toLowerCase()}` : it.q, kcal: `${r ? r.k : it.k} kcal${r?.est ? '*' : ''}`, type: it.type, eaten: x.eaten.includes(k), yours: !!r };
+      const por = x.por?.[k] ?? 1; const q = !r ? parseQty(it.q) : null;
+      return { name: r ? r.n : it.n, sub: r ? `Instead of ${it.n.toLowerCase()}` : q && por !== 1 ? fmtQty(Math.round(q.n * por * 100) / 100, q.unit) : it.q, type: it.type, eaten: x.eaten.includes(k) };
     }),
-    extras: x.extra.map((e) => ({ name: e.n, kcal: e.k, type: e.type, est: e.est })),
-    allLabel: allL,
-    allActive: !!x.skip || v.any,
+    extras: x.extra.map((e) => ({ name: e.n, type: e.type, est: e.est })),
   };
   const askMeal = ask ? mealById(ask) : null;
   return (
@@ -97,10 +79,8 @@ export function TodayMealNowCard() {
       onOpenMeal={(id) => set({ openMeal: id as MealId })}
       meal={shownMeal}
       ask={askMeal ? { name: askMeal.n, planned: fmtT(askMeal.t).full, more: missed.length - 1 } : undefined}
-      onAskAteIt={() => ask && answer(ask, toastCopy.mealAsPlanned(askMeal!.n), { eaten: askMeal!.items.map((_, k) => k), skip: false, at: askMeal!.t })}
-      onAskSomethingElse={() => ask && ateElse(ask)()}
-      onAskSkipped={() => ask && answer(ask, toastCopy.mealSkipped(askMeal!.n), { skip: true, eaten: [] })}
-      onToggleItem={toggle} onOpenFood={openFood} onRemoveExtra={removeExtra} onAteElse={ateElse(shown)} onAll={all} />
+      onAskLog={() => ask && openLog(ask)()}
+      onOpenFood={openFood} onLogMeal={openLog(shown)} />
   );
 }
 export { TodayMealNowCard as MealNowCard }; // the old name, so existing imports keep working

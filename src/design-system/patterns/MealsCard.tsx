@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
 import { Check, ChevronRight, Clock, Lock, Plus, UtensilsCrossed } from '@/lib/icons';
-import { Card, Chip, Pressy, Row, Txt } from '@/components/ui';
+import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { FoodType } from '@/lib/data';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -20,8 +20,8 @@ import { font, fontSizes, radii } from '@/design-system/tokens';
 export type MealsCardState = 'now' | 'complete' | 'paused';
 export type MealTone = 'skipped' | 'logged' | 'missed' | 'now' | 'later';
 
-export type MealItemRow = { name: string; sub: string; kcal: string; type?: FoodType; eaten: boolean; /** swapped for something the member picked: shows "Yours" */ yours: boolean };
-export type MealExtraRow = { name: string; kcal: number; type?: FoodType; est?: boolean };
+export type MealItemRow = { name: string; /** the amount, "1 bowl" */ sub: string; type?: FoodType; /** logged: a small tick at the right (display only) */ eaten: boolean };
+export type MealExtraRow = { name: string; type?: FoodType; est?: boolean };
 export type ShownMeal = {
   name: string;
   /** "650 kcal planned" or "290 kcal eaten". */
@@ -34,10 +34,6 @@ export type ShownMeal = {
   skipped: boolean;
   items: MealItemRow[];
   extras: MealExtraRow[];
-  /** The label of the quiet button: "Skip meal", "Mark rest eaten", "Unmark all", "Undo skip". */
-  allLabel: string;
-  /** The quiet button is drawn in ink instead of muted. */
-  allActive: boolean;
 };
 export type MissedAsk = { name: string; /** "3:30 pm" */ planned: string; /** how many more missed meals after this one */ more: number };
 export type MealSummaryRow = { id: string; name: string; skipped: boolean; sub: string };
@@ -56,14 +52,12 @@ export type MealsCardProps = {
   /** now */
   meal?: ShownMeal;
   ask?: MissedAsk;
-  onToggleItem?: (k: number) => void;
+  /** The name of a food was tapped: opens its page (nutrition, recipe). */
   onOpenFood?: (k: number, extra: boolean) => void;
-  onRemoveExtra?: (j: number) => void;
-  onAteElse?: () => void;
-  onAll?: () => void;
-  onAskAteIt?: () => void;
-  onAskSomethingElse?: () => void;
-  onAskSkipped?: () => void;
+  /** "Log meal": opens the bottom sheet for the meal on screen. Logging happens there, not on the card. */
+  onLogMeal?: () => void;
+  /** The same button on the "Did you have lunch?" prompt, for the missed meal. */
+  onAskLog?: () => void;
 };
 
 // Behind the meals card: a soft orange wash from the top right corner. It is one big round fade (centred past the corner) that reaches zero opacity
@@ -102,8 +96,8 @@ function DotRule({ top }: { top: number }) {
   );
 }
 
-// The prompt for a meal that passed with nothing logged: three one-tap answers.
-function MissedPrompt({ ask, onAteIt, onSomethingElse, onSkipped }: { ask: MissedAsk; onAteIt?: () => void; onSomethingElse?: () => void; onSkipped?: () => void }) {
+// The prompt for a meal that passed with nothing logged: one button that opens the same sheet.
+function MissedPrompt({ ask, onLog }: { ask: MissedAsk; onLog?: () => void }) {
   const { c } = useTheme();
   const n = ask.name.toLowerCase();
   return (
@@ -115,63 +109,38 @@ function MissedPrompt({ ask, onAteIt, onSomethingElse, onSkipped }: { ask: Misse
           <Txt v="caption">{ask.more ? `It was planned for ${ask.planned}. ${ask.more} earlier ${ask.more === 1 ? 'meal' : 'meals'} still to log.` : `It was planned for ${ask.planned}.`}</Txt>
         </View>
       </Row>
-      <Row style={{ gap: 8 }}>
-        <Pressy accessibilityRole="button" accessibilityLabel={`I ate ${n} as planned`} onPress={onAteIt}
-          style={{ height: 36, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.ink, justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.bg }}>I ate it</Txt>
-        </Pressy>
-        <Pressy accessibilityRole="button" accessibilityLabel={`I ate something else for ${n}`} onPress={onSomethingElse}
-          style={{ height: 36, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.surface, justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18 }}>Something else</Txt>
-        </Pressy>
-        <Pressy accessibilityRole="button" accessibilityLabel={`I skipped ${n}`} onPress={onSkipped}
-          style={{ height: 36, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.surface, justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18 }}>Skipped</Txt>
-        </Pressy>
-      </Row>
+      <Row><Button size="compact" kind="primary" label={`Log ${n}`} onPress={onLog} accessibilityLabel={`Log ${n}`} /></Row>
     </FadeIn>
   );
 }
 
-// The items of the meal on screen: one row per food with its own tick, then "Ate something else" and the quiet Skip button.
-function MealItems({ meal, onToggleItem, onOpenFood, onRemoveExtra, onAteElse, onAll }: Pick<MealsCardProps, 'onToggleItem' | 'onOpenFood' | 'onRemoveExtra' | 'onAteElse' | 'onAll'> & { meal: ShownMeal }) {
+// The meal on screen: the names of its foods with the amount, and one button that opens the sheet where it is logged.
+function MealItems({ meal, onOpenFood, onLogMeal }: Pick<MealsCardProps, 'onOpenFood' | 'onLogMeal'> & { meal: ShownMeal }) {
   const { c, isDark } = useTheme();
   return (
     <Animated.View layout={LinearTransition.duration(180)}>
       <FadeIn style={{ gap: 4, paddingBottom: 0 }}>
         {meal.items.map((it, k) => (
-          <Row key={k} style={{ gap: 10, minHeight: 52, paddingLeft: 12, paddingRight: 4, paddingVertical: 4, borderRadius: radii.md, backgroundColor: it.eaten ? (isDark ? '#1E4A3F' : c.goodSoft) : c.surface2, borderWidth: it.eaten ? 1 : 0, borderColor: c.good + '66' }}>
+          <Row key={k} style={{ gap: 10, minHeight: 52, paddingLeft: 12, paddingRight: 12, paddingVertical: 4, borderRadius: radii.md, backgroundColor: it.eaten ? (isDark ? '#1E4A3F' : c.goodSoft) : c.surface2, borderWidth: it.eaten ? 1 : 0, borderColor: c.good + '66' }}>
             <FoodMark type={it.type} />
-            <Pressy accessibilityRole="button" accessibilityLabel={`${it.name}: nutrition, recipe and swap`} onPress={() => onOpenFood?.(k, false)} scaleTo={0.98} style={{ flex: 1, minWidth: 0, paddingVertical: 4 }}>
+            <Pressy accessibilityRole="button" accessibilityLabel={`${it.name}: nutrition and recipe`} onPress={() => onOpenFood?.(k, false)} scaleTo={0.98} style={{ flex: 1, minWidth: 0, paddingVertical: 4 }}>
               <Txt style={{ fontFamily: font.medium, color: meal.skipped ? c.muted : c.ink, textDecorationLine: meal.skipped ? 'line-through' : 'none' }}>{it.name}</Txt>
               <Txt v="caption">{it.sub}</Txt>
             </Pressy>
-            <Txt v="caption" style={{ alignSelf: 'center' }}>{it.kcal}</Txt>
-            {it.yours && <Chip label="Yours" style={{ height: 22, borderColor: c.accentSoft, alignSelf: 'center' }} />}
-            <CheckCircle on={it.eaten} size={28} tone="good" label={`${it.eaten ? 'Unmark' : 'Mark'} ${it.name} as eaten`} onPress={() => onToggleItem?.(k)} />
+            {it.eaten && <Check size={16} strokeWidth={3} color={c.good} />}
           </Row>
         ))}
         {meal.extras.map((e, j) => (
-          <Row key={`x${j}`} style={{ gap: 10, minHeight: 52, paddingLeft: 12, paddingRight: 4, paddingVertical: 4, borderRadius: radii.md, backgroundColor: c.accentSoft }}>
+          <Row key={`x${j}`} style={{ gap: 10, minHeight: 52, paddingLeft: 12, paddingRight: 12, paddingVertical: 4, borderRadius: radii.md, backgroundColor: c.accentSoft }}>
             <FoodMark type={e.type ?? 'veg'} />
             <Pressy accessibilityRole="button" accessibilityLabel={`${e.name}: details`} onPress={() => onOpenFood?.(j, true)} scaleTo={0.98} style={{ flex: 1, minWidth: 0, paddingVertical: 4 }}>
               <Txt style={{ fontFamily: font.medium }}>{e.name}</Txt>
               {e.est ? <Txt v="caption">Estimated</Txt> : null}
             </Pressy>
-            <Txt v="caption" style={{ alignSelf: 'center' }}>{`${e.kcal} kcal`}</Txt>
-            <Chip label="Yours" style={{ height: 22, borderColor: c.accentSoft, alignSelf: 'center' }} />
-            <CheckCircle on size={28} tone="good" label={`Remove ${e.name}`} onPress={() => onRemoveExtra?.(j)} />
+            <Check size={16} strokeWidth={3} color={c.good} />
           </Row>
         ))}
-        <Row style={{ gap: 8, marginTop: 4 }}>
-          <Pressy accessibilityRole="button" onPress={onAteElse}
-            style={{ flex: 1.7, height: 46, borderRadius: 23, backgroundColor: c.surface2, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-            <Plus size={17} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm }}>Ate something else</Txt>
-          </Pressy>
-          <Pressy accessibilityRole="button" onPress={onAll} style={{ flex: 1, height: 46, borderRadius: 23, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: meal.allActive ? c.ink : c.muted }}>{meal.allLabel}</Txt>
-          </Pressy>
-        </Row>
+        <View style={{ marginTop: 4 }}><Button kind="primary" label="Log meal" onPress={onLogMeal} /></View>
       </FadeIn>
     </Animated.View>
   );
@@ -238,7 +207,7 @@ export function MealsCard(p: MealsCardProps) {
         </View>
       </Row>
       <DotRule top={-4} />
-      {p.ask && <MissedPrompt ask={p.ask} onAteIt={p.onAskAteIt} onSomethingElse={p.onAskSomethingElse} onSkipped={p.onAskSkipped} />}
+      {p.ask && <MissedPrompt ask={p.ask} onLog={p.onAskLog} />}
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <View>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, letterSpacing: -0.4 }}>{meal.name}</Txt>
@@ -249,7 +218,7 @@ export function MealsCard(p: MealsCardProps) {
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, paddingTop: 1 }}>{meal.pill}</Txt>
         </View>
       </Row>
-      <MealItems meal={meal} onToggleItem={p.onToggleItem} onOpenFood={p.onOpenFood} onRemoveExtra={p.onRemoveExtra} onAteElse={p.onAteElse} onAll={p.onAll} />
+      <MealItems meal={meal} onOpenFood={p.onOpenFood} onLogMeal={p.onLogMeal} />
     </Card>
   );
 }

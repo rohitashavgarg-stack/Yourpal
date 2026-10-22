@@ -6,7 +6,8 @@ import { devParam } from './devParams';
 // Everything is local (mock backend). Screens read with useDomain() and write with set().
 
 export type Extra = { n: string; k: number; p: number; est?: boolean; type?: FoodType };
-export type MealLog = { eaten: number[]; extra: Extra[]; repl: Record<number, Extra>; skip?: boolean; at?: number };
+// por: how much of a planned item was eaten, as a multiple of the planned amount (1 is as planned, 1.5 is half as much again)
+export type MealLog = { eaten: number[]; extra: Extra[]; repl: Record<number, Extra>; por?: Record<number, number>; skip?: boolean; at?: number };
 export type TimeOfDay = 'Morning' | 'Afternoon' | 'Evening';
 export type CheckInScenario = 'Away' | 'Near (25 m)' | 'At the gym' | 'Checked in' | 'Location off';
 
@@ -134,13 +135,15 @@ export const hasWearableData = (d: Pick<Domain, 'hc' | 'wearable'>) => d.hc && d
 
 export function mealLog(d: Domain, id: MealId): MealLog {
   const x = d.meals[id];
-  return { eaten: x?.eaten ?? [], extra: x?.extra ?? [], repl: x?.repl ?? {}, skip: !!x?.skip, at: x?.at };
+  return { eaten: x?.eaten ?? [], extra: x?.extra ?? [], repl: x?.repl ?? {}, por: x?.por ?? {}, skip: !!x?.skip, at: x?.at };
 }
 
 export function itemNow(d: Domain, id: MealId, k: number) {
   const m = MEALS.find((q) => q.id === id)!;
-  const r = mealLog(d, id).repl[k];
-  return r ? { n: r.n, k: r.k, p: r.p, est: !!r.est, replaced: true } : { n: m.items[k].n, k: m.items[k].k, p: m.items[k].p, est: false, replaced: false };
+  const x = mealLog(d, id);
+  const r = x.repl[k];
+  const por = x.por?.[k] ?? 1;
+  return r ? { n: r.n, k: r.k, p: r.p, est: !!r.est, replaced: true } : { n: m.items[k].n, k: Math.round(m.items[k].k * por), p: Math.round(m.items[k].p * por), est: false, replaced: false };
 }
 
 export function totals(d: Domain) {
