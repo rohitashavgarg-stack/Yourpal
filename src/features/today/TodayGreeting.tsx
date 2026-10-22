@@ -34,7 +34,7 @@ export function TodayGreeting() {
   };
   const ctx = forceCtx(base, g.state);
   const { top, lead, hl, tail } = greeting(ctx, first);
-  const size = top.length > 19 ? 28 : 32; // "Good afternoon, Rohitashav" would wrap at 32, so both lines step down together
+  const size = 28; // one size for every greeting, so "Hello! Rohitashav" and "Good afternoon, Rohitashav" look the same
   const big = { fontFamily: font.regular, fontSize: size, lineHeight: Math.round(size * 1.25), letterSpacing: -0.6, color: c.muted } as const; // both lines: light, grey; the key phrase is brighter
   return (
     <View accessible accessibilityLabel={`${top}. ${lead ? lead + ' ' : ''}${hl}${tail ?? ''}`} style={{ paddingHorizontal: 4, gap: 0 }}>
