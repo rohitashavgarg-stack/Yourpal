@@ -18,7 +18,10 @@ Everything visual is built from `src/design-system/`: tokens, primitives (Button
 ```bash
 npm run storybook                    # every component, every variant and state, light and dark, on http://localhost:6006
 npm run build-storybook              # static files in storybook-static/
+npm run deploy-storybook             # publish it to https://yourpal-storybook.vercel.app (needs `vercel login`)
 ```
+
+Live Storybook: https://yourpal-storybook.vercel.app
 
 - Component pages: `src/design-system/docs/<Name>.md`, listed in `docs/design-system-components.md`.
 - Rules for every change (also read by coding agents): `CLAUDE.md`. Tokens only for colour, spacing, radius and type; add a variant instead of restyling a component.

@@ -59,7 +59,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "node scripts/audit/coverage-storybook.js && storybook build -o storybook-static",
     "lint:changed": "node scripts/lint-changed.js",
-    "handoff": "node scripts/handoff.js"
+    "handoff": "node scripts/handoff.js",
+    "deploy-storybook": "node scripts/deploy-storybook.js"
   },
   "private": true
 }

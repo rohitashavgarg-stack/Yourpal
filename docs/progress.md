@@ -35,3 +35,5 @@ Notes
 | E | Handoff package: CLAUDE.md, PR template, HANDOFF.md, README, HANDOFF-INDEX.md, npm run handoff zip, DEPLOY-STORYBOOK.md | done: zip is 40 MB, reopened (1,145 entries) and extracted to check | e631b5d |
 
 **Round 2 (phases A to E) done.** Not merged into main. Not deployed. One decision is open: the comeback workout card (see docs/review-changes.md and src/design-system/docs/WorkoutCard.md).
+
+**Storybook deployed** to https://yourpal-storybook.vercel.app (Vercel project yourpal-storybook, free Hobby plan, deployed by hand, git disconnected). Vercel CLI 65.1.0 installed globally and signed in as rohitashavgarg-7341; Vercel plugin installed for Claude Code (user scope); Vercel MCP added but not yet authorized by the user.

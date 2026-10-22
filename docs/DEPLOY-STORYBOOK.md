@@ -20,42 +20,35 @@ npm run build-storybook    # static files in storybook-static/
 | `.storybook/preview-head.html` | Declares the Geist, Geist Mono and Outfit fonts under the names the tokens use. |
 | `src/design-system/stories/*.stories.tsx` | One file per component. |
 
-## Deploy as a separate Vercel project (same repo)
+## Live
 
-Not deployed. Nothing below has been run. Only you can do the steps marked **login**; the rest is already set up in the repo.
+**https://yourpal-storybook.vercel.app**: Vercel project `yourpal-storybook` in the account `rohitashavgarg-7341` (team "rohitashavgarg-7341's projects", free Hobby plan), next to the app project `yourpal`. The link is public: no login to view. All 159 stories and the Coverage page were opened on the live site and none errors.
 
-### Steps that need your login (dashboard)
+It is deployed by hand, not from git: the project is deliberately **not connected** to the GitHub repo, so a push never builds it. (Linking a folder to a Vercel project connects the repo by default; `vercel git disconnect` undoes that, and the deploy script does it.)
 
-1. **Login:** sign in to Vercel (https://vercel.com/login) with the account or team that owns the app project.
-2. **Login:** **Add New... > Project**, then **Import Git Repository** and pick `rohitashavgarg-stack/Yourpal`. If the repo is not listed, **Adjust GitHub App Permissions** and allow Vercel to read it (this asks for your GitHub login).
-3. Project name: `yourpal-storybook` (any name; it becomes `<name>.vercel.app`).
-4. Framework preset: **Other**.
-5. Root directory: the repo root (leave the default).
-6. Build command: `npm run build-storybook` (turn the **Override** switch on to type it).
-7. Output directory: `storybook-static` (Override on).
-8. Install command: leave the default (`npm install`).
-9. **Deploy.** The first build runs for this branch's production branch setting; if `main` does not have Storybook yet, change **Settings > Git > Production Branch** to `design-system-handoff` until it is merged, then back to `main`.
-10. Optional, **Settings > Git > Ignored Build Step**: `git diff --quiet HEAD^ HEAD -- src/design-system .storybook package.json docs/coverage-data.json`, so the Storybook project only rebuilds when the design system changes.
-11. Send the link (`https://<name>.vercel.app`) to whoever should see it. Add it to `docs/HANDOFF-INDEX.md`, the row "Storybook", in place of "not deployed yet".
-
-The app project is untouched: it keeps building with `npm run build:web` into `dist/`.
-
-### The same with the Vercel CLI (also needs a login)
+### Update it after a change
 
 ```bash
-npx vercel login                          # login: opens the browser, or asks for an email link
-npm run build-storybook
-npx vercel deploy storybook-static --prod # first run asks: team, project name (yourpal-storybook), link to existing? no
+vercel login            # once per machine: opens a page where you approve; no password is typed into any tool
+npm run deploy-storybook
 ```
 
-The CLI writes `.vercel/` in the repo folder; do not commit it.
+`npm run deploy-storybook` builds Storybook, copies it to `handoff/storybook-site` (not committed), links that folder to `yourpal-storybook`, disconnects git and deploys to production. It prints the link.
 
-### If you only want to share the files
+### Make it private
 
-`npm run handoff` writes `handoff/yourpal-design-system-handoff.zip`. It contains `storybook-static/`; unzip it and serve that folder with any static file server (for example `npx http-server storybook-static`). Opening `index.html` directly from a folder does not work: Storybook needs a server.
+What was seen after deploying: the main link (https://yourpal-storybook.vercel.app) opens for anyone, while the long per-deployment links Vercel prints ask for a Vercel sign-in. To restrict the main link, open the Vercel dashboard, project `yourpal-storybook`, **Settings > Deployment Protection** and see which options your plan offers; some of them need a paid plan. On the free plan, if the stories must stay private, delete the project (**Settings > General > Delete Project**) and share the zip instead.
+
+### Set it up again from nothing (another account or team)
+
+1. Sign in to Vercel (https://vercel.com/login), then `vercel login` on the machine.
+2. `vercel link --yes --project yourpal-storybook` creates the project in the signed-in account (run it inside a copy of `storybook-static`, as the script does).
+3. `vercel git disconnect --yes`, then `vercel deploy --prod --yes`.
+
+The dashboard route also works: **Add New... > Project**, import the repo, framework preset **Other**, build command `npm run build-storybook`, output directory `storybook-static`. It then rebuilds on every push; turn that off with an Ignored Build Step if you do not want it.
 
 ## Checks done on this branch
 
 - `npm run build-storybook` completes.
-- All 159 stories and the Coverage page were opened one by one in the built Storybook: none shows an error or renders empty.
+- All 159 stories and the Coverage page were opened one by one on the live site: none shows an error or renders empty.
 - Light and dark were looked at on a sample of stories (BudgetCard, Button).
