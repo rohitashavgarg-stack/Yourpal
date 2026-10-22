@@ -2,12 +2,14 @@ import React from 'react';
 import { View } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
-import { Check, ChevronRight, Clock, Lock, Plus, UtensilsCrossed } from '@/lib/icons';
+import { Beef, Check, ChevronRight, Clock, Flame, Lock, Plus, UtensilsCrossed } from '@/lib/icons';
 import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { FoodType } from '@/lib/data';
 import { useTheme } from '@/theme/ThemeProvider';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { MetaRow } from '@/design-system/primitives/MetaRow';
 import { font, fontSizes, radii } from '@/design-system/tokens';
 
 /**
@@ -20,16 +22,12 @@ import { font, fontSizes, radii } from '@/design-system/tokens';
 export type MealsCardState = 'now' | 'complete' | 'paused';
 export type MealTone = 'skipped' | 'logged' | 'missed' | 'now' | 'later';
 
-export type MealItemRow = { name: string; /** the amount, "1 bowl" */ sub: string; type?: FoodType; /** logged: a small tick at the right (display only) */ eaten: boolean };
+export type MealItemRow = { name: string; /** the amount in front of the name, "1 bowl"; empty for a food the member swapped in */ amount: string; type?: FoodType; eaten: boolean };
 export type MealExtraRow = { name: string; type?: FoodType; est?: boolean };
 export type ShownMeal = {
   name: string;
-  /** "650 kcal planned" or "290 kcal eaten". */
-  caption: string;
-  /** The pill at the top right: a time, or a status word for another meal. */
-  pill: string;
-  /** Shows a small clock in the pill (the meal that is due or missed). */
-  clock: boolean;
+  /** Under the name, each with an icon and a thin line between: the time (or a status word), "650 kcal planned" or "290 kcal eaten", "22 g protein". */
+  meta: { time: string; kcal: string; protein: string };
   /** The member skipped it: names are greyed and struck through. */
   skipped: boolean;
   items: MealItemRow[];
@@ -52,8 +50,6 @@ export type MealsCardProps = {
   /** now */
   meal?: ShownMeal;
   ask?: MissedAsk;
-  /** The name of a food was tapped: opens its page (nutrition, recipe). */
-  onOpenFood?: (k: number, extra: boolean) => void;
   /** "Log meal": opens the bottom sheet for the meal on screen. Logging happens there, not on the card. */
   onLogMeal?: () => void;
   /** The same button on the "Did you have lunch?" prompt, for the missed meal. */
@@ -105,42 +101,27 @@ function MissedPrompt({ ask, onLog }: { ask: MissedAsk; onLog?: () => void }) {
       <Row style={{ gap: 10 }}>
         <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}><Clock size={18} color={c.warn} /></View>
         <View style={{ flex: 1 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{`Did you have ${n}?`}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{`Did you have your ${n}?`}</Txt>
           <Txt v="caption">{ask.more ? `It was planned for ${ask.planned}. ${ask.more} earlier ${ask.more === 1 ? 'meal' : 'meals'} still to log.` : `It was planned for ${ask.planned}.`}</Txt>
         </View>
       </Row>
-      <Row><Button size="compact" kind="primary" label={`Log ${n}`} onPress={onLog} accessibilityLabel={`Log ${n}`} /></Row>
+      <Row style={{ justifyContent: 'flex-end' }}><Button size="compact" kind="primary" label={`Log ${n}`} onPress={onLog} accessibilityLabel={`Log ${n}`} /></Row>
     </FadeIn>
   );
 }
 
-// The meal on screen: the names of its foods with the amount, and one button that opens the sheet where it is logged.
-function MealItems({ meal, onOpenFood, onLogMeal }: Pick<MealsCardProps, 'onOpenFood' | 'onLogMeal'> & { meal: ShownMeal }) {
-  const { c, isDark } = useTheme();
+// The meal on screen: its foods in one line with one food icon ("2 bowl dal, 4 roti, 1 bowl salad"), and one button that opens the sheet where it is logged.
+function MealItems({ meal, onLogMeal }: Pick<MealsCardProps, 'onLogMeal'> & { meal: ShownMeal }) {
+  const { c } = useTheme();
+  const line = [...meal.items.map((it) => (it.amount ? it.amount + ' ' : '') + it.name), ...meal.extras.map((e) => e.name)].join(', ');
   return (
     <Animated.View layout={LinearTransition.duration(180)}>
-      <FadeIn style={{ gap: 4, paddingBottom: 0 }}>
-        {meal.items.map((it, k) => (
-          <Row key={k} style={{ gap: 10, minHeight: 52, paddingLeft: 12, paddingRight: 12, paddingVertical: 4, borderRadius: radii.md, backgroundColor: it.eaten ? (isDark ? '#1E4A3F' : c.goodSoft) : c.surface2, borderWidth: it.eaten ? 1 : 0, borderColor: c.good + '66' }}>
-            <FoodMark type={it.type} />
-            <Pressy accessibilityRole="button" accessibilityLabel={`${it.name}: nutrition and recipe`} onPress={() => onOpenFood?.(k, false)} scaleTo={0.98} style={{ flex: 1, minWidth: 0, paddingVertical: 4 }}>
-              <Txt style={{ fontFamily: font.medium, color: meal.skipped ? c.muted : c.ink, textDecorationLine: meal.skipped ? 'line-through' : 'none' }}>{it.name}</Txt>
-              <Txt v="caption">{it.sub}</Txt>
-            </Pressy>
-            {it.eaten && <Check size={16} strokeWidth={3} color={c.good} />}
-          </Row>
-        ))}
-        {meal.extras.map((e, j) => (
-          <Row key={`x${j}`} style={{ gap: 10, minHeight: 52, paddingLeft: 12, paddingRight: 12, paddingVertical: 4, borderRadius: radii.md, backgroundColor: c.accentSoft }}>
-            <FoodMark type={e.type ?? 'veg'} />
-            <Pressy accessibilityRole="button" accessibilityLabel={`${e.name}: details`} onPress={() => onOpenFood?.(j, true)} scaleTo={0.98} style={{ flex: 1, minWidth: 0, paddingVertical: 4 }}>
-              <Txt style={{ fontFamily: font.medium }}>{e.name}</Txt>
-              {e.est ? <Txt v="caption">Estimated</Txt> : null}
-            </Pressy>
-            <Check size={16} strokeWidth={3} color={c.good} />
-          </Row>
-        ))}
-        <View style={{ marginTop: 4 }}><Button kind="primary" label="Log meal" onPress={onLogMeal} /></View>
+      <FadeIn style={{ gap: 12, paddingBottom: 0 }}>
+        <View accessible accessibilityLabel={`${meal.name}: ${line}`} style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start', paddingHorizontal: 4 }}>
+          <IconBadge size={36} radius={radii.sm} bg={c.surface2}><UtensilsCrossed size={18} color={c.muted} /></IconBadge>
+          <Txt style={{ flex: 1, minWidth: 0, fontSize: fontSizes.base, lineHeight: 24, paddingTop: 5, color: meal.skipped ? c.muted : c.ink, textDecorationLine: meal.skipped ? 'line-through' : 'none' }}>{line}</Txt>
+        </View>
+        <Button kind="primary" label="Log meal" onPress={onLogMeal} />
       </FadeIn>
     </Animated.View>
   );
@@ -208,17 +189,15 @@ export function MealsCard(p: MealsCardProps) {
       </Row>
       <DotRule top={-4} />
       {p.ask && <MissedPrompt ask={p.ask} onLog={p.onAskLog} />}
-      <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
-        <View>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, letterSpacing: -0.4 }}>{meal.name}</Txt>
-          <Txt v="caption">{meal.caption}</Txt>
-        </View>
-        <View style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, borderWidth: 1, borderColor: isDark ? 'rgba(255,255,255,0.18)' : c.chipLine, backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)', flexDirection: 'row', gap: 5, alignItems: 'center', justifyContent: 'center' }}>
-          {meal.clock && <Clock size={12} color={c.ink} />}
-          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, paddingTop: 1 }}>{meal.pill}</Txt>
-        </View>
-      </Row>
-      <MealItems meal={meal} onOpenFood={p.onOpenFood} onLogMeal={p.onLogMeal} />
+      <View style={{ paddingHorizontal: 4, gap: 4 }}>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, letterSpacing: -0.4 }}>{meal.name}</Txt>
+        <MetaRow color={c.muted} dividerColor={c.line} items={[
+          { icon: <Clock size={14} color={c.muted} />, text: meal.meta.time },
+          { icon: <Flame size={14} color={c.muted} />, text: meal.meta.kcal },
+          { icon: <Beef size={14} color={c.muted} />, text: meal.meta.protein },
+        ]} />
+      </View>
+      <MealItems meal={meal} onLogMeal={p.onLogMeal} />
     </Card>
   );
 }

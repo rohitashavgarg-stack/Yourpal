@@ -21,7 +21,7 @@ import { FadeIn } from '@/design-system/primitives/FadeIn';
 export type StepsDesign = 'Current' | 'Ruler' | 'Day bars' | 'Dot matrix' | 'Bars + details';
 export const STEPS_DESIGNS: StepsDesign[] = ['Current', 'Ruler', 'Day bars', 'Dot matrix', 'Bars + details'];
 type Entry = { id: number; n: number; label: string };
-export const stepsStore = createStore(() => ({ design: 'Ruler' as StepsDesign, // the black ruler card is the default on Today
+export const stepsStore = createStore(() => ({ design: 'Dot matrix' as StepsDesign, // the dark green dot-matrix card is the default on Today
   manual: [] as Entry[] }));
 
 const SENSOR = 5230, GOAL = 8000, SQ = 160;

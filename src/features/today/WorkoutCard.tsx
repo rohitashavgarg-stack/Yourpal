@@ -37,7 +37,7 @@ export function TodayWorkoutCard({ restart = false }: { restart?: boolean } = {}
   const comeback = restart && st0 === 'hidden';
   const name = comeback ? 'Comeback plan' : 'Leg day';
   const time = comeback ? undefined : fmtT(WKT).full;
-  const chips = comeback ? ['5 exercises', '~30 min', 'Lighter weights'] : [`${buildExercises().length} exercises`, `~${WORKOUT_MIN} min`];
+  const meta = comeback ? [] : [{ kind: 'exercises' as const, text: `${buildExercises().length} exercises` }, { kind: 'time' as const, text: `~${WORKOUT_MIN} min` }];
   // while logging is paused nothing can be answered or started: the card just shows the plan
   const missed = !paused && st === 'todo' && !comeback && d.min - WKT > MISSED_AFTER;
   const didIt = gate(() => { set({ wkDone: { a: WKT, b: WKT + WORKOUT_MIN, k: 350 } }); toast(toastCopy.workoutLogged, { undo: () => set({ wkDone: null }) }); });
@@ -67,7 +67,7 @@ export function TodayWorkoutCard({ restart = false }: { restart?: boolean } = {}
     done = { at: fmtT(info.b).full, stats: [[String(mins), ' min', 'Time'], [String(buildExercises().length), '', 'Exercises'], [String(info.k), ' kcal', 'Burned']] as [string, string, string][] };
   }
   return (
-    <WorkoutCardPattern state={ps} name={name} time={time} when={rel(d, WKT).t} chips={chips} coachUnread={cs.unread} onOpenCoach={() => router.push('/coach')}
+    <WorkoutCardPattern state={ps} name={name} time={time} when={rel(d, WKT).t} meta={meta} coachUnread={cs.unread} onOpenCoach={() => router.push('/coach')}
       burned={burnedKcal} live={live} done={done} restNext={`Next: Pull, Thu ${fmtT(WKT).full}`}
       onStart={() => startWorkout()} onResume={() => router.push('/workout')} onDidIt={didIt} onMove={() => answer('moved')} onSkip={() => answer('skipped')}
       onStartAnyway={() => startWorkout()} onUndo={() => missedWkStore.set({ answer: null })} onStartRegular={() => startWorkout()} />

@@ -81,7 +81,7 @@ export const updateCopy = {
   meal: (meal: string, first: string, planned: string, late: boolean) => {
     const m = meal.toLowerCase();
     return late
-      ? { title: `Did you have ${m}${nm(first)}?`, body: `It was planned for ${planned}. Log what you ate, or skip it if you missed it.` }
+      ? { title: `Did you have your ${m}${nm(first)}?`, body: `It was planned for ${planned}. Log what you ate, or skip it if you missed it.` }
       : { title: `${meal} time${nm(first)}`, body: 'Log it when you sit down to eat, so your total for today stays right.' };
   },
   workout: (first: string, planned: string) => ({ title: `Did you train today${nm(first)}?`, body: `Leg day was planned for ${planned}. Log it if you went, or skip it.` }),

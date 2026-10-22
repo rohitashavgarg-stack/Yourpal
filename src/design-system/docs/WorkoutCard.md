@@ -14,4 +14,4 @@
 | paused | flat grey card, no Start (membership ended) |
 | comeback | flat grey "Easy session", Start and Do regular instead |
 
-Other props: `name`, `time`, `when`, `chips`, `coachUnread`, `burned` (the watch row, on upcoming, due, rest and done), and callbacks `onStart onResume onDidIt onMove onSkip onStartAnyway onUndo onStartRegular onOpenCoach`. There is no Full / Quick / Low energy choice on the card; it lives in the Start sheet. Images: `workout-<state>` (live has a running timer, so its digits differ between runs).
+Other props: `name`, `time`, `when`, `meta` (exercises and minutes as icon lines, see MetaRow), `coachUnread`, `burned` (the watch row, on upcoming, due, rest and done), and callbacks `onStart onResume onDidIt onMove onSkip onStartAnyway onUndo onStartRegular onOpenCoach`. There is no Full / Quick / Low energy choice on the card; it lives in the Start sheet. Images: `workout-<state>` (live has a running timer, so its digits differ between runs).

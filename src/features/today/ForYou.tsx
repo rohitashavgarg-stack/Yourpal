@@ -134,7 +134,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
                 <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} /></View>
               </Row>
             ) : it.btn ? (
-              <Row><Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.bg }}>{it.btn}</Txt></Pressy></Row>
+              <Row style={{ justifyContent: 'flex-end' }}><Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, minWidth: 132, paddingHorizontal: 24, borderRadius: 20, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.bg }}>{it.btn}</Txt></Pressy></Row>
             ) : null}
           </View>
         </Animated.View>

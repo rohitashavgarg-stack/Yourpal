@@ -1,10 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { CalendarClock, Check, Clock, Flame, Lock, Moon, X } from '@/lib/icons';
+import { CalendarClock, Check, Clock, Dumbbell, Flame, Lock, Moon, X } from '@/lib/icons';
 import { Chip, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { Button } from '@/design-system/primitives/Button';
+import { MetaRow } from '@/design-system/primitives/MetaRow';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, fontSizes, fixed, radii } from '@/design-system/tokens';
 
@@ -31,8 +32,8 @@ export type WorkoutCardProps = {
   time?: string;
   /** upcoming: the chip at the top right, "in 2 h". */
   when?: string;
-  /** upcoming and due: the info chips under the name ("5 exercises", "~50 min"). */
-  chips?: string[];
+  /** upcoming and due: facts under the name, each with an icon and a thin line between: "7 exercises", "~50 min". */
+  meta?: { kind: 'exercises' | 'time'; text: string }[];
   /** The coach reply dot on the coach line. */
   coachUnread?: boolean;
   onOpenCoach?: () => void;
@@ -104,7 +105,7 @@ function WorkoutShell({ colors, edge, children, compact = false, label }: { colo
 
 const noop = () => {};
 
-export function WorkoutCard({ state, name, time, when, chips = [], coachUnread, onOpenCoach, burned, live, done, restNext, onStart = noop, onResume = noop, onDidIt = noop, onMove = noop, onSkip = noop, onStartAnyway = noop, onUndo = noop, onStartRegular = noop }: WorkoutCardProps) {
+export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, onOpenCoach, burned, live, done, restNext, onStart = noop, onResume = noop, onDidIt = noop, onMove = noop, onSkip = noop, onStartAnyway = noop, onUndo = noop, onStartRegular = noop }: WorkoutCardProps) {
   const { c } = useTheme();
   const burnedRow = burned != null ? (
     <Row style={{ gap: 8, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.12)' }}>
@@ -271,7 +272,7 @@ export function WorkoutCard({ state, name, time, when, chips = [], coachUnread, 
         ) : <Chip label={when ?? ''} onDark />}
       </Row>
       <WorkoutTitle name={name} time={time} />
-      <Row style={{ gap: 6, flexWrap: 'wrap' }}>{chips.map((t) => <Chip key={t} label={t} onDark />)}</Row>
+      <MetaRow color={W60} dividerColor="rgba(255,255,255,0.22)" items={meta.map((m) => ({ icon: m.kind === 'exercises' ? <Dumbbell size={14} color={W60} /> : <Clock size={14} color={W60} />, text: m.text }))} />
       <Button kind="white" size="medium" label="Start workout" onPress={onStart} />
       {burnedRow}
     </WorkoutShell>

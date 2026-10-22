@@ -24,7 +24,7 @@ function Photo({ src, style, fallback, resizeMode }: { src: ImageSourcePropType;
 export function GymLogoMark({ size = 40 }: { size?: number }) {
   const iw = size * 1.35, ih = size * 1.35;
   return (
-    <View accessibilityLabel="Wulf Fitness" style={{ width: size, height: size, borderRadius: Math.round(size * 0.28), overflow: 'hidden', backgroundColor: '#000', flexShrink: 0 }}>
+    <View accessibilityLabel="Wulf Fitness" style={{ width: size, height: size, borderRadius: Math.round(size * 0.28), borderWidth: 1, borderColor: 'rgba(240,170,60,0.5)', overflow: 'hidden', backgroundColor: '#000', flexShrink: 0 }}>
       <Photo src={LOGO} style={{ position: 'absolute', width: iw, height: ih, left: -size * 0.155, top: -size * 0.128 }}
         fallback={<View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#E8C89A', fontFamily: font.bold, fontSize: Math.round(size * 0.46), lineHeight: Math.round(size * 0.6) }}>W</Text></View>} />
     </View>

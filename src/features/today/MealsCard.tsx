@@ -2,7 +2,7 @@ import React from 'react';
 import { router } from 'expo-router';
 import { useOverlay } from '@/components/Overlay';
 import { fmtT, KCAL_TARGET, MACRO_TARGET, MealId, MEALS } from '@/lib/data';
-import { mealLog, totals, useDomain, useMeals } from '@/lib/domain';
+import { itemNow, mealLog, totals, useDomain, useMeals } from '@/lib/domain';
 import { inr } from '@/lib/useNow';
 import { mealById, mealKcal, mealView } from './meals';
 import { LogMealsSheet } from './LogMealsSheet';
@@ -53,20 +53,25 @@ export function TodayMealNowCard() {
   };
   const text = (id: MealId) => { const tn = tone(id); return tn === 'skipped' ? 'Skipped' : tn === 'logged' ? 'Logged' : tn === 'missed' ? 'Not logged' : tn === 'now' ? 'Now' : fmtT(mealById(id).t).full; };
 
-  const openFood = (k: number, extra: boolean) => router.push({ pathname: '/food', params: { mid: shown, k: String(k), extra: extra ? '1' : '0' } });
   const openLog = (id: MealId) => gate(() => openSheet(<LogMealsSheet mealId={id} />, { label: 'Log meal' }));
 
   const state: MealsCardState = paused ? 'paused' : t.done === MEALS.length && !picked ? 'complete' : 'now';
+  // protein of what was eaten, or of the plan when nothing is logged yet (the same basis as the calories)
+  const protein = v.any
+    ? x.eaten.reduce((a, k) => a + itemNow(d, shown, k).p, 0) + x.extra.reduce((a, e) => a + e.p, 0)
+    : m.items.reduce((a, it) => a + it.p, 0);
   const shownMeal: ShownMeal = {
     name: m.n,
-    caption: v.any ? `${v.kcal} kcal eaten` : `${mealKcal(m)} kcal planned`,
-    pill: shown === now || missed.includes(shown) ? fmtT(m.t).full : text(shown),
-    clock: shown === now || missed.includes(shown),
+    meta: {
+      time: shown === now || missed.includes(shown) ? fmtT(m.t).full : text(shown),
+      kcal: v.any ? `${v.kcal} kcal eaten` : `${mealKcal(m)} kcal planned`,
+      protein: `${protein} g protein`,
+    },
     skipped: !!x.skip,
     items: m.items.map((it, k) => {
       const r = x.repl[k];
       const por = x.por?.[k] ?? 1; const q = !r ? parseQty(it.q) : null;
-      return { name: r ? r.n : it.n, sub: r ? `Instead of ${it.n.toLowerCase()}` : q && por !== 1 ? fmtQty(Math.round(q.n * por * 100) / 100, q.unit) : it.q, type: it.type, eaten: x.eaten.includes(k) };
+      return { name: r ? r.n : it.n, amount: r ? '' : q && por !== 1 ? fmtQty(Math.round(q.n * por * 100) / 100, q.unit) : it.q, type: it.type, eaten: x.eaten.includes(k) };
     }),
     extras: x.extra.map((e) => ({ name: e.n, type: e.type, est: e.est })),
   };
@@ -80,7 +85,7 @@ export function TodayMealNowCard() {
       meal={shownMeal}
       ask={askMeal ? { name: askMeal.n, planned: fmtT(askMeal.t).full, more: missed.length - 1 } : undefined}
       onAskLog={() => ask && openLog(ask)()}
-      onOpenFood={openFood} onLogMeal={openLog(shown)} />
+      onLogMeal={openLog(shown)} />
   );
 }
 export { TodayMealNowCard as MealNowCard }; // the old name, so existing imports keep working
