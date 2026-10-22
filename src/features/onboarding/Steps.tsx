@@ -16,6 +16,7 @@ import { haptic } from '@/lib/haptics';
 import { Pt, smoothPath } from './path';
 import { planMath } from './plan';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Card } from '@/design-system/primitives/Card';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const AP = Animated.createAnimatedComponent(Path);
@@ -270,7 +271,7 @@ export function ReadyContent({ assess }: { assess: string }) {
         </Row>
       </View>
 
-      <View style={{ gap: 4, padding: 16, borderRadius: radii.card, backgroundColor: c.surface }}>
+      <Card variant="tight" flat gap={4}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>SHARED WITH YOUR COACH</Txt>
         {shared.map(([k, v], i) => (
           <Row key={k} style={{ justifyContent: 'space-between', gap: 12, minHeight: 48, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
@@ -278,9 +279,9 @@ export function ReadyContent({ assess }: { assess: string }) {
             <Txt style={{ fontFamily: font.semibold, flexShrink: 1, textAlign: 'right' }}>{v}</Txt>
           </Row>
         ))}
-      </View>
+      </Card>
 
-      <View style={{ gap: 6, padding: 16, borderRadius: radii.card, backgroundColor: c.surface }}>
+      <Card variant="tight" flat gap={6}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>WHAT HAPPENS NEXT</Txt>
         {next.map(([icon, t, s], i) => (
           <Row key={t} style={{ gap: 14, alignItems: 'flex-start', paddingVertical: 6 }}>
@@ -291,7 +292,7 @@ export function ReadyContent({ assess }: { assess: string }) {
             </View>
           </Row>
         ))}
-      </View>
+      </Card>
     </>
   );
 }

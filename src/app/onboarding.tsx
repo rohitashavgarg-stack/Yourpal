@@ -33,6 +33,7 @@ import { useShell } from '@/features/shell/state';
 import { ProgLogo } from '@/features/shell/parts';
 import Svg, { Circle } from 'react-native-svg';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Option } from '@/design-system/primitives/Option';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ORDER = ['welcome', 'facility', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
@@ -300,8 +301,7 @@ function FacilityStep() {
       {gyms.map((g) => {
         const on = s.cur === g.id;
         return (
-          <Pressy key={g.id} accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={() => setShell({ cur: g.id })}
-            style={{ minHeight: 72, borderRadius: radii.lg, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <Option key={g.id} look="outline" selected={on} onPress={() => setShell({ cur: g.id })} minHeight={72} padX={16} gap={12}>
             <ProgLogo p={g} size={44} />
             <View style={{ flex: 1, paddingVertical: 12 }}>
               <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{g.name}</Txt>
@@ -310,7 +310,7 @@ function FacilityStep() {
             <View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
               {on && <Check size={15} strokeWidth={3} color={c.bg} />}
             </View>
-          </Pressy>
+          </Option>
         );
       })}
     </>
@@ -326,8 +326,7 @@ function ExpStep({ tried }: { tried: boolean }) {
       {EXPS.map((e) => {
         const on = state.profile.exp === e.l;
         return (
-          <Pressy key={e.l} accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={() => setProfile({ exp: e.l })}
-            style={{ minHeight: 72, borderRadius: radii.lg, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, backgroundColor: c.surface, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <Option key={e.l} look="outline" selected={on} onPress={() => setProfile({ exp: e.l })} minHeight={72} padX={18} gap={12}>
             <View style={{ flex: 1, paddingVertical: 12 }}>
               <Txt style={{ fontFamily: font.semibold, fontSize: 16 }}>{e.l}</Txt>
               <Txt v="caption">{e.s}</Txt>
@@ -335,7 +334,7 @@ function ExpStep({ tried }: { tried: boolean }) {
             <View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
               {on && <Check size={15} strokeWidth={3} color={c.bg} />}
             </View>
-          </Pressy>
+          </Option>
         );
       })}
       {tried && !state.profile.exp && <Txt v="caption" color={c.warn}>Pick one to continue.</Txt>}
@@ -354,11 +353,10 @@ function SchedStep() {
         {[2, 3, 4, 5, 6].map((d) => {
           const on = p.days === d;
           return (
-            <Pressy key={d} accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={`${d} days a week`} onPress={() => setProfile({ days: d })}
-              style={{ flex: 1, height: 72, borderRadius: radii.lg, backgroundColor: on ? c.ink : c.surface, borderWidth: on ? 0 : 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+            <Option key={d} selected={on} accessibilityLabel={`${d} days a week`} onPress={() => setProfile({ days: d })} height={72} row={false} offFill={c.surface} offLine={c.line} style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, color: on ? c.bg : c.ink }}>{d}</Txt>
               <Txt v="caption" color={on ? c.bg : c.muted}>days</Txt>
-            </Pressy>
+            </Option>
           );
         })}
       </Row>

@@ -114,9 +114,7 @@ export default function CoachChat() {
   ) : (
     <View>
       {ctx ? (
-        <Pressy accessibilityRole="button" accessibilityLabel={`About ${ctx}. Remove`} onPress={() => setCtx(undefined)} style={{ alignSelf: 'flex-start', marginLeft: 16, marginTop: 10, height: 32, paddingLeft: 12, paddingRight: 8, borderRadius: radii.md, backgroundColor: c.accentSoft, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, color: c.accentText }}>About: {ctx}</Txt><X size={14} color={c.accentText} />
-        </Pressy>
+        <Button kind="soft" size="xs" weight="medium" label={`About: ${ctx}`} accessibilityLabel={`About ${ctx}. Remove`} iconAfter={<X size={14} color={c.accentText} />} onPress={() => setCtx(undefined)} style={{ alignSelf: 'flex-start', marginLeft: 16, marginTop: 10 }} />
       ) : null}
       <Composer draft={draft} setDraft={setDraft} onSend={send} bottomInset={kb ? 0 : insets.bottom} />
     </View>
@@ -150,7 +148,7 @@ export default function CoachChat() {
           <View style={{ flex: 1, justifyContent: 'center', paddingVertical: 30, paddingHorizontal: 20 }}>
             <Txt muted style={{ textAlign: 'center' }}>Start the conversation. Ask Coach Vikram about form, your plan or the gym.</Txt>
             <Row style={{ gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginTop: 14 }}>
-              {TOPICS.map((t) => <Pressy key={t.l} accessibilityRole="button" onPress={() => { setDraft(t.draft); setCtx(t.ctx); }} scaleTo={0.95} style={{ height: 44, paddingHorizontal: 16, borderRadius: radii.lg, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>{t.l}</Txt></Pressy>)}
+              {TOPICS.map((t) => <Button key={t.l} kind="line" size="chip" label={t.l} onPress={() => { setDraft(t.draft); setCtx(t.ctx); }} scaleTo={0.95} />)}
             </Row>
           </View>
         )}

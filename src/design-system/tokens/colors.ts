@@ -87,6 +87,7 @@ export const fixed = {
   dark: '#0B0E14',       // the dark card; equals palette.dark
   live: '#7CF0C8',       // mint for live states; equals palette.live
   shadow: '#101828',     // shadow colour used by card and header shadows
+  lineOnWhite: '#C9D1DD', // the 1 px line of buttons on the white clip stage (workout)
 } as const;
 export type FixedColor = keyof typeof fixed;
 

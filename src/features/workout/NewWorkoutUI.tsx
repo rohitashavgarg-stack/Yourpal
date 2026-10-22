@@ -63,10 +63,7 @@ const INK = fixed.dark; // text drawn straight on the white clip stage
 // Solid pill, top right, on every workout screen: Finish is easy to find.
 function FinishPill({ onPress }: { onPress: () => void }) {
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel="Finish workout" onPress={onPress} scaleTo={0.94}
-      style={{ height: 44, paddingHorizontal: 18, borderRadius: radii.lg, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: INK }}>Finish</Txt>
-    </Pressy>
+    <Button kind="whiteLine" size="small" label="Finish" accessibilityLabel="Finish workout" onPress={onPress} scaleTo={0.94} />
   );
 }
 
@@ -96,11 +93,7 @@ function ClipCardInner({ source, thumb, onFull, onHide }: { source: number; thum
         )}
       </Pressy>
       {onHide && (
-        <Pressy accessibilityRole="button" accessibilityLabel="Hide the clip" onPress={onHide} scaleTo={0.94}
-          style={{ position: 'absolute', left: 10, top: 10, height: 32, paddingHorizontal: 12, borderRadius: radii.md, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', flexDirection: 'row', alignItems: 'center', gap: 4, justifyContent: 'center' }}>
-          <ChevronUp size={15} color={INK} />
-          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: INK }}>Hide</Txt>
-        </Pressy>
+        <Button kind="whiteLine" size="xs" weight="medium" label="Hide" accessibilityLabel="Hide the clip" icon={<ChevronUp size={15} color={INK} />} onPress={onHide} scaleTo={0.94} style={{ position: 'absolute', left: 10, top: 10 }} />
       )}
       <IconButton label="Full screen" onPress={goFull} scaleTo={0.92} size={40} radius={20} bg={fixed.white} borderWidth={1} borderColor="#C9D1DD" style={{ position: 'absolute', right: 10, bottom: 10 }}>
         <Maximize2 size={18} color={INK} />

@@ -77,10 +77,7 @@ export default function CoachHub() {
         <SectionLabel variant="overline">ASK ABOUT</SectionLabel>
         <Row style={{ gap: 8, flexWrap: 'wrap' }}>
           {TOPICS.map((t) => (
-            <Pressy key={t.l} accessibilityRole="button" onPress={() => askCoach(t.ctx, t.draft)} scaleTo={0.95}
-              style={{ height: 44, paddingHorizontal: 16, borderRadius: radii.lg, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}>
-              <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>{t.l}</Txt>
-            </Pressy>
+            <Button key={t.l} kind="line" size="chip" label={t.l} onPress={() => askCoach(t.ctx, t.draft)} scaleTo={0.95} />
           ))}
         </Row>
       </View>

@@ -21,6 +21,7 @@ import { PageHeader } from '@/features/plans/parts';
 import { allowedFor, dietItems, Food, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { ScanBracket } from '@/design-system/primitives/ScanBracket';
+import { Option } from '@/design-system/primitives/Option';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Mode = 'search' | 'write' | 'scan';
@@ -209,11 +210,10 @@ export default function LogFood() {
                 <Txt v="label">Type</Txt>
                 <View accessibilityRole="radiogroup" accessibilityLabel="Food type" style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   {(['veg', 'egg', 'nv'] as FoodType[]).map((t) => (
-                    <Pressy key={t} accessibilityRole="radio" accessibilityState={{ selected: wType === t }} accessibilityLabel={foodTypeLabel(t)} onPress={() => setWType(t)}
-                      style={{ flex: 1, height: 44, borderRadius: radii.lg, borderWidth: 1, borderColor: wType === t ? c.ink : c.surface3, backgroundColor: wType === t ? c.ink : 'transparent', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                    <Option key={t} selected={wType === t} accessibilityLabel={foodTypeLabel(t)} onPress={() => setWType(t)} height={44} gap={6} offLine={c.surface3} style={{ flex: 1 }}>
                       <FoodMark type={t} />
                       <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, color: wType === t ? c.bg : c.ink }}>{foodTypeLabel(t)}</Txt>
-                    </Pressy>
+                    </Option>
                   ))}
                 </View>
               </View>

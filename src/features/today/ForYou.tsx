@@ -29,6 +29,7 @@ import { useUpdates } from './TopCards';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { toastCopy, updateCopy } from '@/lib/microcopy';
 import { goalCardStore } from './goalCardState';
+import { Card } from '@/design-system/primitives/Card';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // The slim goal strip moved to src/design-system/_archive/ForYouGoalStrip.tsx (archived: nothing renders it). Re-exported so the old import keeps working.
@@ -118,7 +119,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
   const content = useAnimatedStyle(() => ({ opacity: interpolate(wrapD(i, prog.value, n), [-1, 0, 1], [1, 1, 0], 'clamp') }));
   return (
     <Animated.View style={[inFlow ? null : { position: 'absolute', left: 0, right: 0, top: 0, bottom: n > 2 ? 26 : n > 1 ? 14 : 0 } /* as tall as the front card (the deck padding below is the room for the edges) */, card]}>
-      <View style={[{ flexGrow: 1, flexShrink: 1, backgroundColor: c.surface, borderRadius: radii.card, padding: 16, overflow: 'hidden', borderWidth: 1, borderColor: c.line }, cardShadow(isDark)]}>
+      <Card variant="tight" border={{ color: c.line }} clip style={{ flexGrow: 1, flexShrink: 1 }}>
         <Animated.View style={content}>
           <View style={{ gap: 12 }}>
             <Row style={{ gap: 12, alignItems: 'flex-start', paddingRight: it.critical ? 0 : 28 }}>
@@ -143,7 +144,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
             <X size={17} color={c.muted} />
           </Pressy>
         )}
-      </View>
+      </Card>
     </Animated.View>
   );
 }, (a, b) => a.it.key === b.it.key && a.it.title === b.it.title && a.it.body === b.it.body && a.it.btn === b.it.btn && a.it.critical === b.it.critical && a.i === b.i && a.n === b.n && a.inFlow === b.inFlow && a.prog === b.prog);

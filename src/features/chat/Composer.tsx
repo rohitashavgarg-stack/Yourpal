@@ -37,10 +37,9 @@ function EmojiPanel({ onPick }: { onPick: (e: string) => void }) {
     <FadeIn exiting={fadeOut()} style={{ height: 232, borderTopWidth: 1, borderTopColor: c.line }}>
       <View style={{ flexDirection: 'row', gap: 6, paddingHorizontal: 12, paddingTop: 8 }}>
         {EMOJI_GROUPS.map((x, i) => (
-          <Pressy key={x.key} accessibilityRole="button" accessibilityLabel={`${x.key} emoji`} onPress={() => setG(i)} scaleTo={0.9}
-            style={{ width: 44, height: 40, borderRadius: radii.sm, alignItems: 'center', justifyContent: 'center', backgroundColor: g === i ? c.accentSoft : 'transparent' }}>
+          <IconButton key={x.key} label={`${x.key} emoji`} onPress={() => setG(i)} scaleTo={0.9} size={40} width={44} radius={radii.sm} bg={g === i ? c.accentSoft : 'transparent'}>
             <Txt style={{ fontSize: fontSizes.xl2, lineHeight: 30 }}>{x.icon}</Txt>
-          </Pressy>
+          </IconButton>
         ))}
       </View>
       <ScrollView contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, paddingVertical: 6 }}>

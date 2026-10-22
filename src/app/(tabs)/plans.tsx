@@ -7,7 +7,7 @@ import { Check, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/ic
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
-import { IconButton } from '@/design-system/primitives/Button';
+import { IconButton, Button } from '@/design-system/primitives/Button';
 import { useOverlay } from '@/components/Overlay';
 import { basePlans, TODAY_IDX } from '@/lib/data';
 import { useDomain } from '@/lib/domain';
@@ -50,7 +50,7 @@ function DayStrip() {
     <View style={{ gap: 6 }}>
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, minHeight: 32 }}>
         <Txt v="label" accessibilityLiveRegion="polite">{cur === 0 ? `This week · ${range}` : cur < 0 ? `${range} · earlier` : `${range} · coming up`}</Txt>
-        {cur !== 0 && <Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => goto(THIS)} style={{ height: 32, paddingHorizontal: 12, borderRadius: radii.md, backgroundColor: c.accentSoft, justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, color: c.accentText }}>This week</Txt></Pressy>}
+        {cur !== 0 && <Button kind="soft" size="xs" label="This week" accessibilityLabel="Back to this week" onPress={() => goto(THIS)} />}
       </Row>
       <View onLayout={(e) => setW(e.nativeEvent.layout.width)}>
         <ScrollView ref={ref} horizontal pagingEnabled showsHorizontalScrollIndicator={false} accessibilityLabel="Weeks, swipe for earlier or later weeks" scrollEventThrottle={16}

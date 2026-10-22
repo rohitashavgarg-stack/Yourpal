@@ -8,6 +8,7 @@ import { font, spring } from '@/theme/tokens';
 import { FoodType } from '@/lib/data';
 import { Pressy } from './ui';
 import { Button, IconButton, IconButtonProps } from '@/design-system/primitives/Button';
+import { Option } from '@/design-system/primitives/Option';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // ---------- Veg / egg / non-veg mark (Indian food label style) ----------
@@ -127,10 +128,9 @@ export function UnitPill<T extends string>({ options, value, onChange, label }: 
       {options.map((o) => {
         const on = o.value === value;
         return (
-          <Pressy key={o.value} accessibilityRole="tab" accessibilityState={{ selected: on }} onPress={() => onChange(o.value)} scaleTo={0.96}
-            style={{ minWidth: 72, height: 44, paddingHorizontal: 16, borderRadius: radii.lg, backgroundColor: on ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+          <Option key={o.value} role="tab" selected={on} onPress={() => onChange(o.value)} scaleTo={0.96} height={44} minWidth={72} padX={16} row={false}>
             <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 17, letterSpacing: 0.8, color: on ? c.bg : c.muted }}>{o.label.toUpperCase()}</Text>
-          </Pressy>
+          </Option>
         );
       })}
     </View>

@@ -266,10 +266,7 @@ function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
 function AteElse({ onPress }: { onPress: () => void }) {
   const { c } = useTheme();
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel="Ate something else? Log it" onPress={onPress}
-      style={{ height: 44, borderRadius: radii.lg, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-      <Plus size={16} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>Ate something else?</Txt>
-    </Pressy>
+    <Button kind="dashed" size="small" label="Ate something else?" accessibilityLabel="Ate something else? Log it" icon={<Plus size={16} color={c.ink} />} onPress={onPress} />
   );
 }
 

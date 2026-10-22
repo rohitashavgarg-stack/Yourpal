@@ -7,6 +7,7 @@ import { Pressy, Row, Txt } from '@/components/ui';
 import { font } from '@/theme/tokens';
 import { fmt1 } from '@/lib/useNow';
 import { DotText } from './DotText';
+import { IconButton } from '@/design-system/primitives/Button';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // New tracker widget designs. Plain tiles driven by props, so they can sit on Today, on the designs page and on the Profile card.
@@ -43,11 +44,10 @@ export const ADD_STYLE = { position: 'absolute', top: 12, right: 10, width: 30, 
 export function AddButton({ label, onPress, variant = 'round' }: { label: string; onPress?: () => void; variant?: 'round' | 'glass' }) {
   if (variant === 'glass') {
     return (
-      <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} disabled={!onPress} scaleTo={0.92}
-        style={{ position: 'absolute', top: 10, right: 10, height: 44, minWidth: 74, paddingHorizontal: 12, borderRadius: radii.lg, backgroundColor: 'rgba(255,255,255,0.16)', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, zIndex: 3 }}>
+      <IconButton label={label} onPress={onPress ?? (() => {})} disabled={!onPress} scaleTo={0.92} size={44} width={74} radius={radii.lg} bg="rgba(255,255,255,0.16)" style={{ position: 'absolute', top: 10, right: 10, gap: 6, zIndex: 3 }}>
         <GlassWater size={18} color={fixed.white} />
         <CirclePlus size={18} color={fixed.white} />
-      </Pressy>
+      </IconButton>
     );
   }
   return (

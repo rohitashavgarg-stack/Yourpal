@@ -12,6 +12,7 @@ import { cardShadow, Hint, SubPage } from '@/features/progress/parts';
 import { VISITS } from '@/features/gym/data';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Card } from '@/design-system/primitives/Card';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Att = { t: string; s: string; tag: string; type: 'c' | 'pt'; icon: 'loc' | 'home' | 'pt' | 'wait'; tone?: 'accent' | 'good' | 'warn'; ptOnly?: boolean; key: string };
@@ -102,7 +103,7 @@ export default function Attendance() {
           {['All', 'Check-ins', 'PT sessions'].map((l, i) => <Pill key={l} label={l} on={g.attFilter === i} onPress={() => gymStore.set({ attFilter: i as any })} style={{ flex: 1, paddingHorizontal: 8 }} />)}
         </View>
       )}
-      <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 4, paddingHorizontal: 16 }, cardShadow(isDark)]}>
+      <Card padding={{ top: 4, bottom: 4, horizontal: 16 }}>
         {list.map((r, i) => {
           const t = tone(r); const I = Icon[r.icon];
           return (
@@ -117,7 +118,7 @@ export default function Attendance() {
           );
         })}
         {list.length === 0 && <Txt muted style={{ paddingVertical: 18, textAlign: 'center' }}>Nothing here for this filter.</Txt>}
-      </View>
+      </Card>
       <Hint style={{ fontSize: fontSizes.xs }}>Check in from the app when you are at the gym (within 20 m). The front desk can also mark a visit.</Hint>
     </SubPage>
   );

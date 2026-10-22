@@ -10,6 +10,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { HEALTH_NAME } from '@/lib/health';
 import { ListCard, SubPage, Switch } from '@/features/shell/parts';
+import { Card } from '@/design-system/primitives/Card';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // What YourPal reads from the phone's health store. Colours match the trackers on Today.
@@ -41,7 +42,7 @@ export default function ConnectedApps() {
 
   return (
     <SubPage title="Connected apps" fallback="/profile">
-      <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14 }}>
+      <Card variant="roomy" flat gap={14}>
         <Row style={{ gap: 14 }}>
           <View accessibilityLabel={HEALTH_NAME} style={{ width: 56, height: 56, borderRadius: radii.md, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: c.line }}>
             <HeartIcon size={28} color="#FF3B5C" />
@@ -55,7 +56,7 @@ export default function ConnectedApps() {
           </View>
         </Row>
         {on ? <Button kind="secondary" label="Disconnect" onPress={disconnect} /> : <Button kind="accent" label={`Connect ${HEALTH_NAME}`} onPress={connect} />}
-      </View>
+      </Card>
 
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, marginTop: 6 }}>
         <Txt v="label">{on ? 'SYNCING' : 'YOU WILL SEE ON TODAY'}</Txt>

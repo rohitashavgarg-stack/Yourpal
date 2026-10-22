@@ -122,14 +122,8 @@ export function LogMealsSheet({ mealId, draft: start }: { mealId: MealId; draft?
           );
         })}
         <Row style={{ gap: 8 }}>
-          <Pressy accessibilityRole="button" accessibilityLabel="Ate something else? Log it" onPress={elseFood}
-            style={{ flex: 1.5, height: 44, borderRadius: radii.lg, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-            <Plus size={16} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>Ate something else?</Txt>
-          </Pressy>
-          <Pressy accessibilityRole="button" accessibilityLabel={x.skip ? 'Undo skip' : 'Skip meal'} onPress={skip}
-            style={{ flex: 1, height: 44, borderRadius: radii.lg, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, color: x.skip ? c.ink : c.muted }}>{x.skip ? 'Undo skip' : 'Skip meal'}</Txt>
-          </Pressy>
+          <Button kind="dashed" size="small" label="Ate something else?" accessibilityLabel="Ate something else? Log it" icon={<Plus size={16} color={c.ink} />} onPress={elseFood} style={{ flex: 1.5 }} />
+          <Button kind="quiet" size="small" muted={!x.skip} label={x.skip ? 'Undo skip' : 'Skip meal'} onPress={skip} style={{ flex: 1 }} />
         </Row>
       </View>
       <Button label="Save meal" onPress={save} />

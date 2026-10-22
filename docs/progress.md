@@ -23,3 +23,13 @@ Notes
 - Commit 0c811d9 (IconBadge, StatusDot) and the capture tooling (scripts/visual) are kept.
 - Step 2 needed two Storybook-only shims: require() of images and clips becomes an import, and expo-router is a no-op stand-in (.storybook/mocks/expo-router.tsx). The app is unchanged by them.
 - ThemeProvider gained an optional `scheme` prop (Storybook pins light or dark); the app does not pass it.
+
+## Round 2 (phases A to E)
+
+| Phase | What | Status | Commit |
+|---|---|---|---|
+| A | Decisions already made: no-goal copy, banner wording, comeback docs, tap targets, accessibility, IconButton hitSlop | done except A3: needs my decision (the comeback card described in the brief is not the one in the code) | db5706f |
+| B | Near-matches from docs/coverage-decisions.md: new variants, replacements, docs/review-changes.md, docs/coverage-exceptions.md | done: 37 of 41 use the library, 4 exceptions; hand-built count 216 to 179 | (see git log: Phase B) |
+| C | Stories and docs for what changed, Coverage page in Storybook, rebuild and open every story | not started | |
+| D | Screenshots before (main) and after (this branch), docs/review/index.html | not started | |
+| E | Handoff package: CLAUDE.md, PR template, HANDOFF.md, README, HANDOFF-INDEX.md, npm run handoff zip, DEPLOY-STORYBOOK.md | not started | |

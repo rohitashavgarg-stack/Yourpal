@@ -226,9 +226,7 @@ export default function Workout() {
           )}
         </FadeIn>
       )}
-      <Pressy accessibilityRole="button" onPress={() => A.addSet(s.exIdx)} style={{ height: 48, borderRadius: radii.card, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        <Plus size={17} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>Add set</Txt>
-      </Pressy>
+      <Button kind="dashed" size="medium" label="Add set" icon={<Plus size={17} color={c.ink} />} onPress={() => A.addSet(s.exIdx)} />
       {!newUi && <Txt v="caption" style={{ textAlign: 'center', paddingHorizontal: 6, paddingTop: 4 }}>Adjust the highlighted set and tick it · tap a set to edit · swipe right = done, left = swap/skip · hold for options</Txt>}
     </View>
   );

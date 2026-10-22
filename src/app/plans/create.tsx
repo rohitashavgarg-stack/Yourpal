@@ -82,10 +82,7 @@ export default function CreateWorkout() {
             {p.cEx.length === 0 && <Txt muted style={{ paddingVertical: 16, fontSize: fontSizes.md }}>No exercises yet</Txt>}
           </Card>
         </View>
-        <Pressy accessibilityRole="button" onPress={() => openSheet(<LibrarySheet mode="create" />, { label: 'Add exercise' })}
-          style={{ height: 48, borderRadius: radii.card, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>+ Add exercise</Txt>
-        </Pressy>
+        <Button kind="dashed" size="medium" label="+ Add exercise" onPress={() => openSheet(<LibrarySheet mode="create" />, { label: 'Add exercise' })} />
         <ShakeText text={p.cErr} n={tries} />
         <Txt muted style={{ fontSize: fontSizes.sm, paddingHorizontal: 6 }}>Added to your plan · Coach Vikram will be notified</Txt>
         <Button label="Save workout" onPress={save} />

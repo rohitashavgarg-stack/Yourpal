@@ -13,6 +13,7 @@ import { cardShadow, DrawLine, ListCard, SubPage, toPts } from '@/features/progr
 import { LiftName, progressStore } from '@/features/progress/store';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { Card } from '@/design-system/primitives/Card';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const H = 170;
@@ -50,7 +51,7 @@ export default function LiftDetail() {
         {LIFT_METRICS.map((l, i) => <Pill key={l} label={l} on={ps.metric === i} onPress={() => { progressStore.set({ metric: i as 0 | 1 | 2 }); setTip(null); }} style={{ flex: 1, paddingHorizontal: 8 }} />)}
       </View>
 
-      <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingTop: 16, paddingHorizontal: 12, paddingBottom: 12, gap: 6 }, cardShadow(isDark)]} onLayout={(e) => setW(e.nativeEvent.layout.width)}>
+      <Card padding={{ top: 16, horizontal: 12, bottom: 12 }} gap={6} onLayout={(e) => setW(e.nativeEvent.layout.width)}>
         <Row style={{ justifyContent: 'space-between', paddingHorizontal: 6, minHeight: 26 }}>
           <Txt v="label">{LIFT_TITLES[ps.metric]}</Txt>
           {tip !== null && <FadeIn exiting={fadeOut()}><Tag label={`Week ${tip + 1} · ${vals[tip]}${unit}`} bg={c.ink} fg={c.bg} /></FadeIn>}
@@ -71,7 +72,7 @@ export default function LiftDetail() {
           </View>
         </View>
         <Txt v="caption" style={{ paddingHorizontal: 6 }}>12 weeks · warm-ups excluded · tap a point</Txt>
-      </View>
+      </Card>
 
       <ListCard mono rows={[{ l: L.pr, v: L.prd }, { l: L.last, v: '24 Sep' }]} />
 

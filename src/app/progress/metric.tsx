@@ -21,6 +21,7 @@ import { RANGES, Range, shift, trend } from '@/features/progress/trends';
 import { RangeBar, TrendChart } from '@/features/progress/TrendUI';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { Card } from '@/design-system/primitives/Card';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const TIP_UNIT: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: ' steps', water: ' L', hr: ' bpm', sleep: '', diet: '', cons: ' workouts' };
@@ -59,7 +60,7 @@ export default function MetricDetail() {
   return (
     <SubPage title={METRIC_TITLES[k]} fallback="/progress">
       <RangeBar />
-      <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 8, overflow: 'hidden' }, cardShadow(isDark)]}>
+      <Card variant="roomy" clip gap={8}>
         <CornerGlow color={look.tint} size={320} />
         <View style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: radii.md, backgroundColor: look.tint + '26', alignItems: 'center', justifyContent: 'center' }}><look.Icon size={19} color={look.tint} /></View>
         <FadeIn key={t.key + 'h'}>
@@ -69,7 +70,7 @@ export default function MetricDetail() {
           <Txt muted style={{ fontSize: fontSizes.md }}>{t.hasData ? t.sub : (t.empty ?? '')}</Txt>
         </FadeIn>
         <TrendChart t={t} unit={TIP_UNIT[k]} height={190} onSwipe={swipe} color={look.tint} />
-      </View>
+      </Card>
       {rows.length > 0 && <ListCard rows={rows} />}
       {k === 'steps' && <Button label="Add steps" onPress={() => openSheet(<StepsSheet />, { label: 'Add steps' })} />}
       {k === 'water' && <Button label="Log water" onPress={() => openSheet(<WaterSheet />, { label: 'Water' })} />}
