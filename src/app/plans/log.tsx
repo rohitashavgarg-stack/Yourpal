@@ -5,7 +5,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useLeaveIfPaused } from '@/lib/logGate';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Ellipse } from 'react-native-svg';
-import { CameraOff, PenLine, ScanLine, Search } from '@/lib/icons';
+import { CameraOff, Check, PenLine, ScanLine, Search } from '@/lib/icons';
 import { Button, Card, Field, Pill, Pressy, Row, Segmented, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark, foodTypeLabel, PillBtn } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -59,6 +59,8 @@ export default function LogFood() {
   const [mode, setMode] = useState<Mode>('search');
   const [q, setQ] = useState('');
   const [pick, setPick] = useState<Food | null>(null);
+  const [picks, setPicks] = useState<Food[]>([]); // the foods ticked in the search list (several at once)
+  const clearPick = () => { setPick(null); setPicks([]); };
   const [portion, setPortion] = useState(1);
   const [wName, setWName] = useState('');
   const [wType, setWType] = useState<FoodType>('veg');
@@ -90,19 +92,23 @@ export default function LogFood() {
   const guess = wn ? FOOD.find((f) => wn.toLowerCase().includes(f.n.split(',')[0].split(' ')[0].toLowerCase())) ?? null : null;
   const estK = guess ? guess.k : 250, estP = guess ? guess.p : 8;
   const wPick: Food | null = wn ? { n: wn, k: Number(wK) > 0 ? Number(wK) : estK, p: wP !== '' ? Number(wP) : estP, type: wType, est: !(Number(wK) > 0), written: true } : null;
-  const cur = mode === 'write' ? wPick : pick;
+  // search mode while logging selects several foods; swapping one item, a scan and a written food are one food
+  const multi = mode === 'search' && !replaceIt;
+  const list: Food[] = mode === 'write' ? (wPick ? [wPick] : []) : multi ? picks : pick ? [pick] : [];
+  const cur = list[0] ?? null;
+  const toggle = (f: Food) => { haptic.tick(); setPortion(1); setPicks((a) => (a.some((x) => x.n === f.n) ? a.filter((x) => x.n !== f.n) : [...a, f])); };
 
   const changeMode = (m: Mode) => {
     clearTimeout(timer.current);
     setMode(m);
-    if (m === 'write') setPick(null);
-    if (m === 'scan' && scan !== 'done') setPick(null);
-    if (m === 'search' && scan !== 'idle') { setScan('idle'); setPick(null); }
+    if (m === 'write') clearPick();
+    if (m === 'scan' && scan !== 'done') clearPick();
+    if (m === 'search' && scan !== 'idle') { setScan('idle'); clearPick(); }
   };
-  const toWrite = () => { setWName(q); setPick(null); changeMode('write'); };
-  const toSearch = () => { clearTimeout(timer.current); setScan('idle'); setPick(null); setMode('search'); };
+  const toWrite = () => { setWName(q); clearPick(); changeMode('write'); };
+  const toSearch = () => { clearTimeout(timer.current); setScan('idle'); clearPick(); setMode('search'); };
   const goScan = () => {
-    clearTimeout(timer.current); setScan('busy'); setPick(null); haptic.light();
+    clearTimeout(timer.current); setScan('busy'); clearPick(); haptic.light();
     timer.current = setTimeout(() => {
       if (d.scanFails) { setScan('fail'); haptic.error(); return; }
       setScan('done'); setPick(SCAN_PHOTO); haptic.success();
@@ -113,33 +119,34 @@ export default function LogFood() {
   let planK = 0, planP = 0;
   if (replaceIt) { planK = replaceIt.k; planP = replaceIt.p; }
   else dietItems(d, p, meal).forEach((i) => { if (i.kind === 'plan' && i.st !== 'skipped') { planK += i.k; planP += i.p; } });
-  const diff = cur ? (() => { const dk = Math.round(cur.k * portion - planK), dp = Math.round(cur.p * portion - planP); return `${dk >= 0 ? '+' : '−'}${Math.abs(dk)} kcal · ${dp >= 0 ? '+' : '−'}${Math.abs(dp)} g protein vs ${replaceIt ? 'planned item' : 'plan'}${cur.est ? ' · estimated' : ''}`; })() : '';
+  const diff = cur ? (() => { const tk = list.reduce((a, f) => a + f.k * portion, 0), tp = list.reduce((a, f) => a + f.p * portion, 0); const dk = Math.round(tk - planK), dp = Math.round(tp - planP); return `${dk >= 0 ? '+' : '−'}${Math.abs(dk)} kcal · ${dp >= 0 ? '+' : '−'}${Math.abs(dp)} g protein vs ${replaceIt ? 'planned item' : 'plan'}${list.some((f) => f.est) ? ' · estimated' : ''}`; })() : '';
 
   const log = () => {
     if (!cur) return;
-    const item: Extra = { n: cur.n + (portion !== 1 ? (portion < 1 ? ' (less)' : ' (more)') : ''), k: Math.round(cur.k * portion), p: Math.round(cur.p * portion), type: cur.type ?? 'veg', est: !!cur.est };
+    const items = list.map((f) => ({ f, item: { n: f.n + (portion !== 1 ? (portion < 1 ? ' (less)' : ' (more)') : ''), k: Math.round(f.k * portion), p: Math.round(f.p * portion), type: f.type ?? 'veg', est: !!f.est } as Extra }));
+    items.forEach(({ f }) => { if (f.written && wSave && !p.myFoods.some((x) => x.n === f.n)) setP((st) => ({ myFoods: [{ ...f, mine: true, est: false, written: false }, ...st.myFoods] })); });
     const saveMine = !!cur.written && wSave && !p.myFoods.some((x) => x.n === cur.n);
-    if (saveMine) setP((s) => ({ myFoods: [{ ...cur, mine: true, est: false, written: false }, ...s.myFoods] }));
+    const what = items.length > 1 ? `${items.length} foods` : items[0].item.n;
     haptic.success();
     if (forEdit) {
-      setP((s) => (s.draft?.kind === 'diet' ? { draft: { ...s.draft, rows: [...s.draft.rows, { key: `n${Date.now()}`, n: item.n, k: item.k, p: item.p, por: 1, type: item.type ?? 'veg', mine: true, added: { ...cur } }] } } : {}));
+      setP((st) => (st.draft?.kind === 'diet' ? { draft: { ...st.draft, rows: [...st.draft.rows, ...items.map(({ f, item }, i) => ({ key: `n${Date.now()}${i}`, n: item.n, k: item.k, p: item.p, por: 1, type: item.type ?? 'veg', mine: true, added: { ...f } }))] } } : {}));
       router.back();
-      toast(`Added ${item.n}. Save to keep it`);
+      toast(`Added ${what}. Save to keep it`);
       return;
     }
-    if (replaceIt) { A.applySwap(meal, replaceIt, item, false); router.back(); return; }
-    A.addExtra(meal, item);
+    if (replaceIt) { A.applySwap(meal, replaceIt, items[0].item, false); router.back(); return; }
+    items.forEach(({ item }) => A.addExtra(meal, item));
     setP({ seg: 'diet', openMeal: meal });
     router.back();
-    toast(`Logged ${cur.n}${saveMine ? '. Saved to your foods' : ''}`);
+    toast(`Logged ${items.length > 1 ? what : cur.n}${saveMine ? '. Saved to your foods' : ''}`);
   };
-  const logL = cur ? (replaceIt ? 'Swap it' : forEdit ? 'Add to the meal' : 'Log it') : mode === 'scan' ? 'Scan first' : mode === 'write' ? 'Write what you ate' : 'Pick what you ate';
+  const logL = cur ? (replaceIt ? 'Swap it' : forEdit ? (list.length > 1 ? `Add ${list.length} foods to the meal` : 'Add to the meal') : list.length > 1 ? `Log ${list.length} foods` : 'Log it') : mode === 'scan' ? 'Scan first' : mode === 'write' ? 'Write what you ate' : 'Pick what you ate';
   const cap = { idle: 'Fit the whole plate in the frame', busy: 'Looking at your plate…', done: 'Here is our guess', fail: 'Try again' }[scan];
 
   const foodRow = (f: Food, last: boolean) => {
-    const on = pick?.n === f.n;
+    const on = multi ? picks.some((x) => x.n === f.n) : pick?.n === f.n;
     return (
-      <Pressy key={f.n} accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={`${f.n}${f.mine ? ', yours' : ''}, ${f.k} kcal, ${foodTypeLabel(f.type)}`} onPress={() => { setPick(f); setPortion(1); }} scaleTo={0.985}
+      <Pressy key={f.n} accessibilityRole={multi ? 'checkbox' : 'radio'} accessibilityState={multi ? { checked: on } : { selected: on }} accessibilityLabel={`${f.n}${f.mine ? ', yours' : ''}, ${f.k} kcal, ${foodTypeLabel(f.type)}`} onPress={() => (multi ? toggle(f) : (setPick(f), setPortion(1)))} scaleTo={0.985}
         style={{ minHeight: 60, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 10, borderRadius: 14, backgroundColor: on ? c.accentSoft : 'transparent', borderBottomWidth: last || on ? 0 : 1, borderBottomColor: c.line }}>
         <FoodMark type={f.type ?? 'veg'} />
         <View style={{ flex: 1, minWidth: 0, paddingVertical: 8 }}>
@@ -147,6 +154,7 @@ export default function LogFood() {
           <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{macroLine(f)}</Txt>
         </View>
         <Txt style={{ fontFamily: font.monoBold, fontSize: fontSizes.sm }}>{f.k} kcal</Txt>
+        {multi && <View style={{ width: 22, height: 22, borderRadius: 11, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? c.accent : 'transparent', borderWidth: on ? 0 : 1.5, borderColor: c.surface3 }}>{on && <Check size={13} strokeWidth={3.5} color={fixed.white} />}</View>}
       </Pressy>
     );
   };
@@ -174,7 +182,7 @@ export default function LogFood() {
               <View style={{ gap: 6 }}>
                 <Txt v="label" style={{ paddingHorizontal: 6 }}>Recent</Txt>
                 <Row style={{ gap: 6, flexWrap: 'wrap' }}>
-                  {RECENT.map((n) => { const f = FOOD.find((x) => x.n === n)!; return <Pill key={n} label={n} on={pick?.n === n} onPress={() => { setPick(f); setPortion(1); }} />; })}
+                  {RECENT.map((n) => { const f = FOOD.find((x) => x.n === n)!; return <Pill key={n} label={n} on={multi ? picks.some((x) => x.n === n) : pick?.n === n} onPress={() => (multi ? toggle(f) : (setPick(f), setPortion(1)))} />; })}
                 </Row>
               </View>
             )}

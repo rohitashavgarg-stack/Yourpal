@@ -67,7 +67,7 @@ async function main() {
         const url = BASE + p + (p.includes('?') ? '&' : '?') + (signedOut ? '' : 'signedin=1&') + 'theme=' + theme;
         await send('Page.navigate', { url });
         // wait for the app to render something, then for the first-load skeleton (about 1.1 s) and the fade-in to finish
-        for (let i = 0; i < 80; i++) { const n = await evalJs('document.body ? document.body.innerText.length : 0'); if (n > 15) break; await sleep(250); }
+        for (let i = 0; i < 400; i++) { const n = await evalJs('document.body ? document.body.innerText.length : 0'); if (n > 15) break; await sleep(250); }
         await sleep(3200);
         const shot = async (file) => { const r = await send('Page.captureScreenshot', { format: 'png' }); fs.writeFileSync(path.join(out, theme, file), Buffer.from(r.data, 'base64')); count++; };
         await shot(name + '.png');

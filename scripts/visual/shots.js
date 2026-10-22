@@ -37,7 +37,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       for (const e of LIST) {
         const url = BASE + e.url + (e.url.includes('?') ? '&' : '?') + (e.noSignedIn ? '' : 'signedin=1&') + 'theme=' + theme;
         await send('Page.navigate', { url });
-        for (let i = 0; i < 80; i++) { if ((await js('document.body ? document.body.innerText.length : 0')) > 5) break; await sleep(250); }
+        for (let i = 0; i < 400; i++) { if ((await js('document.body ? document.body.innerText.length : 0')) > 5) break; await sleep(250); }
         await sleep(e.settle || 2500);
         for (const c of e.clicks || []) { await click(c); await sleep(900); }
         if (e.clicks && e.clicks.length) await sleep(e.wait || 1500);

@@ -27,11 +27,12 @@ export function LogMealsSheet({ mealId }: { mealId: MealId }) {
   const m = MEALS.find((q) => q.id === mealId)!;
   const x = mealLog(d, mealId);
   const tick = gate((k: number) => { haptic.light(); toggleItem(mealId, k); });
-  const allOn = x.eaten.length === m.items.length;
+  const total = m.items.length + x.extra.length, eatenN = x.eaten.length + x.extra.length;
+  const allOn = eatenN === total;
   const tickAll = gate(() => { haptic.light(); patch(mealId, { eaten: allOn ? [] : m.items.map((_, k) => k), skip: false, at: x.at ?? d.min }); });
   const setAmount = gate((k: number, por: number) => { haptic.tick(); patch(mealId, { por: { ...(x.por ?? {}), [k]: por } }); });
   // something that is not on the plan: scan the plate, write it or pick from the catalogue (the same sheet the meals card used to open)
-  const elseFood = gate(() => closeSheet(() => openSheet(<QuickLogSheet mealId={mealId} mode="scan" />, { label: 'Log a meal' })));
+  const elseFood = gate(() => closeSheet(() => openSheet(<QuickLogSheet mealId={mealId} mode="scan" backTo={() => openSheet(<LogMealsSheet mealId={mealId} />, { label: 'Log meal' })} />, { label: 'Log a meal' })));
   const skip = gate(() => {
     if (x.skip) { patch(mealId, { skip: false }); return; }
     const prev = d.meals;
@@ -39,7 +40,8 @@ export function LogMealsSheet({ mealId }: { mealId: MealId }) {
     closeSheet(() => toast(toastCopy.mealSkipped(m.n), { undo: () => set({ meals: prev }) }));
   });
   const now = m.items.map((_, k) => itemNow(d, mealId, k));
-  const kcal = now.reduce((a, n) => a + n.k, 0), prot = now.reduce((a, n) => a + n.p, 0);
+  const kcal = now.reduce((a, n) => a + n.k, 0) + x.extra.reduce((a, e) => a + e.k, 0), prot = now.reduce((a, n) => a + n.p, 0) + x.extra.reduce((a, e) => a + e.p, 0);
+  const removeExtra = gate((j: number) => { const prev = d.meals; const gone = x.extra[j]; patch(mealId, { extra: x.extra.filter((_, i) => i !== j) }); toast(toastCopy.removed(gone?.n ?? 'item'), { undo: () => set({ meals: prev }) }); });
 
   const stepBtn = (label: string, on: () => void, off: boolean, icon: React.ReactNode) => (
     <Pressy accessibilityRole="button" accessibilityLabel={label} disabled={off} onPress={on} scaleTo={0.86} hitSlop={6}
@@ -53,7 +55,7 @@ export function LogMealsSheet({ mealId }: { mealId: MealId }) {
         <Row style={{ justifyContent: 'space-between', paddingBottom: 2 }}>
           <View style={{ flex: 1, gap: 2 }}>
             <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{m.n}</Txt>
-            <Txt v="caption">{`${m.items.length} items · ~${kcal} kcal · P ${prot} g`}</Txt>
+            <Txt v="caption">{`${allOn ? 'All eaten' : eatenN ? `${eatenN} of ${total} eaten` : `${total} items`} · ~${kcal} kcal · P ${prot} g`}</Txt>
           </View>
           <CheckCircle on={allOn} size={40} tone="good" label={allOn ? 'Unmark all' : 'Mark all as eaten'} onPress={tickAll} />
         </Row>
@@ -71,7 +73,9 @@ export function LogMealsSheet({ mealId }: { mealId: MealId }) {
               <FoodMark type={it.type} />
               <View style={{ flex: 1, minWidth: 0, gap: 6, paddingVertical: 10 }}>
                 <Txt numberOfLines={2} style={{ fontFamily: font.medium }}>{n.n}</Txt>
-                {qty ? (
+                {qty && on ? (
+                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.muted }}>{fmtQty(cur, qty.unit)}</Txt>
+                ) : qty ? (
                   <View style={{ alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 2, height: 38, paddingHorizontal: 3, borderRadius: 19, backgroundColor: c.accentSoft }}>
                     {stepBtn(`Less ${qty.unit || 'piece'}`, () => to(cur - step), cur <= step, <Minus size={16} color={c.accentText} strokeWidth={2.4} />)}
                     <View style={{ minWidth: 62, height: 32, paddingHorizontal: 4, alignItems: 'center', justifyContent: 'center' }}>
@@ -80,12 +84,22 @@ export function LogMealsSheet({ mealId }: { mealId: MealId }) {
                     {stepBtn(`More ${qty.unit || 'piece'}`, () => to(cur + step), cur >= max, <Plus size={16} color={c.accentText} strokeWidth={2.4} />)}
                   </View>
                 ) : null}
-                <Txt v="caption" numberOfLines={1}>{`~${n.k} kcal · P ${n.p} · C ${Math.round((n.k * 0.5) / 4)} · F ${Math.round((n.k * 0.3) / 9)} g`}</Txt>
+                <Txt v="caption" numberOfLines={1}>{on ? `Eaten · ~${n.k} kcal` : `~${n.k} kcal · P ${n.p} · C ${Math.round((n.k * 0.5) / 4)} · F ${Math.round((n.k * 0.3) / 9)} g`}</Txt>
               </View>
               <CheckCircle on={on} size={40} tone="good" label={`${on ? 'Unmark' : 'Mark'} ${n.n} as eaten`} onPress={() => tick(k)} />
             </Row>
           );
         })}
+        {x.extra.map((e, j) => (
+          <Row key={`x${j}`} style={{ gap: 8, minHeight: 64, paddingLeft: 12, paddingRight: 4, borderRadius: radii.md, backgroundColor: c.goodSoft }}>
+            <FoodMark type={e.type ?? 'veg'} />
+            <View style={{ flex: 1, minWidth: 0, gap: 4, paddingVertical: 10 }}>
+              <Txt numberOfLines={2} style={{ fontFamily: font.medium }}>{e.n}</Txt>
+              <Txt v="caption" numberOfLines={1}>{`Added by you · ~${e.k} kcal · P ${e.p} · C ${Math.round((e.k * 0.5) / 4)} · F ${Math.round((e.k * 0.3) / 9)} g`}</Txt>
+            </View>
+            <CheckCircle on size={40} tone="good" label={`Remove ${e.n}`} onPress={() => removeExtra(j)} />
+          </Row>
+        ))}
         <Row style={{ gap: 8 }}>
           <Pressy accessibilityRole="button" accessibilityLabel="Ate something else? Log it" onPress={elseFood}
             style={{ flex: 1.5, height: 44, borderRadius: radii.lg, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>

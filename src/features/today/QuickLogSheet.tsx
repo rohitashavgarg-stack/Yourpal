@@ -30,7 +30,8 @@ function ScanLine() {
   return <Animated.View style={[{ position: 'absolute', left: '12%', right: '12%', height: 2, backgroundColor: fixed.live, shadowColor: fixed.live, shadowOpacity: 1, shadowRadius: 8, shadowOffset: { width: 0, height: 0 } }, a]} />;
 }
 
-export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { mealId: MealId; mode?: Mode; replaceIdx?: number }) {
+// backTo: after something is added, go back to the sheet that opened this one (the log sheet shows the new food first).
+export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx, backTo }: { mealId: MealId; mode?: Mode; replaceIdx?: number; backTo?: () => void }) {
   const { c } = useTheme();
   const { d, set } = useDomain();
   const { closeSheet, toast } = useOverlay();
@@ -97,6 +98,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx }: { 
       } else {
         set({ meals: { ...d.meals, [mealId]: { ...cur, extra: [...cur.extra, ...items.map((x) => ({ n: x.n, k: x.k, p: x.p, est: x.est, type: x.type ?? 'veg' }))], at, skip: false } }, openMeal: mealId });
         toast(`Added to ${meal.n.toLowerCase()}. Coach sees what changed`, { undo: () => set({ meals: prev }) });
+        backTo?.();
       }
       haptic.success();
     });

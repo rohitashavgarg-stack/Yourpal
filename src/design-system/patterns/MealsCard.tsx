@@ -28,8 +28,8 @@ export type ShownMeal = {
   name: string;
   /** Under the name, each with an icon and a thin line between: the time (or a status word), "650 kcal planned" or "290 kcal eaten", "22 g protein". */
   meta: { time: string; kcal: string; protein: string };
-  /** todo: nothing logged. partial: some foods logged. logged: all of them (the card shows when, and "Edit log"). skipped. */
-  status: 'todo' | 'partial' | 'logged' | 'skipped';
+  /** todo: nothing logged. logged: at least one food is logged (the card shows when, and "Edit log"; the foods not eaten are struck through). skipped: the whole meal. */
+  status: 'todo' | 'logged' | 'skipped';
   /** logged: the time it was logged, "1:10 pm". */
   loggedAt?: string;
   /** The member skipped it: names are greyed and struck through. */
@@ -123,14 +123,18 @@ function MealItems({ meal, onLogMeal }: Pick<MealsCardProps, 'onLogMeal'> & { me
     <Animated.View layout={LinearTransition.duration(180)}>
       <FadeIn style={{ gap: 12, paddingBottom: 0 }}>
         <View accessible accessibilityLabel={`${meal.name}: ${line}`} style={{ paddingHorizontal: 4 }}>
-          {rows.map((r, k) => (
-            <Row key={k} style={{ gap: 10, minHeight: 40, borderTopWidth: k ? 1 : 0, borderTopColor: c.line }}>
-              <FoodMark type={r.type} />
-              <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 22, color: meal.skipped ? c.muted : c.ink, textDecorationLine: meal.skipped ? 'line-through' : 'none' }}>{r.name}</Txt>
-              {meal.status === 'partial' && r.eaten && <Check size={14} strokeWidth={3} color={c.good} />}
-              {!!r.amount && <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: c.muted }}>{r.amount}</Txt>}
-            </Row>
-          ))}
+          {rows.map((r, k) => {
+            const eaten = meal.status === 'logged' && r.eaten;
+            const left = meal.status === 'logged' && !r.eaten; // not eaten although the meal is logged: skipped
+            const dim = meal.skipped || left;
+            return (
+              <Row key={k} style={{ gap: 10, minHeight: 40, borderTopWidth: k ? 1 : 0, borderTopColor: c.line }}>
+                {eaten ? <IconBadge size={22} bg={c.good}><Check size={13} strokeWidth={3.5} color={c.bg} /></IconBadge> : <View style={{ opacity: dim ? 0.45 : 1 }}><FoodMark type={r.type} /></View>}
+                <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 22, color: dim ? c.muted : c.ink, textDecorationLine: dim ? 'line-through' : 'none' }}>{r.name}</Txt>
+                {!!r.amount && <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: c.muted, textDecorationLine: dim ? 'line-through' : 'none' }}>{r.amount}</Txt>}
+              </Row>
+            );
+          })}
         </View>
         <Button kind={meal.status === 'logged' ? 'secondary' : 'primary'} label={meal.status === 'logged' ? 'Edit log' : 'Log meal'} onPress={onLogMeal} />
       </FadeIn>
@@ -138,7 +142,7 @@ function MealItems({ meal, onLogMeal }: Pick<MealsCardProps, 'onLogMeal'> & { me
   );
 }
 
-// The small filled pill in front of the meal name: the time (text only), "Logged 7:10 am" in soft green once it is logged, or "Skipped". No outline, like the time pill on the workout card.
+// The small filled pill next to the meal name: in front of it for the time, after it for Logged and Skipped: the time (text only), "Logged 7:10 am" in soft green once it is logged, or "Skipped". No outline, like the time pill on the workout card.
 function StatusPill({ status, time, loggedAt }: { status: ShownMeal['status']; time: string; loggedAt?: string }) {
   const { c, isDark } = useTheme();
   const logged = status === 'logged', skipped = status === 'skipped';
@@ -217,8 +221,9 @@ export function MealsCard(p: MealsCardProps) {
       {p.ask && <MissedPrompt ask={p.ask} onLog={p.onAskLog} />}
       <View style={{ paddingHorizontal: 4, gap: 8 }}>
         <Row style={{ gap: 10 }}>
-          <StatusPill status={meal.status} time={meal.meta.time} loggedAt={meal.loggedAt} />
+          {meal.status === 'todo' && <StatusPill status={meal.status} time={meal.meta.time} loggedAt={meal.loggedAt} />}
           <Txt style={{ flexShrink: 1, fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, letterSpacing: -0.4 }}>{meal.name}</Txt>
+          {meal.status !== 'todo' && <StatusPill status={meal.status} time={meal.meta.time} loggedAt={meal.loggedAt} />}
         </Row>
         <MetaRow color={c.muted} dividerColor={c.line} items={[
           { icon: <Flame size={14} color={c.muted} />, text: meal.meta.kcal },

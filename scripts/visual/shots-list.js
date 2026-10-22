@@ -12,6 +12,7 @@ const MAIN = ['Start workout', 'Start main workout'];
 module.exports = [
   ...SHEETS.map((s) => ({ name: 'sheet-' + s, url: '/dev-cards?c=sheet&s=' + s })),
   ...STEPS.map((s) => onboarding(s)),
+  { name: 'sheet-LogMealsSheet-extra', url: '/dev-cards?c=sheet&s=LogMealsSheet&dom=' + q({ meals: { sn: { eaten: [0], extra: [{ n: '1 bowl Poha', k: 180, p: 4, type: 'veg' }], repl: {}, at: 940 } }, min: 1000 }) },
   // sheets that need the running workout
   { name: 'sheet-WorkoutSwapSheet', url: '/', clicks: [...MAIN, 'Exercise options', 'Swap exercise'] },
   { name: 'sheet-FormTipsSheet', url: '/', clicks: [...MAIN, 'Exercise options', 'Form tips & video'] },

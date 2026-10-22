@@ -49,6 +49,8 @@ const SCENES: Record<string, Record<string, () => Patch | void>> = {
     paused: () => ({ membership: 'Expired' }),
     other: () => ({ openMeal: 'bf' }),
     nothing: () => ({ meals: {} }),
+    extra: () => ({ meals: { sn: { eaten: [0], extra: [{ n: '1 bowl Poha', k: 180, p: 4, type: 'veg' }], repl: {}, at: 940 } } }),
+    partial: () => ({ meals: { sn: { eaten: [0, 2], extra: [], repl: {}, at: 940 } } }),
   },
   trackers: {
     default: () => ({}),

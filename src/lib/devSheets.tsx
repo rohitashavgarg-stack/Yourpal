@@ -40,7 +40,7 @@ export const DEV_SHEETS: Record<string, { label: string; node: () => React.React
   ItemMenuSheet: { label: 'Item options', node: () => <ItemMenuSheet mid="bf" itemKey="0" /> },
   JoinConsentSheet: { label: 'Join programme', node: () => <JoinConsentSheet /> },
   LibrarySheet: { label: 'Exercise library', node: () => <LibrarySheet mode="browse" /> },
-  LogMealsSheet: { label: 'Log meal', node: () => <LogMealsSheet mealId="lu" /> },
+  LogMealsSheet: { label: 'Log meal', node: () => <LogMealsSheet mealId="sn" /> },
   LogoutSheet: { label: 'Log out', node: () => <LogoutSheet /> },
   ManualLogSheet: { label: 'Add manually', node: () => <ManualLogSheet title="Add steps" fields={[{ key: 'steps', label: 'Steps', ph: '8000', unit: 'steps' }]} done="Steps added" /> },
   NutritionSheet: { label: 'Nutrition', node: () => <NutritionSheet mid="bf" itemKey="0" /> },

@@ -26,7 +26,7 @@ const ALL = [
 ];
 const SCENES = {
   workout: [['upcoming', 400], ['due', 400], ['missed', 440], ['moved', 240], ['skipped', 240], ['live', 440], ['done', 420], ['done-watch', 470], ['rest', 340], ['paused', 240], ['comeback', 340]],
-  meals: [['now', 560], ['missed', 640], ['complete', 520], ['paused', 300], ['other', 560], ['nothing', 560]],
+  meals: [['now', 560], ['missed', 640], ['complete', 520], ['paused', 300], ['other', 560], ['nothing', 560], ['partial', 560], ['extra', 560]],
   trackers: [['default', 240], ['health', 240], ['hc-only', 240], ['weight-up', 240], ['water-empty', 240], ['water-full', 240], ['tiles', 380], ['tiles-health', 580]],
   week: [['default', 420], ['done', 420], ['checked-in', 420]],
   banner: [['strip', 200], ['card-active', 200], ['card-expiring', 200], ['card-expired', 200]],
@@ -52,7 +52,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       for (const [name, p, h] of SHOTS) {
         await send('Emulation.setDeviceMetricsOverride', { width: 390, height: h || 320, deviceScaleFactor: 1, mobile: false });
         await send('Page.navigate', { url: BASE + p + '&signedin=1&theme=' + theme });
-        for (let i = 0; i < 80; i++) { if ((await js('document.body ? document.body.innerText.length : 0')) > 5) break; await sleep(250); }
+        for (let i = 0; i < 400; i++) { if ((await js('document.body ? document.body.innerText.length : 0')) > 5) break; await sleep(250); }
         await sleep(2500);
         const r = await send('Page.captureScreenshot', { format: 'png' }); fs.writeFileSync(path.join(out, theme, name + '.png'), Buffer.from(r.data, 'base64')); n++; process.stdout.write('.');
       }
