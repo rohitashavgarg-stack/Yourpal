@@ -132,7 +132,7 @@ export default function Today() {
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <TabScreen title={!SHOW_GREETING ? '' : comebackNew ? `We missed you
 the last ${d.awayDays} days` : `${greet},
-Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 186 : 112}
+Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 160 : 96}
         pinned={isNew && !!payNotice && !payNotice.once ? <View style={{ paddingTop: 10, marginBottom: -8 }}><PaymentBanner /></View> : undefined} pinAfter={Math.max(0, stripY - (insets.top + 8 + 56))}
         refreshControl={<RefreshControl refreshing={refreshing} tintColor={c.accentText} onRefresh={() => { setRefreshing(true); load(1000); }} />}>
         {d.loading ? (
