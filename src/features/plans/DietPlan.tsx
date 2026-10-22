@@ -26,6 +26,7 @@ import { fmtNum, fmtQty, Qty, splitFood, stepFor, unitLabel } from './qty';
 import { DItem, dietItems, dietTotals, setP, useCountUp, usePlans } from './store';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Chevron } from '@/design-system/primitives/Chevron';
+import { AmountStepper } from '@/design-system/primitives/AmountStepper';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
@@ -101,23 +102,11 @@ function QtyControl({ mid, it, qty, locked }: { mid: MealId; it: DItem; qty: Qty
 
   if (locked) return <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.muted }}>{text}</Txt>;
 
-  const b = (label: string, on: () => void, off: boolean, icon: React.ReactNode) => (
-    <Pressy accessibilityRole="button" accessibilityLabel={`${label} ${qty.unit || 'piece'}`} disabled={off} onPress={on} scaleTo={0.86} hitSlop={6}
-      style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center', opacity: off ? 0.35 : 1 }}>
-      {icon}
-    </Pressy>
-  );
   return (
     <View style={{ alignSelf: 'flex-start' }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, height: 38, paddingHorizontal: 3, borderRadius: 19, backgroundColor: c.accentSoft }}>
-        {b('Less', () => go(cur - step), cur <= step, <Minus size={16} color={c.accentText} strokeWidth={2.4} />)}
-        <Pressy accessibilityRole="button" accessibilityLabel={`Amount ${text}${changed ? ', changed from plan' : ''}. Hold for units and reset`}
-          onLongPress={() => { haptic.medium(); openSheet(<QtySheet mid={mid} itemKey={it.key} />, { label: 'Change amount' }); }} delayLongPress={450} scaleTo={0.96}
-          style={{ minWidth: 62, height: 32, paddingHorizontal: 4, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.accentText }}>{text}</Txt>
-        </Pressy>
-        {b('More', () => go(cur + step), cur >= max, <Plus size={16} color={c.accentText} strokeWidth={2.4} />)}
-      </View>
+      <AmountStepper text={text} unit={qty.unit} onLess={() => go(cur - step)} onMore={() => go(cur + step)} lessDisabled={cur <= step} moreDisabled={cur >= max}
+        accessibilityLabel={`Amount ${text}${changed ? ', changed from plan' : ''}. Hold for units and reset`}
+        onLongPress={() => { haptic.medium(); openSheet(<QtySheet mid={mid} itemKey={it.key} />, { label: 'Change amount' }); }} />
       {changed && <View accessibilityLabel="Changed from plan" style={{ position: 'absolute', top: 0, right: 0, width: 8, height: 8, borderRadius: radii.xs, backgroundColor: c.warn }} />}
     </View>
   );

@@ -118,5 +118,6 @@ export const toastCopy = {
   mealAsPlanned: (meal: string) => `${meal} logged as planned`,
   mealSkipped: (meal: string) => `${meal} skipped`,
   mealMarked: (meal: string) => `${meal} marked eaten`,
+  mealSaved: (meal: string) => `${meal} saved`,
   removed: (what: string) => `Removed ${what}`,
 };
