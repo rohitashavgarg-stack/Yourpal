@@ -2,6 +2,8 @@
 
 `src/design-system/primitives/SectionLabel.tsx`
 
+Storybook: Primitives / SectionLabel
+
 ## Purpose
 
 The small heading above a group of cards. It replaces four separate `Label` components. `import { Label } from '@/features/shell/parts'` still works (it is `SectionLabel` with the default variant).
@@ -36,7 +38,8 @@ The small heading above a group of cards. It replaces four separate `Label` comp
 
 ## Accessibility
 
-- It is text with no `header` role, and it takes no accessibility props. The cards under it carry their own titles. If a screen needs headings for navigation, mark the card titles as headers.
+- Every variant is announced as a heading (`accessibilityRole="header"`), so screen reader users can jump between sections. It takes no other accessibility props.
+- The cards under it still carry their own titles.
 
 ## Copy rules
 

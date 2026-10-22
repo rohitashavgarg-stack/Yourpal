@@ -2,6 +2,8 @@
 
 `src/design-system/primitives/Snackbar.tsx`
 
+Storybook: Primitives / Snackbar
+
 ## Purpose
 
 The message bar at the foot of the screen (called Toast before). Show one with `useOverlay().toast(msg, { undo })`; you do not render it yourself. `useToastLift(px)` raises it for a screen with chrome at the bottom.
@@ -37,7 +39,7 @@ The message bar at the foot of the screen (called Toast before). Show one with `
 ## Accessibility
 
 - Role `alert` with a polite live region, so it is read without stealing focus.
-- Undo is a button with a light haptic. It is 40 px high; the bar around it is 52 px.
+- Undo is a button labelled "Undo" with a light haptic. It is drawn 40 px high with a 2 px hit slop above and below, so its tap area is 44 px; the bar around it is 52 px.
 - It stays 3.6 s. Keep the message short enough to read in that time.
 
 ## Copy rules

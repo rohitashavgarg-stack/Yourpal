@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite';
 import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
-/** The small heading above a group. */
+/** The small heading above a group. Announced as a header by screen readers. */
 const meta = {
   title: 'Primitives/SectionLabel',
   component: SectionLabel,

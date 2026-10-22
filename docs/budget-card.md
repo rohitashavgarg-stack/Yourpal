@@ -51,7 +51,7 @@ A burned number needs a watch; without one the card shows the plan, not a measur
 | Bar | track `rgba(255,255,255,0.18)`, corner radius `radii.xs` (4); the fill is clamped between 0 and 100 percent, the number is not |
 | Eat | label "Eat today", fork and knife icon and bar in mint `#2EE6A8` |
 | Burn | label "Burn today", flame icon and bar in orange `#FF9A4D` |
-| Goal row | the first row, above Eat and Burn: `GoalCard variant="strip"`, see `docs/goal-card.md`. Its divider line is under it |
+| Goal row | the first row, above Eat and Burn: `GoalCard variant="strip"`, see `docs/goal-card.md`. Its divider line is under it. With no goal it says only "No goal set yet" (no second line); a goal is never frozen or paused |
 
 ## States
 

@@ -30,6 +30,6 @@ Notes
 |---|---|---|---|
 | A | Decisions already made: no-goal copy, banner wording, comeback docs, tap targets, accessibility, IconButton hitSlop | done except A3: needs my decision (the comeback card described in the brief is not the one in the code) | db5706f |
 | B | Near-matches from docs/coverage-decisions.md: new variants, replacements, docs/review-changes.md, docs/coverage-exceptions.md | done: 37 of 41 use the library, 4 exceptions; hand-built count 216 to 179 | 499a9c8 |
-| C | Stories and docs for what changed, Coverage page in Storybook, rebuild and open every story | not started | |
-| D | Screenshots before (main) and after (this branch), docs/review/index.html | not started | |
+| C | Stories and docs for what changed, Coverage page in Storybook, rebuild and open every story | done: 158 stories plus the Coverage page open without errors | (see below) |
+| D | Screenshots before (main) and after (this branch), docs/review/index.html | in progress | |
 | E | Handoff package: CLAUDE.md, PR template, HANDOFF.md, README, HANDOFF-INDEX.md, npm run handoff zip, DEPLOY-STORYBOOK.md | not started | |

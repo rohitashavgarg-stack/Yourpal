@@ -2,6 +2,8 @@
 
 `src/design-system/primitives/FadeIn.tsx`
 
+Storybook: Primitives / FadeIn
+
 ## Purpose
 
 The one fade-in wrapper for screens and cards. It replaces four copies of the same wrapper (`E` in the two Plans files, `Enter` on Today and Gym) and 108 places that wrote `<Animated.View entering={fade(...)}>` by hand.
@@ -24,6 +26,11 @@ The one fade-in wrapper for screens and cards. It replaces four copies of the sa
 
 No visual state. It plays once on mount: `fade()` from the motion tokens, a plain 180 ms fade.
 
+| State | Look |
+|---|---|
+| Default | Fades in once on mount after its delay |
+| Reduce motion on | No fade: the content is there at once (`useReducedMotion` from reanimated) |
+
 ## Do and don't
 
 - Do use it for every card and screen that enters.
@@ -33,7 +40,7 @@ No visual state. It plays once on mount: `fade()` from the motion tokens, a plai
 ## Accessibility
 
 - No role or label. Content is readable while it fades.
-- Reduced motion is not handled yet (the old wrappers did not handle it either).
+- With the system reduce-motion setting on, it skips the fade and shows the content at once.
 
 ## Copy rules
 

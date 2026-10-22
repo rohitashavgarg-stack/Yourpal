@@ -1,0 +1,10 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { CoveragePage } from './CoveragePage';
+
+<Meta title="Coverage" />
+
+# Coverage
+
+What the app builds from the design system, and what is still drawn by hand. Regenerate the data with `node scripts/audit/coverage.js --json && node scripts/audit/coverage-storybook.js` (the Storybook build runs the second step).
+
+<CoveragePage />

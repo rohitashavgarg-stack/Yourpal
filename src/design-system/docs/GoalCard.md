@@ -2,6 +2,8 @@
 
 `src/design-system/patterns/GoalCard.tsx`. States, colours and sample numbers live in `src/features/today/goalCardState.ts`. It was `GoalTickCard` in `features/today`.
 
+Storybook: Patterns / GoalCard (the strip states are in "Strip All States").
+
 ## Purpose
 
 The member's Programme goal, in three looks that all follow one goal state (`GoalCardState`). The state comes from the member's data (`useGoalCardState`); the `state` and `weighDays` props pin it for the demo panel and the screenshot page. It also exports `RadialGlow` (old name `Glow`), the soft radial glow used behind it and behind the BudgetCard.
@@ -44,7 +46,7 @@ The progress picture on `card`: a 36-segment bar (14 px high, 2 px gaps) for wei
 | complete | "Complete", mint | grey, 0.4 | mint, all 36 filled (ring full) | 100%; the date reads "ended <date>" |
 | comeback | none (a returning member is not stalled) | blue, 0.8 | mint | nothing |
 | backOn | "Back on", mint | mint, 0.6 | mint | "Day 1 back" (fixed sample) |
-| noGoal | none | none | none | card: dashed quiet card "No goal set yet", "Your coach sets this after your assessment". strip: target icon in the ring, "No goal set yet", "Set one to see your progress here" |
+| noGoal | none | none | none | card: dashed quiet card "No goal set yet", "Your coach sets this after your assessment". strip: target icon in the ring and "No goal set yet" only, no second line |
 
 Overlay: **Needs a weigh-in**. A weight or muscle goal whose last weigh-in is 10 days or more old (`STALE_WEIGH_DAYS`) says "Needs a weigh-in" in amber in place of the % (card), or in place of the line (strip; not on complete or backOn).
 
@@ -76,4 +78,4 @@ Baseline images in `docs/visual-baseline/cards/`: `goal-<state>`, `goal-onTrack-
 - Say the number: "1.6 of 6.0 kg lost, by 30 Nov". Comma between the amount and the date, never a dot separator.
 - Pills are short state words: "On track", "Behind", "Almost there", "Complete", "Back on".
 - No guilt for behind or comeback. Credit the coach by name where the goal comes from the coach.
-- The noGoal copy differs between `card` ("Your coach sets this after your assessment") and `strip` ("Set one to see your progress here"); see the report.
+- noGoal: `card` says "No goal set yet" and "Your coach sets this after your assessment"; `strip` says only "No goal set yet" (no second line). Decided in Phase A.

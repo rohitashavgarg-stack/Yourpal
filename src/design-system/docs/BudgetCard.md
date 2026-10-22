@@ -2,6 +2,8 @@
 
 `src/design-system/patterns/BudgetCard.tsx`
 
+Storybook: Patterns / BudgetCard (no goal: "No Goal").
+
 ## Purpose
 
 "Daily budget" on Today: the Programme goal as one row at the top, then today's calories eaten and burned side by side. A charcoal card (`#1A1D22`, the same in light and dark mode) with a soft blue glow from the top right corner and a 1 px white 10% edge. It only draws what it is given; the numbers come from `TodayBudgetCard` in `features/today/TodayBudget.tsx`.
@@ -39,7 +41,7 @@ Layout, top to bottom:
 
 Bars are clamped at 100%; the numbers are not. Numbers use Indian grouping (1,800).
 
-Goal row states: every `GoalCardState` (onTrack, behind, almost, complete, comeback, backOn, noGoal) plus "Needs a weigh-in".
+Goal row states: every `GoalCardState` (onTrack, behind, almost, complete, comeback, backOn, noGoal) plus "Needs a weigh-in". With no goal the row shows a target icon in the ring and says only "No goal set yet", with no second line. A goal is never frozen or paused; a membership pause is the account Banner.
 
 Baseline images in `docs/visual-baseline/cards/`: `budget-default`, `budget-nothing-eaten`, `budget-all-logged`, `budget-workout-done`, `budget-watch`, `budget-goal-<state>`, `budget-goal-onTrack-stale`.
 
@@ -61,3 +63,4 @@ Baseline images in `docs/visual-baseline/cards/`: `budget-default`, `budget-noth
 - Labels "Eat today" and "Burn today". Say the number first, then the target.
 - The source word is quiet text after the target ("planned", "done"), not a chip.
 - No dot separators; the goal line uses a comma: "1.6 of 6.0 kg lost, by 30 Nov".
+- No goal: "No goal set yet", nothing under it.

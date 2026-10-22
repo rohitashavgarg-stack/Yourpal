@@ -2,6 +2,8 @@
 
 `src/design-system/primitives/Sheet.tsx`
 
+Storybook: Primitives / Sheet
+
 ## Purpose
 
 The bottom sheet. It lived inside `components/Overlay.tsx`. You do not render `Sheet` yourself: call `useOverlay().openSheet(content, { label, glow })` and `closeSheet(after?)`. There is one sheet in the app; the "...Sheet" components are the content that goes inside it.

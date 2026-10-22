@@ -15,5 +15,5 @@ type S = StoryObj<typeof meta>;
 export const StripExpiring: S = {};
 export const StripOnce: S = { args: { once: true } };
 export const StripPaused: S = { args: { icon: 'pause', tone: 'plain', title: 'Membership on hold', line: 'Logging and other features are paused until it is back.' } };
-export const CardExpiring: S = { args: { variant: 'card', act: 'View plan' } };
-export const CardActive: S = { args: { variant: 'card', icon: 'ok', tone: 'plain', title: 'Gold, 12 months', line: 'Renews 30 Nov', act: 'View plan' } };
+export const CardExpiring: S = { args: { variant: 'card', act: 'Renew at Wulf Fitness reception.' } };
+export const CardActive: S = { args: { variant: 'card', icon: 'ok', tone: 'plain', title: 'Gold, 12 months', line: 'Expires on 14 Oct 2027.', act: 'Renew early at Wulf Fitness reception.' } };

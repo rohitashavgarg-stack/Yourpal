@@ -9,7 +9,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const fontsDir = (pkg: string) => path.resolve(here, '../node_modules/@expo-google-fonts', pkg);
 
 const config: StorybookConfig = {
-  stories: ['../src/design-system/**/*.stories.@(ts|tsx)'],
+  stories: ['../src/design-system/**/*.mdx', '../src/design-system/**/*.stories.@(ts|tsx)'],
   addons: ['@storybook/addon-docs'],
   core: { disableTelemetry: true },
   framework: {

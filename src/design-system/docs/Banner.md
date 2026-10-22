@@ -2,6 +2,8 @@
 
 `src/design-system/patterns/Banner.tsx`
 
+Storybook: Patterns / Banner
+
 ## Purpose
 
 The account banner: what is happening with the membership, and a way to open the plan. It is information, not a form. Membership is view-only in the app, so the only action is to open the plan. It was two components, the Today strip (`PaymentBanner`) and the Gym card (`MembershipCard`); the old names stay as containers in `features/today/PaymentBanner.tsx`.
@@ -24,7 +26,7 @@ The account banner: what is happening with the membership, and a way to open the
 
 | State | Look |
 |---|---|
-| strip | Amber soft fill, edge to edge (-16 px margins), 40 px amber icon tile, title and line, outlined "View plan" pill on the right |
+| strip | Amber soft fill, edge to edge (-16 px margins), 40 px amber icon tile, title and line, outlined "See plan" pill on the right |
 | strip, `once` | Same, plus a 44 px cross to dismiss |
 | card, warn | Amber soft fill, 20 px corners, amber icon tile, title, line, optional `act`, underlined "See plan" |
 | card, plain | Surface fill, green icon tile (for an active membership, icon `ok`) |
@@ -37,13 +39,13 @@ Baseline images in `docs/visual-baseline/cards/`: `banner-strip`, `banner-card-a
 
 - Do show one account banner at a time. If several things are true, show the most urgent.
 - Do say a membership pause here and only here. A goal is never frozen or paused.
-- Don't add Pay, Renew or Resume buttons. Members never see them; the action is "View plan" / "See plan".
+- Don't add Pay, Renew or Resume buttons. Members never see them; the action is "See plan" (strip and card say the same).
 - Don't use red. Amber for warnings, green for all good.
 - Don't style a paused membership as a failure: amber, a pause icon, calm words.
 
 ## Accessibility
 
-- strip: one button labelled "<title>. <line> View plan". The dismiss cross is a separate 44 px button labelled "Dismiss".
+- strip: one button labelled "<title>. <line> See plan". The dismiss cross is a separate 44 px button labelled "Dismiss".
 - card: one button labelled "<title>. <line> <act> See plan".
 - The whole strip or card is the tap target (well over 44 px).
 

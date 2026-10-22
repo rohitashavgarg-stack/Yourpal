@@ -2,6 +2,8 @@
 
 `src/design-system/patterns/WeekCard.tsx`
 
+Storybook: Patterns / WeekCard
+
 ## Purpose
 
 "This week" on Today: two stat tiles (Workouts, Meals on plan), then the seven days, each with its workout mark and its meals dots, and a one-line legend. `TodayWeekCard` (old name `WeekCard` in `features/today/WeekCard.tsx`) builds the days from the member's data.
@@ -41,7 +43,7 @@ Baseline images in `docs/visual-baseline/cards/`: `week-default`, `week-done`, `
 
 - The title and the two tiles are one element whose label is `summary`.
 - "This week" has role `header`.
-- Each day is a button: "<weekday> <num>, today, open summary" or "<weekday> <num>, open plan". Columns share the card width, so on a 375 px phone each is about 40 px wide (under 44) but over 100 px tall.
+- Each day is a button: "<weekday> <num>, today, open summary" or "<weekday> <num>, open plan". Columns share the card width, so on a 375 px phone each is drawn about 41 px wide; a 2 px hit slop on each side fills the 4 px gap, so each tap area is about 45 px wide and over 100 px tall.
 - The day row is labelled "Days this week. Tap a past day for its summary, a future day to open its plan".
 - The legend is hidden from screen readers (the labels already say it).
 

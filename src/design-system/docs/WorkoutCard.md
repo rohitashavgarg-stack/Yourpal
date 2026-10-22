@@ -2,6 +2,8 @@
 
 `src/design-system/patterns/WorkoutCard.tsx`
 
+Storybook: Patterns / WorkoutCard
+
 ## Purpose
 
 Today's workout, one look per state. The state is a prop; `TodayWorkoutCard` (old name `WorkoutCard`, with `restart`) reads the day and picks it. There is no Full / Quick / Low energy choice on the card: that choice lives only in the Start sheet.
@@ -21,11 +23,11 @@ Today's workout, one look per state. The state is a prop; `TodayWorkoutCard` (ol
 | `live` | `{ elapsed, done, total, next? }` | none | live: timer and exercise count |
 | `done` | `{ at, stats: [value, unit, label][] }` | none | done: "Done at 6:58 pm" and three stats |
 | `restNext` | string | none | rest: the chip "Next: Pull, Thu 6:30 pm" |
-| `onStart` | () => void | no-op | Start workout (upcoming, due), Start (comeback) |
+| `onStart` | () => void | no-op | Start workout (upcoming, due); Start (comeback: starts the easy session) |
 | `onResume` | () => void | no-op | live |
 | `onDidIt`, `onMove`, `onSkip`, `onStartAnyway` | () => void | no-op | missed: the three answers and the quiet link |
 | `onUndo` | () => void | no-op | moved, skipped |
-| `onStartRegular` | () => void | no-op | comeback: the quiet second button |
+| `onStartRegular` | () => void | no-op | comeback: the second button, "Do regular instead" |
 
 ## States
 
@@ -42,9 +44,11 @@ Today's workout, one look per state. The state is a prop; `TodayWorkoutCard` (ol
 | done | Dark green gradient. Mint tick and "Done at 6:58 pm", name chip, "Workout complete", three stats (value, unit, label) |
 | rest | Dark purple gradient. Lilac moon and "Recovery", "Next: ..." chip, "Rest day", "Muscles grow on rest days. A 20 minute walk still counts." |
 | paused | Membership ended. Flat grey card (no gradient, no Start): lock tile, "Workouts are paused", "Renew at Wulf Fitness reception to see your plan and start again. Your history stays here." |
-| comeback | After a break. Flat grey card: "Easy session", "5 exercises, about 30 minutes, lighter weights", **Start** (ink) and **Do regular instead** (grey) side by side |
+| comeback | After a break. One small flat card (no gradient, no coach line, no chips): `surface2` fill, `radii.card` corners, 16 px padding. Title "Easy session" (semibold 17 / 24), one muted line "5 exercises, about 30 minutes, lighter weights", then two 44 px buttons side by side: **Start** (ink fill, background-coloured text) and **Do regular instead** (`surface3` fill, ink text). The greeting is not in the card: the screen shows it as plain text above (`ComebackGreeting`) |
 
 The "Burned today N kcal / From your watch" row appears at the bottom of upcoming, due, rest and done when `burned` is set.
+
+Open: the designer's brief describes chips '4 exercises' and 'Half your usual load' and buttons 'Start easy session' and 'Not today'; the code has the version above. Waiting for a decision.
 
 Baseline images in `docs/visual-baseline/cards/`: `workout-<state>`, `workout-done-watch` (live has a running timer, so its digits differ between runs).
 
@@ -61,7 +65,7 @@ Baseline images in `docs/visual-baseline/cards/`: `workout-<state>`, `workout-do
 
 - Each state card has a label: "Today's workout, <name>", "Workout running, 12:30 elapsed, 3 of 7 exercises", "<name> missed", "<name> moved to tomorrow", "<name> skipped today", "Workout complete", "Rest day", "Workouts are paused", "Easy session".
 - The coach line is a button: "Today's workout, planned by Coach Vikram. Open your coach". The unread dot is labelled "Unread reply".
-- Main buttons are 50 px (medium); the missed answers are 40 px (tight), with 8 px between them. Undo is 34 px high: give it room. Comeback buttons are 44 px and labelled "Start the easy session" and "Do today's regular workout instead".
+- Main buttons are 50 px (medium); the missed answers are 40 px (tight), with 8 px between them. Undo is drawn 34 px high with a 5 px hit slop above and below, so its tap area is 44 px. The missed answers (tight, 40 px) get a hit slop to 44 px from Button. Comeback buttons are 44 px and labelled "Start the easy session" and "Do today's regular workout instead".
 - "Start it now anyway" is a button with an 8 px hit slop.
 
 ## Copy rules

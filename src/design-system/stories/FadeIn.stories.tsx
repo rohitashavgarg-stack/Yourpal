@@ -5,7 +5,7 @@ import { radii } from '@/design-system/tokens';
 import { Txt } from '@/components/ui';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
-/** The one entrance animation: a short fade with a tiny rise, staggered by index. No springs or overshoot. */
+/** The one entrance animation: a short fade, staggered by index. No springs or overshoot. With the system reduce-motion setting on, content appears without the fade. */
 const meta = { title: 'Primitives/FadeIn', component: FadeIn } satisfies Meta<typeof FadeIn>;
 export default meta;
 type S = StoryObj<typeof meta>;

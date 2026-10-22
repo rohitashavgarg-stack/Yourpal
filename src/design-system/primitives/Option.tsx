@@ -51,6 +51,7 @@ export function Option({ selected, onPress, look = 'fill', role = 'radio', acces
     : { backgroundColor: selected ? c.ink : offFill ?? 'transparent', ...(offLine ? { borderWidth: 1, borderColor: selected ? c.ink : offLine } : null) };
   return (
     <Pressy accessibilityRole={role} accessibilityState={{ selected }} accessibilityLabel={accessibilityLabel} onPress={onPress} scaleTo={scaleTo}
+      hitSlop={height !== undefined && height < 44 ? { top: (44 - height) / 2, bottom: (44 - height) / 2 } : undefined}
       style={[{
         ...(height !== undefined ? { height } : null), ...(minHeight !== undefined ? { minHeight } : null), ...(minWidth !== undefined ? { minWidth } : null),
         borderRadius: radius, paddingHorizontal: padX, ...(gap !== undefined ? { gap } : null),
