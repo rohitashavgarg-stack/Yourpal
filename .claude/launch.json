@@ -4,14 +4,40 @@
     {
       "name": "prototype",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "http-server", "prototype", "-p", "5173", "-c-1"],
+      "runtimeArgs": [
+        "--yes",
+        "http-server",
+        "prototype",
+        "-p",
+        "5173",
+        "-c-1"
+      ],
       "port": 5173
     },
     {
       "name": "web",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["expo", "start", "--web", "--port", "8081"],
+      "runtimeArgs": [
+        "expo",
+        "start",
+        "--web",
+        "--port",
+        "8081"
+      ],
       "port": 8081
+    },
+    {
+      "name": "storybook",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "--yes",
+        "http-server",
+        "storybook-static",
+        "-p",
+        "6007",
+        "-c-1"
+      ],
+      "port": 6007
     }
   ]
 }

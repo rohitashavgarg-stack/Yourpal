@@ -38,10 +38,14 @@
   },
   "devDependencies": {
     "@expo/ngrok": "^4.1.3",
+    "@storybook/addon-docs": "^10.6.3",
+    "@storybook/react-native-web-vite": "^10.6.3",
     "@types/react": "~19.2.2",
     "eslint": "^9.0.0",
     "eslint-config-expo": "~57.0.2",
-    "typescript": "~6.0.3"
+    "storybook": "^10.6.3",
+    "typescript": "~6.0.3",
+    "vite": "^7.3.7"
   },
   "scripts": {
     "start": "expo start",
@@ -50,7 +54,9 @@
     "web": "expo start --web",
     "build:web": "expo export --platform web --output-dir dist && node -e \"const fs=require('fs');fs.writeFileSync('dist/vercel.json',JSON.stringify({rewrites:[{source:'/(.*)',destination:'/index.html'}]},null,2))\"",
     "typecheck": "tsc --noEmit",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build -o storybook-static"
   },
   "private": true
 }
