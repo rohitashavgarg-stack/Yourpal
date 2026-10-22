@@ -12,7 +12,7 @@ const meta = {
   args: { label: 'Confirm', kind: 'primary', size: 'large', disabled: false, onPress: () => {} },
   argTypes: {
     kind: { control: 'select', options: ['primary', 'accent', 'secondary', 'ghost', 'white', 'outline', 'glass', 'dashed', 'line', 'quiet', 'soft', 'whiteLine', 'surface'] },
-    size: { control: 'select', options: ['large', 'medium', 'small', 'chip', 'tight', 'compact', 'xs'] },
+    size: { control: 'select', options: ['large', 'medium', 'small', 'chip', 'fill', 'tight', 'compact', 'xs'] },
     weight: { control: 'select', options: [undefined, 'medium', 'semibold'] },
     muted: { control: 'boolean' },
     scaleTo: { control: 'number' },
@@ -40,6 +40,15 @@ export const Disabled: S = { args: { disabled: true, label: 'Pick what you ate' 
 // ---- kinds and sizes added for the near-matches (Phase B) ----
 /** Dashed line: add something to a list ("Ate something else?", "+ Add exercise", "Add set"). */
 export const Dashed: S = { args: { kind: 'dashed', size: 'small', label: 'Ate something else?', icon: <Plus size={16} /> } };
+/** Size fill: no side padding, for buttons that share a row (flex) so a long label gets all the width. */
+export const DashedFillInRow: S = {
+  render: () => (
+    <View style={{ flexDirection: 'row', gap: 8 }}>
+      <Button kind="dashed" size="fill" label="Ate something else?" icon={<Plus size={16} />} onPress={() => {}} style={{ flex: 1.5 }} />
+      <Button kind="quiet" size="fill" muted label="Skip meal" onPress={() => {}} style={{ flex: 1 }} />
+    </View>
+  ),
+};
 export const DashedMedium: S = { args: { kind: 'dashed', size: 'medium', label: 'Add set', icon: <Plus size={17} /> } };
 /** Chip line: one of a row of choices (Ask your coach about...). */
 export const Line: S = { args: { kind: 'line', size: 'chip', label: 'Check my form' } };

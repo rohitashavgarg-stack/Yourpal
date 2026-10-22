@@ -10,7 +10,7 @@ src/
   features/               feature code: containers that read app state and feed the patterns
   design-system/
     tokens/               colours (light and dark palettes, fixed, onDark, gradients), type, spacing, radius, shadows, motion
-    primitives/           small building blocks: Button and IconButton, Card, Chip, Pill, Input, Sheet and SheetFooter, Snackbar, Stepper, ...
+    primitives/           small building blocks: Button and IconButton, Card, Option, Chip, Pill, Input, Sheet and SheetFooter, Snackbar, Stepper, ...
     patterns/             whole cards with their states as props: GoalCard, BudgetCard, WorkoutCard, MealsCard, TrackerRow, WeekCard, Banner
     stories/              one Storybook file per primitive and pattern
     docs/                 one page per component: purpose, props, states, do and don't, accessibility, copy rules
@@ -24,6 +24,7 @@ How the layers depend on each other: tokens, then primitives (use tokens only), 
 
 ## Find a component
 
+0. What is built and what is still drawn by hand: the Coverage page in Storybook, and `docs/coverage.md`.
 1. The index: `docs/design-system-components.md`, grouped by primitive and pattern, with variants and states in one line each.
 2. Storybook: `npm run storybook`, then search by name. Switch Light / Dark in the toolbar; change props in Controls; copy the usage from the Code tab.
 3. The page for one component: `src/design-system/docs/<Name>.md`.
@@ -67,31 +68,42 @@ npm run lint               # whole project
 npm run lint:changed       # fails if the branch adds a hard-coded colour, radius or font size
 ```
 
-## Screenshots and the review page
-
-The baselines are in `docs/visual-baseline/` (every screen, light and dark, 390 x 844 on web). The capture scripts need the web dev server on port 8082 and Microsoft Edge or Chrome.
+## Hand the package to someone
 
 ```bash
-npx expo start --web --port 8082                                    # in one terminal
-node scripts/visual/capture.js .visual-current                      # every screen, both themes (about 10 minutes)
-node scripts/visual/capture.js .visual-current --only=today,plans   # only some screens
-node scripts/visual/review.js docs/visual-baseline .visual-current  # writes .visual-current/review.html
+npm run handoff     # builds Storybook, writes handoff/yourpal-design-system-handoff.zip
 ```
 
-Open `.visual-current/review.html`: every changed screenshot with before, after and the diff (changed pixels in red), flagged ones first. Add `--all` to list unchanged screens too.
+The zip holds the Storybook build, the design-system docs and tokens, `docs/`, the review page and `docs/HANDOFF-INDEX.md` (every deliverable and where it is). It needs `docs/review/index.html` to exist, so make the review page first (next section).
 
-The same works for the other capture scripts and their baselines:
-- `scripts/visual/capture-cards.js` with `docs/visual-baseline/cards`: the Today cards in every state.
-- `scripts/visual/shots.js` with `docs/visual-baseline/shots`: sheets, onboarding steps, empty and error states.
+## Screenshots and the review page
 
-After you have looked at every change and it is intended, refresh the baseline. For example, `node scripts/visual/check.js --screens=today --update`, or capture straight into `docs/visual-baseline`.
+`docs/review/index.html` puts every screen, sheet, onboarding step and state side by side: before on the left, after on the right, with a light / dark switch. A row that changed on purpose links to its entry in `docs/review-changes.md`. The page does not compare anything; you look.
 
-Known: the baselines were taken before the October Today redesign (budget card, meals card, week card, goal page), so those screens show as changed until the baseline is refreshed.
+```bash
+# 1. the "after": the branch you are on
+npx expo start --web --port 8082                                    # terminal 1
+node scripts/visual/capture-all.js docs/review/after                # terminal 2, about 20 minutes, both themes
+
+# 2. the "before": main in a second checkout, on another port
+git worktree add --detach ../Yourpal-main main                      # once; then link node_modules into it
+cd ../Yourpal-main && npx expo start --web --port 8083              # terminal 3
+APP_URL=http://localhost:8083 node scripts/visual/capture-all.js docs/review/before   # from the first checkout
+
+# 3. the page
+node scripts/visual/review.js docs/review/before docs/review/after  # writes docs/review/index.html
+```
+
+Open `docs/review/index.html` in a browser (a double click works; the images are next to it). The capture scripts need Microsoft Edge or Chrome. `capture-all.js` runs four scripts that can also be used alone: `capture.js` (every screen and the bottom of the tab screens), `capture-cards.js` (the Today cards in every state), `shots.js` (sheets, onboarding steps, empty, loading and error states) and `capture-flows.js` (the workout in progress). Add `--only=today,plans` to `capture.js` or `--only=sheet-,state-` to `shots.js` for a part.
+
+`docs/visual-baseline/` holds the older baselines from before the October Today redesign; `scripts/visual/compare.js` and `check.js` still compare a run against them by pixels if you want a number. They are not used by the review page.
 
 ## Where to read more
 
 - `CLAUDE.md`: the rules for every change.
 - `docs/design-system-components.md`: the component index.
-- `docs/coverage.md` and `docs/coverage-decisions.md`: what is still hand-built, and the near-matches that need a design decision.
+- `docs/coverage.md`, `docs/coverage-decisions.md` and `docs/coverage-exceptions.md`: what is still hand-built, how the near-matches were resolved, and what stays hand-built on purpose.
+- `docs/review-changes.md`: every value that changed on screen on this branch.
+- `docs/HANDOFF-INDEX.md`: every deliverable and where it is.
 - `docs/personalisation-gap.md`: which personalisation features are built, partial or missing.
 - `docs/SESSION_HANDOFF.md` and `docs/PHASE2_HANDOFF.md`: product history and design decisions.

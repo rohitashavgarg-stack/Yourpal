@@ -1,5 +1,6 @@
 import React from 'react';
 import data from './coverage.json';
+import { fontSizes } from '@/design-system/tokens';
 
 // The Storybook "Coverage" page: what is in the library and what is still hand-built. The data comes from
 // scripts/audit/coverage-storybook.js (run after scripts/audit/coverage.js --json). Plain HTML: this page only runs in Storybook.
@@ -7,9 +8,9 @@ type Lib = { name: string; group: string; file: string; doc: boolean; uses: numb
 type Hand = { where: string; kind: string; look: string; jsx: string };
 type Exc = { where: string; what: string; why: string };
 
-const cell: React.CSSProperties = { textAlign: 'left', verticalAlign: 'top', padding: '6px 10px', borderBottom: '1px solid rgba(127,127,127,0.25)', fontSize: 13, lineHeight: '18px' };
+const cell: React.CSSProperties = { textAlign: 'left', verticalAlign: 'top', padding: '6px 10px', borderBottom: '1px solid rgba(127,127,127,0.25)', fontSize: fontSizes.sm, lineHeight: '18px' };
 const head: React.CSSProperties = { ...cell, fontWeight: 600 };
-const mono: React.CSSProperties = { fontFamily: 'ui-monospace, Menlo, Consolas, monospace', fontSize: 12 };
+const mono: React.CSSProperties = { fontFamily: 'ui-monospace, Menlo, Consolas, monospace', fontSize: fontSizes.xs };
 
 function Table({ cols, rows }: { cols: string[]; rows: React.ReactNode[][] }) {
   return (

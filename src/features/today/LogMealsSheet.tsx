@@ -122,8 +122,8 @@ export function LogMealsSheet({ mealId, draft: start }: { mealId: MealId; draft?
           );
         })}
         <Row style={{ gap: 8 }}>
-          <Button kind="dashed" size="small" label="Ate something else?" accessibilityLabel="Ate something else? Log it" icon={<Plus size={16} color={c.ink} />} onPress={elseFood} style={{ flex: 1.5 }} />
-          <Button kind="quiet" size="small" muted={!x.skip} label={x.skip ? 'Undo skip' : 'Skip meal'} onPress={skip} style={{ flex: 1 }} />
+          <Button kind="dashed" size="fill" label="Ate something else?" accessibilityLabel="Ate something else? Log it" icon={<Plus size={16} color={c.ink} />} onPress={elseFood} style={{ flex: 1.5 }} />
+          <Button kind="quiet" size="fill" muted={!x.skip} label={x.skip ? 'Undo skip' : 'Skip meal'} onPress={skip} style={{ flex: 1 }} />
         </Row>
       </View>
       <Button label="Save meal" onPress={save} />

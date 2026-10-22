@@ -236,7 +236,7 @@ Result: 37 now use the library, 4 stay hand-built with a reason in [coverage-exc
 | `Button` kind | `soft` (accent-soft fill, accent text) | "This week", "Back to today", "About: ..." |
 | `Button` kind | `whiteLine` (white, 1 px `fixed.lineOnWhite`) | workout "Finish" and "Hide" on the white clip stage |
 | `Button` kind | `surface` (white surface fill) | Profile "Edit" |
-| `Button` size | `xs` (32 px pill), `chip` (44 px, 16 px sides) | the 32 px pills; rows of choices |
+| `Button` size | `xs` (32 px pill), `chip` (44 px, 16 px sides), `fill` (44 px, no side padding) | the 32 px pills; rows of choices; buttons that share a row and need the whole width |
 | `Button` props | `iconAfter`, `weight`, `muted`, `scaleTo` | a trailing X, a label weight different from the kind, a quiet label, the old press scale |
 | `Option` (new primitive) | looks `fill` and `outline`, `selected` | programme and experience choices, days a week, food type, Progress range, segmented tabs |
 | `Card` variant | `tight` (radius 24, padding 16), `roomy` (radius 28, padding 18) | the paddings that recur (7 and 3 cards) |
@@ -247,9 +247,9 @@ Result: 37 now use the library, 4 stay hand-built with a reason in [coverage-exc
 
 | Where | Now | Change |
 |---|---|---|
-| `features/today/LogMealsSheet.tsx` Ate something else? | `Button` dashed small | [recorded](review-changes.md#log-meal-sheet) |
-| `features/today/LogMealsSheet.tsx` Skip meal | `Button` quiet small, muted | [recorded](review-changes.md#log-meal-sheet) |
-| `features/plans/DietPlan.tsx` Ate something else? | `Button` dashed small | [recorded](review-changes.md#plans-diet) |
+| `features/today/LogMealsSheet.tsx` Ate something else? | `Button` dashed fill | exact |
+| `features/today/LogMealsSheet.tsx` Skip meal | `Button` quiet fill, muted | exact |
+| `features/plans/DietPlan.tsx` Ate something else? | `Button` dashed fill | exact |
 | `app/plans/create.tsx` + Add exercise | `Button` dashed medium | [recorded](review-changes.md#plans-create) |
 | `app/plans/edit.tsx` + Add item / exercise | `Button` dashed medium | [recorded](review-changes.md#plans-edit) |
 | `app/workout.tsx` Add set | `Button` dashed medium | [recorded](review-changes.md#workout) |

@@ -10,6 +10,7 @@
  * (each retried while the screen is still drawing), then the screenshot is taken after `wait` ms.
  */
 const fs = require('fs'); const path = require('path'); const os = require('os'); const { spawn } = require('child_process');
+const THEMES = (process.env.THEMES || 'light,dark').split(',').filter(Boolean); // THEMES=dark captures only the dark theme
 const BASE = process.env.APP_URL || 'http://localhost:8082';
 const out = process.argv[2]; if (!out) { console.error('usage: shots.js <outDir> [--only=a,b]'); process.exit(1); }
 const only = ((process.argv.find((a) => a.startsWith('--only=')) || '').slice(7) || '').split(',').filter(Boolean);
@@ -32,7 +33,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       + ' if (!e) return false; let t = e; while (t && t !== document.body) { if (t.tabIndex >= 0 || t.getAttribute(\'role\') === \'button\' || t.getAttribute(\'role\') === \'radio\') break; t = t.parentElement; } (t && t !== document.body ? t : e).click(); return true; })()';
     const click = async (t) => { for (let i = 0; i < 12; i++) { if (await js(clickExpr(t))) return true; await sleep(700); } console.error('could not find: ' + t); return false; };
     let n = 0;
-    for (const theme of ['light', 'dark']) {
+    for (const theme of THEMES) {
       fs.mkdirSync(path.join(out, theme), { recursive: true });
       for (const e of LIST) {
         const url = BASE + e.url + (e.url.includes('?') ? '&' : '?') + (e.noSignedIn ? '' : 'signedin=1&') + 'theme=' + theme;

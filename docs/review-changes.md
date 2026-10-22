@@ -7,7 +7,7 @@ The rule used: an element that differed from a library variant by 2 px or less n
 ## Copy changes (decided in Phase A)
 
 <a id="state-today-expired"></a>
-### Today, membership strip (`state-today-expired`)
+### Membership strip and banners (`state-today-expired`, `banner-strip`)
 
 | Element | Old | New |
 |---|---|---|
@@ -15,13 +15,13 @@ The rule used: an element that differed from a library variant by 2 px or less n
 | Spoken label | "... View plan" | "... See plan" |
 
 <a id="today"></a>
-### Today, Daily budget card with no goal (budget card goal row, state no goal)
+### Daily budget card with no goal (`budget-goal-noGoal`)
 
 | Element | Old | New |
 |---|---|---|
 | Goal row second line | Set one to see your progress here | (none: the row says only "No goal set yet") |
 
-Not in the default screenshots (they show a goal). Storybook: Patterns / BudgetCard / No Goal, and Patterns / GoalCard / Strip All States.
+Storybook: Patterns / BudgetCard / No Goal, and Patterns / GoalCard / Strip All States.
 
 ## Size and spacing (2 px or less)
 
@@ -30,17 +30,14 @@ Not in the default screenshots (they show a goal). Storybook: Patterns / BudgetC
 
 | Element | Old | New |
 |---|---|---|
-| "Ate something else?" gap between + and text | 6 px | 8 px |
-| "Ate something else?" side padding | 0 (centred in its flex space) | 20 px (still centred; no visible move at phone width) |
-| "Skip meal" side padding | 0 (centred) | 20 px (still centred) |
+No visible change. "Ate something else?" and "Skip meal" use Button size `fill` (no side padding, gap 6 px), which is exactly what they had.
 
 <a id="plans"></a>
 ### Plans, diet day and week header (`plans`, `state-plans-diet`)
 
 | Element | Old | New |
 |---|---|---|
-| Diet card "Ate something else?" gap between + and text | 6 px | 8 px |
-| Diet card "Ate something else?" side padding | 0 (full width) | 20 px (full width, text centred) |
+| Diet card "Ate something else?" | exact (Button size `fill`) | exact |
 | "This week" pill corner radius (shown away from this week) | 18 px | 16 px (both fully round at 32 px high) |
 
 <a id="plans-create"></a>
@@ -62,7 +59,7 @@ Not in the default screenshots (they show a goal). Storybook: Patterns / BudgetC
 | Same, text size | 14 px | 15 px |
 
 <a id="workout"></a>
-### Workout (`flow-workout-warmup`, `flow-workout-main`, the running workout)
+### Workout (`flow-workout-warmup`, `flow-workout-main`, `sheet-WorkoutSwapSheet`, `sheet-FormTipsSheet`, `sheet-SetMenuSheet`, `sheet-FinishConfirmSheet`, `sheet-WkMenuSheet`)
 
 | Element | Old | New |
 |---|---|---|
@@ -110,6 +107,13 @@ Shown only after the chart is dragged away from today.
 |---|---|---|
 | Selected day: line | none | 1 px ink line on the ink fill (same colour, so it does not show) |
 | Selected day: number and "days" | at the box edge + 0 | 1 px further in (the line takes 1 px each side) |
+
+## Rendering noise to expect
+
+Not value changes, listed so they are not a surprise on the review page:
+- A shift of under 1 px of centred button content (an icon and its label) on a few screens: `coach` ("Assessment"), `sheet-QuickLogSheet` (the camera icon), `profile-appearance` (the theme tiles). Sizes, colours and text are the same. The cause is not isolated; it is below what the screenshots can show.
+- Timers and animations differ between any two captures: the workout timer (`flow-workout-main`), the onboarding "building" step (`step-building`), the water ripple (`trackers-tiles-health`).
+- A few screens show a small red message at the bottom, "<button> cannot contain a nested <button>". It is a development-mode warning from the web build, present before and after this branch (it is in both columns); it is not part of the app.
 
 ## Tap areas (no visible change)
 

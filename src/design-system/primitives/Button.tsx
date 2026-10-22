@@ -11,14 +11,14 @@ import { Pressy } from './Pressy';
  * are now thin wrappers that pick a kind and a size.
  */
 export type ButtonKind = 'primary' | 'accent' | 'secondary' | 'ghost' | 'white' | 'outline' | 'glass' | 'dashed' | 'line' | 'quiet' | 'soft' | 'whiteLine' | 'surface';
-export type ButtonSize = 'large' | 'medium' | 'small' | 'tight' | 'compact' | 'chip' | 'xs';
+export type ButtonSize = 'large' | 'medium' | 'small' | 'tight' | 'compact' | 'chip' | 'xs' | 'fill';
 
 export type ButtonProps = {
   label: string;
   onPress?: () => void;
   kind?: ButtonKind;
-  /** large 56 px (default), medium 50 px pill, small 44 px, chip 44 px with 16 px sides (a row of choices), tight 40 px pill,
-   *  compact 36 px pill (set `height` to change it), xs 32 px pill. Sizes under 44 px keep a 44 px tap area. */
+  /** large 56 px (default), medium 50 px pill, small 44 px, chip 44 px with 16 px sides (a row of choices), fill 44 px with no side padding (the width comes
+   *  from the row it sits in, so a long label gets all of it), tight 40 px pill, compact 36 px pill (set `height` to change it), xs 32 px pill. Sizes under 44 px keep a 44 px tap area. */
   size?: ButtonSize;
   /** Old way to ask for size="small". */
   small?: boolean;
@@ -47,6 +47,7 @@ const SIZE: Record<ButtonSize, SizeSpec> = {
   tight: { h: 40, r: 20, px: 16, fs: fontSizes.md, lh: 20, gap: 8 },
   compact: { h: 36, r: 18, px: 14, fs: fontSizes.sm, lh: 17, gap: 5 },
   chip: { h: 44, r: radii.lg, px: 16, fs: fontSizes.md, lh: 18, gap: 6 },
+  fill: { h: 44, r: radii.lg, px: 0, fs: fontSizes.md, lh: 18, gap: 6 },
   xs: { h: 32, r: 16, px: 12, fs: fontSizes.xs, lh: 17, gap: 4 },
 };
 

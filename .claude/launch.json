@@ -38,6 +38,19 @@
         "-c-1"
       ],
       "port": 6007
+    },
+    {
+      "name": "review",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "--yes",
+        "http-server",
+        "docs",
+        "-p",
+        "6008",
+        "-c-1"
+      ],
+      "port": 6008
     }
   ]
 }

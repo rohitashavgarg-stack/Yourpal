@@ -266,7 +266,7 @@ function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
 function AteElse({ onPress }: { onPress: () => void }) {
   const { c } = useTheme();
   return (
-    <Button kind="dashed" size="small" label="Ate something else?" accessibilityLabel="Ate something else? Log it" icon={<Plus size={16} color={c.ink} />} onPress={onPress} />
+    <Button kind="dashed" size="fill" label="Ate something else?" accessibilityLabel="Ate something else? Log it" icon={<Plus size={16} color={c.ink} />} onPress={onPress} />
   );
 }
 

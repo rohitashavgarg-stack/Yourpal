@@ -23,6 +23,9 @@ Every action in the app. One `Button` with a kind (colour) and a size (shape), a
 <IconButton label="Add steps" onPress={add} size={30} radius={15} hitSlop={10}><Plus size={14} /></IconButton>
 ```
 
+
+`fill` has no side padding: use it for buttons that share a row (`flex`) so a long label gets all the width, such as "Ate something else?" next to "Skip meal". Elsewhere use `small`.
+
 ## Props: Button
 
 | Prop | Type | Default | What it does |
@@ -91,6 +94,7 @@ Every action in the app. One `Button` with a kind (colour) and a size (shape), a
 | medium | 50 | 25 (pill) | 20 | 15 / 21 | 8 |
 | small | 44 | `radii.lg` (22) | 20 | 14 / 18 | 8 |
 | chip | 44 | `radii.lg` (22) | 16 | 14 / 18 | 6 |
+| fill | 44 | `radii.lg` (22) | 0 | 14 / 18 | 6 |
 | tight | 40 | 20 (pill) | 16 | 14 / 20 | 8 |
 | compact | 36, or `height` | half the height | 14 | 13 / 17 | 5 |
 | xs | 32 | 16 (pill) | 12 | 12 / 17 | 4 |

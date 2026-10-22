@@ -12,6 +12,7 @@
  * Also: workout-<state>, meals-<state>, trackers-<state>, week-<state>, banner-<state> (see src/app/dev-cards.tsx for the states).
  */
 const fs = require('fs'); const path = require('path'); const os = require('os'); const { spawn } = require('child_process');
+const THEMES = (process.env.THEMES || 'light,dark').split(',').filter(Boolean); // THEMES=dark captures only the dark theme
 const BASE = process.env.APP_URL || 'http://localhost:8082';
 const out = process.argv[2]; if (!out) { console.error('usage: capture-cards.js <outDir>'); process.exit(1); }
 const GOAL_STATES = ['onTrack', 'behind', 'almost', 'complete', 'comeback', 'backOn', 'noGoal'];
@@ -47,7 +48,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const js = async (expr) => (await send('Runtime.evaluate', { expression: expr, returnByValue: true, awaitPromise: true })).result.value;
     await send('Page.enable'); await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 320, deviceScaleFactor: 1, mobile: false });
     let n = 0;
-    for (const theme of ['light', 'dark']) {
+    for (const theme of THEMES) {
       fs.mkdirSync(path.join(out, theme), { recursive: true });
       for (const [name, p, h] of SHOTS) {
         await send('Emulation.setDeviceMetricsOverride', { width: 390, height: h || 320, deviceScaleFactor: 1, mobile: false });
