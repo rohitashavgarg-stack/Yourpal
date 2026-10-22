@@ -117,17 +117,39 @@ function MissedPrompt({ ask, onLog }: { ask: MissedAsk; onLog?: () => void }) {
 // The meal on screen: its foods in one line with one food icon ("2 bowl dal, 4 roti, 1 bowl salad"), and one button that opens the sheet where it is logged.
 function MealItems({ meal, onLogMeal }: Pick<MealsCardProps, 'onLogMeal'> & { meal: ShownMeal }) {
   const { c } = useTheme();
-  const line = [...meal.items.map((it) => (it.amount ? it.amount + ' ' : '') + it.name), ...meal.extras.map((e) => e.name)].join(', ');
+  const rows = [...meal.items.map((it) => ({ name: it.name, amount: it.amount, type: it.type, eaten: it.eaten })), ...meal.extras.map((e) => ({ name: e.name, amount: e.est ? 'estimated' : '', type: e.type ?? ('veg' as FoodType), eaten: true }))];
+  const line = rows.map((r) => (r.amount ? r.amount + ' ' : '') + r.name).join(', ');
   return (
     <Animated.View layout={LinearTransition.duration(180)}>
       <FadeIn style={{ gap: 12, paddingBottom: 0 }}>
-        <View accessible accessibilityLabel={`${meal.name}: ${line}`} style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start', paddingHorizontal: 4 }}>
-          <IconBadge size={36} radius={radii.sm} bg={meal.status === 'logged' ? c.goodSoft : c.surface2}>{meal.status === 'logged' ? <Check size={18} strokeWidth={3} color={c.good} /> : <Salad size={18} color={c.muted} />}</IconBadge>
-          <Txt style={{ flex: 1, minWidth: 0, fontSize: fontSizes.base, lineHeight: 24, paddingTop: 5, color: meal.skipped ? c.muted : c.ink, textDecorationLine: meal.skipped ? 'line-through' : 'none' }}>{line}</Txt>
+        <View accessible accessibilityLabel={`${meal.name}: ${line}`} style={{ paddingHorizontal: 4 }}>
+          {rows.map((r, k) => (
+            <Row key={k} style={{ gap: 10, minHeight: 40, borderTopWidth: k ? 1 : 0, borderTopColor: c.line }}>
+              <FoodMark type={r.type} />
+              <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 22, color: meal.skipped ? c.muted : c.ink, textDecorationLine: meal.skipped ? 'line-through' : 'none' }}>{r.name}</Txt>
+              {meal.status === 'partial' && r.eaten && <Check size={14} strokeWidth={3} color={c.good} />}
+              {!!r.amount && <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: c.muted }}>{r.amount}</Txt>}
+            </Row>
+          ))}
         </View>
         <Button kind={meal.status === 'logged' ? 'secondary' : 'primary'} label={meal.status === 'logged' ? 'Edit log' : 'Log meal'} onPress={onLogMeal} />
       </FadeIn>
     </Animated.View>
+  );
+}
+
+// The small filled pill after the meal name: the time (text only), "Logged 7:10 am" in soft green once it is logged, or "Skipped". No outline, like the time pill on the workout card.
+function StatusPill({ status, time, loggedAt }: { status: ShownMeal['status']; time: string; loggedAt?: string }) {
+  const { c, isDark } = useTheme();
+  const logged = status === 'logged', skipped = status === 'skipped';
+  const bg = logged ? c.goodSoft : isDark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.06)';
+  const fg = logged ? c.good : skipped ? c.muted : c.ink;
+  const label = logged ? ('Logged ' + (loggedAt ?? '')).trim() : skipped ? 'Skipped' : time;
+  return (
+    <View style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, backgroundColor: bg, flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+      {logged ? <Check size={13} strokeWidth={3} color={fg} /> : skipped ? <X size={13} color={fg} /> : null}
+      <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: fg }}>{label}</Txt>
+    </View>
   );
 }
 
@@ -195,10 +217,8 @@ export function MealsCard(p: MealsCardProps) {
       {p.ask && <MissedPrompt ask={p.ask} onLog={p.onAskLog} />}
       <View style={{ paddingHorizontal: 4, gap: 8 }}>
         <Row style={{ gap: 10 }}>
-          {meal.status === 'logged' ? <Chip tone="good" label={`Logged ${meal.loggedAt ?? ''}`.trim()} icon={<Check size={13} strokeWidth={3} color={c.good} />} />
-            : meal.status === 'skipped' ? <Chip label="Skipped" icon={<X size={13} color={c.muted} />} />
-            : <Chip label={meal.meta.time} icon={<Clock size={13} color={c.ink} />} style={{ borderColor: isDark ? 'rgba(255,255,255,0.18)' : c.chipLine, backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)' }} />}
           <Txt style={{ flexShrink: 1, fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, letterSpacing: -0.4 }}>{meal.name}</Txt>
+          <StatusPill status={meal.status} time={meal.meta.time} loggedAt={meal.loggedAt} />
         </Row>
         <MetaRow color={c.muted} dividerColor={c.line} items={[
           { icon: <Flame size={14} color={c.muted} />, text: meal.meta.kcal },
