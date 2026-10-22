@@ -85,7 +85,7 @@ export default function Today() {
   if (mealsSettled && primary !== 'wrap') { order.splice(order.indexOf('meals'), 1); order.splice(order.indexOf('trackers') + 1, 0, 'meals'); }
   const assigned = planStore.use().assigned;
   if (!assigned) order.splice(0, order.length, 'trackers'); // no plans: only the trackers
-  const slots: Record<Slot, React.ReactNode> = { workout: <WorkoutCard />, meals: <ViewOnly><MealNowCard /></ViewOnly>, trackers: <ViewOnly><Trackers /></ViewOnly>, week: <View style={{ gap: 12 }}><WeekCard /><StreakChip /></View> }; // the weekly streak sits right under the week it counts
+  const slots: Record<Slot, React.ReactNode> = { workout: <WorkoutCard />, meals: <ViewOnly><MealNowCard /></ViewOnly>, trackers: <ViewOnly><Trackers /></ViewOnly>, week: <View style={{ gap: 12 }}><StreakChip /><WeekCard /></View> }; // the weekly streak sits right above the week it counts
   const focusMeal = focus.kind === 'meal' ? focus.meal.id : null;
   useEffect(() => { if (focusMeal) set({ openMeal: focusMeal }); }, [focusMeal]); // eslint-disable-line react-hooks/exhaustive-deps
   const gs = goalStore.use();
