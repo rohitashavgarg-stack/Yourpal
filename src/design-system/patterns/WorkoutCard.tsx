@@ -76,14 +76,14 @@ function Coach({ dim = false, unread, onPress }: { dim?: boolean; unread?: boole
   );
 }
 
-// The workout name with its time as a small pill right after it.
+// The workout name with its time as a small pill right after it. The pill sits 3 px below the middle of the line box: the name is mostly lower-case with descenders, so its visual centre is lower than its capitals.
 function WorkoutTitle({ name, time, tone = 'default' }: { name: string; time?: string; tone?: 'default' | 'missed' }) {
   const missed = tone === 'missed';
   return (
     <Row style={{ gap: 10, flexWrap: 'wrap' }}>
       <Txt style={{ fontFamily: font.regular, fontSize: 34, lineHeight: 42, letterSpacing: -1.4, color: missed ? 'rgba(255,255,255,0.75)' : fixed.white }}>{name}</Txt>
       {!!time && (
-        <View style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, backgroundColor: missed ? 'rgba(242,179,91,0.14)' : 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
+        <View style={{ height: 28, paddingHorizontal: 10, marginTop: 6, borderRadius: 14, backgroundColor: missed ? 'rgba(242,179,91,0.14)' : 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: missed ? AMBER : fixed.white, textDecorationLine: missed ? 'line-through' : 'none' }}>{time}</Txt>
         </View>
       )}
