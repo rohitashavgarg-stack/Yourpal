@@ -4,6 +4,7 @@ import { fmtT, MEALS } from '@/lib/data';
 import { useShell } from '@/features/shell/state';
 import { goalCardStore } from '@/features/today/goalCardState';
 import { useSteps } from '@/features/today/StepsCards';
+import { reminderText } from '@/lib/microcopy';
 import { missedMeals } from '@/features/today/MealsCard';
 
 // Personal reminders: small, calm nudges that sit next to the thing they are about (a caption under the tile, the meals card's own "not logged" row)
@@ -47,15 +48,15 @@ export function useReminders(): Reminder[] {
   const on = (k: ReminderKey) => shell.notif[k as keyof typeof shell.notif] !== false && !rs.snoozed[k];
   const out: Reminder[] = [];
   const missed = missedMeals(d);
-  if (on('meals') && missed.length) { const m = MEALS.find((q) => q.id === missed[missed.length - 1]); if (m) out.push({ key: 'meals', text: `${m.n} is not logged yet`, action: 'Log it' }); }
+  if (on('meals') && missed.length) { const m = MEALS.find((q) => q.id === missed[missed.length - 1]); if (m) out.push({ key: 'meals', text: reminderText.mealMissed(m.n), action: 'Log it' }); }
   if (on('water') && d.water < WATER_TARGET_L && d.min >= WAKE_MIN && d.min < SLEEP_MIN) {
     const since = rs.waterAt ?? WAKE_MIN;
-    if (d.min - since >= WATER_GAP_MIN) out.push({ key: 'water', text: rs.waterAt == null ? 'No water logged today' : `No water since ${fmtT(rs.waterAt).full}`, action: 'Add 250 ml' });
+    if (d.min - since >= WATER_GAP_MIN) out.push({ key: 'water', text: rs.waterAt == null ? reminderText.waterNone : reminderText.waterSince(fmtT(rs.waterAt).full), action: 'Add 250 ml' });
   }
-  if (on('weight') && weighDays >= WEIGH_NUDGE_DAYS) out.push({ key: 'weight', text: `Last weighed ${weighDays} days ago`, action: 'Log weight' });
+  if (on('weight') && weighDays >= WEIGH_NUDGE_DAYS) out.push({ key: 'weight', text: reminderText.weight(weighDays), action: 'Log weight' });
   if (on('steps') && d.hc && d.min >= 14 * 60 && d.min < SLEEP_MIN) {
     const dayShare = Math.min(1, (d.min - WAKE_MIN) / (SLEEP_MIN - WAKE_MIN));
-    if (steps.pct < 0.5 * dayShare) out.push({ key: 'steps', text: "Steps are behind today's pace" });
+    if (steps.pct < 0.5 * dayShare) out.push({ key: 'steps', text: reminderText.steps });
   }
   return out;
 }

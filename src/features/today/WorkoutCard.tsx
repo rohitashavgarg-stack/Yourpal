@@ -11,6 +11,7 @@ import { buildExercises, WORKOUT_MIN } from '@/features/workout/session';
 import { rel } from './meals';
 import { useLogGate } from '@/lib/logGate';
 import { createStore } from '@/features/progress/store';
+import { toastCopy } from '@/lib/microcopy';
 import { WorkoutCard as WorkoutCardPattern, WorkoutCardState } from '@/design-system/patterns/WorkoutCard';
 
 // What the member said about a missed workout (kept for the day): moved to tomorrow or skipped. "I did it" logs it as done instead.
@@ -39,8 +40,8 @@ export function TodayWorkoutCard({ restart = false }: { restart?: boolean } = {}
   const chips = comeback ? ['5 exercises', '~30 min', 'Lighter weights'] : [`${buildExercises().length} exercises`, `~${WORKOUT_MIN} min`];
   // while logging is paused nothing can be answered or started: the card just shows the plan
   const missed = !paused && st === 'todo' && !comeback && d.min - WKT > MISSED_AFTER;
-  const didIt = gate(() => { set({ wkDone: { a: WKT, b: WKT + WORKOUT_MIN, k: 350 } }); toast('Logged as done', { undo: () => set({ wkDone: null }) }); });
-  const answer = gate((a: 'moved' | 'skipped') => { missedWkStore.set({ answer: a }); toast(a === 'moved' ? 'Moved to tomorrow. Coach Vikram is told.' : 'Skipped today', { undo: () => missedWkStore.set({ answer: null }) }); });
+  const didIt = gate(() => { set({ wkDone: { a: WKT, b: WKT + WORKOUT_MIN, k: 350 } }); toast(toastCopy.workoutLogged, { undo: () => set({ wkDone: null }) }); });
+  const answer = gate((a: 'moved' | 'skipped') => { missedWkStore.set({ answer: a }); toast(a === 'moved' ? toastCopy.workoutMoved : toastCopy.workoutSkipped, { undo: () => missedWkStore.set({ answer: null }) }); });
   const burnedKcal = d.hc && d.wearable ? burned(d) : undefined;
 
   let ps: WorkoutCardState;

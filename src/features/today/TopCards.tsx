@@ -25,6 +25,7 @@ import { ringCentre, StatusChip } from '@/features/goalv2/GoalCard2';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { updateCopy } from '@/lib/microcopy';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
@@ -190,12 +191,13 @@ export function useUpdates() {
   const { openSheet, toast } = useOverlay();
   const startWorkout = useStartWorkout();
   const isPT = state.sc.member === 'PT member';
+  const first = (state.profile.name || '').trim().split(' ')[0];
   const all: Upd[] = [
-    { key: 'plan', title: 'Coach Vikram updated your plan', body: 'Leg day: lunges added, leg extension removed', isPlan: true, icon: ClipboardList, tone: 'accent' },
-    { key: 'reply', title: 'Coach Vikram replied', body: '“Keep your back straight on rows.”', btn: 'Reply', act: () => toast('Chat with Coach Vikram opens in the Gym tab'), icon: MessageCircle, tone: 'accent' },
-    { key: 'reassess', title: 'Reassessment due', body: 'Book it at the front desk this week.', icon: CalendarClock, tone: 'warn' },
-    { key: 'member', title: 'Membership', body: 'Expires in 12 days. Renew at the front desk.', icon: CreditCard, tone: 'warn' },
-    { key: 'log', title: 'Checked in at 6:42 pm', body: "Log today's workout?", btn: 'Log workout', act: () => startWorkout(), icon: CircleCheck, tone: 'good' },
+    { key: 'plan', ...updateCopy.plan, isPlan: true, icon: ClipboardList, tone: 'accent' },
+    { key: 'reply', ...updateCopy.reply, btn: 'Reply', act: () => toast('Chat with Coach Vikram opens in the Gym tab'), icon: MessageCircle, tone: 'accent' },
+    { key: 'reassess', ...updateCopy.reassess(first), icon: CalendarClock, tone: 'warn' },
+    { key: 'member', ...updateCopy.memberSoon, icon: CreditCard, tone: 'warn' },
+    { key: 'log', ...updateCopy.checkedIn(first, '6:42 pm'), btn: 'Log workout', act: () => startWorkout(), icon: CircleCheck, tone: 'good' },
   ];
   const live = d.todayVariant === 'With updates' ? all.filter((u) => !d.dismissed[u.key]) : [];
   const dismiss = (k: string) => { haptic.light(); set((s) => ({ dismissed: { ...s.dismissed, [k]: true } })); };

@@ -84,7 +84,7 @@ The sample numbers are what the demo panel and the screenshots show for a "Lose 
 
 ## Strip variant
 
-One row inside the Daily budget card, edge to edge, 64 px minimum height, `rgba(255,255,255,0.07)` background and a 1 px `rgba(255,255,255,0.14)` line on top. It has no corner radius of its own: the budget card clips it.
+One row inside the Daily budget card, at the top, edge to edge, 64 px minimum height, `rgba(255,255,255,0.07)` background and a 1 px `rgba(255,255,255,0.14)` line under it. It has no corner radius of its own: the budget card clips it.
 
 Target icon (22 px), the label "Goal" (14 px, `#C9CDD6`), the goal name (17 px, white), the right text (15 px) and a chevron.
 

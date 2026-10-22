@@ -85,29 +85,29 @@ export function CheckInBar() {
   if (mode === 'here' || mode === 'near') {
     const here = mode === 'here';
     if (here) icBg = c.accentSoft;
-    title = here ? "You're at Wulf Fitness" : "Almost at Wulf Fitness";
-    sub = here ? 'Inside the 20 m check-in area' : '25 m away · check-in opens within 20 m';
+    title = here ? 'You made it to Wulf Fitness' : 'Almost at Wulf Fitness';
+    sub = here ? 'You are inside the check-in area' : 'You are 25 m away. Check-in opens at 20 m.';
     btn = here ? 'Check in' : 'Map';
     pillTone = here ? 'ink' : 'soft';
     act = () => router.push('/checkin');
   } else if (mode === 'in') {
     icBg = c.goodSoft; pillTone = 'soft';
     const mins = Math.max(0, Math.floor(elapsedMin(d, now)));
-    title = 'Checked in';
+    title = 'You are checked in';
     chip = `${mins} min`;
     progress = Math.min(1, mins / limitOf(d));
-    sub = `Since ${fmtT(at!).full} · ${st === 'todo' ? 'Leg day is next' : st === 'done' ? 'Workout done' : 'Rest day'}`;
+    sub = `Since ${fmtT(at!).full}. ${st === 'todo' ? 'Leg day is next.' : st === 'done' ? 'Workout done.' : 'Rest day.'}`;
     if (st === 'todo') { btn = 'Start workout'; act = () => startWorkout(); }
     else { btn = 'Check out'; act = A.checkOut; }
     icon = <Check size={16} strokeWidth={2.6} color={c.good} />;
   } else if (mode === 'out') {
     bg = c.surface; icBg = c.goodSoft;
     const o = d.ciOut!;
-    title = `Checked out ${fmtT(o.at).full}`;
-    sub = `${o.mins} min at the gym${o.auto === 'time' ? ' · automatic' : o.auto === 'left' ? ' · you left the gym' : ''}`;
+    title = `You checked out at ${fmtT(o.at).full}`;
+    sub = `${o.mins} minutes at the gym.${o.auto === 'time' ? ' Checked out automatically.' : o.auto === 'left' ? ' You left the gym.' : ''}`;
     icon = <Check size={17} strokeWidth={2.6} color={c.good} />;
   } else {
-    title = 'Location is off'; sub = 'Turn it on to check in · front desk can also mark you'; btn = 'Turn on'; open = null;
+    title = 'Location is off'; sub = 'Turn it on to check in, or ask the front desk to mark you.'; btn = 'Turn on'; open = null;
     act = () => { set({ ci: 'At the gym' }); haptic.success(); toast('Location on. We only check it while the app is open'); };
     icon = <LocateOff size={17} color={fg} />;
   }

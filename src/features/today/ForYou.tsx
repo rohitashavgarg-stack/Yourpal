@@ -27,6 +27,8 @@ import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
 import { useUpdates } from './TopCards';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { toastCopy, updateCopy } from '@/lib/microcopy';
+import { goalCardStore } from './goalCardState';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // The slim goal strip moved to src/design-system/_archive/ForYouGoalStrip.tsx (archived: nothing renders it). Re-exported so the old import keeps working.
@@ -49,13 +51,14 @@ export function useForYou(): Item[] {
   const { live } = useUpdates();
   const { openSheet } = useOverlay();
   const { state } = useStore();
+  const first = (state.profile.name || '').trim().split(' ')[0];
   const startWorkout = useStartWorkout();
   const missedWk = missedWkStore.use();
   const plansOn = planStore.use().assigned;
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
-  if (ptPending && d.hasGym && !logsPaused) out.push({ key: 'pt', title: 'Confirm your PT session', body: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', critical: true, tone: 'accent', who: true, two: true });
-  if (d.hasGym && d.membership === 'Expiring') out.push({ key: 'member-exp', title: 'Membership ends in 12 days', body: 'Expires on 6 Oct. Renew at Wulf Fitness reception.', tone: 'warn', icon: Clock, btn: 'View plan', act: () => router.push('/gym/membership') });
+  if (ptPending && d.hasGym && !logsPaused) out.push({ key: 'pt', title: updateCopy.pt.title, body: updateCopy.pt.body, critical: true, tone: 'accent', who: true, two: true });
+  if (d.hasGym && d.membership === 'Expiring') out.push({ key: 'member-exp', title: updateCopy.membership.title, body: updateCopy.membership.body, tone: 'warn', icon: Clock, btn: 'View plan', act: () => router.push('/gym/membership') });
   const order = ['reassess', 'reply', 'plan', 'log'];
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
     out.push({ key: u.key, title: u.title, body: u.body, tone: u.tone, who: ['plan', 'reply'].includes(u.key), icon: u.icon, btn: u.isPlan ? 'See changes' : u.btn, act: u.isPlan ? () => router.navigate('/plans') : u.act });
@@ -66,18 +69,18 @@ export function useForYou(): Item[] {
     const meal = nm ? MEALS.find((m) => m.id === nm) : undefined;
     if (meal && d.min >= meal.t - 30) {
       const late = d.min > meal.t + 60;
-      out.push({ key: 'log-meal', title: 'Log your ' + meal.n.toLowerCase(), body: late ? 'It was due at ' + fmtT(meal.t).full + '. Log it, or skip it if you missed it.' : 'It is time for ' + meal.n.toLowerCase() + '. Log it when you eat.', tone: 'accent', icon: UtensilsCrossed, btn: 'Log meal', act: () => openSheet(<LogMealsSheet mealId={meal.id} />, { label: 'Log meal' }) });
+      out.push({ key: 'log-meal', ...updateCopy.meal(meal.n, first, fmtT(meal.t).full, late), tone: 'accent', icon: UtensilsCrossed, btn: 'Log meal', act: () => openSheet(<LogMealsSheet mealId={meal.id} />, { label: 'Log meal' }) });
     }
     const planned = plannedMin(state.profile.time);
     if (workoutState(d) === 'todo' && d.min - planned > MISSED_AFTER && !missedWk.answer && !live.some((u) => u.key === 'log')) {
-      out.push({ key: 'log-workout', title: 'Log your workout', body: 'Leg day was planned for ' + fmtT(planned).full + '. Log it if you trained, or skip it.', tone: 'accent', icon: Dumbbell, btn: 'Start workout', act: () => startWorkout() });
+      out.push({ key: 'log-workout', ...updateCopy.workout(first, fmtT(planned).full), tone: 'accent', icon: Dumbbell, btn: 'Start workout', act: () => startWorkout() });
     }
   }
   // Personal reminders (log your water, log your weight, steps behind): a card each, last in the stack; the meals reminder lives in the meals card.
   reminders.filter((r) => r.key !== 'meals').forEach((r) => {
-    if (r.key === 'water') out.push({ key: 'rem-water', title: 'Log your water', body: r.text, tone: 'accent', icon: GlassWater, btn: r.action, act: () => { set({ water: Math.min(3.5, Math.round((d.water + 0.25) * 100) / 100) }); reminderStore.set({ waterAt: d.min }); toast('Added 250 ml'); } });
-    else if (r.key === 'weight') out.push({ key: 'rem-weight', title: 'Log your weight', body: r.text, tone: 'accent', icon: Scale, btn: r.action, act: () => router.push('/log-weight') });
-    else if (r.key === 'steps') out.push({ key: 'rem-steps', title: 'Steps are behind', body: "A short walk catches you up today.", tone: 'accent', icon: Footprints });
+    if (r.key === 'water') out.push({ key: 'rem-water', ...updateCopy.water(first, reminderStore.get().waterAt == null ? null : fmtT(reminderStore.get().waterAt!).full), tone: 'accent', icon: GlassWater, btn: r.action, act: () => { set({ water: Math.min(3.5, Math.round((d.water + 0.25) * 100) / 100) }); reminderStore.set({ waterAt: d.min }); toast(toastCopy.glassAdded); } });
+    else if (r.key === 'weight') out.push({ key: 'rem-weight', ...updateCopy.weight(first, goalCardStore.get().weighDays), tone: 'accent', icon: Scale, btn: r.action, act: () => router.push('/log-weight') });
+    else if (r.key === 'steps') out.push({ key: 'rem-steps', ...updateCopy.steps(first), tone: 'accent', icon: Footprints });
   });
   return out.filter((i) => i.critical || !d.dismissed[i.key]);
 }

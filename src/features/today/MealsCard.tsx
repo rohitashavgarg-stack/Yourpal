@@ -7,7 +7,8 @@ import { inr } from '@/lib/useNow';
 import { mealById, mealKcal, mealView } from './meals';
 import { QuickLogSheet } from './QuickLogSheet';
 import { useLogGate } from '@/lib/logGate';
-import { MealChipItem, MealsCard as MealsCardPattern, MealsCardState, MealTone, ShownMeal } from '@/design-system/patterns/MealsCard';
+import { toastCopy } from '@/lib/microcopy';
+import { MealsCard as MealsCardPattern, MealsCardState, MealTone, ShownMeal } from '@/design-system/patterns/MealsCard';
 
 export { MealsCard } from '@/design-system/_archive/MealsAccordion'; // the old all-meals accordion, archived
 
@@ -54,18 +55,18 @@ export function TodayMealNowCard() {
   const withUndo = (msg: string, fn: () => void) => { const prev = d.meals; fn(); toast(msg, { undo: () => set({ meals: prev }) }); };
   const toggle = gate((k: number) => {
     const willFull = !x.eaten.includes(k) && x.eaten.length + 1 === m.items.length;
-    if (willFull) withUndo(`${m.n} done, +${mealKcal(m)} kcal`, () => toggleItem(shown, k));
+    if (willFull) withUndo(toastCopy.mealDone(m.n, mealKcal(m)), () => toggleItem(shown, k));
     else toggleItem(shown, k);
   });
   const removeExtra = gate((j: number) => {
     const gone = x.extra[j];
-    withUndo(`Removed ${gone?.n ?? 'item'}`, () => patch(shown, { extra: x.extra.filter((_, i) => i !== j) }));
+    withUndo(toastCopy.removed(gone?.n ?? 'item'), () => patch(shown, { extra: x.extra.filter((_, i) => i !== j) }));
   });
   const all = gate(() => {
     if (x.skip) patch(shown, { skip: false });
     else if (v.full) patch(shown, { eaten: [] });
-    else if (v.any) withUndo(`${m.n} done`, () => patch(shown, { eaten: m.items.map((_, k) => k), at: x.at ?? d.min }));
-    else withUndo(`${m.n} skipped`, () => patch(shown, { skip: true, eaten: [] }));
+    else if (v.any) withUndo(toastCopy.mealMarked(m.n), () => patch(shown, { eaten: m.items.map((_, k) => k), at: x.at ?? d.min }));
+    else withUndo(toastCopy.mealSkipped(m.n), () => patch(shown, { skip: true, eaten: [] }));
   });
   const allL = x.skip ? 'Undo skip' : v.full ? 'Unmark all' : v.any ? 'Mark rest eaten' : 'Skip meal';
   const openFood = (k: number, extra: boolean) => router.push({ pathname: '/food', params: { mid: shown, k: String(k), extra: extra ? '1' : '0' } });
@@ -87,19 +88,18 @@ export function TodayMealNowCard() {
     allLabel: allL,
     allActive: !!x.skip || v.any,
   };
-  const strip: MealChipItem[] = MEALS.map((q) => ({ id: q.id, name: q.n, label: q.n === 'Evening snack' ? 'Snack' : q.n, text: text(q.id), tone: tone(q.id), selected: q.id === shown }));
   const askMeal = ask ? mealById(ask) : null;
   return (
     <MealsCardPattern state={state} done={t.done} total={MEALS.length}
       pausedLine={`${inr(t.k)} of ${inr(KCAL_TARGET)} kcal, ${t.done} of 4 meals logged`}
-      completeLine={`All ${MEALS.length} meals logged. Protein ${t.p} of ${MACRO_TARGET.p} g.`}
+      completeLine={`All ${MEALS.length} meals logged today. Protein is at ${t.p} of ${MACRO_TARGET.p} g.`}
       rows={MEALS.map((q) => { const xl = mealLog(d, q.id); const mv = mealView(d, q); return { id: q.id, name: q.n, skipped: !!xl.skip, sub: xl.skip ? 'Skipped' : `${mv.kcal} kcal${xl.at != null ? ', ' + fmtT(xl.at).full : ''}` }; })}
       onOpenMeal={(id) => set({ openMeal: id as MealId })}
-      meal={shownMeal} strip={strip} onPick={(id) => set({ openMeal: id === now ? null : (id as MealId) })}
+      meal={shownMeal}
       ask={askMeal ? { name: askMeal.n, planned: fmtT(askMeal.t).full, more: missed.length - 1 } : undefined}
-      onAskAteIt={() => ask && answer(ask, `${askMeal!.n} logged as planned`, { eaten: askMeal!.items.map((_, k) => k), skip: false, at: askMeal!.t })}
+      onAskAteIt={() => ask && answer(ask, toastCopy.mealAsPlanned(askMeal!.n), { eaten: askMeal!.items.map((_, k) => k), skip: false, at: askMeal!.t })}
       onAskSomethingElse={() => ask && ateElse(ask)()}
-      onAskSkipped={() => ask && answer(ask, `${askMeal!.n} skipped`, { skip: true, eaten: [] })}
+      onAskSkipped={() => ask && answer(ask, toastCopy.mealSkipped(askMeal!.n), { skip: true, eaten: [] })}
       onToggleItem={toggle} onOpenFood={openFood} onRemoveExtra={removeExtra} onAteElse={ateElse(shown)} onAll={all} />
   );
 }

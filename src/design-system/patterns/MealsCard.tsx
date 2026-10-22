@@ -11,8 +11,8 @@ import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { font, fontSizes, radii } from '@/design-system/tokens';
 
 /**
- * The Today meals card. It shows only the meal for right now, with a small strip of the whole day under it.
- *   now        the meal on screen (items with one tick each, "Ate something else", Skip) and the day strip.
+ * The Today meals card. It shows only the meal for right now.
+ *   now        the meal on screen (items with one tick each, "Ate something else", Skip).
  *              `ask` adds the "wasn't logged" prompt for the most recent missed meal.
  *   complete   every meal is logged: a plain list, tap a meal to open it
  *   paused     the membership has ended: logging is off, the day's total is still shown
@@ -40,7 +40,6 @@ export type ShownMeal = {
   allActive: boolean;
 };
 export type MissedAsk = { name: string; /** "3:30 pm" */ planned: string; /** how many more missed meals after this one */ more: number };
-export type MealChipItem = { id: string; /** "Dinner" */ name: string; /** "Snack" for the evening snack */ label: string; /** "Logged", "Now", "3:30 pm" */ text: string; tone: MealTone; selected: boolean };
 export type MealSummaryRow = { id: string; name: string; skipped: boolean; sub: string };
 
 export type MealsCardProps = {
@@ -57,8 +56,6 @@ export type MealsCardProps = {
   /** now */
   meal?: ShownMeal;
   ask?: MissedAsk;
-  strip?: MealChipItem[];
-  onPick?: (id: string) => void;
   onToggleItem?: (k: number) => void;
   onOpenFood?: (k: number, extra: boolean) => void;
   onRemoveExtra?: (j: number) => void;
@@ -114,8 +111,8 @@ function MissedPrompt({ ask, onAteIt, onSomethingElse, onSkipped }: { ask: Misse
       <Row style={{ gap: 10 }}>
         <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}><Clock size={18} color={c.warn} /></View>
         <View style={{ flex: 1 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{`${ask.name} wasn't logged`}</Txt>
-          <Txt v="caption">{ask.more ? `Planned for ${ask.planned}. ${ask.more} more to catch up.` : `Planned for ${ask.planned}`}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{`Did you have ${n}?`}</Txt>
+          <Txt v="caption">{ask.more ? `It was planned for ${ask.planned}. ${ask.more} earlier ${ask.more === 1 ? 'meal' : 'meals'} still to log.` : `It was planned for ${ask.planned}.`}</Txt>
         </View>
       </Row>
       <Row style={{ gap: 8 }}>
@@ -231,10 +228,6 @@ export function MealsCard(p: MealsCardProps) {
   }
 
   const meal = p.meal!;
-  const tones: Record<MealTone, { col: string; bg: string }> = {
-    skipped: { col: c.muted, bg: c.surface2 }, logged: { col: c.good, bg: c.surface2 }, missed: { col: c.warn, bg: c.warnSoft },
-    now: { col: c.accentText, bg: c.accentSoft }, later: { col: c.muted, bg: c.surface2 },
-  };
   return (
     <Card style={{ paddingTop: 20, paddingHorizontal: 16, paddingBottom: 16, gap: 14, overflow: 'hidden' }}>
       <MealsBackdrop />
@@ -257,19 +250,6 @@ export function MealsCard(p: MealsCardProps) {
         </View>
       </Row>
       <MealItems meal={meal} onToggleItem={p.onToggleItem} onOpenFood={p.onOpenFood} onRemoveExtra={p.onRemoveExtra} onAteElse={p.onAteElse} onAll={p.onAll} />
-      <Row style={{ gap: 6 }}>
-        {(p.strip ?? []).map((q) => {
-          const t = tones[q.tone];
-          return (
-            <Pressy key={q.id} accessibilityRole="button" accessibilityState={{ selected: q.selected }} accessibilityLabel={`${q.name}, ${q.text}`} scaleTo={0.96}
-              onPress={() => p.onPick?.(q.id)}
-              style={{ flex: 1, minHeight: 48, borderRadius: 14, paddingHorizontal: 8, paddingVertical: 7, backgroundColor: t.bg, borderWidth: q.selected ? 1.5 : 0, borderColor: c.accent, justifyContent: 'center' }}>
-              <Txt numberOfLines={1} style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 17 }}>{q.label}</Txt>
-              <Txt numberOfLines={1} style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: t.col }}>{q.text}</Txt>
-            </Pressy>
-          );
-        })}
-      </Row>
     </Card>
   );
 }

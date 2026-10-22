@@ -53,7 +53,7 @@ export function TodayWeekCard() {
   const week: WeekDay[] = list.map((x, i) => ({ num: x.num, letter: x.let, name: DN[i], workout: x.wk, mealsPct: x.mealW, future: x.fut, today: x.today }));
   const onDayPress = (i: number) => (list[i].fut ? router.navigate({ pathname: '/plans', params: { day: String(i) } }) : openSheet(<DaySheet i={i} />, { label: 'Day summary' }));
   return <WeekCardPattern days={week} workoutsDone={doneN} onDayPress={onDayPress}
-    summary={`${doneN} of 4 workouts · ${7 + t.onPlan} of 12 meals on plan · ${ciTime(d) != null ? '2 check-ins' : '1 check-in'}`} />;
+    summary={`You have done ${doneN} of 4 workouts, kept ${7 + t.onPlan} of 12 meals on plan and checked in ${ciTime(d) != null ? 'twice' : 'once'} this week.`} />;
 }
 export { TodayWeekCard as WeekCard }; // the old name, so existing imports keep working
 

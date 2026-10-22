@@ -104,7 +104,7 @@ const STRIP = { white: '#F3F4F6', soft: '#C9CDD6' };
 function GoalStripRow({ name, right, rightColor, none }: { name: string; right: string; rightColor: string; none: boolean }) {
   return (
     <Pressy accessibilityRole="link" accessibilityLabel={none ? 'No goal set yet. Open' : `Your goal: ${name}, ${right}. Open`} onPress={() => router.push('/goal-detail')} scaleTo={0.98}
-      style={{ minHeight: 64, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.14)', backgroundColor: 'rgba(255,255,255,0.07)', paddingHorizontal: 18, justifyContent: 'center' }}>
+      style={{ minHeight: 64, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.14)', backgroundColor: 'rgba(255,255,255,0.07)', paddingHorizontal: 18, justifyContent: 'center' }}>
       <Row style={{ gap: 12 }}>
         <Target size={22} color={none ? GC.emptyTitle : STRIP.white} />
         <View style={{ flex: 1 }}>

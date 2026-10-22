@@ -72,3 +72,50 @@ export const QUOTES = [
   'Discipline is just remembering what you want.',
 ];
 export const quoteOfDay = (day: number) => QUOTES[day % QUOTES.length];
+
+// ---------- Today: update cards, reminders and the small messages after an action ----------
+// Same voice: a coach who noticed something. Fact first, then what to do about it, in a sentence a person would say. The name is used once per
+// message at most, and only where it reads naturally.
+const nm = (first: string) => (first ? ', ' + first : '');
+export const updateCopy = {
+  meal: (meal: string, first: string, planned: string, late: boolean) => {
+    const m = meal.toLowerCase();
+    return late
+      ? { title: `Did you have ${m}${nm(first)}?`, body: `It was planned for ${planned}. Log what you ate, or skip it if you missed it.` }
+      : { title: `${meal} time${nm(first)}`, body: 'Log it when you sit down to eat, so your total for today stays right.' };
+  },
+  workout: (first: string, planned: string) => ({ title: `Did you train today${nm(first)}?`, body: `Leg day was planned for ${planned}. Log it if you went, or skip it.` }),
+  water: (first: string, last: string | null) => ({
+    title: `Have some water${nm(first)}`,
+    body: last ? `Your last glass was at ${last}. Have one now to stay on track for today.` : 'You have not logged any water today. Start with one glass.',
+  }),
+  weight: (first: string, days: number) => ({ title: `Time to weigh in${nm(first)}`, body: `It has been ${days} days since your last weigh-in. A quick check keeps your goal on track.` }),
+  steps: (first: string) => ({ title: `A short walk${nm(first)}?`, body: 'Your steps are behind today. Ten minutes outside gets you close.' }),
+  pt: { title: 'Did your session happen?', body: 'Coach Vikram marked Tue 23 Sep, 6 to 7 pm as done. Confirm it, or it confirms itself on Fri 26 Sep.' },
+  membership: { title: 'Your membership ends in 12 days', body: 'It expires on 6 Oct. Renew at Wulf Fitness reception to keep going.' },
+  plan: { title: 'Coach Vikram updated your plan', body: 'Leg day has a few changes: lunges added, leg extension removed.' },
+  reply: { title: 'Coach Vikram replied to you', body: '“Keep your back straight on rows.”' },
+  reassess: (first: string) => ({ title: `Your reassessment is due${nm(first)}`, body: 'Book a slot at the front desk this week so Coach Vikram can update your plan.' }),
+  memberSoon: { title: 'Your membership ends soon', body: 'It expires in 12 days. Renew at the front desk to keep your plan going.' },
+  checkedIn: (first: string, at: string) => ({ title: `You checked in at ${at}`, body: `Log today's workout when you are done${nm(first)}.` }),
+};
+// The caption under a tracker tile or the text of a phone reminder: short, one line.
+export const reminderText = {
+  mealMissed: (meal: string) => `You have not logged ${meal.toLowerCase()} yet`,
+  waterNone: 'No water yet today',
+  waterSince: (last: string) => `Last glass was at ${last}`,
+  weight: (days: number) => `It has been ${days} days since you weighed in`,
+  steps: 'Steps are behind today',
+};
+// What the app says after an action.
+export const toastCopy = {
+  workoutLogged: "Logged. That is today's workout done.",
+  workoutMoved: 'Moved to tomorrow. Coach Vikram is told.',
+  workoutSkipped: 'Skipped. Your plan picks up tomorrow.',
+  glassAdded: 'Added a glass, 250 ml',
+  mealDone: (meal: string, kcal: number) => `${meal} logged, ${kcal} kcal in`,
+  mealAsPlanned: (meal: string) => `${meal} logged as planned`,
+  mealSkipped: (meal: string) => `${meal} skipped`,
+  mealMarked: (meal: string) => `${meal} marked eaten`,
+  removed: (what: string) => `Removed ${what}`,
+};

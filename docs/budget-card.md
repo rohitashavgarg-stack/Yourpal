@@ -1,6 +1,6 @@
 # Daily budget (BudgetCard)
 
-`src/design-system/patterns/BudgetCard.tsx`. Today's calories, eaten and burned, on one dark card, with the Programme goal as a strip along the bottom. This is the live top card on Today. It is a separate component from the goal card; it only uses the goal card's `strip` variant for its last row.
+`src/design-system/patterns/BudgetCard.tsx`. Today's calories, eaten and burned, on one dark card, with the Programme goal as a strip along the top. This is the live top card on Today. It is a separate component from the goal card; it only uses the goal card's `strip` variant for its last row.
 
 The card draws what it is given. `TodayBudgetCard` (`src/features/today/TodayBudget.tsx`) is the container that reads the member's day and passes the numbers in.
 
@@ -26,7 +26,7 @@ The card draws what it is given. `TodayBudgetCard` (`src/features/today/TodayBud
 |---|---|---|
 | `plan` | `/ 350 planned` | nothing measured: no watch and the workout is not done. The number is 0 |
 | `done` | `/ 350 done` | the workout was logged. The number is that workout's burn (380 in the demo) |
-| `watch` | `/ 350 watch` | Health and a wearable are both connected. The number is the live burn |
+| `watch` | `/ 350` (no word) | Health and a wearable are both connected. The number is the live burn |
 
 ## How the container fills it
 
@@ -51,7 +51,7 @@ A burned number needs a watch; without one the card shows the plan, not a measur
 | Bar | track `rgba(255,255,255,0.18)`, corner radius `radii.xs` (4); the fill is clamped between 0 and 100 percent, the number is not |
 | Eat | label "Eat today", fork and knife icon and bar in mint `#2EE6A8` |
 | Burn | label "Burn today", flame icon and bar in orange `#FF9A4D` |
-| Goal row | `GoalCard variant="strip"`, see `docs/goal-card.md` |
+| Goal row | the first row, above Eat and Burn: `GoalCard variant="strip"`, see `docs/goal-card.md`. Its divider line is under it |
 
 ## States
 

@@ -55,12 +55,12 @@ export function BudgetCard({ eaten, eatTarget, burned, burnTarget, burnSource = 
   return (
     <View style={{ borderRadius: radii.xl, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
       <LinearGradient colors={['#1B1D22', '#1E2438', '#2A3860']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      <GoalCard variant="strip" state={goalState} />
       <Row style={{ gap: 16, alignItems: 'flex-start', paddingHorizontal: 18, paddingTop: 18, paddingBottom: 16 }}>
         <Half icon={<UtensilsCrossed size={17} color={MINT} />} label="Eat today" unit="kcal" value={inr(eaten)} of={inr(eatTarget)} pct={eaten / eatTarget} color={MINT} />
         <View style={{ width: 1, alignSelf: 'stretch', backgroundColor: 'rgba(255,255,255,0.12)' }} />
-        <Half icon={<Flame size={17} color={BURN} />} label="Burn today" unit="kcal" value={inr(burned)} of={`${inr(burnTarget)} ${SOURCE_WORD[burnSource]}`} pct={burned / burnTarget} color={BURN} />
+        <Half icon={<Flame size={17} color={BURN} />} label="Burn today" unit="kcal" value={inr(burned)} of={burnSource === 'watch' ? inr(burnTarget) : `${inr(burnTarget)} ${SOURCE_WORD[burnSource]}`} pct={burned / burnTarget} color={BURN} />
       </Row>
-      <GoalCard variant="strip" state={goalState} />
     </View>
   );
 }
