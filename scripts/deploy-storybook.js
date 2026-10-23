@@ -20,7 +20,8 @@ fs.rmSync(site, { recursive: true, force: true });
 fs.mkdirSync(site, { recursive: true });
 fs.cpSync(path.join(root, 'storybook-static'), site, { recursive: true });
 run('vercel link --yes --project yourpal-storybook', site);
-run('vercel git disconnect --yes', site); // linking connects the repo; deploys here are by hand
+// linking connects the repo; deploys here are by hand. Nothing to disconnect when it is already disconnected.
+try { execSync('vercel git disconnect --yes', { cwd: site, stdio: 'pipe' }); } catch { /* already disconnected */ }
 run('vercel deploy --prod --yes', site);
 fs.rmSync(path.join(site, '.env.local'), { force: true });
 console.log('\nLive at https://yourpal-storybook.vercel.app');

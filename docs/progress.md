@@ -47,5 +47,7 @@ Same rules as round 2: no behaviour change, 2 px or less uses the variant and is
 | F1 | Cards the library does not know: soft panel and callout (new Callout primitive, InfoBox built on it, Card tone) | done: 15 hand-built blocks replaced, 7 exact, 8 within 2 px (recorded in docs/review-changes.md); hand-built 179 to 163 | 8e14d87 |
 | F2 | ProgressBar primitive (3, 4, 6, 8 px) and ProgressSegments; 10 hand-built bars replaced | done: all exact (no visible change in the screenshots); hand-built 163 to 152; pager dots, ruler ticks, chart bars and the check-in line stay as they are | 83f29a3 |
 | F3 | IconBadge and StatusDot adopted for the small icon tiles and dots | done: 61 tiles and 4 dots swapped by a codemod, all exact (full dark capture compared: only rotating greeting and quote text differ); tokens onDark.ember and onDark.gold | c52c290 |
-| F4 | Move Txt, Row, Segmented, Tag, CheckCircle, FoodMark, Ring, Avatar and the rest of group 1 into the design-system folder | not started | |
-| F5 | Refresh review screenshots (dark), coverage page, docs, zip | not started | |
+| F4 | Move Txt, Row, Segmented, Tag and the rest of group 1 into the design-system folder | not done, left out on purpose: it is a refactor beyond the developer handoff; listed in docs/HANDOFF-INDEX.md and docs/design-system-components.md ("Still in components/ui.tsx") as the next step | |
+| F5 | Handoff refresh: counts, index, Storybook rebuilt and redeployed (180 stories, live), zip rebuilt | done | (this commit) |
+
+**Developer handoff package is current** (F1 to F3 included). Storybook live: https://yourpal-storybook.vercel.app (180 stories). Zip: handoff/yourpal-design-system-handoff.zip. Not merged into main except the two fixes that went straight to main (the freeze fix and the pinned Save meal).

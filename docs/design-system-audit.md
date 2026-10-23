@@ -1,27 +1,28 @@
 # YourPal design-system audit
 
-## Final counts (after Phase B)
+## Final counts (end of the developer handoff)
 
 | Measure | Count |
 |---|---|
-| Hand-built elements left | **179** (216 before Phase B, 222 at the first audit) |
-| Library components | **27** `.tsx` files: 20 in `src/design-system/primitives/` (Option is new in Phase B), 7 in `src/design-system/patterns/` |
-| Near-matches resolved | **41**: 37 now use the library, 4 stay hand-built with a reason (`docs/coverage-exceptions.md`) |
+| Hand-built elements left | **95** (222 at the first audit, 216 after the first handoff round, 179 after the near-match round, 95 now) |
+| Library components | **29** `.tsx` files: 22 in `src/design-system/primitives/` (Callout and ProgressBar are new), 7 in `src/design-system/patterns/` |
+| Near-matches resolved | **41**: 37 use the library, 4 stay hand-built with a reason (`docs/coverage-exceptions.md`) |
+| Added after that | Callout (15 notices and soft panels), ProgressBar and ProgressSegments (10 bars), IconBadge and StatusDot adopted (61 tiles, 4 dots) |
 
-Hand-built elements by kind (from `docs/coverage-data.json`, de-duplicated by file:line the way `scripts/audit/coverage-md.js` does it, which is the 179 in `docs/coverage.md` and `docs/coverage-elements.md`):
+Hand-built elements by kind (the 95 in `docs/coverage.md`, counted per screen, web demo panel left out):
 
 | Kind | Count |
 |---|---|
-| icon badge | 80 |
-| card | 32 |
 | button or pill | 28 |
-| bar | 24 |
+| icon badge | 20 |
+| card | 15 |
+| bar | 11 |
 | chip | 7 |
 | input | 5 |
-| icon button | 3 |
-| **Total** | **179** |
+| icon button | 2 |
+| **Total** | **95** |
 
-Counting every unique file:line in `routes[].hand` and `shared[].hand` with no exclusions gives 193; the 14 extra are in the web-only demo panel (`src/web/`), which the coverage map leaves out.
+Counting every unique file:line with no exclusions gives 109 (the Storybook Coverage page uses that number); the extra are in the web-only demo panel (`src/web/`), which the coverage map leaves out.
 
 The rest of this file is the original audit, unchanged.
 
