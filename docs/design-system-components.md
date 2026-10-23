@@ -39,7 +39,7 @@ Every component in `src/design-system/`, with its variants and states. Each has 
 | [MealsCard](../src/design-system/docs/MealsCard.md) | `patterns/MealsCard.tsx` | The meal for right now; the button opens the log sheet | now (todo, logged, skipped; with or without the missed-meal prompt), complete, paused |
 | [TrackerRow and tiles](../src/design-system/docs/TrackerRow.md) | `patterns/TrackerRow.tsx` | Quick trackers on Today: 160 px tiles in a sideways scroll | not connected, connected, connected + wearable. WeightTile down or up; WaterTile 0 to 3 L, ripple; HealthTile hr, sleep, kcal; ConnectTile; TrackerTile pressable or not |
 | [WeekCard](../src/design-system/docs/WeekCard.md) | `patterns/WeekCard.tsx` | This week: two stat tiles, seven days, legend | day today, past, future; workout done, rest, open ring, dashed ring; meals 0 to 4 dots on plan |
-| [WorkoutCard](../src/design-system/docs/WorkoutCard.md) | `patterns/WorkoutCard.tsx` | Today's workout | upcoming, due, live, missed, moved, skipped, done, rest, paused, comeback (small grey "Easy session" card with Start and "Do regular instead"); burned row with a watch |
+| [WorkoutCard](../src/design-system/docs/WorkoutCard.md) | `patterns/WorkoutCard.tsx` | Today's workout | upcoming, due, live, missed, moved, skipped, done, rest, paused, comeback (small grey "Easy session" card: 20 min, "4 exercises", "Half your usual load", "Start easy session" and "Not today"); burned row with a watch |
 
 ## Copy rules for every component
 

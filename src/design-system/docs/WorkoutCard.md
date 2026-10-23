@@ -23,11 +23,11 @@ Today's workout, one look per state. The state is a prop; `TodayWorkoutCard` (ol
 | `live` | `{ elapsed, done, total, next? }` | none | live: timer and exercise count |
 | `done` | `{ at, stats: [value, unit, label][] }` | none | done: "Done at 6:58 pm" and three stats |
 | `restNext` | string | none | rest: the chip "Next: Pull, Thu 6:30 pm" |
-| `onStart` | () => void | no-op | Start workout (upcoming, due); Start (comeback: starts the easy session) |
+| `onStart` | () => void | no-op | Start workout (upcoming, due); Start easy session (comeback) |
 | `onResume` | () => void | no-op | live |
 | `onDidIt`, `onMove`, `onSkip`, `onStartAnyway` | () => void | no-op | missed: the three answers and the quiet link |
 | `onUndo` | () => void | no-op | moved, skipped |
-| `onStartRegular` | () => void | no-op | comeback: the second button, "Do regular instead" |
+| `onNotToday` | () => void | no-op | comeback: the second button, "Not today" (the container answers it as a skip, with Undo) |
 
 ## States
 
@@ -44,11 +44,10 @@ Today's workout, one look per state. The state is a prop; `TodayWorkoutCard` (ol
 | done | Dark green gradient. Mint tick and "Done at 6:58 pm", name chip, "Workout complete", three stats (value, unit, label) |
 | rest | Dark purple gradient. Lilac moon and "Recovery", "Next: ..." chip, "Rest day", "Muscles grow on rest days. A 20 minute walk still counts." |
 | paused | Membership ended. Flat grey card (no gradient, no Start): lock tile, "Workouts are paused", "Renew at Wulf Fitness reception to see your plan and start again. Your history stays here." |
-| comeback | After a break. One small flat card (no gradient, no coach line, no chips): `surface2` fill, `radii.card` corners, 16 px padding. Title "Easy session" (semibold 17 / 24), one muted line "5 exercises, about 30 minutes, lighter weights", then two 44 px buttons side by side: **Start** (ink fill, background-coloured text) and **Do regular instead** (`surface3` fill, ink text). The greeting is not in the card: the screen shows it as plain text above (`ComebackGreeting`) |
+| comeback | After a break. One small flat card (no gradient, no coach line): `surface2` fill, `radii.card` corners, 16 px padding. Title "Easy session" (semibold 17 / 24), a muted line "20 min", two chips "4 exercises" and "Half your usual load", then two buttons side by side: **Start easy session** (primary) and **Not today** (`surface`). No exercise names. The greeting is not in the card: the screen shows it as plain text above (`ComebackGreeting`: "Good to see you back, <first name>." and "It's been <n> days. Coach <coach> picked an easy one to ease you in.") with the card directly beneath |
 
 The "Burned today N kcal / From your watch" row appears at the bottom of upcoming, due, rest and done when `burned` is set.
 
-Open: the designer's brief describes chips '4 exercises' and 'Half your usual load' and buttons 'Start easy session' and 'Not today'; the code has the version above. Waiting for a decision.
 
 Baseline images in `docs/visual-baseline/cards/`: `workout-<state>`, `workout-done-watch` (live has a running timer, so its digits differ between runs).
 

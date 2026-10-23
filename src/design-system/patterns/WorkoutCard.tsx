@@ -20,7 +20,7 @@ import { font, fontSizes, fixed, radii, onDark, gradients, round } from '@/desig
  *   done       completed: time, exercises and calories
  *   rest       rest day
  *   paused     the membership has ended: one flat card that says why, no Start
- *   comeback   after a break: the easy session, with Start and "Do regular instead"
+ *   comeback   after a break: the easy session: 20 min, 4 exercises, half your usual load, "Start easy session" and "Not today"
  */
 export type WorkoutCardState = 'upcoming' | 'due' | 'live' | 'missed' | 'moved' | 'skipped' | 'done' | 'rest' | 'paused' | 'comeback';
 
@@ -54,8 +54,8 @@ export type WorkoutCardProps = {
   onStartAnyway?: () => void;
   /** moved and skipped */
   onUndo?: () => void;
-  /** comeback: the quiet second button. */
-  onStartRegular?: () => void;
+  /** comeback: the quiet second button, "Not today". */
+  onNotToday?: () => void;
 };
 
 const MINT = fixed.live;
@@ -105,7 +105,7 @@ function WorkoutShell({ colors, edge, children, compact = false, label }: { colo
 
 const noop = () => {};
 
-export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, onOpenCoach, burned, live, done, restNext, onStart = noop, onResume = noop, onDidIt = noop, onMove = noop, onSkip = noop, onStartAnyway = noop, onUndo = noop, onStartRegular = noop }: WorkoutCardProps) {
+export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, onOpenCoach, burned, live, done, restNext, onStart = noop, onResume = noop, onDidIt = noop, onMove = noop, onSkip = noop, onStartAnyway = noop, onUndo = noop, onNotToday = noop }: WorkoutCardProps) {
   const { c } = useTheme();
   const burnedRow = burned != null ? (
     <Row style={{ gap: 8, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.12)' }}>
@@ -237,23 +237,22 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
     );
   }
 
-  // comeback day: the greeting is plain text above (see ComebackGreeting), and the workout is one small grey card: the easy session,
-  // with Start as the main button and today's planned workout as the quiet one.
+  // comeback day: the greeting is plain text above (see ComebackGreeting); the workout is one small grey card, the easy session.
+  // No exercise names. Start easy session is the main button; Not today is the quiet one.
   if (state === 'comeback') {
-    const btn = { flex: 1, height: 44, borderRadius: radii.lg, alignItems: 'center' as const, justifyContent: 'center' as const };
     return (
-      <View accessibilityLabel="Easy session" style={{ borderRadius: radii.card, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
+      <View accessibilityLabel="Easy session, 20 minutes, 4 exercises, half your usual load" style={{ borderRadius: radii.card, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, letterSpacing: -0.3, color: c.ink }}>Easy session</Txt>
-          <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}>5 exercises, about 30 minutes, lighter weights</Txt>
+          <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}>20 min</Txt>
         </View>
+        <Row style={{ gap: 6, flexWrap: 'wrap' }}>
+          <Chip label="4 exercises" />
+          <Chip label="Half your usual load" />
+        </Row>
         <Row style={{ gap: 8 }}>
-          <Pressy accessibilityRole="button" accessibilityLabel="Start the easy session" onPress={onStart} style={[btn, { backgroundColor: c.ink }]}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.bg }}>Start</Txt>
-          </Pressy>
-          <Pressy accessibilityRole="button" accessibilityLabel="Do today's regular workout instead" onPress={onStartRegular} style={[btn, { backgroundColor: c.surface3 }]}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>Do regular instead</Txt>
-          </Pressy>
+          <Button kind="primary" size="fill" label="Start easy session" onPress={onStart} style={{ flex: 1 }} />
+          <Button kind="surface" size="fill" label="Not today" onPress={onNotToday} style={{ flex: 1 }} />
         </Row>
       </View>
     );

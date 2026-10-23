@@ -28,13 +28,13 @@ Notes
 
 | Phase | What | Status | Commit |
 |---|---|---|---|
-| A | Decisions already made: no-goal copy, banner wording, comeback docs, tap targets, accessibility, IconButton hitSlop | done except A3: needs my decision (the comeback card described in the brief is not the one in the code) | db5706f |
+| A | Decisions already made: no-goal copy, banner wording, comeback docs, tap targets, accessibility, IconButton hitSlop | done (A3 decided and built in round 4, step 1) | db5706f |
 | B | Near-matches from docs/coverage-decisions.md: new variants, replacements, docs/review-changes.md, docs/coverage-exceptions.md | done: 37 of 41 use the library, 4 exceptions; hand-built count 216 to 179 | 499a9c8 |
 | C | Stories and docs for what changed, Coverage page in Storybook, rebuild and open every story | done: 158 stories plus the Coverage page open without errors | 6c4560b |
 | D | Screenshots before (main) and after (this branch), docs/review/index.html | done in dark mode only (light mode left for later, as asked): 181 screens, sheets, onboarding steps and states per side; before = main at 42859d8; page has before left, after right, links to review-changes.md | e631b5d |
 | E | Handoff package: CLAUDE.md, PR template, HANDOFF.md, README, HANDOFF-INDEX.md, npm run handoff zip, DEPLOY-STORYBOOK.md | done: zip is 40 MB, reopened (1,145 entries) and extracted to check | e631b5d |
 
-**Round 2 (phases A to E) done.** Not merged into main. Not deployed. One decision is open: the comeback workout card (see docs/review-changes.md and src/design-system/docs/WorkoutCard.md).
+**Round 2 (phases A to E) done.** Not merged into main. Not deployed.
 
 **Storybook deployed** to https://yourpal-storybook.vercel.app (Vercel project yourpal-storybook, free Hobby plan, deployed by hand, git disconnected). Vercel CLI 65.1.0 installed globally and signed in as rohitashavgarg-7341; Vercel plugin installed for Claude Code (user scope); Vercel MCP added but not yet authorized by the user.
 
@@ -51,3 +51,12 @@ Same rules as round 2: no behaviour change, 2 px or less uses the variant and is
 | F5 | Handoff refresh: counts, index, Storybook rebuilt and redeployed (180 stories, live), zip rebuilt | done | c038bb6 |
 
 **Developer handoff package is current** (F1 to F3 included). Storybook live: https://yourpal-storybook.vercel.app (180 stories). Zip: handoff/yourpal-design-system-handoff.zip. Not merged into main except the two fixes that went straight to main (the freeze fix and the pinned Save meal).
+
+## Round 4 (fix everything PARTIAL or NOT READY in docs/HANDOFF-STATUS.md)
+
+Branch `design-system-handoff`. Not merged into main (main is merged into the branch in step 11). No behaviour changes.
+
+| Step | What | Status | Commit |
+|---|---|---|---|
+| 1 | Comeback card: code and docs match the decision (title "Easy session", 20 min, chips "4 exercises" and "Half your usual load", buttons "Start easy session" and "Not today", no exercise names); `onStartRegular` became `onNotToday` (answers as a skip with Undo) | done | STEP1 |
+| 2 | "View plan" to "See plan" (ForYou.tsx update card); the two rows in docs/review-changes.md are the old wording on purpose | done | STEP2 |
