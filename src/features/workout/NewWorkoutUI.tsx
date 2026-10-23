@@ -120,8 +120,8 @@ function ClipRow({ thumb, onOpen }: { thumb?: number; onOpen: () => void }) {
   );
 }
 
-export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onMenu, prevEx, nextEx, prevName, nextName, sets, note, onAdd30, onSkipRest }: {
-  s: Session; e: Ex; cur: number; elapsed: string; now: number; onMinimise: () => void; onFinish: () => void; onMenu: () => void;
+export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onMenu, menuSlot, prevEx, nextEx, prevName, nextName, sets, note, onAdd30, onSkipRest }: {
+  s: Session; e: Ex; cur: number; elapsed: string; now: number; onMinimise: () => void; onFinish: () => void; onMenu: () => void; menuSlot?: React.ReactNode;
   prevEx: () => void; nextEx: () => void; prevName: string; nextName: string; sets: React.ReactNode; note: React.ReactNode; onAdd30: () => void; onSkipRest: () => void;
 }) {
   const { c } = useTheme();
@@ -151,11 +151,13 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
       </View>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 16 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-        <Row style={{ gap: 8, alignItems: 'flex-start' }}>
+        <Row style={{ gap: 8, alignItems: 'flex-start', zIndex: 30 }}>
           <Txt accessibilityRole="header" style={{ flex: 1, fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 40, letterSpacing: -0.8 }}>{e.name}</Txt>
-          <IconButton label="Exercise options: swap, ask coach, form tips, skip" onPress={onMenu} scaleTo={0.92} style={{ marginTop: 2 }}>
-            <Ellipsis size={20} color={c.ink} />
-          </IconButton>
+          {menuSlot ?? (
+            <IconButton label="Exercise options: swap, ask coach, form tips, skip" onPress={onMenu} scaleTo={0.92} style={{ marginTop: 2 }}>
+              <Ellipsis size={20} color={c.ink} />
+            </IconButton>
+          )}
         </Row>
         {source != null && (clipOpen
           ? <ClipCardInner key={e.id} source={source} thumb={THUMBS[e.id]} onFull={() => setPop(true)} onHide={marked ? () => setShown(false) : undefined} />

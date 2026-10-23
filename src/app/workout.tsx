@@ -6,7 +6,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { Redirect, router } from 'expo-router';
-import { ChevronLeft, ChevronRight, Ellipsis, Play, Plus, X } from '@/lib/icons';
+import { ArrowRightLeft, ChevronLeft, ChevronRight, Ellipsis, MessageCircle, Play, Plus, SkipForward, SlidersHorizontal, X } from '@/lib/icons';
+import { GooeyMenu } from '@/design-system/primitives/GooeyMenu';
 import { Button, Card, Field, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { Beat, CheckCircle, HeartIcon, PillBtn, RoundBtn, Tag } from '@/components/bits';
 import { useOverlay, useToastLift } from '@/components/Overlay';
@@ -250,7 +251,15 @@ export default function Workout() {
         onMain={() => A.phase('main')} onFinishNow={finishNow} onMinimise={minimise} />;
     }
     return <NewExercise key={s.exIdx} s={s} e={e} cur={cur} elapsed={elapsed} now={now} onMinimise={minimise} onFinish={askFinish}
-      onMenu={() => openSheet(<WkMenuSheet api={api} />, { label: 'Workout options' })} prevEx={prevEx} nextEx={nextEx} prevName={prevName} nextName={nextName}
+      onMenu={() => openSheet(<WkMenuSheet api={api} />, { label: 'Workout options' })}
+      menuSlot={<GooeyMenu label="Exercise options: swap, ask coach, form tips, skip" trigger={<Ellipsis size={20} color={c.ink} />} onFallback={() => openSheet(<WkMenuSheet api={api} />, { label: 'Workout options' })}
+        items={[
+          { key: 'swap', label: 'Swap exercise', icon: ArrowRightLeft, onPress: () => api.current.openSwap() },
+          { key: 'coach', label: 'Ask Coach Vikram', icon: MessageCircle, onPress: () => api.current.askCoach() },
+          { key: 'form', label: 'Form tips and video', icon: Play, onPress: () => api.current.formTips() },
+          { key: 'set', label: 'Options for this set', icon: SlidersHorizontal, onPress: () => { const i = api.current.currentSet(); if (i >= 0) api.current.openSetMenu(i); } },
+          { key: 'skip', label: 'Skip this exercise', icon: SkipForward, onPress: () => api.current.skipExercise() },
+        ]} />} prevEx={prevEx} nextEx={nextEx} prevName={prevName} nextName={nextName}
       sets={setsBlock} note={noteBlock} onAdd30={A.add30} onSkipRest={A.skipRest} />;
   }
 
