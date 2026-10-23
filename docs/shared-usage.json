@@ -1,0 +1,137 @@
+{
+ "generated": "2026-10-23",
+ "screens": 52,
+ "rows": [
+  {
+   "name": "RoundBtn",
+   "file": "src/components/bits.tsx",
+   "screens": 50,
+   "files": 13,
+   "usedAt": [
+    "app/checkin.tsx",
+    "app/exercise-search.tsx",
+    "app/food.tsx",
+    "app/goal.tsx",
+    "app/gym/chat.tsx",
+    "app/login.tsx"
+   ]
+  },
+  {
+   "name": "PillBtn",
+   "file": "src/components/bits.tsx",
+   "screens": 18,
+   "files": 6,
+   "usedAt": [
+    "app/gym/assessments.tsx",
+    "app/plans/log.tsx",
+    "app/workout.tsx",
+    "features/today/CheckInBar.tsx",
+    "features/today/QuickLogSheet.tsx",
+    "features/today/TopCards.tsx"
+   ]
+  },
+  {
+   "name": "GymHeader",
+   "file": "src/components/GymHeader.tsx",
+   "screens": 4,
+   "files": 4,
+   "usedAt": [
+    "app/(tabs)/gym.tsx",
+    "app/(tabs)/index.tsx",
+    "app/(tabs)/plans.tsx",
+    "app/(tabs)/progress.tsx"
+   ]
+  },
+  {
+   "name": "TabScreen",
+   "file": "src/components/TabScreen.tsx",
+   "screens": 4,
+   "files": 4,
+   "usedAt": [
+    "app/(tabs)/gym.tsx",
+    "app/(tabs)/index.tsx",
+    "app/(tabs)/plans.tsx",
+    "app/(tabs)/progress.tsx"
+   ]
+  },
+  {
+   "name": "Skeleton",
+   "file": "src/components/bits.tsx",
+   "screens": 2,
+   "files": 2,
+   "usedAt": [
+    "app/(tabs)/index.tsx",
+    "app/(tabs)/progress.tsx"
+   ]
+  },
+  {
+   "name": "Avatar",
+   "file": "src/components/GymHeader.tsx",
+   "screens": 1,
+   "files": 1,
+   "usedAt": [
+    "app/profile/index.tsx"
+   ]
+  },
+  {
+   "name": "Glow",
+   "file": "src/components/bits.tsx",
+   "screens": 1,
+   "files": 2,
+   "usedAt": [
+    "features/today/CheckInBar.tsx",
+    "features/today/DayQuote.tsx"
+   ]
+  },
+  {
+   "name": "OtpInput",
+   "file": "src/components/OtpInput.tsx",
+   "screens": 1,
+   "files": 1,
+   "usedAt": [
+    "app/login.tsx"
+   ]
+  },
+  {
+   "name": "Segmented",
+   "file": "src/components/ui.tsx",
+   "screens": 1,
+   "files": 1,
+   "usedAt": [
+    "app/(tabs)/plans.tsx"
+   ]
+  },
+  {
+   "name": "FloatingTabBar",
+   "file": "src/components/FloatingTabBar.tsx",
+   "screens": 0,
+   "files": 1,
+   "usedAt": [
+    "app/(tabs)/_layout.tsx"
+   ]
+  },
+  {
+   "name": "GymLogo",
+   "file": "src/components/GymHeader.tsx",
+   "screens": 0,
+   "files": 0,
+   "usedAt": []
+  },
+  {
+   "name": "NavHideProvider",
+   "file": "src/components/FloatingTabBar.tsx",
+   "screens": 0,
+   "files": 1,
+   "usedAt": [
+    "app/(tabs)/_layout.tsx"
+   ]
+  },
+  {
+   "name": "UnitPill",
+   "file": "src/components/bits.tsx",
+   "screens": 0,
+   "files": 0,
+   "usedAt": []
+  }
+ ]
+}

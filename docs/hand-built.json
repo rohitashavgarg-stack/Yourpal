@@ -1,14 +1,14 @@
 {
  "generated": "2026-10-23",
  "rule": "unique elements outside src/web; on purpose = rows of docs/coverage-exceptions.md",
- "count": 88,
+ "count": 86,
  "onPurpose": 3,
- "toBuild": 85,
+ "toBuild": 83,
  "demoPanelExcluded": 21,
  "exceptionRows": 4,
  "byKind": {
   "button or pill": 28,
-  "bar": 11,
+  "bar": 9,
   "chip": 7,
   "card": 15,
   "icon badge": 20,
@@ -37,7 +37,7 @@
    "onPurpose": 0
   },
   "Onboarding and login": {
-   "total": 12,
+   "total": 10,
    "onPurpose": 1
   },
   "Profile and settings": {
@@ -766,7 +766,7 @@
   },
   {
    "file": "components/bits.tsx",
-   "line": 127,
+   "line": 54,
    "kind": "card",
    "look": "card radius radii.xl, fill c.surface2, padding 4",
    "fn": "UnitPill",
@@ -776,7 +776,7 @@
   },
   {
    "file": "components/ui.tsx",
-   "line": 57,
+   "line": 39,
    "kind": "card",
    "look": "card radius radii.xl, fill c.surface2, padding 4",
    "fn": "Segmented",
@@ -903,26 +903,6 @@
    "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Date: ${DAYS[day].full}. Change`} onPress={() => openS",
    "onPurpose": false,
    "group": "Progress"
-  },
-  {
-   "file": "components/Ruler.tsx",
-   "line": 107,
-   "kind": "bar",
-   "look": "bar 2 px high, radius 1",
-   "fn": "Ruler",
-   "text": "<View style={{ width: size, height: 2, borderRadius: 1, backgroundColor: major ? c.ink : c.surface3 }} />",
-   "onPurpose": false,
-   "group": "Onboarding and login"
-  },
-  {
-   "file": "components/Ruler.tsx",
-   "line": 122,
-   "kind": "bar",
-   "look": "bar 3 px high, radius radii.xs",
-   "fn": "Ruler",
-   "text": "<View pointerEvents=\"none\" style={{ position: 'absolute', right: 0, top: len / 2 - 1.5, width: 38, height: 3, ",
-   "onPurpose": false,
-   "group": "Onboarding and login"
   },
   {
    "file": "features/checkin/GymMap.native.tsx",

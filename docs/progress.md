@@ -62,9 +62,12 @@ Branch `design-system-handoff`. Not merged into main (main is merged into the br
 | 2 | "View plan" to "See plan" (ForYou.tsx update card); the two rows in docs/review-changes.md are the old wording on purpose | done | 2b51cb9 |
 | 3 | WorkoutCard paused state kept; docs and CLAUDE.md reworded: a membership pause shows as the account banner and as the workout card's paused state, never on the goal; "frozen" removed from the never-failure lines | done | aaeca11 |
 | 4 | Dot separators: none in the library components; CheckInBar "Leg day in progress"; the other 249 lines in 73 files are listed by file in docs/copy-separators.md (script scripts/audit/separators.js), not changed | done | fed49ae |
-| 5 | One hand-built count: scripts/audit/hand-built.js (88 outside the demo panel: 85 to build, 3 on purpose) feeds docs/coverage.md and the Storybook Coverage page; npm run audit:coverage; per-group table below. The earlier 95 was 88 plus 7 demo-panel elements; the 109 was 88 plus 21 | done | b52a4a1 |
+| 5 | One hand-built count: scripts/audit/hand-built.js (outside the demo panel; 88 when written, 86 after step 7 moved two components out of the counted app code) feeds docs/coverage.md and the Storybook Coverage page; npm run audit:coverage; per-group table below. The earlier 95 was 88 plus 7 demo-panel elements; the 109 was 88 plus 21 | done | b52a4a1 |
 
-### Per screen group (2026-10-23; 88 hand-built outside the demo panel, 3 of them on purpose; script scripts/audit/hand-built.js)
+| 6 | Unused library components (report only, nothing deleted): all four are in use. **MetaRow**: no screen writes `<MetaRow>`, but WorkoutCard and MealsCard (library patterns) draw it, so it shows on Today. **RadialGlow**: imported as `Glow` (old name) by `features/today/CheckInBar.tsx` and `DayQuote.tsx`, and used by GoalCard (2) and BudgetCard. **MealsCard** (pattern): used by the container `features/today/MealsCard.tsx` as `MealsCardPattern`, which Today renders as `MealNowCard`. **TrackerTile**: the base of the weight, heart rate, sleep and active energy tiles in TrackerRow.tsx (4 uses in that file). The Coverage script now counts imports under another name and uses inside the library, and the Storybook page has a "Used inside the library" column, so these no longer show as 0 | done | STEP6 |
+| 7 | Shared components used on 3 or more screens moved into the library (script scripts/audit/shared-usage.js counts screens by import closure): Txt, Row, FoodMark, CheckCircle, Tag, Ring, Beat, HeartIcon, Brand (GymLogoMark, PersonAvatar, PremiumBadge), Glass, TrendsButton, YourPalLogo, Wheel, Ruler; each has a story and a doc, a row in docs/design-system-components.md and a re-export at the old path; new tokens fixed.logoBlue, foodVeg, foodEgg, foodNonVeg, onDark.sand, goldInk. Kept where they are, with the reason, in docs/coverage-exceptions.md: Segmented, Skeleton, Glow, UnitPill, OtpInput (under 3 screens), TabScreen, GymHeader, FloatingTabBar (app structure, not visual components), PillBtn and RoundBtn (old names of Button and IconButton). Library is now 43 files: 36 primitives, 7 patterns | done | STEP7 |
+
+### Per screen group (2026-10-23; 86 hand-built outside the demo panel, 3 of them on purpose; script scripts/audit/hand-built.js, run npm run audit:coverage)
 
 | Group | Hand-built | On purpose | Still to build | Status |
 |---|---|---|---|---|
@@ -74,10 +77,9 @@ Branch `design-system-handoff`. Not merged into main (main is merged into the br
 | Workout session | 6 | 1 | 5 | open |
 | Gym tab | 7 | 0 | 7 | open |
 | Profile and settings | 11 | 0 | 11 | open |
-| Onboarding and login | 12 | 1 | 11 | open |
+| Onboarding and login | 10 | 1 | 9 | open |
 | Bottom sheets | 10 | 0 | 10 | open |
 | Modals and toasts | 0 | 0 | 0 | done (no hand-built element found) |
 | Empty, loading and error states | 0 | 0 | 0 | done (no hand-built element; three of these states still lack a review image, step 9) |
 | Shared components (outside the library) | 3 | 0 | 3 | open |
-| **Total** | **88** | **3** | **85** | |
-| 6 | Unused library components (report only, nothing deleted): all four are in use. **MetaRow**: no screen writes `<MetaRow>`, but WorkoutCard and MealsCard (library patterns) draw it, so it shows on Today. **RadialGlow**: imported as `Glow` (old name) by `features/today/CheckInBar.tsx` and `DayQuote.tsx`, and used by GoalCard (2) and BudgetCard. **MealsCard** (pattern): used by the container `features/today/MealsCard.tsx` as `MealsCardPattern`, which Today renders as `MealNowCard`. **TrackerTile**: the base of the weight, heart rate, sleep and active energy tiles in TrackerRow.tsx (6 uses in that file). The Coverage script now counts imports under another name and uses inside the library, and the Storybook page has a "Used inside the library" column, so these no longer show as 0 | done | STEP6 |
+| **Total** | **86** | **3** | **83** | |

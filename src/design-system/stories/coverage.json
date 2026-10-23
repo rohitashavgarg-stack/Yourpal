@@ -11,6 +11,42 @@
    "inLibrary": 0
   },
   {
+   "name": "Beat",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Beat.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 1
+  },
+  {
+   "name": "GymLogoMark",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Brand.tsx",
+   "doc": true,
+   "uses": 2,
+   "files": 2,
+   "inLibrary": 0
+  },
+  {
+   "name": "PremiumBadge",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Brand.tsx",
+   "doc": true,
+   "uses": 0,
+   "files": 0,
+   "inLibrary": 1
+  },
+  {
+   "name": "PersonAvatar",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Brand.tsx",
+   "doc": true,
+   "uses": 19,
+   "files": 17,
+   "inLibrary": 1
+  },
+  {
    "name": "Button",
    "group": "primitives",
    "file": "src/design-system/primitives/Button.tsx",
@@ -47,6 +83,15 @@
    "inLibrary": 5
   },
   {
+   "name": "CheckCircle",
+   "group": "primitives",
+   "file": "src/design-system/primitives/CheckCircle.tsx",
+   "doc": true,
+   "uses": 11,
+   "files": 7,
+   "inLibrary": 0
+  },
+  {
    "name": "Chevron",
    "group": "primitives",
    "file": "src/design-system/primitives/Chevron.tsx",
@@ -74,13 +119,58 @@
    "inLibrary": 4
   },
   {
+   "name": "FoodMark",
+   "group": "primitives",
+   "file": "src/design-system/primitives/FoodMark.tsx",
+   "doc": true,
+   "uses": 12,
+   "files": 7,
+   "inLibrary": 1
+  },
+  {
+   "name": "GlassBackdrop",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Glass.tsx",
+   "doc": true,
+   "uses": 12,
+   "files": 7,
+   "inLibrary": 2
+  },
+  {
+   "name": "WebLiquidGlass",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Glass.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "ProgressiveBlur",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Glass.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 1
+  },
+  {
+   "name": "HeartIcon",
+   "group": "primitives",
+   "file": "src/design-system/primitives/HeartIcon.tsx",
+   "doc": true,
+   "uses": 2,
+   "files": 2,
+   "inLibrary": 2
+  },
+  {
    "name": "IconBadge",
    "group": "primitives",
    "file": "src/design-system/primitives/IconBadge.tsx",
    "doc": true,
-   "uses": 62,
-   "files": 37,
-   "inLibrary": 1
+   "uses": 61,
+   "files": 36,
+   "inLibrary": 2
   },
   {
    "name": "NoteField",
@@ -132,9 +222,9 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Pressy.tsx",
    "doc": true,
-   "uses": 107,
-   "files": 51,
-   "inLibrary": 25
+   "uses": 105,
+   "files": 49,
+   "inLibrary": 27
   },
   {
    "name": "ProgressBar",
@@ -152,6 +242,33 @@
    "doc": true,
    "uses": 4,
    "files": 4,
+   "inLibrary": 0
+  },
+  {
+   "name": "Ring",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Ring.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "Row",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Row.tsx",
+   "doc": true,
+   "uses": 203,
+   "files": 55,
+   "inLibrary": 47
+  },
+  {
+   "name": "Ruler",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Ruler.tsx",
+   "doc": true,
+   "uses": 3,
+   "files": 1,
    "inLibrary": 0
   },
   {
@@ -224,6 +341,51 @@
    "doc": true,
    "uses": 30,
    "files": 30,
+   "inLibrary": 0
+  },
+  {
+   "name": "Tag",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Tag.tsx",
+   "doc": true,
+   "uses": 29,
+   "files": 19,
+   "inLibrary": 0
+  },
+  {
+   "name": "TrendsButton",
+   "group": "primitives",
+   "file": "src/design-system/primitives/TrendsButton.tsx",
+   "doc": true,
+   "uses": 2,
+   "files": 2,
+   "inLibrary": 0
+  },
+  {
+   "name": "Txt",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Txt.tsx",
+   "doc": true,
+   "uses": 873,
+   "files": 85,
+   "inLibrary": 122
+  },
+  {
+   "name": "Wheel",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Wheel.tsx",
+   "doc": true,
+   "uses": 6,
+   "files": 2,
+   "inLibrary": 0
+  },
+  {
+   "name": "YourPalLogo",
+   "group": "primitives",
+   "file": "src/design-system/primitives/YourPalLogo.tsx",
+   "doc": true,
+   "uses": 5,
+   "files": 5,
    "inLibrary": 0
   },
   {
@@ -353,8 +515,8 @@
    "inLibrary": 0
   }
  ],
- "count": 88,
- "toBuild": 85,
+ "count": 86,
+ "toBuild": 83,
  "onPurpose": 3,
  "demoPanelExcluded": 21,
  "byGroup": {
@@ -379,7 +541,7 @@
    "onPurpose": 0
   },
   "Onboarding and login": {
-   "total": 12,
+   "total": 10,
    "onPurpose": 1
   },
   "Profile and settings": {
@@ -409,20 +571,6 @@
    "look": "bar 4 px high, radius radii.xs",
    "jsx": "<View style={{ position: 'absolute', left: 14, right: 14, bottom: 12, height: 4, borderRadius: radii.xs, backg",
    "group": "Plans and food logging"
-  },
-  {
-   "where": "src/components/Ruler.tsx:107",
-   "kind": "bar",
-   "look": "bar 2 px high, radius 1",
-   "jsx": "<View style={{ width: size, height: 2, borderRadius: 1, backgroundColor: major ? c.ink : c.surface3 }} />",
-   "group": "Onboarding and login"
-  },
-  {
-   "where": "src/components/Ruler.tsx:122",
-   "kind": "bar",
-   "look": "bar 3 px high, radius radii.xs",
-   "jsx": "<View pointerEvents=\"none\" style={{ position: 'absolute', right: 0, top: len / 2 - 1.5, width: 38, height: 3, ",
-   "group": "Onboarding and login"
   },
   {
    "where": "src/features/progress/TrendUI.tsx:176",
@@ -726,14 +874,14 @@
    "group": "Progress"
   },
   {
-   "where": "src/components/bits.tsx:127",
+   "where": "src/components/bits.tsx:54",
    "kind": "card",
    "look": "card radius radii.xl, fill c.surface2, padding 4",
    "jsx": "<View accessibilityRole=\"tablist\" accessibilityLabel={label} style={{ flexDirection: 'row', alignSelf: 'center",
    "group": "Shared components (outside the library)"
   },
   {
-   "where": "src/components/ui.tsx:57",
+   "where": "src/components/ui.tsx:39",
    "kind": "card",
    "look": "card radius radii.xl, fill c.surface2, padding 4",
    "jsx": "<View accessibilityRole=\"tablist\" accessibilityLabel={accessibilityLabel} onLayout={(e: LayoutChangeEvent) => ",

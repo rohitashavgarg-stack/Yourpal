@@ -873,14 +873,14 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `components/bits.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `components/bits.tsx:127` card: `<View accessibilityRole="tablist" accessibilityLabel={label} style={{ flexDirection: 'row'`
+  - `components/bits.tsx:54` card: `<View accessibilityRole="tablist" accessibilityLabel={label} style={{ flexDirection: 'row'`
 
 ## components/ui.tsx (shared components and features)
 
 - Files: `components/ui.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `components/ui.tsx:57` card: `<View accessibilityRole="tablist" accessibilityLabel={accessibilityLabel} onLayout={(e: La`
+  - `components/ui.tsx:39` card: `<View accessibilityRole="tablist" accessibilityLabel={accessibilityLabel} onLayout={(e: La`
 
 ## components/FloatingTabBar.tsx (shared components and features)
 
@@ -961,14 +961,6 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Hand-built:
   - `features/body/BodyLog.tsx:46` input: `<TextInput autoFocus value={text} onChangeText={(t) => { setText(t); setBad(false); }} key`
   - `features/body/BodyLog.tsx:220` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Date: ${DAYS[day].full}. Change'} `
-
-## components/Ruler.tsx (shared components and features)
-
-- Files: `components/Ruler.tsx`
-- Library components used: (see the screen's files)
-- Hand-built:
-  - `components/Ruler.tsx:107` bar: `<View style={{ width: size, height: 2, borderRadius: 1, backgroundColor: major ? c.ink : c`
-  - `components/Ruler.tsx:122` bar: `<View pointerEvents="none" style={{ position: 'absolute', right: 0, top: len / 2 - 1.5, wi`
 
 ## features/checkin/CheckInEngine.tsx (shared components and features)
 

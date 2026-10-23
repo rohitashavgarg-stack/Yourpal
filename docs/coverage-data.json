@@ -2526,7 +2526,7 @@
      "kind": "card",
      "sig": "card radius radii.xl, fill c.surface2, padding 4",
      "fn": "UnitPill",
-     "line": 127,
+     "line": 54,
      "tag": "View",
      "text": "<View accessibilityRole=\"tablist\" accessibilityLabel={label} style={{ flexDirection: 'row', alignSelf: 'center",
      "file": "components/bits.tsx"
@@ -2547,7 +2547,7 @@
      "kind": "card",
      "sig": "card radius radii.xl, fill c.surface2, padding 4",
      "fn": "Segmented",
-     "line": 57,
+     "line": 39,
      "tag": "View",
      "text": "<View accessibilityRole=\"tablist\" accessibilityLabel={accessibilityLabel} onLayout={(e: LayoutChangeEvent) => ",
      "file": "components/ui.tsx"
@@ -2966,32 +2966,6 @@
      "file": "features/body/BodyLog.tsx"
     }
    ]
-  },
-  {
-   "file": "components/Ruler.tsx",
-   "hand": [
-    {
-     "kind": "bar",
-     "sig": "bar 2 px high, radius 1",
-     "fn": "Ruler",
-     "line": 107,
-     "tag": "View",
-     "text": "<View style={{ width: size, height: 2, borderRadius: 1, backgroundColor: major ? c.ink : c.surface3 }} />",
-     "file": "components/Ruler.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 3 px high, radius radii.xs",
-     "fn": "Ruler",
-     "line": 122,
-     "tag": "View",
-     "text": "<View pointerEvents=\"none\" style={{ position: 'absolute', right: 0, top: len / 2 - 1.5, width: 38, height: 3, ",
-     "file": "components/Ruler.tsx"
-    }
-   ],
-   "ds": {},
-   "sheets": [],
-   "scenarios": []
   },
   {
    "file": "features/checkin/CheckInEngine.tsx",

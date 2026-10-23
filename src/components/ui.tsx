@@ -6,27 +6,9 @@ import { font, radius, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
-// ---------- Text ----------
-type Variant = 'display' | 'title' | 'headline' | 'body' | 'label' | 'caption' | 'mono' | 'number';
-const V: Record<Variant, TextStyle> = {
-  display: { fontFamily: font.regular, fontSize: 34, letterSpacing: -1.4, lineHeight: 44 },
-  title: { fontFamily: font.regular, fontSize: 28, letterSpacing: -1.1, lineHeight: 37 },
-  headline: { fontFamily: font.semibold, fontSize: fontSizes.lg, letterSpacing: -0.2, lineHeight: 25 },
-  body: { fontFamily: font.regular, fontSize: fontSizes.base, lineHeight: 23 },
-  label: { fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19 },
-  caption: { fontFamily: font.regular, fontSize: fontSizes.xs, lineHeight: 18 },
-  mono: { fontFamily: font.mono, fontSize: fontSizes.sm, lineHeight: 19 },
-  number: { fontFamily: font.display, fontSize: fontSizes.xl4, letterSpacing: -0.6, lineHeight: 39 },
-};
-
-export function Txt({ v = 'body', muted, color, style, ...rest }: TextProps & { v?: Variant; muted?: boolean; color?: string }) {
-  const { c } = useTheme();
-  // Geist crops at the top with tight leading: always give ~1.3x the font size.
-  const flat = StyleSheet.flatten(style) as TextStyle | undefined;
-  const fs = flat?.fontSize ?? V[v].fontSize!;
-  const lh = Math.max(flat?.lineHeight ?? 0, Math.round(fs * 1.3));
-  return <Text {...rest} style={[V[v], { color: color ?? (muted || v === 'label' || v === 'caption' ? c.muted : c.ink) }, style, { lineHeight: lh }]} />;
-}
+// Txt and Row moved to src/design-system/primitives/. Re-exported so these import paths keep working.
+export { Txt } from '@/design-system/primitives/Txt';
+export type { TxtVariant } from '@/design-system/primitives/Txt';
 
 // Pressy, Chip, Pill and the text inputs moved to src/design-system/primitives/. Re-exported so these import paths keep working.
 export { Pressy } from '@/design-system/primitives/Pressy';
@@ -71,8 +53,6 @@ export function Segmented<T extends string>({ options, value, onChange, icons, a
 }
 
 // ---------- Text field ----------
-export function Row({ style, children, ...rest }: { style?: StyleProp<ViewStyle>; children: React.ReactNode; collapsable?: boolean }) {
-  return <View {...rest} style={[{ flexDirection: 'row', alignItems: 'center' }, style]}>{children}</View>;
-}
+export { Row } from '@/design-system/primitives/Row';
 
 export const hairline = StyleSheet.hairlineWidth;

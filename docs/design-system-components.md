@@ -28,6 +28,20 @@ Every component in `src/design-system/`, with its variants and states. Each has 
 | [StatusDot](../src/design-system/docs/StatusDot.md) | `primitives/StatusDot.tsx` | A small solid dot: status, legend key, unread, grid cell | none; colour is the state |
 | [Stepper](../src/design-system/docs/Stepper.md) | `primitives/Stepper.tsx` | Minus, value, plus for numbers | card, row, inline (scrub, `min`, `block`) |
 | [SubPage](../src/design-system/docs/SubPage.md) | `primitives/SubPage.tsx` | Full-screen pushed page with back, title, floating header, footer | shell, progress; `close`, `footer`, `right`, `backdrop`, `scroll`, `onBack`; header at rest or scrolled |
+| [Txt](../src/design-system/docs/Txt.md) | `primitives/Txt.tsx` | The text primitive: eight variants, always a line height of about 1.3 times the size | v display, title, headline, body, label, caption, mono, number; `muted`, `color` |
+| [Row](../src/design-system/docs/Row.md) | `primitives/Row.tsx` | A horizontal row, children centred on the cross axis | none; `style` for gap, wrap and justify |
+| [FoodMark](../src/design-system/docs/FoodMark.md) | `primitives/FoodMark.tsx` | The veg, egg or non-veg mark (Indian food label style) | type veg, egg, nv; `size` |
+| [CheckCircle](../src/design-system/docs/CheckCircle.md) | `primitives/CheckCircle.tsx` | A round check with a drawn tick | on, off; tone accent, good; `size`, `hit` |
+| [Tag](../src/design-system/docs/Tag.md) | `primitives/Tag.tsx` | A small filled pill with a short label | any `bg` and `fg` |
+| [Ring](../src/design-system/docs/Ring.md) | `primitives/Ring.tsx` | A thin progress ring that animates to its value | `size`, `r`, `stroke`, `pct`, `delay` |
+| [Beat](../src/design-system/docs/Beat.md) | `primitives/Beat.tsx` | A heartbeat pulse for a live value | children: any icon |
+| [HeartIcon](../src/design-system/docs/HeartIcon.md) | `primitives/HeartIcon.tsx` | A solid heart icon | `size`, `color` |
+| [Brand](../src/design-system/docs/Brand.md) | `primitives/Brand.tsx` | The gym logo mark, the premium badge and the person avatar | GymLogoMark `size`; PremiumBadge `size`; PersonAvatar who me, coach; `ring`, `square`, `photo` |
+| [Glass](../src/design-system/docs/Glass.md) | `primitives/Glass.tsx` | The frosted glass layer behind pills and bars, and the progressive blur under headers | GlassBackdrop `radius`, `tint`, `frost`; ProgressiveBlur `height`, `edge`; WebLiquidGlass |
+| [TrendsButton](../src/design-system/docs/TrendsButton.md) | `primitives/TrendsButton.tsx` | The glass "Trends" pill that opens a tracker trend page | `label` (accessibility), `onPress` |
+| [YourPalLogo](../src/design-system/docs/YourPalLogo.md) | `primitives/YourPalLogo.tsx` | The YourPal logo, symbol and wordmark, as one vector | `height`, `color` |
+| [Wheel](../src/design-system/docs/Wheel.md) | `primitives/Wheel.tsx` | A vertical number wheel that snaps to a value | `min`, `max`, `unit`, `fmt`, `size` |
+| [Ruler](../src/design-system/docs/Ruler.md) | `primitives/Ruler.tsx` | A drag ruler for a decimal value, horizontal or vertical | `vertical`; `step`, `decimals`, `majorEvery`, `markEvery` |
 
 ## Patterns (`src/design-system/patterns/`)
 
@@ -55,9 +69,9 @@ Every component in `src/design-system/`, with its variants and states. Each has 
 
 colors (light, dark, fixed incl. `lineOnWhite` #C9D1DD for buttons on the white clip stage, semantic), typography (fontSizes, lineHeights, font), spacing, radii (4, 12, 18, 22, 24 card, 28, pill, `dot` 5), shadows, motion (fade, spring).
 
-## Still in `components/ui.tsx` (not moved yet)
+## Still outside the library
 
-Txt (display, title, headline, body, label, caption, mono, number), Row, Segmented, plus `components/bits.tsx` (FoodMark, CheckCircle, Tag, Ring, Glow, Beat) and `components/FloatingTabBar.tsx`, `TabScreen.tsx`.
+Used on fewer than 3 screens, or app structure rather than a visual component. Each is listed with its reason in `docs/coverage-exceptions.md`: Segmented, Skeleton, Glow (the pulsing dot), UnitPill, OtpInput, Avatar and GymLogo (in GymHeader), FloatingTabBar, TabScreen, GymHeader. PillBtn and RoundBtn are the old names of Button (size compact) and IconButton and are kept as re-exports.
 
 ## Not yet merged
 

@@ -88,6 +88,10 @@ export const fixed = {
   live: '#7CF0C8',       // mint for live states; equals palette.live
   shadow: '#101828',     // shadow colour used by card and header shadows
   lineOnWhite: '#C9D1DD', // the 1 px line of buttons on the white clip stage (workout)
+  logoBlue: '#303F9F',   // the YourPal logo on a light screen
+  foodVeg: '#1E9E5A',    // the veg mark
+  foodEgg: '#E0A526',    // the egg mark
+  foodNonVeg: '#A0522D', // the non-veg mark
 } as const;
 export type FixedColor = keyof typeof fixed;
 
@@ -114,6 +118,8 @@ export const onDark = {
   gold: '#F5B301',       // the premium (personal training) crown badge
   flame: '#FF8A3D',      // the streak flame and its bars on the welcome screen
   stageInk: '#F4F4F6',   // the current segment of the workout progress bar on a dark stage
+  sand: '#E8C89A',       // the gym logo letter when the photo is missing
+  goldInk: '#3A2A00',    // the crown on the gold premium badge
 } as const;
 
 // Gradients of the dark cards: from the top left to the bottom right.

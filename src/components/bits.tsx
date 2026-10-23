@@ -11,48 +11,13 @@ import { Button, IconButton, IconButtonProps } from '@/design-system/primitives/
 import { Option } from '@/design-system/primitives/Option';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
-// ---------- Veg / egg / non-veg mark (Indian food label style) ----------
-const MARK: Record<FoodType, { c: string; d: string; l: string }> = {
-  veg: { c: '#1E9E5A', d: 'M6 3.4a2.6 2.6 0 1 1 0 5.2a2.6 2.6 0 1 1 0-5.2z', l: 'Veg' },
-  egg: { c: '#E0A526', d: 'M6 3.4a2.6 2.6 0 1 1 0 5.2a2.6 2.6 0 1 1 0-5.2z', l: 'Egg' },
-  nv: { c: '#A0522D', d: 'M6 3l3 5H3z', l: 'Non-veg' },
-};
-export const foodTypeLabel = (t: FoodType = 'veg') => MARK[t].l;
-export function FoodMark({ type = 'veg', size = 14 }: { type?: FoodType; size?: number }) {
-  const m = MARK[type];
-  return (
-    <Svg width={size} height={size} viewBox="0 0 12 12" accessibilityLabel={m.l}>
-      <Rect x={0.75} y={0.75} width={10.5} height={10.5} rx={2} fill="none" stroke={m.c} strokeWidth={1.5} />
-      <Path d={m.d} fill={m.c} />
-    </Svg>
-  );
-}
-
-// ---------- Round check with a drawn tick ----------
-const APath = Animated.createAnimatedComponent(Path);
-export function CheckCircle({ on, size = 40, tone = 'accent', onPress, label, hit = 44 }: { on: boolean; size?: number; tone?: 'accent' | 'good'; onPress?: () => void; label: string; hit?: number }) {
-  const { c } = useTheme();
-  const p = useSharedValue(on ? 1 : 0);
-  useEffect(() => { p.value = withTiming(on ? 1 : 0, { duration: 380, easing: Easing.bezier(0.65, 0, 0.35, 1) }); }, [on]);
-  const fill = tone === 'good' ? c.good : c.accent;
-  const idle = tone === 'good' ? c.chipLine : c.surface3;
-  const box = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(p.value, [0, 1], [tone === 'good' ? c.surface : 'rgba(0,0,0,0)', fill]),
-    borderColor: interpolateColor(p.value, [0, 1], [idle, fill]),
-    transform: [{ scale: 1 + 0.05 * p.value }],
-  }));
-  const tick = useAnimatedProps(() => ({ strokeDashoffset: 24 * (1 - p.value) }));
-  return (
-    <Pressy accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={label} onPress={onPress} scaleTo={0.9}
-      style={{ width: Math.max(hit, size), height: Math.max(hit, size), alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-      <Animated.View style={[{ width: size, height: size, borderRadius: size / 2, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' }, box]}>
-        <Svg width={size * 0.48} height={size * 0.48} viewBox="0 0 24 24">
-          <APath d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke={fixed.white} strokeWidth={2.8} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="24" animatedProps={tick} />
-        </Svg>
-      </Animated.View>
-    </Pressy>
-  );
-}
+// FoodMark, CheckCircle, Tag, Ring, Beat and HeartIcon moved to src/design-system/primitives/. Re-exported so these import paths keep working.
+export { FoodMark, foodTypeLabel } from '@/design-system/primitives/FoodMark';
+export { CheckCircle } from '@/design-system/primitives/CheckCircle';
+export { Tag } from '@/design-system/primitives/Tag';
+export { Ring } from '@/design-system/primitives/Ring';
+export { Beat } from '@/design-system/primitives/Beat';
+export { HeartIcon } from '@/design-system/primitives/HeartIcon';
 
 // ---------- Shimmer skeleton ----------
 export function Skeleton({ h, style }: { h: number; style?: StyleProp<ViewStyle> }) {
@@ -63,15 +28,6 @@ export function Skeleton({ h, style }: { h: number; style?: StyleProp<ViewStyle>
   return <Animated.View style={[{ height: h, borderRadius: radii.xl }, a, style]} />;
 }
 
-// ---------- Small pill tag (filled) ----------
-export function Tag({ label, bg, fg, style }: { label: string; bg: string; fg: string; style?: StyleProp<ViewStyle> }) {
-  return (
-    <View style={[{ alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 3, borderRadius: radii.pill, backgroundColor: bg }, style]}>
-      <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: fg }}>{label}</Text>
-    </View>
-  );
-}
-
 // ---------- Small black pill button ----------
 // The Button primitive with size="compact". Kept under its old name.
 const PILL_KIND = { ink: 'primary', white: 'white', soft: 'secondary' } as const;
@@ -79,40 +35,11 @@ export function PillBtn({ label, onPress, tone = 'ink', icon, style, h = 36 }: {
   return <Button size="compact" height={h} kind={PILL_KIND[tone]} label={label} onPress={onPress} icon={icon} style={style} />;
 }
 
-// ---------- Soft ring (steps etc.) ----------
-const ACircle = Animated.createAnimatedComponent(Circle);
-export function Ring({ size, r, stroke, pct, color, track, delay = 200 }: { size: number; r: number; stroke: number; pct: number; color: string; track: string; delay?: number }) {
-  const C = 2 * Math.PI * r;
-  const p = useSharedValue(0);
-  useEffect(() => { p.value = withSequence(withTiming(0, { duration: delay }), withTiming(pct, { duration: 1300, easing: Easing.out(Easing.cubic) })); }, [pct]);
-  const props = useAnimatedProps(() => ({ strokeDashoffset: C * (1 - p.value) }));
-  return (
-    <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <Circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={track} strokeWidth={stroke} />
-      <ACircle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth={stroke} strokeLinecap="round" strokeDasharray={`${C}`} animatedProps={props} transform={`rotate(-90 ${size / 2} ${size / 2})`} />
-    </Svg>
-  );
-}
-
-// ---------- Beating heart (wearable live) ----------
-export function Beat({ children }: { children: React.ReactNode }) {
-  const s = useSharedValue(1);
-  useEffect(() => {
-    s.value = withRepeat(withSequence(withTiming(1.25, { duration: 150 }), withTiming(1, { duration: 150 }), withTiming(1.15, { duration: 150 }), withTiming(1, { duration: 550 })), -1, false);
-  }, []);
-  const a = useAnimatedStyle(() => ({ transform: [{ scale: s.value }] }));
-  return <Animated.View style={a}>{children}</Animated.View>;
-}
-
 export function Glow({ color = fixed.live, size = 10 }: { color?: string; size?: number }) {
   const o = useSharedValue(0.55);
   useEffect(() => { o.value = withRepeat(withTiming(1, { duration: 1200 }), -1, true); }, []);
   const a = useAnimatedStyle(() => ({ opacity: o.value }));
   return <Animated.View style={[{ width: size, height: size, borderRadius: size / 2, backgroundColor: color, shadowColor: color, shadowOpacity: 0.9, shadowRadius: 8, shadowOffset: { width: 0, height: 0 } }, a]} />;
-}
-
-export function HeartIcon({ size = 14, color }: { size?: number; color: string }) {
-  return <Svg width={size} height={size} viewBox="0 0 24 24"><Path d="M12 21s-7.5-4.6-9.5-9.2C1.1 8.4 3.3 5 6.6 5c2 0 3.4 1 5.4 3 2-2 3.4-3 5.4-3 3.3 0 5.5 3.4 4.1 6.8C19.5 16.4 12 21 12 21z" fill={color} /></Svg>;
 }
 
 // Close / back button for full-screen pages. The IconButton primitive under its old name.

@@ -1463,16 +1463,6 @@
   ]
  },
  {
-  "id": "shared:components/Ruler.tsx",
-  "screen": "components/Ruler.tsx",
-  "group": "Shared components and features",
-  "status": "not started",
-  "hand": 2,
-  "files": [
-   "components/Ruler.tsx"
-  ]
- },
- {
   "id": "shared:features/checkin/CheckInEngine.tsx",
   "screen": "features/checkin/CheckInEngine.tsx",
   "group": "Shared components and features",

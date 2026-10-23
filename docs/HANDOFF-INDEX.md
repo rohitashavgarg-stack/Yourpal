@@ -5,7 +5,7 @@ Every deliverable of the design-system handoff, where it is in the repo, and how
 | Deliverable | Path in the repo | How to open it, and its link |
 |---|---|---|
 | Tokens (colour light and dark, `fixed`, `onDark`, `gradients`, type, spacing, radius, shadows, motion) | `src/design-system/tokens/` | Read the files. Rules for using them: `CLAUDE.md`. Review notes: `docs/tokens-review.md` |
-| Primitives (22): Button and IconButton, Card, Callout, ProgressBar and ProgressSegments, Option, Chip, Pill, Input (Field, NoteField), AmountStepper, Stepper, Sheet and SheetFooter, Snackbar, SubPage, ListCard, SectionLabel, IconBadge, StatusDot, MetaRow, Chevron, ScanBracket, Pressy, FadeIn | `src/design-system/primitives/` | In Storybook under Primitives |
+| Primitives (36): Txt, Row, FoodMark, CheckCircle, Tag, Ring, Beat, HeartIcon, Brand (GymLogoMark, PersonAvatar, PremiumBadge), Glass, TrendsButton, YourPalLogo, Wheel, Ruler, Button and IconButton, Card, Callout, ProgressBar and ProgressSegments, Option, Chip, Pill, Input (Field, NoteField), AmountStepper, Stepper, Sheet and SheetFooter, Snackbar, SubPage, ListCard, SectionLabel, IconBadge, StatusDot, MetaRow, Chevron, ScanBracket, Pressy, FadeIn | `src/design-system/primitives/` | In Storybook under Primitives |
 | Patterns (7): GoalCard, BudgetCard, WorkoutCard, MealsCard, TrackerRow, WeekCard, Banner | `src/design-system/patterns/` | In Storybook under Patterns |
 | Component docs (one page per component: purpose, props, states, do and don't, accessibility, copy rules) | `src/design-system/docs/<Name>.md` | Index: `docs/design-system-components.md` |
 | Component index | `docs/design-system-components.md` | Open the file; links to every component page |

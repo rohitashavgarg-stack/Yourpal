@@ -26,7 +26,7 @@ import { haptic } from '@/lib/haptics';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
 import { useUpdates } from './TopCards';
-import { radii, fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes, round } from '@/design-system/tokens';
 import { toastCopy, updateCopy } from '@/lib/microcopy';
 import { goalCardStore } from './goalCardState';
 import { Card } from '@/design-system/primitives/Card';
@@ -220,7 +220,7 @@ export function ComebackPlan() {
         <View style={{ flex: 1, gap: 6 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, letterSpacing: -0.5 }}>Your comeback plan with lighter weights</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>
-            {['20 min', '4 exercises'].map((t) => <View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 18 }}>{t}</Txt></View>)}
+            {['20 min', '4 exercises'].map((t) => <View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: round(28), borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xsPlus, lineHeight: 18 }}>{t}</Txt></View>)}
           </Row>
         </View>
       </Row>
