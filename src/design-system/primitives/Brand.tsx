@@ -10,8 +10,8 @@ import { fixed, onDark } from '@/design-system/tokens';
 // Drop your real files into assets/brand/ (same names) and they replace the fallbacks below:
 //   wulf-logo.jpg (gym) · trainer.jpg (Coach Vikram). The member shows initials unless they add their own photo in My details.
 // The placeholders that ship in the repo are 2x2 px, which is how we know nothing was supplied yet.
-const LOGO = require('../../assets/brand/wulf-logo.jpg');
-const COACH = require('../../assets/brand/trainer.jpg');
+const LOGO = require('../../../assets/brand/wulf-logo.jpg');
+const COACH = require('../../../assets/brand/trainer.jpg');
 
 // The supplied photos are real files now, so the image is always drawn (the fallback sits behind it and shows only if loading fails).
 // Not waiting on a load event means the photo can never stay hidden after a remount, e.g. when switching programme or tab.

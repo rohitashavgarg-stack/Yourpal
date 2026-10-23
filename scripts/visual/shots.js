@@ -40,8 +40,16 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
         await send('Page.navigate', { url });
         for (let i = 0; i < 400; i++) { if ((await js('document.body ? document.body.innerText.length : 0')) > 5) break; await sleep(250); }
         await sleep(e.settle || 2500);
+        for (const [lab, text] of e.fill || []) {
+          await js(`(() => { const el = document.querySelector('[aria-label=' + ${JSON.stringify(JSON.stringify(lab))} + ']'); if (el) el.focus(); return !!el; })()`); await sleep(300);
+          await send('Input.insertText', { text }); await sleep(500);
+        }
         for (const c of e.clicks || []) { await click(c); await sleep(900); }
         if (e.clicks && e.clicks.length) await sleep(e.wait || 1500);
+        for (const [lab, text] of e.then || []) {
+          await js(`(() => { const el = document.querySelector('[aria-label=' + ${JSON.stringify(JSON.stringify(lab))} + ']'); if (el) el.focus(); return !!el; })()`); await sleep(300);
+          await send('Input.insertText', { text }); await sleep(700);
+        }
         const r = await send('Page.captureScreenshot', { format: 'png' }); fs.writeFileSync(path.join(out, theme, e.name + '.png'), Buffer.from(r.data, 'base64')); n++; process.stdout.write('.');
       }
     }
