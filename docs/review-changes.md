@@ -28,7 +28,7 @@ Storybook: Patterns / BudgetCard / No Goal, and Patterns / GoalCard / Strip All 
 <a id="sheet-LogMealsSheet"></a>
 ### Log meal sheet (`sheet-LogMealsSheet`, `sheet-LogMealsSheet-extra`)
 
-No visible change. "Ate something else?" and "Skip meal" use Button size `fill` (no side padding, gap 6 px), which is exactly what they had.
+"Save meal" is now pinned at the bottom of the sheet, under the list, instead of at the end of it: when a meal has many foods the list scrolls and the button stays in view (requested). "Ate something else?" and "Skip meal" use Button size `fill` (no side padding, gap 6 px), which is exactly what they had.
 
 <a id="plans"></a>
 ### Plans, diet day and week header (`plans`, `state-plans-diet`)

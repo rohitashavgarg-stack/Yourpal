@@ -110,6 +110,8 @@ export const onDark = {
   capRidge: '#EAE6E6',   // the ridges on the bottle cap
   ripple: '#7FB4FF',     // the ripple when water reaches the target
   heart: '#FF6B7A',      // the heart icon on the Connect tile
+  ember: '#F0692C',      // streak days done, the flame on the goal page
+  gold: '#F5B301',       // the premium (personal training) crown badge
   flame: '#FF8A3D',      // the streak flame and its bars on the welcome screen
   stageInk: '#F4F4F6',   // the current segment of the workout progress bar on a dark stage
 } as const;

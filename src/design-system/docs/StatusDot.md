@@ -1,5 +1,7 @@
 # StatusDot
 
+In use: the 10 px unread and status dots on the bell, Plans, Attendance and the Today update cards now use it. No visible change.
+
 `src/design-system/primitives/StatusDot.tsx`
 
 ## Purpose

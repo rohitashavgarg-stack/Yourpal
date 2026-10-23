@@ -23,6 +23,7 @@ import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { ScanBracket } from '@/design-system/primitives/ScanBracket';
 import { Option } from '@/design-system/primitives/Option';
 import { Callout } from '@/design-system/primitives/Callout';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Mode = 'search' | 'write' | 'scan';
@@ -156,7 +157,7 @@ export default function LogFood() {
           <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{macroLine(f)}</Txt>
         </View>
         <Txt style={{ fontFamily: font.monoBold, fontSize: fontSizes.sm }}>{f.k} kcal</Txt>
-        {multi && <View style={{ width: 22, height: 22, borderRadius: 11, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? c.accent : 'transparent', borderWidth: on ? 0 : 1.5, borderColor: c.surface3 }}>{on && <Check size={13} strokeWidth={3.5} color={fixed.white} />}</View>}
+        {multi && <IconBadge size={22} bg={on ? c.accent : 'transparent'} borderWidth={on ? 0 : 1.5} borderColor={c.surface3}>{on && <Check size={13} strokeWidth={3.5} color={fixed.white} />}</IconBadge>}
       </Pressy>
     );
   };
@@ -238,7 +239,7 @@ export default function LogFood() {
         {mode === 'scan' && (!camOk ? (
           <FadeIn>
             <Card style={{ paddingVertical: 22, paddingHorizontal: 18, gap: 10, alignItems: 'center' }}>
-              <View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><CameraOff size={26} color={c.ink} /></View>
+              <IconBadge size={56} radius={20} bg={c.surface2}><CameraOff size={26} color={c.ink} /></IconBadge>
               <Txt style={{ fontFamily: font.semibold }}>Camera access is off</Txt>
               <Txt muted style={{ fontSize: fontSizes.md, textAlign: 'center' }}>Allow the camera to take a photo of your plate. Photos are only used to guess the food and are not saved.</Txt>
               <Button label="Allow camera" onPress={() => { setP({ camOk: true }); toast('Camera allowed'); }} style={{ alignSelf: 'stretch' }} />

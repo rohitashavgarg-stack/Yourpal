@@ -20,6 +20,7 @@ import { ciTime } from './WeekCard';
 import { useCheckIn } from '@/features/checkin/useCheckIn';
 import { elapsedMin, limitOf } from '@/features/checkin/logic';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export type CiMode = 'none' | 'here' | 'near' | 'in' | 'out' | 'off';
@@ -117,7 +118,7 @@ export function CheckInBar() {
     <Floating>
       <View accessibilityRole="summary" style={[BAR, { backgroundColor: bg }, border && { borderWidth: 1, borderColor: c.line }]}>
         <Pressy accessibilityRole={open ? 'button' : undefined} accessibilityLabel={label} disabled={!open} onPress={open ?? undefined} scaleTo={0.98} haptics={false} style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 10, height: 52 }}>
-          <View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: icBg, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
+          <IconBadge size={32} radius={radii.md} bg={icBg}>{icon}</IconBadge>
           <View style={{ flex: 1, minWidth: 0 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fg, flexShrink: 1 }}>{title}</Txt>

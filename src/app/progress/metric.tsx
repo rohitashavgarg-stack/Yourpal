@@ -23,6 +23,7 @@ import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { Card } from '@/design-system/primitives/Card';
 import { Callout } from '@/design-system/primitives/Callout';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const TIP_UNIT: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: ' steps', water: ' L', hr: ' bpm', sleep: '', diet: '', cons: ' workouts' };
@@ -63,7 +64,7 @@ export default function MetricDetail() {
       <RangeBar />
       <Card variant="roomy" clip gap={8}>
         <CornerGlow color={look.tint} size={320} />
-        <View style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: radii.md, backgroundColor: look.tint + '26', alignItems: 'center', justifyContent: 'center' }}><look.Icon size={19} color={look.tint} /></View>
+        <IconBadge size={36} radius={radii.md} bg={look.tint + '26'} style={{ position: 'absolute', top: 16, right: 16 }}><look.Icon size={19} color={look.tint} /></IconBadge>
         <FadeIn key={t.key + 'h'}>
           <Txt style={{ fontFamily: font.displayBold, fontSize: 42, lineHeight: 52, letterSpacing: -1 }}>
             {t.big}{bigUnit && t.hasData ? <Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: c.muted }}>{bigUnit}</Txt> : null}

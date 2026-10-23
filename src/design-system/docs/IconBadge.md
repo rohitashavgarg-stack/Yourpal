@@ -1,5 +1,7 @@
 # IconBadge
 
+In use: 61 hand-built icon tiles in the app now use it (Today cards, goal page, Plans, onboarding, Gym, Progress). No visible change.
+
 `src/design-system/primitives/IconBadge.tsx`
 
 ## Purpose

@@ -14,6 +14,7 @@ import { goHome, ListCard, Note, ProgLogo, SubPage } from '@/features/shell/part
 import { switchProgramme, useShell } from '@/features/shell/state';
 import { useVisibleNotifs } from '@/features/shell/notifs';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function Notifications() {
@@ -88,7 +89,7 @@ export default function Notifications() {
         })}
         {list.length === 0 && (
           <FadeIn style={{ paddingVertical: 36, paddingHorizontal: 10, alignItems: 'center', gap: 10 }}>
-            <View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><BellRing size={22} color={c.accentText} /></View>
+            <IconBadge size={52} radius={radii.xl} bg={c.accentSoft}><BellRing size={22} color={c.accentText} /></IconBadge>
             <Txt muted style={{ textAlign: 'center' }}>You&apos;re all caught up. New updates from your programmes show up here.</Txt>
           </FadeIn>
         )}

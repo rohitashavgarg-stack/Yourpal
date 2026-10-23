@@ -14,7 +14,7 @@
   "screen": "Today",
   "group": "Routes",
   "status": "not started",
-  "hand": 10,
+  "hand": 5,
   "files": [
    "app/(tabs)/index.tsx",
    "features/today/TopCards.tsx",
@@ -40,7 +40,7 @@
   "screen": "Plans",
   "group": "Routes",
   "status": "not started",
-  "hand": 13,
+  "hand": 8,
   "files": [
    "app/(tabs)/plans.tsx",
    "features/plans/WorkoutPlan.tsx",
@@ -53,7 +53,7 @@
   "screen": "Progress",
   "group": "Routes",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "app/(tabs)/progress.tsx"
   ]
@@ -63,7 +63,7 @@
   "screen": "Check-in map",
   "group": "Routes",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/checkin.tsx",
    "features/checkin/GymMap.tsx"
@@ -74,7 +74,7 @@
   "screen": "Coach",
   "group": "Routes",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/coach.tsx"
   ]
@@ -84,7 +84,7 @@
   "screen": "Exercise search",
   "group": "Routes",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "app/exercise-search.tsx"
   ]
@@ -94,7 +94,7 @@
   "screen": "Food detail",
   "group": "Routes",
   "status": "not started",
-  "hand": 5,
+  "hand": 3,
   "files": [
    "app/food.tsx"
   ]
@@ -104,7 +104,7 @@
   "screen": "Your goal",
   "group": "Routes",
   "status": "not started",
-  "hand": 7,
+  "hand": 3,
   "files": [
    "app/goal-detail.tsx"
   ]
@@ -134,7 +134,7 @@
   "screen": "Attendance",
   "group": "Routes",
   "status": "not started",
-  "hand": 4,
+  "hand": 1,
   "files": [
    "app/gym/attendance.tsx"
   ]
@@ -238,7 +238,7 @@
   "screen": "Notifications",
   "group": "Routes",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "app/notifications.tsx"
   ]
@@ -248,7 +248,7 @@
   "screen": "Onboarding (frame)",
   "group": "Routes",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/plan.ts",
@@ -302,7 +302,7 @@
   "screen": "Workout history",
   "group": "Routes",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/plans/history.tsx"
   ]
@@ -312,7 +312,7 @@
   "screen": "What did you eat?",
   "group": "Routes",
   "status": "not started",
-  "hand": 5,
+  "hand": 3,
   "files": [
    "app/plans/log.tsx"
   ]
@@ -332,7 +332,7 @@
   "screen": "Appearance",
   "group": "Routes",
   "status": "not started",
-  "hand": 4,
+  "hand": 3,
   "files": [
    "app/profile/appearance.tsx",
    "features/shell/ThemeTile.tsx"
@@ -373,7 +373,7 @@
   "screen": "Connected apps",
   "group": "Routes",
   "status": "not started",
-  "hand": 4,
+  "hand": 1,
   "files": [
    "app/profile/health.tsx"
   ]
@@ -434,7 +434,7 @@
   "screen": "Tracker designs",
   "group": "Routes",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/profile/tracker-designs.tsx"
   ]
@@ -494,7 +494,7 @@
   "screen": "Metric detail",
   "group": "Routes",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/progress/metric.tsx",
    "features/progress/LogSheets.tsx"
@@ -505,7 +505,7 @@
   "screen": "Photos",
   "group": "Routes",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "app/progress/photos.tsx"
   ]
@@ -515,7 +515,7 @@
   "screen": "Streaks and badges",
   "group": "Routes",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "app/progress/streaks.tsx",
    "features/streak/BadgeArt.tsx",
@@ -537,7 +537,7 @@
   "screen": "Active workout",
   "group": "Routes",
   "status": "not started",
-  "hand": 9,
+  "hand": 5,
   "files": [
    "app/workout.tsx",
    "features/workout/SetRow.tsx",
@@ -573,7 +573,7 @@
   "screen": "Onboarding: Gym",
   "group": "Onboarding steps",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/Steps.tsx"
@@ -584,7 +584,7 @@
   "screen": "Onboarding: Goal",
   "group": "Onboarding steps",
   "status": "not started",
-  "hand": 3,
+  "hand": 1,
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/Steps.tsx"
@@ -595,7 +595,7 @@
   "screen": "Onboarding: Experience",
   "group": "Onboarding steps",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/Steps.tsx"
@@ -661,7 +661,7 @@
   "screen": "Onboarding: Projection",
   "group": "Onboarding steps",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/Steps.tsx"
@@ -672,7 +672,7 @@
   "screen": "Onboarding: Health",
   "group": "Onboarding steps",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/Steps.tsx"
@@ -705,7 +705,7 @@
   "screen": "Onboarding: Building your plan",
   "group": "Onboarding steps",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/Steps.tsx"
@@ -716,7 +716,7 @@
   "screen": "Onboarding: All set",
   "group": "Onboarding steps",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/Steps.tsx"
@@ -1017,7 +1017,7 @@
   "screen": "UpdatesSheet",
   "group": "Bottom sheets",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "features/today/TopCards.tsx"
   ]
@@ -1147,7 +1147,7 @@
   "screen": "Phone push preview banner",
   "group": "Overlays and popups",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "features/reminders/PushBanner.tsx"
   ]
@@ -1167,7 +1167,7 @@
   "screen": "Check-in bar and mini workout",
   "group": "Overlays and popups",
   "status": "not started",
-  "hand": 4,
+  "hand": 3,
   "files": [
    "features/today/CheckInBar.tsx"
   ]
@@ -1317,7 +1317,7 @@
   "screen": "components/GymHeader.tsx",
   "group": "Shared components and features",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "components/GymHeader.tsx"
   ]
@@ -1340,16 +1340,6 @@
   "hand": 1,
   "files": [
    "components/ui.tsx"
-  ]
- },
- {
-  "id": "shared:features/progress/parts.tsx",
-  "screen": "features/progress/parts.tsx",
-  "group": "Shared components and features",
-  "status": "not started",
-  "hand": 1,
-  "files": [
-   "features/progress/parts.tsx"
   ]
  },
  {
@@ -1407,7 +1397,7 @@
   "screen": "features/streak/StreakChip.tsx",
   "group": "Shared components and features",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "features/streak/StreakChip.tsx"
   ]
@@ -1417,7 +1407,7 @@
   "screen": "features/today/StepsCards.tsx",
   "group": "Shared components and features",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "features/today/StepsCards.tsx"
   ]
@@ -1497,7 +1487,7 @@
   "screen": "features/checkin/GymMap.native.tsx",
   "group": "Shared components and features",
   "status": "not started",
-  "hand": 3,
+  "hand": 1,
   "files": [
    "features/checkin/GymMap.native.tsx"
   ]

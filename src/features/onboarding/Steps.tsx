@@ -17,6 +17,7 @@ import { Pt, smoothPath } from './path';
 import { planMath } from './plan';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Card } from '@/design-system/primitives/Card';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const AP = Animated.createAnimatedComponent(Path);
@@ -105,7 +106,7 @@ export function HowStep() {
   const { d, length } = smoothPath(w ? way : [[0, 0], [1, 1]]);
   const line = useAnimatedProps(() => ({ strokeDashoffset: length * (1 - t.value) }));
   const Node = ({ p, children, size = 44 }: { p: Pt; children: React.ReactNode; size?: number }) => (
-    <View style={{ position: 'absolute', left: p[0] - size / 2, top: p[1] - size / 2, width: size, height: size, borderRadius: size / 2, backgroundColor: c.surface, borderWidth: 2, borderColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>{children}</View>
+    <IconBadge size={size} bg={c.surface} borderWidth={2} borderColor={c.ink} style={{ position: 'absolute', left: p[0] - size / 2, top: p[1] - size / 2 }}>{children}</IconBadge>
   );
   const Label = ({ p, title, sub, right }: { p: Pt; title: string; sub: string; right?: boolean }) => (
     <View style={{ position: 'absolute', top: p[1] - 22, ...(right ? { right: w - p[0] + 34 } : { left: p[0] + 34 }), width: 170, alignItems: right ? 'flex-end' : 'flex-start' }}>
@@ -129,7 +130,7 @@ export function HowStep() {
             <FadeIn pointerEvents="box-none" style={StyleAbs} delay={200}><Node p={stops[0]}><Camera size={19} color={c.ink} /></Node><Label p={stops[0]} title="Snap your plate" sub="and your food is logged" /></FadeIn>
             <FadeIn pointerEvents="box-none" style={StyleAbs} delay={600}><Node p={stops[1]}><Dumbbell size={19} color={c.ink} /></Node><Label p={stops[1]} title="A workout built for you" sub="with a demo for every exercise" /></FadeIn>
             <FadeIn pointerEvents="box-none" style={StyleAbs} delay={1000}><Node p={stops[2]}><TrendingUp size={19} color={c.ink} /></Node><Label p={stops[2]} right title="Progress you can see" sub="weight, lifts and records" /></FadeIn>
-            <FadeIn pointerEvents="box-none" style={StyleAbs} delay={1400}><Node p={stops[3]} size={52}><View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><Trophy size={22} color={fixed.white} /></View></Node></FadeIn>
+            <FadeIn pointerEvents="box-none" style={StyleAbs} delay={1400}><Node p={stops[3]} size={52}><IconBadge size={52} radius={radii.xl} bg={c.accent}><Trophy size={22} color={fixed.white} /></IconBadge></Node></FadeIn>
           </>
         )}
       </View>
@@ -179,7 +180,7 @@ export function MealStep() {
               <Txt style={{ fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.7)' }}>Tap and see the maths the app does on a meal photo.</Txt>
             </View>
             <IconButton label="See what the app reads" onPress={() => { haptic.success(); setRead(true); }} scaleTo={0.92} size={68} radius={34} bg="transparent" borderWidth={3} borderColor="rgba(255,255,255,0.85)">
-              <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}><Camera size={22} color={fixed.dark} /></View>
+              <IconBadge size={50} bg={fixed.white}><Camera size={22} color={fixed.dark} /></IconBadge>
             </IconButton>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.4, color: 'rgba(255,255,255,0.85)' }}>SEE WHAT THE APP READS</Txt>
           </View>
@@ -285,7 +286,7 @@ export function ReadyContent({ assess }: { assess: string }) {
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>WHAT HAPPENS NEXT</Txt>
         {next.map(([icon, t, s], i) => (
           <Row key={t} style={{ gap: 14, alignItems: 'flex-start', paddingVertical: 6 }}>
-            <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
+            <IconBadge size={36} radius={radii.md} bg={c.surface2}>{icon}</IconBadge>
             <View style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.semibold }}>{i + 1}. {t}</Txt>
               <Txt v="caption">{s}</Txt>
@@ -321,7 +322,7 @@ export function HealthStep() {
       <View>
         {rows.map(([icon, t, s], i) => (
           <Row key={t} style={{ gap: 14, minHeight: 64, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
-            <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
+            <IconBadge size={40} bg={c.surface2}>{icon}</IconBadge>
             <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.semibold }}>{t}</Txt><Txt v="caption">{s}</Txt></View>
           </Row>
         ))}

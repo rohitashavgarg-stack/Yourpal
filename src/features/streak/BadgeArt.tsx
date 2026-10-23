@@ -6,6 +6,7 @@ import { Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import type { BadgeIcon } from './data';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { radii, fixed } from '@/design-system/tokens';
 
 export type Shape = 'circle' | 'hex' | 'shield' | 'tile';
@@ -78,9 +79,9 @@ export function BadgeArt({ id, icon: Icon, earned, size = 84 }: { id: string; ic
         </View>
       ) : null}
       {!earned && (
-        <View style={{ position: 'absolute', right: 0, bottom: 2, width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+        <IconBadge size={24} radius={radii.sm} bg={c.surface} borderWidth={1} borderColor={c.line} style={{ position: 'absolute', right: 0, bottom: 2 }}>
           <Lock size={12} color={c.muted} />
-        </View>
+        </IconBadge>
       )}
     </View>
   );

@@ -4,7 +4,8 @@ import { Crown } from '@/lib/icons';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fixed } from '@/design-system/tokens';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { fixed, onDark } from '@/design-system/tokens';
 
 // Drop your real files into assets/brand/ (same names) and they replace the fallbacks below:
 //   wulf-logo.jpg (gym) · trainer.jpg (Coach Vikram). The member shows initials unless they add their own photo in My details.
@@ -35,9 +36,9 @@ export function GymLogoMark({ size = 40 }: { size?: number }) {
 export function PremiumBadge({ size = 18 }: { size?: number }) {
   const { c } = useTheme();
   return (
-    <View accessibilityLabel="Premium, personal training member" style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: '#F5B301', borderWidth: 2, borderColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
+    <IconBadge accessibilityLabel="Premium, personal training member" size={size} bg={onDark.gold} borderWidth={2} borderColor={c.bg}>
       <Crown size={Math.round(size * 0.55)} color="#3A2A00" strokeWidth={2.4} />
-    </View>
+    </IconBadge>
   );
 }
 

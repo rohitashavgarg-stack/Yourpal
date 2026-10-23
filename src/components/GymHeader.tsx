@@ -15,6 +15,8 @@ import { useVisibleNotifs } from '@/features/shell/notifs';
 import { ProgLogo } from '@/features/shell/parts';
 import { useDomain } from '@/lib/domain';
 import { haptic } from '@/lib/haptics';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 export const Avatar = ({ size = 44 }: { size?: number }) => <PersonAvatar who="me" size={size} />;
@@ -53,10 +55,10 @@ export function GymHeader() {
         <ProgLogo p={current} size={40} />
         <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 26, letterSpacing: -0.4, flexShrink: 1 }}>{current.short}</Txt>
         {multi && (
-          <View style={{ width: 26, height: 26, borderRadius: 13, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
+          <IconBadge size={26} style={{ overflow: 'hidden' }}>
             <GlassBackdrop radius={13} />
             <View style={{ zIndex: 2 }}><ChevronDown size={16} color={c.ink} strokeWidth={2.4} /></View>
-          </View>
+          </IconBadge>
         )}
       </Pressy>
       )}
@@ -66,7 +68,7 @@ export function GymHeader() {
         <GlassShell radius={22} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
           <Pressy accessibilityRole="button" accessibilityLabel={unread ? `Notifications, ${unread} unread` : 'Notifications'} onPress={() => router.push('/notifications')} style={{ width: 44, height: 44, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center' }}>
             <Bell size={19} color={c.ink} />
-            {unread > 0 && <View style={{ position: 'absolute', top: 9, right: 10, width: 10, height: 10, borderRadius: 5, backgroundColor: c.danger }} />}
+            {unread > 0 && <StatusDot size={10} color={c.danger} style={{ position: 'absolute', top: 9, right: 10 }} />}
           </Pressy>
         </GlassShell>
       </View>

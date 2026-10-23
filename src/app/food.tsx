@@ -20,6 +20,7 @@ import { QuickLogSheet } from '@/features/today/QuickLogSheet';
 import { askCoach } from '@/features/coach/coach';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { ProgressBar } from '@/design-system/primitives/ProgressBar';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function FoodDetail() {
@@ -89,7 +90,7 @@ export default function FoodDetail() {
           <RoundBtn label="Close" onPress={close} glass><X size={20} color={c.ink} /></RoundBtn>
           <View style={[{ marginTop: 14, marginBottom: 12, width: 96, height: 96, borderRadius: 48, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' },
             !isDark && { shadowColor: fixed.shadow, shadowOpacity: 0.06, shadowRadius: 20, shadowOffset: { width: 0, height: 6 } }]}>
-            <View style={{ width: 66, height: 66, borderRadius: 33, backgroundColor: c.tNutri, alignItems: 'center', justifyContent: 'center' }}><ChefHat size={30} strokeWidth={1.7} color={c.cNutri} /></View>
+            <IconBadge size={66} bg={c.tNutri}><ChefHat size={30} strokeWidth={1.7} color={c.cNutri} /></IconBadge>
           </View>
           <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 34, letterSpacing: -1.4, lineHeight: 38 }}>{fd.n}</Txt>
           <Txt muted style={{ marginTop: 6, fontSize: fontSizes.md, lineHeight: 20 }}>{desc}</Txt>
@@ -111,7 +112,7 @@ export default function FoodDetail() {
           <Txt style={{ fontFamily: font.semibold, paddingHorizontal: 4, paddingTop: 4 }}>Nutrition</Txt>
           <Card style={{ padding: 18, gap: 14 }}>
             <Row style={{ gap: 10 }}>
-              <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.tAct, alignItems: 'center', justifyContent: 'center' }}><Flame size={20} color={c.cAct} /></View>
+              <IconBadge size={40} radius={radii.sm} bg={c.tAct}><Flame size={20} color={c.cAct} /></IconBadge>
               <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 34 }}>{fd.k}</Txt><Txt muted>kcal</Txt>
               <View style={{ flex: 1 }} />
               <Txt v="caption" style={{ textAlign: 'right' }}>{Math.round((fd.k / KCAL_TARGET) * 100)}% of your{'\n'}daily 1,800</Txt>
@@ -161,7 +162,7 @@ export default function FoodDetail() {
               <Card style={{ paddingVertical: 8, paddingHorizontal: 16 }}>
                 {db.st.map((t, i) => (
                   <Row key={i} style={{ gap: 12, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: c.line, alignItems: 'flex-start' }}>
-                    <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Txt v="mono" style={{ fontSize: fontSizes.xs }}>{i + 1}</Txt></View>
+                    <IconBadge size={26} bg={c.surface2}><Txt v="mono" style={{ fontSize: fontSizes.xs }}>{i + 1}</Txt></IconBadge>
                     <Txt style={{ flex: 1, fontSize: fontSizes.md, lineHeight: 20 }}>{t}</Txt>
                   </Row>
                 ))}

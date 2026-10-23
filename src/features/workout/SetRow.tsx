@@ -13,6 +13,7 @@ import { haptic } from '@/lib/haptics';
 import { setLabel, setText } from './session';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { IconButton } from '@/design-system/primitives/Button';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { Stepper } from '@/design-system/primitives/Stepper';
 
 export type Draft = { k: number; r: number; t: number };
@@ -96,9 +97,9 @@ export function SetRow(p: Props) {
                 <Text style={{ fontFamily: font.bold, fontSize: fontSizes.xs2, lineHeight: 13, color: c.cAct }}>Warm-up</Text>
               </View>
             ) : (
-              <View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+              <IconBadge size={32} radius={radii.md} bg={c.surface2}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm }}>{lbl}</Txt>
-              </View>
+              </IconBadge>
             )}
             {p.active ? (
               <View style={{ flex: 1, minWidth: 0, flexDirection: 'row', gap: 6 }}>

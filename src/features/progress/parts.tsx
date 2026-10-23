@@ -9,6 +9,7 @@ import { font } from '@/theme/tokens';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { SubPage as DSSubPage, SubPageProps } from '@/design-system/primitives/SubPage';
 import { IconButton } from '@/design-system/primitives/Button';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { ListCard } from '@/design-system/primitives/ListCard';
 
 
@@ -47,7 +48,7 @@ export function CardTitle({ title, right, icon, tint }: { title: string; right?:
   return (
     <Row style={{ justifyContent: 'space-between', gap: 8 }}>
       <Row style={{ gap: 10, flexShrink: 1 }}>
-        {icon ? <View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: (tint ?? c.accent) + '26', alignItems: 'center', justifyContent: 'center' }}>{icon}</View> : null}
+        {icon ? <IconBadge size={32} radius={radii.md} bg={(tint ?? c.accent) + '26'}>{icon}</IconBadge> : null}
         <Txt v="label" style={{ flexShrink: 1 }}>{title}</Txt>
       </Row>
       {right ?? <ChevronRight size={16} color={c.muted} />}

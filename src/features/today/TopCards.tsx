@@ -26,6 +26,8 @@ import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { updateCopy } from '@/lib/microcopy';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
@@ -163,10 +165,10 @@ export function ComebackCard() {
     <FadeIn style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 20, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
       <CornerGlow color={FLAME} size={520} />
       <Row style={{ gap: 12 }}>
-        <View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}>
+        <IconBadge size={44} radius={radii.lg} bg="rgba(255,138,61,0.16)">
           <Animated.View style={[{ position: 'absolute' }, pause]}><Pause size={20} color={FLAME} fill={FLAME} /></Animated.View>
           <Animated.View style={[{ position: 'absolute' }, flame]}><Flame size={22} color={FLAME} fill={FLAME} /></Animated.View>
-        </View>
+        </IconBadge>
         <ComebackGreeting inCard />
       </Row>
       <View style={{ gap: 8 }}>
@@ -210,7 +212,7 @@ function UpdIcon({ u }: { u: Upd }) {
   const fg = u.tone === 'warn' ? c.warn : u.tone === 'good' ? c.good : c.accentText;
   const I = u.icon;
   if (['pt', 'plan', 'reply'].includes(u.key)) return <PersonAvatar who="coach" size={40} />;
-  return <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}><I size={19} color={fg} /></View>;
+  return <IconBadge size={40} radius={radii.sm} bg={bg}><I size={19} color={fg} /></IconBadge>;
 }
 
 const PLAN_CHANGES: [string, string][] = [['+ Walking lunges', '3×10'], ['− Leg extension', 'Leg day'], ['Squat 60 → 62.5 kg', 'Leg day']];
@@ -323,7 +325,7 @@ export function UpdatesSheet() {
           const fg = u.tone === 'warn' ? c.warn : u.tone === 'good' ? c.good : c.accentText;
           return (
             <FadeIn key={u.key} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12, paddingVertical: 12, paddingHorizontal: 4, borderBottomWidth: 1, borderBottomColor: c.line }}>
-              <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: fg, marginTop: 6 }} />
+              <StatusDot size={10} color={fg} style={{ marginTop: 6 }} />
               <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.semibold }}>{u.title}</Txt><Txt v="caption">{u.body}</Txt></View>
               {u.btn && <PillBtn tone="soft" h={30} label={u.btn} onPress={() => closeSheet(u.act)} />}
               <Pressy accessibilityRole="button" accessibilityLabel={`Dismiss ${u.title}`} onPress={() => dismiss(u.key)} style={{ width: 36, height: 36, alignItems: 'center', justifyContent: 'center' }}><X size={15} color={c.muted} /></Pressy>

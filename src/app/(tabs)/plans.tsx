@@ -22,6 +22,7 @@ import { haptic } from '@/lib/haptics';
 import { DAYL, DAYN, dateOf, monthOf, dayPlan, Diet, resetPlans, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { Callout } from '@/design-system/primitives/Callout';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const JUMP: [string, number][] = [['Today (Wed)', TODAY_IDX], ['Past day (Mon)', 0], ['Rest day (Tue)', 1], ['Future (Thu)', 3]];
@@ -77,7 +78,7 @@ function DayStrip() {
                     <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: on ? c.bg : c.ink, opacity: 0.7 }}>{l}</Txt>
                     <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 21, color: on ? c.bg : c.ink }}>{dateOf(i, wk)}</Txt>
                     {locked ? <Lock size={11} color={c.muted} />
-                      : logged ? <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={9} color={c.bg} strokeWidth={4} /></View>
+                      : logged ? <IconBadge size={14} bg={c.good}><Check size={9} color={c.bg} strokeWidth={4} /></IconBadge>
                       : missed ? <View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.warn }} />
                       : <View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />}
                   </Pressy>
@@ -149,7 +150,7 @@ export default function Plans() {
       {paused && (
         <Callout accessibilityLabel="Plans are view only">
           <Row style={{ gap: 12, alignItems: 'flex-start' }}>
-            <View style={{ width: 36, height: 36, borderRadius: radii.sm, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={17} color={c.muted} /></View>
+            <IconBadge size={36} radius={radii.sm} bg={c.surface3}><Lock size={17} color={c.muted} /></IconBadge>
             <View style={{ flex: 1, gap: 2 }}>
               <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>Plans are view only</Txt>
               <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Renew at Wulf Fitness reception to start workouts, log meals or change your plan.</Txt>

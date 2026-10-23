@@ -17,9 +17,10 @@ import { daysBetween, EXTEND_DAYS, fmtDay, fmtVal, Goal2, goalV2Store, useGoalV2
 import { useDrivers, useGoalV2Rows } from '@/features/goalv2/signs';
 import { TODAY } from '@/features/progress/trends';
 import { useStreak } from '@/features/streak/useStreak';
-import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
 import { Card } from '@/design-system/primitives/Card';
 import { ProgressBar } from '@/design-system/primitives/ProgressBar';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
 type Past = { name: string; when: string; result: string; amount?: string };
@@ -127,7 +128,7 @@ function Drivers({ g }: { g: Goal2 }) {
           const I = DRIVER_ICON[r.key];
           return (
             <Row key={r.key} style={{ gap: 12 }}>
-              <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: col[r.key][0], alignItems: 'center', justifyContent: 'center' }}><I size={19} color={col[r.key][1]} /></View>
+              <IconBadge size={40} bg={col[r.key][0]}><I size={19} color={col[r.key][1]} /></IconBadge>
               <View style={{ flex: 1, gap: 6 }}>
                 <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20 }}>{r.label}</Txt>
                 <ProgressBar height={6} track="surface3" color={col[r.key][1]} percent={Math.max(4, r.pct * 100)} />
@@ -148,7 +149,7 @@ function History({ extra }: { extra: Past[] }) {
     <Card variant="compact" gap={4}>
       {all.map((h, i) => (
         <View key={h.name + i} style={{ paddingVertical: 10, borderTopWidth: i ? 1 : 0, borderTopColor: c.line, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-          <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: h.result === 'Reached' ? c.goodSoft : c.surface2, alignItems: 'center', justifyContent: 'center' }}>{h.result === 'Reached' ? <Check size={18} color={c.good} strokeWidth={2.6} /> : <Flag size={17} color={c.muted} />}</View>
+          <IconBadge size={36} radius={radii.md} bg={h.result === 'Reached' ? c.goodSoft : c.surface2}>{h.result === 'Reached' ? <Check size={18} color={c.good} strokeWidth={2.6} /> : <Flag size={17} color={c.muted} />}</IconBadge>
           <View style={{ flex: 1 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{h.name}</Txt>
             <Txt v="caption">{h.when}</Txt>
@@ -244,7 +245,7 @@ export default function GoalDetail() {
             <Pressy accessibilityRole="button" onPress={() => router.push('/progress/assess')} scaleTo={0.98}>
               <Card variant="compact" gap={12}>
                 <Row style={{ gap: 12 }}>
-                  <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><ClipboardCheck size={19} color={c.accentText} /></View>
+                  <IconBadge size={40} bg={c.accentSoft}><ClipboardCheck size={19} color={c.accentText} /></IconBadge>
                   <View style={{ flex: 1 }}>
                     <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{`${g.noun[0].toUpperCase()}${g.noun.slice(1)} test`}</Txt>
                     <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{assessLine(d.assess).l}</Txt>
@@ -270,9 +271,9 @@ export default function GoalDetail() {
                 return (
                   <View key={i} style={{ alignItems: 'center', gap: 6 }}>
                     <Txt v="caption">{dl}</Txt>
-                    <View style={{ width: 34, height: 34, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center', backgroundColor: done ? '#F0692C' : c.surface2, borderWidth: i === todayIdx && !done ? 2 : 0, borderColor: '#F0692C' }}>
+                    <IconBadge size={34} radius={radii.md} bg={done ? onDark.ember : c.surface2} borderWidth={i === todayIdx && !done ? 2 : 0} borderColor={onDark.ember}>
                       <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: done ? fixed.white : c.muted }}>{22 + i}</Txt>
-                    </View>
+                    </IconBadge>
                   </View>
                 );
               })}

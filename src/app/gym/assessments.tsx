@@ -16,6 +16,7 @@ import { cardShadow, ListCard, SubPage } from '@/features/progress/parts';
 import { ASSESS } from '@/features/gym/data';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function GymAssessments() {
@@ -44,7 +45,7 @@ export default function GymAssessments() {
       {none ? (
         <FadeIn style={{ gap: 12 }}>
           <Card style={{ paddingVertical: 26, paddingHorizontal: 20, alignItems: 'center', gap: 10 }}>
-            <View style={{ width: 64, height: 64, borderRadius: radii.lg, backgroundColor: c.tNutri, alignItems: 'center', justifyContent: 'center' }}><ClipboardCheck size={30} strokeWidth={1.8} color={c.cNutri} /></View>
+            <IconBadge size={64} radius={radii.lg} bg={c.tNutri}><ClipboardCheck size={30} strokeWidth={1.8} color={c.cNutri} /></IconBadge>
             <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 31 }}>No assessment yet</Txt>
             <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.md }}>Your first one is Sat 10:00 am with Coach Vikram. Body, strength and mobility tests take about 30 minutes. Your plan is built from it.</Txt>
           </Card>

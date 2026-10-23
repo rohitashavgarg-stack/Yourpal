@@ -35,6 +35,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Option } from '@/design-system/primitives/Option';
 import { ProgressBar } from '@/design-system/primitives/ProgressBar';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ORDER = ['welcome', 'facility', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
@@ -119,7 +120,7 @@ export default function Onboarding() {
 
   const askNotifications = () => openSheet(
     <View style={{ gap: 12 }}>
-      <View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Bell size={26} color={c.accentText} /></View>
+      <IconBadge size={56} radius={20} bg={c.accentSoft}><Bell size={26} color={c.accentText} /></IconBadge>
       <Txt v="title">Get notified when Coach sends your plan</Txt>
       <Txt muted>Only plan updates and trainer replies. Reminders stay off until you turn them on.</Txt>
       <Button kind="accent" label="Allow notifications" onPress={() => { setProfile({ notifications: 'on' }); closeSheet(() => go('building')); haptic.success(); }} />
@@ -281,11 +282,11 @@ function GoalChoiceTile({ goal, on, onPress }: { goal: string; on: boolean; onPr
   return (
     <Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onPress} scaleTo={0.97}
       style={{ width: '48.5%', height: 108, borderRadius: radii.lg, backgroundColor: c.surface, borderWidth: on ? 2 : 1, borderColor: on ? c.ink : c.line, padding: 14, justifyContent: 'space-between' }}>
-      <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+      <IconBadge size={40} bg={c.surface2}>
         <a.Icon size={20} strokeWidth={1.8} color={c.ink} />
-      </View>
+      </IconBadge>
       <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: c.ink }}>{goal}</Txt>
-      {on && <View style={{ position: 'absolute', right: 12, top: 12, width: 22, height: 22, borderRadius: radii.sm, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Check size={13} strokeWidth={3} color={c.bg} /></View>}
+      {on && <IconBadge size={22} radius={radii.sm} bg={c.ink} style={{ position: 'absolute', right: 12, top: 12 }}><Check size={13} strokeWidth={3} color={c.bg} /></IconBadge>}
     </Pressy>
   );
 }
@@ -306,9 +307,9 @@ function FacilityStep() {
               <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{g.name}</Txt>
               <Txt v="caption">Gym</Txt>
             </View>
-            <View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+            <IconBadge size={26} bg={on ? c.ink : 'transparent'} borderWidth={on ? 0 : 1.5} borderColor={c.surface3}>
               {on && <Check size={15} strokeWidth={3} color={c.bg} />}
-            </View>
+            </IconBadge>
           </Option>
         );
       })}
@@ -330,9 +331,9 @@ function ExpStep({ tried }: { tried: boolean }) {
               <Txt style={{ fontFamily: font.semibold, fontSize: 16 }}>{e.l}</Txt>
               <Txt v="caption">{e.s}</Txt>
             </View>
-            <View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.ink : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+            <IconBadge size={26} bg={on ? c.ink : 'transparent'} borderWidth={on ? 0 : 1.5} borderColor={c.surface3}>
               {on && <Check size={15} strokeWidth={3} color={c.bg} />}
-            </View>
+            </IconBadge>
           </Option>
         );
       })}

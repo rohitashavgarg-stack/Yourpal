@@ -5,6 +5,7 @@ import { Check } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // A small phone drawn in each theme's own colours, so the choice is something you can see.
@@ -35,9 +36,9 @@ export function ThemeTile({ mode, on, onPress }: { mode: 'Light' | 'Dark' | 'Sys
         {mode === 'System' ? (<><Phone t="Light" /><Phone t="Dark" /></>) : <Phone t={mode} />}
       </View>
       <Row style={{ gap: 6 }}>
-        <View style={{ width: 16, height: 16, borderRadius: 8, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, backgroundColor: on ? c.accent : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+        <IconBadge size={16} bg={on ? c.accent : 'transparent'} borderWidth={on ? 0 : 1.5} borderColor={c.surface3}>
           {on && <Check size={10} strokeWidth={3.5} color={fixed.white} />}
-        </View>
+        </IconBadge>
         <Txt style={{ fontFamily: on ? font.semibold : font.medium, fontSize: fontSizes.md, lineHeight: 20 }}>{mode}</Txt>
       </Row>
     </Pressy>

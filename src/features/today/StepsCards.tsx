@@ -16,6 +16,7 @@ import { HEALTH_NAME } from '@/lib/health';
 import { createStore } from '@/lib/createStore';
 import { radii, fontSizes, fixed, round } from '@/design-system/tokens';
 import { IconButton } from '@/design-system/primitives/Button';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // Steps tracker designs to compare. Pick one in the Today edge-case panel.
@@ -83,9 +84,9 @@ export function StepsPreview({ design }: { design: StepsDesign }) {
   return (
     <View pointerEvents="none" style={{ width: SQ, height: SQ, borderRadius: radii.card, overflow: 'hidden' }}>
       <Face design={design} s={s} />
-      <View style={{ position: 'absolute', top: 12, right: 10, width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: design === 'Ruler' ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.22)' }}>
+      <IconBadge size={30} bg={design === 'Ruler' ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.22)'} style={{ position: 'absolute', top: 12, right: 10 }}>
         <Plus size={17} color={fixed.white} />
-      </View>
+      </IconBadge>
     </View>
   );
 }

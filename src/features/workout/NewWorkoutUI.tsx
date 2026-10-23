@@ -17,6 +17,7 @@ import { CLIPS, THUMBS } from './clips';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { IconButton } from '@/design-system/primitives/Button';
 import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // The only clips we have are the main-lift ones, so a move gets a still only where it is the same movement; the rest show a plain tile.
@@ -52,9 +53,9 @@ function MoveThumb({ id, onOpen }: { id: string; onOpen?: () => void }) {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Watch the clip" disabled={!key} onPress={onOpen} scaleTo={0.94} style={{ width: 64, height: 64, borderRadius: radii.sm, overflow: 'hidden', backgroundColor: still ? fixed.white : c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
       {still ? <Image source={still} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} /> : null}
-      <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}>
+      <IconBadge size={26} bg="rgba(11,14,20,0.72)">
         <Play size={12} color={fixed.white} fill={fixed.white} style={{ marginLeft: 1 }} />
-      </View>
+      </IconBadge>
     </Pressy>
   );
 }
@@ -88,9 +89,9 @@ function ClipCardInner({ source, thumb, onFull, onHide }: { source: number; thum
       {!isPlaying && !!thumb && <Image source={thumb} resizeMode="contain" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }} />}
       <Pressy accessibilityRole="button" accessibilityLabel={isPlaying ? 'Pause the clip' : 'Play the clip'} onPress={toggle} scaleTo={1} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
         {!isPlaying && (
-          <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}>
+          <IconBadge size={64} bg="rgba(11,14,20,0.72)">
             <Play size={26} color={fixed.white} fill={fixed.white} style={{ marginLeft: 3 }} />
-          </View>
+          </IconBadge>
         )}
       </Pressy>
       {onHide && (
@@ -109,10 +110,10 @@ function ClipRow({ thumb, onOpen }: { thumb?: number; onOpen: () => void }) {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Show the clip" onPress={onOpen} scaleTo={0.98}
       style={{ flexDirection: 'row', alignItems: 'center', gap: 12, minHeight: 56, paddingVertical: 6, paddingLeft: 6, paddingRight: 14, borderRadius: 20, backgroundColor: c.surface }}>
-      <View style={{ width: 44, height: 44, borderRadius: radii.sm, overflow: 'hidden', backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
+      <IconBadge size={44} radius={radii.sm} bg={fixed.white} style={{ overflow: 'hidden' }}>
         {!!thumb && <Image source={thumb} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} />}
-        <View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}><Play size={10} color={fixed.white} fill={fixed.white} style={{ marginLeft: 1 }} /></View>
-      </View>
+        <IconBadge size={22} radius={radii.sm} bg="rgba(11,14,20,0.72)"><Play size={10} color={fixed.white} fill={fixed.white} style={{ marginLeft: 1 }} /></IconBadge>
+      </IconBadge>
       <Txt style={{ flex: 1, fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 21 }}>Watch form</Txt>
       <ChevronDown size={18} color={c.muted} />
     </Pressy>

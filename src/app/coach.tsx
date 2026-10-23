@@ -13,6 +13,7 @@ import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
 import { askCoach, coachStore, NOTES, TOPICS, WEEKLY } from '@/features/coach/coach';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
 
@@ -63,7 +64,7 @@ export default function CoachHub() {
       <Pressy accessibilityRole="button" accessibilityLabel="Your plan. Leg day updated Wednesday. Open plans" onPress={() => router.navigate('/plans')} scaleTo={0.98}>
         <Card style={{ gap: 4 }}>
           <Row style={{ gap: 12 }}>
-            <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><ClipboardList size={19} color={c.accentText} /></View>
+            <IconBadge size={40} radius={radii.sm} bg={c.accentSoft}><ClipboardList size={19} color={c.accentText} /></IconBadge>
             <View style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.semibold }}>Your plan</Txt>
               <Txt v="caption">Leg day updated Wed 24 · Romanian deadlift added</Txt>
