@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Plus } from '@/lib/icons';
 import { QuickLogSheet } from './QuickLogSheet';
+import { SheetFooter } from '@/design-system/primitives/Sheet';
 import { CheckCircle, FoodMark, Tag } from '@/components/bits';
 import { MealId, MEALS } from '@/lib/data';
 import { Extra, mealLog, useDomain, useMeals } from '@/lib/domain';
@@ -132,7 +133,8 @@ export function LogMealsSheet({ mealId, draft: start }: { mealId: MealId; draft?
           </Pressy>
         </Row>
       </View>
-      <Button label="Save meal" onPress={save} />
+      {/* pinned under the list, so Save meal stays in view however many foods the meal has */}
+      <SheetFooter><Button label="Save meal" onPress={save} /></SheetFooter>
     </View>
   );
 }
