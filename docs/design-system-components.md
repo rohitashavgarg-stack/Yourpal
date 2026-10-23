@@ -15,6 +15,7 @@ Every component in `src/design-system/`, with its variants and states. Each has 
 | [IconBadge](../src/design-system/docs/IconBadge.md) | `primitives/IconBadge.tsx` | Tinted tile with one centred icon | round, rounded square (`radius`), outlined (`borderWidth`) |
 | [Field, NoteField](../src/design-system/docs/Input.md) | `primitives/Input.tsx` | One-line and multi-line text inputs | rest, focus, error; Field `prefix`; NoteField count and `maxLength` |
 | [ListCard](../src/design-system/docs/ListCard.md) | `primitives/ListCard.tsx` | A list inside a white card | rows, container, titled; row plain, pressable, muted, warn |
+| [Callout](../src/design-system/docs/Callout.md) | `primitives/Callout.tsx` | A soft notice, tip or quiet panel inside a page or sheet | tone warn, accent, plain; size compact, sm, md, lg, xl |
 | [Option](../src/design-system/docs/Option.md) | `primitives/Option.tsx` | One choice in a set that stays selected (programme, days a week, food type, range, tab) | look fill, outline; selected, not selected; role radio, tab; `height`, `minHeight`, `minWidth`, `radius`, `padX`, `gap`, `row`, `offFill`, `offLine`, `scaleTo` |
 | [MetaRow](../src/design-system/docs/MetaRow.md) | `primitives/MetaRow.tsx` | Facts in one quiet line, icon and words, thin lines between | none; wraps when long |
 | [Pill](../src/design-system/docs/Pill.md) | `primitives/Pill.tsx` | Selectable option or filter | off, on (ink fill over 220 ms) |

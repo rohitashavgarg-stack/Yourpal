@@ -14,6 +14,7 @@ import { haptic } from '@/lib/haptics';
 import { EMOJI_GROUPS } from './emoji';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { IconButton } from '@/design-system/primitives/Button';
+import { Callout } from '@/design-system/primitives/Callout';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const fmt = (ms: number) => {
@@ -153,9 +154,9 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
   return (
     <View style={{ backgroundColor: c.bg }}>
       {micOff && (
-        <View accessibilityRole="alert" style={{ marginHorizontal: 16, marginTop: 10, padding: 10, borderRadius: 14, backgroundColor: c.warnSoft }}>
+        <Callout tone="warn" size="compact" accessibilityRole="alert" style={{ marginHorizontal: 16, marginTop: 10 }}>
           <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>Microphone is off. Allow it in Settings to send voice messages.</Txt>
-        </View>
+        </Callout>
       )}
       <View style={{ paddingTop: 10, paddingHorizontal: 12, paddingBottom: emoji ? 6 : bottomInset + 10 }}>
         {rec ? (

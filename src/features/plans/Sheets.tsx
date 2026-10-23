@@ -14,6 +14,7 @@ import { useDietActions } from './dietActions';
 import { startCreate, startDietEdit, startWorkoutEdit } from './openers';
 import { BigTitle, ListRow, Stepper } from './parts';
 import { allowedFor, dayPlan, dietItems, DietRow, PEx, setP, usePlans } from './store';
+import { Callout } from '@/design-system/primitives/Callout';
 import { radii, fontSizes } from '@/design-system/tokens';
 
 // ---------- Workout plan menu ----------
@@ -204,10 +205,10 @@ export function NutritionSheet({ mid, itemKey }: { mid: MealId; itemKey: string 
       <BigTitle>{it.n}</BigTitle>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         {tiles.map(([l, v]) => (
-          <View key={l} accessible accessibilityLabel={`${l} ${v}`} style={{ width: '48%', flexGrow: 1, padding: 14, borderRadius: radii.md, backgroundColor: c.surface2 }}>
+          <Callout key={l} size="sm" accessible accessibilityLabel={`${l} ${v}`} style={{ width: '48%', flexGrow: 1 }}>
             <Txt v="label">{l}</Txt>
             <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3 }}>{v}</Txt>
-          </View>
+          </Callout>
         ))}
       </View>
       <Txt v="caption">{it.est || it.swapped || it.mine ? 'Estimated values' : 'Example values'} · real values come from the Indian food database</Txt>
@@ -251,9 +252,9 @@ export function HistSheet({ h }: { h: Hist }) {
     <>
       <BigTitle>{h.t}</BigTitle>
       <Txt muted style={{ marginTop: -6 }}>{h.s || 'Logged'} · {h.m}</Txt>
-      <View style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: radii.md, backgroundColor: c.surface2, gap: 4 }}>
+      <Callout gap={4}>
         {h.b.split('\n').map((l) => <Txt key={l} v="mono">{l}</Txt>)}
-      </View>
+      </Callout>
     </>
   );
 }

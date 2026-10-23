@@ -23,6 +23,7 @@ import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { ChatOptionsSheet } from '@/features/gym/sheets';
 import { cardShadow } from '@/features/progress/parts';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Callout } from '@/design-system/primitives/Callout';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const REPLY = "Got it. I'll check it before your session tomorrow.";
@@ -140,9 +141,9 @@ export default function CoachChat() {
       </View>
       <ScrollView ref={scroll} style={{ flex: 1 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1, paddingTop: 8, paddingHorizontal: 16, paddingBottom: 12, gap: 8 }}>
         {coach.away && (
-          <View accessibilityRole="alert" style={{ padding: 12, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
+          <Callout tone="warn" size="sm" accessibilityRole="alert">
             <Txt style={{ fontSize: fontSizes.sm, color: c.warn }}>Coach Vikram is away until Mon 10:00 am, so replies will be slower. Something urgent? Ask the front desk.</Txt>
-          </View>
+          </Callout>
         )}
         {d.chat.length === 0 && (
           <View style={{ flex: 1, justifyContent: 'center', paddingVertical: 30, paddingHorizontal: 20 }}>

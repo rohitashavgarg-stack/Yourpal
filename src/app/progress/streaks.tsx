@@ -15,6 +15,7 @@ import { StreakHero } from '@/features/streak/StreakHero';
 import { FLAME } from '@/features/streak/StreakChip';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { Card } from '@/design-system/primitives/Card';
+import { Callout } from '@/design-system/primitives/Callout';
 import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
 const ICONS: Record<BadgeIcon, any> = { dumbbell: Dumbbell, flame: Flame, trophy: Trophy, award: Award, medal: Medal, scale: Scale, target: Target, droplets: Droplets, footprints: Footprints, clipboard: ClipboardCheck };
@@ -81,10 +82,10 @@ export default function Streaks() {
         </Row>
       </Card>
 
-      <View style={{ padding: 14, borderRadius: 20, backgroundColor: c.accentSoft, gap: 2 }}>
+      <Callout tone="accent" size="md" gap={2}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.accentText }}>1 rest pass a month</Txt>
         <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.accentText, opacity: 0.85 }}>If you miss a week, a rest pass keeps your streak. It is used for you automatically. A membership pause also freezes your streak.</Txt>
-      </View>
+      </Callout>
 
       {!v2 && (
         <>

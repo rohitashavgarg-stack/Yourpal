@@ -10,7 +10,7 @@ const meta = {
   title: 'Primitives/Card',
   component: Card,
   args: { variant: 'default', children: <><Txt v="headline">Card title</Txt><Txt muted>One sentence of body text.</Txt></> },
-  argTypes: { variant: { control: 'select', options: ['default', 'roomy', 'compact', 'tight', 'dark'] }, gap: { control: 'number' }, flat: { control: 'boolean' }, clip: { control: 'boolean' }, border: { control: 'object' }, padding: { control: 'object' }, children: { control: false } },
+  argTypes: { variant: { control: 'select', options: ['default', 'roomy', 'compact', 'tight', 'dark'] }, gap: { control: 'number' }, flat: { control: 'boolean' }, clip: { control: 'boolean' }, border: { control: 'object' }, padding: { control: 'object' }, tone: { control: 'select', options: ['surface', 'accent', 'warn'] }, children: { control: false } },
 } satisfies Meta<typeof Card>;
 export default meta;
 type S = StoryObj<typeof meta>;
@@ -19,6 +19,9 @@ export const Compact: S = { args: { variant: 'compact' } };
 export const Roomy: S = { args: { variant: 'roomy' } };
 export const Tight: S = { args: { variant: 'tight' } };
 /** No shadow: a card on a sheet or inside another surface. */
+/** Filled with the soft accent colour: a summary (the confirmed session). */
+export const AccentTone: S = { args: { variant: 'roomy', tone: 'accent', flat: true } };
+export const WarnTone: S = { args: { variant: 'roomy', tone: 'warn', flat: true } };
 export const Flat: S = { args: { variant: 'tight', flat: true } };
 /** A line around it: the selected plan on the break page uses a 1.5 px accent line. */
 export const Border: S = { args: { variant: 'tight', border: { color: fixed.blue, width: 1.5 } } };

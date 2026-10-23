@@ -37,3 +37,15 @@ Notes
 **Round 2 (phases A to E) done.** Not merged into main. Not deployed. One decision is open: the comeback workout card (see docs/review-changes.md and src/design-system/docs/WorkoutCard.md).
 
 **Storybook deployed** to https://yourpal-storybook.vercel.app (Vercel project yourpal-storybook, free Hobby plan, deployed by hand, git disconnected). Vercel CLI 65.1.0 installed globally and signed in as rohitashavgarg-7341; Vercel plugin installed for Claude Code (user scope); Vercel MCP added but not yet authorized by the user.
+
+## Round 3 (phase F: remaining components from the pages)
+
+Same rules as round 2: no behaviour change, 2 px or less uses the variant and is recorded in docs/review-changes.md, more than that adds a variant, never change a value silently. After every step: typecheck, lint, story, doc, audit.
+
+| Step | What | Status | Commit |
+|---|---|---|---|
+| F1 | Cards the library does not know: soft panel and callout (new Callout primitive, InfoBox built on it, Card tone) | done: 15 hand-built blocks replaced, 7 exact, 8 within 2 px (recorded in docs/review-changes.md); hand-built 179 to 163 | (this commit) |
+| F2 | ProgressBar primitive (3, 4, 5, 6 px bars) and adopt it | not started | |
+| F3 | IconBadge size presets and StatusDot adopted for the small tiles and dots | not started | |
+| F4 | Move Txt, Row, Segmented, Tag, CheckCircle, FoodMark, Ring, Avatar and the rest of group 1 into the design-system folder | not started | |
+| F5 | Refresh review screenshots (dark), coverage page, docs, zip | not started | |

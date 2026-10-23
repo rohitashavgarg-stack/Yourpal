@@ -27,6 +27,7 @@ import { GoalCard2 } from '@/features/goalv2/GoalCard2';
 import { GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Callout } from '@/design-system/primitives/Callout';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 let firstLoad = true;
@@ -114,11 +115,11 @@ function ProgressCard({ k }: { k: CardKey }) {
       case 'meas': body = (
         <Row style={{ gap: 8 }}>
           {[{ l: 'Waist', v: '89 cm', d: '↓3' }, { l: 'Chest', v: '98 cm', d: '—' }, { l: 'Arm', v: '32 cm', d: '↑0.5' }].map((t) => (
-            <View key={t.l} style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 12, borderRadius: radii.md, backgroundColor: c.surface2 }}>
+            <Callout key={t.l} size="sm" style={{ flex: 1 }}>
               <Txt v="caption">{t.l}</Txt>
               <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl, lineHeight: 26 }}>{t.v}</Txt>
               <Txt v="caption">{t.d}</Txt>
-            </View>
+            </Callout>
           ))}
         </Row>
       ); break;

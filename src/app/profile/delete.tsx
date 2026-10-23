@@ -8,6 +8,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { goBack, Label, SubPage } from '@/features/shell/parts';
 import { useShell } from '@/features/shell/state';
+import { Callout } from '@/design-system/primitives/Callout';
 import { radii, fontSizes } from '@/design-system/tokens';
 
 export default function DeleteAccount() {
@@ -32,10 +33,10 @@ export default function DeleteAccount() {
 
   return (
     <SubPage title="Delete account" fallback="/profile">
-      <View style={{ padding: 18, borderRadius: radii.card, backgroundColor: c.warnSoft, gap: 6 }}>
+      <Callout tone="warn" size="xl" gap={6}>
         <Txt style={{ fontFamily: font.semibold, color: c.warn }}>Delete your YourPal account</Txt>
         <Txt style={{ fontSize: fontSizes.md, color: c.warn }}>You&apos;ll leave every programme and lose your history in the app after 30 days. You can cancel any time before then.</Txt>
-      </View>
+      </Callout>
       <Label>Type DELETE to confirm</Label>
       <View style={{ marginTop: -6 }}>
         <Field value={text} onChangeText={setText} autoCapitalize="characters" autoCorrect={false} autoComplete="off" accessibilityLabel="Type DELETE to confirm" />

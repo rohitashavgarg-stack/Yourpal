@@ -22,6 +22,7 @@ import { allowedFor, dietItems, Food, setP, usePlans } from '@/features/plans/st
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { ScanBracket } from '@/design-system/primitives/ScanBracket';
 import { Option } from '@/design-system/primitives/Option';
+import { Callout } from '@/design-system/primitives/Callout';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Mode = 'search' | 'write' | 'scan';
@@ -283,9 +284,9 @@ export default function LogFood() {
 
         {!!cur && (
           <FadeIn style={{ gap: 12 }}>
-            <View accessibilityLiveRegion="polite" style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.surface2 }}>
+            <Callout accessibilityLiveRegion="polite">
               <Txt v="mono" style={{ fontSize: fontSizes.md }}>{diff}</Txt>
-            </View>
+            </Callout>
             <View accessibilityRole="radiogroup" accessibilityLabel="Portion" style={{ flexDirection: 'row', gap: 8 }}>
               {([['Less', 0.5], ['As shown', 1], ['More', 1.5]] as const).map(([l, v]) => <Pill key={l} label={l} on={portion === v} onPress={() => setPortion(v)} style={{ flex: 1 }} />)}
             </View>

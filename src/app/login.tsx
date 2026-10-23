@@ -18,6 +18,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Callout } from '@/design-system/primitives/Callout';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Step = 'phone' | 'otp' | 'programme';
@@ -151,14 +152,14 @@ export default function Login() {
             {err === 'invalid' && <FadeIn><Txt v="caption" color={c.warn}>Enter a 10-digit mobile number.</Txt></FadeIn>}
             {err === 'notFound' && (
               <FadeIn>
-                <View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.warnSoft, gap: 10 }}>
+                <Callout tone="warn" size="lg" gap={10}>
                   <Txt v="headline" color={c.warn}>We couldn&apos;t find this number</Txt>
                   <Txt color={c.warn} style={{ fontSize: fontSizes.md }}>Please check with your gym&apos;s front desk. They can add it to your membership in a minute.</Txt>
                   <Row style={{ gap: 8 }}>
                     <Button small kind="primary" label="Call front desk" icon={<Phone size={16} color={c.bg} />} onPress={() => toast('Calling Wulf Fitness front desk…')} />
                     <Button small kind="secondary" label="Try another number" onPress={() => { setPhone(''); setErr('none'); }} />
                   </Row>
-                </View>
+                </Callout>
               </FadeIn>
             )}
             {err === 'offline' && <OfflineBanner />}
@@ -199,10 +200,10 @@ export default function Login() {
             {codeState === 'error' && <FadeIn><Txt v="label" color={c.warn}>That code didn&apos;t match. {3 - tries} {3 - tries === 1 ? 'try' : 'tries'} left.</Txt></FadeIn>}
             {codeState === 'locked' && (
               <FadeIn>
-                <View style={{ padding: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
+                <Callout tone="warn" size="sm">
                   <Txt color={c.warn} style={{ fontFamily: font.semibold }}>Too many wrong tries</Txt>
                   <Txt color={c.warn} style={{ fontSize: fontSizes.md }}>For your safety, try again in 0:{String(lockIn).padStart(2, '0')}, or ask the front desk.</Txt>
-                </View>
+                </Callout>
               </FadeIn>
             )}
             {codeState === 'ok' && <FadeIn><Txt v="label" color={c.good}>Verified · setting things up</Txt></FadeIn>}

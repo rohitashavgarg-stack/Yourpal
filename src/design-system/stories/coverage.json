@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-22",
+ "generated": "2026-10-23",
  "library": [
   {
    "name": "AmountStepper",
@@ -26,12 +26,20 @@
    "files": 16
   },
   {
+   "name": "Callout",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Callout.tsx",
+   "doc": true,
+   "uses": 15,
+   "files": 13
+  },
+  {
    "name": "Card",
    "group": "primitives",
    "file": "src/design-system/primitives/Card.tsx",
    "doc": true,
-   "uses": 68,
-   "files": 30
+   "uses": 69,
+   "files": 31
   },
   {
    "name": "Chevron",
@@ -134,8 +142,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Sheet.tsx",
    "doc": true,
-   "uses": 1,
-   "files": 1
+   "uses": 2,
+   "files": 2
   },
   {
    "name": "Sheet",
@@ -436,7 +444,7 @@
    "jsx": "<View style={{ width: `${pct}%`, height: 4, borderRadius: radii.xs, backgroundColor: P.ink }} />"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:72",
+   "where": "src/app/(tabs)/plans.tsx:73",
    "kind": "button or pill",
    "look": "button 60 px high, radius radii.lg",
    "jsx": "<Pressy key={i} accessibilityRole=\"button\" accessibilityState={{ selected: on }} accessibilityLabel={`${DAYL[i"
@@ -466,7 +474,7 @@
    "jsx": "<Pressy accessibilityRole=\"radio\" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onP"
   },
   {
-   "where": "src/app/plans/log.tsx:150",
+   "where": "src/app/plans/log.tsx:151",
    "kind": "button or pill",
    "look": "button 60 px high, radius 14",
    "jsx": "<Pressy key={f.n} accessibilityRole={multi ? 'checkbox' : 'radio'} accessibilityState={multi ? { checked: on }"
@@ -520,7 +528,7 @@
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Date: ${DAYS[day].full}. Change`} onPress={() => openS"
   },
   {
-   "where": "src/features/chat/Composer.tsx:61",
+   "where": "src/features/chat/Composer.tsx:62",
    "kind": "button or pill",
    "look": "button 60 px high, radius 20",
    "jsx": "<Pressy key={src} accessibilityRole=\"button\" onPress={() => closeSheet(() => onPick(src))} scaleTo={0.98} styl"
@@ -550,13 +558,13 @@
    "jsx": "<Pressy accessibilityRole=\"button\" onPress={it.act} style={{ height: 40, minWidth: 132, paddingHorizontal: 24,"
   },
   {
-   "where": "src/features/today/LogMealsSheet.tsx:110",
+   "where": "src/features/today/LogMealsSheet.tsx:111",
    "kind": "button or pill",
    "look": "button 64 px high, radius radii.md",
    "jsx": "<Pressy key={`x${j}`} accessibilityRole=\"button\" accessibilityLabel={`${e.n}, added by you. Tap to remove, hol"
   },
   {
-   "where": "src/features/today/LogMealsSheet.tsx:87",
+   "where": "src/features/today/LogMealsSheet.tsx:88",
    "kind": "button or pill",
    "look": "button 64 px high, radius radii.md",
    "jsx": "<Pressy key={k} accessibilityRole=\"checkbox\" accessibilityState={{ checked: on }} accessibilityLabel={`${n.n}."
@@ -592,13 +600,13 @@
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Show the clip\" onPress={onOpen} scaleTo={0.98} style={{"
   },
   {
-   "where": "src/features/workout/WorkoutSheets.tsx:85",
+   "where": "src/features/workout/WorkoutSheets.tsx:86",
    "kind": "button or pill",
    "look": "button 56 px high, radius radii.xl",
    "jsx": "<Pressy accessibilityRole=\"search\" accessibilityLabel=\"Search all exercises\" onPress={() => closeSheet(() => r"
   },
   {
-   "where": "src/features/workout/WorkoutSheets.tsx:95",
+   "where": "src/features/workout/WorkoutSheets.tsx:96",
    "kind": "button or pill",
    "look": "button 60 px high, radius radii.md",
    "jsx": "<Pressy key={a.n} accessibilityRole=\"button\" accessibilityLabel={`${a.n}. ${a.s}`} onPress={() => api.current."
@@ -652,19 +660,7 @@
    "jsx": "<Pressable accessibilityRole=\"button\" accessibilityState={{ selected: on }} onPress={onPress} style={{ flexBas"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:149",
-   "kind": "card",
-   "look": "card radius 20, fill c.surface2, padding 14",
-   "jsx": "<View accessibilityLabel=\"Plans are view only\" style={{ borderRadius: 20, backgroundColor: c.surface2, padding"
-  },
-  {
-   "where": "src/app/(tabs)/progress.tsx:117",
-   "kind": "card",
-   "look": "card radius radii.md, fill c.surface2",
-   "jsx": "<View key={t.l} style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 12, borderRadius: radii.md, backgrou"
-  },
-  {
-   "where": "src/app/(tabs)/progress.tsx:152",
+   "where": "src/app/(tabs)/progress.tsx:153",
    "kind": "card",
    "look": "card radius 20, fill c.surface2",
    "jsx": "<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: "
@@ -688,40 +684,10 @@
    "jsx": "<View style={{ padding: 18, borderRadius: radii.card, backgroundColor: c.surface }}>"
   },
   {
-   "where": "src/app/gym/chat.tsx:143",
-   "kind": "card",
-   "look": "card radius radii.md, fill c.warnSoft, padding 12",
-   "jsx": "<View accessibilityRole=\"alert\" style={{ padding: 12, borderRadius: radii.md, backgroundColor: c.warnSoft }}>"
-  },
-  {
-   "where": "src/app/gym/chat.tsx:157",
+   "where": "src/app/gym/chat.tsx:158",
    "kind": "card",
    "look": "card radius 20, fill m.me ? c.accent : c.surf",
    "jsx": "<View style={{ flexShrink: 1, paddingVertical: m.img ? 6 : 10, paddingHorizontal: m.img ? 6 : 14, borderRadius"
-  },
-  {
-   "where": "src/app/gym/confirm.tsx:80",
-   "kind": "card",
-   "look": "card radius radii.xl, fill c.accentSoft, padding 18",
-   "jsx": "<View style={{ padding: 18, borderRadius: radii.xl, backgroundColor: c.accentSoft, gap: 4 }}>"
-  },
-  {
-   "where": "src/app/gym/membership.tsx:43",
-   "kind": "card",
-   "look": "card radius radii.lg, fill c.surface2",
-   "jsx": "<View style={{ paddingVertical: 16, paddingHorizontal: 18, borderRadius: radii.lg, backgroundColor: c.surface2"
-  },
-  {
-   "where": "src/app/login.tsx:154",
-   "kind": "card",
-   "look": "card radius radii.lg, fill c.warnSoft, padding 16",
-   "jsx": "<View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.warnSoft, gap: 10 }}>"
-  },
-  {
-   "where": "src/app/login.tsx:202",
-   "kind": "card",
-   "look": "card radius radii.md, fill c.warnSoft, padding 14",
-   "jsx": "<View style={{ padding: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>"
   },
   {
    "where": "src/app/plans/edit.tsx:130",
@@ -736,40 +702,16 @@
    "jsx": "<View style={{ height: 96, borderRadius: radii.lg, backgroundColor: c.surface, flexDirection: 'row', alignItem"
   },
   {
-   "where": "src/app/plans/log.tsx:286",
-   "kind": "card",
-   "look": "card radius 20, fill c.surface2",
-   "jsx": "<View accessibilityLiveRegion=\"polite\" style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, "
-  },
-  {
-   "where": "src/app/plans/log.tsx:39",
+   "where": "src/app/plans/log.tsx:40",
    "kind": "card",
    "look": "card radius radii.xl, fill c.surface",
    "jsx": "<View style={{ flex: 1, height: 52, borderRadius: radii.xl, borderWidth: 1, borderColor: c.line, backgroundCol"
   },
   {
-   "where": "src/app/profile/delete.tsx:35",
-   "kind": "card",
-   "look": "card radius radii.card, fill c.warnSoft, padding 18",
-   "jsx": "<View style={{ padding: 18, borderRadius: radii.card, backgroundColor: c.warnSoft, gap: 6 }}>"
-  },
-  {
-   "where": "src/app/progress/metric.tsx:80",
-   "kind": "card",
-   "look": "card radius radii.lg, fill c.surface2, padding 16",
-   "jsx": "<View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.surface2, gap: 4 }}>"
-  },
-  {
-   "where": "src/app/progress/streaks.tsx:30",
+   "where": "src/app/progress/streaks.tsx:31",
    "kind": "card",
    "look": "card radius radii.card, fill c.surface",
    "jsx": "<View accessible accessibilityLabel={earned ? `${b.title}, earned ${b.earned}` : `${b.title}, locked. ${b.hint"
-  },
-  {
-   "where": "src/app/progress/streaks.tsx:84",
-   "kind": "card",
-   "look": "card radius 20, fill c.accentSoft, padding 14",
-   "jsx": "<View style={{ padding: 14, borderRadius: 20, backgroundColor: c.accentSoft, gap: 2 }}>"
   },
   {
    "where": "src/components/bits.tsx:127",
@@ -784,34 +726,10 @@
    "jsx": "<View accessibilityRole=\"tablist\" accessibilityLabel={accessibilityLabel} onLayout={(e: LayoutChangeEvent) => "
   },
   {
-   "where": "src/features/chat/Composer.tsx:156",
-   "kind": "card",
-   "look": "card radius 14, fill c.warnSoft, padding 10",
-   "jsx": "<View accessibilityRole=\"alert\" style={{ marginHorizontal: 16, marginTop: 10, padding: 10, borderRadius: 14, b"
-  },
-  {
    "where": "src/features/onboarding/Steps.tsx:177",
    "kind": "card",
    "look": "card radius radii.md, fill 'rgba(0, padding 14",
    "jsx": "<View style={{ alignSelf: 'stretch', padding: 14, borderRadius: radii.md, backgroundColor: 'rgba(0,0,0,0.72)' "
-  },
-  {
-   "where": "src/features/plans/parts.tsx:62",
-   "kind": "card",
-   "look": "card radius 20, fill bg",
-   "jsx": "<View style={[{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: bg }, style]}>"
-  },
-  {
-   "where": "src/features/plans/Sheets.tsx:207",
-   "kind": "card",
-   "look": "card radius radii.md, fill c.surface2, padding 14",
-   "jsx": "<View key={l} accessible accessibilityLabel={`${l} ${v}`} style={{ width: '48%', flexGrow: 1, padding: 14, bor"
-  },
-  {
-   "where": "src/features/plans/Sheets.tsx:254",
-   "kind": "card",
-   "look": "card radius radii.md, fill c.surface2",
-   "jsx": "<View style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: radii.md, backgroundColor: c.surface2"
   },
   {
    "where": "src/features/progress/TrendUI.tsx:76",
@@ -830,12 +748,6 @@
    "kind": "card",
    "look": "card radius 20, fill fixed.white",
    "jsx": "<View style={{ height: 40, borderRadius: 20, paddingHorizontal: 16, backgroundColor: fixed.white, justifyConte"
-  },
-  {
-   "where": "src/features/workout/WorkoutSheets.tsx:62",
-   "kind": "card",
-   "look": "card radius 20, fill c.surface2, padding 16",
-   "jsx": "<View style={{ padding: 16, borderRadius: 20, backgroundColor: c.surface2 }}>"
   },
   {
    "where": "src/web/ControlParts.tsx:15",
@@ -916,31 +828,31 @@
    "jsx": "<View style={{ height: 22, paddingHorizontal: 8, borderRadius: radii.sm, borderWidth: 1, borderColor: P.chip, "
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:151",
+   "where": "src/app/(tabs)/plans.tsx:152",
    "kind": "icon badge",
    "look": "icon tile 36 px, radius radii.sm",
    "jsx": "<View style={{ width: 36, height: 36, borderRadius: radii.sm, backgroundColor: c.surface3, alignItems: 'center"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:79",
+   "where": "src/app/(tabs)/plans.tsx:80",
    "kind": "icon badge",
    "look": "dot 14 px",
    "jsx": "<View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: c.good, alignItems: 'center', justifyC"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:80",
+   "where": "src/app/(tabs)/plans.tsx:81",
    "kind": "icon badge",
    "look": "dot 12 px",
    "jsx": "<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:81",
+   "where": "src/app/(tabs)/plans.tsx:82",
    "kind": "icon badge",
    "look": "dot 4 px",
    "jsx": "<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />"
   },
   {
-   "where": "src/app/(tabs)/progress.tsx:165",
+   "where": "src/app/(tabs)/progress.tsx:166",
    "kind": "icon badge",
    "look": "icon tile 48 px, radius radii.card",
    "jsx": "<View style={{ width: 48, height: 48, borderRadius: radii.card, backgroundColor: 'rgba(255,138,61,0.16)', alig"
@@ -1024,7 +936,7 @@
    "jsx": "<View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: x.col }} />"
   },
   {
-   "where": "src/app/gym/chat.tsx:37",
+   "where": "src/app/gym/chat.tsx:38",
    "kind": "icon badge",
    "look": "dot 6 px",
    "jsx": "<Animated.View style={[{ width: 6, height: 6, borderRadius: radii.xs, backgroundColor: c.muted, marginHorizont"
@@ -1078,13 +990,13 @@
    "jsx": "<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.good, alignItems: 'center', j"
   },
   {
-   "where": "src/app/plans/log.tsx:158",
+   "where": "src/app/plans/log.tsx:159",
    "kind": "icon badge",
    "look": "icon tile 22 px, radius 11",
    "jsx": "<View style={{ width: 22, height: 22, borderRadius: 11, alignItems: 'center', justifyContent: 'center', backgr"
   },
   {
-   "where": "src/app/plans/log.tsx:240",
+   "where": "src/app/plans/log.tsx:241",
    "kind": "icon badge",
    "look": "icon tile 56 px, radius 20",
    "jsx": "<View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', jus"
@@ -1120,7 +1032,7 @@
    "jsx": "<View style={{ position: 'absolute', right: 10, bottom: 10, width: 24, height: 24, borderRadius: radii.sm, bac"
   },
   {
-   "where": "src/app/progress/metric.tsx:65",
+   "where": "src/app/progress/metric.tsx:66",
    "kind": "icon badge",
    "look": "icon tile 36 px, radius radii.md",
    "jsx": "<View style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: radii.md, backgr"
@@ -1162,7 +1074,7 @@
    "jsx": "<View style={{ position: 'absolute', top: 9, right: 10, width: 10, height: 10, borderRadius: 5, backgroundColo"
   },
   {
-   "where": "src/features/chat/Composer.tsx:30",
+   "where": "src/features/chat/Composer.tsx:31",
    "kind": "icon badge",
    "look": "dot 10 px",
    "jsx": "<Animated.View style={[{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#FF4D4F' }, a]} />"
@@ -1426,7 +1338,7 @@
    "jsx": "<TextInput accessibilityLabel=\"Note for Coach Vikram, optional\" value={note} onChangeText={setNote} multiline "
   },
   {
-   "where": "src/app/plans/log.tsx:40",
+   "where": "src/app/plans/log.tsx:41",
    "kind": "input",
    "look": "text input",
    "jsx": "<TextInput accessibilityLabel={label} value={value} onChangeText={(t) => onChange(t.replace(/[^0-9]/g, ''))} k"
@@ -1444,7 +1356,7 @@
    "jsx": "<TextInput autoFocus value={text} onChangeText={(t) => { setText(t); setBad(false); }} keyboardType={editable."
   },
   {
-   "where": "src/features/chat/Composer.tsx:194",
+   "where": "src/features/chat/Composer.tsx:195",
    "kind": "input",
    "look": "text input",
    "jsx": "<TextInput ref={input} value={draft} onChangeText={setDraft} onFocus={() => setEmoji(false)} placeholder={img "

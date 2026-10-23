@@ -40,7 +40,7 @@
   "screen": "Plans",
   "group": "Routes",
   "status": "not started",
-  "hand": 16,
+  "hand": 15,
   "files": [
    "app/(tabs)/plans.tsx",
    "features/plans/WorkoutPlan.tsx",
@@ -53,7 +53,7 @@
   "screen": "Progress",
   "group": "Routes",
   "status": "not started",
-  "hand": 3,
+  "hand": 2,
   "files": [
    "app/(tabs)/progress.tsx"
   ]
@@ -154,7 +154,7 @@
   "screen": "Coach chat",
   "group": "Routes",
   "status": "not started",
-  "hand": 6,
+  "hand": 4,
   "files": [
    "app/gym/chat.tsx",
    "features/chat/AudioBubble.tsx",
@@ -167,7 +167,7 @@
   "screen": "Confirm session",
   "group": "Routes",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/gym/confirm.tsx"
   ]
@@ -177,7 +177,7 @@
   "screen": "Membership",
   "group": "Routes",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/gym/membership.tsx"
   ]
@@ -227,7 +227,7 @@
   "screen": "Log in",
   "group": "Routes",
   "status": "not started",
-  "hand": 3,
+  "hand": 1,
   "files": [
    "app/login.tsx",
    "components/OtpInput.tsx"
@@ -312,7 +312,7 @@
   "screen": "What did you eat?",
   "group": "Routes",
   "status": "not started",
-  "hand": 6,
+  "hand": 5,
   "files": [
    "app/plans/log.tsx"
   ]
@@ -343,7 +343,7 @@
   "screen": "Delete account",
   "group": "Routes",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/profile/delete.tsx"
   ]
@@ -494,7 +494,7 @@
   "screen": "Metric detail",
   "group": "Routes",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "app/progress/metric.tsx",
    "features/progress/LogSheets.tsx"
@@ -515,7 +515,7 @@
   "screen": "Streaks and badges",
   "group": "Routes",
   "status": "not started",
-  "hand": 3,
+  "hand": 2,
   "files": [
    "app/progress/streaks.tsx",
    "features/streak/BadgeArt.tsx",
@@ -907,7 +907,7 @@
   "screen": "NutritionSheet",
   "group": "Bottom sheets",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "features/plans/Sheets.tsx"
   ]
@@ -927,7 +927,7 @@
   "screen": "HistSheet",
   "group": "Bottom sheets",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "features/plans/Sheets.tsx"
   ]
@@ -1067,7 +1067,7 @@
   "screen": "FormTipsSheet",
   "group": "Bottom sheets",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "features/workout/WorkoutSheets.tsx"
   ]
@@ -1430,16 +1430,6 @@
   "hand": 0,
   "files": [
    "features/plans/Sheets.tsx"
-  ]
- },
- {
-  "id": "shared:features/plans/parts.tsx",
-  "screen": "features/plans/parts.tsx",
-  "group": "Shared components and features",
-  "status": "not started",
-  "hand": 1,
-  "files": [
-   "features/plans/parts.tsx"
   ]
  },
  {

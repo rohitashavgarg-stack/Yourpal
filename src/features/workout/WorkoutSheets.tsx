@@ -10,6 +10,7 @@ import { legDay } from '@/lib/data';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { setLabel } from './session';
+import { Callout } from '@/design-system/primitives/Callout';
 import { radii, fontSizes } from '@/design-system/tokens';
 
 // Screen-level handlers the sheets call (kept in a ref so they are always current).
@@ -59,7 +60,7 @@ export function FormTipsSheet() {
     <>
       <Txt style={{ fontFamily: font.regular, fontSize: 28, letterSpacing: -1.1 }}>{e.name}</Txt>
       <Txt v="label">{e.muscles}</Txt>
-      <View style={{ padding: 16, borderRadius: 20, backgroundColor: c.surface2 }}><Txt>{e.cue}</Txt></View>
+      <Callout size="lg"><Txt>{e.cue}</Txt></Callout>
       <Txt v="caption">Form videos from Coach Vikram arrive with the full plan.</Txt>
     </>
   );

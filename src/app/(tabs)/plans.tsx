@@ -21,6 +21,7 @@ import { applyCoachUpdate, COACH_HL } from '@/features/plans/content';
 import { haptic } from '@/lib/haptics';
 import { DAYL, DAYN, dateOf, monthOf, dayPlan, Diet, resetPlans, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { Callout } from '@/design-system/primitives/Callout';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const JUMP: [string, number][] = [['Today (Wed)', TODAY_IDX], ['Past day (Mon)', 0], ['Rest day (Tue)', 1], ['Future (Thu)', 3]];
@@ -146,7 +147,7 @@ export default function Plans() {
         </FadeIn>
       )}
       {paused && (
-        <View accessibilityLabel="Plans are view only" style={{ borderRadius: 20, backgroundColor: c.surface2, padding: 14 }}>
+        <Callout accessibilityLabel="Plans are view only">
           <Row style={{ gap: 12, alignItems: 'flex-start' }}>
             <View style={{ width: 36, height: 36, borderRadius: radii.sm, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={17} color={c.muted} /></View>
             <View style={{ flex: 1, gap: 2 }}>
@@ -154,7 +155,7 @@ export default function Plans() {
               <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Renew at Wulf Fitness reception to start workouts, log meals or change your plan.</Txt>
             </View>
           </Row>
-        </View>
+        </Callout>
       )}
       <Row style={{ gap: 10 }}>
         <View style={{ flex: 1 }}>

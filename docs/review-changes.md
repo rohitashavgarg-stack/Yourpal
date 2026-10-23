@@ -107,6 +107,26 @@ Shown only after the chart is dragged away from today.
 | Selected day: line | none | 1 px ink line on the ink fill (same colour, so it does not show) |
 | Selected day: number and "days" | at the box edge + 0 | 1 px further in (the line takes 1 px each side) |
 
+## Soft panels and notices (Callout)
+
+Fifteen hand-built soft blocks now use `Callout` (or `Card tone`). Seven were an exact match. These moved by 2 px or less because they now share the nearest standard size:
+
+<a id="progress-streaks"></a>
+### Streaks and badges, Progress, Membership, sheets (`progress-streaks`, `progress--bottom`, `gym-membership`, `sheet-FormTipsSheet`, `sheet-HistSheet`)
+
+| Where | Element | Old | New |
+|---|---|---|---|
+| Streaks and badges | "1 rest pass a month" note | side padding 14 px | 16 px |
+| Progress (health tiles row) | the small stat tiles | top and bottom padding 10 px | 12 px (each tile 4 px taller) |
+| Membership | "Renewals and freezes happen at the front desk" note | side padding 18 px | 16 px |
+| Workout form tips sheet | the cue panel | corner radius 20 px | 22 px |
+| Plans history sheet | the monospace note | corner radius 18 px | 20 px |
+| Plans, "Plans are view only" row | the row | side padding 14 px | 16 px |
+| Plans nutrition sheet | the stat tiles | padding 14 px | 12 px |
+| Login | "Too many wrong tries" notice | padding 14 px | 12 px |
+
+Exact (no change): the chat "away" notice, the composer's microphone notice, the login "couldn't find this number" notice, Delete account, Logging paused, the "What did you eat?" calorie line, the plans info box, and the confirmed session card on Confirm.
+
 ## Rendering noise to expect
 
 Not value changes, listed so they are not a surprise on the review page:

@@ -22,6 +22,7 @@ import { RangeBar, TrendChart } from '@/features/progress/TrendUI';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { Card } from '@/design-system/primitives/Card';
+import { Callout } from '@/design-system/primitives/Callout';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const TIP_UNIT: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: ' steps', water: ' L', hr: ' bpm', sleep: '', diet: '', cons: ' workouts' };
@@ -77,10 +78,10 @@ export default function MetricDetail() {
       {k === 'diet' && <Button label="Log a meal" onPress={() => openSheet(<QuickLogSheet mealId={nextMeal(d) ?? 'sn'} mode="write" />, { label: 'Log a meal' })} />}
       {(k === 'hr' || k === 'sleep' || k === 'meas' || k === 'cons') && <Button label={LOG_SHEETS[k].button} onPress={() => openSheet(<ManualLogSheet {...LOG_SHEETS[k].props} />, { label: LOG_SHEETS[k].props.title })} />}
       {k === 'weight' && (paused ? (
-        <View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.surface2, gap: 4 }}>
+        <Callout size="lg" gap={4}>
           <Txt style={{ fontFamily: font.semibold }}>Logging paused</Txt>
           <Txt muted style={{ fontSize: fontSizes.md }}>Your membership has expired. History stays here; renew at the front desk to log again.</Txt>
-        </View>
+        </Callout>
       ) : (
         <>
           <Button label="Log weight" onPress={() => router.push('/log-weight')} />
