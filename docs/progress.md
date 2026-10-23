@@ -45,7 +45,7 @@ Same rules as round 2: no behaviour change, 2 px or less uses the variant and is
 | Step | What | Status | Commit |
 |---|---|---|---|
 | F1 | Cards the library does not know: soft panel and callout (new Callout primitive, InfoBox built on it, Card tone) | done: 15 hand-built blocks replaced, 7 exact, 8 within 2 px (recorded in docs/review-changes.md); hand-built 179 to 163 | 8e14d87 |
-| F2 | ProgressBar primitive (3, 4, 6, 8 px) and ProgressSegments; 10 hand-built bars replaced | done: all exact (no visible change in the screenshots); hand-built 163 to 152; pager dots, ruler ticks, chart bars and the check-in line stay as they are | (this commit) |
+| F2 | ProgressBar primitive (3, 4, 6, 8 px) and ProgressSegments; 10 hand-built bars replaced | done: all exact (no visible change in the screenshots); hand-built 163 to 152; pager dots, ruler ticks, chart bars and the check-in line stay as they are | 83f29a3 |
 | F3 | IconBadge size presets and StatusDot adopted for the small tiles and dots | not started | |
 | F4 | Move Txt, Row, Segmented, Tag, CheckCircle, FoodMark, Ring, Avatar and the rest of group 1 into the design-system folder | not started | |
 | F5 | Refresh review screenshots (dark), coverage page, docs, zip | not started | |
