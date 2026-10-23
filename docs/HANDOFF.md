@@ -98,6 +98,47 @@ Open `docs/review/index.html` in a browser (a double click works; the images are
 
 `docs/visual-baseline/` holds the older baselines from before the October Today redesign; `scripts/visual/compare.js` and `check.js` still compare a run against them by pixels if you want a number. They are not used by the review page.
 
+## Known follow-up: hard-coded values outside the library
+
+Inside `src/design-system` there are none (the lint rule is an error there). In the rest of `src` there are **368** left: 223 colours, 81 radii, 64 font sizes (23 Oct 2026). Nothing was changed for these on purpose: each one is a value that could change how a screen looks, so they are moved to tokens one folder at a time, with a screenshot check. `npm run lint:changed` stops new ones: it fails a branch that adds a hard-coded value on any line it adds or changes, so the number can only go down. Count again with `node scripts/audit/hardcoded-by-folder.js` (about a minute).
+
+| Folder | Colours | Radii | Font sizes | Total |
+|---|---|---|---|---|
+| `src/features/today` | 45 | 7 | 10 | 62 |
+| `src/features/streak` | 36 | 2 | 2 | 40 |
+| `src/features/trackers` | 32 | 5 | 1 | 38 |
+| `src/features/workout` | 14 | 10 | 9 | 33 |
+| `src/features/progress` | 22 | 0 | 1 | 23 |
+| `src/features/onboarding` | 14 | 2 | 3 | 19 |
+| `src/app/gym` | 7 | 4 | 4 | 15 |
+| `src/app/plans` | 10 | 3 | 1 | 14 |
+| `src/web/WebFrame.tsx` | 6 | 7 | 1 | 14 |
+| `src/features/shell` | 10 | 3 | 0 | 13 |
+| `src/app/welcome.tsx` | 6 | 5 | 1 | 12 |
+| `src/app/workout.tsx` | 8 | 2 | 1 | 11 |
+| `src/web/ControlParts.tsx` | 0 | 6 | 4 | 10 |
+| `src/app/goal-detail.tsx` | 3 | 3 | 2 | 8 |
+| `src/app/profile` | 3 | 2 | 3 | 8 |
+| `src/features/chat` | 1 | 4 | 2 | 7 |
+| `src/features/plans` | 1 | 2 | 4 | 7 |
+| `src/app/checkin.tsx` | 3 | 2 | 1 | 6 |
+| `src/app/(tabs)` | 0 | 2 | 2 | 4 |
+| `src/app/food.tsx` | 0 | 2 | 1 | 3 |
+| `src/app/onboarding.tsx` | 0 | 0 | 3 | 3 |
+| `src/app/progress` | 0 | 2 | 1 | 3 |
+| `src/features/checkin` | 1 | 1 | 1 | 3 |
+| `src/app/login.tsx` | 0 | 1 | 1 | 2 |
+| `src/components/FloatingTabBar.tsx` | 0 | 2 | 0 | 2 |
+| `src/features/goalv2` | 1 | 1 | 0 | 2 |
+| `src/features/reminders` | 0 | 0 | 2 | 2 |
+| `src/app/exercise-search.tsx` | 0 | 1 | 0 | 1 |
+| `src/app/goal.tsx` | 0 | 0 | 1 | 1 |
+| `src/components/TabScreen.tsx` | 0 | 0 | 1 | 1 |
+| `src/features/body` | 0 | 0 | 1 | 1 |
+| **Total** | **223** | **81** | **64** | **368** |
+
+The `src/web` rows (24) are the dev-only demo panel. Suggested order: `src/features/today`, then `streak`, `trackers`, `workout`, `progress`.
+
 ## Where to read more
 
 - `CLAUDE.md`: the rules for every change.
