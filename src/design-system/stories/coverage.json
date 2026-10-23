@@ -7,7 +7,8 @@
    "file": "src/design-system/primitives/AmountStepper.tsx",
    "doc": true,
    "uses": 2,
-   "files": 2
+   "files": 2,
+   "inLibrary": 0
   },
   {
    "name": "Button",
@@ -15,7 +16,8 @@
    "file": "src/design-system/primitives/Button.tsx",
    "doc": true,
    "uses": 145,
-   "files": 59
+   "files": 59,
+   "inLibrary": 9
   },
   {
    "name": "IconButton",
@@ -23,7 +25,8 @@
    "file": "src/design-system/primitives/Button.tsx",
    "doc": true,
    "uses": 25,
-   "files": 16
+   "files": 16,
+   "inLibrary": 0
   },
   {
    "name": "Callout",
@@ -31,7 +34,8 @@
    "file": "src/design-system/primitives/Callout.tsx",
    "doc": true,
    "uses": 15,
-   "files": 13
+   "files": 13,
+   "inLibrary": 0
   },
   {
    "name": "Card",
@@ -39,7 +43,8 @@
    "file": "src/design-system/primitives/Card.tsx",
    "doc": true,
    "uses": 69,
-   "files": 31
+   "files": 31,
+   "inLibrary": 5
   },
   {
    "name": "Chevron",
@@ -47,7 +52,8 @@
    "file": "src/design-system/primitives/Chevron.tsx",
    "doc": true,
    "uses": 1,
-   "files": 1
+   "files": 1,
+   "inLibrary": 0
   },
   {
    "name": "Chip",
@@ -55,7 +61,8 @@
    "file": "src/design-system/primitives/Chip.tsx",
    "doc": true,
    "uses": 7,
-   "files": 4
+   "files": 4,
+   "inLibrary": 7
   },
   {
    "name": "FadeIn",
@@ -63,7 +70,8 @@
    "file": "src/design-system/primitives/FadeIn.tsx",
    "doc": true,
    "uses": 139,
-   "files": 49
+   "files": 49,
+   "inLibrary": 4
   },
   {
    "name": "IconBadge",
@@ -71,7 +79,8 @@
    "file": "src/design-system/primitives/IconBadge.tsx",
    "doc": true,
    "uses": 62,
-   "files": 37
+   "files": 37,
+   "inLibrary": 1
   },
   {
    "name": "NoteField",
@@ -79,7 +88,8 @@
    "file": "src/design-system/primitives/Input.tsx",
    "doc": true,
    "uses": 3,
-   "files": 3
+   "files": 3,
+   "inLibrary": 0
   },
   {
    "name": "ListCard",
@@ -87,7 +97,8 @@
    "file": "src/design-system/primitives/ListCard.tsx",
    "doc": true,
    "uses": 24,
-   "files": 18
+   "files": 18,
+   "inLibrary": 3
   },
   {
    "name": "MetaRow",
@@ -95,7 +106,8 @@
    "file": "src/design-system/primitives/MetaRow.tsx",
    "doc": true,
    "uses": 0,
-   "files": 0
+   "files": 0,
+   "inLibrary": 2
   },
   {
    "name": "Option",
@@ -103,7 +115,8 @@
    "file": "src/design-system/primitives/Option.tsx",
    "doc": true,
    "uses": 7,
-   "files": 5
+   "files": 5,
+   "inLibrary": 0
   },
   {
    "name": "Pill",
@@ -111,7 +124,8 @@
    "file": "src/design-system/primitives/Pill.tsx",
    "doc": true,
    "uses": 40,
-   "files": 19
+   "files": 19,
+   "inLibrary": 0
   },
   {
    "name": "Pressy",
@@ -119,7 +133,8 @@
    "file": "src/design-system/primitives/Pressy.tsx",
    "doc": true,
    "uses": 107,
-   "files": 51
+   "files": 51,
+   "inLibrary": 25
   },
   {
    "name": "ProgressBar",
@@ -127,7 +142,8 @@
    "file": "src/design-system/primitives/ProgressBar.tsx",
    "doc": true,
    "uses": 6,
-   "files": 5
+   "files": 5,
+   "inLibrary": 0
   },
   {
    "name": "ProgressSegments",
@@ -135,7 +151,8 @@
    "file": "src/design-system/primitives/ProgressBar.tsx",
    "doc": true,
    "uses": 4,
-   "files": 4
+   "files": 4,
+   "inLibrary": 0
   },
   {
    "name": "ScanBracket",
@@ -143,15 +160,17 @@
    "file": "src/design-system/primitives/ScanBracket.tsx",
    "doc": true,
    "uses": 8,
-   "files": 2
+   "files": 2,
+   "inLibrary": 0
   },
   {
    "name": "SectionLabel",
    "group": "primitives",
    "file": "src/design-system/primitives/SectionLabel.tsx",
    "doc": true,
-   "uses": 6,
-   "files": 3
+   "uses": 18,
+   "files": 8,
+   "inLibrary": 0
   },
   {
    "name": "SheetFooter",
@@ -159,7 +178,8 @@
    "file": "src/design-system/primitives/Sheet.tsx",
    "doc": true,
    "uses": 2,
-   "files": 2
+   "files": 2,
+   "inLibrary": 1
   },
   {
    "name": "Sheet",
@@ -167,7 +187,8 @@
    "file": "src/design-system/primitives/Sheet.tsx",
    "doc": true,
    "uses": 1,
-   "files": 1
+   "files": 1,
+   "inLibrary": 0
   },
   {
    "name": "Snackbar",
@@ -175,7 +196,8 @@
    "file": "src/design-system/primitives/Snackbar.tsx",
    "doc": true,
    "uses": 1,
-   "files": 1
+   "files": 1,
+   "inLibrary": 0
   },
   {
    "name": "StatusDot",
@@ -183,23 +205,26 @@
    "file": "src/design-system/primitives/StatusDot.tsx",
    "doc": true,
    "uses": 5,
-   "files": 5
+   "files": 5,
+   "inLibrary": 0
   },
   {
    "name": "Stepper",
    "group": "primitives",
    "file": "src/design-system/primitives/Stepper.tsx",
    "doc": true,
-   "uses": 8,
-   "files": 2
+   "uses": 9,
+   "files": 3,
+   "inLibrary": 0
   },
   {
    "name": "SubPage",
    "group": "primitives",
    "file": "src/design-system/primitives/SubPage.tsx",
    "doc": true,
-   "uses": 29,
-   "files": 29
+   "uses": 30,
+   "files": 30,
+   "inLibrary": 0
   },
   {
    "name": "Banner",
@@ -207,7 +232,8 @@
    "file": "src/design-system/patterns/Banner.tsx",
    "doc": true,
    "uses": 2,
-   "files": 1
+   "files": 1,
+   "inLibrary": 0
   },
   {
    "name": "BudgetCard",
@@ -215,15 +241,17 @@
    "file": "src/design-system/patterns/BudgetCard.tsx",
    "doc": true,
    "uses": 1,
-   "files": 1
+   "files": 1,
+   "inLibrary": 0
   },
   {
    "name": "RadialGlow",
    "group": "patterns",
    "file": "src/design-system/patterns/GoalCard.tsx",
    "doc": true,
-   "uses": 0,
-   "files": 0
+   "uses": 2,
+   "files": 2,
+   "inLibrary": 2
   },
   {
    "name": "GoalCard",
@@ -231,15 +259,17 @@
    "file": "src/design-system/patterns/GoalCard.tsx",
    "doc": true,
    "uses": 1,
-   "files": 1
+   "files": 1,
+   "inLibrary": 1
   },
   {
    "name": "MealsCard",
    "group": "patterns",
    "file": "src/design-system/patterns/MealsCard.tsx",
    "doc": true,
-   "uses": 0,
-   "files": 0
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
   },
   {
    "name": "TrackerRow",
@@ -247,7 +277,8 @@
    "file": "src/design-system/patterns/TrackerRow.tsx",
    "doc": true,
    "uses": 1,
-   "files": 1
+   "files": 1,
+   "inLibrary": 0
   },
   {
    "name": "TrackerTile",
@@ -255,7 +286,8 @@
    "file": "src/design-system/patterns/TrackerRow.tsx",
    "doc": true,
    "uses": 0,
-   "files": 0
+   "files": 0,
+   "inLibrary": 4
   },
   {
    "name": "BottleFigma",
@@ -263,7 +295,8 @@
    "file": "src/design-system/patterns/TrackerRow.tsx",
    "doc": true,
    "uses": 1,
-   "files": 1
+   "files": 1,
+   "inLibrary": 1
   },
   {
    "name": "WaterTile",
@@ -271,7 +304,8 @@
    "file": "src/design-system/patterns/TrackerRow.tsx",
    "doc": true,
    "uses": 1,
-   "files": 1
+   "files": 1,
+   "inLibrary": 0
   },
   {
    "name": "WeightTile",
@@ -279,7 +313,8 @@
    "file": "src/design-system/patterns/TrackerRow.tsx",
    "doc": true,
    "uses": 1,
-   "files": 1
+   "files": 1,
+   "inLibrary": 0
   },
   {
    "name": "HealthTile",
@@ -287,7 +322,8 @@
    "file": "src/design-system/patterns/TrackerRow.tsx",
    "doc": true,
    "uses": 3,
-   "files": 1
+   "files": 1,
+   "inLibrary": 0
   },
   {
    "name": "ConnectTile",
@@ -295,23 +331,26 @@
    "file": "src/design-system/patterns/TrackerRow.tsx",
    "doc": true,
    "uses": 1,
-   "files": 1
+   "files": 1,
+   "inLibrary": 0
   },
   {
    "name": "WeekCard",
    "group": "patterns",
    "file": "src/design-system/patterns/WeekCard.tsx",
    "doc": true,
-   "uses": 2,
-   "files": 2
+   "uses": 3,
+   "files": 3,
+   "inLibrary": 0
   },
   {
    "name": "WorkoutCard",
    "group": "patterns",
    "file": "src/design-system/patterns/WorkoutCard.tsx",
    "doc": true,
-   "uses": 3,
-   "files": 2
+   "uses": 4,
+   "files": 3,
+   "inLibrary": 0
   }
  ],
  "count": 88,

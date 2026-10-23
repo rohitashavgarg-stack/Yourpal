@@ -24,14 +24,21 @@ for (const group of ['primitives', 'patterns']) {
     for (const m of s.matchAll(/^export function ([A-Z]\w*)/gm)) lib.push({ name: m[1], group, file: `src/design-system/${group}/${f}`, doc: fs.existsSync(path.join(src, 'design-system', 'docs', f.replace('.tsx', '.md'))) });
   }
 }
-// uses in the app: <Name ... in files outside the design system (stories and docs do not count)
+// uses in the app: <Name ... in files outside the design system (stories and docs do not count). A component that is imported under another
+// name (`Name as Other`) is counted under that name too. Uses inside the library files (its own file included) are counted separately ("inLibrary"): MetaRow,
+// for example, is used by WorkoutCard and MealsCard, so it is on screen even though no screen writes <MetaRow>.
+const dsFiles = walk(path.join(src, 'design-system')).filter((p) => !/[\\/](stories|docs|_archive)[\\/]/.test(p));
 const appFiles = walk(src).filter((p) => !p.includes(`${path.sep}design-system${path.sep}`));
 const texts = appFiles.map((p) => fs.readFileSync(p, 'utf8'));
+const dsTexts = dsFiles.map((p) => ({ p, t: fs.readFileSync(p, 'utf8') }));
+const count = (t, names) => names.reduce((n, nm) => n + (t.match(new RegExp(`<${nm}(?=[\\s/>])`, 'g')) || []).length, 0);
 for (const c of lib) {
-  const re = new RegExp(`<${c.name}(?=[\\s/>])`, 'g');
+  const names = new Set([c.name]);
+  for (const t of [...texts, ...dsTexts.map((x) => x.t)]) for (const m of t.matchAll(new RegExp(`\\b${c.name} as (\\w+)`, 'g'))) names.add(m[1]);
   let uses = 0, files = 0;
-  for (const t of texts) { const n = (t.match(re) || []).length; uses += n; if (n) files++; }
+  for (const t of texts) { const n = count(t, [...names]); uses += n; if (n) files++; }
   c.uses = uses; c.files = files;
+  c.inLibrary = dsTexts.reduce((n, x) => n + count(x.t, [...names]), 0);
 }
 
 // hand-built: the one count from scripts/audit/hand-built.js (outside the dev-only demo panel; on purpose ones are listed separately)

@@ -4,7 +4,7 @@ import { fontSizes } from '@/design-system/tokens';
 
 // The Storybook "Coverage" page: what is in the library and what is still hand-built. The data comes from
 // scripts/audit/coverage-storybook.js (run after scripts/audit/coverage.js --json). Plain HTML: this page only runs in Storybook.
-type Lib = { name: string; group: string; file: string; doc: boolean; uses: number; files: number };
+type Lib = { name: string; group: string; file: string; doc: boolean; uses: number; files: number; inLibrary: number };
 type Hand = { where: string; kind: string; look: string; jsx: string };
 type Exc = { where: string; what: string; why: string };
 
@@ -31,8 +31,8 @@ export function CoveragePage() {
     <div style={{ fontFamily: 'system-ui, sans-serif', maxWidth: 1100 }}>
       <p>Generated {data.generated}. {lib.length} components in the library. {data.count} elements are hand-built outside the dev-only demo panel: {data.toBuild} still to build and {data.onPurpose} on purpose. The same number is in docs/coverage.md.</p>
       <h2>In the library</h2>
-      <Table cols={['Component', 'Group', 'Uses in the app', 'Files', 'Doc', 'Source']}
-        rows={lib.map((c) => [<strong key="n">{c.name}</strong>, c.group, c.uses, c.files, c.doc ? 'yes' : 'no', <span key="f" style={mono}>{c.file}</span>])} />
+      <Table cols={['Component', 'Group', 'Uses in the app', 'Files', 'Used inside the library', 'Doc', 'Source']}
+        rows={lib.map((c) => [<strong key="n">{c.name}</strong>, c.group, c.uses, c.files, c.inLibrary, c.doc ? 'yes' : 'no', <span key="f" style={mono}>{c.file}</span>])} />
       <h2>Still hand-built</h2>
       <p>{Object.entries(kinds).map(([k, n]) => `${k} ${n}`).join(', ')}. Each is a candidate for a library component. The on purpose ones are not in this list ({data.onPurpose} in the app; the demo panel is not counted, {data.demoPanelExcluded} elements there).</p>
       <Table cols={['Screen group', 'Hand-built', 'On purpose']} rows={groups.map(([g, n]) => [g, n.total, n.onPurpose])} />
