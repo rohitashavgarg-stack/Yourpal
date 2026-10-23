@@ -23,6 +23,7 @@ import { ExTile, Highlight, Moon } from './parts';
 import { DAYL, dateOf, dayPlan, exSub, relDay, usePlans } from './store';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { ListCard } from '@/design-system/primitives/ListCard';
 
 
@@ -148,9 +149,7 @@ export function WorkoutPlan() {
                       </View>
                     ))}
                   </Row>
-                  <Row style={{ gap: 3 }}>
-                    {plan.ex.map((e) => <View key={e.id} accessibilityLabel={e.res === 'skip' ? 'Not logged' : 'Logged'} style={{ flex: 1, height: 4, borderRadius: radii.xs, backgroundColor: e.res === 'skip' ? c.surface3 : c.ink }} />)}
-                  </Row>
+                  <ProgressSegments height={4} gap={3} segments={plan.ex.map((e) => ({ color: e.res === 'skip' ? c.surface3 : c.ink, label: e.res === 'skip' ? 'Not logged' : 'Logged' }))} />
                 </Card>
               </FadeIn>
             );

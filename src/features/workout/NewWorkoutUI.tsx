@@ -16,6 +16,7 @@ import { VideoView, useVideoPlayer } from 'expo-video';
 import { CLIPS, THUMBS } from './clips';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { IconButton } from '@/design-system/primitives/Button';
+import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // The only clips we have are the main-lift ones, so a move gets a still only where it is the same movement; the rest show a plain tile.
@@ -138,9 +139,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       {pop && source != null && <ClipPopup source={source} onClose={() => setPop(false)} />}
       <View style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, gap: 12, paddingBottom: 8 }}>
-        <View style={{ flexDirection: 'row', gap: 4 }}>
-          {Array.from({ length: n }, (_, i) => <View key={i} style={{ flex: 1, height: 4, borderRadius: radii.xs, backgroundColor: i <= pos ? c.accent : c.surface3 }} />)}
-        </View>
+        <ProgressSegments height={4} gap={4} segments={Array.from({ length: n }, (_, i) => ({ color: i <= pos ? c.accent : c.surface3 }))} />
         <Row style={{ gap: 10 }}>
           <RoundBtn label="Minimise workout" onPress={onMinimise} glass><X size={20} color={c.ink} /></RoundBtn>
           <View style={{ flex: 1, alignItems: 'center' }}>

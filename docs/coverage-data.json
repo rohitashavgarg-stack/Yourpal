@@ -368,7 +368,7 @@
      "kind": "icon badge",
      "sig": "icon tile 56 px, radius radii.xl",
      "fn": "LockedPlan",
-     "line": 41,
+     "line": 42,
      "tag": "View",
      "text": "<View style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface2, borderWidth: 1, bor",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -377,7 +377,7 @@
      "kind": "button or pill",
      "sig": "button auto px high, radius radii.xl",
      "fn": "WorkoutPlan",
-     "line": 90,
+     "line": 91,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See w",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -386,7 +386,7 @@
      "kind": "icon badge",
      "sig": "dot 10 px",
      "fn": "WorkoutPlan",
-     "line": 92,
+     "line": 93,
      "tag": "View",
      "text": "<View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: c.accent }} />",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -395,7 +395,7 @@
      "kind": "button or pill",
      "sig": "button auto px high, radius radii.xl",
      "fn": "WorkoutPlan",
-     "line": 112,
+     "line": 113,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -404,25 +404,16 @@
      "kind": "icon badge",
      "sig": "icon tile 28 px, radius 14",
      "fn": "WorkoutPlan",
-     "line": 131,
+     "line": 132,
      "tag": "View",
      "text": "<View accessibilityLabel=\"Logged\" style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.good, a",
-     "file": "features/plans/WorkoutPlan.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 4 px high, radius radii.xs",
-     "fn": "WorkoutPlan",
-     "line": 152,
-     "tag": "View",
-     "text": "<View key={e.id} accessibilityLabel={e.res === 'skip' ? 'Not logged' : 'Logged'} style={{ flex: 1, height: 4, ",
      "file": "features/plans/WorkoutPlan.tsx"
     },
     {
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
-     "line": 178,
+     "line": 177,
      "tag": "View",
      "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -431,32 +422,23 @@
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
-     "line": 179,
+     "line": 178,
      "tag": "View",
      "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g",
      "file": "features/plans/WorkoutPlan.tsx"
     },
     {
-     "kind": "bar",
-     "sig": "bar 6 px high, radius radii.xs",
-     "fn": "MacroBar",
-     "line": 69,
-     "tag": "View",
-     "text": "<View style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>",
-     "file": "features/plans/DietPlan.tsx"
-    },
-    {
      "kind": "icon badge",
      "sig": "dot 8 px",
      "fn": "QtyControl",
-     "line": 111,
+     "line": 109,
      "tag": "View",
      "text": "<View accessibilityLabel=\"Changed from plan\" style={{ position: 'absolute', top: 0, right: 0, width: 8, height",
      "file": "features/plans/DietPlan.tsx"
     }
    ],
    "ds": {
-    "Row": 11,
+    "Row": 10,
     "Txt": 67,
     "Button": 11,
     "Pressy": 7,
@@ -465,7 +447,9 @@
     "Segmented": 1,
     "IconButton": 2,
     "Card": 9,
+    "ProgressSegments": 1,
     "ListCard": 2,
+    "ProgressBar": 1,
     "AmountStepper": 1,
     "Chevron": 1
    },
@@ -480,35 +464,35 @@
     {
      "comp": "QtySheet",
      "label": "Change amount",
-     "line": 110,
+     "line": 108,
      "in": "QtyControl",
      "file": "features/plans/DietPlan.tsx"
     },
     {
      "comp": "it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode=\"sugg\"",
      "label": "Swap item",
-     "line": 145,
+     "line": 143,
      "in": "onLeft",
      "file": "features/plans/DietPlan.tsx"
     },
     {
      "comp": "ItemMenuSheet",
      "label": "Item options",
-     "line": 172,
+     "line": 170,
      "in": "menu",
      "file": "features/plans/DietPlan.tsx"
     },
     {
      "comp": "UndoEatenSheet",
      "label": "Mark as not eaten",
-     "line": 207,
+     "line": 205,
      "in": "ItemRow",
      "file": "features/plans/DietPlan.tsx"
     },
     {
      "comp": "UndoEatenSheet",
      "label": "Mark as not eaten",
-     "line": 253,
+     "line": 251,
      "in": "MealCard",
      "file": "features/plans/DietPlan.tsx"
     }
@@ -730,7 +714,7 @@
      "kind": "card",
      "sig": "card radius radii.md, fill c.surface",
      "fn": "FoodDetail",
-     "line": 97,
+     "line": 98,
      "tag": "View",
      "text": "<View key={l} style={{ gap: 2, paddingVertical: 9, paddingHorizontal: 14, borderRadius: radii.md, backgroundCo",
      "file": "app/food.tsx"
@@ -739,7 +723,7 @@
      "kind": "button or pill",
      "sig": "button 40 px high, radius 20",
      "fn": "FoodDetail",
-     "line": 103,
+     "line": 104,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" onPress={() => askCoach(fd!.n, `Is ${fd!.n.toLowerCase()} right for my plan",
      "file": "app/food.tsx"
@@ -748,43 +732,25 @@
      "kind": "icon badge",
      "sig": "icon tile 40 px, radius radii.sm",
      "fn": "FoodDetail",
-     "line": 113,
+     "line": 114,
      "tag": "View",
      "text": "<View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.tAct, alignItems: 'center', j",
-     "file": "app/food.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 4 px high, radius radii.xs",
-     "fn": "FoodDetail",
-     "line": 123,
-     "tag": "View",
-     "text": "<View style={{ height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>",
      "file": "app/food.tsx"
     },
     {
      "kind": "button or pill",
      "sig": "button auto px high, radius radii.md",
      "fn": "FoodDetail",
-     "line": 127,
+     "line": 128,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityState={{ expanded: micro }} onPress={() => setMicro((v) => !v)",
-     "file": "app/food.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 4 px high, radius radii.xs",
-     "fn": "FoodDetail",
-     "line": 138,
-     "tag": "View",
-     "text": "<View style={{ height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>",
      "file": "app/food.tsx"
     },
     {
      "kind": "icon badge",
      "sig": "icon tile 26 px, radius 13",
      "fn": "FoodDetail",
-     "line": 163,
+     "line": 164,
      "tag": "View",
      "text": "<View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.surface2, alignItems: 'center', jus",
      "file": "app/food.tsx"
@@ -796,6 +762,7 @@
     "Pressy": 2,
     "Chip": 2,
     "Card": 3,
+    "ProgressBar": 2,
     "FadeIn": 1,
     "Button": 2
    },
@@ -803,7 +770,7 @@
     {
      "comp": "QuickLogSheet",
      "label": "Swap item",
-     "line": 80,
+     "line": 81,
      "in": "alt",
      "file": "app/food.tsx"
     }
@@ -837,7 +804,7 @@
      "kind": "chip",
      "sig": "chip 26 px high, radius 13",
      "fn": "ProgressChart",
-     "line": 92,
+     "line": 93,
      "tag": "View",
      "text": "<View style={{ height: 26, paddingHorizontal: 10, borderRadius: 13, backgroundColor: c.ink, justifyContent: 'c",
      "file": "app/goal-detail.tsx"
@@ -846,7 +813,7 @@
      "kind": "bar",
      "sig": "bar 3 px high, radius radii.xs",
      "fn": "ProgressChart",
-     "line": 107,
+     "line": 108,
      "tag": "View",
      "text": "<View style={{ width: 16, height: 3, borderRadius: radii.xs, backgroundColor: c.accent }} />",
      "file": "app/goal-detail.tsx"
@@ -855,34 +822,16 @@
      "kind": "icon badge",
      "sig": "icon tile 40 px, radius 20",
      "fn": "Drivers",
-     "line": 129,
+     "line": 130,
      "tag": "View",
      "text": "<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: col[r.key][0], alignItems: 'center', ",
-     "file": "app/goal-detail.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 6 px high, radius radii.xs",
-     "fn": "Drivers",
-     "line": 132,
-     "tag": "View",
-     "text": "<View style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface3, overflow: 'hidden' }}>",
-     "file": "app/goal-detail.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 6 px high, radius radii.xs",
-     "fn": "Drivers",
-     "line": 133,
-     "tag": "View",
-     "text": "<View style={{ width: `${Math.max(4, r.pct * 100)}%`, height: 6, borderRadius: radii.xs, backgroundColor: col[",
      "file": "app/goal-detail.tsx"
     },
     {
      "kind": "icon badge",
      "sig": "icon tile 36 px, radius radii.md",
      "fn": "History",
-     "line": 152,
+     "line": 151,
      "tag": "View",
      "text": "<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: h.result === 'Reached' ? c.good",
      "file": "app/goal-detail.tsx"
@@ -891,7 +840,7 @@
      "kind": "icon badge",
      "sig": "icon tile 40 px, radius 20",
      "fn": "GoalDetail",
-     "line": 248,
+     "line": 247,
      "tag": "View",
      "text": "<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.accentSoft, alignItems: 'center', j",
      "file": "app/goal-detail.tsx"
@@ -900,7 +849,7 @@
      "kind": "chip",
      "sig": "chip 30 px high, radius 15",
      "fn": "GoalDetail",
-     "line": 255,
+     "line": 254,
      "tag": "View",
      "text": "<View style={{ alignSelf: 'flex-start', height: 30, paddingHorizontal: 12, borderRadius: 15, backgroundColor: ",
      "file": "app/goal-detail.tsx"
@@ -909,7 +858,7 @@
      "kind": "icon badge",
      "sig": "icon tile 34 px, radius radii.md",
      "fn": "GoalDetail",
-     "line": 274,
+     "line": 273,
      "tag": "View",
      "text": "<View style={{ width: 34, height: 34, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center', ",
      "file": "app/goal-detail.tsx"
@@ -921,6 +870,7 @@
     "Card": 11,
     "SectionLabel": 1,
     "Pressy": 3,
+    "ProgressBar": 1,
     "Button": 7
    },
    "sheets": [],
@@ -1441,25 +1391,16 @@
      "kind": "icon badge",
      "sig": "icon tile 56 px, radius 20",
      "fn": "Onboarding",
-     "line": 121,
+     "line": 122,
      "tag": "View",
      "text": "<View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.accentSoft, alignItems: 'center', j",
-     "file": "app/onboarding.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 6 px high, radius radii.xs",
-     "fn": "StepProgress",
-     "line": 205,
-     "tag": "View",
-     "text": "<View accessibilityRole=\"progressbar\" accessibilityValue={{ now: n, min: 0, max: total }} style={{ flex: 1, he",
      "file": "app/onboarding.tsx"
     },
     {
      "kind": "button or pill",
      "sig": "button 108 px high, radius radii.lg",
      "fn": "GoalChoiceTile",
-     "line": 283,
+     "line": 282,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"radio\" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onP",
      "file": "app/onboarding.tsx"
@@ -1468,7 +1409,7 @@
      "kind": "icon badge",
      "sig": "icon tile 40 px, radius 20",
      "fn": "GoalChoiceTile",
-     "line": 285,
+     "line": 284,
      "tag": "View",
      "text": "<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', jus",
      "file": "app/onboarding.tsx"
@@ -1477,7 +1418,7 @@
      "kind": "icon badge",
      "sig": "icon tile 22 px, radius radii.sm",
      "fn": "GoalChoiceTile",
-     "line": 289,
+     "line": 288,
      "tag": "View",
      "text": "<View style={{ position: 'absolute', right: 12, top: 12, width: 22, height: 22, borderRadius: radii.sm, backgr",
      "file": "app/onboarding.tsx"
@@ -1486,7 +1427,7 @@
      "kind": "icon badge",
      "sig": "icon tile 26 px, radius 13",
      "fn": "FacilityStep",
-     "line": 310,
+     "line": 309,
      "tag": "View",
      "text": "<View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, ba",
      "file": "app/onboarding.tsx"
@@ -1495,7 +1436,7 @@
      "kind": "icon badge",
      "sig": "icon tile 26 px, radius 13",
      "fn": "ExpStep",
-     "line": 334,
+     "line": 333,
      "tag": "View",
      "text": "<View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, ba",
      "file": "app/onboarding.tsx"
@@ -1560,6 +1501,7 @@
     "Button": 3,
     "Pressy": 4,
     "FadeIn": 8,
+    "ProgressBar": 1,
     "Card": 4,
     "Row": 15,
     "Option": 3,
@@ -1572,7 +1514,7 @@
     {
      "comp": "View",
      "label": "Notifications",
-     "line": 119,
+     "line": 120,
      "in": "askNotifications",
      "file": "app/onboarding.tsx"
     }
@@ -2110,20 +2052,11 @@
    "files": [
     "app/profile/export.tsx"
    ],
-   "hand": [
-    {
-     "kind": "bar",
-     "sig": "bar 8 px high, radius radii.xs",
-     "fn": "ExportData",
-     "line": 55,
-     "tag": "View",
-     "text": "<View style={{ height: 8, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>",
-     "file": "app/profile/export.tsx"
-    }
-   ],
+   "hand": [],
    "ds": {
     "Txt": 3,
     "FadeIn": 3,
+    "ProgressBar": 1,
     "Button": 1
    },
    "sheets": [],
@@ -2720,7 +2653,7 @@
      "kind": "icon badge",
      "sig": "icon tile 22 px, radius radii.sm",
      "fn": "TodayMock",
-     "line": 45,
+     "line": 46,
      "tag": "View",
      "text": "<View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: fixed.blue }} />",
      "file": "app/welcome.tsx"
@@ -2729,7 +2662,7 @@
      "kind": "icon badge",
      "sig": "icon tile 20 px, radius radii.sm",
      "fn": "TodayMock",
-     "line": 48,
+     "line": 49,
      "tag": "View",
      "text": "<View style={{ width: 20, height: 20, borderRadius: radii.sm, backgroundColor: '#2A3242' }} />",
      "file": "app/welcome.tsx"
@@ -2738,7 +2671,7 @@
      "kind": "chip",
      "sig": "chip 30 px high, radius 15",
      "fn": "TodayMock",
-     "line": 76,
+     "line": 77,
      "tag": "View",
      "text": "<View style={{ marginTop: 6, height: 30, borderRadius: 15, backgroundColor: fixed.white, alignItems: 'center',",
      "file": "app/welcome.tsx"
@@ -2747,25 +2680,16 @@
      "kind": "icon badge",
      "sig": "icon tile 18 px, radius 9",
      "fn": "WorkoutMock",
-     "line": 93,
+     "line": 94,
      "tag": "View",
      "text": "<View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: done ? fixed.blue : 'transparent', bor",
-     "file": "app/welcome.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 6 px high, radius radii.xs",
-     "fn": "ProgressMock",
-     "line": 119,
-     "tag": "View",
-     "text": "<View key={i} style={{ flex: 1, height: 6, borderRadius: radii.xs, backgroundColor: o ? '#FF8A3D' : 'rgba(255,",
      "file": "app/welcome.tsx"
     },
     {
      "kind": "icon badge",
      "sig": "icon tile 28 px, radius 14",
      "fn": "ProgressMock",
-     "line": 128,
+     "line": 129,
      "tag": "View",
      "text": "<View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: 'rgba(15,138,95,0.25)' }} />",
      "file": "app/welcome.tsx"
@@ -2774,7 +2698,7 @@
      "kind": "icon button",
      "sig": "icon button 28 px, radius radii.xs",
      "fn": "Segment",
-     "line": 157,
+     "line": 158,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={label} onPress={onPress} hitSlop={{ top: 14, bottom: 14",
      "file": "app/welcome.tsx"
@@ -2782,6 +2706,7 @@
    ],
    "ds": {
     "Txt": 30,
+    "ProgressSegments": 1,
     "Pressy": 1,
     "FadeIn": 2,
     "Button": 1
@@ -2806,15 +2731,6 @@
     "features/workout/WorkoutSheets.tsx"
    ],
    "hand": [
-    {
-     "kind": "bar",
-     "sig": "bar 3 px high, radius radii.xs",
-     "fn": "Bars",
-     "line": 38,
-     "tag": "View",
-     "text": "<View key={i} style={{ flex: 1, height: 3, borderRadius: radii.xs, backgroundColor: i < pos ? fixed.blue : i =",
-     "file": "app/workout.tsx"
-    },
     {
      "kind": "button or pill",
      "sig": "button 38 px high, radius 19",
@@ -2864,7 +2780,7 @@
      "kind": "icon button",
      "sig": "icon button 64 px, radius radii.sm",
      "fn": "MoveThumb",
-     "line": 52,
+     "line": 53,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Watch the clip\" disabled={!key} onPress={onOpen} scaleT",
      "file": "features/workout/NewWorkoutUI.tsx"
@@ -2873,7 +2789,7 @@
      "kind": "icon badge",
      "sig": "icon tile 26 px, radius 13",
      "fn": "MoveThumb",
-     "line": 54,
+     "line": 55,
      "tag": "View",
      "text": "<View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'c",
      "file": "features/workout/NewWorkoutUI.tsx"
@@ -2882,7 +2798,7 @@
      "kind": "button or pill",
      "sig": "button 56 px high, radius 20",
      "fn": "ClipRow",
-     "line": 109,
+     "line": 110,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Show the clip\" onPress={onOpen} scaleTo={0.98} style={{",
      "file": "features/workout/NewWorkoutUI.tsx"
@@ -2891,7 +2807,7 @@
      "kind": "icon badge",
      "sig": "icon tile 44 px, radius radii.sm",
      "fn": "ClipRow",
-     "line": 111,
+     "line": 112,
      "tag": "View",
      "text": "<View style={{ width: 44, height: 44, borderRadius: radii.sm, overflow: 'hidden', backgroundColor: fixed.white",
      "file": "features/workout/NewWorkoutUI.tsx"
@@ -2900,18 +2816,9 @@
      "kind": "icon badge",
      "sig": "icon tile 22 px, radius radii.sm",
      "fn": "ClipRow",
-     "line": 113,
+     "line": 114,
      "tag": "View",
      "text": "<View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: 'rgba(11,14,20,0.72)', alignIte",
-     "file": "features/workout/NewWorkoutUI.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 4 px high, radius radii.xs",
-     "fn": "NewExercise",
-     "line": 142,
-     "tag": "View",
-     "text": "<View key={i} style={{ flex: 1, height: 4, borderRadius: radii.xs, backgroundColor: i <= pos ? c.accent : c.su",
      "file": "features/workout/NewWorkoutUI.tsx"
     },
     {
@@ -2934,6 +2841,7 @@
     }
    ],
    "ds": {
+    "ProgressSegments": 2,
     "Row": 22,
     "Txt": 71,
     "FadeIn": 10,

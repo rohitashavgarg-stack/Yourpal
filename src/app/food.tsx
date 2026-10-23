@@ -19,6 +19,7 @@ import { mealById } from '@/features/today/meals';
 import { QuickLogSheet } from '@/features/today/QuickLogSheet';
 import { askCoach } from '@/features/coach/coach';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { ProgressBar } from '@/design-system/primitives/ProgressBar';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export default function FoodDetail() {
@@ -120,7 +121,7 @@ export default function FoodDetail() {
                 <View key={m.l} style={{ flex: 1, borderWidth: 1, borderColor: c.line, borderRadius: radii.md, padding: 12, gap: 6 }}>
                   <Txt v="caption">{m.l}</Txt>
                   <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 24 }}>{m.v}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.xs }}> g</Txt></Txt>
-                  <View style={{ height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}><View style={{ height: '100%', width: `${Math.min(100, Math.round(m.w * 100))}%`, backgroundColor: m.col, borderRadius: radii.xs }} /></View>
+                  <ProgressBar height={4} color={m.col} percent={Math.min(100, Math.round(m.w * 100))} />
                 </View>
               ))}
             </Row>
@@ -135,7 +136,7 @@ export default function FoodDetail() {
                 {micros.map(([l, v, pct]) => (
                   <View key={l} style={{ gap: 5 }}>
                     <Row style={{ justifyContent: 'space-between' }}><Txt style={{ fontSize: fontSizes.sm }}>{l}</Txt><Txt v="mono" muted style={{ fontSize: fontSizes.sm }}>{v} · {pct}%</Txt></Row>
-                    <View style={{ height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}><View style={{ height: '100%', width: `${Math.min(100, pct)}%`, backgroundColor: c.cNutri, borderRadius: radii.xs }} /></View>
+                    <ProgressBar height={4} color={c.cNutri} percent={Math.min(100, pct)} />
                   </View>
                 ))}
                 <Txt style={{ fontSize: fontSizes.xs2, color: c.muted }}>% of daily value for an adult. A guide, not medical advice.</Txt>

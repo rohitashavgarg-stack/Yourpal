@@ -122,6 +122,22 @@
    "files": 51
   },
   {
+   "name": "ProgressBar",
+   "group": "primitives",
+   "file": "src/design-system/primitives/ProgressBar.tsx",
+   "doc": true,
+   "uses": 6,
+   "files": 5
+  },
+  {
+   "name": "ProgressSegments",
+   "group": "primitives",
+   "file": "src/design-system/primitives/ProgressBar.tsx",
+   "doc": true,
+   "uses": 4,
+   "files": 4
+  },
+  {
    "name": "ScanBracket",
    "group": "primitives",
    "file": "src/design-system/primitives/ScanBracket.tsx",
@@ -300,64 +316,16 @@
  ],
  "handBuilt": [
   {
-   "where": "src/app/food.tsx:123",
-   "kind": "bar",
-   "look": "bar 4 px high, radius radii.xs",
-   "jsx": "<View style={{ height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>"
-  },
-  {
-   "where": "src/app/food.tsx:138",
-   "kind": "bar",
-   "look": "bar 4 px high, radius radii.xs",
-   "jsx": "<View style={{ height: 4, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>"
-  },
-  {
-   "where": "src/app/goal-detail.tsx:107",
+   "where": "src/app/goal-detail.tsx:108",
    "kind": "bar",
    "look": "bar 3 px high, radius radii.xs",
    "jsx": "<View style={{ width: 16, height: 3, borderRadius: radii.xs, backgroundColor: c.accent }} />"
-  },
-  {
-   "where": "src/app/goal-detail.tsx:132",
-   "kind": "bar",
-   "look": "bar 6 px high, radius radii.xs",
-   "jsx": "<View style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface3, overflow: 'hidden' }}>"
-  },
-  {
-   "where": "src/app/goal-detail.tsx:133",
-   "kind": "bar",
-   "look": "bar 6 px high, radius radii.xs",
-   "jsx": "<View style={{ width: `${Math.max(4, r.pct * 100)}%`, height: 6, borderRadius: radii.xs, backgroundColor: col["
-  },
-  {
-   "where": "src/app/onboarding.tsx:205",
-   "kind": "bar",
-   "look": "bar 6 px high, radius radii.xs",
-   "jsx": "<View accessibilityRole=\"progressbar\" accessibilityValue={{ now: n, min: 0, max: total }} style={{ flex: 1, he"
   },
   {
    "where": "src/app/plans/exercise.tsx:40",
    "kind": "bar",
    "look": "bar 4 px high, radius radii.xs",
    "jsx": "<View style={{ position: 'absolute', left: 14, right: 14, bottom: 12, height: 4, borderRadius: radii.xs, backg"
-  },
-  {
-   "where": "src/app/profile/export.tsx:55",
-   "kind": "bar",
-   "look": "bar 8 px high, radius radii.xs",
-   "jsx": "<View style={{ height: 8, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>"
-  },
-  {
-   "where": "src/app/welcome.tsx:119",
-   "kind": "bar",
-   "look": "bar 6 px high, radius radii.xs",
-   "jsx": "<View key={i} style={{ flex: 1, height: 6, borderRadius: radii.xs, backgroundColor: o ? '#FF8A3D' : 'rgba(255,"
-  },
-  {
-   "where": "src/app/workout.tsx:38",
-   "kind": "bar",
-   "look": "bar 3 px high, radius radii.xs",
-   "jsx": "<View key={i} style={{ flex: 1, height: 3, borderRadius: radii.xs, backgroundColor: i < pos ? fixed.blue : i ="
   },
   {
    "where": "src/components/Ruler.tsx:107",
@@ -370,18 +338,6 @@
    "kind": "bar",
    "look": "bar 3 px high, radius radii.xs",
    "jsx": "<View pointerEvents=\"none\" style={{ position: 'absolute', right: 0, top: len / 2 - 1.5, width: 38, height: 3, "
-  },
-  {
-   "where": "src/features/plans/DietPlan.tsx:69",
-   "kind": "bar",
-   "look": "bar 6 px high, radius radii.xs",
-   "jsx": "<View style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>"
-  },
-  {
-   "where": "src/features/plans/WorkoutPlan.tsx:152",
-   "kind": "bar",
-   "look": "bar 4 px high, radius radii.xs",
-   "jsx": "<View key={e.id} accessibilityLabel={e.res === 'skip' ? 'Not logged' : 'Logged'} style={{ flex: 1, height: 4, "
   },
   {
    "where": "src/features/progress/TrendUI.tsx:176",
@@ -426,12 +382,6 @@
    "jsx": "<View key={k} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: radii.xs, backgroundColor: k === i ? "
   },
   {
-   "where": "src/features/workout/NewWorkoutUI.tsx:142",
-   "kind": "bar",
-   "look": "bar 4 px high, radius radii.xs",
-   "jsx": "<View key={i} style={{ flex: 1, height: 4, borderRadius: radii.xs, backgroundColor: i <= pos ? c.accent : c.su"
-  },
-  {
    "where": "src/web/WebFrame.tsx:116",
    "kind": "bar",
    "look": "bar 4 px high, radius radii.xs",
@@ -456,19 +406,19 @@
    "jsx": "<Pressy key={x.n} accessibilityRole=\"button\" accessibilityLabel={`${x.n}, ${x.g}. Swap`} onPress={() => pick(x"
   },
   {
-   "where": "src/app/food.tsx:103",
+   "where": "src/app/food.tsx:104",
    "kind": "button or pill",
    "look": "button 40 px high, radius 20",
    "jsx": "<Pressy accessibilityRole=\"button\" onPress={() => askCoach(fd!.n, `Is ${fd!.n.toLowerCase()} right for my plan"
   },
   {
-   "where": "src/app/food.tsx:127",
+   "where": "src/app/food.tsx:128",
    "kind": "button or pill",
    "look": "button auto px high, radius radii.md",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityState={{ expanded: micro }} onPress={() => setMicro((v) => !v)"
   },
   {
-   "where": "src/app/onboarding.tsx:283",
+   "where": "src/app/onboarding.tsx:282",
    "kind": "button or pill",
    "look": "button 108 px high, radius radii.lg",
    "jsx": "<Pressy accessibilityRole=\"radio\" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onP"
@@ -534,13 +484,13 @@
    "jsx": "<Pressy key={src} accessibilityRole=\"button\" onPress={() => closeSheet(() => onPick(src))} scaleTo={0.98} styl"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:112",
+   "where": "src/features/plans/WorkoutPlan.tsx:113",
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:90",
+   "where": "src/features/plans/WorkoutPlan.tsx:91",
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See w"
@@ -594,7 +544,7 @@
    "jsx": "<Pressy key={n} accessibilityRole=\"radio\" accessibilityState={{ selected: feel === n }} onPress={() => setFeel"
   },
   {
-   "where": "src/features/workout/NewWorkoutUI.tsx:109",
+   "where": "src/features/workout/NewWorkoutUI.tsx:110",
    "kind": "button or pill",
    "look": "button 56 px high, radius 20",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Show the clip\" onPress={onOpen} scaleTo={0.98} style={{"
@@ -666,7 +616,7 @@
    "jsx": "<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: "
   },
   {
-   "where": "src/app/food.tsx:97",
+   "where": "src/app/food.tsx:98",
    "kind": "card",
    "look": "card radius radii.md, fill c.surface",
    "jsx": "<View key={l} style={{ gap: 2, paddingVertical: 9, paddingHorizontal: 14, borderRadius: radii.md, backgroundCo"
@@ -780,13 +730,13 @@
    "jsx": "<View style={{ backgroundColor: fixed.white, borderRadius: 20, padding: 12 }}>"
   },
   {
-   "where": "src/app/goal-detail.tsx:255",
+   "where": "src/app/goal-detail.tsx:254",
    "kind": "chip",
    "look": "chip 30 px high, radius 15",
    "jsx": "<View style={{ alignSelf: 'flex-start', height: 30, paddingHorizontal: 12, borderRadius: 15, backgroundColor: "
   },
   {
-   "where": "src/app/goal-detail.tsx:92",
+   "where": "src/app/goal-detail.tsx:93",
    "kind": "chip",
    "look": "chip 26 px high, radius 13",
    "jsx": "<View style={{ height: 26, paddingHorizontal: 10, borderRadius: 13, backgroundColor: c.ink, justifyContent: 'c"
@@ -798,7 +748,7 @@
    "jsx": "<View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, borderRadius: radii.s"
   },
   {
-   "where": "src/app/welcome.tsx:76",
+   "where": "src/app/welcome.tsx:77",
    "kind": "chip",
    "look": "chip 30 px high, radius 15",
    "jsx": "<View style={{ marginTop: 6, height: 30, borderRadius: 15, backgroundColor: fixed.white, alignItems: 'center',"
@@ -876,37 +826,37 @@
    "jsx": "<View style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface2, alignItems: 'center"
   },
   {
-   "where": "src/app/food.tsx:113",
+   "where": "src/app/food.tsx:114",
    "kind": "icon badge",
    "look": "icon tile 40 px, radius radii.sm",
    "jsx": "<View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.tAct, alignItems: 'center', j"
   },
   {
-   "where": "src/app/food.tsx:163",
+   "where": "src/app/food.tsx:164",
    "kind": "icon badge",
    "look": "icon tile 26 px, radius 13",
    "jsx": "<View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.surface2, alignItems: 'center', jus"
   },
   {
-   "where": "src/app/goal-detail.tsx:129",
+   "where": "src/app/goal-detail.tsx:130",
    "kind": "icon badge",
    "look": "icon tile 40 px, radius 20",
    "jsx": "<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: col[r.key][0], alignItems: 'center', "
   },
   {
-   "where": "src/app/goal-detail.tsx:152",
+   "where": "src/app/goal-detail.tsx:151",
    "kind": "icon badge",
    "look": "icon tile 36 px, radius radii.md",
    "jsx": "<View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: h.result === 'Reached' ? c.good"
   },
   {
-   "where": "src/app/goal-detail.tsx:248",
+   "where": "src/app/goal-detail.tsx:247",
    "kind": "icon badge",
    "look": "icon tile 40 px, radius 20",
    "jsx": "<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.accentSoft, alignItems: 'center', j"
   },
   {
-   "where": "src/app/goal-detail.tsx:274",
+   "where": "src/app/goal-detail.tsx:273",
    "kind": "icon badge",
    "look": "icon tile 34 px, radius radii.md",
    "jsx": "<View style={{ width: 34, height: 34, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center', "
@@ -954,31 +904,31 @@
    "jsx": "<View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accentSoft, alignItems: 'cent"
   },
   {
-   "where": "src/app/onboarding.tsx:121",
+   "where": "src/app/onboarding.tsx:122",
    "kind": "icon badge",
    "look": "icon tile 56 px, radius 20",
    "jsx": "<View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.accentSoft, alignItems: 'center', j"
   },
   {
-   "where": "src/app/onboarding.tsx:285",
+   "where": "src/app/onboarding.tsx:284",
    "kind": "icon badge",
    "look": "icon tile 40 px, radius 20",
    "jsx": "<View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', jus"
   },
   {
-   "where": "src/app/onboarding.tsx:289",
+   "where": "src/app/onboarding.tsx:288",
    "kind": "icon badge",
    "look": "icon tile 22 px, radius radii.sm",
    "jsx": "<View style={{ position: 'absolute', right: 12, top: 12, width: 22, height: 22, borderRadius: radii.sm, backgr"
   },
   {
-   "where": "src/app/onboarding.tsx:310",
+   "where": "src/app/onboarding.tsx:309",
    "kind": "icon badge",
    "look": "icon tile 26 px, radius 13",
    "jsx": "<View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, ba"
   },
   {
-   "where": "src/app/onboarding.tsx:334",
+   "where": "src/app/onboarding.tsx:333",
    "kind": "icon badge",
    "look": "icon tile 26 px, radius 13",
    "jsx": "<View style={{ width: 26, height: 26, borderRadius: 13, borderWidth: on ? 0 : 1.5, borderColor: c.surface3, ba"
@@ -1044,25 +994,25 @@
    "jsx": "<View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: fixed.white, alignItems: 'cente"
   },
   {
-   "where": "src/app/welcome.tsx:128",
+   "where": "src/app/welcome.tsx:129",
    "kind": "icon badge",
    "look": "icon tile 28 px, radius 14",
    "jsx": "<View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: 'rgba(15,138,95,0.25)' }} />"
   },
   {
-   "where": "src/app/welcome.tsx:45",
+   "where": "src/app/welcome.tsx:46",
    "kind": "icon badge",
    "look": "icon tile 22 px, radius radii.sm",
    "jsx": "<View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: fixed.blue }} />"
   },
   {
-   "where": "src/app/welcome.tsx:48",
+   "where": "src/app/welcome.tsx:49",
    "kind": "icon badge",
    "look": "icon tile 20 px, radius radii.sm",
    "jsx": "<View style={{ width: 20, height: 20, borderRadius: radii.sm, backgroundColor: '#2A3242' }} />"
   },
   {
-   "where": "src/app/welcome.tsx:93",
+   "where": "src/app/welcome.tsx:94",
    "kind": "icon badge",
    "look": "icon tile 18 px, radius 9",
    "jsx": "<View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: done ? fixed.blue : 'transparent', bor"
@@ -1128,37 +1078,37 @@
    "jsx": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: end[0] - 20, top: end[1] - 20, width: 40, heig"
   },
   {
-   "where": "src/features/plans/DietPlan.tsx:111",
+   "where": "src/features/plans/DietPlan.tsx:109",
    "kind": "icon badge",
    "look": "dot 8 px",
    "jsx": "<View accessibilityLabel=\"Changed from plan\" style={{ position: 'absolute', top: 0, right: 0, width: 8, height"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:131",
+   "where": "src/features/plans/WorkoutPlan.tsx:132",
    "kind": "icon badge",
    "look": "icon tile 28 px, radius 14",
    "jsx": "<View accessibilityLabel=\"Logged\" style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.good, a"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:178",
+   "where": "src/features/plans/WorkoutPlan.tsx:177",
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "jsx": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:179",
+   "where": "src/features/plans/WorkoutPlan.tsx:178",
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "jsx": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:41",
+   "where": "src/features/plans/WorkoutPlan.tsx:42",
    "kind": "icon badge",
    "look": "icon tile 56 px, radius radii.xl",
    "jsx": "<View style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface2, borderWidth: 1, bor"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:92",
+   "where": "src/features/plans/WorkoutPlan.tsx:93",
    "kind": "icon badge",
    "look": "dot 10 px",
    "jsx": "<View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: c.accent }} />"
@@ -1266,19 +1216,19 @@
    "jsx": "<Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.accent, alignItems: 'cent"
   },
   {
-   "where": "src/features/workout/NewWorkoutUI.tsx:111",
+   "where": "src/features/workout/NewWorkoutUI.tsx:112",
    "kind": "icon badge",
    "look": "icon tile 44 px, radius radii.sm",
    "jsx": "<View style={{ width: 44, height: 44, borderRadius: radii.sm, overflow: 'hidden', backgroundColor: fixed.white"
   },
   {
-   "where": "src/features/workout/NewWorkoutUI.tsx:113",
+   "where": "src/features/workout/NewWorkoutUI.tsx:114",
    "kind": "icon badge",
    "look": "icon tile 22 px, radius radii.sm",
    "jsx": "<View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: 'rgba(11,14,20,0.72)', alignIte"
   },
   {
-   "where": "src/features/workout/NewWorkoutUI.tsx:54",
+   "where": "src/features/workout/NewWorkoutUI.tsx:55",
    "kind": "icon badge",
    "look": "icon tile 26 px, radius 13",
    "jsx": "<View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'c"
@@ -1314,13 +1264,13 @@
    "jsx": "<View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: P.ink, alignItems: 'center', justifyC"
   },
   {
-   "where": "src/app/welcome.tsx:157",
+   "where": "src/app/welcome.tsx:158",
    "kind": "icon button",
    "look": "icon button 28 px, radius radii.xs",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={label} onPress={onPress} hitSlop={{ top: 14, bottom: 14"
   },
   {
-   "where": "src/features/workout/NewWorkoutUI.tsx:52",
+   "where": "src/features/workout/NewWorkoutUI.tsx:53",
    "kind": "icon button",
    "look": "icon button 64 px, radius radii.sm",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Watch the clip\" disabled={!key} onPress={onOpen} scaleT"

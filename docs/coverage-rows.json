@@ -40,7 +40,7 @@
   "screen": "Plans",
   "group": "Routes",
   "status": "not started",
-  "hand": 15,
+  "hand": 13,
   "files": [
    "app/(tabs)/plans.tsx",
    "features/plans/WorkoutPlan.tsx",
@@ -94,7 +94,7 @@
   "screen": "Food detail",
   "group": "Routes",
   "status": "not started",
-  "hand": 7,
+  "hand": 5,
   "files": [
    "app/food.tsx"
   ]
@@ -104,7 +104,7 @@
   "screen": "Your goal",
   "group": "Routes",
   "status": "not started",
-  "hand": 9,
+  "hand": 7,
   "files": [
    "app/goal-detail.tsx"
   ]
@@ -248,7 +248,7 @@
   "screen": "Onboarding (frame)",
   "group": "Routes",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/plan.ts",
@@ -363,7 +363,7 @@
   "screen": "Export my data",
   "group": "Routes",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "app/profile/export.tsx"
   ]
@@ -527,7 +527,7 @@
   "screen": "Welcome",
   "group": "Routes",
   "status": "not started",
-  "hand": 7,
+  "hand": 6,
   "files": [
    "app/welcome.tsx"
   ]
@@ -537,7 +537,7 @@
   "screen": "Active workout",
   "group": "Routes",
   "status": "not started",
-  "hand": 11,
+  "hand": 9,
   "files": [
    "app/workout.tsx",
    "features/workout/SetRow.tsx",

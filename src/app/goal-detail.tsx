@@ -19,6 +19,7 @@ import { TODAY } from '@/features/progress/trends';
 import { useStreak } from '@/features/streak/useStreak';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Card } from '@/design-system/primitives/Card';
+import { ProgressBar } from '@/design-system/primitives/ProgressBar';
 import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
 type Past = { name: string; when: string; result: string; amount?: string };
@@ -129,9 +130,7 @@ function Drivers({ g }: { g: Goal2 }) {
               <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: col[r.key][0], alignItems: 'center', justifyContent: 'center' }}><I size={19} color={col[r.key][1]} /></View>
               <View style={{ flex: 1, gap: 6 }}>
                 <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20 }}>{r.label}</Txt>
-                <View style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface3, overflow: 'hidden' }}>
-                  <View style={{ width: `${Math.max(4, r.pct * 100)}%`, height: 6, borderRadius: radii.xs, backgroundColor: col[r.key][1] }} />
-                </View>
+                <ProgressBar height={6} track="surface3" color={col[r.key][1]} percent={Math.max(4, r.pct * 100)} />
               </View>
               <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl2, lineHeight: 30, letterSpacing: -0.4, minWidth: 64, textAlign: 'right' }}>{r.value}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.sm, lineHeight: 19, color: c.muted, letterSpacing: 0 }}>{r.unit}</Txt></Txt>
             </Row>

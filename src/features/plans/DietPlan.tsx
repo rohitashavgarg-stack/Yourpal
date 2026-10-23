@@ -28,18 +28,19 @@ import { DItem, dietItems, dietTotals, setP, useCountUp, usePlans } from './stor
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Chevron } from '@/design-system/primitives/Chevron';
 import { AmountStepper } from '@/design-system/primitives/AmountStepper';
+import { ProgressBar } from '@/design-system/primitives/ProgressBar';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
 
 // ---------- Summary: kcal ring + macro bars ----------
 function KcalRing({ k }: { k: number }) {
-  const { c } = useTheme();
   const C = 2 * Math.PI * 44;
   const v = useSharedValue(0);
   useEffect(() => { v.value = withTiming(Math.min(1, k / KCAL_TARGET), { duration: 900, easing: Easing.out(Easing.cubic) }); }, [k]);
   const props = useAnimatedProps(() => ({ strokeDashoffset: C * (1 - v.value) }));
   const shown = useCountUp(Math.round(k), 700);
+  const { c } = useTheme();
   return (
     <View accessible accessibilityLabel={`Eaten ${Math.round(k)} of ${KCAL_TARGET} kcal`} style={{ width: 108, height: 108 }}>
       <Svg width={108} height={108} viewBox="0 0 108 108">
@@ -55,7 +56,6 @@ function KcalRing({ k }: { k: number }) {
 }
 
 function MacroBar({ l, v, target, col }: { l: string; v: number; target: number; col: string }) {
-  const { c } = useTheme();
   const shown = useCountUp(Math.round(v), 700);
   const w = useSharedValue(0);
   useEffect(() => { w.value = withTiming(Math.min(100, (v / target) * 100), { duration: 800, easing: Easing.out(Easing.cubic) }); }, [v, target]);
@@ -66,9 +66,7 @@ function MacroBar({ l, v, target, col }: { l: string; v: number; target: number;
         <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm }}>{l}</Txt>
         <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{shown} / {target} g</Txt>
       </Row>
-      <View style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>
-        <Animated.View style={[{ height: '100%', borderRadius: radii.xs, backgroundColor: col }, a]} />
-      </View>
+      <ProgressBar height={6} color={col} fillStyle={a} />
     </View>
   );
 }

@@ -34,6 +34,7 @@ import { ProgLogo } from '@/features/shell/parts';
 import Svg, { Circle } from 'react-native-svg';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Option } from '@/design-system/primitives/Option';
+import { ProgressBar } from '@/design-system/primitives/ProgressBar';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ORDER = ['welcome', 'facility', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
@@ -202,9 +203,7 @@ function StepProgress({ n, total }: { n: number; total: number }) {
   useEffect(() => { w.value = withSpring(n / total, spring.soft); }, [n, total]);
   const a = useAnimatedStyle(() => ({ width: `${w.value * 100}%` as any }));
   return (
-    <View accessibilityRole="progressbar" accessibilityValue={{ now: n, min: 0, max: total }} style={{ flex: 1, height: 6, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>
-      <Animated.View style={[{ height: '100%', borderRadius: radii.xs, backgroundColor: c.accent }, a]} />
-    </View>
+    <ProgressBar height={6} color={c.accent} fillStyle={a} accessibilityValue={{ now: n, min: 0, max: total }} style={{ flex: 1 }} />
   );
 }
 

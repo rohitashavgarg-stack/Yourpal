@@ -110,6 +110,8 @@ export const onDark = {
   capRidge: '#EAE6E6',   // the ridges on the bottle cap
   ripple: '#7FB4FF',     // the ripple when water reaches the target
   heart: '#FF6B7A',      // the heart icon on the Connect tile
+  flame: '#FF8A3D',      // the streak flame and its bars on the welcome screen
+  stageInk: '#F4F4F6',   // the current segment of the workout progress bar on a dark stage
 } as const;
 
 // Gradients of the dark cards: from the top left to the bottom right.

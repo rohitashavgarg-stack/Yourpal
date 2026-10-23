@@ -10,7 +10,8 @@ import { Button, Pressy, Txt } from '@/components/ui';
 import { fadeOut } from '@/theme/motion';
 import { YourPalLogo } from '@/components/YourPalLogo';
 import { font } from '@/theme/tokens';
-import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
+import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // One soft blue glow bleeding in from the top-right corner. Radial gradient, so it is blurred with no filter (works on web and native).
@@ -116,7 +117,7 @@ function ProgressMock() {
         <View style={[TILE, { flex: 1 }]}>
           <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Streak</Txt>
           <Txt style={{ fontSize: fontSizes.lg, lineHeight: 23, color: '#FF8A3D', fontFamily: font.semibold }}>7 weeks</Txt>
-          <View style={{ flexDirection: 'row', gap: 3, marginTop: 4 }}>{[1, 1, 1, 0].map((o, i) => <View key={i} style={{ flex: 1, height: 6, borderRadius: radii.xs, backgroundColor: o ? '#FF8A3D' : 'rgba(255,255,255,0.15)' }} />)}</View>
+          <ProgressSegments height={6} gap={3} style={{ marginTop: 4 }} segments={[1, 1, 1, 0].map((o) => ({ color: o ? onDark.flame : 'rgba(255,255,255,0.15)' }))} />
         </View>
         <View style={[TILE, { flex: 1 }]}>
           <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Steps</Txt>

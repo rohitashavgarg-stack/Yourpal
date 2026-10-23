@@ -27,16 +27,16 @@ import { FinishScreen, FinishStats } from '@/features/workout/FinishScreen';
 import { workoutUiStore } from '@/features/workout/ui';
 import { NewExercise, NewList } from '@/features/workout/NewWorkoutUI';
 import { FinishConfirmSheet, FormTipsSheet, SetMenuSheet, SwapSheet, WkApi, WkMenuSheet } from '@/features/workout/WorkoutSheets';
-import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
 import { IconButton } from '@/design-system/primitives/Button';
+import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 function Bars({ n, pos, light }: { n: number; pos: number; light?: boolean }) {
   const { c } = useTheme();
   return (
-    <View style={{ position: 'absolute', top: 12, left: 14, right: 14, flexDirection: 'row', gap: 4 }}>
-      {Array.from({ length: n }, (_, i) => <View key={i} style={{ flex: 1, height: 3, borderRadius: radii.xs, backgroundColor: i < pos ? fixed.blue : i === pos ? (light ? c.ink : '#F4F4F6') : (light ? c.surface3 : 'rgba(255,255,255,0.22)') }} />)}
-    </View>
+    <ProgressSegments height={3} gap={4} style={{ position: 'absolute', top: 12, left: 14, right: 14 }}
+      segments={Array.from({ length: n }, (_, i) => ({ color: i < pos ? fixed.blue : i === pos ? (light ? c.ink : onDark.stageInk) : (light ? c.surface3 : 'rgba(255,255,255,0.22)') }))} />
   );
 }
 

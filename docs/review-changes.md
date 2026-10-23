@@ -112,7 +112,7 @@ Shown only after the chart is dragged away from today.
 Fifteen hand-built soft blocks now use `Callout` (or `Card tone`). Seven were an exact match. These moved by 2 px or less because they now share the nearest standard size:
 
 <a id="progress-streaks"></a>
-### Streaks and badges, Progress, Membership, sheets (`progress-streaks`, `progress--bottom`, `gym-membership`, `sheet-FormTipsSheet`, `sheet-HistSheet`)
+### Streaks and badges, Progress, Membership, sheets (`progress-streaks`, `progress--bottom`, `gym-membership`, `state-plans-expired`, `sheet-FormTipsSheet`, `sheet-HistSheet`)
 
 | Where | Element | Old | New |
 |---|---|---|---|
