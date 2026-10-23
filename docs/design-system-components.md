@@ -45,8 +45,8 @@ Every component in `src/design-system/`, with its variants and states. Each has 
 
 - No dot separators ("text · text"). Use a title, a sentence, then a quiet info line on its own line, or a MetaRow.
 - Chips are not for actions. Actions are Buttons; a choice that stays selected is an Option.
-- Frozen, paused and comeback are never styled as failure. Amber for warnings, never red.
-- A goal is never frozen or paused. A membership pause shows only as an account banner.
+- A paused membership and a comeback are never styled as failure. Amber for warnings, never red.
+- A goal is never frozen or paused. A membership pause shows as the account banner and as the paused state of the workout card (shown only while the membership is paused); never on the goal.
 - Members never see Pay or Resume buttons. Membership is view-only.
 - One account banner and one top snackbar at a time.
 - Voice: say the number, fact first then the smallest next step, credit the coach by name, no guilt, no emoji.

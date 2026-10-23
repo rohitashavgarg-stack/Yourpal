@@ -53,4 +53,4 @@ No states of its own. The looks in use:
 ## Copy rules
 
 - No text inside except a single letter or number (an initial, a count).
-- Frozen, paused and comeback states never use a failure look (no red, no cross on a warning fill).
+- Paused-membership and comeback states never use a failure look (no red, no cross on a warning fill).

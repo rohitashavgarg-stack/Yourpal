@@ -13,7 +13,7 @@
 - Tap targets are 44 px. Where the drawn size must stay smaller, add a hit slop (Button and Option do it for you); do not make the drawn element bigger.
 - Accessibility: every pressable has a label, an icon-only button uses `IconButton` (it announces its disabled state), headings use `SectionLabel` or `accessibilityRole="header"`, entrance animation uses `FadeIn` (it respects reduce motion).
 - Choices in a set (one of several) use `Option`; actions use `Button`. A look that exists is a kind or a size, not a new component.
-- A goal is never frozen or paused. A membership pause shows only as the account banner, not on the goal or the workout.
+- A goal is never frozen or paused. A membership pause shows as the account banner and as the paused state of the workout card (shown only while the membership is paused); never on the goal.
 - Members never see Pay or Resume buttons. Membership is view-only in the app.
 - One account banner and one top snackbar at a time.
 - Voice: say the number, put the fact first and then the smallest next step, credit the coach by name ("Coach Vikram"), no guilt, no emoji. No dot separators ("text · text"); chips are not actions; amber for warnings, never red for frozen, paused or comeback.

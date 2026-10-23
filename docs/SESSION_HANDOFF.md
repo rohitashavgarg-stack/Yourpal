@@ -6,7 +6,7 @@ Read this with `PHASE2_HANDOFF.md` (same folder), `../AGENTS.md` and the `yourpa
 - He sends screenshots with a one-line correction. Fold each in at once. He often says "tell me what you will do, then I confirm": do that when he asks, otherwise just build.
 - Look at it on screen before reporting (`npx expo start --web --port 8082`, open `/?signedin=1`). The demo controls panel sits beside the phone on web.
 - **No dot separators** ("text · text"). Use a title, then a sentence, then a quiet info line on its own line. **Chips are not for actions** (a chip looks like a button): use plain info text.
-- Frozen, paused and comeback are never styled as failure. Amber for warnings, never red.
+- A paused membership and a comeback are never styled as failure. Amber for warnings, never red.
 
 ## Shipping
 - `scripts/ship.sh "message"` typechecks, commits, merges into `main` with a real merge commit, pushes, waits for the Vercel Production build and screenshots the live site. Needs `gh` logged in. `scripts/ship.sh --status` shows what Production serves.

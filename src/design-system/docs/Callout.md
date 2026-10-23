@@ -36,7 +36,7 @@ A soft block inside a page or a sheet: a notice (something to know), a tip, or a
 
 ## Do and don't
 
-- Do use warn for amber. Never red: frozen, paused and a comeback are not failures.
+- Do use warn for amber. Never red: a paused membership and a comeback are not failures.
 - Do pick the nearest size instead of tuning padding; add a size if a real design needs one.
 - Don't put an action inside as a chip. Use a Button.
 - Don't use it for a card the member taps. That is a Card (or a PCard).

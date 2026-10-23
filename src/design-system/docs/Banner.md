@@ -38,7 +38,7 @@ Baseline images in `docs/visual-baseline/cards/`: `banner-strip`, `banner-card-a
 ## Do and don't
 
 - Do show one account banner at a time. If several things are true, show the most urgent.
-- Do say a membership pause here and only here. A goal is never frozen or paused.
+- Do say a membership pause here. The only other place it shows is the paused state of the workout card. A goal is never frozen or paused.
 - Don't add Pay, Renew or Resume buttons. Members never see them; the action is "See plan" (strip and card say the same).
 - Don't use red. Amber for warnings, green for all good.
 - Don't style a paused membership as a failure: amber, a pause icon, calm words.

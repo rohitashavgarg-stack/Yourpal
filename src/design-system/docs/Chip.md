@@ -36,7 +36,7 @@ An outline chip for information: 28 px high, 14 px corner, 1 px line. A chip is 
 - Do use it for a label that names a thing or a state: "Leg day", "In 2 h", "Next: Pull, Thu 6:30 pm".
 - Don't put `onPress` on it (it has none) or wrap it in a Pressy. Chips are not for actions.
 - Don't line up several chips as a row of facts: use `MetaRow`.
-- Don't use `warn` for frozen, paused or comeback. Those are not failures.
+- Don't use `warn` for a paused membership or a comeback. Those are not failures.
 - Mint (`live`) is only for live states.
 
 ## Accessibility

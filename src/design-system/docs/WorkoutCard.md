@@ -43,7 +43,7 @@ Today's workout, one look per state. The state is a prop; `TodayWorkoutCard` (ol
 | skipped | One compact row: cross icon, "Leg day skipped today", "Your plan picks up tomorrow", **Undo** |
 | done | Dark green gradient. Mint tick and "Done at 6:58 pm", name chip, "Workout complete", three stats (value, unit, label) |
 | rest | Dark purple gradient. Lilac moon and "Recovery", "Next: ..." chip, "Rest day", "Muscles grow on rest days. A 20 minute walk still counts." |
-| paused | Membership ended. Flat grey card (no gradient, no Start): lock tile, "Workouts are paused", "Renew at Wulf Fitness reception to see your plan and start again. Your history stays here." |
+| paused | Shown only while the membership is paused or ended, never the goal. Membership ended. Flat grey card (no gradient, no Start): lock tile, "Workouts are paused", "Renew at Wulf Fitness reception to see your plan and start again. Your history stays here." |
 | comeback | After a break. One small flat card (no gradient, no coach line): `surface2` fill, `radii.card` corners, 16 px padding. Title "Easy session" (semibold 17 / 24), a muted line "20 min", two chips "4 exercises" and "Half your usual load", then two buttons side by side: **Start easy session** (primary) and **Not today** (`surface`). No exercise names. The greeting is not in the card: the screen shows it as plain text above (`ComebackGreeting`: "Good to see you back, <first name>." and "It's been <n> days. Coach <coach> picked an easy one to ease you in.") with the card directly beneath |
 
 The "Burned today N kcal / From your watch" row appears at the bottom of upcoming, due, rest and done when `burned` is set.
@@ -57,7 +57,7 @@ Baseline images in `docs/visual-baseline/cards/`: `workout-<state>`, `workout-do
 - Do put the version choice (Full, Quick, Low energy) in the Start sheet, never on the card.
 - Do treat missed, moved and skipped calmly: amber edge at most, and always an Undo.
 - Don't use red anywhere on this card.
-- Don't style comeback or paused as failure. Comeback is a fresh, easy start; paused says where to renew, with no Pay or Resume button.
+- Don't style comeback or paused as failure. Comeback is a fresh, easy start. Paused is shown when the membership is paused, never because of the goal; it says where to renew, with no Pay or Resume button.
 - Mint only for live and due.
 
 ## Accessibility

@@ -47,7 +47,7 @@ Row states: plain, pressable (chevron, press scale 0.99), muted, warn. No shadow
 - Do use rows for settings and facts with a value on the right.
 - Do give every pressable row a chevron (it comes with `onPress`).
 - Don't mix actions and facts in one row; a row is either a link or a fact.
-- Don't use `warn` for frozen, paused or comeback.
+- Don't use `warn` for a paused membership or a comeback.
 
 ## Accessibility
 
