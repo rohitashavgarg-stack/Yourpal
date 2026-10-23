@@ -57,7 +57,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "expo lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "node scripts/audit/coverage-storybook.js && storybook build -o storybook-static",
+    "build-storybook": "node scripts/audit/hand-built.js && node scripts/audit/coverage-storybook.js && storybook build -o storybook-static",
+    "audit:coverage": "node scripts/audit/coverage.js --json && node scripts/audit/hand-built.js && node scripts/audit/coverage-md.js && node scripts/audit/coverage-storybook.js",
     "lint:changed": "node scripts/lint-changed.js",
     "handoff": "node scripts/handoff.js",
     "deploy-storybook": "node scripts/deploy-storybook.js"

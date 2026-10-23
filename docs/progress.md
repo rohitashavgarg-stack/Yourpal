@@ -62,3 +62,21 @@ Branch `design-system-handoff`. Not merged into main (main is merged into the br
 | 2 | "View plan" to "See plan" (ForYou.tsx update card); the two rows in docs/review-changes.md are the old wording on purpose | done | 2b51cb9 |
 | 3 | WorkoutCard paused state kept; docs and CLAUDE.md reworded: a membership pause shows as the account banner and as the workout card's paused state, never on the goal; "frozen" removed from the never-failure lines | done | aaeca11 |
 | 4 | Dot separators: none in the library components; CheckInBar "Leg day in progress"; the other 249 lines in 73 files are listed by file in docs/copy-separators.md (script scripts/audit/separators.js), not changed | done | fed49ae |
+| 5 | One hand-built count: scripts/audit/hand-built.js (88 outside the demo panel: 85 to build, 3 on purpose) feeds docs/coverage.md and the Storybook Coverage page; npm run audit:coverage; per-group table below. The earlier 95 was 88 plus 7 demo-panel elements; the 109 was 88 plus 21 | done | STEP5 |
+
+### Per screen group (2026-10-23; 88 hand-built outside the demo panel, 3 of them on purpose; script scripts/audit/hand-built.js)
+
+| Group | Hand-built | On purpose | Still to build | Status |
+|---|---|---|---|---|
+| Today | 12 | 0 | 12 | open |
+| Progress | 11 | 0 | 11 | open |
+| Plans and food logging | 16 | 1 | 15 | open |
+| Workout session | 6 | 1 | 5 | open |
+| Gym tab | 7 | 0 | 7 | open |
+| Profile and settings | 11 | 0 | 11 | open |
+| Onboarding and login | 12 | 1 | 11 | open |
+| Bottom sheets | 10 | 0 | 10 | open |
+| Modals and toasts | 0 | 0 | 0 | done (no hand-built element found) |
+| Empty, loading and error states | 0 | 0 | 0 | done (no hand-built element; three of these states still lack a review image, step 9) |
+| Shared components (outside the library) | 3 | 0 | 3 | open |
+| **Total** | **88** | **3** | **85** | |

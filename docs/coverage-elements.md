@@ -794,14 +794,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 
 - Files: `web/WebFrame.tsx`
 - Library components used: (see the screen's files)
-- Hand-built:
-  - `web/WebFrame.tsx:116` bar: `<View pointerEvents="none" style={{ height: 4, borderRadius: radii.xs, backgroundColor: P.`
-  - `web/WebFrame.tsx:117` bar: `<View style={{ width: '${pct}%', height: 4, borderRadius: radii.xs, backgroundColor: P.ink`
-  - `web/WebFrame.tsx:119` icon badge: `<View key={h} pointerEvents="none" style={{ position: 'absolute', left: '${(h / 23) * 100}`
-  - `web/WebFrame.tsx:120` icon badge: `<View pointerEvents="none" style={{ position: 'absolute', left: '${pct}%', marginLeft: -11`
-  - `web/WebFrame.tsx:310` card: `<View style={{ backgroundColor: fixed.white, borderRadius: radii.md, borderWidth: 1, borde`
-  - `web/WebFrame.tsx:311` icon badge: `<View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: P.ink, alignItems`
-  - `web/WebFrame.tsx:316` icon button: `<Pressable accessibilityRole="button" accessibilityLabel={open ? 'Collapse the controls' :`
+- Hand-built: none
 
 ## Today loading skeleton (empty, loading and error states)
 

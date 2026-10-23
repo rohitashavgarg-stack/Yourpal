@@ -1197,7 +1197,7 @@
   "screen": "Web phone frame and demo controls panel",
   "group": "Overlays and popups",
   "status": "not started",
-  "hand": 7,
+  "hand": 0,
   "files": [
    "web/WebFrame.tsx"
   ]
