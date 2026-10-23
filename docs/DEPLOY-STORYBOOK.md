@@ -22,7 +22,7 @@ npm run build-storybook    # static files in storybook-static/
 
 ## Live
 
-**https://yourpal-storybook.vercel.app**: Vercel project `yourpal-storybook` in the account `rohitashavgarg-7341` (team "rohitashavgarg-7341's projects", free Hobby plan), next to the app project `yourpal`. The link is public: no login to view. All 180 stories and the Coverage page were opened on the live site and none errors.
+**https://yourpal-storybook.vercel.app**: Vercel project `yourpal-storybook` in the account `rohitashavgarg-7341` (team "rohitashavgarg-7341's projects", free Hobby plan), next to the app project `yourpal`. The link is public: no login to view. All 228 stories and the Coverage page were opened on the live site and none errors.
 
 It is deployed by hand, not from git: the project is deliberately **not connected** to the GitHub repo, so a push never builds it. (Linking a folder to a Vercel project connects the repo by default; `vercel git disconnect` undoes that, and the deploy script does it.)
 
@@ -50,5 +50,5 @@ The dashboard route also works: **Add New... > Project**, import the repo, frame
 ## Checks done on this branch
 
 - `npm run build-storybook` completes.
-- All 180 stories and the Coverage page were opened one by one on the live site: none shows an error or renders empty.
+- All 228 stories and the Coverage page were opened one by one on the live site: none shows an error or renders empty.
 - Light and dark were looked at on a sample of stories (BudgetCard, Button).
