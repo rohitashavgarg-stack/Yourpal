@@ -31,17 +31,20 @@ export function useToastLift(px: number) {
 }
 
 export function OverlayProvider({ children }: { children: React.ReactNode }) {
-  const [sheet, setSheet] = useState<{ node: React.ReactNode; opts: SheetOpts; key: number } | null>(null);
-  const [toastMsg, setToastMsg] = useState<{ msg: string; undo?: () => void; key: number } | null>(null);
+  const [sheet, setSheet] = useState<{ node: React.ReactNode; opts: SheetOpts; key: string } | null>(null);
+  const [toastMsg, setToastMsg] = useState<{ msg: string; undo?: () => void; key: string } | null>(null);
   const [lift, setToastLift] = useState(0);
   const closer = useRef<((after?: () => void) => void) | null>(null);
+  // Keys for the sheet and the toast. Never Date.now(): a toast and a sheet opened in the same millisecond (logging a meal does both) got the
+  // same key, React then lost track of one of them and the old sheet and its dark layer stayed on top of the screen, blocking every tap.
+  const seq = useRef(0);
 
-  const openSheet = useCallback((node: React.ReactNode, opts: SheetOpts = {}) => setSheet({ node, opts, key: Date.now() }), []);
+  const openSheet = useCallback((node: React.ReactNode, opts: SheetOpts = {}) => setSheet({ node, opts, key: `sheet-${++seq.current}` }), []);
   const closeSheet = useCallback((after?: () => void) => {
     if (closer.current) closer.current(after);
     else { setSheet(null); after?.(); }
   }, []);
-  const toast = useCallback((msg: string, opts: ToastOpts = {}) => setToastMsg({ msg, undo: opts.undo, key: Date.now() }), []);
+  const toast = useCallback((msg: string, opts: ToastOpts = {}) => setToastMsg({ msg, undo: opts.undo, key: `toast-${++seq.current}` }), []);
   const value = useMemo(() => ({ setToastLift, openSheet, closeSheet, toast }), [openSheet, closeSheet, toast]);
 
   return (
