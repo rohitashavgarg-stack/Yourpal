@@ -11,6 +11,3 @@ export function devParam<T = Record<string, unknown>>(key: 'dom' | 'sc' | 'app' 
   if (!m) return undefined;
   try { return JSON.parse(decodeURIComponent(m[1])) as T; } catch { return undefined; }
 }
-
-// EXPERIMENT (branch experiment-gooey-menu): ?gooey=1 turns on the gooey fan-out menu. Read when the app first loads, because moving between screens drops the query.
-export const GOOEY_ON = typeof location !== 'undefined' && /[?&]gooey=1(&|$)/.test(location.search);

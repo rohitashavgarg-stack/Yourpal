@@ -19,8 +19,6 @@ module.exports = [
   { name: 'sheet-SetMenuSheet', url: '/', clicks: [...MAIN, 'Exercise options', 'Options for the current set'] },
   { name: 'sheet-FinishConfirmSheet', url: '/', clicks: [...MAIN, 'Finish workout'] },
   { name: 'sheet-WkMenuSheet', url: '/', clicks: [...MAIN, 'Exercise options'] },
-  { name: 'exp-gooey-menu-open', url: '/?gooey=1', clicks: [...MAIN, 'Exercise options'], wait: 2200 },
-  { name: 'exp-gooey-menu-closed', url: '/?gooey=1', clicks: [...MAIN], wait: 800 },
   // sheets and overlays that need a tap or a typed value (round 4)
   { name: 'sheet-NotificationPermissionSheet', url: '/onboarding?app=' + q({ onboarded: false, onboardingStep: 'consent' }) + '&prof=' + q(PROF), settle: 2500, clicks: ['Agree and continue'] },
   { name: 'sheet-DisconnectHealthSheet', url: '/profile/health?dom=' + q({ hc: true }), clicks: ['Disconnect'] },
