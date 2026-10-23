@@ -70,6 +70,7 @@ Branch `design-system-handoff`. Not merged into main (main is merged into the br
 | 10 | Hard-coded values outside the library (368: 223 colours, 81 radii, 64 font sizes) not fixed on purpose; counted by folder in docs/HANDOFF.md as a known follow-up (script scripts/audit/hardcoded-by-folder.js); lint:changed prevents new ones | done | 2f2edee |
 | 9 | Review page: **partial, on purpose.** Dark only (light mode is off the table by your instruction). Capture entries for the 11 missing images are in scripts/visual/shots-list.js and shots.js (3 sheets, toast, rest timer, finish screen, streak broken, login not found, wrong code, push banner, Today loading); trial run in dark worked for most, push banner and loading skeleton need timing work. They are not on docs/review/index.html yet. Dev-only key "push" added to the push store so a screenshot can open the banner by URL | partial | 46269a1 |
 | 11 | main merged into the branch (freeze fix and sticky Save meal; no conflicts). Typecheck: 0 errors. Lint: 0 errors, 0 new hard-coded values. Storybook build: passes, 228 stories. Found and fixed one broken asset path (Brand.tsx after the move), which typecheck cannot see | done | merge commit |
+| 12 | Storybook redeployed (228 stories, live checked), zip rebuilt after the last commit, branch pushed, docs/HANDOFF-STATUS.md regenerated: 10 ready, 4 partial, 0 not ready | done | final |
 
 ### Per screen group (2026-10-23; 86 hand-built outside the demo panel, 3 of them on purpose; script scripts/audit/hand-built.js, run npm run audit:coverage)
 
