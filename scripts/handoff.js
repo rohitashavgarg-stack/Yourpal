@@ -6,7 +6,7 @@
  *   npm run handoff -- --no-build   zips what is already in storybook-static/
  *
  * The zip holds: storybook-static/ (open index.html through any static server), src/design-system/docs and src/design-system/tokens,
- * docs/ (including the review page, docs/review/index.html, with its screenshots) and HANDOFF-INDEX.md at the top.
+ * CLAUDE.md and the pull request template, docs/ (including the review page, docs/review/index.html, with its screenshots) and HANDOFF-INDEX.md at the top.
  */
 const fs = require('fs');
 const path = require('path');
@@ -33,6 +33,8 @@ zip.directory(path.join(root, 'storybook-static'), 'storybook-static');
 zip.directory(path.join(root, 'src/design-system/docs'), 'src/design-system/docs');
 zip.directory(path.join(root, 'src/design-system/tokens'), 'src/design-system/tokens');
 zip.directory(path.join(root, 'docs'), 'docs');
+zip.file(path.join(root, 'CLAUDE.md'), { name: 'CLAUDE.md' });
+zip.file(path.join(root, '.github/pull_request_template.md'), { name: '.github/pull_request_template.md' });
 zip.on('warning', (e) => console.warn(e.message));
 zip.on('error', (e) => { throw e; });
 output.on('close', () => {
