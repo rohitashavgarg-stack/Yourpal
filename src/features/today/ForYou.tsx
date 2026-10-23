@@ -60,7 +60,7 @@ export function useForYou(): Item[] {
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
   if (ptPending && d.hasGym && !logsPaused) out.push({ key: 'pt', title: updateCopy.pt.title, body: updateCopy.pt.body, critical: true, tone: 'accent', who: true, two: true });
-  if (d.hasGym && d.membership === 'Expiring') out.push({ key: 'member-exp', title: updateCopy.membership.title, body: updateCopy.membership.body, tone: 'warn', icon: Clock, btn: 'View plan', act: () => router.push('/gym/membership') });
+  if (d.hasGym && d.membership === 'Expiring') out.push({ key: 'member-exp', title: updateCopy.membership.title, body: updateCopy.membership.body, tone: 'warn', icon: Clock, btn: 'See plan', act: () => router.push('/gym/membership') });
   const order = ['reassess', 'reply', 'plan', 'log'];
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
     out.push({ key: u.key, title: u.title, body: u.body, tone: u.tone, who: ['plan', 'reply'].includes(u.key), icon: u.icon, btn: u.isPlan ? 'See changes' : u.btn, act: u.isPlan ? () => router.navigate('/plans') : u.act });

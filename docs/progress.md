@@ -58,5 +58,5 @@ Branch `design-system-handoff`. Not merged into main (main is merged into the br
 
 | Step | What | Status | Commit |
 |---|---|---|---|
-| 1 | Comeback card: code and docs match the decision (title "Easy session", 20 min, chips "4 exercises" and "Half your usual load", buttons "Start easy session" and "Not today", no exercise names); `onStartRegular` became `onNotToday` (answers as a skip with Undo) | done | STEP1 |
-| 2 | "View plan" to "See plan" (ForYou.tsx update card); the two rows in docs/review-changes.md are the old wording on purpose | done | STEP2 |
+| 1 | Comeback card: code and docs match the decision (title "Easy session", 20 min, chips "4 exercises" and "Half your usual load", buttons "Start easy session" and "Not today", no exercise names); `onStartRegular` became `onNotToday` (answers as a skip with Undo) | done | a2b2c2f |
+| 2 | "View plan" to "See plan" (ForYou.tsx update card); the two rows in docs/review-changes.md are the old wording on purpose | done | 7fb414a |
