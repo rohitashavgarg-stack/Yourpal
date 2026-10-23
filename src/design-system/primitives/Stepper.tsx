@@ -72,7 +72,7 @@ function InlineStepper({ value, unit, onChange, step, min, label, block }: Inlin
       accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
       onAccessibilityAction={(e) => onChange(Math.max(min, value + (e.nativeEvent.actionName === 'increment' ? step : -step)))}
       style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', height: 44, borderRadius: radii.lg, backgroundColor: c.surface2 }}>
-      <Pressable accessibilityLabel={`Minus ${step} ${unit}`} onPress={() => { haptic.tap(); onChange(Math.max(min, Math.round((value - step) * 10) / 10)); }} style={{ width: 34, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+      <Pressable accessibilityRole="button" accessibilityLabel={`Minus ${step} ${unit}`} hitSlop={{ left: 5, right: 5 }} onPress={() => { haptic.tap(); onChange(Math.max(min, Math.round((value - step) * 10) / 10)); }} style={{ width: 34, height: 44, alignItems: 'center', justifyContent: 'center' }}>
         <Text style={{ fontSize: fontSizes.lg, lineHeight: 23, color: c.ink }}>−</Text>
       </Pressable>
       <GestureDetector gesture={pan}>
@@ -81,7 +81,7 @@ function InlineStepper({ value, unit, onChange, step, min, label, block }: Inlin
           <Text style={{ fontSize: fontSizes.xs2, lineHeight: 13, color: c.muted }}>{unit}</Text>
         </View>
       </GestureDetector>
-      <Pressable accessibilityLabel={`Plus ${step} ${unit}`} onPress={() => { haptic.tap(); onChange(Math.round((value + step) * 10) / 10); }} style={{ width: 34, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+      <Pressable accessibilityRole="button" accessibilityLabel={`Plus ${step} ${unit}`} hitSlop={{ left: 5, right: 5 }} onPress={() => { haptic.tap(); onChange(Math.round((value + step) * 10) / 10); }} style={{ width: 34, height: 44, alignItems: 'center', justifyContent: 'center' }}>
         <Text style={{ fontSize: fontSizes.lg, lineHeight: 23, color: c.ink }}>+</Text>
       </Pressable>
     </View>

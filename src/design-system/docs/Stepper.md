@@ -34,7 +34,7 @@ The "minus, value, plus" control for numbers. One component, three variants (the
 |---|---|---|
 | `card` | 52 px buttons around a 64 px value card with a unit | `Stepper` in `app/onboarding.tsx` |
 | `row` | Label on the left, round 44 px buttons around a large number, 60 px min row | `Stepper` in `features/plans/parts.tsx` |
-| `inline` | Compact 44 px control in a set row; drag the number sideways to scrub (14 px per step) | `Stepper` in `features/workout/SetRow.tsx` |
+| `inline` | Compact 44 px control in a set row; minus and plus drawn 34 px wide with a 5 px hit slop each side (44 px tap area); drag the number sideways to scrub (14 px per step) | `Stepper` in `features/workout/SetRow.tsx` |
 
 Step maths: `card` rounds to 1 decimal and floors at `step`. `inline` floors at `min`, rounds to 1 decimal, shows kg with one decimal, and plays a tap haptic on every change (taps and scrub).
 
@@ -49,7 +49,7 @@ Step maths: `card` rounds to 1 decimal and floors at `step`. `inline` floors at 
 
 - `card`: buttons "Less <label>" and "More <label>" (52 px); the value reads "<label> <value> <unit>".
 - `row`: the buttons use `minusLabel` and `plusLabel` (44 px); the value is a polite live region, so changes are read.
-- `inline`: role `adjustable` with increment and decrement actions, label "<label>, <value> <unit>". Minus and plus are 34 by 44 px, labelled "Minus <step> <unit>" and "Plus <step> <unit>".
+- `inline`: role `adjustable` with increment and decrement actions, label "<label>, <value> <unit>". Minus and plus are drawn 34 by 44 px with a 5 px hit slop on each side, so the tap area is 44 by 44 px; role `button`, labelled "Minus <step> <unit>" and "Plus <step> <unit>".
 
 ## Copy rules
 
