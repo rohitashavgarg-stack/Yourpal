@@ -56,7 +56,7 @@ function MiniWorkout() {
     <Pressy accessibilityRole="button" accessibilityLabel="Leg day in progress, resume" onPress={() => router.push('/workout')} scaleTo={0.98} style={[BAR, { backgroundColor: fixed.dark }]}>
       <Glow />
       <View style={{ flex: 1, minWidth: 0 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.white }}>Leg day · in progress</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.white }}>Leg day in progress</Txt>
         <Txt style={{ fontFamily: font.mono, fontSize: fontSizes.xs, color: 'rgba(255,255,255,0.7)' }}>{resting ? `Rest ${mmss((s.rest!.endAt - now) / 1000)}` : mmss((now - s.startAt) / 1000).padStart(5, '0')}</Txt>
       </View>
       <View style={{ height: 40, borderRadius: 20, paddingHorizontal: 16, backgroundColor: fixed.white, justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: fixed.dark }}>Resume</Txt></View>
