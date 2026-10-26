@@ -8,6 +8,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Defs, G, LinearGradient as SvgGradient, Mask, Path, Rect, Stop } from 'react-native-svg';
 import { GlassContainer, GlassView } from 'expo-glass-effect';
 import { GlassBackdrop, hasLiquidGlass } from './Glass';
+import { AI_BOX, AiOrbButton } from '@/design-system/primitives/AiOrbButton';
+import { useOverlay } from './Overlay';
 import { navStore } from './navStyle';
 import { ChartLine, ClipboardList, Dumbbell, Sun } from '@/lib/icons';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -206,7 +208,26 @@ export function FloatingTabBar(allProps: any) {
   const props = d.hasGym ? allProps : (() => { const routes = allProps.state.routes.filter((r: any) => r.name !== 'gym'); return { ...allProps, state: { ...allProps.state, routes, index: Math.min(allProps.state.index, routes.length - 1) } }; })();
   if (style === 'Circles') return <CircleNav {...props} />;
   if (style === 'Linked circles') return <MergedNav {...props} />;
-  return <PillBar {...props} />;
+  return (
+    <>
+      <PillBar {...props} />
+      <AiDock />
+    </>
+  );
+}
+
+// EXPERIMENT (branch experiment-gooey-menu): the AI box beside the pill tab bar. It hides on scroll with the bar. It does nothing yet except say so.
+function AiDock() {
+  const insets = useSafeAreaInsets();
+  const hidden = useNavHidden();
+  const { toast } = useOverlay();
+  const bar = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 110 }] }));
+  const bottom = Math.max(insets.bottom - 6, 14);
+  return (
+    <Animated.View pointerEvents="box-none" style={[{ position: 'absolute', right: 16, bottom }, bar]}>
+      <AiOrbButton label="Ask YourPal AI" onPress={() => toast('The AI assistant is coming soon')} />
+    </Animated.View>
+  );
 }
 
 function PillBar({ state, navigation }: any) {
@@ -226,7 +247,7 @@ function PillBar({ state, navigation }: any) {
     <Animated.View
       accessibilityRole="tablist"
       onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)}
-      style={[{ position: 'absolute', left: 16, right: 16, bottom, height: 64, borderRadius: 32, overflow: 'hidden', borderWidth: hasLiquidGlass ? 0 : 1, borderColor: c.navLine,
+      style={[{ position: 'absolute', left: 16, right: 16 + AI_BOX + 10, bottom, height: 64, borderRadius: 32, overflow: 'hidden', borderWidth: hasLiquidGlass ? 0 : 1, borderColor: c.navLine,
         shadowColor: fixed.shadow, shadowOpacity: 0.16, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 12 }, bar]}
     >
       <GlassBackdrop radius={32} frost={70} />
