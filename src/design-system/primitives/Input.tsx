@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, TextInputProps, View } from 'react-native';
+import { Text, TextInput, TextInputProps, View, type TextInputInstance } from 'react-native';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, fontSizes, radii } from '@/design-system/tokens';
 
@@ -7,7 +7,7 @@ import { font, fontSizes, radii } from '@/design-system/tokens';
  * Text inputs. Field is the one-line field (56 px, optional prefix), NoteField the multi-line note with a character count.
  * Both draw a 1 px line that becomes a 1.5 px accent line on focus and a 1.5 px amber line when `error` is set.
  */
-export const Field = React.forwardRef<TextInput, TextInputProps & { error?: boolean; prefix?: string }>(function Field({ error, prefix, style, ...rest }, ref) {
+export const Field = React.forwardRef<TextInputInstance, TextInputProps & { error?: boolean; prefix?: string }>(function Field({ error, prefix, style, ...rest }, ref) {
   const { c } = useTheme();
   const [focus, setFocus] = React.useState(false);
   return (

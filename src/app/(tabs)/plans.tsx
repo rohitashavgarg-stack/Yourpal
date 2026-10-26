@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect -- the effect resets local state when its input changes, as designed */
 import React, { useEffect, useRef, useState } from 'react';
 import { useLogsPaused } from '@/lib/logGate';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, type ScrollViewInstance } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { Check, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
 import { TabScreen } from '@/components/TabScreen';
@@ -39,7 +39,7 @@ function DayStrip() {
   const paused = useLogsPaused();
   const [w, setW] = useState(0);
   const [page, setPage] = useState(THIS);
-  const ref = useRef<ScrollView>(null);
+  const ref = useRef<ScrollViewInstance>(null);
   const cur = WEEKS[page] ?? 0;
   useEffect(() => { if (w > 0) { const t = setTimeout(() => ref.current?.scrollTo({ x: THIS * w, animated: false }), 30); return () => clearTimeout(t); } }, [w]);
   useEffect(() => { // a deep link to another week brings that week into view

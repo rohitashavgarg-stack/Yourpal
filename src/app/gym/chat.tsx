@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, Platform, ScrollView, View } from 'react-native';
+import { Keyboard, Platform, ScrollView, View, type ScrollViewInstance } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft, ChevronRight, Ellipsis, X } from '@/lib/icons';
@@ -63,7 +63,7 @@ export default function CoachChat() {
   const [draft, setDraft] = useState(params.draft ?? '');
   const [ctx, setCtx] = useState<string | undefined>(params.ctx);
   useEffect(() => { coachStore.set({ unread: false }); }, []);
-  const scroll = useRef<ScrollView>(null);
+  const scroll = useRef<ScrollViewInstance>(null);
   const { isDark } = useTheme();
   useToastLift(insets.bottom + 96);
   const back = () => { if (router.canGoBack()) router.back(); else router.replace('/gym'); };

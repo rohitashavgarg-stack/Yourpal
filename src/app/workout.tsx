@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect -- the effect resets local state when its input changes, as designed */
 import React, { useEffect, useRef, useState } from 'react';
 import { useLeaveIfPaused } from '@/lib/logGate';
-import { ScrollView, TextInput, View } from 'react-native';
+import { ScrollView, TextInput, View, type ScrollViewInstance } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, Path } from 'react-native-svg';
@@ -72,7 +72,7 @@ export default function Workout() {
   useEffect(() => { if (!resting) setFb(null); }, [resting]);
   const [noteDraft, setNoteDraft] = useState('');
   const [finished, setFinished] = useState<FinishStats | null>(null);
-  const scroll = useRef<ScrollView>(null);
+  const scroll = useRef<ScrollViewInstance>(null);
   const [dockH, setDockH] = useState(0);
   useToastLift(dockH ? dockH + 12 : 24 + insets.bottom);
   const newUi = workoutUiStore.use().design === 'New';

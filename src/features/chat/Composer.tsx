@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Image, Keyboard, Platform, ScrollView, TextInput, View } from 'react-native';
+import { Image, Keyboard, Platform, ScrollView, TextInput, View, type TextInputInstance } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { ArrowUp, Camera, Image as ImageIcon, Mic, Plus, Send, Smile, Trash2, X } from '@/lib/icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -84,7 +84,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
   const [emoji, setEmoji] = useState(false);
   const [rec, setRec] = useState(false);
   const [micOff, setMicOff] = useState(false);
-  const input = useRef<TextInput>(null);
+  const input = useRef<TextInputInstance>(null);
   const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const rs = useAudioRecorderState(recorder, 200);
 
