@@ -217,12 +217,15 @@ export function FloatingTabBar(allProps: any) {
 }
 
 // EXPERIMENT (branch experiment-gooey-menu): the AI box beside the pill tab bar. It hides on scroll with the bar. It does nothing yet except say so.
+// Phones only for now: on the web the tab bar is exactly as before.
+const AI_ON = Platform.OS !== 'web';
 function AiDock() {
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
   const { toast } = useOverlay();
   const bar = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 110 }] }));
   const bottom = Math.max(insets.bottom - 6, 14);
+  if (!AI_ON) return null;
   return (
     <Animated.View pointerEvents="box-none" style={[{ position: 'absolute', right: 16, bottom }, bar]}>
       <AiOrbButton label="Ask YourPal AI" onPress={() => toast('The AI assistant is coming soon')} />
@@ -247,7 +250,7 @@ function PillBar({ state, navigation }: any) {
     <Animated.View
       accessibilityRole="tablist"
       onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)}
-      style={[{ position: 'absolute', left: 16, right: 16 + AI_BOX + 10, bottom, height: 64, borderRadius: 32, overflow: 'hidden', borderWidth: hasLiquidGlass ? 0 : 1, borderColor: c.navLine,
+      style={[{ position: 'absolute', left: 16, right: AI_ON ? 16 + AI_BOX + 10 : 16, bottom, height: 64, borderRadius: 32, overflow: 'hidden', borderWidth: hasLiquidGlass ? 0 : 1, borderColor: c.navLine,
         shadowColor: fixed.shadow, shadowOpacity: 0.16, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 12 }, bar]}
     >
       <GlassBackdrop radius={32} frost={70} />
