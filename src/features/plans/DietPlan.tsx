@@ -29,6 +29,7 @@ import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Chevron } from '@/design-system/primitives/Chevron';
 import { AmountStepper } from '@/design-system/primitives/AmountStepper';
 import { ProgressBar, ProgressSegments } from '@/design-system/primitives/ProgressBar';
+import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
@@ -311,8 +312,14 @@ export function DietPlan() {
           </FadeIn>
         )}
       </FadeIn>
-      {MEALS.map((m, i) => <FadeIn key={m.id} i={2 + i}><MealCard mid={m.id} open={openId === m.id} /></FadeIn>)}
-      <FadeIn i={2 + MEALS.length}>
+      <FadeIn i={2}>
+        <Row style={{ gap: 12, paddingTop: 8 }}>
+          <SectionLabel variant="overline" inset={6}>MEALS</SectionLabel>
+          <View style={{ flex: 1, height: 1, backgroundColor: c.line }} />
+        </Row>
+      </FadeIn>
+      {MEALS.map((m, i) => <FadeIn key={m.id} i={3 + i}><MealCard mid={m.id} open={openId === m.id} /></FadeIn>)}
+      <FadeIn i={3 + MEALS.length}>
         <View accessible accessibilityLabel={`This week: ${7 + onPlan} of 12 meals on plan`} style={{ gap: 8, paddingHorizontal: 6, paddingBottom: 8 }}>
           <Row style={{ alignItems: 'baseline', gap: 6 }}>
             <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl, lineHeight: 28 }}>{7 + onPlan}</Txt>

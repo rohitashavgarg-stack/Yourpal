@@ -141,7 +141,16 @@ export default function Plans() {
   const canStart = useCanStart() && !paused;
   return (
     <View style={{ flex: 1 }}>
-    <TabScreen title="Plans" header={<GymHeader />} compactTitle={false} bottomPad={canStart ? 190 : 130}>
+    <TabScreen title="Plans" header={<GymHeader />} compactTitle={false} bottomPad={canStart ? 190 : 130} titleRight={(
+      <Row style={{ gap: 8 }}>
+        <Segmented iconOnly accessibilityLabel="Plan type" value={p.seg} onChange={(v) => setP({ seg: v })}
+          options={[{ value: 'workout', label: 'Workout' }, { value: 'diet', label: 'Diet' }]}
+          icons={{ workout: (col) => <Dumbbell size={20} color={col} />, diet: (col) => <UtensilsCrossed size={20} color={col} /> }} />
+        {!paused && <IconButton label={isW ? 'Plan menu' : 'Diet menu'} onPress={openMenu} size={52} radius={radii.xl} bg={c.surface} borderWidth={1} borderColor={c.line}>
+          <MoreHorizontal size={22} color={c.ink} />
+        </IconButton>}
+      </Row>
+    )}>
       {d.offline && (
         <FadeIn style={{ paddingVertical: 8, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: c.warn }}>You&apos;re offline · changes save on this phone and sync later</Txt>
@@ -158,16 +167,6 @@ export default function Plans() {
           </Row>
         </Callout>
       )}
-      <Row style={{ gap: 10 }}>
-        <View style={{ flex: 1 }}>
-          <Segmented accessibilityLabel="Plan type" value={p.seg} onChange={(v) => setP({ seg: v })}
-            options={[{ value: 'workout', label: 'Workout' }, { value: 'diet', label: 'Diet' }]}
-            icons={{ workout: (col) => <Dumbbell size={16} color={col} />, diet: (col) => <UtensilsCrossed size={16} color={col} /> }} />
-        </View>
-        {!paused && <IconButton label={isW ? 'Plan menu' : 'Diet menu'} onPress={openMenu} size={52} radius={radii.xl} bg={c.surface} borderWidth={1} borderColor={c.line}>
-          <MoreHorizontal size={22} color={c.ink} />
-        </IconButton>}
-      </Row>
       <DayStrip />
       <View key={p.seg} style={{ gap: 12 }}>
         {isW ? <WorkoutPlan /> : <DietPlan />}
