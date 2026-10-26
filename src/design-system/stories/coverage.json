@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-23",
+ "generated": "2026-10-26",
  "library": [
   {
    "name": "AmountStepper",
@@ -62,7 +62,7 @@
    "doc": true,
    "uses": 25,
    "files": 16,
-   "inLibrary": 0
+   "inLibrary": 1
   },
   {
    "name": "Callout",
@@ -87,9 +87,9 @@
    "group": "primitives",
    "file": "src/design-system/primitives/CheckCircle.tsx",
    "doc": true,
-   "uses": 11,
-   "files": 7,
-   "inLibrary": 0
+   "uses": 6,
+   "files": 6,
+   "inLibrary": 1
   },
   {
    "name": "Chevron",
@@ -114,7 +114,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/FadeIn.tsx",
    "doc": true,
-   "uses": 139,
+   "uses": 140,
    "files": 49,
    "inLibrary": 4
   },
@@ -123,9 +123,9 @@
    "group": "primitives",
    "file": "src/design-system/primitives/FoodMark.tsx",
    "doc": true,
-   "uses": 12,
-   "files": 7,
-   "inLibrary": 1
+   "uses": 7,
+   "files": 5,
+   "inLibrary": 2
   },
   {
    "name": "GlassBackdrop",
@@ -134,7 +134,7 @@
    "doc": true,
    "uses": 12,
    "files": 7,
-   "inLibrary": 2
+   "inLibrary": 3
   },
   {
    "name": "WebLiquidGlass",
@@ -222,9 +222,9 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Pressy.tsx",
    "doc": true,
-   "uses": 105,
-   "files": 49,
-   "inLibrary": 27
+   "uses": 99,
+   "files": 48,
+   "inLibrary": 31
   },
   {
    "name": "ProgressBar",
@@ -260,7 +260,7 @@
    "doc": true,
    "uses": 203,
    "files": 55,
-   "inLibrary": 47
+   "inLibrary": 51
   },
   {
    "name": "Ruler",
@@ -348,9 +348,9 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Tag.tsx",
    "doc": true,
-   "uses": 29,
-   "files": 19,
-   "inLibrary": 0
+   "uses": 27,
+   "files": 18,
+   "inLibrary": 1
   },
   {
    "name": "TrendsButton",
@@ -366,9 +366,9 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 873,
+   "uses": 858,
    "files": 85,
-   "inLibrary": 122
+   "inLibrary": 130
   },
   {
    "name": "Wheel",
@@ -404,6 +404,15 @@
    "doc": true,
    "uses": 1,
    "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "FoodCard",
+   "group": "patterns",
+   "file": "src/design-system/patterns/FoodCard.tsx",
+   "doc": true,
+   "uses": 6,
+   "files": 4,
    "inLibrary": 0
   },
   {
@@ -515,17 +524,13 @@
    "inLibrary": 0
   }
  ],
- "count": 86,
- "toBuild": 83,
+ "count": 84,
+ "toBuild": 81,
  "onPurpose": 3,
  "demoPanelExcluded": 21,
  "byGroup": {
   "Today": {
    "total": 12,
-   "onPurpose": 0
-  },
-  "Bottom sheets": {
-   "total": 10,
    "onPurpose": 0
   },
   "Plans and food logging": {
@@ -538,6 +543,10 @@
   },
   "Gym tab": {
    "total": 7,
+   "onPurpose": 0
+  },
+  "Bottom sheets": {
+   "total": 8,
    "onPurpose": 0
   },
   "Onboarding and login": {
@@ -755,21 +764,7 @@
    "group": "Today"
   },
   {
-   "where": "src/features/today/LogMealsSheet.tsx:111",
-   "kind": "button or pill",
-   "look": "button 64 px high, radius radii.md",
-   "jsx": "<Pressy key={`x${j}`} accessibilityRole=\"button\" accessibilityLabel={`${e.n}, added by you. Tap to remove, hol",
-   "group": "Bottom sheets"
-  },
-  {
-   "where": "src/features/today/LogMealsSheet.tsx:88",
-   "kind": "button or pill",
-   "look": "button 64 px high, radius radii.md",
-   "jsx": "<Pressy key={k} accessibilityRole=\"checkbox\" accessibilityState={{ checked: on }} accessibilityLabel={`${n.n}.",
-   "group": "Bottom sheets"
-  },
-  {
-   "where": "src/features/today/QuickLogSheet.tsx:148",
+   "where": "src/features/today/QuickLogSheet.tsx:143",
    "kind": "button or pill",
    "look": "button 34 px high, radius radii.md",
    "jsx": "<Pressy key={t} accessibilityRole=\"button\" accessibilityLabel={`Add ${t}`} onPress={() => setText((v) => (v.tr",
@@ -953,8 +948,8 @@
   {
    "where": "src/features/today/ForYou.tsx:223",
    "kind": "chip",
-   "look": "chip 28 px high, radius 14 with a line",
-   "jsx": "<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, borderWidth: 1, borderColor: c.chi",
+   "look": "chip 28 px high, radius round with a line",
+   "jsx": "<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: round(28), borderWidth: 1, borderColor",
    "group": "Today"
   },
   {
@@ -1056,7 +1051,7 @@
    "group": "Onboarding and login"
   },
   {
-   "where": "src/features/plans/DietPlan.tsx:109",
+   "where": "src/features/plans/DietPlan.tsx:110",
    "kind": "icon badge",
    "look": "dot 8 px",
    "jsx": "<View accessibilityLabel=\"Changed from plan\" style={{ position: 'absolute', top: 0, right: 0, width: 8, height",

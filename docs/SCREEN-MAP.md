@@ -1,6 +1,6 @@
 # Screen map
 
-For the developer. Every screen of the app: where its code is, how a member gets there, where it leads, which sheets it opens, which library pieces it is built from and what data it reads. Generated from the code by `node scripts/audit/screen-map.js` (a first draft: confirm the data lists against the code before building the backend). Generated 2026-10-23.
+For the developer. Every screen of the app: where its code is, how a member gets there, where it leads, which sheets it opens, which library pieces it is built from and what data it reads. Generated from the code by `node scripts/audit/screen-map.js` (a first draft: confirm the data lists against the code before building the backend). Generated 2026-10-26.
 
 How to read it
 - **Route** is the address of the screen (Expo Router: the file under `src/app` is the route).
@@ -106,7 +106,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 - Opens from: Tab bar: Today
 - Leads to: [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans), [Metric detail](#metric-detail), [Log weight](#log-weight), [Coach](#coach), [Active workout](#active-workout), [Progress](#progress), [Membership](#membership), [Check-in map](#check-in-map), [Streaks and badges](#streaks-and-badges)
 - Sheets it opens: `FlagSheet`, `UpdatesSheet`, `WaterSheet`, `HealthSheet`, `LogMealsSheet`, `DaySheet`, `StepsSheet`
-- Library pieces: `FadeIn`, `Pressy`, `Button`, `IconBadge`, `Card`, `StatusDot`, `WorkoutCardPattern`, `WeekCardPattern`
+- Library pieces: `FadeIn`, `Button`, `Pressy`, `IconBadge`, `Card`, `FoodCard`, `StatusDot`, `WorkoutCardPattern`
 - Data it reads: app state `loading`, `session`, `todayVariant`, `hc`, `wearable`, `time`, `wkDone`, `wkScenario`, `ci`, `scanFails`, `min`, `ciStart`, `ciOut`, `ciExtend`, `goal`, `awayDays`, `hasGym`, `dismissed`, `water`, `weight`, `openMeal`, `ciAt`, `membership`; profile `name`, `time`; screen stores `todayUiStore`, `planStore`, `goalStore`, `stepsStore`, `goalV2Store`, `goalSizeStore`, `goalCardStore`, `topCardStore`, `gymStore`, `missedWkStore`, `coachStore`, `reminderStore`, `greetStore`, `pushStore`; sample data `dur`, `fmtT`, `Meal`, `MealId`, `MEALS`, `KCAL_TARGET`, `MACRO_TARGET`
 
 ### Plans
@@ -114,8 +114,8 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 - Route `/plans`, code `src/app/(tabs)/plans.tsx`
 - Opens from: [Today](#today), [Coach](#coach), [Exercise search](#exercise-search), [Change goal](#change-goal), [Ask coach](#ask-coach), [Create a workout](#create-a-workout), [Edit plan](#edit-plan), [Exercise](#exercise), [Workout history](#workout-history), [What did you eat?](#what-did-you-eat), [What changed](#what-changed), [Goal (progress)](#goal-progress)
 - Leads to: [What changed](#what-changed), [Exercise](#exercise), [Workout history](#workout-history), [Active workout](#active-workout), [Food detail](#food-detail), [What did you eat?](#what-did-you-eat), [Ask coach](#ask-coach)
-- Sheets it opens: `QtySheet`, `ItemMenuSheet`, `UndoEatenSheet`, `ResetSheet`, `LibrarySheet`, `NutritionSheet`, `DietSwapSheet`
-- Library pieces: `FadeIn`, `Button`, `Card`, `Pressy`, `IconBadge`, `IconButton`, `ListCard`, `Callout`
+- Sheets it opens: `QtySheet`, `UndoEatenSheet`, `ResetSheet`, `LibrarySheet`, `NutritionSheet`, `DietSwapSheet`
+- Library pieces: `FadeIn`, `Button`, `Card`, `Pressy`, `IconBadge`, `IconButton`, `ListCard`, `Segmented`
 - Data it reads: app state `coachUpdated`, `planReq`, `offline`, `scanFails`, `session`; profile none; screen stores none; sample data `basePlans`, `TODAY_IDX`, `KCAL_TARGET`, `MACRO_TARGET`, `MealId`, `MEALS`, `LIBRARY`, `SWAPS`, `PlanDay`, `FoodType`, `Mode`, `fmtT`
 
 ### Progress

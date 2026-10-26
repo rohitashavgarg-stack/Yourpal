@@ -1,13 +1,13 @@
 {
- "generated": "2026-10-23",
+ "generated": "2026-10-26",
  "rule": "unique elements outside src/web; on purpose = rows of docs/coverage-exceptions.md",
- "count": 86,
+ "count": 84,
  "onPurpose": 3,
- "toBuild": 83,
+ "toBuild": 81,
  "demoPanelExcluded": 21,
  "exceptionRows": 4,
  "byKind": {
-  "button or pill": 28,
+  "button or pill": 26,
   "bar": 9,
   "chip": 7,
   "card": 15,
@@ -20,10 +20,6 @@
    "total": 12,
    "onPurpose": 0
   },
-  "Bottom sheets": {
-   "total": 10,
-   "onPurpose": 0
-  },
   "Plans and food logging": {
    "total": 16,
    "onPurpose": 1
@@ -34,6 +30,10 @@
   },
   "Gym tab": {
    "total": 7,
+   "onPurpose": 0
+  },
+  "Bottom sheets": {
+   "total": 8,
    "onPurpose": 0
   },
   "Onboarding and login": {
@@ -98,9 +98,9 @@
    "file": "features/today/ForYou.tsx",
    "line": 223,
    "kind": "chip",
-   "look": "chip 28 px high, radius 14 with a line",
+   "look": "chip 28 px high, radius round with a line",
    "fn": "ComebackPlan",
-   "text": "<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, borderWidth: 1, borderColor: c.chi",
+   "text": "<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: round(28), borderWidth: 1, borderColor",
    "onPurpose": false,
    "group": "Today"
   },
@@ -133,26 +133,6 @@
    "text": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: 18, right: 18, bottom: 0, height: 3, borderRad",
    "onPurpose": false,
    "group": "Today"
-  },
-  {
-   "file": "features/today/LogMealsSheet.tsx",
-   "line": 88,
-   "kind": "button or pill",
-   "look": "button 64 px high, radius radii.md",
-   "fn": "LogMealsSheet",
-   "text": "<Pressy key={k} accessibilityRole=\"checkbox\" accessibilityState={{ checked: on }} accessibilityLabel={`${n.n}.",
-   "onPurpose": false,
-   "group": "Bottom sheets"
-  },
-  {
-   "file": "features/today/LogMealsSheet.tsx",
-   "line": 111,
-   "kind": "button or pill",
-   "look": "button 64 px high, radius radii.md",
-   "fn": "LogMealsSheet",
-   "text": "<Pressy key={`x${j}`} accessibilityRole=\"button\" accessibilityLabel={`${e.n}, added by you. Tap to remove, hol",
-   "onPurpose": false,
-   "group": "Bottom sheets"
   },
   {
    "file": "app/(tabs)/plans.tsx",
@@ -226,7 +206,7 @@
   },
   {
    "file": "features/plans/DietPlan.tsx",
-   "line": 109,
+   "line": 110,
    "kind": "icon badge",
    "look": "dot 8 px",
    "fn": "QtyControl",
@@ -846,7 +826,7 @@
   },
   {
    "file": "features/today/QuickLogSheet.tsx",
-   "line": 148,
+   "line": 143,
    "kind": "button or pill",
    "look": "button 34 px high, radius radii.md",
    "fn": "QuickLogSheet",

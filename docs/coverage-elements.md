@@ -11,19 +11,19 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Today (routes)
 
 - Files: `app/(tabs)/index.tsx`, `features/today/TopCards.tsx`, `features/today/WorkoutCard.tsx`, `features/today/WeekCard.tsx`, `features/today/timeline.ts`, `features/today/ForYou.tsx`, `features/today/ui.ts`, `features/today/CheckInBar.tsx`, `features/today/ViewOnly.tsx`, `features/today/TodayBudget.tsx`, `features/today/TodayGreeting.tsx`, `features/today/DayQuote.tsx`, `features/today/NoPlanCard.tsx`, `features/reminders/PushBanner.tsx`, `features/today/GoalCards.tsx`, `features/today/LogMealsSheet.tsx`, `features/reminders/push.ts`
-- Library components used: Txt x63, FadeIn x23, Row x16, Pressy x12, Button x11, IconBadge x7, Card x3, StatusDot x1, WorkoutCardPattern x1, WeekCardPattern x1, BudgetCard x1, AmountStepper x1, SheetFooter x1
+- Library components used: Txt x57, FadeIn x23, Row x16, Button x11, Pressy x10, IconBadge x7, Card x3, FoodCard x2, StatusDot x1, WorkoutCardPattern x1, WeekCardPattern x1, BudgetCard x1, AmountStepper x1, SheetFooter x1
 - States and edge cases: Today variant: Regular, With updates, Comeback; Goal card state: Auto, ...GOAL_STATE_OPTIONS.map(([l; Last weigh-in: Today, 3 days ago, 10+ days ago; Health (steps): Connected, Not connected; Wearable (heart rate, sleep, energy): Has a wearable, No wearable; Time of day: Morning, Afternoon, Evening; Workout today: Not started, Done, Rest day; Check-in (location): Away, Near (25 m), At the gym, Checked in, Location off; Food scan result: Works, Fails; (action) Show loading state; (action) Reset meals for this time of day
 - Hand-built:
   - `features/today/TopCards.tsx:43` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Your goal: ${g.name}. ${progressLi`
   - `features/today/TopCards.tsx:306` bar: `<View key={k} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: radii.xs, backgro`
   - `features/today/ForYou.tsx:139` button or pill: `<Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, minWidth: 132, pa`
   - `features/today/ForYou.tsx:160` bar: `<Animated.View style={[{ height: 6, borderRadius: radii.xs, backgroundColor: c.ink }, st]}`
-  - `features/today/ForYou.tsx:223` chip: `<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, borderWidth: 1`
+  - `features/today/ForYou.tsx:223` chip: `<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: round(28), borderW`
 
 ## Plans (routes)
 
 - Files: `app/(tabs)/plans.tsx`, `features/plans/WorkoutPlan.tsx`, `features/plans/DietPlan.tsx`, `features/plans/QtySheet.tsx`
-- Library components used: Txt x67, FadeIn x21, Button x11, Row x10, Card x9, Pressy x7, IconBadge x4, IconButton x2, ListCard x2, Callout x1, Segmented x1, StatusDot x1, ProgressSegments x1, ProgressBar x1, AmountStepper x1, Chevron x1
+- Library components used: Txt x63, FadeIn x22, Row x11, Button x11, Card x9, Pressy x5, IconBadge x4, IconButton x2, ListCard x2, Segmented x1, Callout x1, StatusDot x1, ProgressSegments x1, ProgressBar x1, AmountStepper x1, FoodCard x1, Chevron x1
 - States and edge cases: Plan type: Workout, Diet; Coach updated the plan: Off, On; Plan change request: None, Requested, Ready; No plan yet (before assessment): Off, On; Mid-workout when the update arrives: Off, On; Connection: Online, Offline; Diet type (plan + swaps): Veg, Eggetarian, Non-veg; Detail level: Detailed, Simple; Camera (scan food): Allowed, Denied; Scan result: Works, Fails; (action) Apply Coach update now; (action) Reset this prototype
 - Hand-built:
   - `app/(tabs)/plans.tsx:74` button or pill: `<Pressy key={i} accessibilityRole="button" accessibilityState={{ selected: on }} accessibi`
@@ -33,7 +33,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
   - `features/plans/WorkoutPlan.tsx:115` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Your new plan is ready. View" onPre`
   - `features/plans/WorkoutPlan.tsx:179` icon badge: `<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, `
   - `features/plans/WorkoutPlan.tsx:180` icon badge: `<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, `
-  - `features/plans/DietPlan.tsx:109` icon badge: `<View accessibilityLabel="Changed from plan" style={{ position: 'absolute', top: 0, right:`
+  - `features/plans/DietPlan.tsx:110` icon badge: `<View accessibilityLabel="Changed from plan" style={{ position: 'absolute', top: 0, right:`
 
 ## Progress (routes)
 
@@ -658,16 +658,14 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 
 - Files: `features/today/LogMealsSheet.tsx`
 - Library components used: (see the screen's files)
-- Hand-built:
-  - `features/today/LogMealsSheet.tsx:88` button or pill: `<Pressy key={k} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessib`
-  - `features/today/LogMealsSheet.tsx:111` button or pill: `<Pressy key={'x${j}'} accessibilityRole="button" accessibilityLabel={'${e.n}, added by you`
+- Hand-built: none
 
 ## QuickLogSheet (bottom sheets)
 
 - Files: `features/today/QuickLogSheet.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `features/today/QuickLogSheet.tsx:148` button or pill: `<Pressy key={t} accessibilityRole="button" accessibilityLabel={'Add ${t}'} onPress={() => `
+  - `features/today/QuickLogSheet.tsx:143` button or pill: `<Pressy key={t} accessibilityRole="button" accessibilityLabel={'Add ${t}'} onPress={() => `
 
 ## StepsSheet (bottom sheets)
 

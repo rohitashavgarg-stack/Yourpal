@@ -987,7 +987,7 @@
   "screen": "LogMealsSheet",
   "group": "Bottom sheets",
   "status": "not started",
-  "hand": 2,
+  "hand": 0,
   "files": [
    "features/today/LogMealsSheet.tsx"
   ]

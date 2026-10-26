@@ -82,11 +82,11 @@
     },
     {
      "kind": "chip",
-     "sig": "chip 28 px high, radius 14 with a line",
+     "sig": "chip 28 px high, radius round with a line",
      "fn": "ComebackPlan",
      "line": 223,
      "tag": "View",
-     "text": "<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, borderWidth: 1, borderColor: c.chi",
+     "text": "<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: round(28), borderWidth: 1, borderColor",
      "file": "features/today/ForYou.tsx"
     },
     {
@@ -115,31 +115,13 @@
      "tag": "View",
      "text": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: 18, right: 18, bottom: 0, height: 3, borderRad",
      "file": "features/today/CheckInBar.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 64 px high, radius radii.md",
-     "fn": "LogMealsSheet",
-     "line": 88,
-     "tag": "Pressy",
-     "text": "<Pressy key={k} accessibilityRole=\"checkbox\" accessibilityState={{ checked: on }} accessibilityLabel={`${n.n}.",
-     "file": "features/today/LogMealsSheet.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 64 px high, radius radii.md",
-     "fn": "LogMealsSheet",
-     "line": 111,
-     "tag": "Pressy",
-     "text": "<Pressy key={`x${j}`} accessibilityRole=\"button\" accessibilityLabel={`${e.n}, added by you. Tap to remove, hol",
-     "file": "features/today/LogMealsSheet.tsx"
     }
    ],
    "ds": {
     "FadeIn": 23,
-    "Pressy": 12,
+    "Pressy": 10,
     "Row": 16,
-    "Txt": 63,
+    "Txt": 57,
     "Button": 11,
     "IconBadge": 7,
     "Card": 3,
@@ -147,6 +129,7 @@
     "WorkoutCardPattern": 1,
     "WeekCardPattern": 1,
     "BudgetCard": 1,
+    "FoodCard": 2,
     "AmountStepper": 1,
     "SheetFooter": 1
    },
@@ -189,14 +172,14 @@
     {
      "comp": "QuickLogSheet",
      "label": "Log a meal",
-     "line": 45,
+     "line": 46,
      "in": "elseFood",
      "file": "features/today/LogMealsSheet.tsx"
     },
     {
      "comp": "LogMealsSheet",
      "label": "Log meal",
-     "line": 45,
+     "line": 46,
      "in": "elseFood",
      "file": "features/today/LogMealsSheet.tsx"
     }
@@ -316,28 +299,29 @@
      "kind": "icon badge",
      "sig": "dot 8 px",
      "fn": "QtyControl",
-     "line": 109,
+     "line": 110,
      "tag": "View",
      "text": "<View accessibilityLabel=\"Changed from plan\" style={{ position: 'absolute', top: 0, right: 0, width: 8, height",
      "file": "features/plans/DietPlan.tsx"
     }
    ],
    "ds": {
-    "Row": 10,
-    "Txt": 67,
+    "Row": 11,
+    "Txt": 63,
     "Button": 11,
-    "Pressy": 7,
+    "Pressy": 5,
     "IconBadge": 4,
-    "FadeIn": 21,
-    "Callout": 1,
     "Segmented": 1,
     "IconButton": 2,
+    "FadeIn": 22,
+    "Callout": 1,
     "Card": 9,
     "StatusDot": 1,
     "ProgressSegments": 1,
     "ListCard": 2,
     "ProgressBar": 1,
     "AmountStepper": 1,
+    "FoodCard": 1,
     "Chevron": 1
    },
    "sheets": [
@@ -351,35 +335,28 @@
     {
      "comp": "QtySheet",
      "label": "Change amount",
-     "line": 108,
+     "line": 109,
      "in": "QtyControl",
      "file": "features/plans/DietPlan.tsx"
     },
     {
      "comp": "it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode=\"sugg\"",
      "label": "Swap item",
-     "line": 143,
-     "in": "onLeft",
-     "file": "features/plans/DietPlan.tsx"
-    },
-    {
-     "comp": "ItemMenuSheet",
-     "label": "Item options",
-     "line": 170,
-     "in": "menu",
+     "line": 125,
+     "in": "onSwap",
      "file": "features/plans/DietPlan.tsx"
     },
     {
      "comp": "UndoEatenSheet",
      "label": "Mark as not eaten",
-     "line": 205,
-     "in": "ItemRow",
+     "line": 128,
+     "in": "undo",
      "file": "features/plans/DietPlan.tsx"
     },
     {
      "comp": "UndoEatenSheet",
      "label": "Mark as not eaten",
-     "line": 251,
+     "line": 177,
      "in": "MealCard",
      "file": "features/plans/DietPlan.tsx"
     }
@@ -2756,53 +2733,54 @@
    "file": "features/plans/Sheets.tsx",
    "hand": [],
    "ds": {
-    "Txt": 22,
-    "Row": 4,
+    "Txt": 21,
+    "Row": 3,
     "Pill": 3,
     "Button": 6,
     "Field": 1,
-    "Callout": 2
+    "Callout": 2,
+    "FoodCard": 1
    },
    "sheets": [
     {
      "comp": "ResetSheet",
      "label": "Reset plan",
-     "line": 34,
+     "line": 35,
      "in": "PlanMenuSheet",
      "file": "features/plans/Sheets.tsx"
     },
     {
      "comp": "LibrarySheet",
      "label": "Exercise library",
-     "line": 35,
+     "line": 36,
      "in": "PlanMenuSheet",
      "file": "features/plans/Sheets.tsx"
     },
     {
      "comp": "ResetSheet",
      "label": "Reset plan",
-     "line": 53,
+     "line": 54,
      "in": "DietMenuSheet",
      "file": "features/plans/Sheets.tsx"
     },
     {
      "comp": "it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode=\"sugg\"",
      "label": "Swap item",
-     "line": 184,
+     "line": 185,
      "in": "ItemMenuSheet",
      "file": "features/plans/Sheets.tsx"
     },
     {
      "comp": "NutritionSheet",
      "label": "Nutrition",
-     "line": 188,
+     "line": 189,
      "in": "ItemMenuSheet",
      "file": "features/plans/Sheets.tsx"
     },
     {
      "comp": "DietSwapSheet",
      "label": "Swap item",
-     "line": 190,
+     "line": 191,
      "in": "ItemMenuSheet",
      "file": "features/plans/Sheets.tsx"
     }
@@ -2816,18 +2794,19 @@
      "kind": "button or pill",
      "sig": "button 34 px high, radius radii.md",
      "fn": "QuickLogSheet",
-     "line": 148,
+     "line": 143,
      "tag": "Pressy",
      "text": "<Pressy key={t} accessibilityRole=\"button\" accessibilityLabel={`Add ${t}`} onPress={() => setText((v) => (v.tr",
      "file": "features/today/QuickLogSheet.tsx"
     }
    ],
    "ds": {
-    "Txt": 18,
+    "Txt": 14,
     "Segmented": 1,
-    "Pressy": 3,
+    "FoodCard": 2,
     "Field": 2,
     "Row": 3,
+    "Pressy": 1,
     "ScanBracket": 4,
     "FadeIn": 2,
     "Button": 3,

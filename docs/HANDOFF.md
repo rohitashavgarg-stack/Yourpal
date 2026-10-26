@@ -1,6 +1,6 @@
 # YourPal member app: developer handoff
 
-The member app is Expo (SDK 57) with Expo Router and TypeScript. It runs on iOS, Android and the web (react-native-web, deployed to Vercel). This page explains the design system and the everyday commands. The rules every change follows are in `CLAUDE.md`.
+The member app is Expo (SDK 58) with Expo Router and TypeScript. It runs on iOS, Android and the web (react-native-web, deployed to Vercel). This page explains the design system and the everyday commands. The rules every change follows are in `CLAUDE.md`.
 
 ## Structure
 
@@ -11,7 +11,7 @@ src/
   design-system/
     tokens/               colours (light and dark palettes, fixed, onDark, gradients), type, spacing, radius, shadows, motion
     primitives/           small building blocks: Button and IconButton, Card, Option, Chip, Pill, Input, Sheet and SheetFooter, Snackbar, Stepper, ...
-    patterns/             whole cards with their states as props: GoalCard, BudgetCard, WorkoutCard, MealsCard, TrackerRow, WeekCard, Banner
+    patterns/             whole cards with their states as props: GoalCard, BudgetCard, WorkoutCard, MealsCard, FoodCard, TrackerRow, WeekCard, Banner
     stories/              one Storybook file per primitive and pattern
     docs/                 one page per component: purpose, props, states, do and don't, accessibility, copy rules
     _archive/             retired components kept so old imports still resolve; do not use them in new code
@@ -21,6 +21,14 @@ src/
 ```
 
 How the layers depend on each other: tokens, then primitives (use tokens only), then patterns (use primitives and tokens, take every state as a prop, read no app state), then features and routes (read app state and pass it into patterns).
+
+## Running it (Expo SDK 58)
+
+- The app is on **Expo SDK 58** (Expo 58, React Native 0.88, React 19.3, Expo Router 58). Expo Go on a phone only opens the latest SDK, so use the current Expo Go from the App Store or Play Store.
+- Install with `npm install --legacy-peer-deps`. Expo Router 58 lists an optional extra package (`@expo/ui`) that this app does not use, and npm stops on it without the flag.
+- `npx expo start`, then scan the QR code with Expo Go (same Wi-Fi), or press `w` for the web version.
+- Router 58 changed what a custom tab bar receives: `emitter` and `navigateToTab` replace `navigation` (see `src/components/FloatingTabBar.tsx`). React Native 0.88 types a ScrollView ref as `ScrollViewInstance` and a TextInput ref as `TextInputInstance`.
+- Storybook builds with `npm run build-storybook`. It carries a small stand-in for `@react-native/assets-registry` (`.storybook/mocks/assets-registry.ts`) because react-native-svg 15.16 imports it.
 
 ## Find a component
 

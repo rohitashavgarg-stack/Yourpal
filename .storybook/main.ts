@@ -45,7 +45,7 @@ const config: StorybookConfig = {
       },
     }];
     cfg.resolve = cfg.resolve ?? {};
-    cfg.resolve.alias = { ...(cfg.resolve.alias as Record<string, string>), '@': path.resolve(here, '../src'), 'expo-router': path.resolve(here, 'mocks/expo-router.tsx') };
+    cfg.resolve.alias = { ...(cfg.resolve.alias as Record<string, string>), '@': path.resolve(here, '../src'), 'expo-router': path.resolve(here, 'mocks/expo-router.tsx'), '@react-native/assets-registry/registry': path.resolve(here, 'mocks/assets-registry.ts') };
     cfg.define = { ...cfg.define, __DEV__: 'false', 'process.env.EXPO_OS': JSON.stringify('web'), 'process.env.NODE_ENV': JSON.stringify('production') };
     return cfg;
   },

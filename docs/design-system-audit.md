@@ -4,12 +4,12 @@
 
 | Measure | Count |
 |---|---|
-| Hand-built elements left | **86** outside the dev-only demo panel, 3 of them on purpose, so 83 still to build (222 at the first audit, 216 after the first handoff round, 179 after the near-match round, 152 after round 3; the earlier "95" included 7 elements of the demo panel and was not the same count as the Storybook page; one script, `scripts/audit/hand-built.js`, now gives the number for `docs/coverage.md` and the Storybook Coverage page) |
-| Library components | **43** `.tsx` files: 36 in `src/design-system/primitives/` (22 at the end of round 3, plus 14 shared components moved in round 4), 7 in `src/design-system/patterns/` |
+| Hand-built elements left | **84** outside the dev-only demo panel, 3 of them on purpose, so 81 still to build (222 at the first audit, 216 after the first handoff round, 179 after the near-match round, 152 after round 3; the earlier "95" included 7 elements of the demo panel and was not the same count as the Storybook page; one script, `scripts/audit/hand-built.js`, now gives the number for `docs/coverage.md` and the Storybook Coverage page) |
+| Library components | **44** `.tsx` files: 36 in `src/design-system/primitives/` (22 at the end of round 3, plus 14 shared components moved in round 4), 8 in `src/design-system/patterns/` (FoodCard added in round 5) |
 | Near-matches resolved | **41**: 37 use the library, 4 stay hand-built with a reason (`docs/coverage-exceptions.md`; 3 are in the app, 1 in the demo panel) |
 | Added after that | Callout (15 notices and soft panels), ProgressBar and ProgressSegments (10 bars), IconBadge and StatusDot adopted (61 tiles, 4 dots) |
 
-Hand-built elements by kind (the 86 in `docs/coverage.md` and on the Storybook Coverage page, web demo panel left out):
+Hand-built elements by kind (the 84 in `docs/coverage.md` and on the Storybook Coverage page, web demo panel left out):
 
 | Kind | Count |
 |---|---|
