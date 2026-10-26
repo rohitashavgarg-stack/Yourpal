@@ -69,7 +69,7 @@ function kindSpec(kind: ButtonKind, c: ReturnType<typeof useTheme>['c']): KindSp
     case 'whiteLine': return { bg: fixed.white, fg: fixed.dark, line: fixed.lineOnWhite };
     case 'surface': return { bg: c.surface, fg: c.ink };
     // blue glass: real iOS glass tinted with the accent (blurred glass with a blue tint elsewhere). For the one main action that floats over scrolling content.
-    case 'glassAccent': return { bg: 'transparent', fg: c.accentInk, glass: `${c.accent}EB`, line: `${fixed.white}4D` };
+    case 'glassAccent': return { bg: 'transparent', fg: c.accentInk, glass: `${c.accent}EB` };
   }
 }
 

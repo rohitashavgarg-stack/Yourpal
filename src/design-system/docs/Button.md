@@ -83,7 +83,7 @@ Every action in the app. One `Button` with a kind (colour) and a size (shape), a
 | soft | `accentSoft` | none | accent text | "This week", "Back to today", "About: ..." |
 | whiteLine | white | 1 px `fixed.lineOnWhite` (#C9D1DD) | dark | buttons on the white workout clip stage ("Finish", "Hide") |
 | surface | `surface` | none | ink | a button on a soft surface (Profile "Edit") |
-| glassAccent | transparent, blue glass (`GlassBackdrop` tinted with `c.accent` at 92%) | 1 px white at 30% | white | the one main action that floats over scrolling content: "Start workout" on Plans and "Save meal" in the meal log sheet. Real iOS 26 glass on a phone that has it, blurred blue glass elsewhere. Not for buttons inside a solid card |
+| glassAccent | transparent, blue glass (`GlassBackdrop` tinted with `c.accent` at 92%) | none | white | the one main action that floats over scrolling content: "Start workout" on Plans and "Save meal" in the meal log sheet. Real iOS 26 glass on a phone that has it, blurred blue glass elsewhere. Not for buttons inside a solid card |
 
 `weight` overrides the label weight of any kind; `muted` swaps the label to the muted colour.
 
