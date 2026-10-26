@@ -128,7 +128,7 @@ export function LogMealsSheet({ mealId, draft: start }: { mealId: MealId; draft?
         </Row>
       </View>
       {/* pinned under the list, so Save meal stays in view however many foods the meal has */}
-      <SheetFooter><Button kind="glassAccent" label="Save meal" onPress={save} /></SheetFooter>
+      <SheetFooter><Button kind="glassPrimary" label="Save meal" onPress={save} /></SheetFooter>
     </View>
   );
 }

@@ -11,7 +11,7 @@ const meta = {
   component: Button,
   args: { label: 'Confirm', kind: 'primary', size: 'large', disabled: false, onPress: () => {} },
   argTypes: {
-    kind: { control: 'select', options: ['primary', 'accent', 'secondary', 'ghost', 'white', 'outline', 'glass', 'dashed', 'line', 'quiet', 'soft', 'whiteLine', 'surface', 'glassAccent'] },
+    kind: { control: 'select', options: ['primary', 'accent', 'secondary', 'ghost', 'white', 'outline', 'glass', 'dashed', 'line', 'quiet', 'soft', 'whiteLine', 'surface', 'glassAccent', 'glassPrimary'] },
     size: { control: 'select', options: ['large', 'medium', 'small', 'chip', 'fill', 'tight', 'compact', 'xs'] },
     weight: { control: 'select', options: [undefined, 'medium', 'semibold'] },
     muted: { control: 'boolean' },
@@ -64,6 +64,7 @@ export const WhiteLine: S = { args: { kind: 'whiteLine', size: 'small', label: '
 export const WhiteLineXs: S = { args: { kind: 'whiteLine', size: 'xs', weight: 'medium', label: 'Hide', icon: <ChevronUp size={15} color={fixed.dark} /> } };
 /** White surface fill on the page background (Profile "Edit"). */
 export const Surface: S = { args: { kind: 'surface', size: 'small', label: 'Edit' } };
+export const GlassPrimary: S = { args: { kind: 'glassPrimary', label: 'Save meal' }, decorators: [(St) => <View style={{ backgroundColor: onDark.card, padding: 16, borderRadius: radii.card }}><St /></View>] };
 export const GlassAccent: S = { args: { kind: 'glassAccent', label: 'Start workout' }, decorators: [(St) => <View style={{ backgroundColor: onDark.card, padding: 16, borderRadius: radii.card }}><St /></View>] };
 export const Chip: S = { args: { kind: 'line', size: 'chip', label: 'Pain or injury' } };
 /** 32 px pill; the tap area still reaches 44 px. */
