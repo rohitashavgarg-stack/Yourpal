@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { CalendarClock, Check, Clock, Dumbbell, Flame, Lock, Moon, X } from '@/lib/icons';
+import { CalendarClock, Check, Clock, Dumbbell, Flame, Lock, Moon, X, SkipForward } from '@/lib/icons';
 import { Chip, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { Button } from '@/design-system/primitives/Button';
@@ -15,8 +15,8 @@ import { font, fontSizes, fixed, radii, onDark, gradients, round } from '@/desig
  *   due        within 15 minutes of the planned time or after it: a thin mint edge and a "Now" chip
  *   live       a session is running: timer, one segment per exercise
  *   missed     two hours past the plan with nothing logged: muted, amber edge, one question with three answers
- *   moved      the member answered "Move to tomorrow": one small row with Undo
- *   skipped    the member answered "Skip": one small row with Undo
+ *   moved      the member answered "Move to tomorrow": the same full card, a neutral "Moved" chip, where it moved to, Undo
+ *   skipped    the member answered "Skip": the same full card, the name faded and struck through, a neutral "Skipped" chip, what is next, Undo
  *   done       completed: time, exercises and calories
  *   rest       rest day
  *   paused     the membership has ended: one flat card that says why, no Start
@@ -43,8 +43,10 @@ export type WorkoutCardProps = {
   live?: { elapsed: string; done: number; total: number; next?: string };
   /** done: "6:58 pm" and the three stats (value, unit, label). */
   done?: { at: string; stats: [string, string, string][] };
-  /** rest: "Next: Pull, Thu 6:30 pm". */
+  /** rest and skipped: "Next: Pull, Thu 6:30 pm". */
   restNext?: string;
+  /** moved: where the workout moved to, "Thu 25 at 6:30 pm". */
+  tomorrow?: string;
   onStart?: () => void;
   onResume?: () => void;
   /** missed */
@@ -52,7 +54,7 @@ export type WorkoutCardProps = {
   onMove?: () => void;
   onSkip?: () => void;
   onStartAnyway?: () => void;
-  /** moved and skipped */
+  /** moved and skipped: Undo (white, 44 px) and "Start it today anyway" */
   onUndo?: () => void;
   /** comeback: the quiet second button, "Not today". */
   onNotToday?: () => void;
@@ -77,11 +79,12 @@ function Coach({ dim = false, unread, onPress }: { dim?: boolean; unread?: boole
 }
 
 // The workout name with its time as a small pill right after it. The pill sits 3 px below the middle of the line box: the name is mostly lower-case with descenders, so its visual centre is lower than its capitals.
-function WorkoutTitle({ name, time, tone = 'default' }: { name: string; time?: string; tone?: 'default' | 'missed' }) {
+function WorkoutTitle({ name, time, tone = 'default' }: { name: string; time?: string; tone?: 'default' | 'missed' | 'skipped' }) {
   const missed = tone === 'missed';
+  const skipped = tone === 'skipped';
   return (
     <Row style={{ gap: 10, flexWrap: 'wrap' }}>
-      <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl5, lineHeight: 42, letterSpacing: -1.4, color: missed ? 'rgba(255,255,255,0.75)' : fixed.white }}>{name}</Txt>
+      <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl5, lineHeight: 42, letterSpacing: -1.4, color: missed ? 'rgba(255,255,255,0.75)' : skipped ? 'rgba(255,255,255,0.5)' : fixed.white, textDecorationLine: skipped ? 'line-through' : 'none' }}>{name}</Txt>
       {!!time && (
         <View style={{ height: 28, paddingHorizontal: 10, marginTop: 6, borderRadius: round(28), backgroundColor: missed ? 'rgba(242,179,91,0.14)' : 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: missed ? AMBER : fixed.white, textDecorationLine: missed ? 'line-through' : 'none' }}>{time}</Txt>
@@ -105,7 +108,7 @@ function WorkoutShell({ colors, edge, children, compact = false, label }: { colo
 
 const noop = () => {};
 
-export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, onOpenCoach, burned, live, done, restNext, onStart = noop, onResume = noop, onDidIt = noop, onMove = noop, onSkip = noop, onStartAnyway = noop, onUndo = noop, onNotToday = noop }: WorkoutCardProps) {
+export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, onOpenCoach, burned, live, done, restNext, tomorrow, onStart = noop, onResume = noop, onDidIt = noop, onMove = noop, onSkip = noop, onStartAnyway = noop, onUndo = noop, onNotToday = noop }: WorkoutCardProps) {
   const { c } = useTheme();
   const burnedRow = burned != null ? (
     <Row style={{ gap: 8, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.12)' }}>
@@ -130,19 +133,22 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
     );
   }
 
-  // moved or skipped: one small row, so it stops taking space
+  // moved or skipped: the same full card as the other states. A neutral chip (never red or amber: neither is a failure), the answer in one line, Undo and a way back in.
   if (state === 'moved' || state === 'skipped') {
     const moved = state === 'moved';
     return (
-      <WorkoutShell compact label={moved ? `${name} moved to tomorrow` : `${name} skipped today`} colors={gradients.workoutPlanned}>
-        <Row style={{ gap: 12 }}>
-          <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center' }}>{moved ? <CalendarClock size={18} color={fixed.white} /> : <X size={18} color={fixed.white} />}</View>
-          <View style={{ flex: 1 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: fixed.white }}>{moved ? `${name} moved to tomorrow` : `${name} skipped today`}</Txt>
-            <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: W60 }}>{moved ? 'Coach Vikram is told' : 'Your plan picks up tomorrow'}</Txt>
-          </View>
-          <Pressy accessibilityRole="button" accessibilityLabel="Undo" onPress={onUndo} hitSlop={{ top: 5, bottom: 5 }} style={{ height: 34, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: fixed.white }}>Undo</Txt>
+      <WorkoutShell label={moved ? `${name} moved to tomorrow` : `${name} skipped today`} colors={moved ? gradients.workoutPlanned : [onDark.card, onDark.card]} edge="rgba(255,255,255,0.12)">
+        <Row style={{ justifyContent: 'space-between', gap: 8 }}>
+          <Coach dim unread={coachUnread} onPress={onOpenCoach} />
+          <Chip label={moved ? 'Moved' : 'Skipped'} icon={moved ? <CalendarClock size={13} color={fixed.white} /> : <SkipForward size={13} color={fixed.white} />} onDark />
+        </Row>
+        <WorkoutTitle name={name} tone={moved ? 'default' : 'skipped'} />
+        <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: 'rgba(255,255,255,0.8)' }}>{moved ? `Moved to tomorrow${tomorrow ? `, ${tomorrow}` : ''}. Coach Vikram is told.` : 'Skipped for today. Your plan picks up tomorrow.'}</Txt>
+        {!moved && !!restNext && <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: W60 }}>{restNext}</Txt>}
+        <Row style={{ gap: 14 }}>
+          <Button kind="white" size="small" label="Undo" onPress={onUndo} />
+          <Pressy accessibilityRole="button" onPress={onStartAnyway} hitSlop={8} style={{ paddingVertical: 2 }}>
+            <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: W60, textDecorationLine: 'underline' }}>Start it today anyway</Txt>
           </Pressy>
         </Row>
       </WorkoutShell>
