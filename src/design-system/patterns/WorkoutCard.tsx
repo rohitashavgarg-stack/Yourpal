@@ -151,7 +151,7 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
         </View>
         <Row style={{ gap: 10 }}>
           <Button kind="white" size="small" label="Undo" onPress={onUndo} />
-          <Button kind="glass" size="small" label="Start today anyway" onPress={onStartAnyway} />
+          <Button kind="secondary" size="small" label="Start today anyway" onPress={onStartAnyway} />
         </Row>
       </WorkoutShell>
     );
