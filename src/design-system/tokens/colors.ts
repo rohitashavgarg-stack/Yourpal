@@ -130,9 +130,6 @@ export const gradients = {
   workoutLive: ['#06231B', '#0B3A2C', '#0F5A42'],
   workoutMissed: ['#17140F', '#17140F', '#1B1710'],
   water: ['#070B2B', '#1C2BC0'],
-  // the AI box beside the tab bar: a light glass tint, violet to blue to teal, from the top left to the bottom right
-  aiGlass: ['rgba(139,92,246,0.24)', 'rgba(76,130,247,0.16)', 'rgba(45,212,191,0.22)'],
-  aiGlassOnLight: ['rgba(139,92,246,0.16)', 'rgba(76,130,247,0.10)', 'rgba(45,212,191,0.16)'],
 } as const;
 
 // Semantic roles. They point at palette values, so they follow the theme. fg = text or icon, bg = soft background.

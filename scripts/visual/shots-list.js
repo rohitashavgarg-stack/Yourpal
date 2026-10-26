@@ -27,7 +27,8 @@ module.exports = [
   { name: 'overlay-push-banner', url: '/?stores=' + q({ push: { shown: { key: 'water', title: 'YourPal', body: 'No water logged since 11 am. A glass is 250 ml.', at: 1 } } }), settle: 600 },
   { name: 'overlay-rest-timer', url: '/', clicks: [...MAIN, 'Log set'] },
   { name: 'overlay-finish-screen', url: '/', clicks: [...MAIN, 'Finish workout', 'Finish now'], wait: 2500 },
-  { name: 'exp-ai-box', url: '/', settle: 3500 },
+    { name: 'exp-tab-plans', url: '/', clicks: ['Plans'], wait: 2500 },
+  { name: 'exp-tab-gym', url: '/', clicks: ['Progress', 'Gym'], wait: 2500 },
   // empty, loading and error states
   { name: 'state-today-loading', url: '/', settle: 100 },
   { name: 'state-login-notfound', url: '/login?sc=' + q({ number: 'Not found' }), noSignedIn: true, fill: [['Phone number', '9876543210']], clicks: ['Send code'], wait: 2000 },
