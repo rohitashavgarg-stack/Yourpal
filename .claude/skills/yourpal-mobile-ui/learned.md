@@ -4,6 +4,9 @@ Rules learned from the designer's corrections and from how the app was built. Re
 
 ## 26 Oct 2026
 
+**Workout card answers** (source: moved and skipped redesign)
+- The answers "Move to tomorrow" and "Skip" show as the **same full card** as every other workout state, never a slim strip with a round icon (it looked like a dismissed notification). A neutral outlined chip says "Moved" or "Skipped" (not amber, not red: neither is a failure), the answer is one plain line, Undo is a white 44 px button, and "Start it today anyway" is a quiet link. A skipped name is faded and struck through and a "Next:" line shows what is coming.
+
 **Food cards** (source: the diet card redesign, FoodCard pattern)
 - One food is its own card with three states: **dashed** (not eaten), **solid** (eaten), **faded and struck through** (skipped). The state is read from the outline, never from colour alone.
 - The check circle is on the **right**, on the not-eaten card only. The eaten card has no check; it has a darker strip with the macros and a three-dot button ("Mark as not eaten").

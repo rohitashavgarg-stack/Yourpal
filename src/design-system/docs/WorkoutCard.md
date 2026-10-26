@@ -26,7 +26,8 @@ Today's workout, one look per state. The state is a prop; `TodayWorkoutCard` (ol
 | `onStart` | () => void | no-op | Start workout (upcoming, due); Start easy session (comeback) |
 | `onResume` | () => void | no-op | live |
 | `onDidIt`, `onMove`, `onSkip`, `onStartAnyway` | () => void | no-op | missed: the three answers and the quiet link |
-| `onUndo` | () => void | no-op | moved, skipped |
+| `onUndo` | () => void | no-op | moved, skipped: the Undo button |
+| `tomorrow` | string | none | moved: where it moved to, "Thu 25 at 6:30 pm" |
 | `onNotToday` | () => void | no-op | comeback: the second button, "Not today" (the container answers it as a skip, with Undo) |
 
 ## States
@@ -39,8 +40,8 @@ Today's workout, one look per state. The state is a prop; `TodayWorkoutCard` (ol
 | due | Same with a thin mint edge and a mint "Now" chip with a live dot (15 minutes before the planned time or later) |
 | live | Green gradient. "Running" with a mint dot, name chip (live tone), the mono timer and "elapsed", "3 of 7 exercises" with "Next: ...", one segment per exercise, white **Resume workout** |
 | missed | Two hours past the plan with nothing logged. Muted dark card with an amber edge, dimmed coach line, amber "Missed" chip, the time struck through in amber, "Did you train without the app, or should it move?", **I did it** (white), **Move to tomorrow** and **Skip** (glass), and an underlined "Start it now anyway" |
-| moved | One compact row: calendar icon, "Leg day moved to tomorrow", "Coach Vikram is told", **Undo** |
-| skipped | One compact row: cross icon, "Leg day skipped today", "Your plan picks up tomorrow", **Undo** |
+| moved | The same full card as the other states, blue-tinted. Coach line, a neutral outlined chip "Moved" with a calendar icon, the name, "Moved to tomorrow, Thu 25 at 6:30 pm. Coach Vikram is told.", a white **Undo** button (44 px) and the link "Start it today anyway" |
+| skipped | The same full card on a flat dark fill. Coach line, a neutral outlined chip "Skipped" with the skip icon, the name faded and struck through, "Skipped for today. Your plan picks up tomorrow.", "Next: Pull, Thu 6:30 pm", a white **Undo** button (44 px) and the link "Start it today anyway" |
 | done | Dark green gradient. Mint tick and "Done at 6:58 pm", name chip, "Workout complete", three stats (value, unit, label) |
 | rest | Dark purple gradient. Lilac moon and "Recovery", "Next: ..." chip, "Rest day", "Muscles grow on rest days. A 20 minute walk still counts." |
 | paused | Shown only while the membership is paused or ended, never the goal. Membership ended. Flat grey card (no gradient, no Start): lock tile, "Workouts are paused", "Renew at Wulf Fitness reception to see your plan and start again. Your history stays here." |
@@ -55,7 +56,7 @@ Baseline images in `docs/visual-baseline/cards/`: `workout-<state>`, `workout-do
 
 - Do keep the same layout in every state so the card does not jump.
 - Do put the version choice (Full, Quick, Low energy) in the Start sheet, never on the card.
-- Do treat missed, moved and skipped calmly: amber edge at most, and always an Undo.
+- Do treat missed, moved and skipped calmly: amber edge at most (missed only; moved and skipped use a neutral chip), and always an Undo. Starting the workout anyway clears the answer.
 - Don't use red anywhere on this card.
 - Don't style comeback or paused as failure. Comeback is a fresh, easy start. Paused is shown when the membership is paused, never because of the goal; it says where to renew, with no Pay or Resume button.
 - Mint only for live and due.

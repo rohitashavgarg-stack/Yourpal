@@ -1,5 +1,7 @@
 # Design changelog (generated)
 
+- 2026-10-26 `cbabe01` Workout card: moved and skipped are the same full card as the other states (neutral chip, one line, Undo 44 px, start anyway) (library, features)
+
 - 2026-10-26 `618f5eb` Round 5 handoff refresh: FoodCard docs and story, Storybook asset registry stand-in, SDK 58 notes, status, progress, screen map, counts (docs)
 - 2026-10-26 `3ac6381` FoodCard pattern in the library; the Plans diet page, the meal log sheet, quick log and the swap sheet use it (features)
 - 2026-10-26 `b9dde40` wip-foodcard (library)

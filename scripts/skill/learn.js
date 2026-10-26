@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /*
  * Keeps the design skill (.claude/skills/yourpal-mobile-ui) in step with the code, with no AI and no network. Run by hand, by `npm run skill:learn`,
- * by `scripts/publish.js` and by the Stop hook in .claude/settings.json after every Claude turn.
+ * by `scripts/publish.js` and (if you install the optional Stop hook, see docs/AUTOMATION.md) after every Claude turn.
  *
  *   1. catalog.md        regenerated from the code: library components (docs/design-system-components.md), Button kinds and sizes, tokens, the rules in CLAUDE.md
  *   2. CHANGELOG.md      one entry per new commit that touched the UI, grouped by area

@@ -2,6 +2,20 @@
 
 Checked on 26 Oct 2026 on branch `design-system-handoff`, after round 5 (see `docs/progress.md`). Each line was checked by running the command or opening the file or link. Light mode is out of scope by the designer's instruction, so nothing here covers it.
 
+<!-- numbers:start -->
+Numbers written by `scripts/publish.js` on 2026-10-26 12:15 from branch `experiment-blue-glass` at `f6d4afc`:
+
+| Measure | Value |
+|---|---|
+| Typecheck | 0 errors |
+| Lint | 0 errors, 671 warnings |
+| New hard-coded values on changed lines | 0 |
+| Library files | 44 (36 primitives, 8 patterns) |
+| Storybook stories | 237 |
+| Hand-built elements (outside the demo panel) | 84 (3 on purpose, 81 to build) |
+| Dot-separator lines left | 247 in 74 files |
+<!-- numbers:end -->
+
 ## What changed since the last status (23 Oct)
 
 - **Expo SDK 58.** The app moved from SDK 57 to 58 (Expo 58.0.19, React Native 0.88, React 19.3, Expo Router 58). Expo Go on a phone only opens the latest SDK. Install with `npm install --legacy-peer-deps`. Details: `docs/HANDOFF.md`, "Running it".

@@ -96,7 +96,7 @@ One goal model (`useGoalV2`, `src/features/goalv2/model.ts`) feeds every surface
 ## 11. Learned rules and how this skill improves itself
 
 - `learned.md` holds the rules learned from the designer's corrections (food cards, glass, Plans, separators, how he likes to work). **Read it before any UI work.** It overrides older text in this file when they disagree.
-- `catalog.md`, `CHANGELOG.md` and `pending-review.md` are written by `scripts/skill/learn.js`. It runs after every Claude turn (Stop hook in `.claude/settings.json`) and on every publish. It needs no AI: it re-reads the code and records what changed.
+- `catalog.md`, `CHANGELOG.md` and `pending-review.md` are written by `scripts/skill/learn.js`. It runs on every publish and on `/yourpal-learn` (an every-turn Stop hook is described in docs/AUTOMATION.md but is not installed). It needs no AI: it re-reads the code and records what changed.
 - When `pending-review.md` is not empty, new components, new Button kinds or new designer feedback have appeared. The `yourpal-design-learner` agent (run `/yourpal-learn`, or let the weekly schedule run it) reads the diffs and the feedback, writes the rules into `learned.md` and this file, and empties `pending-review.md`.
 - When the designer corrects something, save the rule in `learned.md` straight away, with the date and where it came from.
 - Where this file and `learned.md` disagree, `learned.md` wins; fix this file when you notice.

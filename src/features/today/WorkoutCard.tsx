@@ -2,7 +2,7 @@ import React from 'react';
 import { router } from 'expo-router';
 import { coachStore } from '@/features/coach/coach';
 import { useOverlay } from '@/components/Overlay';
-import { fmtT } from '@/lib/data';
+import { fmtT, TODAY_IDX, WEEK } from '@/lib/data';
 import { burned, plannedMin, useDomain, wkDoneInfo, workoutState } from '@/lib/domain';
 import { useStore } from '@/lib/store';
 import { mmss, useNow } from '@/lib/useNow';
@@ -68,9 +68,9 @@ export function TodayWorkoutCard({ restart = false }: { restart?: boolean } = {}
   }
   return (
     <WorkoutCardPattern state={ps} name={name} time={time} when={rel(d, WKT).t} meta={meta} coachUnread={cs.unread} onOpenCoach={() => router.push('/coach')}
-      burned={burnedKcal} live={live} done={done} restNext={`Next: Pull, Thu ${fmtT(WKT).full}`}
+      burned={burnedKcal} live={live} done={done} restNext={`Next: Pull, Thu ${fmtT(WKT).full}`} tomorrow={`${WEEK[TODAY_IDX + 1].d} ${WEEK[TODAY_IDX + 1].num} at ${fmtT(WKT).full}`}
       onStart={() => startWorkout()} onResume={() => router.push('/workout')} onDidIt={didIt} onMove={() => answer('moved')} onSkip={() => answer('skipped')}
-      onStartAnyway={() => startWorkout()} onUndo={() => missedWkStore.set({ answer: null })} onNotToday={() => answer('skipped')} />
+      onStartAnyway={() => { missedWkStore.set({ answer: null }); startWorkout(); }} onUndo={() => missedWkStore.set({ answer: null })} onNotToday={() => answer('skipped')} />
   );
 }
 export { TodayWorkoutCard as WorkoutCard }; // the old name, so existing imports keep working
