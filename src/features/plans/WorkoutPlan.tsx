@@ -225,7 +225,7 @@ export function StickyStart() {
   const bottom = Math.max(insets.bottom - 6, 14) + 84;
   return (
     <FadeIn pointerEvents="box-none" style={[{ position: 'absolute', left: 16, right: 16, bottom }, lift]}>
-      <Button kind="accent" label={live ? 'Resume workout' : 'Start workout'} icon={<Play size={18} color={c.accentInk} fill={c.accentInk} />}
+      <Button kind="glassAccent" label={live ? 'Resume workout' : 'Start workout'} icon={<Play size={18} color={c.accentInk} fill={c.accentInk} />}
         onPress={() => (live ? router.push('/workout') : startWorkout())} />
     </FadeIn>
   );

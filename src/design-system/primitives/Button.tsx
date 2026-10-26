@@ -10,7 +10,7 @@ import { Pressy } from './Pressy';
  * Every look here existed before; the old names (PillBtn, RoundBtn, StepBtn, and the two buttons on the workout card)
  * are now thin wrappers that pick a kind and a size.
  */
-export type ButtonKind = 'primary' | 'accent' | 'secondary' | 'ghost' | 'white' | 'outline' | 'glass' | 'dashed' | 'line' | 'quiet' | 'soft' | 'whiteLine' | 'surface';
+export type ButtonKind = 'primary' | 'accent' | 'secondary' | 'ghost' | 'white' | 'outline' | 'glass' | 'dashed' | 'line' | 'quiet' | 'soft' | 'whiteLine' | 'surface' | 'glassAccent';
 export type ButtonSize = 'large' | 'medium' | 'small' | 'tight' | 'compact' | 'chip' | 'xs' | 'fill';
 
 export type ButtonProps = {
@@ -52,7 +52,7 @@ const SIZE: Record<ButtonSize, SizeSpec> = {
 };
 
 // Fill, line and label colour of each kind. dashed, line and quiet are transparent with a 1 px line; whiteLine sits on the white clip stage.
-type KindSpec = { bg: string; fg: string; line?: string; dashed?: boolean; medium?: boolean };
+type KindSpec = { bg: string; fg: string; line?: string; dashed?: boolean; medium?: boolean; glass?: string };
 function kindSpec(kind: ButtonKind, c: ReturnType<typeof useTheme>['c']): KindSpec {
   switch (kind) {
     case 'primary': return { bg: c.ink, fg: c.bg };
@@ -68,6 +68,8 @@ function kindSpec(kind: ButtonKind, c: ReturnType<typeof useTheme>['c']): KindSp
     case 'soft': return { bg: c.accentSoft, fg: c.accentText };
     case 'whiteLine': return { bg: fixed.white, fg: fixed.dark, line: fixed.lineOnWhite };
     case 'surface': return { bg: c.surface, fg: c.ink };
+    // blue glass: real iOS glass tinted with the accent (blurred glass with a blue tint elsewhere). For the one main action that floats over scrolling content.
+    case 'glassAccent': return { bg: 'transparent', fg: c.accentInk, glass: `${c.accent}CC`, line: `${fixed.white}4D` };
   }
 }
 
@@ -90,11 +92,12 @@ export function Button({ kind = 'primary', size, small, height, label, onPress, 
       hitSlop={slop}
       scaleTo={scaleTo}
       style={[{
-        height: s.h, borderRadius: s.r, backgroundColor: k.bg, flexDirection: 'row', alignItems: 'center', ...(sz === 'compact' ? null : { justifyContent: 'center' }), gap: s.gap,
+        height: s.h, borderRadius: s.r, backgroundColor: k.bg, ...(k.glass ? { overflow: 'hidden' as const } : null), flexDirection: 'row', alignItems: 'center', ...(sz === 'compact' ? null : { justifyContent: 'center' }), gap: s.gap,
         paddingHorizontal: s.px, ...(iconAfter ? { paddingRight: s.px - 4 } : null), opacity: disabled ? 0.4 : 1,
         borderWidth: k.line ? 1 : 0, borderColor: k.line ?? c.line, ...(k.dashed ? { borderStyle: 'dashed' as const } : null),
       }, style]}
     >
+      {k.glass ? <GlassBackdrop radius={s.r} tint={k.glass} /> : null}
       {icon}
       <Text style={{ fontFamily: medium ? font.medium : font.semibold, fontSize: s.fs, lineHeight: s.lh, color: fg }}>{label}</Text>
       {iconAfter}
