@@ -14,6 +14,8 @@ import { useDietActions } from './dietActions';
 import { startCreate, startDietEdit, startWorkoutEdit } from './openers';
 import { BigTitle, ListRow, Stepper } from './parts';
 import { allowedFor, dayPlan, dietItems, DietRow, PEx, setP, usePlans } from './store';
+import { Callout } from '@/design-system/primitives/Callout';
+import { FoodCard } from '@/design-system/patterns/FoodCard';
 import { radii, fontSizes } from '@/design-system/tokens';
 
 // ---------- Workout plan menu ----------
@@ -71,7 +73,7 @@ export function ResetSheet({ kind }: { kind: 'workout' | 'diet' }) {
   };
   return (
     <>
-      <BigTitle>Reset to Coach's version?</BigTitle>
+      <BigTitle>Reset to Coach&apos;s version?</BigTitle>
       <Txt muted>{kind === 'diet' ? "Your swaps, portions and order changes are removed. What you've already logged stays." : 'Your edits and workouts you created are removed. Coach Vikram\'s plan comes back as it was.'}</Txt>
       <Button label="Reset plan" onPress={reset} />
       <Button kind="secondary" label="Keep my edits" onPress={() => closeSheet()} />
@@ -84,7 +86,7 @@ export function DiscardSheet() {
   return (
     <>
       <BigTitle>Discard your changes?</BigTitle>
-      <Txt muted>You changed this plan but haven't saved it.</Txt>
+      <Txt muted>You changed this plan but haven&apos;t saved it.</Txt>
       <Button label="Discard" onPress={() => closeSheet(() => { setP({ draft: null }); router.back(); })} />
       <Button kind="secondary" label="Keep editing" onPress={() => closeSheet()} />
     </>
@@ -114,7 +116,7 @@ export function LibrarySheet({ mode }: { mode: 'edit' | 'create' | 'browse' }) {
           <ListRow key={x.n} label={x.n} sub={x.g} last={i === res.length - 1} chevron={false} a11y={`${mode === 'browse' ? 'View' : 'Add'} ${x.n}, ${x.g}`}
             right={<Txt style={{ fontFamily: font.semibold, color: c.accentText }}>{mode === 'browse' ? 'View' : 'Add'}</Txt>} onPress={() => pick(x.n)} />
         ))}
-        {res.length === 0 && <Txt muted style={{ paddingVertical: 18 }}>No exercises match "{q}".</Txt>}
+        {res.length === 0 && <Txt muted style={{ paddingVertical: 18 }}>No exercises match &quot;{q}&quot;.</Txt>}
       </View>
     </>
   );
@@ -189,7 +191,7 @@ export function ItemMenuSheet({ mid, itemKey }: { mid: MealId; itemKey: string }
         <ListRow label="Always use a swap for this" chevron={false} last={!it.mine} onPress={() => openSheet(<DietSwapSheet mid={mid} itemKey={it.key} always />, { label: 'Swap item' })} />
         {it.mine && <ListRow label="Delete item" tone={c.warn} chevron={false} last onPress={() => closeSheet(() => A.deleteExtra(mid, it))} />}
       </View>
-      {!it.mine && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Items from Coach's plan can be skipped but not deleted.</Txt>}
+      {!it.mine && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Items from Coach&apos;s plan can be skipped but not deleted.</Txt>}
     </>
   );
 }
@@ -204,10 +206,10 @@ export function NutritionSheet({ mid, itemKey }: { mid: MealId; itemKey: string 
       <BigTitle>{it.n}</BigTitle>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         {tiles.map(([l, v]) => (
-          <View key={l} accessible accessibilityLabel={`${l} ${v}`} style={{ width: '48%', flexGrow: 1, padding: 14, borderRadius: radii.md, backgroundColor: c.surface2 }}>
+          <Callout key={l} size="sm" accessible accessibilityLabel={`${l} ${v}`} style={{ width: '48%', flexGrow: 1 }}>
             <Txt v="label">{l}</Txt>
             <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3 }}>{v}</Txt>
-          </View>
+          </Callout>
         ))}
       </View>
       <Txt v="caption">{it.est || it.swapped || it.mine ? 'Estimated values' : 'Example values'} · real values come from the Indian food database</Txt>
@@ -228,10 +230,10 @@ export function DietSwapSheet({ mid, itemKey, always: always0 }: { mid: MealId; 
     <>
       <BigTitle>Swap {it.n.toLowerCase()}</BigTitle>
       <Txt v="mono" muted style={{ marginTop: -6 }}>~{it.k} kcal · {it.p} g protein</Txt>
-      <View>
+      <View style={{ gap: 8 }}>
         {opts.map((o) => (
-          <ListRow key={o.n} label={`${o.n}, ${o.q}`} sub={o.coach ? 'Coach-approved' : undefined} chevron={false} a11y={`${o.n}, ${o.q}, about ${o.k} kcal, ${o.p} grams protein${o.coach ? ', coach-approved' : ''}`}
-            right={<Row style={{ gap: 8 }}><FoodMark type={o.type} /><Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>≈{o.k} · {o.p} g</Txt></Row>} onPress={() => pick(o)} />
+          <FoodCard key={o.n} state="todo" name={`${o.n}, ${o.q}`} type={o.type} kcal={`≈${o.k} kcal`} macros={`P ${o.p} g${o.coach ? ' · Coach-approved' : ''}`} onPress={() => pick(o)}
+            label={`${o.n}, ${o.q}, about ${o.k} kcal, ${o.p} grams protein${o.coach ? ', coach-approved' : ''}`} />
         ))}
         <ListRow label="Search something else" last onPress={() => closeSheet(() => router.push({ pathname: '/plans/log', params: { meal: mid, replace: it.key } }))} />
       </View>
@@ -251,9 +253,9 @@ export function HistSheet({ h }: { h: Hist }) {
     <>
       <BigTitle>{h.t}</BigTitle>
       <Txt muted style={{ marginTop: -6 }}>{h.s || 'Logged'} · {h.m}</Txt>
-      <View style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: radii.md, backgroundColor: c.surface2, gap: 4 }}>
+      <Callout gap={4}>
         {h.b.split('\n').map((l) => <Txt key={l} v="mono">{l}</Txt>)}
-      </View>
+      </Callout>
     </>
   );
 }

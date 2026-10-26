@@ -21,6 +21,9 @@ import { RANGES, Range, shift, trend } from '@/features/progress/trends';
 import { RangeBar, TrendChart } from '@/features/progress/TrendUI';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { Card } from '@/design-system/primitives/Card';
+import { Callout } from '@/design-system/primitives/Callout';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const TIP_UNIT: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: ' steps', water: ' L', hr: ' bpm', sleep: '', diet: '', cons: ' workouts' };
@@ -59,9 +62,9 @@ export default function MetricDetail() {
   return (
     <SubPage title={METRIC_TITLES[k]} fallback="/progress">
       <RangeBar />
-      <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 8, overflow: 'hidden' }, cardShadow(isDark)]}>
+      <Card variant="roomy" clip gap={8}>
         <CornerGlow color={look.tint} size={320} />
-        <View style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: radii.md, backgroundColor: look.tint + '26', alignItems: 'center', justifyContent: 'center' }}><look.Icon size={19} color={look.tint} /></View>
+        <IconBadge size={36} radius={radii.md} bg={look.tint + '26'} style={{ position: 'absolute', top: 16, right: 16 }}><look.Icon size={19} color={look.tint} /></IconBadge>
         <FadeIn key={t.key + 'h'}>
           <Txt style={{ fontFamily: font.displayBold, fontSize: 42, lineHeight: 52, letterSpacing: -1 }}>
             {t.big}{bigUnit && t.hasData ? <Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: c.muted }}>{bigUnit}</Txt> : null}
@@ -69,17 +72,17 @@ export default function MetricDetail() {
           <Txt muted style={{ fontSize: fontSizes.md }}>{t.hasData ? t.sub : (t.empty ?? '')}</Txt>
         </FadeIn>
         <TrendChart t={t} unit={TIP_UNIT[k]} height={190} onSwipe={swipe} color={look.tint} />
-      </View>
+      </Card>
       {rows.length > 0 && <ListCard rows={rows} />}
       {k === 'steps' && <Button label="Add steps" onPress={() => openSheet(<StepsSheet />, { label: 'Add steps' })} />}
       {k === 'water' && <Button label="Log water" onPress={() => openSheet(<WaterSheet />, { label: 'Water' })} />}
       {k === 'diet' && <Button label="Log a meal" onPress={() => openSheet(<QuickLogSheet mealId={nextMeal(d) ?? 'sn'} mode="write" />, { label: 'Log a meal' })} />}
       {(k === 'hr' || k === 'sleep' || k === 'meas' || k === 'cons') && <Button label={LOG_SHEETS[k].button} onPress={() => openSheet(<ManualLogSheet {...LOG_SHEETS[k].props} />, { label: LOG_SHEETS[k].props.title })} />}
       {k === 'weight' && (paused ? (
-        <View style={{ padding: 16, borderRadius: radii.lg, backgroundColor: c.surface2, gap: 4 }}>
+        <Callout size="lg" gap={4}>
           <Txt style={{ fontFamily: font.semibold }}>Logging paused</Txt>
           <Txt muted style={{ fontSize: fontSizes.md }}>Your membership has expired. History stays here; renew at the front desk to log again.</Txt>
-        </View>
+        </Callout>
       ) : (
         <>
           <Button label="Log weight" onPress={() => router.push('/log-weight')} />

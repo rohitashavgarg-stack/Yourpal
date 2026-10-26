@@ -167,7 +167,7 @@ export default function MyDetails() {
       </View>
       {!!err && (
         <FadeIn exiting={fadeOut()} style={shake}>
-          <Txt style={{ color: c.warn, fontSize: fontSizes.md, paddingHorizontal: 6 }}>Name can't be empty.</Txt>
+          <Txt style={{ color: c.warn, fontSize: fontSizes.md, paddingHorizontal: 6 }}>Name can&apos;t be empty.</Txt>
         </FadeIn>
       )}
 

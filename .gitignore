@@ -44,3 +44,8 @@ yarn-error.*
 .visual-flows-before/
 .visual-flows-after/
 .visual-cards/
+
+# Storybook static build
+storybook-static/
+*storybook.log
+handoff/

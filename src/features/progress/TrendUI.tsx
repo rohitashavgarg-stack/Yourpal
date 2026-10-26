@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect -- the effect resets local state when its input changes, as designed */
 import React, { useEffect, useState } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -12,7 +13,8 @@ import { haptic } from '@/lib/haptics';
 import { dow, RANGES, Range, shift, sod, START, TODAY, Trend, windowOf } from './trends';
 import { progressStore } from './store';
 import { radii, fontSizes } from '@/design-system/tokens';
-import { IconButton } from '@/design-system/primitives/Button';
+import { IconButton, Button } from '@/design-system/primitives/Button';
+import { Option } from '@/design-system/primitives/Option';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // ============ Day | Week | Month | Year, with ‹ date › you can also swipe ============
@@ -48,9 +50,7 @@ export function RangeBar() {
         </Row>
       </GestureDetector>
       {!win.current && (
-        <Pressy accessibilityRole="button" onPress={() => { haptic.tick(); progressStore.set({ anchor: sod(TODAY).getTime() }); }} style={{ alignSelf: 'center', height: 32, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.accentSoft, justifyContent: 'center', marginTop: -2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, color: c.accentText }}>Back to today</Txt>
-        </Pressy>
+        <Button kind="soft" size="xs" label="Back to today" onPress={() => { haptic.tick(); progressStore.set({ anchor: sod(TODAY).getTime() }); }} style={{ alignSelf: 'center', marginTop: -2 }} />
       )}
     </View>
   );
@@ -77,10 +77,9 @@ export function RangeBarSlim() {
           {RANGES.map((r) => {
             const on = r.value === ps.range;
             return (
-              <Pressy key={r.value} accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={r.label} onPress={() => { haptic.tick(); progressStore.set({ range: r.value }); }}
-                style={{ flex: 1, height: 32, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? c.ink : 'transparent' }}>
+              <Option key={r.value} selected={on} accessibilityLabel={r.label} onPress={() => { haptic.tick(); progressStore.set({ range: r.value }); }} height={32} radius={radii.md} row={false} style={{ flex: 1 }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: on ? c.bg : c.muted }}>{r.label}</Txt>
-              </Pressy>
+              </Option>
             );
           })}
         </View>

@@ -16,6 +16,7 @@ import { font } from '@/theme/tokens';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { fmtQty, parseQty, stepFor } from '@/features/plans/qty';
 import { AmountStepper } from '@/design-system/primitives/AmountStepper';
+import { FoodCard } from '@/design-system/patterns/FoodCard';
 import { toastCopy } from '@/lib/microcopy';
 
 // What the sheet edits before it is saved: which planned foods were eaten, how much of each, and the foods added with "Ate something else".
@@ -85,56 +86,30 @@ export function LogMealsSheet({ mealId, draft: start }: { mealId: MealId; draft?
           const max = qty ? Math.max(qty.n * 4, step * 10) : 0;
           const to = (v: number) => qty && setAmount(k, Math.min(max, Math.max(step, Math.round(v * 100) / 100)) / qty.n);
           return (
-            <Pressy key={k} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={`${n.n}. ${on ? 'Eaten' : 'Not eaten'}. Tap to ${on ? 'unmark' : 'mark as eaten'}, hold for details`}
-              onPress={() => tick(k)} onLongPress={() => { haptic.medium(); openFood(k, false); }} delayLongPress={450} scaleTo={0.985}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 64, paddingLeft: 12, paddingRight: 4, borderRadius: radii.md, backgroundColor: on ? c.goodSoft : c.surface2 }}>
-              <FoodMark type={it.type} />
-              <View style={{ flex: 1, minWidth: 0, gap: 6, paddingVertical: 10 }}>
-                <Txt numberOfLines={2} style={{ fontFamily: font.medium }}>{n.n}</Txt>
-                {qty && on ? (
-                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.muted }}>{fmtQty(cur, qty.unit)}</Txt>
-                ) : qty ? (
-                  <AmountStepper text={fmtQty(cur, qty.unit)} unit={qty.unit} onLess={() => to(cur - step)} onMore={() => to(cur + step)} lessDisabled={cur <= step} moreDisabled={cur >= max} />
-                ) : null}
-                <Txt v="caption" numberOfLines={1}>{on ? `Eaten · ~${n.k} kcal` : `~${n.k} kcal · P ${n.p} · C ${Math.round((n.k * 0.5) / 4)} · F ${Math.round((n.k * 0.3) / 9)} g`}</Txt>
-              </View>
-              <CheckCircle on={on} size={40} tone="good" label={`${on ? 'Unmark' : 'Mark'} ${n.n} as eaten`} onPress={() => tick(k)} />
-            </Pressy>
+            <FoodCard key={k} state={on ? 'eaten' : 'todo'} name={n.n} type={it.type}
+              amount={qty ? <AmountStepper text={fmtQty(cur, qty.unit)} unit={qty.unit} onLess={() => to(cur - step)} onMore={() => to(cur + step)} lessDisabled={cur <= step} moreDisabled={cur >= max} /> : undefined}
+              amountText={qty ? fmtQty(cur, qty.unit) : ''} kcal={`${n.k} kcal`} macros={`P ${n.p} · C ${Math.round((n.k * 0.5) / 4)} · F ${Math.round((n.k * 0.3) / 9)} g`}
+              onPress={() => tick(k)} onCheck={() => tick(k)} onHold={() => { haptic.medium(); openFood(k, false); }}
+              checkLabel={`Mark ${n.n} as eaten`} label={`${n.n}. ${on ? 'Eaten' : 'Not eaten'}. Tap to ${on ? 'unmark' : 'mark as eaten'}, hold for details`} />
           );
         })}
         {dr.extra.map((e, j) => {
-          // like the Plans diet card: "Poha" with "1 plate" under it, then "Eaten · ~250 kcal", and a "Yours" tag
+          // like the Plans diet card: "Poha" with "1 plate" under it, the calories, and a "Yours" tag. Tap to remove.
           const cut = e.n.lastIndexOf(', ');
           const name = cut > 0 ? e.n.slice(0, cut) : e.n;
           const amount = cut > 0 ? e.n.slice(cut + 2) : '';
           return (
-            <Pressy key={`x${j}`} accessibilityRole="button" accessibilityLabel={`${e.n}, added by you. Tap to remove, hold for details`}
-              onPress={() => removeExtra(j)} onLongPress={() => { haptic.medium(); openFood(j, true); }} delayLongPress={450} scaleTo={0.985}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 64, paddingLeft: 12, paddingRight: 4, borderRadius: radii.md, backgroundColor: c.goodSoft }}>
-              <FoodMark type={e.type ?? 'veg'} />
-              <View style={{ flex: 1, minWidth: 0, gap: 4, paddingVertical: 10 }}>
-                <Txt numberOfLines={2} style={{ fontFamily: font.medium }}>{name}</Txt>
-                {!!amount && <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.muted }}>{amount}</Txt>}
-                <Txt v="caption" numberOfLines={1}>{`Eaten · ~${e.k} kcal`}</Txt>
-              </View>
-              <Tag label="Yours" bg={c.accentSoft} fg={c.accentText} style={{ alignSelf: 'center' }} />
-              <CheckCircle on size={40} tone="good" label={`Remove ${e.n}`} onPress={() => removeExtra(j)} />
-            </Pressy>
+            <FoodCard key={`x${j}`} state="eaten" name={name} type={e.type ?? 'veg'} tag="Yours" amountText={amount} kcal={`${e.k} kcal`}
+              onPress={() => removeExtra(j)} onHold={() => { haptic.medium(); openFood(j, true); }} label={`${e.n}, added by you. Tap to remove, hold for details`} />
           );
         })}
         <Row style={{ gap: 8 }}>
-          <Pressy accessibilityRole="button" accessibilityLabel="Ate something else? Log it" onPress={elseFood}
-            style={{ flex: 1.5, height: 44, borderRadius: radii.lg, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-            <Plus size={16} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>Ate something else?</Txt>
-          </Pressy>
-          <Pressy accessibilityRole="button" accessibilityLabel={x.skip ? 'Undo skip' : 'Skip meal'} onPress={skip}
-            style={{ flex: 1, height: 44, borderRadius: radii.lg, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, color: x.skip ? c.ink : c.muted }}>{x.skip ? 'Undo skip' : 'Skip meal'}</Txt>
-          </Pressy>
+          <Button kind="dashed" size="fill" label="Ate something else?" accessibilityLabel="Ate something else? Log it" icon={<Plus size={16} color={c.ink} />} onPress={elseFood} style={{ flex: 1.5 }} />
+          <Button kind="quiet" size="fill" muted={!x.skip} label={x.skip ? 'Undo skip' : 'Skip meal'} onPress={skip} style={{ flex: 1 }} />
         </Row>
       </View>
       {/* pinned under the list, so Save meal stays in view however many foods the meal has */}
-      <SheetFooter><Button label="Save meal" onPress={save} /></SheetFooter>
+      <SheetFooter><Button kind="glassPrimary" label="Save meal" onPress={save} /></SheetFooter>
     </View>
   );
 }

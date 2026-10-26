@@ -1,11 +1,13 @@
+/* eslint-disable react-hooks/set-state-in-effect -- the effect resets local state when its input changes, as designed */
 import React, { useEffect, useRef, useState } from 'react';
 import { useLogsPaused } from '@/lib/logGate';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, type ScrollViewInstance } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { Check, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
+import { IconButton, Button } from '@/design-system/primitives/Button';
 import { useOverlay } from '@/components/Overlay';
 import { basePlans, TODAY_IDX } from '@/lib/data';
 import { useDomain } from '@/lib/domain';
@@ -19,6 +21,8 @@ import { applyCoachUpdate, COACH_HL } from '@/features/plans/content';
 import { haptic } from '@/lib/haptics';
 import { DAYL, DAYN, dateOf, monthOf, dayPlan, Diet, resetPlans, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes } from '@/design-system/tokens';
+import { Callout } from '@/design-system/primitives/Callout';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const JUMP: [string, number][] = [['Today (Wed)', TODAY_IDX], ['Past day (Mon)', 0], ['Rest day (Tue)', 1], ['Future (Thu)', 3]];
@@ -35,7 +39,7 @@ function DayStrip() {
   const paused = useLogsPaused();
   const [w, setW] = useState(0);
   const [page, setPage] = useState(THIS);
-  const ref = useRef<ScrollView>(null);
+  const ref = useRef<ScrollViewInstance>(null);
   const cur = WEEKS[page] ?? 0;
   useEffect(() => { if (w > 0) { const t = setTimeout(() => ref.current?.scrollTo({ x: THIS * w, animated: false }), 30); return () => clearTimeout(t); } }, [w]);
   useEffect(() => { // a deep link to another week brings that week into view
@@ -48,7 +52,7 @@ function DayStrip() {
     <View style={{ gap: 6 }}>
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, minHeight: 32 }}>
         <Txt v="label" accessibilityLiveRegion="polite">{cur === 0 ? `This week · ${range}` : cur < 0 ? `${range} · earlier` : `${range} · coming up`}</Txt>
-        {cur !== 0 && <Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => goto(THIS)} style={{ height: 32, paddingHorizontal: 12, borderRadius: radii.md, backgroundColor: c.accentSoft, justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, color: c.accentText }}>This week</Txt></Pressy>}
+        {cur !== 0 && <Button kind="soft" size="xs" label="This week" accessibilityLabel="Back to this week" onPress={() => goto(THIS)} />}
       </Row>
       <View onLayout={(e) => setW(e.nativeEvent.layout.width)}>
         <ScrollView ref={ref} horizontal pagingEnabled showsHorizontalScrollIndicator={false} accessibilityLabel="Weeks, swipe for earlier or later weeks" scrollEventThrottle={16}
@@ -74,7 +78,7 @@ function DayStrip() {
                     <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: on ? c.bg : c.ink, opacity: 0.7 }}>{l}</Txt>
                     <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 21, color: on ? c.bg : c.ink }}>{dateOf(i, wk)}</Txt>
                     {locked ? <Lock size={11} color={c.muted} />
-                      : logged ? <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={9} color={c.bg} strokeWidth={4} /></View>
+                      : logged ? <IconBadge size={14} bg={c.good}><Check size={9} color={c.bg} strokeWidth={4} /></IconBadge>
                       : missed ? <View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.warn }} />
                       : <View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />}
                   </Pressy>
@@ -137,34 +141,32 @@ export default function Plans() {
   const canStart = useCanStart() && !paused;
   return (
     <View style={{ flex: 1 }}>
-    <TabScreen title="Plans" header={<GymHeader />} compactTitle={false} bottomPad={canStart ? 190 : 130}>
+    <TabScreen title="Plans" header={<GymHeader />} compactTitle={false} bottomPad={canStart ? 190 : 130} titleRight={(
+      <Row style={{ gap: 8 }}>
+        <Segmented iconOnly accessibilityLabel="Plan type" value={p.seg} onChange={(v) => setP({ seg: v })}
+          options={[{ value: 'workout', label: 'Workout' }, { value: 'diet', label: 'Diet' }]}
+          icons={{ workout: (col) => <Dumbbell size={20} color={col} />, diet: (col) => <UtensilsCrossed size={20} color={col} /> }} />
+        {!paused && <IconButton label={isW ? 'Plan menu' : 'Diet menu'} onPress={openMenu} size={52} radius={radii.xl} bg={c.surface} borderWidth={1} borderColor={c.line}>
+          <MoreHorizontal size={22} color={c.ink} />
+        </IconButton>}
+      </Row>
+    )}>
       {d.offline && (
         <FadeIn style={{ paddingVertical: 8, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: c.warn }}>You're offline · changes save on this phone and sync later</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: c.warn }}>You&apos;re offline · changes save on this phone and sync later</Txt>
         </FadeIn>
       )}
       {paused && (
-        <View accessibilityLabel="Plans are view only" style={{ borderRadius: 20, backgroundColor: c.surface2, padding: 14 }}>
+        <Callout accessibilityLabel="Plans are view only">
           <Row style={{ gap: 12, alignItems: 'flex-start' }}>
-            <View style={{ width: 36, height: 36, borderRadius: radii.sm, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}><Lock size={17} color={c.muted} /></View>
+            <IconBadge size={36} radius={radii.sm} bg={c.surface3}><Lock size={17} color={c.muted} /></IconBadge>
             <View style={{ flex: 1, gap: 2 }}>
               <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>Plans are view only</Txt>
               <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Renew at Wulf Fitness reception to start workouts, log meals or change your plan.</Txt>
             </View>
           </Row>
-        </View>
+        </Callout>
       )}
-      <Row style={{ gap: 10 }}>
-        <View style={{ flex: 1 }}>
-          <Segmented accessibilityLabel="Plan type" value={p.seg} onChange={(v) => setP({ seg: v })}
-            options={[{ value: 'workout', label: 'Workout' }, { value: 'diet', label: 'Diet' }]}
-            icons={{ workout: (col) => <Dumbbell size={16} color={col} />, diet: (col) => <UtensilsCrossed size={16} color={col} /> }} />
-        </View>
-        {!paused && <Pressy accessibilityRole="button" accessibilityLabel={isW ? 'Plan menu' : 'Diet menu'} onPress={openMenu}
-          style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
-          <MoreHorizontal size={22} color={c.ink} />
-        </Pressy>}
-      </Row>
       <DayStrip />
       <View key={p.seg} style={{ gap: 12 }}>
         {isW ? <WorkoutPlan /> : <DietPlan />}

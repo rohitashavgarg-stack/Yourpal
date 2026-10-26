@@ -53,7 +53,7 @@ export function ProgrammeSwitcherSheet() {
           <Txt style={{ flex: 1, fontFamily: font.medium }}>Join a program</Txt>
         </Pressy>
       </View>
-      {progs.length === 1 && <Txt muted style={{ fontSize: fontSizes.sm }}>You're in one programme. When your gym or clinic sends an invite, it shows up here.</Txt>}
+      {progs.length === 1 && <Txt muted style={{ fontSize: fontSizes.sm }}>You&apos;re in one programme. When your gym or clinic sends an invite, it shows up here.</Txt>}
     </>
   );
 }

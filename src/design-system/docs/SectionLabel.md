@@ -1,17 +1,47 @@
 # SectionLabel
 
-`src/design-system/primitives/SectionLabel.tsx`. The small heading above a group of cards. It replaces four separate `Label` components.
+`src/design-system/primitives/SectionLabel.tsx`
+
+Storybook: Primitives / SectionLabel
+
+## Purpose
+
+The small heading above a group of cards. It replaces four separate `Label` components. `import { Label } from '@/features/shell/parts'` still works (it is `SectionLabel` with the default variant).
+
+```tsx
+<SectionLabel>Account</SectionLabel>
+<SectionLabel variant="overline" inset={4}>THIS MONTH</SectionLabel>
+```
+
+## Props
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `children` | node | required | The text |
+| `variant` | `'overline' \| 'quiet' \| 'label'` | `label` | One of the looks below |
+| `inset` | number | 6 for `label`, 0 for the others | Horizontal padding |
+| `style` | TextStyle | none | Merged last |
+
+## States
 
 | Variant | Look | Was |
 |---|---|---|
-| `overline` | 11 px semibold, letter-spacing 1.3, muted | `Label` in `app/coach.tsx` and `app/progress/streaks.tsx` (streaks adds `inset={4}`) |
-| `quiet` | 13 px medium, muted | `Label` in `app/goal-detail.tsx` |
+| `overline` | 11 / 15 semibold, letter-spacing 1.3, muted | `Label` in `app/coach.tsx` and `app/progress/streaks.tsx` (streaks adds `inset={4}`) |
+| `quiet` | 13 / 19 medium, muted | `Label` in `app/goal-detail.tsx` |
 | `label` (default) | `Txt` variant "label", 6 px inset | `Label` in `features/shell/parts.tsx` |
 
-| Prop | What it does |
-|---|---|
-| `variant` | one of the above |
-| `inset` | horizontal padding. Default 6 for `label`, 0 for the others |
-| `style` | merged last |
+## Do and don't
 
-`import { Label } from '@/features/shell/parts'` still works (it is `SectionLabel` with the default variant).
+- Do use one variant per screen.
+- Don't use it inside a card as the card title; the card has its own title.
+- Don't make it a link.
+
+## Accessibility
+
+- Every variant is announced as a heading (`accessibilityRole="header"`), so screen reader users can jump between sections. It takes no other accessibility props.
+- The cards under it still carry their own titles.
+
+## Copy rules
+
+- One or two words, a noun: "Account", "Reminders", "This month".
+- No dot separators, no counts in brackets.

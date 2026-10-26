@@ -20,6 +20,6 @@ const SPEC = {
 
 export function SectionLabel({ children, variant = 'label', inset, style }: { children: React.ReactNode; variant?: SectionLabelVariant; inset?: number; style?: StyleProp<TextStyle> }) {
   const { c } = useTheme();
-  if (variant === 'label') return <Txt v="label" style={[{ paddingHorizontal: inset ?? 6 }, style]}>{children}</Txt>;
-  return <Txt style={[{ ...SPEC[variant], color: c.muted, ...(inset ? { paddingHorizontal: inset } : null) }, style]}>{children}</Txt>;
+  if (variant === 'label') return <Txt v="label" accessibilityRole="header" style={[{ paddingHorizontal: inset ?? 6 }, style]}>{children}</Txt>;
+  return <Txt accessibilityRole="header" style={[{ ...SPEC[variant], color: c.muted, ...(inset ? { paddingHorizontal: inset } : null) }, style]}>{children}</Txt>;
 }

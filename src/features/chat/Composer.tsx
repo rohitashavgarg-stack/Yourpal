@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Image, Keyboard, Platform, ScrollView, TextInput, View } from 'react-native';
+import { Image, Keyboard, Platform, ScrollView, TextInput, View, type TextInputInstance } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { ArrowUp, Camera, Image as ImageIcon, Mic, Plus, Send, Smile, Trash2, X } from '@/lib/icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -13,6 +13,8 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { EMOJI_GROUPS } from './emoji';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { IconButton } from '@/design-system/primitives/Button';
+import { Callout } from '@/design-system/primitives/Callout';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const fmt = (ms: number) => {
@@ -36,10 +38,9 @@ function EmojiPanel({ onPick }: { onPick: (e: string) => void }) {
     <FadeIn exiting={fadeOut()} style={{ height: 232, borderTopWidth: 1, borderTopColor: c.line }}>
       <View style={{ flexDirection: 'row', gap: 6, paddingHorizontal: 12, paddingTop: 8 }}>
         {EMOJI_GROUPS.map((x, i) => (
-          <Pressy key={x.key} accessibilityRole="button" accessibilityLabel={`${x.key} emoji`} onPress={() => setG(i)} scaleTo={0.9}
-            style={{ width: 44, height: 40, borderRadius: radii.sm, alignItems: 'center', justifyContent: 'center', backgroundColor: g === i ? c.accentSoft : 'transparent' }}>
+          <IconButton key={x.key} label={`${x.key} emoji`} onPress={() => setG(i)} scaleTo={0.9} size={40} width={44} radius={radii.sm} bg={g === i ? c.accentSoft : 'transparent'}>
             <Txt style={{ fontSize: fontSizes.xl2, lineHeight: 30 }}>{x.icon}</Txt>
-          </Pressy>
+          </IconButton>
         ))}
       </View>
       <ScrollView contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, paddingVertical: 6 }}>
@@ -83,7 +84,7 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
   const [emoji, setEmoji] = useState(false);
   const [rec, setRec] = useState(false);
   const [micOff, setMicOff] = useState(false);
-  const input = useRef<TextInput>(null);
+  const input = useRef<TextInputInstance>(null);
   const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const rs = useAudioRecorderState(recorder, 200);
 
@@ -153,9 +154,9 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
   return (
     <View style={{ backgroundColor: c.bg }}>
       {micOff && (
-        <View accessibilityRole="alert" style={{ marginHorizontal: 16, marginTop: 10, padding: 10, borderRadius: 14, backgroundColor: c.warnSoft }}>
+        <Callout tone="warn" size="compact" accessibilityRole="alert" style={{ marginHorizontal: 16, marginTop: 10 }}>
           <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>Microphone is off. Allow it in Settings to send voice messages.</Txt>
-        </View>
+        </Callout>
       )}
       <View style={{ paddingTop: 10, paddingHorizontal: 12, paddingBottom: emoji ? 6 : bottomInset + 10 }}>
         {rec ? (
@@ -184,10 +185,9 @@ export function Composer({ draft, setDraft, onSend, bottomInset, disabled }: { d
               <FadeIn exiting={fadeOut()} style={{ padding: 10, paddingBottom: 0, flexDirection: 'row', zIndex: 2 }}>
                 <View>
                   <Image source={{ uri: img }} accessibilityIgnoresInvertColors style={{ width: 76, height: 76, borderRadius: radii.md, backgroundColor: c.surface3 }} />
-                  <Pressy accessibilityRole="button" accessibilityLabel="Remove photo" onPress={() => setImg(undefined)} scaleTo={0.9} hitSlop={10}
-                    style={{ position: 'absolute', top: -6, right: -6, width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>
+                  <IconButton label="Remove photo" onPress={() => setImg(undefined)} scaleTo={0.9} hitSlop={10} size={24} radius={radii.sm} bg={c.ink} style={{ position: 'absolute', top: -6, right: -6 }}>
                     <X size={14} color={c.bg} strokeWidth={2.6} />
-                  </Pressy>
+                  </IconButton>
                 </View>
               </FadeIn>
             )}

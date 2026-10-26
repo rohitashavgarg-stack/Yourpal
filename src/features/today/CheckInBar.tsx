@@ -20,6 +20,7 @@ import { ciTime } from './WeekCard';
 import { useCheckIn } from '@/features/checkin/useCheckIn';
 import { elapsedMin, limitOf } from '@/features/checkin/logic';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 export type CiMode = 'none' | 'here' | 'near' | 'in' | 'out' | 'off';
@@ -55,7 +56,7 @@ function MiniWorkout() {
     <Pressy accessibilityRole="button" accessibilityLabel="Leg day in progress, resume" onPress={() => router.push('/workout')} scaleTo={0.98} style={[BAR, { backgroundColor: fixed.dark }]}>
       <Glow />
       <View style={{ flex: 1, minWidth: 0 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.white }}>Leg day · in progress</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.white }}>Leg day in progress</Txt>
         <Txt style={{ fontFamily: font.mono, fontSize: fontSizes.xs, color: 'rgba(255,255,255,0.7)' }}>{resting ? `Rest ${mmss((s.rest!.endAt - now) / 1000)}` : mmss((now - s.startAt) / 1000).padStart(5, '0')}</Txt>
       </View>
       <View style={{ height: 40, borderRadius: 20, paddingHorizontal: 16, backgroundColor: fixed.white, justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: fixed.dark }}>Resume</Txt></View>
@@ -117,7 +118,7 @@ export function CheckInBar() {
     <Floating>
       <View accessibilityRole="summary" style={[BAR, { backgroundColor: bg }, border && { borderWidth: 1, borderColor: c.line }]}>
         <Pressy accessibilityRole={open ? 'button' : undefined} accessibilityLabel={label} disabled={!open} onPress={open ?? undefined} scaleTo={0.98} haptics={false} style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 10, height: 52 }}>
-          <View style={{ width: 32, height: 32, borderRadius: radii.md, backgroundColor: icBg, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
+          <IconBadge size={32} radius={radii.md} bg={icBg}>{icon}</IconBadge>
           <View style={{ flex: 1, minWidth: 0 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fg, flexShrink: 1 }}>{title}</Txt>

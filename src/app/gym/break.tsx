@@ -10,6 +10,7 @@ import { font } from '@/theme/tokens';
 import { cardShadow, GrowBar, SubPage } from '@/features/progress/parts';
 import { PAUSE_HISTORY, PAUSE_TOTAL } from '@/features/gym/data';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
+import { Card } from '@/design-system/primitives/Card';
 import { radii, fontSizes } from '@/design-system/tokens';
 
 // View-only: pauses are set by the front desk. The member sees status, history and how many are left.
@@ -30,13 +31,13 @@ export default function MembershipPauses() {
       <Txt style={{ fontFamily: font.semibold, fontSize: 24, lineHeight: 31, letterSpacing: -0.7, paddingHorizontal: 4 }}>Pauses are set by the front desk.</Txt>
 
       {d.onBreak && (
-        <View style={[{ padding: 16, borderRadius: radii.card, backgroundColor: c.surface, borderWidth: 1.5, borderColor: c.accent, gap: 4 }, cardShadow(isDark)]}>
+        <Card variant="tight" border={{ color: c.accent, width: 1.5 }} gap={4}>
           <Row style={{ gap: 8 }}><PauseCircle size={18} color={c.accentText} /><Txt style={{ fontFamily: font.semibold }}>Paused until {dateLabel(g.breakUntil)}</Txt></Row>
           <Txt muted style={{ fontSize: fontSizes.md }}>Your streak is frozen and reminders are off. Your end date moves out by the paused days.</Txt>
-        </View>
+        </Card>
       )}
 
-      <View style={[{ padding: 18, borderRadius: radii.xl, backgroundColor: c.surface, gap: 10 }, cardShadow(isDark)]}>
+      <Card variant="roomy" gap={10}>
         <Txt v="label">PAUSES LEFT</Txt>
         <Row style={{ alignItems: 'baseline', gap: 6 }}>
           <Txt style={{ fontFamily: font.displayBold, fontSize: 40, lineHeight: 52, letterSpacing: -1.2 }}>{left}</Txt>
@@ -44,19 +45,19 @@ export default function MembershipPauses() {
         </Row>
         <GrowBar pct={Math.round((left / PAUSE_TOTAL) * 100)} color={c.accent} />
         <Txt muted style={{ fontSize: fontSizes.md }}>{left ? 'Need one? Ask at the front desk and they will set it up for you.' : 'You have used all your pauses. Talk to the front desk if something has come up.'}</Txt>
-      </View>
+      </Card>
 
       <Txt v="label" style={{ paddingHorizontal: 6 }}>PAUSE HISTORY</Txt>
       {history.length === 0 ? (
         <View style={{ padding: 18, borderRadius: radii.card, backgroundColor: c.surface }}><Txt muted>No pauses yet.</Txt></View>
       ) : history.map((h) => (
-        <View key={h.from} style={[{ padding: 16, borderRadius: radii.card, backgroundColor: c.surface, gap: 6 }, cardShadow(isDark)]}>
+        <Card key={h.from} variant="tight" gap={6}>
           <Row style={{ justifyContent: 'space-between' }}>
             <Txt style={{ fontFamily: font.semibold }}>{h.from} – {h.to}</Txt>
             <Tag label={`${h.days} days`} bg={c.accentSoft} fg={c.accentText} />
           </Row>
           <Txt v="caption">{h.reason} · set by front desk</Txt>
-        </View>
+        </Card>
       ))}
     </SubPage>
   );

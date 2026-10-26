@@ -26,9 +26,11 @@ import { haptic } from '@/lib/haptics';
 import { cardShadow, CornerGlow } from '@/features/progress/parts';
 import { FLAME } from '@/features/streak/StreakChip';
 import { useUpdates } from './TopCards';
-import { radii, fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes, round } from '@/design-system/tokens';
 import { toastCopy, updateCopy } from '@/lib/microcopy';
 import { goalCardStore } from './goalCardState';
+import { Card } from '@/design-system/primitives/Card';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // The slim goal strip moved to src/design-system/_archive/ForYouGoalStrip.tsx (archived: nothing renders it). Re-exported so the old import keeps working.
@@ -58,7 +60,7 @@ export function useForYou(): Item[] {
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
   if (ptPending && d.hasGym && !logsPaused) out.push({ key: 'pt', title: updateCopy.pt.title, body: updateCopy.pt.body, critical: true, tone: 'accent', who: true, two: true });
-  if (d.hasGym && d.membership === 'Expiring') out.push({ key: 'member-exp', title: updateCopy.membership.title, body: updateCopy.membership.body, tone: 'warn', icon: Clock, btn: 'View plan', act: () => router.push('/gym/membership') });
+  if (d.hasGym && d.membership === 'Expiring') out.push({ key: 'member-exp', title: updateCopy.membership.title, body: updateCopy.membership.body, tone: 'warn', icon: Clock, btn: 'See plan', act: () => router.push('/gym/membership') });
   const order = ['reassess', 'reply', 'plan', 'log'];
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
     out.push({ key: u.key, title: u.title, body: u.body, tone: u.tone, who: ['plan', 'reply'].includes(u.key), icon: u.icon, btn: u.isPlan ? 'See changes' : u.btn, act: u.isPlan ? () => router.navigate('/plans') : u.act });
@@ -118,11 +120,11 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
   const content = useAnimatedStyle(() => ({ opacity: interpolate(wrapD(i, prog.value, n), [-1, 0, 1], [1, 1, 0], 'clamp') }));
   return (
     <Animated.View style={[inFlow ? null : { position: 'absolute', left: 0, right: 0, top: 0, bottom: n > 2 ? 26 : n > 1 ? 14 : 0 } /* as tall as the front card (the deck padding below is the room for the edges) */, card]}>
-      <View style={[{ flexGrow: 1, flexShrink: 1, backgroundColor: c.surface, borderRadius: radii.card, padding: 16, overflow: 'hidden', borderWidth: 1, borderColor: c.line }, cardShadow(isDark)]}>
+      <Card variant="tight" border={{ color: c.line }} clip style={{ flexGrow: 1, flexShrink: 1 }}>
         <Animated.View style={content}>
           <View style={{ gap: 12 }}>
             <Row style={{ gap: 12, alignItems: 'flex-start', paddingRight: it.critical ? 0 : 28 }}>
-              {it.who ? <PersonAvatar who="coach" size={40} /> : <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}>{I ? <I size={19} color={fg} /> : null}</View>}
+              {it.who ? <PersonAvatar who="coach" size={40} /> : <IconBadge size={40} radius={radii.sm} bg={bg}>{I ? <I size={19} color={fg} /> : null}</IconBadge>}
               <View style={{ flex: 1, gap: 2 }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{it.title}</Txt>
                 {!!it.body && <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{it.body}</Txt>}
@@ -143,7 +145,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
             <X size={17} color={c.muted} />
           </Pressy>
         )}
-      </View>
+      </Card>
     </Animated.View>
   );
 }, (a, b) => a.it.key === b.it.key && a.it.title === b.it.title && a.it.body === b.it.body && a.it.btn === b.it.btn && a.it.critical === b.it.critical && a.i === b.i && a.n === b.n && a.inFlow === b.inFlow && a.prog === b.prog);
@@ -214,11 +216,11 @@ export function ComebackPlan() {
     <FadeIn style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14, overflow: 'hidden' }, cardShadow(isDark)]}>
       <CornerGlow color={FLAME} size={520} />
       <Row style={{ gap: 12 }}>
-        <View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}><Flame size={22} color={FLAME} fill={FLAME} /></View>
+        <IconBadge size={44} radius={radii.lg} bg="rgba(255,138,61,0.16)"><Flame size={22} color={FLAME} fill={FLAME} /></IconBadge>
         <View style={{ flex: 1, gap: 6 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, letterSpacing: -0.5 }}>Your comeback plan with lighter weights</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>
-            {['30 min', '5 exercises'].map((t) => <View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: 14, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: 12.5, lineHeight: 18 }}>{t}</Txt></View>)}
+            {['20 min', '4 exercises'].map((t) => <View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: round(28), borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xsPlus, lineHeight: 18 }}>{t}</Txt></View>)}
           </Row>
         </View>
       </Row>

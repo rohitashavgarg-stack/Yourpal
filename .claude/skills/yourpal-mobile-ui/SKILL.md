@@ -85,3 +85,23 @@ One goal model (`useGoalV2`, `src/features/goalv2/model.ts`) feeds every surface
 4. `npx tsc --noEmit` and `npx expo lint <files>`.
 5. Look at it: dev server (`npx expo start --port 8082`), web preview `http://localhost:8082/?signedin=1` (skips login; append to any route, e.g. `/goal-detail?signedin=1`). Use the Demo controls panel (goal type, time of day, situation, member type) to walk every state. Check light and dark.
 6. Report what changed per surface, what you saw on screen, and anything not checked. Keep `docs/PHASE2_HANDOFF.md` overrides in mind (e.g. no Full / Quick / Low energy selector on the Today workout card).
+
+## 10. The design-system library (read catalog.md first)
+
+- Before drawing anything, look in `catalog.md` (generated from the code): 44 library components, the Button kinds and sizes, the tokens and the rules. Use a library component before making a new one; a look that exists is a variant, not a copy.
+- Library layout: tokens, then primitives (small), then patterns (whole cards that take every state as a prop and read no app state), then feature containers in `src/features` that read the app and feed the patterns (`FoodCard` with `ItemRow`, `MealsCard` with `TodayMealNowCard`).
+- Adding or changing a component: the component, a story, a doc page, a row in `docs/design-system-components.md`, then `npm run audit:coverage`. No hard-coded colour, radius or font size (`npm run lint:changed`).
+- The handoff to the developer (docs, screen map, Storybook, zip, branch) is one command: see the `yourpal-publish` skill.
+
+## 11. Learned rules and how this skill improves itself
+
+- `learned.md` holds the rules learned from the designer's corrections (food cards, glass, Plans, separators, how he likes to work). **Read it before any UI work.** It overrides older text in this file when they disagree.
+- `catalog.md`, `CHANGELOG.md` and `pending-review.md` are written by `scripts/skill/learn.js`. It runs after every Claude turn (Stop hook in `.claude/settings.json`) and on every publish. It needs no AI: it re-reads the code and records what changed.
+- When `pending-review.md` is not empty, new components, new Button kinds or new designer feedback have appeared. The `yourpal-design-learner` agent (run `/yourpal-learn`, or let the weekly schedule run it) reads the diffs and the feedback, writes the rules into `learned.md` and this file, and empties `pending-review.md`.
+- When the designer corrects something, save the rule in `learned.md` straight away, with the date and where it came from.
+- Where this file and `learned.md` disagree, `learned.md` wins; fix this file when you notice.
+
+## 12. Known outdated lines in sections 1 to 9
+
+- Section 4 "Never text · text": the rule stands, but do not bulk-replace the existing ones; the designer guides the fix screen by screen (see learned.md).
+- Section 5 (goal patterns) and section 6 (trackers) describe the Today cards as of 19 Oct; the Plans, diet and sheets patterns are in learned.md.

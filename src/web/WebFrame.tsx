@@ -4,7 +4,7 @@ import { useShell } from '@/features/shell/state';
 import { router } from 'expo-router';
 import { workoutUiStore } from '@/features/workout/ui';
 import { newSession } from '@/features/workout/session';
-import { Dimensions, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { Dimensions, Platform, Pressable, ScrollView, Text, View, type ScaledSize } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useStore } from '@/lib/store';
 import { bucketOf, mealsAt, plannedMin, useDomain } from '@/lib/domain';
@@ -45,7 +45,7 @@ export function useIsWideWeb() {
 function useWindow() {
   const [d, setD] = useState(Dimensions.get('window'));
   useEffect(() => {
-    const s = Dimensions.addEventListener('change', ({ window }) => setD(window));
+    const s = Dimensions.addEventListener('change', ({ window }: { window: ScaledSize }) => setD(window));
     return () => s.remove();
   }, []);
   return d;

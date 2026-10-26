@@ -5,11 +5,11 @@ import { Row, Txt } from '@/components/ui';
 import { GoalCard, RadialGlow } from '@/design-system/patterns/GoalCard';
 import { GoalCardState } from '@/features/today/goalCardState';
 import { font } from '@/theme/tokens';
-import { radii, fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes, onDark, fixed } from '@/design-system/tokens';
 
 const inr = (n: number) => Math.round(n).toLocaleString('en-IN');
-const BURN = '#FF9A4D';
-const WHITE = '#F3F4F6', SOFT = '#C9CDD6', MUTED = '#9AA0AD', MINT = '#2EE6A8';
+const BURN = onDark.burn;
+const WHITE = onDark.text, SOFT = onDark.soft, MUTED = onDark.muted, MINT = onDark.mint;
 
 /**
  * "Daily budget": today's calories, eaten and burned, side by side on a dark card that fades from charcoal to blue, with the
@@ -39,7 +39,7 @@ function Half({ icon, label, unit, value, of, pct, color }: { icon: React.ReactN
         {icon}
         <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: SOFT }}>{label}</Txt>
               </Row>
-      <Txt style={{ fontFamily: font.regular, fontSize: 30, lineHeight: 38, letterSpacing: -0.8, color: WHITE }}>{value}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.base, lineHeight: 20, color: MUTED, letterSpacing: 0 }}>{` / ${of}`}</Txt></Txt>
+      <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 38, letterSpacing: -0.8, color: WHITE }}>{value}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.base, lineHeight: 20, color: MUTED, letterSpacing: 0 }}>{` / ${of}`}</Txt></Txt>
       <View style={{ height: 5, borderRadius: radii.xs, backgroundColor: 'rgba(255,255,255,0.18)', overflow: 'hidden' }}>
         <View style={{ width: `${Math.max(0, Math.min(100, pct * 100))}%`, height: '100%', borderRadius: radii.xs, backgroundColor: color }} />
       </View>
@@ -53,8 +53,8 @@ export function BudgetCard({ eaten, eatTarget, burned, burnTarget, burnSource = 
   return (
     <View style={{ borderRadius: radii.xl, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
       {/* charcoal with a soft blue glow from the top right corner */}
-      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#1A1D22' }} />
-      <RadialGlow color="#2F6BEA" a={0.32} side="right" top />
+      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: onDark.card }} />
+      <RadialGlow color={fixed.blue} a={0.32} side="right" top />
       <GoalCard variant="strip" state={goalState} />
       <View style={{ height: 1, marginHorizontal: 18, backgroundColor: 'rgba(255,255,255,0.1)' }} />
       <Row style={{ gap: 16, alignItems: 'flex-start', paddingHorizontal: 18, paddingTop: 14, paddingBottom: 18 }}>

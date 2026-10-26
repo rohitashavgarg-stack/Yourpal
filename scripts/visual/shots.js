@@ -10,6 +10,7 @@
  * (each retried while the screen is still drawing), then the screenshot is taken after `wait` ms.
  */
 const fs = require('fs'); const path = require('path'); const os = require('os'); const { spawn } = require('child_process');
+const THEMES = (process.env.THEMES || 'light,dark').split(',').filter(Boolean); // THEMES=dark captures only the dark theme
 const BASE = process.env.APP_URL || 'http://localhost:8082';
 const out = process.argv[2]; if (!out) { console.error('usage: shots.js <outDir> [--only=a,b]'); process.exit(1); }
 const only = ((process.argv.find((a) => a.startsWith('--only=')) || '').slice(7) || '').split(',').filter(Boolean);
@@ -32,15 +33,24 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       + ' if (!e) return false; let t = e; while (t && t !== document.body) { if (t.tabIndex >= 0 || t.getAttribute(\'role\') === \'button\' || t.getAttribute(\'role\') === \'radio\') break; t = t.parentElement; } (t && t !== document.body ? t : e).click(); return true; })()';
     const click = async (t) => { for (let i = 0; i < 12; i++) { if (await js(clickExpr(t))) return true; await sleep(700); } console.error('could not find: ' + t); return false; };
     let n = 0;
-    for (const theme of ['light', 'dark']) {
+    for (const theme of THEMES) {
       fs.mkdirSync(path.join(out, theme), { recursive: true });
       for (const e of LIST) {
         const url = BASE + e.url + (e.url.includes('?') ? '&' : '?') + (e.noSignedIn ? '' : 'signedin=1&') + 'theme=' + theme;
         await send('Page.navigate', { url });
         for (let i = 0; i < 400; i++) { if ((await js('document.body ? document.body.innerText.length : 0')) > 5) break; await sleep(250); }
         await sleep(e.settle || 2500);
+        for (const [lab, text] of e.fill || []) {
+          await js(`(() => { const el = document.querySelector('[aria-label=' + ${JSON.stringify(JSON.stringify(lab))} + ']'); if (el) el.focus(); return !!el; })()`); await sleep(300);
+          await send('Input.insertText', { text }); await sleep(500);
+        }
         for (const c of e.clicks || []) { await click(c); await sleep(900); }
         if (e.clicks && e.clicks.length) await sleep(e.wait || 1500);
+        for (const [lab, text] of e.then || []) {
+          await js(`(() => { const el = document.querySelector('[aria-label=' + ${JSON.stringify(JSON.stringify(lab))} + ']'); if (el) el.focus(); return !!el; })()`); await sleep(300);
+          await send('Input.insertText', { text }); await sleep(700);
+        }
+        if (e.scroll) { await js('(() => { const els = [...document.querySelectorAll("div")].filter((x) => x.scrollHeight > x.clientHeight + 50 && /auto|scroll/.test(getComputedStyle(x).overflowY)); const el = els.sort((m, n) => n.scrollHeight - m.scrollHeight)[0]; if (el) el.scrollTop = el.scrollHeight; return !!el; })()'); await sleep(1200); }
         const r = await send('Page.captureScreenshot', { format: 'png' }); fs.writeFileSync(path.join(out, theme, e.name + '.png'), Buffer.from(r.data, 'base64')); n++; process.stdout.write('.');
       }
     }

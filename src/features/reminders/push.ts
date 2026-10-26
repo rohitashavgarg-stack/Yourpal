@@ -4,7 +4,7 @@ import { inQuiet, Reminder } from './reminders';
 
 // The phone notification for a reminder: the same words as the in-app one. It is only sent when the phone allows notifications, the member has not
 // turned this reminder off, and it is not quiet hours. In this prototype the clock is simulated, so "Send reminder push" previews it with a banner.
-export const pushStore = createStore(() => ({ shown: null as null | { key: string; title: string; body: string; at: number } }));
+export const pushStore = createStore(() => ({ shown: null as null | { key: string; title: string; body: string; at: number } }), 'push');
 
 export type PushResult = 'sent' | 'quiet' | 'blocked' | 'none';
 export async function sendReminderPush(r: Reminder | undefined, ctx: { min: number; quiet: number; permission: 'on' | 'off' | 'unset' }): Promise<PushResult> {

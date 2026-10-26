@@ -27,6 +27,8 @@ import { GoalCard2 } from '@/features/goalv2/GoalCard2';
 import { GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Callout } from '@/design-system/primitives/Callout';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 let firstLoad = true;
@@ -114,11 +116,11 @@ function ProgressCard({ k }: { k: CardKey }) {
       case 'meas': body = (
         <Row style={{ gap: 8 }}>
           {[{ l: 'Waist', v: '89 cm', d: '↓3' }, { l: 'Chest', v: '98 cm', d: '—' }, { l: 'Arm', v: '32 cm', d: '↑0.5' }].map((t) => (
-            <View key={t.l} style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 12, borderRadius: radii.md, backgroundColor: c.surface2 }}>
+            <Callout key={t.l} size="sm" style={{ flex: 1 }}>
               <Txt v="caption">{t.l}</Txt>
               <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl, lineHeight: 26 }}>{t.v}</Txt>
               <Txt v="caption">{t.d}</Txt>
-            </View>
+            </Callout>
           ))}
         </Row>
       ); break;
@@ -162,9 +164,9 @@ function StreakEntry() {
   const st = useStreak();
   return (
     <PCard onPress={() => router.push('/progress/streaks')} label={`Streaks and badges. ${st.weeks} week streak. Open`} style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-      <View style={{ width: 48, height: 48, borderRadius: radii.card, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}>
+      <IconBadge size={48} radius={radii.card} bg="rgba(255,138,61,0.16)">
         <Flame size={26} color={FLAME} fill={st.weeks > 0 ? FLAME : 'transparent'} strokeWidth={2} />
-      </View>
+      </IconBadge>
       <View style={{ flex: 1 }}>
         <Txt style={{ fontFamily: font.semibold }}>Streaks & badges</Txt>
         <Txt v="caption">{st.weeks ? `${st.weeks}-week streak · ` : ''}{st.weekDone} of {st.target} this week · 5 of 10 badges</Txt>

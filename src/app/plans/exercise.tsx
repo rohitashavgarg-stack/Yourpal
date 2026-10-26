@@ -9,6 +9,7 @@ import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import { MessageCircle, Pause, Play } from '@/lib/icons';
 import { askCoach } from '@/features/coach/coach';
 import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
+import { IconButton } from '@/design-system/primitives/Button';
 import { useDomain } from '@/lib/domain';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -81,10 +82,9 @@ export default function ExerciseDetail() {
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, color: fixed.white }}>{d.offline ? 'Downloaded · plays offline' : 'Licensed form video'}</Txt>
           </View>
           <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
-            <Pressy accessibilityRole="button" accessibilityLabel={playing ? 'Pause video' : 'Play form video'} onPress={() => setPlaying((v) => !v)} scaleTo={0.92}
-              style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: artId || clipId ? 'rgba(11,11,13,0.72)' : 'rgba(255,255,255,0.92)', alignItems: 'center', justifyContent: 'center' }}>
+            <IconButton label={playing ? 'Pause video' : 'Play form video'} onPress={() => setPlaying((v) => !v)} scaleTo={0.92} size={64} radius={32} bg={artId || clipId ? 'rgba(11,11,13,0.72)' : 'rgba(255,255,255,0.92)'}>
               {playing ? <Pause size={22} color={artId || clipId ? fixed.white : fixed.dark} fill={artId || clipId ? fixed.white : fixed.dark} /> : <Play size={24} color={artId || clipId ? fixed.white : fixed.dark} fill={artId || clipId ? fixed.white : fixed.dark} style={{ marginLeft: 3 }} />}
-            </Pressy>
+            </IconButton>
           </View>
           {playing && !clipId && <PlayBar dark={!!artId} />}
         </View>

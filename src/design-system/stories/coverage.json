@@ -1,0 +1,1160 @@
+{
+ "generated": "2026-10-26",
+ "library": [
+  {
+   "name": "AmountStepper",
+   "group": "primitives",
+   "file": "src/design-system/primitives/AmountStepper.tsx",
+   "doc": true,
+   "uses": 2,
+   "files": 2,
+   "inLibrary": 0
+  },
+  {
+   "name": "Beat",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Beat.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 1
+  },
+  {
+   "name": "GymLogoMark",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Brand.tsx",
+   "doc": true,
+   "uses": 2,
+   "files": 2,
+   "inLibrary": 0
+  },
+  {
+   "name": "PremiumBadge",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Brand.tsx",
+   "doc": true,
+   "uses": 0,
+   "files": 0,
+   "inLibrary": 1
+  },
+  {
+   "name": "PersonAvatar",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Brand.tsx",
+   "doc": true,
+   "uses": 19,
+   "files": 17,
+   "inLibrary": 1
+  },
+  {
+   "name": "Button",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Button.tsx",
+   "doc": true,
+   "uses": 145,
+   "files": 59,
+   "inLibrary": 9
+  },
+  {
+   "name": "IconButton",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Button.tsx",
+   "doc": true,
+   "uses": 25,
+   "files": 16,
+   "inLibrary": 1
+  },
+  {
+   "name": "Callout",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Callout.tsx",
+   "doc": true,
+   "uses": 15,
+   "files": 13,
+   "inLibrary": 0
+  },
+  {
+   "name": "Card",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Card.tsx",
+   "doc": true,
+   "uses": 69,
+   "files": 31,
+   "inLibrary": 5
+  },
+  {
+   "name": "CheckCircle",
+   "group": "primitives",
+   "file": "src/design-system/primitives/CheckCircle.tsx",
+   "doc": true,
+   "uses": 6,
+   "files": 6,
+   "inLibrary": 1
+  },
+  {
+   "name": "Chevron",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Chevron.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "Chip",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Chip.tsx",
+   "doc": true,
+   "uses": 7,
+   "files": 4,
+   "inLibrary": 7
+  },
+  {
+   "name": "FadeIn",
+   "group": "primitives",
+   "file": "src/design-system/primitives/FadeIn.tsx",
+   "doc": true,
+   "uses": 140,
+   "files": 49,
+   "inLibrary": 4
+  },
+  {
+   "name": "FoodMark",
+   "group": "primitives",
+   "file": "src/design-system/primitives/FoodMark.tsx",
+   "doc": true,
+   "uses": 7,
+   "files": 5,
+   "inLibrary": 2
+  },
+  {
+   "name": "GlassBackdrop",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Glass.tsx",
+   "doc": true,
+   "uses": 12,
+   "files": 7,
+   "inLibrary": 3
+  },
+  {
+   "name": "WebLiquidGlass",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Glass.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "ProgressiveBlur",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Glass.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 1
+  },
+  {
+   "name": "HeartIcon",
+   "group": "primitives",
+   "file": "src/design-system/primitives/HeartIcon.tsx",
+   "doc": true,
+   "uses": 2,
+   "files": 2,
+   "inLibrary": 2
+  },
+  {
+   "name": "IconBadge",
+   "group": "primitives",
+   "file": "src/design-system/primitives/IconBadge.tsx",
+   "doc": true,
+   "uses": 61,
+   "files": 36,
+   "inLibrary": 2
+  },
+  {
+   "name": "NoteField",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Input.tsx",
+   "doc": true,
+   "uses": 3,
+   "files": 3,
+   "inLibrary": 0
+  },
+  {
+   "name": "ListCard",
+   "group": "primitives",
+   "file": "src/design-system/primitives/ListCard.tsx",
+   "doc": true,
+   "uses": 24,
+   "files": 18,
+   "inLibrary": 3
+  },
+  {
+   "name": "MetaRow",
+   "group": "primitives",
+   "file": "src/design-system/primitives/MetaRow.tsx",
+   "doc": true,
+   "uses": 0,
+   "files": 0,
+   "inLibrary": 2
+  },
+  {
+   "name": "Option",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Option.tsx",
+   "doc": true,
+   "uses": 7,
+   "files": 5,
+   "inLibrary": 0
+  },
+  {
+   "name": "Pill",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Pill.tsx",
+   "doc": true,
+   "uses": 40,
+   "files": 19,
+   "inLibrary": 0
+  },
+  {
+   "name": "Pressy",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Pressy.tsx",
+   "doc": true,
+   "uses": 99,
+   "files": 48,
+   "inLibrary": 31
+  },
+  {
+   "name": "ProgressBar",
+   "group": "primitives",
+   "file": "src/design-system/primitives/ProgressBar.tsx",
+   "doc": true,
+   "uses": 6,
+   "files": 5,
+   "inLibrary": 0
+  },
+  {
+   "name": "ProgressSegments",
+   "group": "primitives",
+   "file": "src/design-system/primitives/ProgressBar.tsx",
+   "doc": true,
+   "uses": 4,
+   "files": 4,
+   "inLibrary": 0
+  },
+  {
+   "name": "Ring",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Ring.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "Row",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Row.tsx",
+   "doc": true,
+   "uses": 203,
+   "files": 55,
+   "inLibrary": 51
+  },
+  {
+   "name": "Ruler",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Ruler.tsx",
+   "doc": true,
+   "uses": 3,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "ScanBracket",
+   "group": "primitives",
+   "file": "src/design-system/primitives/ScanBracket.tsx",
+   "doc": true,
+   "uses": 8,
+   "files": 2,
+   "inLibrary": 0
+  },
+  {
+   "name": "SectionLabel",
+   "group": "primitives",
+   "file": "src/design-system/primitives/SectionLabel.tsx",
+   "doc": true,
+   "uses": 18,
+   "files": 8,
+   "inLibrary": 0
+  },
+  {
+   "name": "SheetFooter",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Sheet.tsx",
+   "doc": true,
+   "uses": 2,
+   "files": 2,
+   "inLibrary": 1
+  },
+  {
+   "name": "Sheet",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Sheet.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "Snackbar",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Snackbar.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "StatusDot",
+   "group": "primitives",
+   "file": "src/design-system/primitives/StatusDot.tsx",
+   "doc": true,
+   "uses": 5,
+   "files": 5,
+   "inLibrary": 0
+  },
+  {
+   "name": "Stepper",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Stepper.tsx",
+   "doc": true,
+   "uses": 9,
+   "files": 3,
+   "inLibrary": 0
+  },
+  {
+   "name": "SubPage",
+   "group": "primitives",
+   "file": "src/design-system/primitives/SubPage.tsx",
+   "doc": true,
+   "uses": 30,
+   "files": 30,
+   "inLibrary": 0
+  },
+  {
+   "name": "Tag",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Tag.tsx",
+   "doc": true,
+   "uses": 27,
+   "files": 18,
+   "inLibrary": 1
+  },
+  {
+   "name": "TrendsButton",
+   "group": "primitives",
+   "file": "src/design-system/primitives/TrendsButton.tsx",
+   "doc": true,
+   "uses": 2,
+   "files": 2,
+   "inLibrary": 0
+  },
+  {
+   "name": "Txt",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Txt.tsx",
+   "doc": true,
+   "uses": 858,
+   "files": 85,
+   "inLibrary": 130
+  },
+  {
+   "name": "Wheel",
+   "group": "primitives",
+   "file": "src/design-system/primitives/Wheel.tsx",
+   "doc": true,
+   "uses": 6,
+   "files": 2,
+   "inLibrary": 0
+  },
+  {
+   "name": "YourPalLogo",
+   "group": "primitives",
+   "file": "src/design-system/primitives/YourPalLogo.tsx",
+   "doc": true,
+   "uses": 5,
+   "files": 5,
+   "inLibrary": 0
+  },
+  {
+   "name": "Banner",
+   "group": "patterns",
+   "file": "src/design-system/patterns/Banner.tsx",
+   "doc": true,
+   "uses": 2,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "BudgetCard",
+   "group": "patterns",
+   "file": "src/design-system/patterns/BudgetCard.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "FoodCard",
+   "group": "patterns",
+   "file": "src/design-system/patterns/FoodCard.tsx",
+   "doc": true,
+   "uses": 6,
+   "files": 4,
+   "inLibrary": 0
+  },
+  {
+   "name": "RadialGlow",
+   "group": "patterns",
+   "file": "src/design-system/patterns/GoalCard.tsx",
+   "doc": true,
+   "uses": 2,
+   "files": 2,
+   "inLibrary": 2
+  },
+  {
+   "name": "GoalCard",
+   "group": "patterns",
+   "file": "src/design-system/patterns/GoalCard.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 1
+  },
+  {
+   "name": "MealsCard",
+   "group": "patterns",
+   "file": "src/design-system/patterns/MealsCard.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "TrackerRow",
+   "group": "patterns",
+   "file": "src/design-system/patterns/TrackerRow.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "TrackerTile",
+   "group": "patterns",
+   "file": "src/design-system/patterns/TrackerRow.tsx",
+   "doc": true,
+   "uses": 0,
+   "files": 0,
+   "inLibrary": 4
+  },
+  {
+   "name": "BottleFigma",
+   "group": "patterns",
+   "file": "src/design-system/patterns/TrackerRow.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 1
+  },
+  {
+   "name": "WaterTile",
+   "group": "patterns",
+   "file": "src/design-system/patterns/TrackerRow.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "WeightTile",
+   "group": "patterns",
+   "file": "src/design-system/patterns/TrackerRow.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "HealthTile",
+   "group": "patterns",
+   "file": "src/design-system/patterns/TrackerRow.tsx",
+   "doc": true,
+   "uses": 3,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "ConnectTile",
+   "group": "patterns",
+   "file": "src/design-system/patterns/TrackerRow.tsx",
+   "doc": true,
+   "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "WeekCard",
+   "group": "patterns",
+   "file": "src/design-system/patterns/WeekCard.tsx",
+   "doc": true,
+   "uses": 3,
+   "files": 3,
+   "inLibrary": 0
+  },
+  {
+   "name": "WorkoutCard",
+   "group": "patterns",
+   "file": "src/design-system/patterns/WorkoutCard.tsx",
+   "doc": true,
+   "uses": 4,
+   "files": 3,
+   "inLibrary": 0
+  }
+ ],
+ "count": 84,
+ "toBuild": 81,
+ "onPurpose": 3,
+ "demoPanelExcluded": 21,
+ "byGroup": {
+  "Today": {
+   "total": 12,
+   "onPurpose": 0
+  },
+  "Plans and food logging": {
+   "total": 16,
+   "onPurpose": 1
+  },
+  "Progress": {
+   "total": 11,
+   "onPurpose": 0
+  },
+  "Gym tab": {
+   "total": 7,
+   "onPurpose": 0
+  },
+  "Bottom sheets": {
+   "total": 8,
+   "onPurpose": 0
+  },
+  "Onboarding and login": {
+   "total": 10,
+   "onPurpose": 1
+  },
+  "Profile and settings": {
+   "total": 11,
+   "onPurpose": 0
+  },
+  "Workout session": {
+   "total": 6,
+   "onPurpose": 1
+  },
+  "Shared components (outside the library)": {
+   "total": 3,
+   "onPurpose": 0
+  }
+ },
+ "handBuilt": [
+  {
+   "where": "src/app/goal-detail.tsx:109",
+   "kind": "bar",
+   "look": "bar 3 px high, radius radii.xs",
+   "jsx": "<View style={{ width: 16, height: 3, borderRadius: radii.xs, backgroundColor: c.accent }} />",
+   "group": "Progress"
+  },
+  {
+   "where": "src/app/plans/exercise.tsx:40",
+   "kind": "bar",
+   "look": "bar 4 px high, radius radii.xs",
+   "jsx": "<View style={{ position: 'absolute', left: 14, right: 14, bottom: 12, height: 4, borderRadius: radii.xs, backg",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/features/progress/TrendUI.tsx:176",
+   "kind": "bar",
+   "look": "bar 3 px high, radius radii.xs",
+   "jsx": "<View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2 }} />",
+   "group": "Progress"
+  },
+  {
+   "where": "src/features/shell/ThemeTile.tsx:22",
+   "kind": "bar",
+   "look": "bar 5 px high, radius radii.xs",
+   "jsx": "<View style={{ width: 22, height: 5, borderRadius: radii.xs, backgroundColor: m.ink, opacity: 0.8 }} />",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/features/shell/ThemeTile.tsx:27",
+   "kind": "bar",
+   "look": "bar 5 px high, radius radii.xs",
+   "jsx": "<View style={{ flex: 1, height: 5, borderRadius: radii.xs, backgroundColor: m.mute }} />",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/features/shell/ThemeTile.tsx:28",
+   "kind": "bar",
+   "look": "bar 5 px high, radius radii.xs",
+   "jsx": "<View style={{ flex: 1, height: 5, borderRadius: radii.xs, backgroundColor: m.mute }} />",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/features/today/CheckInBar.tsx:136",
+   "kind": "bar",
+   "look": "bar 3 px high, radius radii.xs",
+   "jsx": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: 18, right: 18, bottom: 0, height: 3, borderRad",
+   "group": "Today"
+  },
+  {
+   "where": "src/features/today/ForYou.tsx:160",
+   "kind": "bar",
+   "look": "bar 6 px high, radius radii.xs",
+   "jsx": "<Animated.View style={[{ height: 6, borderRadius: radii.xs, backgroundColor: c.ink }, st]} />",
+   "group": "Today"
+  },
+  {
+   "where": "src/features/today/TopCards.tsx:306",
+   "kind": "bar",
+   "look": "bar 6 px high, radius radii.xs",
+   "jsx": "<View key={k} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: radii.xs, backgroundColor: k === i ? ",
+   "group": "Today"
+  },
+  {
+   "where": "src/app/(tabs)/plans.tsx:74",
+   "kind": "button or pill",
+   "look": "button 60 px high, radius radii.lg",
+   "jsx": "<Pressy key={i} accessibilityRole=\"button\" accessibilityState={{ selected: on }} accessibilityLabel={`${DAYL[i",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/app/exercise-search.tsx:73",
+   "kind": "button or pill",
+   "look": "button 68 px high, radius 20",
+   "jsx": "<Pressy key={x.n} accessibilityRole=\"button\" accessibilityLabel={`${x.n}, ${x.g}. Swap`} onPress={() => pick(x",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/app/food.tsx:105",
+   "kind": "button or pill",
+   "look": "button 40 px high, radius 20",
+   "jsx": "<Pressy accessibilityRole=\"button\" onPress={() => askCoach(fd!.n, `Is ${fd!.n.toLowerCase()} right for my plan",
+   "group": "Today"
+  },
+  {
+   "where": "src/app/food.tsx:129",
+   "kind": "button or pill",
+   "look": "button auto px high, radius radii.md",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityState={{ expanded: micro }} onPress={() => setMicro((v) => !v)",
+   "group": "Today"
+  },
+  {
+   "where": "src/app/onboarding.tsx:283",
+   "kind": "button or pill",
+   "look": "button 108 px high, radius radii.lg",
+   "jsx": "<Pressy accessibilityRole=\"radio\" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onP",
+   "group": "Onboarding and login"
+  },
+  {
+   "where": "src/app/plans/log.tsx:152",
+   "kind": "button or pill",
+   "look": "button 60 px high, radius 14",
+   "jsx": "<Pressy key={f.n} accessibilityRole={multi ? 'checkbox' : 'radio'} accessibilityState={multi ? { checked: on }",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/app/profile/details.tsx:65",
+   "kind": "button or pill",
+   "look": "button 60 px high, radius 20",
+   "jsx": "<Pressy key={label} accessibilityRole=\"button\" onPress={() => closeSheet(run)} scaleTo={0.98} style={{ flexDir",
+   "group": "Bottom sheets"
+  },
+  {
+   "where": "src/app/profile/index.tsx:139",
+   "kind": "button or pill",
+   "look": "button 84 px high, radius radii.lg",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`${title} goal ${value}. Edit`} onPress={onPress} scale",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/profile/index.tsx:155",
+   "kind": "button or pill",
+   "look": "button 196 px high, radius radii.xl",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Tracker designs. Choose how your trackers look\" onPress",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/profile/index.tsx:98",
+   "kind": "button or pill",
+   "look": "button 64 px high, radius radii.lg",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Goal: ${g2.name}. Change goal`} onPress={go('/goal')} ",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/progress/photos.tsx:30",
+   "kind": "button or pill",
+   "look": "button 210 px high, radius radii.lg",
+   "jsx": "<Pressy accessibilityRole=\"imagebutton\" accessibilityLabel={`Progress photo ${d}${zoomed ? ', zoomed' : ''}. D",
+   "group": "Progress"
+  },
+  {
+   "where": "src/app/workout.tsx:314",
+   "kind": "button or pill",
+   "look": "button 38 px high, radius 19",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Play form video\" onPress={() => api.current.formTips()}",
+   "group": "Workout session"
+  },
+  {
+   "where": "src/components/FloatingTabBar.tsx:64",
+   "kind": "button or pill",
+   "look": "button 8 px high, radius size",
+   "jsx": "<Pressable key={r.key} accessibilityRole=\"tab\" accessibilityState={{ selected: on }} accessibilityLabel={LABEL",
+   "group": "Shared components (outside the library)"
+  },
+  {
+   "where": "src/features/body/BodyLog.tsx:220",
+   "kind": "button or pill",
+   "look": "button 56 px high, radius radii.md",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Date: ${DAYS[day].full}. Change`} onPress={() => openS",
+   "group": "Progress"
+  },
+  {
+   "where": "src/features/chat/Composer.tsx:62",
+   "kind": "button or pill",
+   "look": "button 60 px high, radius 20",
+   "jsx": "<Pressy key={src} accessibilityRole=\"button\" onPress={() => closeSheet(() => onPick(src))} scaleTo={0.98} styl",
+   "group": "Bottom sheets"
+  },
+  {
+   "where": "src/features/plans/WorkoutPlan.tsx:115",
+   "kind": "button or pill",
+   "look": "button auto px high, radius radii.xl",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/features/plans/WorkoutPlan.tsx:93",
+   "kind": "button or pill",
+   "look": "button auto px high, radius radii.xl",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See w",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/features/streak/StreakChip.tsx:37",
+   "kind": "button or pill",
+   "look": "button 60 px high, radius 30",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`${title}. ${sub}. Open streaks and badges`} onPress={(",
+   "group": "Progress"
+  },
+  {
+   "where": "src/features/today/ForYou.tsx:139",
+   "kind": "button or pill",
+   "look": "button 40 px high, radius 20",
+   "jsx": "<Pressy accessibilityRole=\"button\" onPress={it.act} style={{ height: 40, minWidth: 132, paddingHorizontal: 24,",
+   "group": "Today"
+  },
+  {
+   "where": "src/features/today/QuickLogSheet.tsx:143",
+   "kind": "button or pill",
+   "look": "button 34 px high, radius radii.md",
+   "jsx": "<Pressy key={t} accessibilityRole=\"button\" accessibilityLabel={`Add ${t}`} onPress={() => setText((v) => (v.tr",
+   "group": "Bottom sheets"
+  },
+  {
+   "where": "src/features/today/StepsCards.tsx:242",
+   "kind": "button or pill",
+   "look": "button 36 px high, radius radii.md",
+   "jsx": "<Pressy key={m} accessibilityRole=\"button\" accessibilityLabel={m === 'steps' ? 'Enter steps' : 'Enter walking ",
+   "group": "Bottom sheets"
+  },
+  {
+   "where": "src/features/today/TopCards.tsx:43",
+   "kind": "button or pill",
+   "look": "button auto px high, radius 20",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Your goal: ${g.name}. ${progressLine(g)}. ${statusLine",
+   "group": "Today"
+  },
+  {
+   "where": "src/features/workout/FinishScreen.tsx:126",
+   "kind": "button or pill",
+   "look": "button 50 px high, radius 25",
+   "jsx": "<Pressy key={n} accessibilityRole=\"radio\" accessibilityState={{ selected: feel === n }} onPress={() => setFeel",
+   "group": "Workout session"
+  },
+  {
+   "where": "src/features/workout/NewWorkoutUI.tsx:111",
+   "kind": "button or pill",
+   "look": "button 56 px high, radius 20",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Show the clip\" onPress={onOpen} scaleTo={0.98} style={{",
+   "group": "Workout session"
+  },
+  {
+   "where": "src/features/workout/WorkoutSheets.tsx:86",
+   "kind": "button or pill",
+   "look": "button 56 px high, radius radii.xl",
+   "jsx": "<Pressy accessibilityRole=\"search\" accessibilityLabel=\"Search all exercises\" onPress={() => closeSheet(() => r",
+   "group": "Bottom sheets"
+  },
+  {
+   "where": "src/features/workout/WorkoutSheets.tsx:96",
+   "kind": "button or pill",
+   "look": "button 60 px high, radius radii.md",
+   "jsx": "<Pressy key={a.n} accessibilityRole=\"button\" accessibilityLabel={`${a.n}. ${a.s}`} onPress={() => api.current.",
+   "group": "Bottom sheets"
+  },
+  {
+   "where": "src/app/(tabs)/progress.tsx:154",
+   "kind": "card",
+   "look": "card radius 20, fill c.surface2",
+   "jsx": "<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: ",
+   "group": "Progress"
+  },
+  {
+   "where": "src/app/food.tsx:99",
+   "kind": "card",
+   "look": "card radius radii.md, fill c.surface",
+   "jsx": "<View key={l} style={{ gap: 2, paddingVertical: 9, paddingHorizontal: 14, borderRadius: radii.md, backgroundCo",
+   "group": "Today"
+  },
+  {
+   "where": "src/app/gym/attendance.tsx:81",
+   "kind": "card",
+   "look": "card radius radii.xl, fill c.surface, padding 16",
+   "jsx": "<View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 16 }, cardShadow(isDark)]}>",
+   "group": "Gym tab"
+  },
+  {
+   "where": "src/app/gym/break.tsx:52",
+   "kind": "card",
+   "look": "card radius radii.card, fill c.surface, padding 18",
+   "jsx": "<View style={{ padding: 18, borderRadius: radii.card, backgroundColor: c.surface }}>",
+   "group": "Gym tab"
+  },
+  {
+   "where": "src/app/gym/chat.tsx:158",
+   "kind": "card",
+   "look": "card radius 20, fill m.me ? c.accent : c.surf",
+   "jsx": "<View style={{ flexShrink: 1, paddingVertical: m.img ? 6 : 10, paddingHorizontal: m.img ? 6 : 14, borderRadius",
+   "group": "Gym tab"
+  },
+  {
+   "where": "src/app/plans/edit.tsx:130",
+   "kind": "card",
+   "look": "card radius 20, fill c.surface",
+   "jsx": "<View style={{ height: ROW_H, borderRadius: 20, backgroundColor: c.surface, flexDirection: 'row', alignItems: ",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/app/plans/exercise.tsx:97",
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.surface",
+   "jsx": "<View style={{ height: 96, borderRadius: radii.lg, backgroundColor: c.surface, flexDirection: 'row', alignItem",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/app/progress/streaks.tsx:31",
+   "kind": "card",
+   "look": "card radius radii.card, fill c.surface",
+   "jsx": "<View accessible accessibilityLabel={earned ? `${b.title}, earned ${b.earned}` : `${b.title}, locked. ${b.hint",
+   "group": "Progress"
+  },
+  {
+   "where": "src/components/bits.tsx:54",
+   "kind": "card",
+   "look": "card radius radii.xl, fill c.surface2, padding 4",
+   "jsx": "<View accessibilityRole=\"tablist\" accessibilityLabel={label} style={{ flexDirection: 'row', alignSelf: 'center",
+   "group": "Shared components (outside the library)"
+  },
+  {
+   "where": "src/components/ui.tsx:39",
+   "kind": "card",
+   "look": "card radius radii.xl, fill c.surface2, padding 4",
+   "jsx": "<View accessibilityRole=\"tablist\" accessibilityLabel={accessibilityLabel} onLayout={(e: LayoutChangeEvent) => ",
+   "group": "Shared components (outside the library)"
+  },
+  {
+   "where": "src/features/onboarding/Steps.tsx:178",
+   "kind": "card",
+   "look": "card radius radii.md, fill 'rgba(0, padding 14",
+   "jsx": "<View style={{ alignSelf: 'stretch', padding: 14, borderRadius: radii.md, backgroundColor: 'rgba(0,0,0,0.72)' ",
+   "group": "Onboarding and login"
+  },
+  {
+   "where": "src/features/progress/TrendUI.tsx:76",
+   "kind": "card",
+   "look": "card radius radii.md, fill c.surface2, padding 2",
+   "jsx": "<View accessibilityRole=\"radiogroup\" accessibilityLabel=\"Period\" style={{ flex: 1, flexDirection: 'row', gap: ",
+   "group": "Progress"
+  },
+  {
+   "where": "src/features/shell/parts.tsx:76",
+   "kind": "card",
+   "look": "card radius 20, fill bg",
+   "jsx": "<View style={[{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: bg }, style]}>",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/features/today/CheckInBar.tsx:62",
+   "kind": "card",
+   "look": "card radius 20, fill fixed.white",
+   "jsx": "<View style={{ height: 40, borderRadius: 20, paddingHorizontal: 16, backgroundColor: fixed.white, justifyConte",
+   "group": "Today"
+  },
+  {
+   "where": "src/app/goal-detail.tsx:255",
+   "kind": "chip",
+   "look": "chip 30 px high, radius 15",
+   "jsx": "<View style={{ alignSelf: 'flex-start', height: 30, paddingHorizontal: 12, borderRadius: 15, backgroundColor: ",
+   "group": "Progress"
+  },
+  {
+   "where": "src/app/goal-detail.tsx:94",
+   "kind": "chip",
+   "look": "chip 26 px high, radius 13",
+   "jsx": "<View style={{ height: 26, paddingHorizontal: 10, borderRadius: 13, backgroundColor: c.ink, justifyContent: 'c",
+   "group": "Progress"
+  },
+  {
+   "where": "src/app/profile/index.tsx:78",
+   "kind": "chip",
+   "look": "chip 24 px high, radius radii.sm",
+   "jsx": "<View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, borderRadius: radii.s",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/welcome.tsx:77",
+   "kind": "chip",
+   "look": "chip 30 px high, radius 15",
+   "jsx": "<View style={{ marginTop: 6, height: 30, borderRadius: 15, backgroundColor: fixed.white, alignItems: 'center',",
+   "group": "Onboarding and login"
+  },
+  {
+   "where": "src/features/today/CheckInBar.tsx:126",
+   "kind": "chip",
+   "look": "chip 20 px high, radius radii.sm",
+   "jsx": "<View style={{ height: 20, paddingHorizontal: 8, borderRadius: radii.sm, backgroundColor: c.goodSoft, justifyC",
+   "group": "Today"
+  },
+  {
+   "where": "src/features/today/ForYou.tsx:223",
+   "kind": "chip",
+   "look": "chip 28 px high, radius round with a line",
+   "jsx": "<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: round(28), borderWidth: 1, borderColor",
+   "group": "Today"
+  },
+  {
+   "where": "src/features/workout/SetRow.tsx:96",
+   "kind": "chip",
+   "look": "chip 24 px high, radius radii.sm",
+   "jsx": "<View accessibilityLabel=\"Warm-up set: a lighter set before your working sets. It doesn't count toward your PR",
+   "group": "Workout session"
+  },
+  {
+   "where": "src/app/(tabs)/plans.tsx:82",
+   "kind": "icon badge",
+   "look": "dot 12 px",
+   "jsx": "<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/app/(tabs)/plans.tsx:83",
+   "kind": "icon badge",
+   "look": "dot 4 px",
+   "jsx": "<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/app/gym/assessments.tsx:77",
+   "kind": "icon badge",
+   "look": "dot 8 px",
+   "jsx": "<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone] }} />",
+   "group": "Gym tab"
+  },
+  {
+   "where": "src/app/gym/chat.tsx:38",
+   "kind": "icon badge",
+   "look": "dot 6 px",
+   "jsx": "<Animated.View style={[{ width: 6, height: 6, borderRadius: radii.xs, backgroundColor: c.muted, marginHorizont",
+   "group": "Gym tab"
+  },
+  {
+   "where": "src/app/notifications.tsx:84",
+   "kind": "icon badge",
+   "look": "dot 8 px",
+   "jsx": "<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: c.accent }} />",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/profile/health.tsx:54",
+   "kind": "icon badge",
+   "look": "dot 8 px",
+   "jsx": "<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: on ? c.good : c.muted }} />",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/welcome.tsx:129",
+   "kind": "icon badge",
+   "look": "icon tile 28 px, radius 14",
+   "jsx": "<View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: 'rgba(15,138,95,0.25)' }} />",
+   "group": "Onboarding and login"
+  },
+  {
+   "where": "src/app/welcome.tsx:46",
+   "kind": "icon badge",
+   "look": "icon tile 22 px, radius radii.sm",
+   "jsx": "<View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: fixed.blue }} />",
+   "group": "Onboarding and login"
+  },
+  {
+   "where": "src/app/welcome.tsx:49",
+   "kind": "icon badge",
+   "look": "icon tile 20 px, radius radii.sm",
+   "jsx": "<View style={{ width: 20, height: 20, borderRadius: radii.sm, backgroundColor: '#2A3242' }} />",
+   "group": "Onboarding and login"
+  },
+  {
+   "where": "src/app/welcome.tsx:94",
+   "kind": "icon badge",
+   "look": "icon tile 18 px, radius 9",
+   "jsx": "<View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: done ? fixed.blue : 'transparent', bor",
+   "group": "Onboarding and login"
+  },
+  {
+   "where": "src/features/chat/Composer.tsx:31",
+   "kind": "icon badge",
+   "look": "dot 10 px",
+   "jsx": "<Animated.View style={[{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#FF4D4F' }, a]} />",
+   "group": "Gym tab"
+  },
+  {
+   "where": "src/features/checkin/GymMap.native.tsx:53",
+   "kind": "icon badge",
+   "look": "icon tile 16 px, radius 8",
+   "jsx": "<View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: '#3478F6', borderWidth: 3, borderColor",
+   "group": "Today"
+  },
+  {
+   "where": "src/features/onboarding/Steps.tsx:79",
+   "kind": "icon badge",
+   "look": "icon tile 40 px, radius 20",
+   "jsx": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: end[0] - 20, top: end[1] - 20, width: 40, heig",
+   "group": "Onboarding and login"
+  },
+  {
+   "where": "src/features/plans/DietPlan.tsx:110",
+   "kind": "icon badge",
+   "look": "dot 8 px",
+   "jsx": "<View accessibilityLabel=\"Changed from plan\" style={{ position: 'absolute', top: 0, right: 0, width: 8, height",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/features/plans/WorkoutPlan.tsx:179",
+   "kind": "icon badge",
+   "look": "icon tile 24 px, radius radii.sm",
+   "jsx": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/features/plans/WorkoutPlan.tsx:180",
+   "kind": "icon badge",
+   "look": "icon tile 24 px, radius radii.sm",
+   "jsx": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/features/progress/TrendUI.tsx:128",
+   "kind": "icon badge",
+   "look": "dot 4 px",
+   "jsx": "<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.xs, backgroundColor: ",
+   "group": "Bottom sheets"
+  },
+  {
+   "where": "src/features/shell/parts.tsx:45",
+   "kind": "icon badge",
+   "look": "icon tile 26 px, radius 13",
+   "jsx": "<Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: fixed.white, shadowColor: f",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/features/shell/Switcher.tsx:50",
+   "kind": "icon badge",
+   "look": "icon tile 44 px, radius radii.lg",
+   "jsx": "<View style={{ width: 44, height: 44, borderRadius: radii.lg, borderWidth: 1.5, borderStyle: 'dashed', borderC",
+   "group": "Bottom sheets"
+  },
+  {
+   "where": "src/features/workout/FinishScreen.tsx:40",
+   "kind": "icon badge",
+   "look": "icon tile 26 px, radius 13",
+   "jsx": "<Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.accent, alignItems: 'cent",
+   "group": "Workout session"
+  },
+  {
+   "where": "src/app/plans/ask.tsx:67",
+   "kind": "input",
+   "look": "text input",
+   "jsx": "<TextInput accessibilityLabel=\"Note for Coach Vikram, optional\" value={note} onChangeText={setNote} multiline ",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/app/plans/log.tsx:42",
+   "kind": "input",
+   "look": "text input",
+   "jsx": "<TextInput accessibilityLabel={label} value={value} onChangeText={(t) => onChange(t.replace(/[^0-9]/g, ''))} k",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/components/OtpInput.tsx:25",
+   "kind": "input",
+   "look": "text input",
+   "jsx": "<TextInput ref={ref} value={value} onChangeText={(t) => onChange(t.replace(/\\D/g, '').slice(0, 6))} keyboardTy",
+   "group": "Onboarding and login"
+  },
+  {
+   "where": "src/features/body/BodyLog.tsx:46",
+   "kind": "input",
+   "look": "text input",
+   "jsx": "<TextInput autoFocus value={text} onChangeText={(t) => { setText(t); setBad(false); }} keyboardType={editable.",
+   "group": "Progress"
+  },
+  {
+   "where": "src/features/chat/Composer.tsx:195",
+   "kind": "input",
+   "look": "text input",
+   "jsx": "<TextInput ref={input} value={draft} onChangeText={setDraft} onFocus={() => setEmoji(false)} placeholder={img ",
+   "group": "Gym tab"
+  }
+ ],
+ "exceptions": [
+  {
+   "where": "src/app/welcome.tsx:158",
+   "what": "One segment of the story progress bar on the welcome screen (28 x 4 px), tappable to jump to that story",
+   "why": "Not a button look at all: a progress segment that the audit counts as an icon button because it is pressable. It fills with an animated bar; no library component draws that."
+  },
+  {
+   "where": "src/app/plans/log.tsx:41",
+   "what": "The search field on \"What did you eat?\" (52 px, radius 28, 1 px line, no shadow, an icon and a text input inside)",
+   "why": "A text field, not a card. It belongs with `Field` (Input), which is 56 px with a 1.5 px line on focus; this one is 52 px and does not change on focus, so it would need its own Field variant. Left as a one-off as agreed."
+  },
+  {
+   "where": "src/features/workout/NewWorkoutUI.tsx:54",
+   "what": "The exercise clip thumbnail button (64 px, a photo filling it, clipped to radius 12, a play mark on top)",
+   "why": "An image button. `IconButton` draws a fill and an icon; it does not clip a photo to its corners. One place in the app."
+  },
+  {
+   "where": "src/web/WebFrame.tsx:316",
+   "what": "Collapse / expand on the demo controls panel (web only, beside the phone)",
+   "why": "Part of the demo tooling, not the app. It uses a plain Pressable on purpose (no press scale, no haptic); `IconButton` would add both."
+  }
+ ]
+}

@@ -10,7 +10,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { MetaRow } from '@/design-system/primitives/MetaRow';
-import { font, fontSizes, radii } from '@/design-system/tokens';
+import { font, fontSizes, radii, round, onDark } from '@/design-system/tokens';
 
 /**
  * The Today meals card. It shows only the meal for right now.
@@ -72,9 +72,9 @@ function MealsBackdrop() {
         <Svg width={W} height={H}>
           <Defs>
             <RadialGradient id="mealsWash" cx="50%" cy="50%" r="50%">
-              <Stop offset="0" stopColor="#FF9A4D" stopOpacity={peak} />
-              <Stop offset="0.45" stopColor="#FF9A4D" stopOpacity={peak * 0.4} />
-              <Stop offset="1" stopColor="#FF9A4D" stopOpacity={0} />
+              <Stop offset="0" stopColor={onDark.burn} stopOpacity={peak} />
+              <Stop offset="0.45" stopColor={onDark.burn} stopOpacity={peak * 0.4} />
+              <Stop offset="1" stopColor={onDark.burn} stopOpacity={0} />
             </RadialGradient>
           </Defs>
           <Ellipse cx={W / 2} cy={H / 2} rx={W / 2} ry={H / 2} fill="url(#mealsWash)" />
@@ -131,10 +131,10 @@ function MealItems({ meal, onLogMeal }: Pick<MealsCardProps, 'onLogMeal'> & { me
             return (
               <Row key={k} style={{ gap: 10, minHeight: 44, borderTopWidth: k ? 1 : 0, borderTopColor: c.line }}>
                 {eaten ? <IconBadge size={18} bg={c.good}><Check size={11} strokeWidth={3.5} color={c.bg} /></IconBadge>
-                  : left ? <View style={{ width: 18, height: 18, borderRadius: 9, borderWidth: 1.5, borderColor: c.chipLine }} />
+                  : left ? <View style={{ width: 18, height: 18, borderRadius: round(18), borderWidth: 1.5, borderColor: c.chipLine }} />
                   : <View style={{ opacity: meal.skipped ? 0.45 : 1 }}><FoodMark type={r.type} /></View>}
                 <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 22, color: quiet ? c.muted : c.ink, textDecorationLine: eaten ? 'line-through' : 'none' }}>{r.name}</Txt>
-                {left ? <View style={{ paddingHorizontal: 8, height: 22, borderRadius: 11, backgroundColor: c.warnSoft, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: c.warn }}>Skipped</Txt></View>
+                {left ? <View style={{ paddingHorizontal: 8, height: 22, borderRadius: round(22), backgroundColor: c.warnSoft, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: c.warn }}>Skipped</Txt></View>
                   : !!r.amount && <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: c.muted, textDecorationLine: eaten ? 'line-through' : 'none' }}>{r.amount}</Txt>}
               </Row>
             );
@@ -154,7 +154,7 @@ function StatusPill({ status, time, loggedAt }: { status: ShownMeal['status']; t
   const fg = logged ? c.good : skipped ? c.muted : c.ink;
   const label = logged ? ('Logged ' + (loggedAt ?? '')).trim() : skipped ? 'Skipped' : time;
   return (
-    <View style={{ height: 28, paddingHorizontal: 10, borderRadius: 14, backgroundColor: bg, flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+    <View style={{ height: 28, paddingHorizontal: 10, borderRadius: round(28), backgroundColor: bg, flexDirection: 'row', alignItems: 'center', gap: 5 }}>
       {logged ? <Check size={13} strokeWidth={3} color={fg} /> : skipped ? <X size={13} color={fg} /> : null}
       <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: fg }}>{label}</Txt>
     </View>
@@ -189,7 +189,7 @@ export function MealsCard(p: MealsCardProps) {
         <MealsBackdrop />
         <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
           <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
-          <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={16} color={c.bg} strokeWidth={3} /></View>
+          <View style={{ width: 28, height: 28, borderRadius: round(28), backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={16} color={c.bg} strokeWidth={3} /></View>
         </Row>
         <Txt muted style={{ paddingHorizontal: 4, marginTop: -6, fontSize: fontSizes.md, lineHeight: 20 }}>{p.completeLine}</Txt>
         <DotRule top={-2} />
@@ -218,7 +218,7 @@ export function MealsCard(p: MealsCardProps) {
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4 }}>
         <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 39, letterSpacing: -1.3 }}>Meals</Txt>
         <View style={{ borderRadius: radii.pill, backgroundColor: isDark ? 'rgba(10,12,16,0.22)' : 'rgba(255,255,255,0.45)' }}>
-          <Chip label={`${done} of ${total} done`} icon={<UtensilsCrossed size={13} color={c.ink} />} style={{ height: 38, borderRadius: 19, paddingHorizontal: 14 }} />
+          <Chip label={`${done} of ${total} done`} icon={<UtensilsCrossed size={13} color={c.ink} />} style={{ height: 38, borderRadius: round(38), paddingHorizontal: 14 }} />
         </View>
       </Row>
       <DotRule top={-4} />

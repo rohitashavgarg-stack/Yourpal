@@ -14,6 +14,7 @@ import { progressStore } from '@/features/progress/store';
 import { AFTER_PHOTO, BEFORE_PHOTO, photoFor } from '@/features/progress/photoAssets';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const SCRIM = 'rgba(0,0,0,0.55)';
@@ -59,9 +60,9 @@ function Compare({ latest }: { latest: string }) {
           <Tag label="Sep 2" bg={SCRIM} fg={fixed.white} style={{ position: 'absolute', left: 12, top: 12 }} />
           <Tag label={latest} bg={SCRIM} fg={fixed.white} style={{ position: 'absolute', right: 12, top: 12 }} />
           <View pointerEvents="none" style={{ position: 'absolute', top: 0, bottom: 0, left: `${pos}%`, width: 2, marginLeft: -1, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
-            <View style={{ width: 44, height: 44, borderRadius: radii.lg, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
+            <IconBadge size={44} radius={radii.lg} bg={fixed.white}>
               <ChevronsLeftRight size={18} color={fixed.dark} />
-            </View>
+            </IconBadge>
           </View>
         </View>
       </GestureDetector>

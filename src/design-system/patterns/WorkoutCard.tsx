@@ -7,7 +7,7 @@ import { PersonAvatar } from '@/components/Brand';
 import { Button } from '@/design-system/primitives/Button';
 import { MetaRow } from '@/design-system/primitives/MetaRow';
 import { useTheme } from '@/theme/ThemeProvider';
-import { font, fontSizes, fixed, radii } from '@/design-system/tokens';
+import { font, fontSizes, fixed, radii, onDark, gradients, round } from '@/design-system/tokens';
 
 /**
  * Today's workout, one look per state:
@@ -20,7 +20,7 @@ import { font, fontSizes, fixed, radii } from '@/design-system/tokens';
  *   done       completed: time, exercises and calories
  *   rest       rest day
  *   paused     the membership has ended: one flat card that says why, no Start
- *   comeback   after a break: the easy session, with Start and "Do regular instead"
+ *   comeback   after a break: the easy session: 20 min, 4 exercises, half your usual load, "Start easy session" and "Not today"
  */
 export type WorkoutCardState = 'upcoming' | 'due' | 'live' | 'missed' | 'moved' | 'skipped' | 'done' | 'rest' | 'paused' | 'comeback';
 
@@ -54,23 +54,23 @@ export type WorkoutCardProps = {
   onStartAnyway?: () => void;
   /** moved and skipped */
   onUndo?: () => void;
-  /** comeback: the quiet second button. */
-  onStartRegular?: () => void;
+  /** comeback: the quiet second button, "Not today". */
+  onNotToday?: () => void;
 };
 
 const MINT = fixed.live;
-const AMBER = '#F2B35B';
-const LILAC = '#B9A8FF';
+const AMBER = onDark.amber;
+const LILAC = onDark.lilac;
 const W60 = 'rgba(255,255,255,0.65)';
 
 // The coach line at the top of the card (with the unread dot for a coach reply).
 function Coach({ dim = false, unread, onPress }: { dim?: boolean; unread?: boolean; onPress?: () => void }) {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Today's workout, planned by Coach Vikram. Open your coach" onPress={onPress} scaleTo={0.97} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 1, opacity: dim ? 0.7 : 1 }}>
-      <View><PersonAvatar who="coach" size={34} />{unread && <View accessibilityLabel="Unread reply" style={{ position: 'absolute', right: -1, top: -1, width: 9, height: 9, borderRadius: 5, backgroundColor: MINT }} />}</View>
+      <View><PersonAvatar who="coach" size={34} />{unread && <View accessibilityLabel="Unread reply" style={{ position: 'absolute', right: -1, top: -1, width: 9, height: 9, borderRadius: radii.dot, backgroundColor: MINT }} />}</View>
       <View style={{ flexShrink: 1 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22, color: fixed.white }}>{"Today's workout"}</Txt>
-        <Txt style={{ fontSize: 12.5, lineHeight: 18, color: W60 }}>Planned by Coach Vikram</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.basePlus, lineHeight: 22, color: fixed.white }}>{"Today's workout"}</Txt>
+        <Txt style={{ fontSize: fontSizes.xsPlus, lineHeight: 18, color: W60 }}>Planned by Coach Vikram</Txt>
       </View>
     </Pressy>
   );
@@ -81,9 +81,9 @@ function WorkoutTitle({ name, time, tone = 'default' }: { name: string; time?: s
   const missed = tone === 'missed';
   return (
     <Row style={{ gap: 10, flexWrap: 'wrap' }}>
-      <Txt style={{ fontFamily: font.regular, fontSize: 34, lineHeight: 42, letterSpacing: -1.4, color: missed ? 'rgba(255,255,255,0.75)' : fixed.white }}>{name}</Txt>
+      <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl5, lineHeight: 42, letterSpacing: -1.4, color: missed ? 'rgba(255,255,255,0.75)' : fixed.white }}>{name}</Txt>
       {!!time && (
-        <View style={{ height: 28, paddingHorizontal: 10, marginTop: 6, borderRadius: 14, backgroundColor: missed ? 'rgba(242,179,91,0.14)' : 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
+        <View style={{ height: 28, paddingHorizontal: 10, marginTop: 6, borderRadius: round(28), backgroundColor: missed ? 'rgba(242,179,91,0.14)' : 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: missed ? AMBER : fixed.white, textDecorationLine: missed ? 'line-through' : 'none' }}>{time}</Txt>
         </View>
       )}
@@ -93,11 +93,11 @@ function WorkoutTitle({ name, time, tone = 'default' }: { name: string; time?: s
 
 const LiveDot = () => <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: MINT }} />;
 
-function WorkoutShell({ colors, edge, children, compact = false, label }: { colors: string[]; edge?: string; children: React.ReactNode; compact?: boolean; label: string }) {
+function WorkoutShell({ colors, edge, children, compact = false, label }: { colors: readonly string[]; edge?: string; children: React.ReactNode; compact?: boolean; label: string }) {
   return (
     <View accessibilityLabel={label} style={{ borderRadius: radii.card, padding: 16, paddingVertical: compact ? 14 : 16, gap: 12, overflow: 'hidden', borderWidth: edge ? 1.5 : 0, borderColor: edge }}>
       <LinearGradient colors={colors as any} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
-      {!compact && <View pointerEvents="none" style={{ position: 'absolute', right: -70, top: -80, width: 220, height: 220, borderRadius: 110, borderWidth: 14, borderColor: 'rgba(255,255,255,0.05)' }} />}
+      {!compact && <View pointerEvents="none" style={{ position: 'absolute', right: -70, top: -80, width: 220, height: 220, borderRadius: round(220), borderWidth: 14, borderColor: 'rgba(255,255,255,0.05)' }} />}
       {children}
     </View>
   );
@@ -105,7 +105,7 @@ function WorkoutShell({ colors, edge, children, compact = false, label }: { colo
 
 const noop = () => {};
 
-export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, onOpenCoach, burned, live, done, restNext, onStart = noop, onResume = noop, onDidIt = noop, onMove = noop, onSkip = noop, onStartAnyway = noop, onUndo = noop, onStartRegular = noop }: WorkoutCardProps) {
+export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, onOpenCoach, burned, live, done, restNext, onStart = noop, onResume = noop, onDidIt = noop, onMove = noop, onSkip = noop, onStartAnyway = noop, onUndo = noop, onNotToday = noop }: WorkoutCardProps) {
   const { c } = useTheme();
   const burnedRow = burned != null ? (
     <Row style={{ gap: 8, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.12)' }}>
@@ -134,14 +134,14 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
   if (state === 'moved' || state === 'skipped') {
     const moved = state === 'moved';
     return (
-      <WorkoutShell compact label={moved ? `${name} moved to tomorrow` : `${name} skipped today`} colors={[fixed.dark, '#0E1B45', '#13327A']}>
+      <WorkoutShell compact label={moved ? `${name} moved to tomorrow` : `${name} skipped today`} colors={gradients.workoutPlanned}>
         <Row style={{ gap: 12 }}>
           <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center' }}>{moved ? <CalendarClock size={18} color={fixed.white} /> : <X size={18} color={fixed.white} />}</View>
           <View style={{ flex: 1 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: fixed.white }}>{moved ? `${name} moved to tomorrow` : `${name} skipped today`}</Txt>
             <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: W60 }}>{moved ? 'Coach Vikram is told' : 'Your plan picks up tomorrow'}</Txt>
           </View>
-          <Pressy accessibilityRole="button" accessibilityLabel="Undo" onPress={onUndo} style={{ height: 34, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
+          <Pressy accessibilityRole="button" accessibilityLabel="Undo" onPress={onUndo} hitSlop={{ top: 5, bottom: 5 }} style={{ height: 34, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center' }}>
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: fixed.white }}>Undo</Txt>
           </Pressy>
         </Row>
@@ -151,7 +151,7 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
 
   if (state === 'rest') {
     return (
-      <WorkoutShell label="Rest day" colors={[fixed.dark, fixed.shadow, '#1A1636']}>
+      <WorkoutShell label="Rest day" colors={gradients.workoutRest}>
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <Row style={{ gap: 8 }}><Moon size={17} color={LILAC} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: LILAC }}>Recovery</Txt></Row>
           {!!restNext && <Chip label={restNext} onDark />}
@@ -165,10 +165,10 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
 
   if (state === 'done' && done) {
     return (
-      <WorkoutShell label="Workout complete" colors={[fixed.dark, '#0D2A22', '#124A3A']}>
+      <WorkoutShell label="Workout complete" colors={gradients.workoutDone}>
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <Row style={{ gap: 8 }}>
-            <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: MINT, alignItems: 'center', justifyContent: 'center' }}><Check size={16} strokeWidth={3} color={fixed.dark} /></View>
+            <View style={{ width: 28, height: 28, borderRadius: round(28), backgroundColor: MINT, alignItems: 'center', justifyContent: 'center' }}><Check size={16} strokeWidth={3} color={fixed.dark} /></View>
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: MINT }}>{`Done at ${done.at}`}</Txt>
           </Row>
           <Chip label={name} onDark />
@@ -190,13 +190,13 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
   // in progress: the timer leads, one segment per exercise fills as you go
   if (state === 'live' && live) {
     return (
-      <WorkoutShell label={`Workout running, ${live.elapsed} elapsed, ${live.done} of ${live.total} exercises`} colors={['#06231B', '#0B3A2C', '#0F5A42']}>
+      <WorkoutShell label={`Workout running, ${live.elapsed} elapsed, ${live.done} of ${live.total} exercises`} colors={gradients.workoutLive}>
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <Row style={{ gap: 8 }}><LiveDot /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: MINT }}>Running</Txt></Row>
           <Chip label={name} onDark tone="live" />
         </Row>
         <Row style={{ alignItems: 'baseline', gap: 8 }}>
-          <Txt style={{ fontFamily: font.monoBold, fontSize: 42, lineHeight: 50, letterSpacing: -1, color: fixed.white }}>{live.elapsed}</Txt>
+          <Txt style={{ fontFamily: font.monoBold, fontSize: fontSizes.xl6, lineHeight: 50, letterSpacing: -1, color: fixed.white }}>{live.elapsed}</Txt>
           <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: W60 }}>elapsed</Txt>
         </Row>
         <View style={{ gap: 6 }}>
@@ -216,10 +216,10 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
   // missed: muted, amber edge, the time crossed out, one question with three answers
   if (state === 'missed') {
     return (
-      <WorkoutShell label={`${name} missed`} colors={['#17140F', '#17140F', '#1B1710']} edge="rgba(242,179,91,0.28)">
+      <WorkoutShell label={`${name} missed`} colors={gradients.workoutMissed} edge="rgba(242,179,91,0.28)">
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <Coach dim unread={coachUnread} onPress={onOpenCoach} />
-          <View style={{ height: 28, paddingHorizontal: 11, borderRadius: 14, borderWidth: 1, borderColor: 'rgba(242,179,91,0.5)', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <View style={{ height: 28, paddingHorizontal: 11, borderRadius: round(28), borderWidth: 1, borderColor: 'rgba(242,179,91,0.5)', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <Clock size={13} color={AMBER} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 17, color: AMBER }}>Missed</Txt>
           </View>
         </Row>
@@ -237,23 +237,22 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
     );
   }
 
-  // comeback day: the greeting is plain text above (see ComebackGreeting), and the workout is one small grey card: the easy session,
-  // with Start as the main button and today's planned workout as the quiet one.
+  // comeback day: the greeting is plain text above (see ComebackGreeting); the workout is one small grey card, the easy session.
+  // No exercise names. Start easy session is the main button; Not today is the quiet one.
   if (state === 'comeback') {
-    const btn = { flex: 1, height: 44, borderRadius: radii.lg, alignItems: 'center' as const, justifyContent: 'center' as const };
     return (
-      <View accessibilityLabel="Easy session" style={{ borderRadius: radii.card, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
+      <View accessibilityLabel="Easy session, 20 minutes, 4 exercises, half your usual load" style={{ borderRadius: radii.card, backgroundColor: c.surface2, padding: 16, gap: 12 }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, letterSpacing: -0.3, color: c.ink }}>Easy session</Txt>
-          <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}>5 exercises, about 30 minutes, lighter weights</Txt>
+          <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}>20 min</Txt>
         </View>
+        <Row style={{ gap: 6, flexWrap: 'wrap' }}>
+          <Chip label="4 exercises" />
+          <Chip label="Half your usual load" />
+        </Row>
         <Row style={{ gap: 8 }}>
-          <Pressy accessibilityRole="button" accessibilityLabel="Start the easy session" onPress={onStart} style={[btn, { backgroundColor: c.ink }]}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.bg }}>Start</Txt>
-          </Pressy>
-          <Pressy accessibilityRole="button" accessibilityLabel="Do today's regular workout instead" onPress={onStartRegular} style={[btn, { backgroundColor: c.surface3 }]}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>Do regular instead</Txt>
-          </Pressy>
+          <Button kind="primary" size="fill" label="Start easy session" onPress={onStart} style={{ flex: 1 }} />
+          <Button kind="surface" size="fill" label="Not today" onPress={onNotToday} style={{ flex: 1 }} />
         </Row>
       </View>
     );
@@ -262,11 +261,11 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
   // upcoming / due now (a thin mint edge and a "Now" chip; the button stays white)
   const due = state === 'due';
   return (
-    <WorkoutShell label={`Today's workout, ${name}`} colors={[fixed.dark, '#0E1B45', '#13327A']} edge={due ? 'rgba(124,240,200,0.45)' : undefined}>
+    <WorkoutShell label={`Today's workout, ${name}`} colors={gradients.workoutPlanned} edge={due ? 'rgba(124,240,200,0.45)' : undefined}>
       <Row style={{ justifyContent: 'space-between', gap: 8 }}>
         <Coach unread={coachUnread} onPress={onOpenCoach} />
         {due ? (
-          <View style={{ height: 28, paddingHorizontal: 11, borderRadius: 14, borderWidth: 1, borderColor: 'rgba(124,240,200,0.6)', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <View style={{ height: 28, paddingHorizontal: 11, borderRadius: round(28), borderWidth: 1, borderColor: 'rgba(124,240,200,0.6)', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <LiveDot /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 17, color: MINT }}>Now</Txt>
           </View>
         ) : <Chip label={when ?? ''} onDark />}

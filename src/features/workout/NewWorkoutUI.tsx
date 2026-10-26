@@ -16,6 +16,8 @@ import { VideoView, useVideoPlayer } from 'expo-video';
 import { CLIPS, THUMBS } from './clips';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { IconButton } from '@/design-system/primitives/Button';
+import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // The only clips we have are the main-lift ones, so a move gets a still only where it is the same movement; the rest show a plain tile.
@@ -51,9 +53,9 @@ function MoveThumb({ id, onOpen }: { id: string; onOpen?: () => void }) {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Watch the clip" disabled={!key} onPress={onOpen} scaleTo={0.94} style={{ width: 64, height: 64, borderRadius: radii.sm, overflow: 'hidden', backgroundColor: still ? fixed.white : c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
       {still ? <Image source={still} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} /> : null}
-      <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}>
+      <IconBadge size={26} bg="rgba(11,14,20,0.72)">
         <Play size={12} color={fixed.white} fill={fixed.white} style={{ marginLeft: 1 }} />
-      </View>
+      </IconBadge>
     </Pressy>
   );
 }
@@ -63,10 +65,7 @@ const INK = fixed.dark; // text drawn straight on the white clip stage
 // Solid pill, top right, on every workout screen: Finish is easy to find.
 function FinishPill({ onPress }: { onPress: () => void }) {
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel="Finish workout" onPress={onPress} scaleTo={0.94}
-      style={{ height: 44, paddingHorizontal: 18, borderRadius: radii.lg, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', alignItems: 'center', justifyContent: 'center' }}>
-      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: INK }}>Finish</Txt>
-    </Pressy>
+    <Button kind="whiteLine" size="small" label="Finish" accessibilityLabel="Finish workout" onPress={onPress} scaleTo={0.94} />
   );
 }
 
@@ -90,17 +89,13 @@ function ClipCardInner({ source, thumb, onFull, onHide }: { source: number; thum
       {!isPlaying && !!thumb && <Image source={thumb} resizeMode="contain" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }} />}
       <Pressy accessibilityRole="button" accessibilityLabel={isPlaying ? 'Pause the clip' : 'Play the clip'} onPress={toggle} scaleTo={1} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
         {!isPlaying && (
-          <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}>
+          <IconBadge size={64} bg="rgba(11,14,20,0.72)">
             <Play size={26} color={fixed.white} fill={fixed.white} style={{ marginLeft: 3 }} />
-          </View>
+          </IconBadge>
         )}
       </Pressy>
       {onHide && (
-        <Pressy accessibilityRole="button" accessibilityLabel="Hide the clip" onPress={onHide} scaleTo={0.94}
-          style={{ position: 'absolute', left: 10, top: 10, height: 32, paddingHorizontal: 12, borderRadius: radii.md, backgroundColor: fixed.white, borderWidth: 1, borderColor: '#C9D1DD', flexDirection: 'row', alignItems: 'center', gap: 4, justifyContent: 'center' }}>
-          <ChevronUp size={15} color={INK} />
-          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: INK }}>Hide</Txt>
-        </Pressy>
+        <Button kind="whiteLine" size="xs" weight="medium" label="Hide" accessibilityLabel="Hide the clip" icon={<ChevronUp size={15} color={INK} />} onPress={onHide} scaleTo={0.94} style={{ position: 'absolute', left: 10, top: 10 }} />
       )}
       <IconButton label="Full screen" onPress={goFull} scaleTo={0.92} size={40} radius={20} bg={fixed.white} borderWidth={1} borderColor="#C9D1DD" style={{ position: 'absolute', right: 10, bottom: 10 }}>
         <Maximize2 size={18} color={INK} />
@@ -115,10 +110,10 @@ function ClipRow({ thumb, onOpen }: { thumb?: number; onOpen: () => void }) {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Show the clip" onPress={onOpen} scaleTo={0.98}
       style={{ flexDirection: 'row', alignItems: 'center', gap: 12, minHeight: 56, paddingVertical: 6, paddingLeft: 6, paddingRight: 14, borderRadius: 20, backgroundColor: c.surface }}>
-      <View style={{ width: 44, height: 44, borderRadius: radii.sm, overflow: 'hidden', backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
+      <IconBadge size={44} radius={radii.sm} bg={fixed.white} style={{ overflow: 'hidden' }}>
         {!!thumb && <Image source={thumb} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} />}
-        <View style={{ width: 22, height: 22, borderRadius: radii.sm, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center' }}><Play size={10} color={fixed.white} fill={fixed.white} style={{ marginLeft: 1 }} /></View>
-      </View>
+        <IconBadge size={22} radius={radii.sm} bg="rgba(11,14,20,0.72)"><Play size={10} color={fixed.white} fill={fixed.white} style={{ marginLeft: 1 }} /></IconBadge>
+      </IconBadge>
       <Txt style={{ flex: 1, fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 21 }}>Watch form</Txt>
       <ChevronDown size={18} color={c.muted} />
     </Pressy>
@@ -145,9 +140,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       {pop && source != null && <ClipPopup source={source} onClose={() => setPop(false)} />}
       <View style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, gap: 12, paddingBottom: 8 }}>
-        <View style={{ flexDirection: 'row', gap: 4 }}>
-          {Array.from({ length: n }, (_, i) => <View key={i} style={{ flex: 1, height: 4, borderRadius: radii.xs, backgroundColor: i <= pos ? c.accent : c.surface3 }} />)}
-        </View>
+        <ProgressSegments height={4} gap={4} segments={Array.from({ length: n }, (_, i) => ({ color: i <= pos ? c.accent : c.surface3 }))} />
         <Row style={{ gap: 10 }}>
           <RoundBtn label="Minimise workout" onPress={onMinimise} glass><X size={20} color={c.ink} /></RoundBtn>
           <View style={{ flex: 1, alignItems: 'center' }}>
@@ -182,10 +175,9 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
         {cur >= 0 && marked && <Txt v="caption" style={{ textAlign: 'center' }}>{left} set{left === 1 ? '' : 's'} not done · you can come back to them</Txt>}
         <Row style={{ gap: 10 }}>
           {s.exIdx > 0 && (
-            <Pressy accessibilityRole="button" accessibilityLabel={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92}
-              style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+            <IconButton label={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92} size={56} radius={radii.xl} bg={c.surface} borderWidth={1} borderColor={c.line}>
               <ChevronLeft size={22} color={c.ink} />
-            </Pressy>
+            </IconButton>
           )}
           <Button kind={none ? 'accent' : 'secondary'} label={none ? `Next: ${nextName}` : `Skip to ${nextName}`} onPress={nextEx} style={{ flex: 1 }} />
         </Row>

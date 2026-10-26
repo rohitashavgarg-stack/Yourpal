@@ -31,10 +31,9 @@ function Clip({ source, thumb, top: top0, bottom: bottom0, wide, setWide }: { so
       </View>
       {/* big play / pause in the middle of the part of the clip that is showing */}
       <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, top, bottom, alignItems: 'center', justifyContent: 'center', zIndex: 5, elevation: 5 }}>
-        <Pressy accessibilityRole="button" accessibilityLabel={isPlaying ? 'Pause the clip' : 'Play the clip'} onPress={() => (isPlaying ? player.pause() : player.play())} scaleTo={0.92}
-          style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(11,14,20,0.72)', alignItems: 'center', justifyContent: 'center', opacity: isPlaying ? 0.55 : 1 }}>
+        <IconButton label={isPlaying ? 'Pause the clip' : 'Play the clip'} onPress={() => (isPlaying ? player.pause() : player.play())} scaleTo={0.92} size={64} radius={32} bg="rgba(11,14,20,0.72)" style={{ opacity: isPlaying ? 0.55 : 1 }}>
           {isPlaying ? <Pause size={26} color={fixed.white} fill={fixed.white} /> : <Play size={26} color={fixed.white} fill={fixed.white} style={{ marginLeft: 3 }} />}
-        </Pressy>
+        </IconButton>
         {/* full screen: the clip in landscape */}
         <IconButton label={IS_WEB && wide ? 'Exit full screen' : 'Full screen'} onPress={() => { player.play(); if (IS_WEB) { setWide(!wide); return; } setFull(true); setTimeout(() => view.current?.enterFullscreen(), 60); }} scaleTo={0.92} bg={fixed.white} borderWidth={1} borderColor="#C9D1DD" style={{ position: 'absolute', right: 14, bottom: 12 }}>
           {IS_WEB && wide ? <Minimize2 size={19} color={fixed.dark} /> : <Maximize2 size={19} color={fixed.dark} />}

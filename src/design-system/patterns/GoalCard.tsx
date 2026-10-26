@@ -12,7 +12,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { fmtDay, fmtVal, Goal2, statusLine, useGoalV2 } from '@/features/goalv2/model';
 import { DEMO, GC, GoalCardState, goalCardStore, LOOK, RIGHT_TEXT, SEGMENTS, STALE_WEIGH_DAYS, SUFFIX, useGoalCardState } from '@/features/today/goalCardState';
-import { radii, fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes, onDark, round } from '@/design-system/tokens';
 
 // The Programme goal card (src/design-system/patterns/GoalCard.tsx; it was GoalTickCard in features/today). The goal at the top of Today (Figma "Your Pal Mobile app", node 40151:12923), with no card around it: it sits straight on the page,
 // over a soft blue glow, the goal in one line, a status pill, the progress picture for this kind of goal (GoalVisual), and the numbers underneath.
@@ -65,7 +65,7 @@ function Marker({ g, w, size }: { g: Goal2; w: number; size: VisualSize }) {
   return (
     <View style={{ height: 32 }}>
       <View style={{ position: 'absolute', left: bx, width: BW, alignItems: x - bx < 30 ? 'flex-start' : x - bx > BW - 30 ? 'flex-end' : 'center' }}>
-        <View style={{ height: 26, paddingHorizontal: 10, borderRadius: 13, backgroundColor: c.ink, justifyContent: 'center' }}>
+        <View style={{ height: 26, paddingHorizontal: 10, borderRadius: round(26), backgroundColor: c.ink, justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.bg }}>{`${fmtVal(g, g.currentValue)} ${g.unit}`}</Txt>
         </View>
       </View>
@@ -89,7 +89,7 @@ function Journey({ g }: { g: Goal2 }) {
         {ends.map(([l, v], i) => (
           <View key={l} style={{ gap: 1, alignItems: i ? 'flex-end' : 'flex-start' }}>
             <Txt v="caption">{l}</Txt>
-            <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{v}</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.basePlus, lineHeight: 22 }}>{v}</Txt>
           </View>
         ))}
       </Row>
@@ -100,7 +100,7 @@ function Journey({ g }: { g: Goal2 }) {
 // The strip variant: the goal row at the top of the Daily budget card on Today. A thin ring with the share done in it, the goal name with
 // the state pill beside it, and one line under it: how far the member got in the goal's own words and the end date ("1.6 of 6.0 kg lost, by 30 Nov").
 // A weight or muscle goal whose last weigh-in is 10 days or more old says "Needs a weigh-in" in amber; no goal says so in the name.
-const STRIP = { white: '#F3F4F6', soft: '#C9CDD6', muted: '#9AA0AD', track: 'rgba(255,255,255,0.14)' };
+const STRIP = { white: onDark.text, soft: onDark.soft, muted: onDark.muted, track: 'rgba(255,255,255,0.14)' };
 const RING = 44, RW = 3.5;
 function GoalStripRow({ name, line, lineColor, pct, ringColor, pill, none }: { name: string; line: string; lineColor: string; pct: number; ringColor: string; pill?: { label: string; bg: string; fg: string }; none: boolean }) {
   const r = (RING - RW) / 2, len = 2 * Math.PI * r;
@@ -114,12 +114,12 @@ function GoalStripRow({ name, line, lineColor, pct, ringColor, pill, none }: { n
             {!none && pct > 0 && <Circle cx={RING / 2} cy={RING / 2} r={r} stroke={ringColor} strokeWidth={RW} fill="none" strokeLinecap="round"
               strokeDasharray={`${len} ${len}`} strokeDashoffset={len * (1 - Math.min(1, pct))} transform={`rotate(-90 ${RING / 2} ${RING / 2})`} />}
           </Svg>
-          {none ? <Target size={18} color={GC.emptyTitle} /> : <Txt style={{ fontFamily: font.semibold, fontSize: 11, lineHeight: 15, color: STRIP.white }}>{`${Math.round(pct * 100)}%`}</Txt>}
+          {none ? <Target size={18} color={GC.emptyTitle} /> : <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, color: STRIP.white }}>{`${Math.round(pct * 100)}%`}</Txt>}
         </View>
         <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
           <Row style={{ gap: 8 }}>
             <Txt numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, color: none ? GC.emptyTitle : STRIP.white }}>{name}</Txt>
-            {!!pill && <View style={{ height: 22, paddingHorizontal: 9, borderRadius: 11, backgroundColor: pill.bg, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: pill.fg }}>{pill.label}</Txt></View>}
+            {!!pill && <View style={{ height: 22, paddingHorizontal: 9, borderRadius: round(22), backgroundColor: pill.bg, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16, color: pill.fg }}>{pill.label}</Txt></View>}
           </Row>
           {!!line && <Txt numberOfLines={1} style={{ fontSize: fontSizes.sm, lineHeight: 18, color: lineColor }}>{line}</Txt>}
         </View>
@@ -163,7 +163,7 @@ export function GoalCard({ variant = 'card', state: stateProp, weighDays: weighP
     const unit = g.unit === '%' ? '%' : ` ${g.unit}`;
     const amount = g.kind === 'consistency' ? `${g.currentValue} of ${g.weeklyTarget} this week` : `${fmtVal(g, lostS)} of ${fmtVal(g, total)}${unit} ${g.kind === 'agility' ? 'faster' : verb}`;
     const staleS = kgGoal && weighDays >= STALE_WEIGH_DAYS && state !== 'complete' && state !== 'backOn';
-    const line = none ? 'Set one to see your progress here' : staleS ? 'Needs a weigh-in' : [amount, by].filter(Boolean).join(', ');
+    const line = none ? '' : staleS ? 'Needs a weigh-in' : [amount, by].filter(Boolean).join(', ');
     const lineColor = staleS ? GC.amber : STRIP.muted;
     const look = none ? null : LOOK[state];
     // on track reads as good news in mint here; the other states keep their own pill
@@ -202,7 +202,7 @@ export function GoalCard({ variant = 'card', state: stateProp, weighDays: weighP
       <Pressy accessibilityRole="link" scaleTo={0.98} onPress={() => router.push('/goal-detail')} accessibilityLabel="No goal set yet. Your coach sets this after your assessment. Open goal details">
         <View style={{ ...box, backgroundColor: GC.emptyBg, borderColor: GC.emptyBorder, borderStyle: 'dashed', gap: 4, marginBottom: 4 }}>
           <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl, lineHeight: 26, color: GC.emptyTitle }}>No goal set yet</Txt>
-          <Txt style={{ fontSize: 13.5, lineHeight: 20, color: GC.emptySub }}>Your coach sets this after your assessment</Txt>
+          <Txt style={{ fontSize: fontSizes.smPlus, lineHeight: 20, color: GC.emptySub }}>Your coach sets this after your assessment</Txt>
         </View>
       </Pressy>
     );
@@ -234,7 +234,7 @@ export function GoalCard({ variant = 'card', state: stateProp, weighDays: weighP
         {/* the title with the date as subtext under it, and the pill in front on the same row: the title wraps inside its own space, the pill never moves down or truncates */}
         <Row style={{ alignItems: 'flex-start', justifyContent: 'space-between', columnGap: 8 }}>
           <View style={{ flexShrink: 1 }}>
-            <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 32, letterSpacing: -0.24, color: GC.title }}>{g.name}</Txt>
+            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 32, letterSpacing: -0.24, color: GC.title }}>{g.name}</Txt>
             <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: GC.date }}>{suffix}</Txt>
           </View>
           {look.pill && (

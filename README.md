@@ -1,37 +1,66 @@
-# YourPal member app (React Native · Expo SDK 57)
+# YourPal member app
 
-Phase 1 of the React Native build: design system, iOS-style motion, floating tab bar, sheets, toasts, login and onboarding. Today, Plans, Progress and Gym are placeholder shells that later phases fill in from the HTML prototype.
+The member app for a gym programme (Gold's Gym, member Ankit, Coach Vikram): Today, Plans, Progress and Gym tabs, workouts, meals, goals and check-in. React Native on Expo SDK 57 with Expo Router and TypeScript, for iOS, Android and the web (deployed to Vercel as a preview of the app).
 
 ## Run it
 
 ```bash
 npm install
-npx expo start          # press i for iOS simulator, or scan the QR with Expo Go on your iPhone
-npx expo start --web    # browser: phone frame + edge-case panel on wide screens
+npx expo start                       # press i for the iOS simulator, a for Android, or scan the QR code with Expo Go
+npx expo start --web --port 8082     # browser: a phone frame plus the demo controls panel on wide screens (open /?signedin=1)
+npm run build:web                    # the static web build in dist/
 ```
 
-Build the web version: `npx expo export -p web` (output in `dist/`).
+## Design system
+
+Everything visual is built from `src/design-system/`: tokens, primitives (Button, Card, Option, Sheet, ...) and patterns (GoalCard, WorkoutCard, MealsCard, ...). Look at it before building anything new.
+
+```bash
+npm run storybook                    # every component, every variant and state, light and dark, on http://localhost:6006
+npm run build-storybook              # static files in storybook-static/
+npm run deploy-storybook             # publish it to https://yourpal-storybook.vercel.app (needs `vercel login`)
+```
+
+Live Storybook: https://yourpal-storybook.vercel.app
+
+- Component pages: `src/design-system/docs/<Name>.md`, listed in `docs/design-system-components.md`.
+- Rules for every change (also read by coding agents): `CLAUDE.md`. Tokens only for colour, spacing, radius and type; add a variant instead of restyling a component.
+- Checks before a PR: `npx tsc --noEmit`, `npm run lint`, `npm run lint:changed`.
+
+## Review the screenshots
+
+```bash
+npx expo start --web --port 8082                                   # the branch to review
+node scripts/visual/capture-all.js docs/review/after               # about 20 minutes, both themes
+node scripts/visual/review.js docs/review/before docs/review/after # writes docs/review/index.html
+```
+
+`docs/review/index.html` shows every screen, sheet, onboarding step and state with before on the left and after on the right, and a light / dark switch. Rows that changed on purpose link to `docs/review-changes.md`. Details in `docs/HANDOFF.md`.
+
+## Hand the design system to someone
+
+```bash
+npm run handoff                      # builds Storybook, writes handoff/yourpal-design-system-handoff.zip
+```
+
+The zip holds the Storybook build, the design-system docs and tokens, `docs/`, the review page and `docs/HANDOFF-INDEX.md`, the list of everything delivered and where it is.
 
 ## Where things live
 
-- `src/app/` — routes (Expo Router). `login.tsx`, `onboarding.tsx`, `(tabs)/` for Today · Plans · Progress · Gym.
-- `src/components/` — `ui.tsx` (Txt, Button, Card, Chip, Pill, Segmented, Field), `Overlay.tsx` (bottom sheets + toasts), `FloatingTabBar.tsx` (hide on scroll), `TabScreen.tsx` (large title that collapses), `OtpInput.tsx`.
-- `src/theme/tokens.ts` — colours (light + dark), fonts, springs. Same tokens as the HTML prototype.
-- `src/lib/store.tsx` — mock backend on the device, plus the edge-case registry.
-- `prototype/` — the original HTML/CSS/JS design prototype (reference only, not bundled).
-- `assets/` — app icon, splash and favicon.
-- `src/web/WebFrame.tsx` — web-only phone frame with the edge-case panel outside the phone.
-
-## Edge cases
-
-Every screen registers its scenarios with `useScenarios(...)`. On a wide browser they show in the side panel; on a phone, tap the slim blue tab on the right edge.
-
-Login: number not found, wrong code (3 tries → lock), Android SMS auto-read, offline, join code (`GOLD21`).
-Onboarding: jump to any step, assessment not scheduled, offline, required injury note, skip height/weight, notifications allow / not now.
+- `src/app/` routes (Expo Router): `login`, `onboarding`, `(tabs)/` for Today, Plans, Progress and Gym, and the pushed pages.
+- `src/features/` feature code: containers that read app state and feed the design-system patterns.
+- `src/design-system/` `tokens/`, `primitives/`, `patterns/`, `stories/` (Storybook), `docs/` (one page per component), `_archive/` (retired components).
+- `src/components/` older shared pieces; `ui.tsx` re-exports the primitives under their old names.
+- `src/lib/` app state (`store.tsx`, `domain.tsx`), sample data (`data.ts`) and copy (`microcopy.ts`).
+- `src/web/` the web phone frame and the demo controls panel (every screen registers its edge cases with `useScenarios`).
+- `scripts/visual/` screenshot capture and the review page; `scripts/audit/` the coverage audit; `scripts/ship.sh` merge, push and wait for Vercel.
+- `docs/` handoff, coverage, review, deploy and gap documents. Start with `docs/HANDOFF.md` and `docs/HANDOFF-INDEX.md`.
+- `prototype/` the original HTML prototype (reference only, not bundled). `assets/` icon, splash, images.
 
 ## Docs
 
-- `AGENTS.md` and `CLAUDE.md` (this folder): rules for coding agents working in the repo.
-- `docs/PHASE2_HANDOFF.md`: how the app is built, shared building blocks and the design rules.
-- `docs/SESSION_HANDOFF.md`: where the app is right now and what is open (read this first).
-- `docs/DEPLOY.md`: putting the web preview online (Vercel).
+- `AGENTS.md` and `CLAUDE.md`: rules for coding agents working in the repo.
+- `docs/HANDOFF.md`: structure, how to find and add a component, how to run the app, Storybook and the review page.
+- `docs/HANDOFF-INDEX.md`: every deliverable with its path.
+- `docs/SESSION_HANDOFF.md` and `docs/PHASE2_HANDOFF.md`: product history, decisions and design rules.
+- `docs/DEPLOY.md` (the web preview) and `docs/DEPLOY-STORYBOOK.md` (Storybook, with the steps that need a Vercel login).

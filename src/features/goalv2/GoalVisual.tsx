@@ -5,6 +5,7 @@ import { Flag } from '@/lib/icons';
 import { Row } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Goal2 } from './model';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { radii, fixed } from '@/design-system/tokens';
 
 // One progress picture per kind of goal, always the full width, in two sizes (compact on Today and the Progress card, large on the goal page).
@@ -111,7 +112,7 @@ export function GoalVisual({ g, size = 'compact', onColor, color, share: sharePr
           <LinearGradient colors={onColor ? ['rgba(255,255,255,0.2)', 'rgba(255,255,255,0.7)'] : color ? [color + '26', color + '99'] : ['rgba(60,203,154,0.15)', 'rgba(60,203,154,0.6)']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
             style={{ width: `${Math.max(8, share * 100)}%`, height: '100%' }} />
         </View>
-        <View style={{ position: 'absolute', left: `${share * 100}%`, marginLeft: -h / 2, top: 0, width: h, height: h, borderRadius: h / 2, backgroundColor: fill, alignItems: 'center', justifyContent: 'center' }}><View style={{ width: h * 0.32, height: h * 0.32, borderRadius: h * 0.16, backgroundColor: onColor ? fixed.blue : fixed.white }} /></View>
+        <IconBadge size={h} bg={fill} style={{ position: 'absolute', left: `${share * 100}%`, marginLeft: -h / 2, top: 0 }}><View style={{ width: h * 0.32, height: h * 0.32, borderRadius: h * 0.16, backgroundColor: onColor ? fixed.blue : fixed.white }} /></IconBadge>
       </View>
       <Flag size={big ? 24 : mini ? 16 : 20} color={onColor ? fixed.white : c.ink} />
     </Row>

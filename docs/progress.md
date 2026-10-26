@@ -1,0 +1,107 @@
+# Design system handoff: progress
+
+Branch: `design-system-handoff` (not merged into main). Resume with "Continue from docs/progress.md".
+
+| Step | What | Status | Commit |
+|---|---|---|---|
+| 1a | Buttons: replace exact matches with Button | done (earlier pass, no new exact matches after re-audit) | e19a3fc |
+| 1b | Cards: replace exact matches with Card | done (earlier pass, no new exact matches after re-audit) | 1e1271a |
+| 1c | Icon buttons: replace exact matches with IconButton | done | 05bff48 |
+| 2 | Storybook for web, light/dark toggle, 26 story files (128 stories), static build, docs/DEPLOY-STORYBOOK.md | done (all 128 stories open without errors; not deployed) | 3cb75d2 (tokens), 1e14461 (Storybook) |
+| 3 | Component docs for every component, docs/design-system-components.md index | done | 52db975 |
+| 4 | Handoff pack: CLAUDE.md rules, PR template, ESLint error rule, docs/HANDOFF.md | done | 296e5e5 (lint), 3a29d3d (CLAUDE.md, PR template, HANDOFF.md, review page script) |
+| 5 | docs/personalisation-gap.md | done | f76d8c9 |
+| Final | Report | done (given in chat) | |
+
+**Step 1 done, ready for screenshots.**
+
+**Steps 1 to 5 done.** Not merged into main.
+
+After Step 2: the 9 px coach unread dot is back to radius 5 (d86a0ac). The water tile icon radius was already 20.
+
+Notes
+- Commit 0c811d9 (IconBadge, StatusDot) and the capture tooling (scripts/visual) are kept.
+- Step 2 needed two Storybook-only shims: require() of images and clips becomes an import, and expo-router is a no-op stand-in (.storybook/mocks/expo-router.tsx). The app is unchanged by them.
+- ThemeProvider gained an optional `scheme` prop (Storybook pins light or dark); the app does not pass it.
+
+## Round 2 (phases A to E)
+
+| Phase | What | Status | Commit |
+|---|---|---|---|
+| A | Decisions already made: no-goal copy, banner wording, comeback docs, tap targets, accessibility, IconButton hitSlop | done (A3 decided and built in round 4, step 1) | db5706f |
+| B | Near-matches from docs/coverage-decisions.md: new variants, replacements, docs/review-changes.md, docs/coverage-exceptions.md | done: 37 of 41 use the library, 4 exceptions; hand-built count 216 to 179 | 499a9c8 |
+| C | Stories and docs for what changed, Coverage page in Storybook, rebuild and open every story | done: 158 stories plus the Coverage page open without errors | 6c4560b |
+| D | Screenshots before (main) and after (this branch), docs/review/index.html | done in dark mode only (light mode left for later, as asked): 181 screens, sheets, onboarding steps and states per side; before = main at 42859d8; page has before left, after right, links to review-changes.md | e631b5d |
+| E | Handoff package: CLAUDE.md, PR template, HANDOFF.md, README, HANDOFF-INDEX.md, npm run handoff zip, DEPLOY-STORYBOOK.md | done: zip is 40 MB, reopened (1,145 entries) and extracted to check | e631b5d |
+
+**Round 2 (phases A to E) done.** Not merged into main. Not deployed.
+
+**Storybook deployed** to https://yourpal-storybook.vercel.app (Vercel project yourpal-storybook, free Hobby plan, deployed by hand, git disconnected). Vercel CLI 65.1.0 installed globally and signed in as rohitashavgarg-7341; Vercel plugin installed for Claude Code (user scope); Vercel MCP added but not yet authorized by the user.
+
+## Round 3 (phase F: remaining components from the pages)
+
+Same rules as round 2: no behaviour change, 2 px or less uses the variant and is recorded in docs/review-changes.md, more than that adds a variant, never change a value silently. After every step: typecheck, lint, story, doc, audit.
+
+| Step | What | Status | Commit |
+|---|---|---|---|
+| F1 | Cards the library does not know: soft panel and callout (new Callout primitive, InfoBox built on it, Card tone) | done: 15 hand-built blocks replaced, 7 exact, 8 within 2 px (recorded in docs/review-changes.md); hand-built 179 to 163 | 8e14d87 |
+| F2 | ProgressBar primitive (3, 4, 6, 8 px) and ProgressSegments; 10 hand-built bars replaced | done: all exact (no visible change in the screenshots); hand-built 163 to 152; pager dots, ruler ticks, chart bars and the check-in line stay as they are | 83f29a3 |
+| F3 | IconBadge and StatusDot adopted for the small icon tiles and dots | done: 61 tiles and 4 dots swapped by a codemod, all exact (full dark capture compared: only rotating greeting and quote text differ); tokens onDark.ember and onDark.gold | c52c290 |
+| F4 | Move Txt, Row, Segmented, Tag and the rest of group 1 into the design-system folder | not done, left out on purpose: it is a refactor beyond the developer handoff; listed in docs/HANDOFF-INDEX.md and docs/design-system-components.md ("Still in components/ui.tsx") as the next step | |
+| F5 | Handoff refresh: counts, index, Storybook rebuilt and redeployed (180 stories, live), zip rebuilt | done | c038bb6 |
+
+**Developer handoff package is current** (F1 to F3 included). Storybook live: https://yourpal-storybook.vercel.app (180 stories). Zip: handoff/yourpal-design-system-handoff.zip. Not merged into main except the two fixes that went straight to main (the freeze fix and the pinned Save meal).
+
+## Round 4 (fix everything PARTIAL or NOT READY in docs/HANDOFF-STATUS.md)
+
+Branch `design-system-handoff`. Not merged into main (main is merged into the branch in step 11). No behaviour changes.
+
+| Step | What | Status | Commit |
+|---|---|---|---|
+| 1 | Comeback card: code and docs match the decision (title "Easy session", 20 min, chips "4 exercises" and "Half your usual load", buttons "Start easy session" and "Not today", no exercise names); `onStartRegular` became `onNotToday` (answers as a skip with Undo) | done | a2b2c2f |
+| 2 | "View plan" to "See plan" (ForYou.tsx update card); the two rows in docs/review-changes.md are the old wording on purpose | done | 2b51cb9 |
+| 3 | WorkoutCard paused state kept; docs and CLAUDE.md reworded: a membership pause shows as the account banner and as the workout card's paused state, never on the goal; "frozen" removed from the never-failure lines | done | aaeca11 |
+| 4 | Dot separators: none in the library components; CheckInBar "Leg day in progress"; the other 249 lines in 73 files are listed by file in docs/copy-separators.md (script scripts/audit/separators.js), not changed | done | fed49ae |
+| 5 | One hand-built count: scripts/audit/hand-built.js (outside the demo panel; 88 when written, 86 after step 7 moved two components out of the counted app code) feeds docs/coverage.md and the Storybook Coverage page; npm run audit:coverage; per-group table below. The earlier 95 was 88 plus 7 demo-panel elements; the 109 was 88 plus 21 | done | b52a4a1 |
+
+| 6 | Unused library components (report only, nothing deleted): all four are in use. **MetaRow**: no screen writes `<MetaRow>`, but WorkoutCard and MealsCard (library patterns) draw it, so it shows on Today. **RadialGlow**: imported as `Glow` (old name) by `features/today/CheckInBar.tsx` and `DayQuote.tsx`, and used by GoalCard (2) and BudgetCard. **MealsCard** (pattern): used by the container `features/today/MealsCard.tsx` as `MealsCardPattern`, which Today renders as `MealNowCard`. **TrackerTile**: the base of the weight, heart rate, sleep and active energy tiles in TrackerRow.tsx (4 uses in that file). The Coverage script now counts imports under another name and uses inside the library, and the Storybook page has a "Used inside the library" column, so these no longer show as 0 | done | STEP6 |
+| 7 | Shared components used on 3 or more screens moved into the library (script scripts/audit/shared-usage.js counts screens by import closure): Txt, Row, FoodMark, CheckCircle, Tag, Ring, Beat, HeartIcon, Brand (GymLogoMark, PersonAvatar, PremiumBadge), Glass, TrendsButton, YourPalLogo, Wheel, Ruler; each has a story and a doc, a row in docs/design-system-components.md and a re-export at the old path; new tokens fixed.logoBlue, foodVeg, foodEgg, foodNonVeg, onDark.sand, goldInk. Kept where they are, with the reason, in docs/coverage-exceptions.md: Segmented, Skeleton, Glow, UnitPill, OtpInput (under 3 screens), TabScreen, GymHeader, FloatingTabBar (app structure, not visual components), PillBtn and RoundBtn (old names of Button and IconButton). Library is now 43 files: 36 primitives, 7 patterns | done | 6b2f8e9 |
+| 8 | Stepper minus and plus: drawn size unchanged (34 by 44 px), 5 px hit slop each side so the tap area is 44 by 44, role button, Stepper.md updated. Note: the audit table said "row" variant; the 34 px buttons were in the inline variant (the row variant already has 44 px buttons) | done | cd63ff3 |
+| 10 | Hard-coded values outside the library (368: 223 colours, 81 radii, 64 font sizes) not fixed on purpose; counted by folder in docs/HANDOFF.md as a known follow-up (script scripts/audit/hardcoded-by-folder.js); lint:changed prevents new ones | done | 2f2edee |
+| 9 | Review page: **partial, on purpose.** Dark only (light mode is off the table by your instruction). Capture entries for the 11 missing images are in scripts/visual/shots-list.js and shots.js (3 sheets, toast, rest timer, finish screen, streak broken, login not found, wrong code, push banner, Today loading); trial run in dark worked for most, push banner and loading skeleton need timing work. They are not on docs/review/index.html yet. Dev-only key "push" added to the push store so a screenshot can open the banner by URL | partial | 46269a1 |
+| 11 | main merged into the branch (freeze fix and sticky Save meal; no conflicts). Typecheck: 0 errors. Lint: 0 errors, 0 new hard-coded values. Storybook build: passes, 228 stories. Found and fixed one broken asset path (Brand.tsx after the move), which typecheck cannot see | done | merge commit |
+| 12 | Storybook redeployed (228 stories, live checked), zip rebuilt after the last commit, branch pushed, docs/HANDOFF-STATUS.md regenerated: 10 ready, 4 partial, 0 not ready | done | final |
+| + | Screen map for the developer: docs/SCREEN-MAP.md (51 screens: route, code file, opens from, leads to, sheets, library pieces, data read; plus the data a backend has to supply), generated by scripts/audit/screen-map.js; a first draft to confirm against the code | done | map |
+
+## Round 5 (after the handoff: SDK 58, glass buttons, Plans, food cards)
+
+Work on branches `upgrade-sdk-58` and `experiment-blue-glass`, merged into `design-system-handoff` in step 7.
+
+| Step | What | Status |
+|---|---|---|
+| 1 | Expo SDK 58 (expo 58.0.19, React Native 0.88, React 19.3, Router 58, Reanimated 4.7). The tab bar uses the new `emitter` and `navigateToTab` props (tab taps crashed without it). ScrollView and TextInput refs use the new instance types. Install needs `--legacy-peer-deps` | done |
+| 2 | Button kinds `glassAccent` (blue glass, 92% tint, no outline: "Start workout" on Plans) and `glassPrimary` (white glass, original colour: "Save meal") | done |
+| 3 | Plans: the Workout and Diet tabs are icon-only and sit beside the heading with the menu button (`TabScreen` gets a `titleRight` slot, `Segmented` an `iconOnly` mode) | done |
+| 4 | Diet page: the gesture hint line, the kcal-left line and the Veg, Egg, Non-veg legend are gone from the top; the legend returns as the row between the calorie card and the meals; the weekly line is a big number ("7 of 12 meals on plan this week") | done |
+| 5 | FoodCard pattern: one food as its own card, dashed when not eaten, solid when eaten (amount locked, macros strip, three-dot menu), faded when skipped; swipe left for Swap and Skip (44 px), hold for the food page. Used by the Plans diet page, the meal log sheet, the quick log sheet (suggestions and library) and the swap sheet | done |
+| 6 | Storybook: FoodCard and the two glass buttons added, stand-in for `@react-native/assets-registry` so the build works with react-native-svg 15.16; 237 stories | done |
+| 7 | Handoff refreshed: docs, screen map, status report, zip, `design-system-handoff` updated and pushed | done |
+| - | Dot separators: not changed (the designer will guide them screen by screen); the 247 lines left are in docs/copy-separators.md | open on purpose |
+| - | Gooey menu and AI orb box: tried, removed by request; previews only | dropped |
+
+### Per screen group (2026-10-26; 84 hand-built outside the demo panel, 3 of them on purpose; script scripts/audit/hand-built.js, run npm run audit:coverage)
+
+| Group | Hand-built | On purpose | Still to build | Status |
+|---|---|---|---|---|
+| Today | 12 | 0 | 12 | open |
+| Progress | 11 | 0 | 11 | open |
+| Plans and food logging | 16 | 1 | 15 | open |
+| Workout session | 6 | 1 | 5 | open |
+| Gym tab | 7 | 0 | 7 | open |
+| Profile and settings | 11 | 0 | 11 | open |
+| Onboarding and login | 10 | 1 | 9 | open |
+| Bottom sheets | 8 | 0 | 8 | open |
+| Modals and toasts | 0 | 0 | 0 | done (no hand-built element found) |
+| Empty, loading and error states | 0 | 0 | 0 | done (no hand-built element; three of these states still lack a review image) |
+| Shared components (outside the library) | 3 | 0 | 3 | open |
+| **Total** | **84** | **3** | **81** | |

@@ -84,24 +84,21 @@ The sample numbers are what the demo panel and the screenshots show for a "Lose 
 
 ## Strip variant
 
-One row inside the Daily budget card, at the top, edge to edge, 64 px minimum height, `rgba(255,255,255,0.07)` background and a 1 px `rgba(255,255,255,0.14)` line under it. It has no corner radius of its own: the budget card clips it.
+The goal row at the top of the Daily budget card on Today. No card of its own: 76 px minimum height, 18 px side padding, 14 px top and bottom; the budget card draws the line under it.
 
-Target icon (22 px), the label "Goal" (14 px, `#C9CDD6`), the goal name (17 px, white), the right text (15 px) and a chevron.
+Left to right: a 44 px thin ring (3.5 px stroke, track `rgba(255,255,255,0.14)`) with the share of the goal's time in it as "27%" (11 px semibold); the goal name (17 px semibold, white) with the state pill beside it; one line under the name (13 px, muted); a chevron.
 
-The right text is the kg line, worded per goal kind: "1.6 of 6.0 kg" (weight, muscle), "{n} of {total} %" for body fat, "{n} of {total} this week" for a weekly goal, with "faster" added for agility. The state colours are unchanged.
+The line is the amount in the goal's own words and the end date, joined with a comma: "1.6 of 6.0 kg lost, by 30 Nov". Weekly goals say "2 of 4 this week"; agility adds "faster". On track uses a mint pill here (mint on mint 16%); the other states keep the card's pill. The ring fill takes the state's segment colour; complete fills the ring.
 
-| State | Right text | Colour |
+| State | Line | Ring |
 |---|---|---|
-| onTrack | kg line, e.g. 1.6 of 6.0 kg | `#C9CDD6` |
-| behind | kg line | amber `#E8A33D` |
-| almost | kg line | mint `#2EE6A8` |
-| complete | Complete | mint |
-| comeback | kg line | `#C9CDD6` |
-| backOn | Back on | mint |
-| stale weigh-in | Needs a weigh-in | amber |
-| noGoal | (nothing); the name reads "No goal set yet" in `#8C8E97` and the icon is dimmed | |
+| onTrack, behind, almost, comeback | amount and date, muted | filled to the time share, in the state colour |
+| complete | amount and date, muted | full |
+| backOn | amount and date, muted | filled to the time share, mint |
+| stale weigh-in (weight and muscle, 10 days or more; not complete or backOn) | "Needs a weigh-in" in amber | as the state |
+| noGoal | none: the row says only "No goal set yet" (in `#8C8E97`), with no second line | a target icon in the empty ring, no fill, no pill |
 
-**Stale weigh-in:** for weight and muscle goals, when the last weigh-in is 10 days or more old, the kg line becomes "Needs a weigh-in" in amber. It does not apply to complete or backOn. Tap opens `/goal-detail`.
+Tap opens `/goal-detail`. Spoken label: "Your goal: <name>, <n> percent, <pill>. <line>. Open", or "No goal set yet. Open".
 
 ## Flat variant
 

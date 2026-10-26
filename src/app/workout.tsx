@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/set-state-in-effect -- the effect resets local state when its input changes, as designed */
 import React, { useEffect, useRef, useState } from 'react';
 import { useLeaveIfPaused } from '@/lib/logGate';
-import { ScrollView, TextInput, View } from 'react-native';
+import { ScrollView, TextInput, View, type ScrollViewInstance } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, Path } from 'react-native-svg';
@@ -26,16 +27,16 @@ import { FinishScreen, FinishStats } from '@/features/workout/FinishScreen';
 import { workoutUiStore } from '@/features/workout/ui';
 import { NewExercise, NewList } from '@/features/workout/NewWorkoutUI';
 import { FinishConfirmSheet, FormTipsSheet, SetMenuSheet, SwapSheet, WkApi, WkMenuSheet } from '@/features/workout/WorkoutSheets';
-import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
 import { IconButton } from '@/design-system/primitives/Button';
+import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 function Bars({ n, pos, light }: { n: number; pos: number; light?: boolean }) {
   const { c } = useTheme();
   return (
-    <View style={{ position: 'absolute', top: 12, left: 14, right: 14, flexDirection: 'row', gap: 4 }}>
-      {Array.from({ length: n }, (_, i) => <View key={i} style={{ flex: 1, height: 3, borderRadius: radii.xs, backgroundColor: i < pos ? fixed.blue : i === pos ? (light ? c.ink : '#F4F4F6') : (light ? c.surface3 : 'rgba(255,255,255,0.22)') }} />)}
-    </View>
+    <ProgressSegments height={3} gap={4} style={{ position: 'absolute', top: 12, left: 14, right: 14 }}
+      segments={Array.from({ length: n }, (_, i) => ({ color: i < pos ? fixed.blue : i === pos ? (light ? c.ink : onDark.stageInk) : (light ? c.surface3 : 'rgba(255,255,255,0.22)') }))} />
   );
 }
 
@@ -71,7 +72,7 @@ export default function Workout() {
   useEffect(() => { if (!resting) setFb(null); }, [resting]);
   const [noteDraft, setNoteDraft] = useState('');
   const [finished, setFinished] = useState<FinishStats | null>(null);
-  const scroll = useRef<ScrollView>(null);
+  const scroll = useRef<ScrollViewInstance>(null);
   const [dockH, setDockH] = useState(0);
   useToastLift(dockH ? dockH + 12 : 24 + insets.bottom);
   const newUi = workoutUiStore.use().design === 'New';
@@ -225,9 +226,7 @@ export default function Workout() {
           )}
         </FadeIn>
       )}
-      <Pressy accessibilityRole="button" onPress={() => A.addSet(s.exIdx)} style={{ height: 48, borderRadius: radii.card, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        <Plus size={17} color={c.ink} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>Add set</Txt>
-      </Pressy>
+      <Button kind="dashed" size="medium" label="Add set" icon={<Plus size={17} color={c.ink} />} onPress={() => A.addSet(s.exIdx)} />
       {!newUi && <Txt v="caption" style={{ textAlign: 'center', paddingHorizontal: 6, paddingTop: 4 }}>Adjust the highlighted set and tick it · tap a set to edit · swipe right = done, left = swap/skip · hold for options</Txt>}
     </View>
   );
@@ -347,10 +346,9 @@ export default function Workout() {
           )}
           <Row style={{ gap: 10 }}>
             {s.exIdx > 0 && (
-              <Pressy accessibilityRole="button" accessibilityLabel={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92}
-                style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+              <IconButton label={`Back to ${prevName}`} onPress={prevEx} scaleTo={0.92} size={56} radius={radii.xl} bg={c.surface} borderWidth={1} borderColor={c.line}>
                 <ChevronLeft size={22} color={c.ink} />
-              </Pressy>
+              </IconButton>
             )}
             <Button kind={cur < 0 || e.sets.some((x) => x.st === 'done') ? 'accent' : 'secondary'} label={cur < 0 || e.sets.some((x) => x.st === 'done') ? `Next: ${nextName}` : `Skip to ${nextName}`} onPress={nextEx} style={{ flex: 1 }} />
           </Row>

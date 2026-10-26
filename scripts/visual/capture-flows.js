@@ -9,6 +9,7 @@
  * Compare two folders with compare.js as usual (run it once before a change and once after, since the baseline folder does not have these).
  */
 const fs = require('fs'); const path = require('path'); const os = require('os'); const { spawn } = require('child_process');
+const THEMES = (process.env.THEMES || 'light,dark').split(',').filter(Boolean); // THEMES=dark captures only the dark theme
 const BASE = process.env.APP_URL || 'http://localhost:8082';
 const out = process.argv[2]; if (!out) { console.error('usage: capture-flows.js <outDir>'); process.exit(1); }
 const edge = ['C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Google/Chrome/Application/chrome.exe'].find((p) => fs.existsSync(p));
@@ -29,7 +30,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const click1 = (t) => js(`(() => { const q = ${JSON.stringify(t)}; const lab = [...document.querySelectorAll('[aria-label="' + q + '"]')]; let e = lab[lab.length - 1]; if (!e) { const all = [...document.querySelectorAll('div,span')].filter((x) => x.children.length === 0 && x.textContent.trim() === q); e = all[all.length - 1]; } if (!e) return false; e.click(); return true; })()`); // the last match is the screen on top (earlier screens stay mounted underneath)
     const click = async (t) => { for (let i = 0; i < 12; i++) { if (await click1(t)) return true; await sleep(700); } console.error('could not find: ' + t + ' on ' + (await js('location.pathname'))); return false; }; // retry while the screen is still drawing
     const shot = async (theme, name) => { fs.mkdirSync(path.join(out, theme), { recursive: true }); const r = await send('Page.captureScreenshot', { format: 'png' }); fs.writeFileSync(path.join(out, theme, name + '.png'), Buffer.from(r.data, 'base64')); process.stdout.write('.'); };
-    for (const theme of ['light', 'dark']) {
+    for (const theme of THEMES) {
       await open('/', theme); await click('Start workout'); await sleep(3500); await shot(theme, 'flow-workout-warmup');
       await click('Start main workout'); await sleep(2500); await shot(theme, 'flow-workout-main');
       await open('/plans?day=2', theme); const a = await click('Plan menu'); await sleep(2000); const b = await click('Edit plan'); await sleep(3500);

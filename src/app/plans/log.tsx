@@ -21,6 +21,9 @@ import { PageHeader } from '@/features/plans/parts';
 import { allowedFor, dietItems, Food, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { ScanBracket } from '@/design-system/primitives/ScanBracket';
+import { Option } from '@/design-system/primitives/Option';
+import { Callout } from '@/design-system/primitives/Callout';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Mode = 'search' | 'write' | 'scan';
@@ -154,7 +157,7 @@ export default function LogFood() {
           <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{macroLine(f)}</Txt>
         </View>
         <Txt style={{ fontFamily: font.monoBold, fontSize: fontSizes.sm }}>{f.k} kcal</Txt>
-        {multi && <View style={{ width: 22, height: 22, borderRadius: 11, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? c.accent : 'transparent', borderWidth: on ? 0 : 1.5, borderColor: c.surface3 }}>{on && <Check size={13} strokeWidth={3.5} color={fixed.white} />}</View>}
+        {multi && <IconBadge size={22} bg={on ? c.accent : 'transparent'} borderWidth={on ? 0 : 1.5} borderColor={c.surface3}>{on && <Check size={13} strokeWidth={3.5} color={fixed.white} />}</IconBadge>}
       </Pressy>
     );
   };
@@ -190,7 +193,7 @@ export default function LogFood() {
               {res.map((f, i) => foodRow(f, i === res.length - 1))}
               {res.length === 0 && (
                 <View style={{ paddingVertical: 16, paddingHorizontal: 6, gap: 10, alignItems: 'flex-start' }}>
-                  <Txt muted style={{ fontSize: fontSizes.md }}>Nothing called "{q}" in the catalogue.</Txt>
+                  <Txt muted style={{ fontSize: fontSizes.md }}>Nothing called &quot;{q}&quot; in the catalogue.</Txt>
                   <PillBtn tone="soft" h={40} label="Write it in instead" onPress={toWrite} />
                 </View>
               )}
@@ -209,11 +212,10 @@ export default function LogFood() {
                 <Txt v="label">Type</Txt>
                 <View accessibilityRole="radiogroup" accessibilityLabel="Food type" style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   {(['veg', 'egg', 'nv'] as FoodType[]).map((t) => (
-                    <Pressy key={t} accessibilityRole="radio" accessibilityState={{ selected: wType === t }} accessibilityLabel={foodTypeLabel(t)} onPress={() => setWType(t)}
-                      style={{ flex: 1, height: 44, borderRadius: radii.lg, borderWidth: 1, borderColor: wType === t ? c.ink : c.surface3, backgroundColor: wType === t ? c.ink : 'transparent', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                    <Option key={t} selected={wType === t} accessibilityLabel={foodTypeLabel(t)} onPress={() => setWType(t)} height={44} gap={6} offLine={c.surface3} style={{ flex: 1 }}>
                       <FoodMark type={t} />
                       <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, color: wType === t ? c.bg : c.ink }}>{foodTypeLabel(t)}</Txt>
-                    </Pressy>
+                    </Option>
                   ))}
                 </View>
               </View>
@@ -237,7 +239,7 @@ export default function LogFood() {
         {mode === 'scan' && (!camOk ? (
           <FadeIn>
             <Card style={{ paddingVertical: 22, paddingHorizontal: 18, gap: 10, alignItems: 'center' }}>
-              <View style={{ width: 56, height: 56, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><CameraOff size={26} color={c.ink} /></View>
+              <IconBadge size={56} radius={20} bg={c.surface2}><CameraOff size={26} color={c.ink} /></IconBadge>
               <Txt style={{ fontFamily: font.semibold }}>Camera access is off</Txt>
               <Txt muted style={{ fontSize: fontSizes.md, textAlign: 'center' }}>Allow the camera to take a photo of your plate. Photos are only used to guess the food and are not saved.</Txt>
               <Button label="Allow camera" onPress={() => { setP({ camOk: true }); toast('Camera allowed'); }} style={{ alignSelf: 'stretch' }} />
@@ -258,7 +260,7 @@ export default function LogFood() {
             </View>
             {scan === 'fail' && (
               <FadeIn style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.warnSoft, gap: 8 }}>
-                <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.warn }}>Couldn't read that.</Txt> Too dark or too close. Try the whole plate in good light.</Txt>
+                <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.warn }}>Couldn&apos;t read that.</Txt> Too dark or too close. Try the whole plate in good light.</Txt>
                 <Row style={{ gap: 8 }}>
                   <PillBtn tone="soft" h={40} label="Try again" onPress={goScan} />
                   <PillBtn tone="soft" h={40} label="Search instead" onPress={toSearch} />
@@ -283,9 +285,9 @@ export default function LogFood() {
 
         {!!cur && (
           <FadeIn style={{ gap: 12 }}>
-            <View accessibilityLiveRegion="polite" style={{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: c.surface2 }}>
+            <Callout accessibilityLiveRegion="polite">
               <Txt v="mono" style={{ fontSize: fontSizes.md }}>{diff}</Txt>
-            </View>
+            </Callout>
             <View accessibilityRole="radiogroup" accessibilityLabel="Portion" style={{ flexDirection: 'row', gap: 8 }}>
               {([['Less', 0.5], ['As shown', 1], ['More', 1.5]] as const).map(([l, v]) => <Pill key={l} label={l} on={portion === v} onPress={() => setPortion(v)} style={{ flex: 1 }} />)}
             </View>

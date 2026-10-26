@@ -21,6 +21,7 @@ import { haptic } from '@/lib/haptics';
 import { GlassBackdrop } from '@/components/Glass';
 import { GymMap, hasRealMap } from '@/features/checkin/GymMap';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 
@@ -122,9 +123,9 @@ export default function CheckIn() {
           <Txt muted style={{ fontSize: fontSizes.sm }}>Vaishali Nagar, Jaipur · 20 m check-in area</Txt>
         </View>
         <FadeIn key={status.t} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: status.bg }}>
-          <View style={{ width: 34, height: 34, borderRadius: radii.md, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.5)', alignItems: 'center', justifyContent: 'center' }}>
+          <IconBadge size={34} radius={radii.md} bg={isDark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.5)'}>
             {off ? <LocateOff size={17} color={status.fg} /> : <MapPin size={17} color={status.fg} />}
-          </View>
+          </IconBadge>
           <View style={{ flex: 1 }}>
             <Txt style={{ fontFamily: font.semibold, color: status.fg }}>{status.t}</Txt>
             <Txt style={{ fontSize: fontSizes.sm, color: status.fg, opacity: 0.85 }}>{status.s}</Txt>

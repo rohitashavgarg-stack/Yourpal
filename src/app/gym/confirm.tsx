@@ -17,6 +17,7 @@ import { PT_TOTAL, STAR_WORDS } from '@/features/gym/data';
 import { FlagSheet } from '@/features/gym/sheets';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Card } from '@/design-system/primitives/Card';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const STAR = 'M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z';
@@ -77,13 +78,13 @@ export default function ConfirmSession() {
 
   return (
     <SubPage title="Confirm session" fallback="/gym/attendance">
-      <View style={{ padding: 18, borderRadius: radii.xl, backgroundColor: c.accentSoft, gap: 4 }}>
+      <Card variant="roomy" tone="accent" flat gap={4}>
         <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 33 }}>Tue 23 Sep · 6:00–7:00 pm</Txt>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <PersonAvatar who="coach" size={26} />
           <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.accentText }}>Coach Vikram marked this session as completed</Txt>
         </View>
-      </View>
+      </Card>
       <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, paddingHorizontal: 4 }}>How was it?</Txt>
       <View accessibilityRole="radiogroup" accessibilityLabel="Rate the session, 1 to 5 stars" style={{ flexDirection: 'row', justifyContent: 'center', gap: 6 }}>
         {[1, 2, 3, 4, 5].map((n) => <StarBtn key={n} n={n} on={rating >= n} bump={bump} onPress={() => pick(n)} />)}

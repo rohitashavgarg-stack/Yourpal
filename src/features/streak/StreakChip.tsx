@@ -7,6 +7,7 @@ import { Pressy, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { useStreak } from './useStreak';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { fontSizes } from '@/design-system/tokens';
 
 export const FLAME = '#FF8A3D';
@@ -35,9 +36,9 @@ export function StreakChip() {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`${title}. ${sub}. Open streaks and badges`} onPress={() => router.push('/progress/streaks')} scaleTo={0.98}
       style={{ minHeight: 60, borderRadius: 30, backgroundColor: c.surface, paddingLeft: 10, paddingRight: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-      <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,138,61,0.16)', alignItems: 'center', justifyContent: 'center' }}>
+      <IconBadge size={40} bg="rgba(255,138,61,0.16)">
         <Flame size={22} color={FLAME} fill={st.weeks > 0 ? FLAME : 'transparent'} strokeWidth={2} />
-      </View>
+      </IconBadge>
       <View style={{ flex: 1, minWidth: 0 }}>
         <Txt numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{title}</Txt>
         <Txt v="caption" numberOfLines={1}>{sub}</Txt>

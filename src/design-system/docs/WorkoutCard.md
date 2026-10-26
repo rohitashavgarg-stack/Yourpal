@@ -1,17 +1,76 @@
 # WorkoutCard
 
-`src/design-system/patterns/WorkoutCard.tsx`. Today's workout. The state is a prop; `TodayWorkoutCard` (old name `WorkoutCard`, with `restart`) reads the day and picks it.
+`src/design-system/patterns/WorkoutCard.tsx`
 
-| `state` | Look |
+Storybook: Patterns / WorkoutCard
+
+## Purpose
+
+Today's workout, one look per state. The state is a prop; `TodayWorkoutCard` (old name `WorkoutCard`, with `restart`) reads the day and picks it. There is no Full / Quick / Low energy choice on the card: that choice lives only in the Start sheet.
+
+## Props
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `state` | `WorkoutCardState` | required | See States |
+| `name` | string | required | The workout name, "Leg day" |
+| `time` | string | none | The planned time, "6:30 pm", as a small pill after the name |
+| `when` | string | none | upcoming: the chip at the top right, "in 2 h" |
+| `meta` | `{ kind: 'exercises' \| 'time', text }[]` | `[]` | upcoming and due: facts under the name as a MetaRow ("7 exercises", "~50 min") |
+| `coachUnread` | boolean | false | A mint dot on the coach's photo for an unread reply |
+| `onOpenCoach` | () => void | none | The coach line was tapped |
+| `burned` | number | none | With a watch: the "Burned today N kcal" row at the bottom (upcoming, due, rest, done) |
+| `live` | `{ elapsed, done, total, next? }` | none | live: timer and exercise count |
+| `done` | `{ at, stats: [value, unit, label][] }` | none | done: "Done at 6:58 pm" and three stats |
+| `restNext` | string | none | rest: the chip "Next: Pull, Thu 6:30 pm" |
+| `onStart` | () => void | no-op | Start workout (upcoming, due); Start easy session (comeback) |
+| `onResume` | () => void | no-op | live |
+| `onDidIt`, `onMove`, `onSkip`, `onStartAnyway` | () => void | no-op | missed: the three answers and the quiet link |
+| `onUndo` | () => void | no-op | moved, skipped |
+| `onNotToday` | () => void | no-op | comeback: the second button, "Not today" (the container answers it as a skip, with Undo) |
+
+## States
+
+`WorkoutCardState`: upcoming, due, live, missed, moved, skipped, done, rest, paused, comeback.
+
+| State | Look |
 |---|---|
-| upcoming | blue dark card, "in 2 h" chip, Start workout |
-| due | same with a mint edge and a "Now" chip |
-| live | green card, timer, one segment per exercise, Resume workout (`live`) |
-| missed | muted amber edge, time crossed out, I did it / Move / Skip, Start it now anyway |
-| moved, skipped | one small row with Undo |
-| done | green card, time, exercises, kcal (`done`) |
-| rest | purple card, "Next: ..." chip (`restNext`) |
-| paused | flat grey card, no Start (membership ended) |
-| comeback | flat grey "Easy session", Start and Do regular instead |
+| upcoming | Dark blue gradient card with a faint ring top right. Coach line ("Today's workout", "Planned by Coach Vikram"), "in 2 h" chip, name and time pill, MetaRow, white **Start workout** |
+| due | Same with a thin mint edge and a mint "Now" chip with a live dot (15 minutes before the planned time or later) |
+| live | Green gradient. "Running" with a mint dot, name chip (live tone), the mono timer and "elapsed", "3 of 7 exercises" with "Next: ...", one segment per exercise, white **Resume workout** |
+| missed | Two hours past the plan with nothing logged. Muted dark card with an amber edge, dimmed coach line, amber "Missed" chip, the time struck through in amber, "Did you train without the app, or should it move?", **I did it** (white), **Move to tomorrow** and **Skip** (glass), and an underlined "Start it now anyway" |
+| moved | One compact row: calendar icon, "Leg day moved to tomorrow", "Coach Vikram is told", **Undo** |
+| skipped | One compact row: cross icon, "Leg day skipped today", "Your plan picks up tomorrow", **Undo** |
+| done | Dark green gradient. Mint tick and "Done at 6:58 pm", name chip, "Workout complete", three stats (value, unit, label) |
+| rest | Dark purple gradient. Lilac moon and "Recovery", "Next: ..." chip, "Rest day", "Muscles grow on rest days. A 20 minute walk still counts." |
+| paused | Shown only while the membership is paused or ended, never the goal. Membership ended. Flat grey card (no gradient, no Start): lock tile, "Workouts are paused", "Renew at Wulf Fitness reception to see your plan and start again. Your history stays here." |
+| comeback | After a break. One small flat card (no gradient, no coach line): `surface2` fill, `radii.card` corners, 16 px padding. Title "Easy session" (semibold 17 / 24), a muted line "20 min", two chips "4 exercises" and "Half your usual load", then two buttons side by side: **Start easy session** (primary) and **Not today** (`surface`). No exercise names. The greeting is not in the card: the screen shows it as plain text above (`ComebackGreeting`: "Good to see you back, <first name>." and "It's been <n> days. Coach <coach> picked an easy one to ease you in.") with the card directly beneath |
 
-Other props: `name`, `time`, `when`, `meta` (exercises and minutes as icon lines, see MetaRow), `coachUnread`, `burned` (the watch row, on upcoming, due, rest and done), and callbacks `onStart onResume onDidIt onMove onSkip onStartAnyway onUndo onStartRegular onOpenCoach`. There is no Full / Quick / Low energy choice on the card; it lives in the Start sheet. Images: `workout-<state>` (live has a running timer, so its digits differ between runs).
+The "Burned today N kcal / From your watch" row appears at the bottom of upcoming, due, rest and done when `burned` is set.
+
+
+Baseline images in `docs/visual-baseline/cards/`: `workout-<state>`, `workout-done-watch` (live has a running timer, so its digits differ between runs).
+
+## Do and don't
+
+- Do keep the same layout in every state so the card does not jump.
+- Do put the version choice (Full, Quick, Low energy) in the Start sheet, never on the card.
+- Do treat missed, moved and skipped calmly: amber edge at most, and always an Undo.
+- Don't use red anywhere on this card.
+- Don't style comeback or paused as failure. Comeback is a fresh, easy start. Paused is shown when the membership is paused, never because of the goal; it says where to renew, with no Pay or Resume button.
+- Mint only for live and due.
+
+## Accessibility
+
+- Each state card has a label: "Today's workout, <name>", "Workout running, 12:30 elapsed, 3 of 7 exercises", "<name> missed", "<name> moved to tomorrow", "<name> skipped today", "Workout complete", "Rest day", "Workouts are paused", "Easy session".
+- The coach line is a button: "Today's workout, planned by Coach Vikram. Open your coach". The unread dot is labelled "Unread reply".
+- Main buttons are 50 px (medium); the missed answers are 40 px (tight), with 8 px between them. Undo is drawn 34 px high with a 5 px hit slop above and below, so its tap area is 44 px. The missed answers (tight, 40 px) get a hit slop to 44 px from Button. Comeback buttons are 44 px and labelled "Start the easy session" and "Do today's regular workout instead".
+- "Start it now anyway" is a button with an 8 px hit slop.
+
+## Copy rules
+
+- Credit the coach by name: "Planned by Coach Vikram", "Coach Vikram is told".
+- Fact first, then the smallest next step: "Did you train without the app, or should it move?"
+- No guilt on missed or skipped: "Your plan picks up tomorrow".
+- Say the number: "7 exercises", "~50 min", "Burned today 320 kcal".
+- No dot separators, no emoji.

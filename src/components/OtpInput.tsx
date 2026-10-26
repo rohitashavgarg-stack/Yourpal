@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Pressable, Text, TextInput, View, type TextInputInstance } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, spring } from '@/theme/tokens';
@@ -8,7 +8,7 @@ import { radii, fontSizes } from '@/design-system/tokens';
 // Six boxes over a single hidden input: works with paste, SMS autofill and keyboards.
 export function OtpInput({ value, onChange, state, shakeKey, autoFocus }: { value: string; onChange: (v: string) => void; state: 'idle' | 'error' | 'ok' | 'locked'; shakeKey: number; autoFocus?: boolean }) {
   const { c } = useTheme();
-  const ref = useRef<TextInput>(null);
+  const ref = useRef<TextInputInstance>(null);
   const x = useSharedValue(0);
   useEffect(() => {
     if (!shakeKey) return;

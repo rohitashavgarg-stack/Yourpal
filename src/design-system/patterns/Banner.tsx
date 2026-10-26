@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { CircleCheck, Clock, Pause, X } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
-import { font, fontSizes, radii } from '@/design-system/tokens';
+import { font, fontSizes, radii, round } from '@/design-system/tokens';
 
 export type BannerIcon = 'clock' | 'pause' | 'ok';
 export type BannerVariant = 'strip' | 'card';
@@ -35,7 +35,7 @@ export function Banner({ variant, icon, tone, title, line, act, once, onPress, o
     const Icon = icon === 'pause' ? Pause : Clock;
     return (
       <View style={{ marginHorizontal: -16, backgroundColor: c.warnSoft, flexDirection: 'row', alignItems: 'center' }}>
-        <Pressy accessibilityRole="button" accessibilityLabel={`${title}. ${line} View plan`} onPress={onPress} scaleTo={1}
+        <Pressy accessibilityRole="button" accessibilityLabel={`${title}. ${line} See plan`} onPress={onPress} scaleTo={1}
           style={{ flex: 1, paddingVertical: 14, paddingLeft: 16, paddingRight: once ? 4 : 16 }}>
           <Row style={{ gap: 12 }}>
             <View style={{ width: 40, height: 40, borderRadius: radii.sm, backgroundColor: c.warn + '2E', alignItems: 'center', justifyContent: 'center' }}><Icon size={18} color={c.warn} /></View>
@@ -43,8 +43,8 @@ export function Banner({ variant, icon, tone, title, line, act, once, onPress, o
               <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: c.ink }}>{title}</Txt>
               <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{line}</Txt>
             </View>
-            <View style={{ minHeight: 40, paddingHorizontal: 16, borderRadius: 20, borderWidth: 1, borderColor: c.ink + '55', alignItems: 'center', justifyContent: 'center' }}>
-              <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>View plan</Txt>
+            <View style={{ minHeight: 40, paddingHorizontal: 16, borderRadius: round(40), borderWidth: 1, borderColor: c.ink + '55', alignItems: 'center', justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>See plan</Txt>
             </View>
           </Row>
         </Pressy>
@@ -61,7 +61,7 @@ export function Banner({ variant, icon, tone, title, line, act, once, onPress, o
   const fg = warn ? c.warn : c.good;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`${title}. ${line} ${act ?? ''} See plan`} onPress={onPress} scaleTo={0.98}
-      style={{ alignSelf: 'stretch', borderRadius: 20, backgroundColor: warn ? c.warnSoft : c.surface, paddingVertical: 12, paddingHorizontal: 14 }}>
+      style={{ alignSelf: 'stretch', borderRadius: radii.block, backgroundColor: warn ? c.warnSoft : c.surface, paddingVertical: 12, paddingHorizontal: 14 }}>
       <Row style={{ gap: 12, alignItems: 'flex-start' }}>
         <View style={{ width: 36, height: 36, borderRadius: radii.sm, backgroundColor: fg + '2E', alignItems: 'center', justifyContent: 'center' }}><Icon size={17} color={fg} /></View>
         <View style={{ flex: 1, gap: 2 }}>

@@ -10,6 +10,8 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { HEALTH_NAME } from '@/lib/health';
 import { ListCard, SubPage, Switch } from '@/features/shell/parts';
+import { Card } from '@/design-system/primitives/Card';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // What YourPal reads from the phone's health store. Colours match the trackers on Today.
@@ -32,7 +34,7 @@ export default function ConnectedApps() {
   const disconnect = () => openSheet(
     <View style={{ gap: 12 }}>
       <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29 }}>{`Disconnect ${HEALTH_NAME}?`}</Txt>
-      <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>We stop reading new steps, heart rate and sleep. What is already in YourPal stays. Steps fall back to your phone's own counter. You can reconnect any time.</Txt>
+      <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>We stop reading new steps, heart rate and sleep. What is already in YourPal stays. Steps fall back to your phone&apos;s own counter. You can reconnect any time.</Txt>
       <Button kind="primary" label="Disconnect" onPress={() => closeSheet(() => { set({ hc: false }); haptic.medium(); toast(`${HEALTH_NAME} disconnected`); })} />
       <Button kind="secondary" label="Keep it connected" onPress={() => closeSheet()} />
     </View>,
@@ -41,11 +43,11 @@ export default function ConnectedApps() {
 
   return (
     <SubPage title="Connected apps" fallback="/profile">
-      <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14 }}>
+      <Card variant="roomy" flat gap={14}>
         <Row style={{ gap: 14 }}>
-          <View accessibilityLabel={HEALTH_NAME} style={{ width: 56, height: 56, borderRadius: radii.md, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: c.line }}>
+          <IconBadge accessibilityLabel={HEALTH_NAME} size={56} radius={radii.md} bg={fixed.white} borderWidth={1} borderColor={c.line}>
             <HeartIcon size={28} color="#FF3B5C" />
-          </View>
+          </IconBadge>
           <View style={{ flex: 1, gap: 2 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 26 }}>{HEALTH_NAME}</Txt>
             <Row style={{ gap: 6 }}>
@@ -55,7 +57,7 @@ export default function ConnectedApps() {
           </View>
         </Row>
         {on ? <Button kind="secondary" label="Disconnect" onPress={disconnect} /> : <Button kind="accent" label={`Connect ${HEALTH_NAME}`} onPress={connect} />}
-      </View>
+      </Card>
 
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, marginTop: 6 }}>
         <Txt v="label">{on ? 'SYNCING' : 'YOU WILL SEE ON TODAY'}</Txt>
@@ -68,9 +70,9 @@ export default function ConnectedApps() {
           const live = on && metrics[t] && !noWatch;
           return (
             <Row key={t} style={{ gap: 14, minHeight: 72, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
-              <View style={{ width: 44, height: 44, borderRadius: 15, backgroundColor: bg, alignItems: 'center', justifyContent: 'center', opacity: on && !metrics[t] ? 0.5 : 1 }}>
+              <IconBadge size={44} radius={15} bg={bg} style={{ opacity: on && !metrics[t] ? 0.5 : 1 }}>
                 <Icon size={22} strokeWidth={1.9} color={fg} />
-              </View>
+              </IconBadge>
               <View style={{ flex: 1, paddingVertical: 10 }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{t}</Txt>
                 <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{noWatch ? 'Needs a watch or band' : live ? `Today · ${v}` : on ? 'Paused' : s}</Txt>
@@ -84,7 +86,7 @@ export default function ConnectedApps() {
       <Txt v="label" style={{ paddingHorizontal: 4, marginTop: 6 }}>PRIVACY</Txt>
       <ListCard>
         <Row style={{ gap: 14, minHeight: 64 }}>
-          <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Lock size={17} color={c.ink} /></View>
+          <IconBadge size={36} radius={radii.md} bg={c.surface2}><Lock size={17} color={c.ink} /></IconBadge>
           <View style={{ flex: 1, paddingVertical: 10 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>Read only</Txt>
             <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`YourPal never writes to ${HEALTH_NAME}. Only you see this data.`}</Txt>

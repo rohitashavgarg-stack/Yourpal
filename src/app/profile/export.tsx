@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Button, Txt } from '@/components/ui';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -9,7 +8,8 @@ import { haptic } from '@/lib/haptics';
 import { fadeOut } from '@/theme/motion';
 import { LineRow, ListCard, Note, SubPage, Switch } from '@/features/shell/parts';
 import { useShell } from '@/features/shell/state';
-import { radii, fontSizes } from '@/design-system/tokens';
+import { fontSizes } from '@/design-system/tokens';
+import { ProgressBar } from '@/design-system/primitives/ProgressBar';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Phase = 'idle' | 'running' | 'done' | 'failed';
@@ -52,14 +52,12 @@ export default function ExportData() {
         <LineRow title="Include progress photos" minH={52} last right={<Switch label="Include progress photos" on={s.expPhotos} onChange={(v) => set({ expPhotos: v })} />} />
         {phase === 'running' && (
           <FadeIn exiting={fadeOut()} style={{ gap: 6 }}>
-            <View style={{ height: 8, borderRadius: radii.xs, backgroundColor: c.surface2, overflow: 'hidden' }}>
-              <Animated.View style={[{ height: '100%', backgroundColor: c.accent, borderRadius: radii.xs }, bar]} />
-            </View>
+            <ProgressBar height={8} color={c.accent} fillStyle={bar} />
             <Txt v="mono" muted accessibilityLiveRegion="polite">Preparing… {pct}%</Txt>
           </FadeIn>
         )}
         {phase === 'done' && <FadeIn><Note tone="good">Ready · saved to Downloads as yourpal-export.zip</Note></FadeIn>}
-        {phase === 'failed' && <FadeIn><Note tone="warn">Couldn't finish the export. You're offline — try again when you're connected.</Note></FadeIn>}
+        {phase === 'failed' && <FadeIn><Note tone="warn">Couldn&apos;t finish the export. You&apos;re offline — try again when you&apos;re connected.</Note></FadeIn>}
       </ListCard>
       <Button label={phase === 'done' ? 'Export again' : phase === 'failed' ? 'Try again' : 'Prepare export'} disabled={phase === 'running'} onPress={start} />
     </SubPage>

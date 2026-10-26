@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, Platform, ScrollView, View } from 'react-native';
+import { Keyboard, Platform, ScrollView, View, type ScrollViewInstance } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft, ChevronRight, Ellipsis, X } from '@/lib/icons';
@@ -23,6 +23,7 @@ import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { ChatOptionsSheet } from '@/features/gym/sheets';
 import { cardShadow } from '@/features/progress/parts';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Callout } from '@/design-system/primitives/Callout';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const REPLY = "Got it. I'll check it before your session tomorrow.";
@@ -62,7 +63,7 @@ export default function CoachChat() {
   const [draft, setDraft] = useState(params.draft ?? '');
   const [ctx, setCtx] = useState<string | undefined>(params.ctx);
   useEffect(() => { coachStore.set({ unread: false }); }, []);
-  const scroll = useRef<ScrollView>(null);
+  const scroll = useRef<ScrollViewInstance>(null);
   const { isDark } = useTheme();
   useToastLift(insets.bottom + 96);
   const back = () => { if (router.canGoBack()) router.back(); else router.replace('/gym'); };
@@ -114,9 +115,7 @@ export default function CoachChat() {
   ) : (
     <View>
       {ctx ? (
-        <Pressy accessibilityRole="button" accessibilityLabel={`About ${ctx}. Remove`} onPress={() => setCtx(undefined)} style={{ alignSelf: 'flex-start', marginLeft: 16, marginTop: 10, height: 32, paddingLeft: 12, paddingRight: 8, borderRadius: radii.md, backgroundColor: c.accentSoft, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, color: c.accentText }}>About: {ctx}</Txt><X size={14} color={c.accentText} />
-        </Pressy>
+        <Button kind="soft" size="xs" weight="medium" label={`About: ${ctx}`} accessibilityLabel={`About ${ctx}. Remove`} iconAfter={<X size={14} color={c.accentText} />} onPress={() => setCtx(undefined)} style={{ alignSelf: 'flex-start', marginLeft: 16, marginTop: 10 }} />
       ) : null}
       <Composer draft={draft} setDraft={setDraft} onSend={send} bottomInset={kb ? 0 : insets.bottom} />
     </View>
@@ -142,15 +141,15 @@ export default function CoachChat() {
       </View>
       <ScrollView ref={scroll} style={{ flex: 1 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1, paddingTop: 8, paddingHorizontal: 16, paddingBottom: 12, gap: 8 }}>
         {coach.away && (
-          <View accessibilityRole="alert" style={{ padding: 12, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
+          <Callout tone="warn" size="sm" accessibilityRole="alert">
             <Txt style={{ fontSize: fontSizes.sm, color: c.warn }}>Coach Vikram is away until Mon 10:00 am, so replies will be slower. Something urgent? Ask the front desk.</Txt>
-          </View>
+          </Callout>
         )}
         {d.chat.length === 0 && (
           <View style={{ flex: 1, justifyContent: 'center', paddingVertical: 30, paddingHorizontal: 20 }}>
             <Txt muted style={{ textAlign: 'center' }}>Start the conversation. Ask Coach Vikram about form, your plan or the gym.</Txt>
             <Row style={{ gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginTop: 14 }}>
-              {TOPICS.map((t) => <Pressy key={t.l} accessibilityRole="button" onPress={() => { setDraft(t.draft); setCtx(t.ctx); }} scaleTo={0.95} style={{ height: 44, paddingHorizontal: 16, borderRadius: radii.lg, borderWidth: 1, borderColor: c.chipLine, justifyContent: 'center' }}><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>{t.l}</Txt></Pressy>)}
+              {TOPICS.map((t) => <Button key={t.l} kind="line" size="chip" label={t.l} onPress={() => { setDraft(t.draft); setCtx(t.ctx); }} scaleTo={0.95} />)}
             </Row>
           </View>
         )}

@@ -14,6 +14,7 @@ import { iconFor } from './content';
 import { artIdFor, ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { clipIdFor, THUMBS } from '@/features/workout/clips';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Callout } from '@/design-system/primitives/Callout';
 import { Stepper as DSStepper, StepperProps } from '@/design-system/primitives/Stepper';
 
 export const goBackToPlans = () => (router.canGoBack() ? router.back() : router.replace('/plans'));
@@ -56,12 +57,11 @@ export function ListRow({ label, sub, right, onPress, last, tone, chevron = true
 
 export function InfoBox({ children, tone = 'accent', style }: { children: React.ReactNode; tone?: 'accent' | 'warn' | 'plain'; style?: StyleProp<ViewStyle> }) {
   const { c } = useTheme();
-  const bg = tone === 'warn' ? c.warnSoft : tone === 'plain' ? c.surface2 : c.accentSoft;
   const fg = tone === 'warn' ? c.warn : tone === 'plain' ? c.muted : c.accentText;
   return (
-    <View style={[{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: bg }, style]}>
+    <Callout tone={tone} size="md" style={style}>
       {typeof children === 'string' ? <Txt style={{ fontSize: fontSizes.md, color: fg }}>{children}</Txt> : children}
-    </View>
+    </Callout>
   );
 }
 

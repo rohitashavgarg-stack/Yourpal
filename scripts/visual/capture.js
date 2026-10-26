@@ -15,6 +15,7 @@ const path = require('path');
 const os = require('os');
 const { spawn } = require('child_process');
 
+const THEMES = (process.env.THEMES || 'light,dark').split(',').filter(Boolean); // THEMES=dark captures only the dark theme
 const BASE = process.env.APP_URL || 'http://localhost:8082';
 const out = process.argv[2];
 const only = ((process.argv.find((a) => a.startsWith('--only=')) || '').slice(7) || '').split(',').filter(Boolean);
@@ -61,7 +62,7 @@ async function main() {
     await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: false });
     const list2 = SCREENS.filter(([n]) => !only.length || only.some((w) => n.includes(w)));
     let count = 0;
-    for (const theme of ['light', 'dark']) {
+    for (const theme of THEMES) {
       fs.mkdirSync(path.join(out, theme), { recursive: true });
       for (const [name, p, bottom, signedOut] of list2) {
         const url = BASE + p + (p.includes('?') ? '&' : '?') + (signedOut ? '' : 'signedin=1&') + 'theme=' + theme;

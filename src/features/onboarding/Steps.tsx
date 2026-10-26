@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components, react-hooks/refs -- small helper components defined in the parent keep their current behaviour; refs are read and written in gesture-handler callbacks, not during render */
 import React, { useEffect, useRef, useState } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
 import Animated, { Easing, useAnimatedProps, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
@@ -7,6 +8,7 @@ import { CalendarCheck, Camera, Check, ClipboardList, Dumbbell, Flame, Footprint
 import { HEALTH_NAME } from '@/lib/health';
 import { PersonAvatar } from '@/components/Brand';
 import { Pressy, Row, Txt } from '@/components/ui';
+import { IconButton } from '@/design-system/primitives/Button';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
@@ -14,6 +16,8 @@ import { haptic } from '@/lib/haptics';
 import { Pt, smoothPath } from './path';
 import { planMath } from './plan';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Card } from '@/design-system/primitives/Card';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const AP = Animated.createAnimatedComponent(Path);
@@ -102,7 +106,7 @@ export function HowStep() {
   const { d, length } = smoothPath(w ? way : [[0, 0], [1, 1]]);
   const line = useAnimatedProps(() => ({ strokeDashoffset: length * (1 - t.value) }));
   const Node = ({ p, children, size = 44 }: { p: Pt; children: React.ReactNode; size?: number }) => (
-    <View style={{ position: 'absolute', left: p[0] - size / 2, top: p[1] - size / 2, width: size, height: size, borderRadius: size / 2, backgroundColor: c.surface, borderWidth: 2, borderColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>{children}</View>
+    <IconBadge size={size} bg={c.surface} borderWidth={2} borderColor={c.ink} style={{ position: 'absolute', left: p[0] - size / 2, top: p[1] - size / 2 }}>{children}</IconBadge>
   );
   const Label = ({ p, title, sub, right }: { p: Pt; title: string; sub: string; right?: boolean }) => (
     <View style={{ position: 'absolute', top: p[1] - 22, ...(right ? { right: w - p[0] + 34 } : { left: p[0] + 34 }), width: 170, alignItems: right ? 'flex-end' : 'flex-start' }}>
@@ -126,7 +130,7 @@ export function HowStep() {
             <FadeIn pointerEvents="box-none" style={StyleAbs} delay={200}><Node p={stops[0]}><Camera size={19} color={c.ink} /></Node><Label p={stops[0]} title="Snap your plate" sub="and your food is logged" /></FadeIn>
             <FadeIn pointerEvents="box-none" style={StyleAbs} delay={600}><Node p={stops[1]}><Dumbbell size={19} color={c.ink} /></Node><Label p={stops[1]} title="A workout built for you" sub="with a demo for every exercise" /></FadeIn>
             <FadeIn pointerEvents="box-none" style={StyleAbs} delay={1000}><Node p={stops[2]}><TrendingUp size={19} color={c.ink} /></Node><Label p={stops[2]} right title="Progress you can see" sub="weight, lifts and records" /></FadeIn>
-            <FadeIn pointerEvents="box-none" style={StyleAbs} delay={1400}><Node p={stops[3]} size={52}><View style={{ width: 52, height: 52, borderRadius: radii.xl, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><Trophy size={22} color={fixed.white} /></View></Node></FadeIn>
+            <FadeIn pointerEvents="box-none" style={StyleAbs} delay={1400}><Node p={stops[3]} size={52}><IconBadge size={52} radius={radii.xl} bg={c.accent}><Trophy size={22} color={fixed.white} /></IconBadge></Node></FadeIn>
           </>
         )}
       </View>
@@ -175,10 +179,9 @@ export function MealStep() {
               <Txt style={{ fontFamily: font.semibold, color: fixed.white }}>This photo is ours.</Txt>
               <Txt style={{ fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.7)' }}>Tap and see the maths the app does on a meal photo.</Txt>
             </View>
-            <Pressy accessibilityRole="button" accessibilityLabel="See what the app reads" onPress={() => { haptic.success(); setRead(true); }} scaleTo={0.92}
-              style={{ width: 68, height: 68, borderRadius: 34, borderWidth: 3, borderColor: 'rgba(255,255,255,0.85)', alignItems: 'center', justifyContent: 'center' }}>
-              <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}><Camera size={22} color={fixed.dark} /></View>
-            </Pressy>
+            <IconButton label="See what the app reads" onPress={() => { haptic.success(); setRead(true); }} scaleTo={0.92} size={68} radius={34} bg="transparent" borderWidth={3} borderColor="rgba(255,255,255,0.85)">
+              <IconBadge size={50} bg={fixed.white}><Camera size={22} color={fixed.dark} /></IconBadge>
+            </IconButton>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.4, color: 'rgba(255,255,255,0.85)' }}>SEE WHAT THE APP READS</Txt>
           </View>
         )}
@@ -249,9 +252,9 @@ export function ReadyContent({ assess }: { assess: string }) {
     ['Injuries', p.injury === 'Yes' ? 'Shared with your coach' : 'None'],
   ];
   const next: [React.ReactNode, string, string][] = [
-    [<CalendarCheck size={17} color={c.ink} />, booked ? 'Assessment · Sat 10:00 am' : 'Book your assessment', booked ? 'A 30-minute check-in with Coach Vikram: measurements, movement and your goal.' : 'Ask at the front desk. Coach Vikram builds your plan from it.'],
-    [<ClipboardList size={17} color={c.ink} />, 'Your plan lands on Today', "Workouts and meals from Coach Vikram. We'll notify you when it arrives."],
-    [<Dumbbell size={17} color={c.ink} />, 'Start training', 'Until then, log your meals, water and weight.'],
+    [<CalendarCheck key="book" size={17} color={c.ink} />, booked ? 'Assessment · Sat 10:00 am' : 'Book your assessment', booked ? 'A 30-minute check-in with Coach Vikram: measurements, movement and your goal.' : 'Ask at the front desk. Coach Vikram builds your plan from it.'],
+    [<ClipboardList key="plan" size={17} color={c.ink} />, 'Your plan lands on Today', "Workouts and meals from Coach Vikram. We'll notify you when it arrives."],
+    [<Dumbbell key="train" size={17} color={c.ink} />, 'Start training', 'Until then, log your meals, water and weight.'],
   ];
   return (
     <>
@@ -260,7 +263,7 @@ export function ReadyContent({ assess }: { assess: string }) {
           <Check size={30} strokeWidth={2.6} color={c.accent} />
         </FadeIn>
         <View style={{ alignItems: 'center' }}>
-          <Txt style={{ fontFamily: font.light, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>You're all set,</Txt>
+          <Txt style={{ fontFamily: font.light, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>You&apos;re all set,</Txt>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.7, textAlign: 'center' }}>{p.name || 'Rohitashav Garg'}.</Txt>
         </View>
         <Row style={{ gap: 8 }}>
@@ -269,7 +272,7 @@ export function ReadyContent({ assess }: { assess: string }) {
         </Row>
       </View>
 
-      <View style={{ gap: 4, padding: 16, borderRadius: radii.card, backgroundColor: c.surface }}>
+      <Card variant="tight" flat gap={4}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>SHARED WITH YOUR COACH</Txt>
         {shared.map(([k, v], i) => (
           <Row key={k} style={{ justifyContent: 'space-between', gap: 12, minHeight: 48, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
@@ -277,20 +280,20 @@ export function ReadyContent({ assess }: { assess: string }) {
             <Txt style={{ fontFamily: font.semibold, flexShrink: 1, textAlign: 'right' }}>{v}</Txt>
           </Row>
         ))}
-      </View>
+      </Card>
 
-      <View style={{ gap: 6, padding: 16, borderRadius: radii.card, backgroundColor: c.surface }}>
+      <Card variant="tight" flat gap={6}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>WHAT HAPPENS NEXT</Txt>
         {next.map(([icon, t, s], i) => (
           <Row key={t} style={{ gap: 14, alignItems: 'flex-start', paddingVertical: 6 }}>
-            <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
+            <IconBadge size={36} radius={radii.md} bg={c.surface2}>{icon}</IconBadge>
             <View style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.semibold }}>{i + 1}. {t}</Txt>
               <Txt v="caption">{s}</Txt>
             </View>
           </Row>
         ))}
-      </View>
+      </Card>
     </>
   );
 }
@@ -299,10 +302,10 @@ export function ReadyContent({ assess }: { assess: string }) {
 export function HealthStep() {
   const { c, isDark } = useTheme();
   const rows: [React.ReactNode, string, string][] = [
-    [<Footprints size={20} color={c.ink} />, 'Steps', 'Daily count and goal streaks'],
-    [<Heart size={20} color={c.ink} />, 'Heart rate', 'Resting and during workouts'],
-    [<Moon size={20} color={c.ink} />, 'Sleep', 'How rested you are for training'],
-    [<Flame size={20} color={c.ink} />, 'Active energy', 'Calories burned today'],
+    [<Footprints key="steps" size={20} color={c.ink} />, 'Steps', 'Daily count and goal streaks'],
+    [<Heart key="hr" size={20} color={c.ink} />, 'Heart rate', 'Resting and during workouts'],
+    [<Moon key="sleep" size={20} color={c.ink} />, 'Sleep', 'How rested you are for training'],
+    [<Flame key="kcal" size={20} color={c.ink} />, 'Active energy', 'Calories burned today'],
   ];
   return (
     <>
@@ -319,7 +322,7 @@ export function HealthStep() {
       <View>
         {rows.map(([icon, t, s], i) => (
           <Row key={t} style={{ gap: 14, minHeight: 64, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
-            <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
+            <IconBadge size={40} bg={c.surface2}>{icon}</IconBadge>
             <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.semibold }}>{t}</Txt><Txt v="caption">{s}</Txt></View>
           </Row>
         ))}

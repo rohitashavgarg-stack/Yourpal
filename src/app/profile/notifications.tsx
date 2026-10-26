@@ -46,7 +46,7 @@ export default function NotificationSettings() {
             <BellOff size={18} color={c.warn} />
             <Txt style={{ flex: 1, fontFamily: font.semibold, color: c.warn }}>Notifications are off on this phone</Txt>
           </Row>
-          <Txt style={{ fontSize: fontSizes.md, color: c.warn }}>You won't hear about plan changes or Coach replies. Your choices below are kept for when you turn them on.</Txt>
+          <Txt style={{ fontSize: fontSizes.md, color: c.warn }}>You won&apos;t hear about plan changes or Coach replies. Your choices below are kept for when you turn them on.</Txt>
           <Button small kind="primary" label="Turn on notifications" style={{ alignSelf: 'flex-start' }} onPress={() => { setProfile({ notifications: 'on' }); toast('Notifications on'); }} />
         </FadeIn>
       )}

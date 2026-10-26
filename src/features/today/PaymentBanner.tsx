@@ -34,7 +34,7 @@ export function MembershipCard({ n }: { n: Notice }) {
   return <Banner variant="card" icon={n.icon} tone={n.tone} title={n.title} line={n.line} act={n.act} onPress={() => router.push('/gym/membership')} />;
 }
 
-// The strip at the top of Today: edge to edge under the header, the title and one sentence on the left, "View plan" on the right.
+// The strip at the top of Today: edge to edge under the header, the title and one sentence on the left, "See plan" on the right.
 // (The "what to do" line stays on the Gym tab card; the strip only says what is happening and what it means.)
 export function PaymentBanner() {
   const { d, set } = useDomain();

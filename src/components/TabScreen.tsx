@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability -- reanimated shared values are written from gesture and animation callbacks */
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -13,7 +14,7 @@ import { fontSizes } from '@/design-system/tokens';
 
 // A tab page with an iOS large title that collapses into a compact header,
 // and a scroll that hides / shows the floating nav.
-export function TabScreen({ title, header, children, compactTitle = true, bottomPad = 130, refreshControl, pinned, pinAfter }: { title: string; header?: React.ReactNode; children: React.ReactNode; compactTitle?: boolean; bottomPad?: number; refreshControl?: React.ReactElement<any>; pinned?: React.ReactNode; pinAfter?: number }) {
+export function TabScreen({ title, header, children, compactTitle = true, bottomPad = 130, refreshControl, pinned, pinAfter, titleRight }: { title: string; titleRight?: React.ReactNode; header?: React.ReactNode; children: React.ReactNode; compactTitle?: boolean; bottomPad?: number; refreshControl?: React.ReactElement<any>; pinned?: React.ReactNode; pinAfter?: number }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
@@ -63,7 +64,12 @@ export function TabScreen({ title, header, children, compactTitle = true, bottom
         </Animated.View>
       )}
       <Animated.ScrollView onScroll={onScroll} scrollEventThrottle={16} refreshControl={refreshControl} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: top + 56, paddingBottom: bottomPad, gap: 12 }}>
-        {!!title && <Animated.Text accessibilityRole="header" style={[{ fontFamily: font.regular, fontSize: 34, lineHeight: 44, letterSpacing: -1.4, color: c.ink, marginTop: 4, marginBottom: 8, marginHorizontal: 4, transformOrigin: 'left' as any }, large]}>{title}</Animated.Text>}
+        {!!title && titleRight ? (
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginTop: 4, marginBottom: 8, marginHorizontal: 4 }}>
+            <Animated.Text accessibilityRole="header" style={[{ flexShrink: 1, fontFamily: font.regular, fontSize: fontSizes.xl5, lineHeight: 44, letterSpacing: -1.4, color: c.ink, transformOrigin: 'left' as any }, large]}>{title}</Animated.Text>
+            {titleRight}
+          </View>
+        ) : !!title && <Animated.Text accessibilityRole="header" style={[{ fontFamily: font.regular, fontSize: fontSizes.xl5, lineHeight: 44, letterSpacing: -1.4, color: c.ink, marginTop: 4, marginBottom: 8, marginHorizontal: 4, transformOrigin: 'left' as any }, large]}>{title}</Animated.Text>}
         {children}
       </Animated.ScrollView>
     </View>

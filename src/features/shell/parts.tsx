@@ -13,6 +13,7 @@ import type { Programme } from './state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { goBack, SubPage } from '@/design-system/primitives/SubPage';
 import { ListCard } from '@/design-system/primitives/ListCard';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { SectionLabel as Label } from '@/design-system/primitives/SectionLabel';
 
 export const goHome = () => (router.canDismiss() ? router.dismissAll() : router.replace('/(tabs)'));
@@ -22,9 +23,9 @@ export const goHome = () => (router.canDismiss() ? router.dismissAll() : router.
 export function ProgLogo({ p, size = 44 }: { p: Pick<Programme, 'id' | 'logo' | 'color'>; size?: number }) {
   if (p.id === 'gold') return <GymLogoMark size={size} />;
   return (
-    <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: p.color, alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+    <IconBadge size={size} bg={p.color} style={{ flexShrink: 0 }}>
       <Text style={{ color: fixed.white, fontFamily: font.bold, fontSize: Math.round(size * 0.4), lineHeight: Math.round(size * 0.52) }}>{p.logo}</Text>
-    </View>
+    </IconBadge>
   );
 }
 

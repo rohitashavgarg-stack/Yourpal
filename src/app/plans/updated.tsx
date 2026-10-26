@@ -57,10 +57,10 @@ export default function WhatChanged() {
             );
           })}
         </Card>
-        <InfoBox tone="plain">Your earlier edits were replaced by Coach's new version. You can edit again.</InfoBox>
+        <InfoBox tone="plain">Your earlier edits were replaced by Coach&apos;s new version. You can edit again.</InfoBox>
         {mid && (
           <FadeIn>
-            <InfoBox tone="warn">You're mid-workout. These changes start from your next session, so today's workout stays as it is.</InfoBox>
+            <InfoBox tone="warn">You&apos;re mid-workout. These changes start from your next session, so today&apos;s workout stays as it is.</InfoBox>
           </FadeIn>
         )}
         <Button label="Got it" onPress={gotIt} />

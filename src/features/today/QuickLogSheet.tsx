@@ -20,6 +20,7 @@ import { mealById, mealKcal } from './meals';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { ScanBracket } from '@/design-system/primitives/ScanBracket';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { FoodCard } from '@/design-system/patterns/FoodCard';
 
 type Mode = 'sugg' | 'scan' | 'write' | 'cat';
 const SUGG = ['2 roti', '1 cup milk', '1 katori dal', '1 banana', '100 g paneer'];
@@ -119,20 +120,14 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx, back
         icons={{ scan: (col) => <Camera size={16} color={col} />, write: (col) => <PenLine size={16} color={col} />, cat: (col) => <Search size={16} color={col} /> }} />
 
       {mode === 'sugg' && (
-        <View style={{ borderRadius: 20, borderWidth: 1, borderColor: c.line, paddingHorizontal: 12 }}>
-          {suggestions.map((o, i) => {
+        <View style={{ gap: 8 }}>
+          {suggestions.map((o) => {
             const label = `${o.n}, ${o.q}`;
             const on = pick === label;
             return (
-              <Pressy key={label} accessibilityRole="radio" accessibilityState={{ checked: on }} accessibilityLabel={`${label}, about ${o.k} kcal, ${o.p} grams protein${o.coach ? ', coach-approved' : ''}`} onPress={() => setPick(on ? null : label)} scaleTo={0.99}
-                style={{ minHeight: 58, borderBottomWidth: i === suggestions.length - 1 ? 0 : 1, borderBottomColor: c.line, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                <FoodMark type={o.type} />
-                <View style={{ flex: 1 }}>
-                  <Txt style={{ fontFamily: font.medium }}>{label}</Txt>
-                  <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>≈{o.k} kcal · P {o.p} g{o.coach ? ' · Coach-approved' : ''}</Txt>
-                </View>
-                <CheckCircle on={on} size={30} hit={30} label={label} onPress={() => setPick(on ? null : label)} />
-              </Pressy>
+              <FoodCard key={label} state={on ? 'eaten' : 'todo'} name={label} type={o.type} kcal={`≈${o.k} kcal`} macros={`P ${o.p} g${o.coach ? ' · Coach-approved' : ''}`}
+                onPress={() => setPick(on ? null : label)} onCheck={() => setPick(label)} checkLabel={label}
+                label={`${label}, about ${o.k} kcal, ${o.p} grams protein${o.coach ? ', coach-approved' : ''}`} />
             );
           })}
           {suggestions.length === 0 && <Txt muted style={{ paddingVertical: 16, fontSize: fontSizes.md }}>No suggestions for this one. Use Scan, Write or Library.</Txt>}
@@ -171,7 +166,7 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx, back
           </View>
           {scan === 'fail' && (
             <FadeIn style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
-              <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, color: c.warn }}>Couldn't read that.</Txt> Too dark or too close. Try the whole plate in good light, or write it instead.</Txt>
+              <Txt style={{ fontSize: fontSizes.md, color: c.warn }}><Txt style={{ fontFamily: font.semibold, color: c.warn }}>Couldn&apos;t read that.</Txt> Too dark or too close. Try the whole plate in good light, or write it instead.</Txt>
             </FadeIn>
           )}
           {perm && !perm.granted && !perm.canAskAgain && (
@@ -187,17 +182,11 @@ export function QuickLogSheet({ mealId, mode: initial = 'scan', replaceIdx, back
       {mode === 'cat' && (
         <>
           <Field accessibilityLabel="Search the food catalogue" value={q} onChangeText={setQ} placeholder="Search poha, dal, curd…" />
-          <View style={{ borderRadius: 20, borderWidth: 1, borderColor: c.line, paddingHorizontal: 12 }}>
+          <View style={{ gap: 8 }}>
             {res.map((f) => {
               const on = sel.includes(f.n);
               const tog = () => setSel((l) => (on ? l.filter((x) => x !== f.n) : [...l, f.n]));
-              return (
-                <Pressy key={f.n} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={f.n} onPress={tog} scaleTo={0.99}
-                  style={{ minHeight: 54, borderBottomWidth: 1, borderBottomColor: c.line, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                  <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.medium }}>{f.n}</Txt><Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{f.k} kcal · P {f.p} g</Txt></View>
-                  <CheckCircle on={on} size={30} hit={30} label={f.n} onPress={tog} />
-                </Pressy>
-              );
+              return <FoodCard key={f.n} state={on ? 'eaten' : 'todo'} name={f.n} kcal={`${f.k} kcal`} macros={`P ${f.p} g`} onPress={tog} onCheck={tog} checkLabel={f.n} label={f.n} />;
             })}
             {res.length === 0 && (
               <View style={{ paddingVertical: 16, gap: 8, alignItems: 'flex-start' }}>

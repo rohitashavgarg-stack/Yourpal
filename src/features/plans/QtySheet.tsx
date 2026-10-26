@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Minus, Plus } from '@/lib/icons';
 import { Button, Pressy, Txt } from '@/components/ui';
+import { IconButton } from '@/design-system/primitives/Button';
 import { useOverlay } from '@/components/Overlay';
 import { MealId } from '@/lib/data';
 import { useDomain } from '@/lib/domain';
@@ -35,10 +36,9 @@ export function QtySheet({ mid, itemKey }: { mid: MealId; itemKey: string }) {
     A.setPor(mid, it.key, n / qty.n);
   };
   const btn = (label: string, on: () => void, off: boolean, icon: React.ReactNode) => (
-    <Pressy accessibilityRole="button" accessibilityLabel={label} disabled={off} onPress={on} scaleTo={0.9}
-      style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: off ? 0.35 : 1 }}>
+    <IconButton label={label} disabled={off} onPress={on} scaleTo={0.9} size={56} radius={radii.xl} style={{ opacity: off ? 0.35 : 1 }}>
       {icon}
-    </Pressy>
+    </IconButton>
   );
   const planned = qty.n;
   return (

@@ -23,6 +23,9 @@ import { ExTile, Highlight, Moon } from './parts';
 import { DAYL, dateOf, dayPlan, exSub, relDay, usePlans } from './store';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { ListCard } from '@/design-system/primitives/ListCard';
 
 
@@ -38,7 +41,7 @@ function LockedPlan({ day, locked, children }: { day: string; locked: boolean; c
       <LinearGradient pointerEvents="none" colors={[c.bg, c.bg + '00']} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 70 }} />
       <LinearGradient pointerEvents="none" colors={[c.bg + '00', c.bg]} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120 }} />
       <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'flex-start', gap: 10, paddingTop: 110, paddingHorizontal: 44 }}>
-        <View style={{ width: 56, height: 56, borderRadius: radii.xl, backgroundColor: c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}><Lock size={24} color={c.ink} /></View>
+        <IconBadge size={56} radius={radii.xl} bg={c.surface2} borderWidth={1} borderColor={c.line}><Lock size={24} color={c.ink} /></IconBadge>
         <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 29 }}>This plan is locked</Txt>
         <Txt style={{ textAlign: 'center', maxWidth: 290, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>{`Renew at Wulf Fitness reception to see what Coach Vikram planned for ${day}. Workouts you logged stay here.`}</Txt>
       </View>
@@ -89,7 +92,7 @@ export function WorkoutPlan() {
         <FadeIn i={0}>
           <Pressy accessibilityRole="button" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See what changed`} onPress={openUpdated} scaleTo={0.98}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 16, paddingHorizontal: 18, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1.5, borderColor: c.accent }}>
-            <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: c.accent }} />
+            <StatusDot size={10} color={c.accent} />
             <View style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.semibold }}>Coach Vikram updated your plan</Txt>
               <Txt muted style={{ fontSize: fontSizes.sm }}>{COACH_BANNER}</Txt>
@@ -128,7 +131,7 @@ export function WorkoutPlan() {
                 <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 34, letterSpacing: -1.4 }}>{plan.name}</Txt>
                 <Row style={{ gap: 8 }}><PersonAvatar who={plan.created ? 'me' : 'coach'} size={22} /><Txt muted style={{ fontSize: fontSizes.sm, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'} · {plan.ex.length} exercises{plan.time && !plan.done ? ` · planned ${plan.time}` : ''}</Txt></Row>
               </View>
-              {!!plan.done && <View accessibilityLabel="Logged" style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}><Check size={16} color={c.bg} strokeWidth={3} /></View>}
+              {!!plan.done && <IconBadge accessibilityLabel="Logged" size={28} bg={c.good} style={{ marginBottom: 8 }}><Check size={16} color={c.bg} strokeWidth={3} /></IconBadge>}
             </Row>
             {!!plan.done && <Txt v="caption" style={{ paddingHorizontal: 4, marginTop: 4 }}>{`Logged ${plan.done.replace(/^Done /, '').split(' · ').join(', ')}`}</Txt>}
             {!plan.done && rel < 0 && <Txt style={{ paddingHorizontal: 4, marginTop: 4, fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>Not logged</Txt>}
@@ -148,9 +151,7 @@ export function WorkoutPlan() {
                       </View>
                     ))}
                   </Row>
-                  <Row style={{ gap: 3 }}>
-                    {plan.ex.map((e) => <View key={e.id} accessibilityLabel={e.res === 'skip' ? 'Not logged' : 'Logged'} style={{ flex: 1, height: 4, borderRadius: radii.xs, backgroundColor: e.res === 'skip' ? c.surface3 : c.ink }} />)}
-                  </Row>
+                  <ProgressSegments height={4} gap={3} segments={plan.ex.map((e) => ({ color: e.res === 'skip' ? c.surface3 : c.ink, label: e.res === 'skip' ? 'Not logged' : 'Logged' }))} />
                 </Card>
               </FadeIn>
             );
@@ -224,7 +225,7 @@ export function StickyStart() {
   const bottom = Math.max(insets.bottom - 6, 14) + 84;
   return (
     <FadeIn pointerEvents="box-none" style={[{ position: 'absolute', left: 16, right: 16, bottom }, lift]}>
-      <Button kind="accent" label={live ? 'Resume workout' : 'Start workout'} icon={<Play size={18} color={c.accentInk} fill={c.accentInk} />}
+      <Button kind="glassAccent" label={live ? 'Resume workout' : 'Start workout'} icon={<Play size={18} color={c.accentInk} fill={c.accentInk} />}
         onPress={() => (live ? router.push('/workout') : startWorkout())} />
     </FadeIn>
   );

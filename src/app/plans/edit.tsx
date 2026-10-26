@@ -146,9 +146,7 @@ export default function EditPlan() {
             );
           }} />
         {dr.rows.length === 0 && <Txt muted style={{ textAlign: 'center', padding: 12 }}>Nothing here yet. Add {isDiet ? 'an item' : 'an exercise'} to keep this {isDiet ? 'meal' : 'day'} in your plan.</Txt>}
-        <Pressy accessibilityRole="button" onPress={add} style={{ height: 48, borderRadius: radii.card, borderWidth: 1, borderStyle: 'dashed', borderColor: c.chipLine, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>+ {isDiet ? 'Add item' : 'Add exercise'}</Txt>
-        </Pressy>
+        <Button kind="dashed" size="medium" label={`+ ${isDiet ? 'Add item' : 'Add exercise'}`} onPress={add} />
         <InfoBox>Coach Vikram will be notified of these changes.</InfoBox>
         <Button label="Save changes" disabled={!dirty} onPress={save} />
         {isDiet && <Button kind="secondary" label="Ask for a diet change instead" onPress={() => router.push({ pathname: '/plans/ask', params: { kind: 'diet' } })} />}

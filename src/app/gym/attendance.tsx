@@ -12,6 +12,9 @@ import { cardShadow, Hint, SubPage } from '@/features/progress/parts';
 import { VISITS } from '@/features/gym/data';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { Card } from '@/design-system/primitives/Card';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 type Att = { t: string; s: string; tag: string; type: 'c' | 'pt'; icon: 'loc' | 'home' | 'pt' | 'wait'; tone?: 'accent' | 'good' | 'warn'; ptOnly?: boolean; key: string };
@@ -85,15 +88,15 @@ export default function Attendance() {
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', rowGap: 4 }}>
           {cells.map((x, i) => (
             <View key={i} style={{ width: `${100 / 7}%`, alignItems: 'center' }} accessible={!!x.aria} accessibilityLabel={x.aria || undefined}>
-              <View style={{ width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center', backgroundColor: x.bg, borderWidth: x.ring || x.today ? 2 : 0, borderColor: x.today ? c.ink : x.ring ?? 'transparent' }}>
+              <IconBadge size={38} bg={x.bg} borderWidth={x.ring || x.today ? 2 : 0} borderColor={x.today ? c.ink : x.ring ?? 'transparent'}>
                 <Txt style={{ fontSize: fontSizes.sm, fontFamily: x.fw, color: x.fg }}>{x.n}</Txt>
-              </View>
+              </IconBadge>
             </View>
           ))}
         </View>
         <Row style={{ gap: 14, flexWrap: 'wrap', marginTop: 12 }}>
           {[{ l: 'Check-in', col: c.accent }, { l: 'Home', col: c.surface3 }, ...(isPT ? [{ l: 'PT session', col: c.good }] : [])].map((x) => (
-            <Row key={x.l} style={{ gap: 6 }}><View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: x.col }} /><Txt v="caption">{x.l}</Txt></Row>
+            <Row key={x.l} style={{ gap: 6 }}><StatusDot size={10} color={x.col} /><Txt v="caption">{x.l}</Txt></Row>
           ))}
         </Row>
       </View>
@@ -102,12 +105,12 @@ export default function Attendance() {
           {['All', 'Check-ins', 'PT sessions'].map((l, i) => <Pill key={l} label={l} on={g.attFilter === i} onPress={() => gymStore.set({ attFilter: i as any })} style={{ flex: 1, paddingHorizontal: 8 }} />)}
         </View>
       )}
-      <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 4, paddingHorizontal: 16 }, cardShadow(isDark)]}>
+      <Card padding={{ top: 4, bottom: 4, horizontal: 16 }}>
         {list.map((r, i) => {
           const t = tone(r); const I = Icon[r.icon];
           return (
             <FadeIn key={r.key + r.tag} style={{ minHeight: 60, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, paddingHorizontal: 4, borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-              <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: t.dotBg, alignItems: 'center', justifyContent: 'center' }}><I size={16} strokeWidth={2.4} color={t.dotFg} /></View>
+              <IconBadge size={36} radius={radii.md} bg={t.dotBg}><I size={16} strokeWidth={2.4} color={t.dotFg} /></IconBadge>
               <View style={{ flex: 1, minWidth: 0 }}>
                 <Txt style={{ fontFamily: font.medium }}>{r.t}</Txt>
                 <Txt v="caption">{r.s}</Txt>
@@ -117,7 +120,7 @@ export default function Attendance() {
           );
         })}
         {list.length === 0 && <Txt muted style={{ paddingVertical: 18, textAlign: 'center' }}>Nothing here for this filter.</Txt>}
-      </View>
+      </Card>
       <Hint style={{ fontSize: fontSizes.xs }}>Check in from the app when you are at the gym (within 20 m). The front desk can also mark a visit.</Hint>
     </SubPage>
   );

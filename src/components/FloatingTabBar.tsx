@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability -- reanimated shared values are written from gesture and animation callbacks */
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useDomain } from '@/lib/domain';
 import { LayoutChangeEvent, Platform, Pressable, Text, View } from 'react-native';
@@ -46,7 +47,7 @@ const ICONS: Record<string, any> = { index: Sun, plans: ClipboardList, progress:
 const LABELS: Record<string, string> = { index: 'Today', plans: 'Plans', progress: 'Progress', gym: 'Gym' };
 
 // ---- Circle navigation: each tab is its own round button (separate, or linked into a chain) ----
-function CircleNav({ state, navigation, linked }: any) {
+function CircleNav({ state, emitter, navigateToTab, linked }: any) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
@@ -67,8 +68,8 @@ function CircleNav({ state, navigation, linked }: any) {
               accessibilityLabel={LABELS[r.name] ?? r.name}
               onPress={() => {
                 haptic.tap();
-                const ev = navigation.emit({ type: 'tabPress', target: r.key, canPreventDefault: true });
-                if (!on && !ev.defaultPrevented) navigation.navigate(r.name);
+                const ev = emitter.emit({ type: 'tabPress', target: r.key, canPreventDefault: true }); // SDK 58: the tab bar gets `emitter` and `navigateToTab`, not `navigation`
+                if (!on && !ev.defaultPrevented) navigateToTab(r.key);
                 if (hidden) hidden.value = withTiming(0);
               }}
               style={{ width: size, height: size, borderRadius: size / 2, marginLeft: linked && i ? -10 : 0, zIndex: on ? 3 : 1, overflow: 'hidden', alignItems: 'center', justifyContent: 'center',
@@ -104,7 +105,7 @@ function neck(x1: number, x2: number, y: number, r: number, v = 0.5, rate = 2.4)
 }
 
 // ---- Merged circles: one connected blob (circles fused by necks) with a blue bubble that slides to the active tab ----
-function MergedNav({ state, navigation }: any) {
+function MergedNav({ state, emitter, navigateToTab }: any) {
   const { c, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
@@ -182,8 +183,8 @@ function MergedNav({ state, navigation }: any) {
               accessibilityLabel={LABELS[r.name] ?? r.name}
               onPress={() => {
                 haptic.tap();
-                const ev = navigation.emit({ type: 'tabPress', target: r.key, canPreventDefault: true });
-                if (!on && !ev.defaultPrevented) navigation.navigate(r.name);
+                const ev = emitter.emit({ type: 'tabPress', target: r.key, canPreventDefault: true }); // SDK 58: the tab bar gets `emitter` and `navigateToTab`, not `navigation`
+                if (!on && !ev.defaultPrevented) navigateToTab(r.key);
                 if (hidden) hidden.value = withTiming(0);
               }}
               style={{ position: 'absolute', left: i * STEP, top: 0, width: D, height: D, alignItems: 'center', justifyContent: 'center' }}
@@ -208,7 +209,7 @@ export function FloatingTabBar(allProps: any) {
   return <PillBar {...props} />;
 }
 
-function PillBar({ state, navigation }: any) {
+function PillBar({ state, emitter, navigateToTab }: any) {
   const { c, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
@@ -243,8 +244,8 @@ function PillBar({ state, navigation }: any) {
               accessibilityLabel={LABELS[r.name] ?? r.name}
               onPress={() => {
                 haptic.tap();
-                const ev = navigation.emit({ type: 'tabPress', target: r.key, canPreventDefault: true });
-                if (!on && !ev.defaultPrevented) navigation.navigate(r.name);
+                const ev = emitter.emit({ type: 'tabPress', target: r.key, canPreventDefault: true }); // SDK 58: the tab bar gets `emitter` and `navigateToTab`, not `navigation`
+                if (!on && !ev.defaultPrevented) navigateToTab(r.key);
                 if (hidden) hidden.value = withTiming(0);
               }}
               style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 3 }}

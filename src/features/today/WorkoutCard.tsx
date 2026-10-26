@@ -46,7 +46,7 @@ export function TodayWorkoutCard({ restart = false }: { restart?: boolean } = {}
 
   let ps: WorkoutCardState;
   if (paused && (st === 'todo' || st === 'live')) ps = 'paused';
-  else if (missed && ms.answer) ps = ms.answer;
+  else if ((missed || (comeback && ms.answer === 'skipped')) && ms.answer) ps = ms.answer;
   else if (st === 'rest') ps = 'rest';
   else if (st === 'done') ps = 'done';
   else if (st === 'live' && d.session) ps = 'live';
@@ -70,7 +70,7 @@ export function TodayWorkoutCard({ restart = false }: { restart?: boolean } = {}
     <WorkoutCardPattern state={ps} name={name} time={time} when={rel(d, WKT).t} meta={meta} coachUnread={cs.unread} onOpenCoach={() => router.push('/coach')}
       burned={burnedKcal} live={live} done={done} restNext={`Next: Pull, Thu ${fmtT(WKT).full}`}
       onStart={() => startWorkout()} onResume={() => router.push('/workout')} onDidIt={didIt} onMove={() => answer('moved')} onSkip={() => answer('skipped')}
-      onStartAnyway={() => startWorkout()} onUndo={() => missedWkStore.set({ answer: null })} onStartRegular={() => startWorkout()} />
+      onStartAnyway={() => startWorkout()} onUndo={() => missedWkStore.set({ answer: null })} onNotToday={() => answer('skipped')} />
   );
 }
 export { TodayWorkoutCard as WorkoutCard }; // the old name, so existing imports keep working
