@@ -143,13 +143,15 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
           <Chip label={moved ? 'Moved' : 'Skipped'} icon={moved ? <CalendarClock size={13} color={fixed.white} /> : <SkipForward size={13} color={fixed.white} />} onDark />
         </Row>
         <WorkoutTitle name={name} tone={moved ? 'default' : 'skipped'} />
-        <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: 'rgba(255,255,255,0.8)' }}>{moved ? `Moved to tomorrow${tomorrow ? `, ${tomorrow}` : ''}. Coach Vikram is told.` : 'Skipped for today. Your plan picks up tomorrow.'}</Txt>
-        {!moved && !!restNext && <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: W60 }}>{restNext}</Txt>}
-        <Row style={{ gap: 14 }}>
+        <View style={{ gap: 2 }}>
+          <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: 'rgba(255,255,255,0.9)' }}>{moved ? 'Moved to tomorrow' : 'Skipped for today'}</Txt>
+          {moved && !!tomorrow && <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: 'rgba(255,255,255,0.9)' }}>{tomorrow}</Txt>}
+          <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: W60 }}>{moved ? 'Coach Vikram is told.' : 'Your plan picks up tomorrow.'}</Txt>
+          {!moved && !!restNext && <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: W60 }}>{restNext}</Txt>}
+        </View>
+        <Row style={{ gap: 10 }}>
           <Button kind="white" size="small" label="Undo" onPress={onUndo} />
-          <Pressy accessibilityRole="button" onPress={onStartAnyway} hitSlop={8} style={{ paddingVertical: 2 }}>
-            <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: W60, textDecorationLine: 'underline' }}>Start it today anyway</Txt>
-          </Pressy>
+          <Button kind="glass" size="small" label="Start today anyway" onPress={onStartAnyway} />
         </Row>
       </WorkoutShell>
     );
