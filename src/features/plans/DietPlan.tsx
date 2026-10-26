@@ -25,7 +25,7 @@ import { ItemMenuSheet, SwapSheet } from './Sheets';
 import { QtySheet } from './QtySheet';
 import { fmtNum, fmtQty, Qty, splitFood, stepFor, unitLabel } from './qty';
 import { DItem, dietItems, dietTotals, setP, useCountUp, usePlans } from './store';
-import { radii, fontSizes, fixed, round } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Chevron } from '@/design-system/primitives/Chevron';
 import { AmountStepper } from '@/design-system/primitives/AmountStepper';
 import { ProgressBar } from '@/design-system/primitives/ProgressBar';
@@ -320,11 +320,12 @@ export function DietPlan() {
       </FadeIn>
       {MEALS.map((m, i) => <FadeIn key={m.id} i={3 + i}><MealCard mid={m.id} open={openId === m.id} /></FadeIn>)}
       <FadeIn i={3 + MEALS.length}>
-        <View accessible accessibilityLabel={`This week: ${7 + onPlan} of 12 meals on plan`} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, paddingHorizontal: 6, paddingTop: 4, paddingBottom: 8 }}>
-          <Txt muted style={{ fontSize: fontSizes.sm }}>{7 + onPlan} of 12 meals on plan this week</Txt>
-          <View importantForAccessibility="no-hide-descendants" style={{ flexDirection: 'row', gap: 4 }}>
-            {Array.from({ length: 12 }, (_, i) => <View key={i} style={{ width: 5, height: 5, borderRadius: round(5), backgroundColor: i < 7 + onPlan ? c.muted : c.line }} />)}
-          </View>
+        <View accessible accessibilityLabel={`This week: ${7 + onPlan} of 12 meals on plan`} style={{ gap: 2, paddingHorizontal: 6, paddingTop: 8, paddingBottom: 12 }}>
+          <Row style={{ alignItems: 'baseline', gap: 6 }}>
+            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39, letterSpacing: -0.6 }}>{7 + onPlan}</Txt>
+            <Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 29 }}>of 12</Txt>
+          </Row>
+          <Txt muted style={{ fontSize: fontSizes.sm }}>meals on plan this week</Txt>
         </View>
       </FadeIn>
     </>
