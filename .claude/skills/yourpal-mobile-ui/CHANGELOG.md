@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-26 `553f151` Workout card: Start today anyway is a plain button, not glass (library)
+- 2026-10-26 `0de0568` publish: workout card moved and skipped lines (docs)
+
 - 2026-10-26 `8259207` Workout card: moved and skipped info on separate lines, glass Start today anyway button (library)
 - 2026-10-26 `c48acf8` publish: refresh numbers, audits, screen map and skill catalogue (docs)
 
