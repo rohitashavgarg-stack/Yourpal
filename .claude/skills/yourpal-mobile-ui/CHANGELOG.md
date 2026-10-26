@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-26 `8259207` Workout card: moved and skipped info on separate lines, glass Start today anyway button (library)
+- 2026-10-26 `c48acf8` publish: refresh numbers, audits, screen map and skill catalogue (docs)
+
 - 2026-10-26 `cbabe01` Workout card: moved and skipped are the same full card as the other states (neutral chip, one line, Undo 44 px, start anyway) (library, features)
 
 - 2026-10-26 `618f5eb` Round 5 handoff refresh: FoodCard docs and story, Storybook asset registry stand-in, SDK 58 notes, status, progress, screen map, counts (docs)

@@ -6,3 +6,4 @@ Things that changed since the skill was last reviewed. The yourpal-design-learne
 - Designer feedback saved or changed in memory: yourpal-working-style.md. Turn it into a rule in learned.md.
 - 30 UI commit(s) since the last review (see CHANGELOG.md). Read the diffs for new patterns: states, copy, layout, motion.
 - 1 UI commit(s) since the last review (see CHANGELOG.md). Read the diffs for new patterns: states, copy, layout, motion.
+- 2 UI commit(s) since the last review (see CHANGELOG.md). Read the diffs for new patterns: states, copy, layout, motion.

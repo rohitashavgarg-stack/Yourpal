@@ -53,7 +53,7 @@
    "doc": true,
    "uses": 145,
    "files": 59,
-   "inLibrary": 10
+   "inLibrary": 11
   },
   {
    "name": "IconButton",
@@ -224,7 +224,7 @@
    "doc": true,
    "uses": 99,
    "files": 48,
-   "inLibrary": 31
+   "inLibrary": 30
   },
   {
    "name": "ProgressBar",
@@ -368,7 +368,7 @@
    "doc": true,
    "uses": 858,
    "files": 85,
-   "inLibrary": 130
+   "inLibrary": 131
   },
   {
    "name": "Wheel",
