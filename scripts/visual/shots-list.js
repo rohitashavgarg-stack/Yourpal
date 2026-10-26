@@ -28,6 +28,7 @@ module.exports = [
   { name: 'overlay-rest-timer', url: '/', clicks: [...MAIN, 'Log set'] },
   { name: 'overlay-finish-screen', url: '/', clicks: [...MAIN, 'Finish workout', 'Finish now'], wait: 2500 },
     { name: 'exp-diet-bottom', url: '/plans?day=2&tab=diet', clicks: ['Diet'], wait: 2500, scroll: true },
+  { name: 'exp-diet-logged', url: '/plans?day=2&dom=' + q({ meals: { bf: { eaten: [0], por: {}, extra: [], repl: {}, skip: false, at: 500 } }, min: 1000 }), clicks: ['Diet', 'Breakfast'], wait: 2500 },
   { name: 'exp-diet', url: '/plans?day=2&tab=diet', clicks: ['Diet'], wait: 2500 },
   { name: 'exp-tab-plans', url: '/', clicks: ['Plans'], wait: 2500 },
   { name: 'exp-tab-gym', url: '/', clicks: ['Progress', 'Gym'], wait: 2500 },

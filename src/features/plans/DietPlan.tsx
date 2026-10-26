@@ -7,8 +7,8 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import Svg, { Circle } from 'react-native-svg';
 import { router } from 'expo-router';
-import { ChevronDown, Minus, Plus } from '@/lib/icons';
-import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
+import { ArrowRightLeft, ChevronDown, Minus, MoreHorizontal, Plus } from '@/lib/icons';
+import { Button, Card, IconButton, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark, Tag } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
 import { KCAL_TARGET, MACRO_TARGET, MealId, MEALS } from '@/lib/data';
@@ -111,98 +111,111 @@ function QtyControl({ mid, it, qty, locked }: { mid: MealId; it: DItem; qty: Qty
   );
 }
 
-// ---------- One food line: swipe right = eaten, left = swap, hold = menu ----------
+// ---------- One food card ----------
+// Not eaten: a dashed card with the amount stepper and the check on the right. Swipe left for Swap and Skip (Delete for a food you added).
+// Eaten: a solid card, the amount is locked, the macros sit in a darker strip with a menu to mark it as not eaten.
+// Skipped: faded. Hold any card to open the food page.
+const ACTION = 44;                       // the Swap and Skip buttons are 44 px
+const REVEAL = ACTION + 64 + 8 * 3;      // Swap, Skip (wider, it has a word) and the gaps
 
 function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean }) {
   const { c } = useTheme();
   const A = useDietActions();
   const { openSheet } = useOverlay();
-  const tx = useSharedValue(0);
-  const wash = useSharedValue(0);
-  const inX = useSharedValue(0);
-  const op = useSharedValue(it.st === 'skipped' ? 0.5 : 1);
-  const swipedAt = useRef(0);
-  const prevSt = useRef(it.st);
-  const prevN = useRef(it.n);
-
-  useEffect(() => {
-    if (it.st === 'eaten' && prevSt.current !== 'eaten') { wash.value = 1; wash.value = withTiming(0, { duration: 1100 }); }
-    if (it.st === 'skipped' && prevSt.current !== 'skipped') { inX.value = -40; inX.value = withTiming(0, { duration: 380, easing: Easing.out(Easing.cubic) }); }
-    op.value = withTiming(it.st === 'skipped' ? 0.5 : 1, { duration: 300 });
-    prevSt.current = it.st;
-  }, [it.st]);
-  useEffect(() => {
-    if (prevN.current !== it.n) { inX.value = 60; inX.value = withTiming(0, { duration: 450, easing: Easing.out(Easing.cubic) }); op.value = 0; op.value = withTiming(1, { duration: 320 }); }
-    prevN.current = it.n;
-  }, [it.n]);
-  const kShown = useCountUp(Math.round(it.k * it.por), 700, Math.round(it.k * it.por));
-
-  const markSwipe = () => { swipedAt.current = Date.now(); };
   const { gate: logGate } = useLogGate();
-  const onRight = () => { if (it.st !== 'eaten') A.eat(mid, it, true); };
-  const onLeft = logGate(() => { haptic.light(); openSheet(it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode="sugg" replaceIdx={it.idx} /> : <SwapSheet mid={mid} itemKey={it.key} always={false} />, { label: 'Swap item' }); });
-  const pan = Gesture.Pan().activeOffsetX([-12, 12]).failOffsetY([-10, 10])
-    .onStart(() => { scheduleOnRN(markSwipe); })
-    .onUpdate((e) => {
-      const raw = e.translationX;
-      tx.value = raw < -100 ? -100 + (raw + 100) * 0.3 : raw > 110 ? 110 + (raw - 110) * 0.3 : raw;
-    })
-    .onEnd((e) => {
-      const raw = e.translationX;
-      tx.value = withTiming(0, { duration: 300, easing: Easing.out(Easing.cubic) });
-      if (raw > 80) scheduleOnRN(onRight);
-      else if (raw < -80) scheduleOnRN(onLeft);
-      scheduleOnRN(markSwipe);
-    });
-
+  const tx = useSharedValue(0);
+  const base = useSharedValue(0);
+  const kShown = useCountUp(Math.round(it.k * it.por), 700, Math.round(it.k * it.por));
   const ate = it.st === 'eaten';
-  const fg = useAnimatedStyle(() => ({
-    transform: [{ translateX: tx.value + inX.value }],
-    backgroundColor: interpolateColor(wash.value, [0, 1], [ate ? c.goodSoft : c.surface2, c.goodSoft]),
-  }));
-  const content = useAnimatedStyle(() => ({ opacity: op.value }));
-  const under = useAnimatedStyle(() => ({ backgroundColor: tx.value > 0 ? c.good : tx.value < 0 ? c.accent : 'transparent' }));
-  const doneL = useAnimatedStyle(() => ({ opacity: tx.value > 0 ? Math.min(1, tx.value / 80) : 0 }));
-  const swapL = useAnimatedStyle(() => ({ opacity: tx.value < 0 ? Math.min(1, -tx.value / 70) : 0 }));
-
-  const recent = () => Date.now() - swipedAt.current < 400;
-  const openFood = () => { if (recent()) return; router.push({ pathname: '/food', params: { mid, k: String(it.idx), extra: it.mine ? '1' : '0' } }); };
-  const menu = logGate(() => { if (recent()) return; haptic.medium(); openSheet(<ItemMenuSheet mid={mid} itemKey={it.key} />, { label: 'Item options' }); });
+  const skipped = it.st === 'skipped';
+  const canSwipe = it.st === 'todo';
   const food = splitFood(it);
-  const qtyText = food.qty ? fmtQty(Math.round(food.qty.n * it.por * 100) / 100, food.qty.unit) : '';
-  const sub = it.st === 'skipped' ? 'Skipped for today'
-    : ate ? `Eaten · ~${kShown} kcal`
-    : simple ? (it.swapped ? 'Swapped' : it.mine ? 'Added by you' : 'As planned')
-    : `~${kShown} kcal · P ${Math.round(it.p * it.por)} · C ${Math.round(it.c * it.por)} · F ${Math.round(it.f * it.por)} g`;
+
+  const close = () => { tx.value = withTiming(0, { duration: 200 }); base.value = 0; };
+  const tick = () => { haptic.light(); };
+  const onSwap = logGate(() => { close(); openSheet(it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode="sugg" replaceIdx={it.idx} /> : <SwapSheet mid={mid} itemKey={it.key} always={false} />, { label: 'Swap item' }); });
+  const onSkip = () => { close(); if (it.mine) A.deleteExtra(mid, it); else A.skipItem(mid, it); };
+  const openFood = () => { haptic.medium(); router.push({ pathname: '/food', params: { mid, k: String(it.idx), extra: it.mine ? '1' : '0' } }); };
+
+  const pan = Gesture.Pan().enabled(canSwipe).activeOffsetX([-12, 12]).failOffsetY([-10, 10])
+    .onUpdate((e) => { tx.value = Math.max(-REVEAL, Math.min(0, base.value + e.translationX)); })
+    .onEnd(() => {
+      const open = tx.value < -REVEAL / 2;
+      tx.value = withTiming(open ? -REVEAL : 0, { duration: 220, easing: Easing.out(Easing.cubic) });
+      if (open && base.value === 0) scheduleOnRN(tick);
+      base.value = open ? -REVEAL : 0;
+    });
+  const slide = useAnimatedStyle(() => ({ transform: [{ translateX: tx.value }] }));
+
+  const macros = simple ? (it.swapped ? 'Swapped' : it.mine ? 'Added by you' : 'As planned') : `P ${Math.round(it.p * it.por)} · C ${Math.round(it.c * it.por)} · F ${Math.round(it.f * it.por)} g`;
+  const amountText = food.qty ? fmtQty(Math.round(food.qty.n * it.por * 100) / 100, food.qty.unit) : '';
+  const label = `${food.name}, ${amountText ? amountText + ', ' : ''}${skipped ? 'skipped for today' : `${kShown} kcal`}. Hold for nutrition and recipe`;
+  const actions = ate ? [{ name: 'details', label: 'Open details' }] : [{ name: 'swap', label: 'Swap' }, { name: it.mine ? 'delete' : 'skip', label: it.mine ? 'Delete' : 'Skip' }, { name: 'details', label: 'Open details' }];
+  const onAction = (n: string) => { if (n === 'swap') onSwap(); else if (n === 'skip' || n === 'delete') onSkip(); else if (n === 'details') openFood(); };
+  const check = (
+    <CheckCircle on={ate} size={34} tone="good" label={`${ate ? 'Unmark' : 'Mark eaten:'} ${it.n}`}
+      onPress={() => (ate ? openSheet(<UndoEatenSheet what={it.n} onConfirm={() => A.eat(mid, it, false)} />, { label: 'Mark as not eaten' }) : A.eat(mid, it, true))} />
+  );
+  const title = (
+    <Row style={{ gap: 8 }}>
+      <FoodMark type={it.type} size={13} />
+      <Txt numberOfLines={2} style={{ flexShrink: 1, fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 21, textDecorationLine: skipped ? 'line-through' : 'none' }}>{food.name}</Txt>
+      {it.mine && <Tag label="Yours" bg={c.accentSoft} fg={c.accentText} />}
+    </Row>
+  );
+
+  if (ate) {
+    return (
+      <Pressy accessibilityRole="button" accessibilityLabel={label} accessibilityActions={actions} onAccessibilityAction={(e) => onAction(e.nativeEvent.actionName)}
+        onLongPress={openFood} delayLongPress={480} scaleTo={0.99} haptics={false} style={{ borderRadius: radii.md, overflow: 'hidden', backgroundColor: c.surface2 }}>
+        <View style={{ paddingHorizontal: 14, paddingTop: 14, paddingBottom: 12, gap: 10 }}>
+          {title}
+          <Row style={{ justifyContent: 'space-between' }}>
+            {food.qty ? <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20 }}>{amountText}</Txt> : <View />}
+            <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{kShown} kcal</Txt>
+          </Row>
+        </View>
+        <Row style={{ justifyContent: 'space-between', backgroundColor: c.surface3, paddingLeft: 14, paddingRight: 8, paddingVertical: 8, minHeight: 52 }}>
+          <Txt v="caption" style={{ flexShrink: 1 }}>{macros}</Txt>
+          <IconButton label={`More for ${it.n}`} onPress={() => openSheet(<UndoEatenSheet what={it.n} onConfirm={() => A.eat(mid, it, false)} />, { label: 'Mark as not eaten' })} size={36} radius={radii.pill} borderWidth={1.5} borderColor={c.chipLine} hitSlop={4}>
+            <MoreHorizontal size={18} color={c.ink} />
+          </IconButton>
+        </Row>
+      </Pressy>
+    );
+  }
 
   return (
     <View style={{ borderRadius: radii.md, overflow: 'hidden' }}>
-      <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: radii.md, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 18 }, under]}>
-        <Animated.View style={doneL}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.dark }}>Eaten</Txt></Animated.View>
-        <Animated.View style={swapL}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.white }}>Swap</Txt></Animated.View>
-      </Animated.View>
+      {canSwipe && (
+        <View style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: REVEAL, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+          <Pressy accessibilityRole="button" accessibilityLabel="Swap" onPress={onSwap} scaleTo={0.94} style={{ width: ACTION, height: ACTION, borderRadius: radii.tile, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}>
+            <ArrowRightLeft size={20} color={c.bg} />
+          </Pressy>
+          <Pressy accessibilityRole="button" accessibilityLabel={it.mine ? 'Delete' : 'Skip'} onPress={onSkip} scaleTo={0.94} style={{ minWidth: 64, height: ACTION, paddingHorizontal: 12, borderRadius: radii.tile, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: it.mine ? c.warn : c.ink }}>{it.mine ? 'Delete' : 'Skip'}</Txt>
+          </Pressy>
+        </View>
+      )}
       <GestureDetector gesture={pan}>
-        <Animated.View collapsable={false}
-          style={[{ minHeight: 64, borderRadius: radii.md, paddingLeft: 12, paddingRight: 4, flexDirection: 'row', alignItems: 'center', gap: 8 }, fg]}>
-          <Animated.View style={[{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, minWidth: 0 }, content]}>
-            <FoodMark type={it.type} />
-            <View style={{ flex: 1, minWidth: 0 }}>
-              <Pressy accessibilityRole="button" accessibilityLabel={`${food.name}, ${qtyText ? qtyText + ', ' : ''}${sub}. Tap for nutrition and recipe, hold for more`} accessibilityHint="Swipe right to mark eaten, left to swap"
-                accessibilityActions={[{ name: 'eaten', label: 'Mark eaten' }, { name: 'swap', label: 'Swap' }, { name: 'menu', label: 'More options' }]}
-                onAccessibilityAction={(e) => { const n = e.nativeEvent.actionName; if (n === 'eaten') onRight(); else if (n === 'swap') onLeft(); else if (n === 'menu') menu(); }}
-                onPress={openFood} onLongPress={menu} delayLongPress={480} scaleTo={0.98} style={{ paddingTop: 10, paddingBottom: 2 }}>
-                <Txt numberOfLines={2} style={{ fontFamily: font.medium, textDecorationLine: it.st === 'skipped' ? 'line-through' : 'none' }}>{food.name}</Txt>
-              </Pressy>
-              <View style={{ gap: 6, paddingBottom: 10 }}>
-                {food.qty && it.st !== 'skipped' ? <QtyControl mid={mid} it={it} qty={food.qty} locked={ate} /> : null}
-                <Pressy onPress={openFood} onLongPress={menu} delayLongPress={480} scaleTo={0.98} accessible={false}>
-                  <Txt v="caption" numberOfLines={1}>{sub}</Txt>
-                </Pressy>
-              </View>
+        <Animated.View collapsable={false} style={[{ borderRadius: radii.md, backgroundColor: c.surface }, slide]}>
+          <Pressy accessibilityRole="button" accessibilityLabel={label} accessibilityActions={actions} onAccessibilityAction={(e) => onAction(e.nativeEvent.actionName)}
+            onLongPress={openFood} delayLongPress={480} scaleTo={0.99} haptics={false}
+            style={{ borderRadius: radii.md, borderWidth: 1.5, borderStyle: skipped ? 'solid' : 'dashed', borderColor: skipped ? 'transparent' : c.chipLine, backgroundColor: skipped ? c.surface2 : 'transparent', paddingVertical: 12, paddingLeft: 14, paddingRight: 10, flexDirection: 'row', alignItems: 'center', gap: 10, opacity: skipped ? 0.55 : 1 }}>
+            <View style={{ flex: 1, minWidth: 0, gap: 8 }}>
+              {title}
+              {skipped ? <Txt v="caption">Skipped for today</Txt> : (
+                <>
+                  <Row style={{ gap: 10, flexWrap: 'wrap' }}>
+                    {food.qty ? <QtyControl mid={mid} it={it} qty={food.qty} locked={false} /> : null}
+                    <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{kShown} kcal</Txt>
+                  </Row>
+                  <Txt v="caption">{macros}</Txt>
+                </>
+              )}
             </View>
-            {it.mine && <Tag label="Yours" bg={c.accentSoft} fg={c.accentText} style={{ alignSelf: 'center' }} />}
-          </Animated.View>
-          <CheckCircle on={it.st === 'eaten'} size={40} tone="good" label={`${it.st === 'eaten' ? 'Unmark' : 'Mark eaten:'} ${it.n}`} onPress={() => (ate ? openSheet(<UndoEatenSheet what={it.n} onConfirm={() => A.eat(mid, it, false)} />, { label: 'Mark as not eaten' }) : A.eat(mid, it, true))} />
+            {check}
+          </Pressy>
         </Animated.View>
       </GestureDetector>
     </View>
