@@ -28,7 +28,7 @@ import { DItem, dietItems, dietTotals, setP, useCountUp, usePlans } from './stor
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Chevron } from '@/design-system/primitives/Chevron';
 import { AmountStepper } from '@/design-system/primitives/AmountStepper';
-import { ProgressBar } from '@/design-system/primitives/ProgressBar';
+import { ProgressBar, ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
@@ -291,7 +291,6 @@ export function DietPlan() {
   const t = dietTotals(d, p);
   const openId = p.openMeal === 'none' ? null : p.openMeal ?? nextMeal(d) ?? 'lu';
   const onPlan = totals(d).onPlan;
-  const left = Math.max(0, Math.round(KCAL_TARGET - t.k));
   const overBy = Math.max(0, Math.round(t.k - KCAL_TARGET));
   return (
     <>
@@ -306,22 +305,22 @@ export function DietPlan() {
         </Card>
       </FadeIn>
       <FadeIn i={1}>
-        <Row style={{ gap: 12, flexWrap: 'wrap', paddingHorizontal: 6 }}>
-          <Txt v="caption" style={overBy ? { color: c.warn } : undefined}>{overBy ? `${inr(overBy)} kcal over today's target` : `${inr(left)} kcal left`} · planned ~{inr(Math.round(t.plan))}</Txt>
-          <View style={{ flex: 1 }} />
-          {(['veg', 'egg', 'nv'] as const).map((ty) => (
-            <Row key={ty} style={{ gap: 4 }}><FoodMark type={ty} size={12} /><Txt v="caption">{ty === 'veg' ? 'Veg' : ty === 'egg' ? 'Egg' : 'Non-veg'}</Txt></Row>
-          ))}
-        </Row>
         {overBy > 0 && (
           <FadeIn accessibilityRole="alert" style={{ marginTop: 8, padding: 12, borderRadius: radii.md, backgroundColor: c.warnSoft }}>
             <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>You&apos;re about {inr(overBy)} kcal over today. That&apos;s okay. Keep your next meal light and have some water.</Txt>
           </FadeIn>
         )}
       </FadeIn>
-      <FadeIn i={1}><Txt v="caption" style={{ paddingHorizontal: 6 }}>Swipe right = eaten · swipe left = swap · tap the amount to change it · hold for more · double tap a meal to mark it all eaten</Txt></FadeIn>
       {MEALS.map((m, i) => <FadeIn key={m.id} i={2 + i}><MealCard mid={m.id} open={openId === m.id} /></FadeIn>)}
-      <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.sm }}>This week: {7 + onPlan} of 12 meals on plan</Txt>
+      <FadeIn i={2 + MEALS.length}>
+        <View accessible accessibilityLabel={`This week: ${7 + onPlan} of 12 meals on plan`} style={{ gap: 8, paddingHorizontal: 6, paddingBottom: 8 }}>
+          <Row style={{ alignItems: 'baseline', gap: 6 }}>
+            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl, lineHeight: 28 }}>{7 + onPlan}</Txt>
+            <Txt muted style={{ fontSize: fontSizes.sm }}>of 12 meals on plan this week</Txt>
+          </Row>
+          <ProgressSegments segments={Array.from({ length: 12 }, (_, i) => ({ color: i < 7 + onPlan ? c.good : c.surface3 }))} height={6} gap={3} />
+        </View>
+      </FadeIn>
     </>
   );
 }
