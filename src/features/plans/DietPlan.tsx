@@ -7,7 +7,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import Svg, { Circle } from 'react-native-svg';
 import { router } from 'expo-router';
-import { ChevronDown, Minus, Plus } from '@/lib/icons';
+import { ChevronDown, Minus, Plus, UtensilsCrossed } from '@/lib/icons';
 import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark, Tag } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -29,7 +29,6 @@ import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Chevron } from '@/design-system/primitives/Chevron';
 import { AmountStepper } from '@/design-system/primitives/AmountStepper';
 import { ProgressBar, ProgressSegments } from '@/design-system/primitives/ProgressBar';
-import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
@@ -313,10 +312,11 @@ export function DietPlan() {
         )}
       </FadeIn>
       <FadeIn i={2}>
-        <Row style={{ gap: 12, paddingTop: 8 }}>
-          <SectionLabel variant="overline" inset={6}>MEALS</SectionLabel>
+        <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 4 }}>
           <View style={{ flex: 1, height: 1, backgroundColor: c.line }} />
-        </Row>
+          <View style={{ width: 28, height: 28, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><UtensilsCrossed size={14} color={c.muted} /></View>
+          <View style={{ flex: 1, height: 1, backgroundColor: c.line }} />
+        </View>
       </FadeIn>
       {MEALS.map((m, i) => <FadeIn key={m.id} i={3 + i}><MealCard mid={m.id} open={openId === m.id} /></FadeIn>)}
       <FadeIn i={3 + MEALS.length}>
