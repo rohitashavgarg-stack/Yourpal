@@ -15,6 +15,7 @@ import { startCreate, startDietEdit, startWorkoutEdit } from './openers';
 import { BigTitle, ListRow, Stepper } from './parts';
 import { allowedFor, dayPlan, dietItems, DietRow, PEx, setP, usePlans } from './store';
 import { Callout } from '@/design-system/primitives/Callout';
+import { FoodCard } from '@/design-system/patterns/FoodCard';
 import { radii, fontSizes } from '@/design-system/tokens';
 
 // ---------- Workout plan menu ----------
@@ -229,10 +230,10 @@ export function DietSwapSheet({ mid, itemKey, always: always0 }: { mid: MealId; 
     <>
       <BigTitle>Swap {it.n.toLowerCase()}</BigTitle>
       <Txt v="mono" muted style={{ marginTop: -6 }}>~{it.k} kcal · {it.p} g protein</Txt>
-      <View>
+      <View style={{ gap: 8 }}>
         {opts.map((o) => (
-          <ListRow key={o.n} label={`${o.n}, ${o.q}`} sub={o.coach ? 'Coach-approved' : undefined} chevron={false} a11y={`${o.n}, ${o.q}, about ${o.k} kcal, ${o.p} grams protein${o.coach ? ', coach-approved' : ''}`}
-            right={<Row style={{ gap: 8 }}><FoodMark type={o.type} /><Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>≈{o.k} · {o.p} g</Txt></Row>} onPress={() => pick(o)} />
+          <FoodCard key={o.n} state="todo" name={`${o.n}, ${o.q}`} type={o.type} kcal={`≈${o.k} kcal`} macros={`P ${o.p} g${o.coach ? ' · Coach-approved' : ''}`} onPress={() => pick(o)}
+            label={`${o.n}, ${o.q}, about ${o.k} kcal, ${o.p} grams protein${o.coach ? ', coach-approved' : ''}`} />
         ))}
         <ListRow label="Search something else" last onPress={() => closeSheet(() => router.push({ pathname: '/plans/log', params: { meal: mid, replace: it.key } }))} />
       </View>
