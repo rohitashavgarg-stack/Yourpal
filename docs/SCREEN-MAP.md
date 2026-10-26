@@ -107,7 +107,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 - Leads to: [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans), [Metric detail](#metric-detail), [Log weight](#log-weight), [Coach](#coach), [Active workout](#active-workout), [Progress](#progress), [Membership](#membership), [Check-in map](#check-in-map), [Streaks and badges](#streaks-and-badges)
 - Sheets it opens: `FlagSheet`, `UpdatesSheet`, `WaterSheet`, `HealthSheet`, `LogMealsSheet`, `DaySheet`, `StepsSheet`
 - Library pieces: `FadeIn`, `Button`, `Pressy`, `IconBadge`, `Card`, `FoodCard`, `StatusDot`, `WorkoutCardPattern`
-- Data it reads: app state `loading`, `session`, `todayVariant`, `hc`, `wearable`, `time`, `wkDone`, `wkScenario`, `ci`, `scanFails`, `min`, `ciStart`, `ciOut`, `ciExtend`, `goal`, `awayDays`, `hasGym`, `dismissed`, `water`, `weight`, `openMeal`, `ciAt`, `membership`; profile `name`, `time`; screen stores `todayUiStore`, `planStore`, `goalStore`, `stepsStore`, `goalV2Store`, `goalSizeStore`, `goalCardStore`, `topCardStore`, `gymStore`, `missedWkStore`, `coachStore`, `reminderStore`, `greetStore`, `pushStore`; sample data `dur`, `fmtT`, `Meal`, `MealId`, `MEALS`, `KCAL_TARGET`, `MACRO_TARGET`
+- Data it reads: app state `loading`, `session`, `todayVariant`, `hc`, `wearable`, `time`, `wkDone`, `wkScenario`, `ci`, `scanFails`, `min`, `ciStart`, `ciOut`, `ciExtend`, `goal`, `awayDays`, `hasGym`, `dismissed`, `water`, `weight`, `openMeal`, `ciAt`, `membership`; profile `name`, `time`; screen stores `todayUiStore`, `planStore`, `goalStore`, `stepsStore`, `goalV2Store`, `goalSizeStore`, `goalCardStore`, `topCardStore`, `gymStore`, `missedWkStore`, `coachStore`, `reminderStore`, `greetStore`, `pushStore`; sample data `dur`, `fmtT`, `Meal`, `MealId`, `MEALS`, `KCAL_TARGET`, `TODAY_IDX`, `WEEK`, `MACRO_TARGET`
 
 ### Plans
 
@@ -629,9 +629,9 @@ Made-up content: meals, food details, workouts, plans, the weekly strip, assessm
 | `MEALS` | 10 | Today, Plans, Food detail, Ask coach, Create a workout, Edit plan, ... |
 | `FoodType` | 7 | Plans, Food detail, Ask coach, Create a workout, Edit plan, What did you eat?, ... |
 | `PlanDay` | 7 | Plans, Ask coach, Create a workout, Exercise, Workout history, What did you eat?, ... |
+| `TODAY_IDX` | 7 | Today, Plans, Ask coach, Create a workout, Edit plan, What did you eat?, ... |
 | `Mode` | 6 | Plans, Ask coach, Create a workout, Edit plan, What did you eat?, What changed |
 | `SWAPS` | 6 | Plans, Food detail, Create a workout, Edit plan, Workout history, Metric detail |
-| `TODAY_IDX` | 6 | Plans, Ask coach, Create a workout, Edit plan, What did you eat?, What changed |
 | `LIBRARY` | 5 | Plans, Exercise search, Create a workout, Edit plan, Workout history |
 | `basePlans` | 4 | Plans, Create a workout, Edit plan, Workout history |
 | `Ex` | 4 | Check-in map, Exercise search, Exercise, Active workout |
@@ -649,3 +649,4 @@ Made-up content: meals, food details, workouts, plans, the weekly strip, assessm
 | `FOOD_DB` | 1 | Food detail |
 | `ListItem` | 1 | Active workout |
 | `WARMUP` | 1 | Active workout |
+| `WEEK` | 1 | Today |
