@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { scheduleOnRN } from 'react-native-worklets';
-import Animated, { interpolate, useAnimatedReaction, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, Extrapolation } from 'react-native-reanimated';
+import Animated, { SharedValue, interpolate, useAnimatedReaction, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, Extrapolation } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useNavHidden } from './FloatingTabBar';
@@ -14,7 +14,7 @@ import { fontSizes } from '@/design-system/tokens';
 
 // A tab page with an iOS large title that collapses into a compact header,
 // and a scroll that hides / shows the floating nav.
-export function TabScreen({ title, header, children, compactTitle = true, bottomPad = 130, refreshControl, pinned, pinAfter, titleRight }: { title: string; titleRight?: React.ReactNode; header?: React.ReactNode; children: React.ReactNode; compactTitle?: boolean; bottomPad?: number; refreshControl?: React.ReactElement<any>; pinned?: React.ReactNode; pinAfter?: number }) {
+export function TabScreen({ title, header, children, compactTitle = true, bottomPad = 130, refreshControl, pinned, pinAfter, titleRight, scrollY }: { title: string; scrollY?: SharedValue<number>; titleRight?: React.ReactNode; header?: React.ReactNode; children: React.ReactNode; compactTitle?: boolean; bottomPad?: number; refreshControl?: React.ReactElement<any>; pinned?: React.ReactNode; pinAfter?: number }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
@@ -24,6 +24,7 @@ export function TabScreen({ title, header, children, compactTitle = true, bottom
     onScroll: (e) => {
       const v = e.contentOffset.y;
       y.value = v;
+      if (scrollY) scrollY.value = v;
       if (hidden) {
         const dy = v - last.value;
         if (v < 30) hidden.value = withTiming(0, { duration: 260 });

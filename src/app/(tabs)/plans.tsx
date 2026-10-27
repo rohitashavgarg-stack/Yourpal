@@ -3,6 +3,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLogsPaused } from '@/lib/logGate';
 import { ScrollView, View, type ScrollViewInstance } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAnimatedReaction, useSharedValue } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 import { Check, ChevronsRight, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -47,20 +50,18 @@ function DayStrip() {
     if (w > 0 && k >= 0 && k !== page) { ref.current?.scrollTo({ x: k * w, animated: true }); setPage(k); }
   }, [p.week]);
   const goto = (k: number) => { ref.current?.scrollTo({ x: k * w, animated: true }); setPage(k); haptic.tick(); };
-  const range = `${monthOf(0, cur)} ${dateOf(0, cur)} – ${monthOf(6, cur) !== monthOf(0, cur) ? monthOf(6, cur) + ' ' : ''}${dateOf(6, cur)}`;
   return (
-    <Callout size="compact" gap={2}>
-      {/* a slim row: the dates for every week, and the way back only on another week, so the container keeps one size when you swipe */}
-      <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, height: 24, marginTop: -2 }}>
-        <Txt v="caption" accessibilityLiveRegion="polite">{range}</Txt>
-        {cur !== 0 && (
+    <Callout size="compact">
+      {/* on another week a small way back floats on the bottom edge of the container: it is not part of the layout, so the container keeps one size when you swipe */}
+      {cur !== 0 && (
+        <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: -13, alignItems: 'center', zIndex: 2 }}>
           <Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => goto(THIS)} hitSlop={10} scaleTo={0.96}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 24, paddingHorizontal: 10, borderRadius: radii.pill, borderWidth: 1, borderColor: c.chipLine }}>
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 26, paddingHorizontal: 12, borderRadius: radii.pill, borderWidth: 1, borderColor: c.chipLine, backgroundColor: c.surface }}>
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16 }}>This week</Txt>
             <ChevronsRight size={12} color={c.ink} />
           </Pressy>
-        )}
-      </Row>
+        </View>
+      )}
       <View onLayout={(e) => setW(e.nativeEvent.layout.width)}>
         <ScrollView ref={ref} horizontal pagingEnabled showsHorizontalScrollIndicator={false} accessibilityLabel="Weeks, swipe for earlier or later weeks" scrollEventThrottle={16}
           onScroll={(e) => { const k = Math.round(e.nativeEvent.contentOffset.x / (w || 1)); if (k !== page && k >= 0 && k < WEEKS.length) { setPage(k); haptic.tick(); } }}
@@ -149,9 +150,15 @@ export default function Plans() {
 
   const paused = useLogsPaused();
   const canStart = useCanStart() && !paused;
+  const insets = useSafeAreaInsets();
+  const sy = useSharedValue(0);
+  const [startBottom, setStartBottom] = useState<number | null>(null); // where the Start button in the page ends, measured from the top of the page content
+  const [floating, setFloating] = useState(false);
+  const under = insets.top + 8 + 56 + 8; // below this the page content is hidden behind the header
+  useAnimatedReaction(() => startBottom != null && sy.value > startBottom - under, (v, prev) => { if (v !== prev) scheduleOnRN(setFloating, v); }, [startBottom, under]);
   return (
     <View style={{ flex: 1 }}>
-    <TabScreen title="Plans" header={<GymHeader />} compactTitle={false} bottomPad={canStart ? 190 : 130} titleRight={(
+    <TabScreen title="Plans" scrollY={sy} header={<GymHeader />} compactTitle={false} bottomPad={canStart ? 190 : 130} titleRight={(
       <Row style={{ gap: 8 }}>
         <Segmented iconOnly accessibilityLabel="Plan type" value={p.seg} onChange={(v) => setP({ seg: v })}
           options={[{ value: 'workout', label: 'Workout' }, { value: 'diet', label: 'Diet' }]}
@@ -179,10 +186,10 @@ export default function Plans() {
       )}
       <DayStrip />
       <View key={p.seg} style={{ gap: 12 }}>
-        {isW ? <WorkoutPlan /> : <DietPlan />}
+        {isW ? <WorkoutPlan onStartMeasure={(wb) => setStartBottom(wb == null ? null : wb + sy.value)} /> : <DietPlan />}
       </View>
     </TabScreen>
-    {canStart && <StickyStart />}
+    {canStart && floating && <StickyStart />}
     </View>
   );
 }

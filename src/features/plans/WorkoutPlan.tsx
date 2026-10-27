@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLogsPaused } from '@/lib/logGate';
 import { StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
+import Svg, { Line } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -49,13 +50,14 @@ function LockedPlan({ day, locked, children }: { day: string; locked: boolean; c
   );
 }
 
-export function WorkoutPlan() {
+export function WorkoutPlan({ onStartMeasure }: { onStartMeasure?: (windowBottom: number | null) => void }) {
   const { c } = useTheme();
   const { d } = useDomain();
   const { p } = usePlans();
   const { openSheet } = useOverlay();
   const startWorkout = useStartWorkout();
   const paused = useLogsPaused();
+  const canStart = useCanStart() && !paused;
   const plan = dayPlan(d, p, p.day);
 
   if (p.noPlan) {
@@ -146,6 +148,7 @@ export function WorkoutPlan() {
                   <PersonAvatar who={plan.created ? 'me' : 'coach'} size={24} />
                   <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'}</Txt>
                 </Row>
+                {canStart && <InlineStart onMeasure={onStartMeasure} />}
               </View>
               {!!plan.done && <IconBadge accessibilityLabel="Logged" size={28} bg={c.good} style={{ marginBottom: 8 }}><Check size={16} color={c.bg} strokeWidth={3} /></IconBadge>}
             </Row>
@@ -172,7 +175,7 @@ export function WorkoutPlan() {
               </FadeIn>
             );
           })()}
-          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><View accessibilityElementsHidden style={{ height: 1, backgroundColor: c.chipLine, marginTop: 4 }} /><ListCard dot={c.cAct} title="Warm-up" rows={plan.wu} /></FadeIn>}
+          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><Svg accessibilityElementsHidden width="100%" height={2} style={{ marginTop: 4 }}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg><ListCard dot={c.cAct} title="Warm-up" rows={plan.wu} /></FadeIn>}
           <FadeIn i={3}><Txt v="label" style={{ paddingHorizontal: 6 }}>Main workout</Txt></FadeIn>
           <FadeIn i={3}>
             <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
@@ -228,11 +231,27 @@ export function useCanStart() {
   return !!plan && relDay(p) === 0 && !plan.done;
 }
 
-// Pinned above the floating tab bar; when the bar slides away on scroll, the button settles to the bottom edge.
+// The Start button in the page: under the coach pill. It reports where it sits so the floating one knows when to take over.
+function InlineStart({ onMeasure }: { onMeasure?: (windowBottom: number | null) => void }) {
+  const { c } = useTheme();
+  const { d } = useDomain();
+  const startWorkout = useStartWorkout();
+  const live = !!d.session;
+  const ref = useRef<View>(null);
+  const measure = () => ref.current?.measureInWindow((_x, y, _w, h) => onMeasure?.(y + h));
+  useEffect(() => () => onMeasure?.(null), []); // eslint-disable-line react-hooks/exhaustive-deps
+  return (
+    <View ref={ref} onLayout={measure} style={{ marginTop: 14 }}>
+      <Button kind="accent" label={live ? 'Resume workout' : 'Start workout'} icon={<Play size={18} color={c.accentInk} fill={c.accentInk} />}
+        onPress={() => (live ? router.push('/workout') : startWorkout())} />
+    </View>
+  );
+}
+
+// Floats above the tab bar once the Start button in the page has scrolled out of view; when the bar slides away on scroll, the button settles to the bottom edge.
 export function StickyStart() {
   const { c } = useTheme();
   const { d } = useDomain();
-  const { openSheet } = useOverlay();
   const startWorkout = useStartWorkout();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
