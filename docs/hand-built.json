@@ -136,7 +136,7 @@
   },
   {
    "file": "app/(tabs)/plans.tsx",
-   "line": 74,
+   "line": 75,
    "kind": "button or pill",
    "look": "button 60 px high, radius radii.lg",
    "fn": "DayStrip",
@@ -146,7 +146,7 @@
   },
   {
    "file": "app/(tabs)/plans.tsx",
-   "line": 82,
+   "line": 83,
    "kind": "icon badge",
    "look": "dot 12 px",
    "fn": "DayStrip",
@@ -156,7 +156,7 @@
   },
   {
    "file": "app/(tabs)/plans.tsx",
-   "line": 83,
+   "line": 84,
    "kind": "icon badge",
    "look": "dot 4 px",
    "fn": "DayStrip",
@@ -166,7 +166,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 93,
+   "line": 94,
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "fn": "WorkoutPlan",
@@ -176,7 +176,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 115,
+   "line": 116,
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "fn": "WorkoutPlan",
@@ -186,7 +186,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 179,
+   "line": 189,
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "fn": "WorkoutPlan",
@@ -196,7 +196,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 180,
+   "line": 190,
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "fn": "WorkoutPlan",
