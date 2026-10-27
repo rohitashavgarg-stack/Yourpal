@@ -38,7 +38,7 @@ export type Domain = {
   weightLog: { t: string; v: number }[];
   meals: Partial<Record<MealId, MealLog>>;
   wkScenario: 'Not started' | 'Done' | 'Rest day';
-  wkDone: { a: number; b: number; k: number } | null;
+  wkDone: { a: number; b: number; k: number; ex?: number } | null; // ex: how many exercises were marked done (left out: all of them)
   pastLogs: Record<string, { a: number; b: number; skip: string[]; sets?: Record<string, { kg: number; reps: number; sec: number; done: boolean }[]> }>; // workouts logged for days that have gone by, keyed "week:day"; a and b are minutes of the day, skip lists the exercises not done
   session: Session | null;
   ci: CheckInScenario;

@@ -69,6 +69,7 @@ module.exports = [
   { name: 'state-diet-pastday', url: '/plans?day=0', clicks: ['Diet'], settle: 6000, wait: 2500 },
   { name: 'state-plans-done-scrolled', url: '/plans?day=0', settle: 6000, scrollBy: 560 },
   { name: 'state-plans-calendar', url: '/plans', clicks: ['September. Open the calendar'], settle: 6000, wait: 1500 },
+  { name: 'state-today-wkdone', url: '/?dom=' + q({ wkDone: { a: 1110, b: 1160, k: 380, ex: 6 }, min: 1200 }), settle: 7000, scrollBy: 700 },
   { name: 'state-progress-earlier', url: '/progress', settle: 9000, clicks: ['Earlier'], wait: 1500 },
   { name: 'state-login-offline', url: '/login?sc=' + q({ net: 'Offline' }), noSignedIn: true },
 ];
