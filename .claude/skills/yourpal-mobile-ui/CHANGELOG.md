@@ -1,5 +1,9 @@
 # Design changelog (generated)
 
+- 2026-10-27 `d48b4ce` Plans: log sets, weight and reps for a previous workout, grey stat tiles, check marks on the right of logged rows (library, features)
+- 2026-10-27 `08c2230` publish: Plans calendar sheet, floating log, compact strip (features)
+- 2026-10-27 `4f38c9d` publish: Plans calendar sheet, floating log, compact strip (docs)
+
 - 2026-10-27 `fd931e7` Plans: compact full-width strip with the month heading above it and a calendar in a bottom sheet, floating Log this workout on past days, secondary log button, green only on stats and checks, softer glow edge on Today (screens, library, features)
 - 2026-10-27 `595db54` publish: log a past workout, logged day look (docs)
 

@@ -283,7 +283,7 @@
     },
     {
      "kind": "card",
-     "sig": "card radius radii.card, fill c.goodSoft, padding 14",
+     "sig": "card radius radii.card, fill c.surface2, padding 14",
      "fn": "WorkoutPlan",
      "line": 191,
      "tag": "View",
@@ -327,28 +327,28 @@
      "file": "features/plans/PlansCalendarSheet.tsx"
     },
     {
-     "kind": "button or pill",
-     "sig": "button 52 px high, radius radii.md",
-     "fn": "LogPastWorkoutSheet",
-     "line": 58,
-     "tag": "Pressy",
-     "text": "<Pressy key={e.id} accessibilityRole=\"checkbox\" accessibilityState={{ checked: !off }} accessibilityLabel={`${",
-     "file": "features/plans/LogPastWorkoutSheet.tsx"
-    },
-    {
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.pill",
      "fn": "LogPastWorkoutSheet",
-     "line": 60,
+     "line": 93,
      "tag": "View",
      "text": "<View style={{ width: 24, height: 24, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center'",
+     "file": "features/plans/LogPastWorkoutSheet.tsx"
+    },
+    {
+     "kind": "icon button",
+     "sig": "icon button 28 px, radius radii.pill",
+     "fn": "LogPastWorkoutSheet",
+     "line": 113,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"checkbox\" accessibilityState={{ checked: s.done }} accessibilityLabel={`Set ${i + 1",
      "file": "features/plans/LogPastWorkoutSheet.tsx"
     }
    ],
    "ds": {
-    "Row": 22,
-    "Pressy": 9,
-    "Txt": 75,
+    "Row": 24,
+    "Pressy": 11,
+    "Txt": 77,
     "IconBadge": 3,
     "Segmented": 1,
     "IconButton": 4,
@@ -360,7 +360,7 @@
     "ListCard": 2,
     "SectionLabel": 1,
     "ProgressBar": 1,
-    "AmountStepper": 3,
+    "AmountStepper": 6,
     "FoodCard": 1,
     "Chevron": 1,
     "SheetFooter": 1

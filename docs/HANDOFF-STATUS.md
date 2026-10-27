@@ -3,12 +3,12 @@
 Checked on 26 Oct 2026 on branch `design-system-handoff`, after round 5 (see `docs/progress.md`). Each line was checked by running the command or opening the file or link. Light mode is out of scope by the designer's instruction, so nothing here covers it.
 
 <!-- numbers:start -->
-Numbers written by `scripts/publish.js` on 2026-10-27 12:16 from branch `experiment-blue-glass` at `fd931e7`:
+Numbers written by `scripts/publish.js` on 2026-10-27 12:22 from branch `experiment-blue-glass` at `d48b4ce`:
 
 | Measure | Value |
 |---|---|
 | Typecheck | 0 errors |
-| Lint | 0 errors, 674 warnings |
+| Lint | 0 errors, 672 warnings |
 | New hard-coded values on changed lines | 0 |
 | Library files | 45 (36 primitives, 9 patterns) |
 | Storybook stories | 241 |

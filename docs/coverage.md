@@ -97,7 +97,7 @@ Every screen, sub-page, bottom sheet, popup, empty, loading and error state, and
 | FlagSheet | `(sheet) features/gym/sheets.tsx:17` | Opened from lib/devSheets, gym/confirm, features/today/ForYou, features/today/TopCards | not started | 0 |
 | ChatOptionsSheet | `(sheet) features/gym/sheets.tsx:38` | Opened from lib/devSheets, gym/chat | not started | 0 |
 | UndoEatenSheet | `(sheet) features/plans/DietPlan.tsx:76` | Opened from lib/devSheets, features/plans/DietPlan | not started | 0 |
-| LogPastWorkoutSheet | `(sheet) features/plans/LogPastWorkoutSheet.tsx:24` | Opened from features/plans/WorkoutPlan | not started | 2 (1 button or pill, 1 icon badge) |
+| LogPastWorkoutSheet | `(sheet) features/plans/LogPastWorkoutSheet.tsx:40` | Opened from features/plans/WorkoutPlan | not started | 2 (1 icon badge, 1 icon button) |
 | PlansCalendarSheet | `(sheet) features/plans/PlansCalendarSheet.tsx:19` | Opened from plans | not started | 1 (1 icon button) |
 | QtySheet | `(sheet) features/plans/QtySheet.tsx:18` | Opened from lib/devSheets, features/plans/DietPlan | not started | 0 |
 | PlanMenuSheet | `(sheet) features/plans/Sheets.tsx:22` | Opened from lib/devSheets, plans | not started | 0 |
@@ -195,13 +195,13 @@ By kind, all sizes together:
 
 | Kind | Elements | Distinct patterns | Screens |
 |---|---|---|---|
-| button or pill | 28 | 25 | 19 |
+| button or pill | 27 | 24 | 18 |
 | icon badge | 21 | 15 | 13 |
 | card | 16 | 15 | 16 |
 | bar | 9 | 4 | 6 |
 | chip | 7 | 5 | 6 |
 | input | 5 | 1 | 5 |
-| icon button | 3 | 3 | 3 |
+| icon button | 4 | 4 | 4 |
 
 Patterns on 3 or more screens: **3**, covering 12 of the 89 hand-built elements.
 
