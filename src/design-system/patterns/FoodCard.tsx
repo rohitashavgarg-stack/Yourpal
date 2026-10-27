@@ -20,6 +20,7 @@ import { Tag } from '../primitives/Tag';
  *   todo     a dashed card with the amount control, the calories and the macros, and the check on the right
  *   eaten    a solid card: the amount as plain text, the calories on the right, the macros in a darker strip (with a menu button if `onMenu` is set)
  *   skipped  the same card faded, name struck through
+ * `solid` draws a todo card as a solid card (no dashed line) with a larger tick circle: the diet page uses it. Everything else about the card is the same.
  * `pick` is for a list the member ticks and then saves (the meal log sheet): a solid card with the tick circle on the right in both states, no dashed line and no macros strip.
  * Swipe left on a todo card (when `onSwap` and `onSkip` are set) to reveal Swap and Skip, 44 px each. Hold the card for the food page (`onHold`).
  */
@@ -27,6 +28,8 @@ export type FoodCardState = 'todo' | 'eaten' | 'skipped';
 
 export type FoodCardProps = {
   state: FoodCardState;
+  /** A todo card drawn solid: no dashed line, a larger tick circle. */
+  solid?: boolean;
   /** A list that is ticked and then saved: solid card, tick circle on the right, no dashed line. */
   pick?: boolean;
   name: string;
@@ -66,7 +69,7 @@ const SKIP_W = 64;
 const GAP = 8;
 const REVEAL = ACTION + SKIP_W + GAP * 3;
 
-export function FoodCard({ state, pick, name, type, amount, amountText, kcal, macros, tag, note, onPress, onCheck, onMenu, onHold, onSwap, onSkip, skipLabel = 'Skip', checkLabel, label }: FoodCardProps) {
+export function FoodCard({ state, pick, solid, name, type, amount, amountText, kcal, macros, tag, note, onPress, onCheck, onMenu, onHold, onSwap, onSkip, skipLabel = 'Skip', checkLabel, label }: FoodCardProps) {
   const { c } = useTheme();
   const tx = useSharedValue(0);
   const base = useSharedValue(0);
@@ -164,7 +167,7 @@ export function FoodCard({ state, pick, name, type, amount, amountText, kcal, ma
       <GestureDetector gesture={pan}>
         <Animated.View collapsable={false} style={[{ borderRadius: radii.md, backgroundColor: c.surface }, slide]}>
           <Pressy {...common}
-            style={{ borderRadius: radii.md, borderWidth: 1.5, borderStyle: skipped ? 'solid' : 'dashed', borderColor: skipped ? 'transparent' : c.chipLine, backgroundColor: skipped ? c.surface2 : 'transparent',
+            style={{ borderRadius: radii.md, borderWidth: 1.5, borderStyle: skipped || solid ? 'solid' : 'dashed', borderColor: skipped || solid ? 'transparent' : c.chipLine, backgroundColor: skipped || solid ? c.surface2 : 'transparent',
               paddingVertical: 12, paddingLeft: 14, paddingRight: 10, flexDirection: 'row', alignItems: 'center', gap: 10, opacity: skipped ? 0.55 : 1 }}>
             <View style={{ flex: 1, minWidth: 0, gap: 8 }}>
               {title}
@@ -180,7 +183,7 @@ export function FoodCard({ state, pick, name, type, amount, amountText, kcal, ma
                 </>
               )}
             </View>
-            {onCheck ? <CheckCircle on={false} size={34} tone="good" label={checkLabel ?? `Mark ${name}`} onPress={onCheck} /> : null}
+            {onCheck ? <CheckCircle on={false} size={solid ? 40 : 34} tone="good" label={checkLabel ?? `Mark ${name}`} onPress={onCheck} /> : null}
           </Pressy>
         </Animated.View>
       </GestureDetector>

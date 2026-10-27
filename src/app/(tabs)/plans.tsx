@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLogsPaused } from '@/lib/logGate';
 import { ScrollView, View, type ScrollViewInstance } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { Check, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
+import { Check, ChevronsRight, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
@@ -49,10 +49,11 @@ function DayStrip() {
   const goto = (k: number) => { ref.current?.scrollTo({ x: k * w, animated: true }); setPage(k); haptic.tick(); };
   const range = `${monthOf(0, cur)} ${dateOf(0, cur)} – ${monthOf(6, cur) !== monthOf(0, cur) ? monthOf(6, cur) + ' ' : ''}${dateOf(6, cur)}`;
   return (
-    <View style={{ gap: 6 }}>
-      <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, minHeight: 32 }}>
-        <Txt v="label" accessibilityLiveRegion="polite">{cur === 0 ? `This week · ${range}` : cur < 0 ? `${range} · earlier` : `${range} · coming up`}</Txt>
-        {cur !== 0 && <Button kind="soft" size="xs" label="This week" accessibilityLabel="Back to this week" onPress={() => goto(THIS)} />}
+    <Callout size="compact" gap={6}>
+      {/* the dates sit inside the container for every week and the way back appears only on another week, so the container never changes size when you swipe */}
+      <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, height: 32 }}>
+        <Txt v="label" accessibilityLiveRegion="polite">{range}</Txt>
+        {cur !== 0 && <Button kind="line" size="xs" label="This week" accessibilityLabel="Back to this week" iconAfter={<ChevronsRight size={14} color={c.ink} />} onPress={() => goto(THIS)} />}
       </Row>
       <View onLayout={(e) => setW(e.nativeEvent.layout.width)}>
         <ScrollView ref={ref} horizontal pagingEnabled showsHorizontalScrollIndicator={false} accessibilityLabel="Weeks, swipe for earlier or later weeks" scrollEventThrottle={16}
@@ -88,7 +89,7 @@ function DayStrip() {
           ))}
         </ScrollView>
       </View>
-    </View>
+    </Callout>
   );
 }
 

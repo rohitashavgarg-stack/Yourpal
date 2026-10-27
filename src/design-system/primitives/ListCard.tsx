@@ -60,20 +60,33 @@ function ContainerList({ children, style }: ContainerProps) {
   );
 }
 
+// Warm-up and cool-down: a title with how many moves, then numbered rows: the name on the left and the amount as its own small block on the right.
+// No extra note lines under the names.
 function TitledList({ dot, title, rows }: TitledProps) {
+  const { c } = useTheme();
   return (
     <View style={{ gap: 8 }}>
-      <Row style={{ gap: 6, paddingHorizontal: 6 }}>
-        <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot }} />
-        <Txt v="label">{title}</Txt>
+      <Row style={{ gap: 6, paddingHorizontal: 6, justifyContent: 'space-between' }}>
+        <Row style={{ gap: 6 }}>
+          <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot }} />
+          <Txt v="label">{title}</Txt>
+        </Row>
+        <Txt v="caption">{rows.length} moves</Txt>
       </Row>
-      <Card style={{ paddingVertical: 6, paddingHorizontal: 16 }}>
-        {rows.map((w) => (
-          <Row key={w.n} style={{ justifyContent: 'space-between', gap: 10, minHeight: 40 }}>
-            <Txt style={{ fontFamily: font.medium, flexShrink: 1 }}>{w.n}</Txt>
-            <Txt v="caption">{w.s}</Txt>
-          </Row>
-        ))}
+      <Card style={{ paddingVertical: 4, paddingHorizontal: 16 }}>
+        {rows.map((w, i) => {
+          return (
+            <Row key={w.n} style={{ gap: 12, minHeight: 52, paddingVertical: 8, borderBottomWidth: i < rows.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
+              <View style={{ width: 24, height: 24, borderRadius: radii.pill, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>{i + 1}</Txt>
+              </View>
+              <Txt style={{ flex: 1, minWidth: 0, fontFamily: font.medium }}>{w.n}</Txt>
+              <View style={{ maxWidth: '42%', paddingHorizontal: 10, paddingVertical: 5, borderRadius: radii.pill, backgroundColor: c.surface2 }}>
+                <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, textAlign: 'center' }}>{w.s}</Txt>
+              </View>
+            </Row>
+          );
+        })}
       </Card>
     </View>
   );

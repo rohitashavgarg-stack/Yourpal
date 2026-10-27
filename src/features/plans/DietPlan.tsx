@@ -116,6 +116,9 @@ function QtyControl({ mid, it, qty, locked }: { mid: MealId; it: DItem; qty: Qty
 // The look is the FoodCard pattern (src/design-system/patterns/FoodCard.tsx); this reads the member's day and does the logging.
 function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean }) {
   const A = useDietActions();
+  const { p } = usePlans();
+  // the page opens the first meal with nothing eaten; once a food in this meal is ticked or skipped that would be the next meal, so pin this one open until the member closes it
+  const pin = () => { if (p.openMeal == null) setP({ openMeal: mid }); };
   const { openSheet } = useOverlay();
   const { gate: logGate } = useLogGate();
   const kShown = useCountUp(Math.round(it.k * it.por), 700, Math.round(it.k * it.por));
@@ -123,14 +126,14 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
   const amountText = food.qty ? fmtQty(Math.round(food.qty.n * it.por * 100) / 100, food.qty.unit) : '';
   const macros = simple ? (it.swapped ? 'Swapped' : it.mine ? 'Added by you' : 'As planned') : `P ${Math.round(it.p * it.por)} · C ${Math.round(it.c * it.por)} · F ${Math.round(it.f * it.por)} g`;
   const onSwap = logGate(() => { haptic.light(); openSheet(it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode="sugg" replaceIdx={it.idx} /> : <SwapSheet mid={mid} itemKey={it.key} always={false} />, { label: 'Swap item' }); });
-  const onSkip = () => { if (it.mine) A.deleteExtra(mid, it); else A.skipItem(mid, it); };
+  const onSkip = () => { pin(); if (it.mine) A.deleteExtra(mid, it); else A.skipItem(mid, it); };
   const openFood = () => { haptic.medium(); router.push({ pathname: '/food', params: { mid, k: String(it.idx), extra: it.mine ? '1' : '0' } }); };
   const undo = () => openSheet(<UndoEatenSheet what={it.n} onConfirm={() => A.eat(mid, it, false)} />, { label: 'Mark as not eaten' });
   return (
-    <FoodCard state={it.st} name={food.name} type={it.type} tag={it.mine ? 'Yours' : undefined}
+    <FoodCard solid state={it.st} name={food.name} type={it.type} tag={it.mine ? 'Yours' : undefined}
       amount={food.qty ? <QtyControl mid={mid} it={it} qty={food.qty} locked={false} /> : undefined} amountText={amountText}
       kcal={`${kShown} kcal`} macros={macros} note="Skipped for today"
-      onCheck={() => A.eat(mid, it, true)} onMenu={undo} onHold={openFood} onSwap={onSwap} onSkip={onSkip} skipLabel={it.mine ? 'Delete' : 'Skip'}
+      onCheck={() => { pin(); A.eat(mid, it, true); }} onMenu={undo} onHold={openFood} onSwap={onSwap} onSkip={onSkip} skipLabel={it.mine ? 'Delete' : 'Skip'}
       checkLabel={`Mark eaten: ${it.n}`} label={`${food.name}${amountText ? `, ${amountText}` : ''}, ${it.st === 'skipped' ? 'skipped for today' : `${kShown} kcal`}. Hold for nutrition and recipe`} />
   );
 }

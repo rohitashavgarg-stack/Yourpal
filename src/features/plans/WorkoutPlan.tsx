@@ -27,6 +27,7 @@ import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { ListCard } from '@/design-system/primitives/ListCard';
+import { Callout } from '@/design-system/primitives/Callout';
 
 
 // Expired membership: the plan stays on the page, behind a strong blur (it cannot be tapped), with a lock and the reason on top.
@@ -127,9 +128,18 @@ export function WorkoutPlan() {
           <FadeIn i={1}>
             <Row style={{ alignItems: 'flex-end', gap: 10, paddingTop: 4, paddingHorizontal: 4 }}>
               <View style={{ flex: 1, gap: 2 }}>
-                <Txt v="label">{DAYL[p.day]} {dateOf(p.day, p.week)}{isToday ? ' · Today' : ''}</Txt>
+                <Row style={{ gap: 8 }}>
+                  <Txt v="label">{DAYL[p.day]} {dateOf(p.day, p.week)}</Txt>
+                  {isToday && <Tag label="Today" bg={c.surface2} fg={c.ink} />}
+                </Row>
                 <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 34, letterSpacing: -1.4 }}>{plan.name}</Txt>
-                <Row style={{ gap: 8 }}><PersonAvatar who={plan.created ? 'me' : 'coach'} size={22} /><Txt muted style={{ fontSize: fontSizes.sm, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'} · {plan.ex.length} exercises{plan.time && !plan.done ? ` · planned ${plan.time}` : ''}</Txt></Row>
+                <Row style={{ gap: 8 }}><PersonAvatar who={plan.created ? 'me' : 'coach'} size={22} /><Txt muted style={{ fontSize: fontSizes.sm, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'}</Txt></Row>
+                {/* the time is about the day, so it stays in the header in its own container; the exercise count belongs to the Main workout list below */}
+                {!!plan.time && !plan.done && (
+                  <Callout size="compact" style={{ marginTop: 10, alignSelf: 'flex-start' }}>
+                    <Row style={{ gap: 8 }}><Clock size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Planned <Txt style={{ fontFamily: font.bold, fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.time}</Txt></Txt></Row>
+                  </Callout>
+                )}
               </View>
               {!!plan.done && <IconBadge accessibilityLabel="Logged" size={28} bg={c.good} style={{ marginBottom: 8 }}><Check size={16} color={c.bg} strokeWidth={3} /></IconBadge>}
             </Row>
@@ -157,7 +167,7 @@ export function WorkoutPlan() {
             );
           })()}
           {!!plan.wu?.length && <FadeIn i={2}><ListCard dot={c.cAct} title="Warm-up" rows={plan.wu} /></FadeIn>}
-          <FadeIn i={3}><Txt v="label" style={{ paddingHorizontal: 6 }}>Main workout</Txt></FadeIn>
+          <FadeIn i={3}><Row style={{ justifyContent: 'space-between', paddingHorizontal: 6 }}><Txt v="label">Main workout</Txt><Txt v="caption">{plan.ex.length} exercises</Txt></Row></FadeIn>
           <FadeIn i={3}>
             <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
               {plan.ex.map((e, i) => {
