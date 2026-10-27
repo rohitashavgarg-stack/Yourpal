@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleProp, ViewStyle } from 'react-native';
-import { ChevronRight } from '@/lib/icons';
+import { Check, ChevronRight } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { Card } from '@/design-system/primitives/Card';
 import { SectionLabel } from '@/design-system/primitives/SectionLabel';
@@ -18,7 +18,7 @@ export type ListRow = { l: string; v?: string; sub?: string; right?: React.React
 export type TitledRow = { n: string; s: string };
 type RowsProps = { rows: ListRow[]; mono?: boolean; style?: StyleProp<ViewStyle>; children?: never; title?: never; icon?: never };
 type ContainerProps = { children: React.ReactNode; style?: StyleProp<ViewStyle>; rows?: never; mono?: never; title?: never; icon?: never };
-type TitledProps = { title: string; icon: React.ReactNode; rows: TitledRow[]; style?: never; mono?: never; children?: never };
+type TitledProps = { title: string; icon: React.ReactNode; done?: boolean; rows: TitledRow[]; style?: never; mono?: never; children?: never };
 export type ListCardProps = RowsProps | ContainerProps | TitledProps;
 
 export function ListCard(props: ListCardProps) {
@@ -62,8 +62,8 @@ function ContainerList({ children, style }: ContainerProps) {
 }
 
 // Warm-up and cool-down: a title with how many moves, then numbered rows: the name on the left and the amount as its own small block on the right.
-// No extra note lines under the names.
-function TitledList({ icon, title, rows }: TitledProps) {
+// No extra note lines under the names. On a logged day (`done`) the numbers become green checks.
+function TitledList({ icon, title, rows, done }: TitledProps) {
   const { c } = useTheme();
   return (
     <View style={{ gap: 8 }}>
@@ -72,8 +72,8 @@ function TitledList({ icon, title, rows }: TitledProps) {
         {rows.map((w, i) => {
           return (
             <Row key={w.n} style={{ gap: 12, minHeight: 52, paddingVertical: 8, borderBottomWidth: i < rows.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-              <View style={{ width: 24, height: 24, borderRadius: radii.pill, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>{i + 1}</Txt>
+              <View style={{ width: 24, height: 24, borderRadius: radii.pill, backgroundColor: done ? c.good : c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+                {done ? <Check size={13} color={c.bg} strokeWidth={3} /> : <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>{i + 1}</Txt>}
               </View>
               <Txt style={{ flex: 1, minWidth: 0, fontFamily: font.medium }}>{w.n}</Txt>
               <View style={{ maxWidth: '42%', paddingHorizontal: 10, paddingVertical: 5, borderRadius: radii.pill, backgroundColor: c.surface2 }}>
