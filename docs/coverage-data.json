@@ -236,7 +236,7 @@
     },
     {
      "kind": "button or pill",
-     "sig": "button 70 px high, radius radii.lg",
+     "sig": "button 76 px high, radius radii.lg",
      "fn": "DayStrip",
      "line": 87,
      "tag": "Pressy",
@@ -265,7 +265,7 @@
      "kind": "button or pill",
      "sig": "button auto px high, radius radii.xl",
      "fn": "WorkoutPlan",
-     "line": 98,
+     "line": 99,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See w",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -274,7 +274,7 @@
      "kind": "button or pill",
      "sig": "button auto px high, radius radii.xl",
      "fn": "WorkoutPlan",
-     "line": 120,
+     "line": 121,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -283,7 +283,7 @@
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
-     "line": 205,
+     "line": 211,
      "tag": "View",
      "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -292,7 +292,7 @@
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
-     "line": 206,
+     "line": 212,
      "tag": "View",
      "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -308,10 +308,10 @@
     }
    ],
    "ds": {
-    "Row": 16,
+    "Row": 17,
     "Txt": 67,
     "Pressy": 6,
-    "IconBadge": 4,
+    "IconBadge": 3,
     "Segmented": 1,
     "IconButton": 2,
     "FadeIn": 21,

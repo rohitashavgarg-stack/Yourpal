@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-27 `f6e13c2` Plans logged day: green Logged tag, the time it took beside the exercise count with a green check, PRs as a stat, green checks on warm-up and cool-down; roomier selected day (screens, library, features)
+- 2026-10-27 `942bc4c` publish: Plans warm-up icon, facts row, day pills (docs)
+
 - 2026-10-27 `5fff37b` Plans: stretch icon for Warm-up, dumbbell and calendar icons in the facts row, roomier day pills (screens, features)
 - 2026-10-27 `a4af365` publish: Plans strip, headings, icons (docs)
 
