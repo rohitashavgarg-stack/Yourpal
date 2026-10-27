@@ -99,8 +99,16 @@ export function LogPastWorkoutSheet({ day, week }: { day: number; week: number }
                   <View style={{ gap: 8, paddingHorizontal: 12, paddingBottom: 12 }}>
                     {sets.map((s, i) => (
                       <Row key={i} style={{ gap: 8 }}>
-                        <Txt style={{ width: 16, fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>{i + 1}</Txt>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', gap: 8, opacity: s.done ? 1 : 0.4 }} pointerEvents={s.done ? 'auto' : 'none'}>
+                        {weighted ? (
+                          <Txt style={{ width: 16, fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>{i + 1}</Txt>
+                        ) : (
+                          /* only reps or seconds: the row has room, so it says which set and what was planned */
+                          <View style={{ flex: 1, minWidth: 0, opacity: s.done ? 1 : 0.4 }}>
+                            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19 }}>{`Set ${i + 1}`}</Txt>
+                            <Txt v="caption">{`Planned ${timed ? `${e.t ?? 0} s` : `${e.reps} reps`}`}</Txt>
+                          </View>
+                        )}
+                        <View style={{ ...(weighted ? { flex: 1 } : null), flexDirection: 'row', justifyContent: 'flex-end', gap: 8, opacity: s.done ? 1 : 0.4 }} pointerEvents={s.done ? 'auto' : 'none'}>
                           {weighted && (
                             <AmountStepper text={`${round(s.kg)} kg`} unit="kg" accessibilityLabel={`Set ${i + 1} weight`} lessDisabled={s.kg <= 0} onLess={() => change(e.id, i, { kg: Math.max(0, round(s.kg - kgStep(s.kg))) })} onMore={() => change(e.id, i, { kg: round(s.kg + kgStep(s.kg)) })} />
                           )}
