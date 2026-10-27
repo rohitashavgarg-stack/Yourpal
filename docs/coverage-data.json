@@ -65,7 +65,7 @@
      "kind": "button or pill",
      "sig": "button 40 px high, radius 20",
      "fn": "StackCard",
-     "line": 139,
+     "line": 119,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" onPress={it.act} style={{ height: 40, minWidth: 132, paddingHorizontal: 24,",
      "file": "features/today/ForYou.tsx"
@@ -74,7 +74,7 @@
      "kind": "bar",
      "sig": "bar 6 px high, radius radii.xs",
      "fn": "PagerDot",
-     "line": 160,
+     "line": 140,
      "tag": "Animated.View",
      "text": "<Animated.View style={[{ height: 6, borderRadius: radii.xs, backgroundColor: c.ink }, st]} />",
      "file": "features/today/ForYou.tsx"
@@ -83,7 +83,7 @@
      "kind": "chip",
      "sig": "chip 28 px high, radius round with a line",
      "fn": "ComebackPlan",
-     "line": 223,
+     "line": 203,
      "tag": "View",
      "text": "<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: round(28), borderWidth: 1, borderColor",
      "file": "features/today/ForYou.tsx"
@@ -156,16 +156,9 @@
      "file": "features/today/WeekCard.tsx"
     },
     {
-     "comp": "LogMealsSheet",
-     "label": "Log meal",
-     "line": 74,
-     "in": "useForYou",
-     "file": "features/today/ForYou.tsx"
-    },
-    {
      "comp": "FlagSheet",
      "label": "Flag session",
-     "line": 135,
+     "line": 115,
      "in": "StackCard",
      "file": "features/today/ForYou.tsx"
     },
@@ -404,16 +397,16 @@
      "kind": "card",
      "sig": "card radius 20, fill c.surface2",
      "fn": "ProgressCard",
-     "line": 165,
+     "line": 179,
      "tag": "View",
      "text": "<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: ",
      "file": "app/(tabs)/progress.tsx"
     }
    ],
    "ds": {
-    "Txt": 26,
-    "Row": 7,
-    "Callout": 2,
+    "Txt": 29,
+    "Row": 8,
+    "Callout": 3,
     "IconBadge": 1,
     "ProgressSegments": 1,
     "FadeIn": 4

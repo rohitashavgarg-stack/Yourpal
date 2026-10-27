@@ -76,7 +76,7 @@
   },
   {
    "file": "features/today/ForYou.tsx",
-   "line": 139,
+   "line": 119,
    "kind": "button or pill",
    "look": "button 40 px high, radius 20",
    "fn": "StackCard",
@@ -86,7 +86,7 @@
   },
   {
    "file": "features/today/ForYou.tsx",
-   "line": 160,
+   "line": 140,
    "kind": "bar",
    "look": "bar 6 px high, radius radii.xs",
    "fn": "PagerDot",
@@ -96,7 +96,7 @@
   },
   {
    "file": "features/today/ForYou.tsx",
-   "line": 223,
+   "line": 203,
    "kind": "chip",
    "look": "chip 28 px high, radius round with a line",
    "fn": "ComebackPlan",
@@ -216,7 +216,7 @@
   },
   {
    "file": "app/(tabs)/progress.tsx",
-   "line": 165,
+   "line": 179,
    "kind": "card",
    "look": "card radius 20, fill c.surface2",
    "fn": "ProgressCard",

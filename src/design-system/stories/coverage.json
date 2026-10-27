@@ -69,7 +69,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Callout.tsx",
    "doc": true,
-   "uses": 16,
+   "uses": 17,
    "files": 13,
    "inLibrary": 0
   },
@@ -258,7 +258,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Row.tsx",
    "doc": true,
-   "uses": 204,
+   "uses": 205,
    "files": 55,
    "inLibrary": 53
   },
@@ -366,7 +366,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 862,
+   "uses": 865,
    "files": 85,
    "inLibrary": 136
   },
@@ -626,7 +626,7 @@
    "group": "Today"
   },
   {
-   "where": "src/features/today/ForYou.tsx:160",
+   "where": "src/features/today/ForYou.tsx:140",
    "kind": "bar",
    "look": "bar 6 px high, radius radii.xs",
    "jsx": "<Animated.View style={[{ height: 6, borderRadius: radii.xs, backgroundColor: c.ink }, st]} />",
@@ -766,7 +766,7 @@
    "group": "Progress"
   },
   {
-   "where": "src/features/today/ForYou.tsx:139",
+   "where": "src/features/today/ForYou.tsx:119",
    "kind": "button or pill",
    "look": "button 40 px high, radius 20",
    "jsx": "<Pressy accessibilityRole=\"button\" onPress={it.act} style={{ height: 40, minWidth: 132, paddingHorizontal: 24,",
@@ -822,7 +822,7 @@
    "group": "Bottom sheets"
   },
   {
-   "where": "src/app/(tabs)/progress.tsx:165",
+   "where": "src/app/(tabs)/progress.tsx:179",
    "kind": "card",
    "look": "card radius 20, fill c.surface2",
    "jsx": "<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: ",
@@ -955,7 +955,7 @@
    "group": "Today"
   },
   {
-   "where": "src/features/today/ForYou.tsx:223",
+   "where": "src/features/today/ForYou.tsx:203",
    "kind": "chip",
    "look": "chip 28 px high, radius round with a line",
    "jsx": "<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: round(28), borderWidth: 1, borderColor",
