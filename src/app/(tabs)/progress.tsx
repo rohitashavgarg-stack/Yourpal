@@ -104,8 +104,8 @@ function ProgressCard({ k }: { k: CardKey }) {
         <View style={{ gap: 2 }}><Big big={big} />{!!line && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{line}</Txt>}</View>
         <Callout size="compact">
           <Row style={{ gap: 10, alignItems: 'flex-start' }}>
-            <CalendarClock size={18} color={c.accentText} />
-            <Txt v="caption" style={{ flex: 1, fontSize: fontSizes.sm }}>{lead} <Txt v="caption" style={{ fontFamily: font.bold, fontSize: fontSizes.sm, color: c.accentText }}>{when}</Txt>{tail ? ` ${tail}` : ''}</Txt>
+            <CalendarClock size={18} color={c.ink} />
+            <Txt v="caption" style={{ flex: 1, fontSize: fontSizes.sm }}>{lead} <Txt v="caption" style={{ fontFamily: font.bold, fontSize: fontSizes.sm, color: c.ink }}>{when}</Txt>{tail ? ` ${tail}` : ''}</Txt>
           </Row>
         </Callout>
       </View>
@@ -188,21 +188,21 @@ function StreakEntry() {
   const { c } = useTheme();
   const st = useStreak();
   return (
-    <PCard onPress={() => router.push('/progress/streaks')} label={`Streaks and badges. ${st.weeks} week streak. Open`} style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-      <IconBadge size={48} radius={radii.card} bg="rgba(255,138,61,0.16)">
-        <Flame size={26} color={FLAME} fill={st.weeks > 0 ? FLAME : 'transparent'} strokeWidth={2} />
-      </IconBadge>
-      <View style={{ flex: 1, gap: 8 }}>
-        <View>
+    <PCard onPress={() => router.push('/progress/streaks')} label={`Streaks and badges. ${st.weeks} week streak. Open`} style={{ gap: 14 }}>
+      <Row style={{ gap: 14 }}>
+        <IconBadge size={48} radius={radii.card} bg="rgba(255,138,61,0.16)">
+          <Flame size={26} color={FLAME} fill={st.weeks > 0 ? FLAME : 'transparent'} strokeWidth={2} />
+        </IconBadge>
+        <View style={{ flex: 1 }}>
           <Txt style={{ fontFamily: font.semibold }}>Streaks & badges</Txt>
           {st.weeks ? <Txt v="caption"><Txt v="caption" style={{ fontFamily: font.bold, color: FLAME }}>{st.weeks}</Txt>-week streak</Txt> : null}
         </View>
-        <Callout size="compact" gap={8}>
-          <ProgressSegments height={6} gap={4} segments={Array.from({ length: st.target }, (_, i) => ({ color: i < st.weekDone ? FLAME : c.surface3, label: i < st.weekDone ? 'Session done' : 'Session to do' }))} />
-          <Txt v="caption"><Txt v="caption" style={{ fontFamily: font.bold, color: FLAME }}>{st.weekDone}</Txt> of {st.target} sessions this week</Txt>
-        </Callout>
-      </View>
-      <ChevronRight size={18} color={c.muted} />
+        <ChevronRight size={18} color={c.muted} />
+      </Row>
+      <Callout size="compact" gap={8}>
+        <ProgressSegments height={6} gap={4} segments={Array.from({ length: st.target }, (_, i) => ({ color: i < st.weekDone ? FLAME : c.surface3, label: i < st.weekDone ? 'Session done' : 'Session to do' }))} />
+        <Txt v="caption"><Txt v="caption" style={{ fontFamily: font.bold, color: c.ink }}>{st.weekDone}</Txt> of {st.target} sessions this week</Txt>
+      </Callout>
     </PCard>
   );
 }

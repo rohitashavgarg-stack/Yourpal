@@ -38,7 +38,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Progress (routes)
 
 - Files: `app/(tabs)/progress.tsx`
-- Library components used: Txt x29, Row x8, FadeIn x4, Callout x3, IconBadge x1, ProgressSegments x1
+- Library components used: Txt x29, Row x9, FadeIn x4, Callout x3, IconBadge x1, ProgressSegments x1
 - Hand-built:
   - `app/(tabs)/progress.tsx:179` card: `<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 2`
 
