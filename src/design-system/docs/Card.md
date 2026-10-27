@@ -25,7 +25,7 @@ The white (or dark) rounded container that holds one subject on a screen.
 | `variant` | `'default' \| 'roomy' \| 'compact' \| 'tight' \| 'dark'` | `default` (or `dark` when `dark` is set) | One of the looks below |
 | `gap` | number | the variant's gap | Space between children |
 | `dark` | boolean | false | Old name for `variant="dark"`; kept so `<Card dark>` keeps working |
-| `tone` | `'surface' | 'accent' | 'warn'` | `surface` | The fill: the surface, soft blue (a summary) or soft amber (a notice that is a whole card) |
+| `tone` | `'surface' | 'accent' | 'warn'` | `surface` | The fill: the surface, soft blue (a summary) or soft amber, or `none` (no fill: an outlined card, give it `border`) (a notice that is a whole card) |
 | `flat` | boolean | false | No shadow, also in light mode (a card on a sheet or inside another surface) |
 | `border` | `{ color: string; width?: number }` | none | A line around the card; width 1 by default (the selected plan on the break page uses 1.5 px accent) |
 | `clip` | boolean | false | Clips the content to the rounded corners (a chart or an image that runs to the edge) |

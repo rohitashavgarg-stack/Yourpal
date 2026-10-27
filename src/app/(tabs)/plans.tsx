@@ -25,6 +25,7 @@ import { haptic } from '@/lib/haptics';
 import { DAYL, DAYN, dateOf, monthOf, dayPlan, Diet, resetPlans, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { Callout } from '@/design-system/primitives/Callout';
+import { Card } from '@/design-system/primitives/Card';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
@@ -51,7 +52,7 @@ function DayStrip() {
   }, [p.week]);
   const goto = (k: number) => { ref.current?.scrollTo({ x: k * w, animated: true }); setPage(k); haptic.tick(); };
   return (
-    <Callout size="compact">
+    <Card variant="tight" tone="none" flat border={{ color: c.chipLine }} padding={{ top: 8, bottom: 8, horizontal: 8 }}>
       {/* on another week a small way back floats on the bottom edge of the container: it is not part of the layout, so the container keeps one size when you swipe */}
       {cur !== 0 && (
         <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: -13, alignItems: 'center', zIndex: 2 }}>
@@ -100,7 +101,7 @@ function DayStrip() {
           ))}
         </ScrollView>
       </View>
-    </Callout>
+    </Card>
   );
 }
 
@@ -188,7 +189,7 @@ export default function Plans() {
         </Callout>
       )}
       <DayStrip />
-      <View key={p.seg} style={{ gap: 12 }}>
+      <View key={p.seg} style={{ gap: isW ? 24 : 12 }}>
         {isW ? <WorkoutPlan startRef={startRef} /> : <DietPlan />}
       </View>
     </TabScreen>
