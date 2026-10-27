@@ -227,9 +227,9 @@
    "hand": [
     {
      "kind": "button or pill",
-     "sig": "button 24 px high, radius radii.pill",
+     "sig": "button 26 px high, radius radii.pill",
      "fn": "DayStrip",
-     "line": 57,
+     "line": 58,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Back to this week\" onPress={() => goto(THIS)} hitSlop={",
      "file": "app/(tabs)/plans.tsx"
@@ -238,7 +238,7 @@
      "kind": "button or pill",
      "sig": "button 60 px high, radius radii.lg",
      "fn": "DayStrip",
-     "line": 81,
+     "line": 82,
      "tag": "Pressy",
      "text": "<Pressy key={i} accessibilityRole=\"button\" accessibilityState={{ selected: on }} accessibilityLabel={`${DAYL[i",
      "file": "app/(tabs)/plans.tsx"
@@ -247,7 +247,7 @@
      "kind": "icon badge",
      "sig": "dot 12 px",
      "fn": "DayStrip",
-     "line": 91,
+     "line": 92,
      "tag": "View",
      "text": "<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c",
      "file": "app/(tabs)/plans.tsx"
@@ -256,7 +256,7 @@
      "kind": "icon badge",
      "sig": "dot 4 px",
      "fn": "DayStrip",
-     "line": 92,
+     "line": 93,
      "tag": "View",
      "text": "<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />",
      "file": "app/(tabs)/plans.tsx"
@@ -265,7 +265,7 @@
      "kind": "button or pill",
      "sig": "button auto px high, radius radii.xl",
      "fn": "WorkoutPlan",
-     "line": 93,
+     "line": 96,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See w",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -274,7 +274,7 @@
      "kind": "button or pill",
      "sig": "button auto px high, radius radii.xl",
      "fn": "WorkoutPlan",
-     "line": 115,
+     "line": 118,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -283,7 +283,7 @@
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
-     "line": 195,
+     "line": 199,
      "tag": "View",
      "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -292,7 +292,7 @@
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
-     "line": 196,
+     "line": 200,
      "tag": "View",
      "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -309,15 +309,15 @@
    ],
    "ds": {
     "Callout": 2,
-    "Row": 13,
-    "Txt": 67,
     "Pressy": 6,
+    "Txt": 66,
     "IconBadge": 4,
+    "Row": 12,
     "Segmented": 1,
     "IconButton": 2,
     "FadeIn": 22,
     "Card": 9,
-    "Button": 10,
+    "Button": 11,
     "StatusDot": 1,
     "ProgressSegments": 1,
     "ListCard": 2,
@@ -330,7 +330,7 @@
     {
      "comp": "isW ? <PlanMenuSheet /> : <DietMenuSheet />",
      "label": "",
-     "line": 122,
+     "line": 123,
      "in": "openMenu",
      "file": "app/(tabs)/plans.tsx"
     },

@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import type { ViewInstance } from 'react-native';
 import { useLogsPaused } from '@/lib/logGate';
 import { StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
@@ -8,7 +9,7 @@ import { useAnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavHidden } from '@/components/FloatingTabBar';
 import { router } from 'expo-router';
-import { Check, ChevronRight, Clock, Lock, Play } from '@/lib/icons';
+import { Check, ChevronRight, Clock, Dumbbell, Flame, Lock, Play, Snowflake } from '@/lib/icons';
 import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { Tag } from '@/components/bits';
@@ -28,6 +29,7 @@ import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { ListCard } from '@/design-system/primitives/ListCard';
+import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
 
 // Expired membership: the plan stays on the page, behind a strong blur (it cannot be tapped), with a lock and the reason on top.
@@ -50,7 +52,7 @@ function LockedPlan({ day, locked, children }: { day: string; locked: boolean; c
   );
 }
 
-export function WorkoutPlan({ onStartMeasure }: { onStartMeasure?: (windowBottom: number | null) => void }) {
+export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInstance | null> }) {
   const { c } = useTheme();
   const { d } = useDomain();
   const { p } = usePlans();
@@ -133,8 +135,15 @@ export function WorkoutPlan({ onStartMeasure }: { onStartMeasure?: (windowBottom
                   <Txt v="label">{DAYL[p.day]} {dateOf(p.day, p.week)}</Txt>
                   {isToday && <Tag label="Today" bg={c.surface2} fg={c.ink} />}
                 </Row>
-                {/* the name; under it how many exercises, a thin divider and when it is planned; under that who made the plan in a rounded pill with their photo */}
-                <Txt accessibilityRole="header" numberOfLines={1} style={{ fontFamily: font.regular, fontSize: fontSizes.xl5Plus, lineHeight: 49, letterSpacing: -1.5 }}>{plan.name}</Txt>
+                {/* the name with who made the plan beside it, small, with their photo; under it how many exercises, a thin divider and when it is planned */}
+                <Row style={{ alignItems: 'flex-end', columnGap: 10, flexWrap: 'wrap' }}>
+                  <Txt accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.regular, fontSize: fontSizes.xl5Plus, lineHeight: 49, letterSpacing: -1.5 }}>{plan.name}</Txt>
+                  <Row style={{ gap: 6, paddingBottom: 9 }}>
+                    <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 16 }}>by</Txt>
+                    <PersonAvatar who={plan.created ? 'me' : 'coach'} size={18} />
+                    <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 16 }}>{plan.created ? 'you' : 'Coach Vikram'}</Txt>
+                  </Row>
+                </Row>
                 <Row style={{ marginTop: 4, gap: 12 }}>
                   <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt style={{ fontFamily: font.bold, fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.ex.length}</Txt> exercises</Txt>
                   {!!plan.time && !plan.done && (
@@ -144,11 +153,7 @@ export function WorkoutPlan({ onStartMeasure }: { onStartMeasure?: (windowBottom
                     </>
                   )}
                 </Row>
-                <Row style={{ alignSelf: 'flex-start', marginTop: 10, gap: 8, paddingLeft: 4, paddingRight: 12, minHeight: 32, borderRadius: radii.pill, backgroundColor: c.surface2 }}>
-                  <PersonAvatar who={plan.created ? 'me' : 'coach'} size={24} />
-                  <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'}</Txt>
-                </Row>
-                {canStart && <InlineStart onMeasure={onStartMeasure} />}
+                {canStart && <InlineStart innerRef={startRef} />}
               </View>
               {!!plan.done && <IconBadge accessibilityLabel="Logged" size={28} bg={c.good} style={{ marginBottom: 8 }}><Check size={16} color={c.bg} strokeWidth={3} /></IconBadge>}
             </Row>
@@ -175,8 +180,8 @@ export function WorkoutPlan({ onStartMeasure }: { onStartMeasure?: (windowBottom
               </FadeIn>
             );
           })()}
-          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><Svg accessibilityElementsHidden width="100%" height={2} style={{ marginTop: 4 }}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg><ListCard dot={c.cAct} title="Warm-up" rows={plan.wu} /></FadeIn>}
-          <FadeIn i={3}><Txt v="label" style={{ paddingHorizontal: 6 }}>Main workout</Txt></FadeIn>
+          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ marginTop: 4 }}><Svg width="100%" height={2}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg></View><ListCard icon={<Flame size={16} color={c.cAct} />} tint={c.cAct} title="Warm-up" rows={plan.wu} /></FadeIn>}
+          <FadeIn i={3}><SectionLabel variant="section" icon={<Dumbbell size={16} color={c.accent} />} tint={c.accent} >Main workout</SectionLabel></FadeIn>
           <FadeIn i={3}>
             <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
               {plan.ex.map((e, i) => {
@@ -204,7 +209,7 @@ export function WorkoutPlan({ onStartMeasure }: { onStartMeasure?: (windowBottom
               })}
             </Card>
           </FadeIn>
-          {!!plan.cd?.length && <FadeIn i={4}><ListCard dot={c.cNutri} title="Cool-down" rows={plan.cd} /></FadeIn>}
+          {!!plan.cd?.length && <FadeIn i={4}><ListCard icon={<Snowflake size={16} color={c.cNutri} />} tint={c.cNutri} title="Cool-down" rows={plan.cd} /></FadeIn>}
           {rel > 0 && <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.sm }}>You can start this on {DAYL[p.day]}. Plans open on today by default.</Txt>}
           {!!plan.done && <Button kind="secondary" small label="View in workout history" onPress={() => router.push('/plans/history')} />}
         </LockedPlan>
@@ -231,17 +236,14 @@ export function useCanStart() {
   return !!plan && relDay(p) === 0 && !plan.done;
 }
 
-// The Start button in the page: under the coach pill. It reports where it sits so the floating one knows when to take over.
-function InlineStart({ onMeasure }: { onMeasure?: (windowBottom: number | null) => void }) {
+// The Start button in the page: under the coach pill. The page keeps its ref to know when it has scrolled out of view.
+function InlineStart({ innerRef }: { innerRef?: React.RefObject<ViewInstance | null> }) {
   const { c } = useTheme();
   const { d } = useDomain();
   const startWorkout = useStartWorkout();
   const live = !!d.session;
-  const ref = useRef<View>(null);
-  const measure = () => ref.current?.measureInWindow((_x, y, _w, h) => onMeasure?.(y + h));
-  useEffect(() => () => onMeasure?.(null), []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
-    <View ref={ref} onLayout={measure} style={{ marginTop: 14 }}>
+    <View ref={innerRef} collapsable={false} style={{ marginTop: 14 }}>
       <Button kind="accent" label={live ? 'Resume workout' : 'Start workout'} icon={<Play size={18} color={c.accentInk} fill={c.accentInk} />}
         onPress={() => (live ? router.push('/workout') : startWorkout())} />
     </View>

@@ -51,7 +51,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Button.tsx",
    "doc": true,
-   "uses": 144,
+   "uses": 145,
    "files": 58,
    "inLibrary": 11
   },
@@ -170,7 +170,7 @@
    "doc": true,
    "uses": 61,
    "files": 36,
-   "inLibrary": 2
+   "inLibrary": 3
   },
   {
    "name": "NoteField",
@@ -285,9 +285,9 @@
    "group": "primitives",
    "file": "src/design-system/primitives/SectionLabel.tsx",
    "doc": true,
-   "uses": 18,
-   "files": 8,
-   "inLibrary": 0
+   "uses": 19,
+   "files": 9,
+   "inLibrary": 1
   },
   {
    "name": "SheetFooter",
@@ -366,7 +366,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 868,
+   "uses": 867,
    "files": 85,
    "inLibrary": 138
   },
@@ -640,14 +640,14 @@
    "group": "Today"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:57",
+   "where": "src/app/(tabs)/plans.tsx:58",
    "kind": "button or pill",
-   "look": "button 24 px high, radius radii.pill",
+   "look": "button 26 px high, radius radii.pill",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Back to this week\" onPress={() => goto(THIS)} hitSlop={",
    "group": "Plans and food logging"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:81",
+   "where": "src/app/(tabs)/plans.tsx:82",
    "kind": "button or pill",
    "look": "button 60 px high, radius radii.lg",
    "jsx": "<Pressy key={i} accessibilityRole=\"button\" accessibilityState={{ selected: on }} accessibilityLabel={`${DAYL[i",
@@ -752,14 +752,14 @@
    "group": "Bottom sheets"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:115",
+   "where": "src/features/plans/WorkoutPlan.tsx:118",
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca",
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:93",
+   "where": "src/features/plans/WorkoutPlan.tsx:96",
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See w",
@@ -976,14 +976,14 @@
    "group": "Workout session"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:91",
+   "where": "src/app/(tabs)/plans.tsx:92",
    "kind": "icon badge",
    "look": "dot 12 px",
    "jsx": "<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c",
    "group": "Plans and food logging"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:92",
+   "where": "src/app/(tabs)/plans.tsx:93",
    "kind": "icon badge",
    "look": "dot 4 px",
    "jsx": "<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />",
@@ -1074,14 +1074,14 @@
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:195",
+   "where": "src/features/plans/WorkoutPlan.tsx:199",
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "jsx": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo",
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:196",
+   "where": "src/features/plans/WorkoutPlan.tsx:200",
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "jsx": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g",

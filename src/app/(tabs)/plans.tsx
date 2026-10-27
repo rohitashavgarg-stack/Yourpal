@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/set-state-in-effect -- the effect resets local state when its input changes, as designed */
 import React, { useEffect, useRef, useState } from 'react';
 import { useLogsPaused } from '@/lib/logGate';
-import { ScrollView, View, type ScrollViewInstance } from 'react-native';
+import { ScrollView, View, type ScrollViewInstance, type ViewInstance } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAnimatedReaction, useSharedValue } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { Check, ChevronsRight, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
+import { Check, ChevronsLeft, ChevronsRight, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
@@ -57,8 +57,9 @@ function DayStrip() {
         <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: -13, alignItems: 'center', zIndex: 2 }}>
           <Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => goto(THIS)} hitSlop={10} scaleTo={0.96}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 26, paddingHorizontal: 12, borderRadius: radii.pill, borderWidth: 1, borderColor: c.chipLine, backgroundColor: c.surface }}>
+            {cur > 0 && <ChevronsLeft size={12} color={c.ink} />}
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16 }}>This week</Txt>
-            <ChevronsRight size={12} color={c.ink} />
+            {cur < 0 && <ChevronsRight size={12} color={c.ink} />}
           </Pressy>
         </View>
       )}
@@ -152,10 +153,12 @@ export default function Plans() {
   const canStart = useCanStart() && !paused;
   const insets = useSafeAreaInsets();
   const sy = useSharedValue(0);
-  const [startBottom, setStartBottom] = useState<number | null>(null); // where the Start button in the page ends, measured from the top of the page content
+  const startRef = useRef<ViewInstance>(null);
   const [floating, setFloating] = useState(false);
   const under = insets.top + 8 + 56 + 8; // below this the page content is hidden behind the header
-  useAnimatedReaction(() => startBottom != null && sy.value > startBottom - under, (v, prev) => { if (v !== prev) scheduleOnRN(setFloating, v); }, [startBottom, under]);
+  // while scrolling, ask where the Start button in the page is right now; once it has gone under the header the floating one takes over
+  const check = () => startRef.current?.measureInWindow((_x, y, _w, h) => { if (h > 0) setFloating(y + h < under); });
+  useAnimatedReaction(() => Math.round(sy.value / 12), (v, prev) => { if (v !== prev) scheduleOnRN(check); }, [under]);
   return (
     <View style={{ flex: 1 }}>
     <TabScreen title="Plans" scrollY={sy} header={<GymHeader />} compactTitle={false} bottomPad={canStart ? 190 : 130} titleRight={(
@@ -186,7 +189,7 @@ export default function Plans() {
       )}
       <DayStrip />
       <View key={p.seg} style={{ gap: 12 }}>
-        {isW ? <WorkoutPlan onStartMeasure={(wb) => setStartBottom(wb == null ? null : wb + sy.value)} /> : <DietPlan />}
+        {isW ? <WorkoutPlan startRef={startRef} /> : <DietPlan />}
       </View>
     </TabScreen>
     {canStart && floating && <StickyStart />}
