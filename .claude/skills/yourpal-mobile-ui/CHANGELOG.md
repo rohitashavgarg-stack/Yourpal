@@ -1,5 +1,7 @@
 # Design changelog (generated)
 
+- 2026-10-27 `227080f` Today page end: picture shifted further left, glow follows (library)
+
 - 2026-10-27 `023cf2a` Today page end: gradient words (clear at the top, soft grey at the bottom), less empty space above, picture shifted left with the glow (library)
 
 - 2026-10-27 `e52e3e0` Today page end: edge to edge with a blue glow, large cropped illustration, text on its foot, dashed line and logo, like the reference (library)
