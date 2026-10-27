@@ -7,7 +7,7 @@ import { Check, ChevronsRight, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed }
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
-import { IconButton, Button } from '@/design-system/primitives/Button';
+import { IconButton } from '@/design-system/primitives/Button';
 import { useOverlay } from '@/components/Overlay';
 import { basePlans, TODAY_IDX } from '@/lib/data';
 import { useDomain } from '@/lib/domain';
@@ -49,11 +49,17 @@ function DayStrip() {
   const goto = (k: number) => { ref.current?.scrollTo({ x: k * w, animated: true }); setPage(k); haptic.tick(); };
   const range = `${monthOf(0, cur)} ${dateOf(0, cur)} – ${monthOf(6, cur) !== monthOf(0, cur) ? monthOf(6, cur) + ' ' : ''}${dateOf(6, cur)}`;
   return (
-    <Callout size="compact" gap={6}>
-      {/* the dates sit inside the container for every week and the way back appears only on another week, so the container never changes size when you swipe */}
-      <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, height: 32 }}>
-        <Txt v="label" accessibilityLiveRegion="polite">{range}</Txt>
-        {cur !== 0 && <Button kind="line" size="xs" label="This week" accessibilityLabel="Back to this week" iconAfter={<ChevronsRight size={14} color={c.ink} />} onPress={() => goto(THIS)} />}
+    <Callout size="compact" gap={2}>
+      {/* a slim row: the dates for every week, and the way back only on another week, so the container keeps one size when you swipe */}
+      <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, height: 24, marginTop: -2 }}>
+        <Txt v="caption" accessibilityLiveRegion="polite">{range}</Txt>
+        {cur !== 0 && (
+          <Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => goto(THIS)} hitSlop={10} scaleTo={0.96}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 24, paddingHorizontal: 10, borderRadius: radii.pill, borderWidth: 1, borderColor: c.chipLine }}>
+            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16 }}>This week</Txt>
+            <ChevronsRight size={12} color={c.ink} />
+          </Pressy>
+        )}
       </Row>
       <View onLayout={(e) => setW(e.nativeEvent.layout.width)}>
         <ScrollView ref={ref} horizontal pagingEnabled showsHorizontalScrollIndicator={false} accessibilityLabel="Weeks, swipe for earlier or later weeks" scrollEventThrottle={16}
@@ -78,10 +84,13 @@ function DayStrip() {
                     style={{ flex: 1, height: 60, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center', gap: 1, backgroundColor: on ? c.ink : 'transparent', borderWidth: isToday ? 1.5 : 0, borderColor: c.accent }}>
                     <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: on ? c.bg : c.ink, opacity: 0.7 }}>{l}</Txt>
                     <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 21, color: on ? c.bg : c.ink }}>{dateOf(i, wk)}</Txt>
-                    {locked ? <Lock size={11} color={c.muted} />
+                    {/* the mark under the date always gets the same 16 px slot, so a check, a lock or a dot never moves the numbers */}
+                    <View style={{ height: 16, minWidth: 16, alignItems: 'center', justifyContent: 'center' }}>
+                      {locked ? <Lock size={11} color={c.muted} />
                       : logged ? <IconBadge size={14} bg={c.good}><Check size={9} color={c.bg} strokeWidth={4} /></IconBadge>
                       : missed ? <View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.warn }} />
                       : <View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />}
+                    </View>
                   </Pressy>
                 );
               })}

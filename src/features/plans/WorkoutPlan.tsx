@@ -131,18 +131,20 @@ export function WorkoutPlan() {
                   <Txt v="label">{DAYL[p.day]} {dateOf(p.day, p.week)}</Txt>
                   {isToday && <Tag label="Today" bg={c.surface2} fg={c.ink} />}
                 </Row>
-                {/* the name on the left and when it is planned on the right; then how many exercises, a thin divider and who made the plan in a rounded pill with their photo */}
-                <Row style={{ justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
-                  <Txt accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.regular, fontSize: fontSizes.xl5Plus, lineHeight: 49, letterSpacing: -1.5 }}>{plan.name}</Txt>
-                  {!!plan.time && !plan.done && <Row style={{ gap: 6 }}><Clock size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Planned {plan.time}</Txt></Row>}
-                </Row>
-                <Row style={{ marginTop: 8, gap: 12 }}>
+                {/* the name; under it how many exercises, a thin divider and when it is planned; under that who made the plan in a rounded pill with their photo */}
+                <Txt accessibilityRole="header" numberOfLines={1} style={{ fontFamily: font.regular, fontSize: fontSizes.xl5Plus, lineHeight: 49, letterSpacing: -1.5 }}>{plan.name}</Txt>
+                <Row style={{ marginTop: 4, gap: 12 }}>
                   <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt style={{ fontFamily: font.bold, fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.ex.length}</Txt> exercises</Txt>
-                  <View accessibilityElementsHidden style={{ width: 1, height: 16, backgroundColor: c.line }} />
-                  <Row style={{ gap: 8, paddingLeft: 4, paddingRight: 12, minHeight: 32, borderRadius: radii.pill, backgroundColor: c.surface2 }}>
-                    <PersonAvatar who={plan.created ? 'me' : 'coach'} size={24} />
-                    <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'}</Txt>
-                  </Row>
+                  {!!plan.time && !plan.done && (
+                    <>
+                      <View accessibilityElementsHidden style={{ width: 1, height: 16, backgroundColor: c.line }} />
+                      <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Planned {plan.time}</Txt>
+                    </>
+                  )}
+                </Row>
+                <Row style={{ alignSelf: 'flex-start', marginTop: 10, gap: 8, paddingLeft: 4, paddingRight: 12, minHeight: 32, borderRadius: radii.pill, backgroundColor: c.surface2 }}>
+                  <PersonAvatar who={plan.created ? 'me' : 'coach'} size={24} />
+                  <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'}</Txt>
                 </Row>
               </View>
               {!!plan.done && <IconBadge accessibilityLabel="Logged" size={28} bg={c.good} style={{ marginBottom: 8 }}><Check size={16} color={c.bg} strokeWidth={3} /></IconBadge>}
@@ -170,7 +172,7 @@ export function WorkoutPlan() {
               </FadeIn>
             );
           })()}
-          {!!plan.wu?.length && <FadeIn i={2}><ListCard dot={c.cAct} title="Warm-up" rows={plan.wu} /></FadeIn>}
+          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><View accessibilityElementsHidden style={{ height: 1, backgroundColor: c.chipLine, marginTop: 4 }} /><ListCard dot={c.cAct} title="Warm-up" rows={plan.wu} /></FadeIn>}
           <FadeIn i={3}><Txt v="label" style={{ paddingHorizontal: 6 }}>Main workout</Txt></FadeIn>
           <FadeIn i={3}>
             <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
