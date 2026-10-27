@@ -745,14 +745,14 @@
    "group": "Bottom sheets"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:116",
+   "where": "src/features/plans/WorkoutPlan.tsx:115",
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca",
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:94",
+   "where": "src/features/plans/WorkoutPlan.tsx:93",
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See w",
@@ -1067,14 +1067,14 @@
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:189",
+   "where": "src/features/plans/WorkoutPlan.tsx:193",
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "jsx": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo",
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:190",
+   "where": "src/features/plans/WorkoutPlan.tsx:194",
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "jsx": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g",
