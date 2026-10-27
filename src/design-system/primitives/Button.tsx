@@ -1,5 +1,6 @@
 import React from 'react';
 import { Platform, StyleProp, Text, View, ViewStyle } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { GlassBackdrop } from '@/components/Glass';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, fontSizes, fixed, radii } from '@/design-system/tokens';
@@ -137,11 +138,14 @@ export type IconButtonProps = {
 /** A rounded square (44 px by default) with one icon or sign in it: close, back, minus, plus, play. `width` makes it a pill. */
 export function IconButton({ label, onPress, children, bg, style, glass, scaleTo, size = 44, width, radius = radii.lg, borderColor, borderWidth, disabled, hitSlop }: IconButtonProps) {
   const { c, isDark } = useTheme();
+  // On web and Android an icon button gets a thin border and a soft grey gradient that echo the iOS glass (iPhone draws the real glass). Coloured buttons are left alone.
+  const mimic = Platform.OS !== 'ios' && (glass || !bg || bg === c.surface || bg === c.surface2 || bg === c.surface3);
   // Glass buttons get a soft shadow so they still read on a plain page.
   const rim = glass ? { shadowColor: fixed.shadow, shadowOpacity: isDark ? 0.35 : 0.1, shadowRadius: 10, shadowOffset: { width: 0, height: 3 }, elevation: 3 } : null;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: !!disabled }} onPress={onPress} scaleTo={scaleTo} disabled={disabled} hitSlop={hitSlop}
-      style={[{ width: width ?? size, height: size, borderRadius: radius, ...(width ? { flexDirection: 'row' as const } : null), backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center', ...(borderWidth ? { borderWidth, borderColor } : null) }, rim, style]}>
+      style={[{ width: width ?? size, height: size, borderRadius: radius, ...(width ? { flexDirection: 'row' as const } : null), backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center', ...(borderWidth ? { borderWidth, borderColor } : mimic ? { borderWidth: 1, borderColor: c.glassEdge } : null) }, rim, style]}>
+      {mimic ? <LinearGradient pointerEvents="none" colors={[c.glassFrom, c.glassTo]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius }} /> : null}
       {glass ? (
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radii.lg, overflow: 'hidden' }}>
           <GlassBackdrop radius={22} tint={Platform.OS === 'web' ? (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.82)') : undefined} />

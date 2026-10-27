@@ -21,6 +21,8 @@ Every action in the app. One `Button` with a kind (colour) and a size (shape), a
 <IconButton label="Close" onPress={back}><X size={20} /></IconButton>      // was RoundBtn
 <IconButton label="Play" onPress={play} size={36} radius={18} borderWidth={1} borderColor={c.line}><Play size={16} /></IconButton>
 <IconButton label="Add steps" onPress={add} size={30} radius={15} hitSlop={10}><Plus size={14} /></IconButton>
+
+**Glass look on web and Android.** An IconButton with a neutral fill (the default, a surface colour, or `glass`) gets a thin border (`glassEdge`) and a soft grey gradient from top left to bottom right (`glassFrom` to `glassTo`), so it echoes the iOS glass. iPhone draws the real glass and is unchanged. Buttons with a colour of their own, and buttons that pass their own `borderWidth`, are left as they are.
 ```
 
 

@@ -139,6 +139,7 @@ const web = () => {
   if (dirty()) { if (!YES) { say('There are uncommitted changes. They would be committed first (--message needed).'); } else commitIfDirty(); }
   if (!YES) { say(`\nWould merge ${branch()} (${sha().slice(0, 7)}) into main with a merge commit, push it, and wait for the Vercel Production build of ${SITE}. Run again with --yes to do it.`); return; }
   const head = sha();
+  const before = (run(`curl -s ${SITE}`).out.match(/entry-[0-9a-f]+\.js/) || [''])[0];
   let tmp;
   step('merge into main (real merge commit)', () => {
     run('git fetch origin');
@@ -155,10 +156,21 @@ const web = () => {
     metrics.mainSha = msha; return { ok: true, note: msha.slice(0, 7) };
   });
   step('wait for the Vercel Production build', () => {
+    // GitHub's status lookup is limited when nobody is logged in (and gh is not installed): then it answers with a message and no state. In that case the live page itself is the proof:
+    // the build is done when the page points at a new entry script.
+    const entry = () => { const r = run(`curl -s ${SITE}`); const m = r.out.match(/entry-[0-9a-f]+\.js/); return m ? m[0] : ''; };
     const deadline = Date.now() + 15 * 60 * 1000;
-    const poll = () => { const r = run(`curl -s https://api.github.com/repos/${REPO}/commits/${metrics.mainSha}/status`); try { const j = JSON.parse(r.out); return j.state; } catch { return 'pending'; } };
-    let st = 'pending'; while (Date.now() < deadline) { st = poll(); if (st === 'success' || st === 'failure' || st === 'error') break; run('node -e "setTimeout(()=>{},8000)"'); }
-    return { ok: st === 'success', note: st === 'success' ? `live at ${SITE}` : `Vercel says: ${st}` };
+    const poll = () => { const r = run(`curl -s https://api.github.com/repos/${REPO}/commits/${metrics.mainSha}/status`); try { const j = JSON.parse(r.out); return j.state || 'unknown'; } catch { return 'unknown'; } };
+    let st = 'pending'; let limited = false;
+    while (Date.now() < deadline) {
+      st = poll();
+      if (st === 'success' || st === 'failure' || st === 'error') break;
+      if (st === 'unknown') { limited = true; const now = entry(); if (now && before && now !== before) { st = 'success'; break; } }
+      run('node -e "setTimeout(()=>{},8000)"');
+    }
+    if (st === 'success') return { ok: true, note: `live at ${SITE}` };
+    if (limited && st === 'unknown') return { ok: true, note: `pushed; GitHub would not say whether the build finished (rate limit) and the page did not change within 15 minutes: check ${SITE}` };
+    return { ok: false, note: `Vercel says: ${st}` };
   });
 };
 
