@@ -22,14 +22,14 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 
 ## Plans (routes)
 
-- Files: `app/(tabs)/plans.tsx`, `features/plans/WorkoutPlan.tsx`, `features/plans/DietPlan.tsx`, `features/plans/LogPastWorkoutSheet.tsx`, `features/plans/QtySheet.tsx`
-- Library components used: Txt x72, FadeIn x21, Row x19, Button x13, Card x8, Pressy x7, IconBadge x3, AmountStepper x3, IconButton x2, ListCard x2, Segmented x1, Callout x1, StatusDot x1, SectionLabel x1, ProgressBar x1, FoodCard x1, Chevron x1, SheetFooter x1
+- Files: `app/(tabs)/plans.tsx`, `features/plans/WorkoutPlan.tsx`, `features/plans/DietPlan.tsx`, `features/plans/PlansCalendarSheet.tsx`, `features/plans/LogPastWorkoutSheet.tsx`, `features/plans/QtySheet.tsx`
+- Library components used: Txt x75, Row x22, FadeIn x22, Button x14, Pressy x9, Card x8, IconButton x4, IconBadge x3, AmountStepper x3, ListCard x2, Segmented x1, Callout x1, StatusDot x1, SectionLabel x1, ProgressBar x1, FoodCard x1, Chevron x1, SheetFooter x1
 - States and edge cases: Plan type: Workout, Diet; Coach updated the plan: Off, On; Plan change request: None, Requested, Ready; No plan yet (before assessment): Off, On; Mid-workout when the update arrives: Off, On; Connection: Online, Offline; Diet type (plan + swaps): Veg, Eggetarian, Non-veg; Detail level: Detailed, Simple; Camera (scan food): Allowed, Denied; Scan result: Works, Fails; (action) Apply Coach update now; (action) Reset this prototype
 - Hand-built:
-  - `app/(tabs)/plans.tsx:62` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => g`
-  - `app/(tabs)/plans.tsx:87` button or pill: `<Pressy key={i} accessibilityRole="button" accessibilityState={{ selected: on }} accessibi`
-  - `app/(tabs)/plans.tsx:97` icon badge: `<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'das`
-  - `app/(tabs)/plans.tsx:98` icon badge: `<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />`
+  - `app/(tabs)/plans.tsx:67` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => g`
+  - `app/(tabs)/plans.tsx:93` button or pill: `<Pressy key={i} accessibilityRole="button" accessibilityState={{ selected: on }} accessibi`
+  - `app/(tabs)/plans.tsx:103` icon badge: `<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'das`
+  - `app/(tabs)/plans.tsx:104` icon badge: `<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />`
   - `features/plans/WorkoutPlan.tsx:100` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Coach Vikram updated your plan. ${`
   - `features/plans/WorkoutPlan.tsx:122` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Your new plan is ready. View" onPre`
   - `features/plans/WorkoutPlan.tsx:191` card: `<View key={t.key} accessible accessibilityLabel={'${t.n} ${t.of} ${t.label}'} style={{ fle`
@@ -565,6 +565,13 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Hand-built:
   - `features/plans/LogPastWorkoutSheet.tsx:58` button or pill: `<Pressy key={e.id} accessibilityRole="checkbox" accessibilityState={{ checked: !off }} acc`
   - `features/plans/LogPastWorkoutSheet.tsx:60` icon badge: `<View style={{ width: 24, height: 24, borderRadius: radii.pill, alignItems: 'center', just`
+
+## PlansCalendarSheet (bottom sheets)
+
+- Files: `features/plans/PlansCalendarSheet.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/plans/PlansCalendarSheet.tsx:58` icon button: `<Pressy accessibilityRole="button" accessibilityState={{ selected: on, disabled: off }} ac`
 
 ## QtySheet (bottom sheets)
 

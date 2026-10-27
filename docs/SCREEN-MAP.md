@@ -114,8 +114,8 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 - Route `/plans`, code `src/app/(tabs)/plans.tsx`
 - Opens from: [Today](#today), [Coach](#coach), [Exercise search](#exercise-search), [Change goal](#change-goal), [Ask coach](#ask-coach), [Create a workout](#create-a-workout), [Edit plan](#edit-plan), [Exercise](#exercise), [Workout history](#workout-history), [What did you eat?](#what-did-you-eat), [What changed](#what-changed), [Goal (progress)](#goal-progress)
 - Leads to: [What changed](#what-changed), [Exercise](#exercise), [Workout history](#workout-history), [Active workout](#active-workout), [Food detail](#food-detail), [What did you eat?](#what-did-you-eat), [Ask coach](#ask-coach)
-- Sheets it opens: `LogPastWorkoutSheet`, `QtySheet`, `UndoEatenSheet`, `ResetSheet`, `LibrarySheet`, `NutritionSheet`, `DietSwapSheet`
-- Library pieces: `FadeIn`, `Button`, `Card`, `Pressy`, `IconBadge`, `AmountStepper`, `IconButton`, `ListCard`
+- Sheets it opens: `PlansCalendarSheet`, `LogPastWorkoutSheet`, `QtySheet`, `UndoEatenSheet`, `ResetSheet`, `LibrarySheet`, `NutritionSheet`, `DietSwapSheet`
+- Library pieces: `FadeIn`, `Button`, `Pressy`, `Card`, `IconButton`, `IconBadge`, `AmountStepper`, `ListCard`
 - Data it reads: app state `coachUpdated`, `planReq`, `offline`, `scanFails`, `session`; profile none; screen stores none; sample data `basePlans`, `TODAY_IDX`, `KCAL_TARGET`, `MACRO_TARGET`, `MealId`, `MEALS`, `LIBRARY`, `SWAPS`, `PlanDay`, `FoodType`, `Mode`, `fmtT`
 
 ### Progress

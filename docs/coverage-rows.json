@@ -44,6 +44,7 @@
    "app/(tabs)/plans.tsx",
    "features/plans/WorkoutPlan.tsx",
    "features/plans/DietPlan.tsx",
+   "features/plans/PlansCalendarSheet.tsx",
    "features/plans/LogPastWorkoutSheet.tsx",
    "features/plans/QtySheet.tsx"
   ]
@@ -830,6 +831,16 @@
   "hand": 2,
   "files": [
    "features/plans/LogPastWorkoutSheet.tsx"
+  ]
+ },
+ {
+  "id": "sheet:PlansCalendarSheet",
+  "screen": "PlansCalendarSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/plans/PlansCalendarSheet.tsx"
   ]
  },
  {

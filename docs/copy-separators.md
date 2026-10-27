@@ -399,7 +399,7 @@ The rule (CLAUDE.md): no dot separators ("text · text"). Use a title, a sentenc
 
 ### `src/app/(tabs)/plans.tsx` (1)
 
-- 180: `<Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: c.warn }}>You&apos;re offline · changes save on this phone and sync later</Txt>`
+- 188: `<Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: c.warn }}>You&apos;re offline · changes save on this phone and sync later</Txt>`
 
 ### `src/app/(tabs)/progress.tsx` (1)
 

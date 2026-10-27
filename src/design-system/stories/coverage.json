@@ -51,7 +51,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Button.tsx",
    "doc": true,
-   "uses": 147,
+   "uses": 148,
    "files": 59,
    "inLibrary": 11
   },
@@ -60,8 +60,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Button.tsx",
    "doc": true,
-   "uses": 25,
-   "files": 16,
+   "uses": 27,
+   "files": 17,
    "inLibrary": 1
   },
   {
@@ -114,7 +114,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/FadeIn.tsx",
    "doc": true,
-   "uses": 141,
+   "uses": 142,
    "files": 49,
    "inLibrary": 4
   },
@@ -222,8 +222,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Pressy.tsx",
    "doc": true,
-   "uses": 101,
-   "files": 49,
+   "uses": 103,
+   "files": 50,
    "inLibrary": 31
   },
   {
@@ -258,8 +258,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Row.tsx",
    "doc": true,
-   "uses": 215,
-   "files": 56,
+   "uses": 218,
+   "files": 57,
    "inLibrary": 54
   },
   {
@@ -366,8 +366,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 873,
-   "files": 86,
+   "uses": 876,
+   "files": 87,
    "inLibrary": 138
   },
   {
@@ -533,8 +533,8 @@
    "inLibrary": 0
   }
  ],
- "count": 88,
- "toBuild": 85,
+ "count": 89,
+ "toBuild": 86,
  "onPurpose": 3,
  "demoPanelExcluded": 21,
  "byGroup": {
@@ -547,7 +547,7 @@
    "onPurpose": 1
   },
   "Bottom sheets": {
-   "total": 10,
+   "total": 11,
    "onPurpose": 0
   },
   "Progress": {
@@ -640,16 +640,16 @@
    "group": "Today"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:62",
+   "where": "src/app/(tabs)/plans.tsx:67",
    "kind": "button or pill",
    "look": "button 26 px high, radius radii.pill",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Back to this week\" onPress={() => goto(THIS)} hitSlop={",
    "group": "Plans and food logging"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:87",
+   "where": "src/app/(tabs)/plans.tsx:93",
    "kind": "button or pill",
-   "look": "button 76 px high, radius radii.lg",
+   "look": "button 66 px high, radius radii.lg",
    "jsx": "<Pressy key={i} accessibilityRole=\"button\" accessibilityState={{ selected: on }} accessibilityLabel={`${DAYL[i",
    "group": "Plans and food logging"
   },
@@ -990,14 +990,14 @@
    "group": "Workout session"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:97",
+   "where": "src/app/(tabs)/plans.tsx:103",
    "kind": "icon badge",
    "look": "dot 12 px",
    "jsx": "<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c",
    "group": "Plans and food logging"
   },
   {
-   "where": "src/app/(tabs)/plans.tsx:98",
+   "where": "src/app/(tabs)/plans.tsx:104",
    "kind": "icon badge",
    "look": "dot 4 px",
    "jsx": "<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />",
@@ -1135,6 +1135,13 @@
    "look": "icon tile 26 px, radius 13",
    "jsx": "<Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.accent, alignItems: 'cent",
    "group": "Workout session"
+  },
+  {
+   "where": "src/features/plans/PlansCalendarSheet.tsx:58",
+   "kind": "icon button",
+   "look": "icon button 40 px, radius radii.pill",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityState={{ selected: on, disabled: off }} accessibilityLabel={d.",
+   "group": "Bottom sheets"
   },
   {
    "where": "src/app/plans/ask.tsx:67",

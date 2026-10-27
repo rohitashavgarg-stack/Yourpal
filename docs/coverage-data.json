@@ -222,6 +222,7 @@
     "app/(tabs)/plans.tsx",
     "features/plans/WorkoutPlan.tsx",
     "features/plans/DietPlan.tsx",
+    "features/plans/PlansCalendarSheet.tsx",
     "features/plans/LogPastWorkoutSheet.tsx",
     "features/plans/QtySheet.tsx"
    ],
@@ -230,16 +231,16 @@
      "kind": "button or pill",
      "sig": "button 26 px high, radius radii.pill",
      "fn": "DayStrip",
-     "line": 62,
+     "line": 67,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Back to this week\" onPress={() => goto(THIS)} hitSlop={",
      "file": "app/(tabs)/plans.tsx"
     },
     {
      "kind": "button or pill",
-     "sig": "button 76 px high, radius radii.lg",
+     "sig": "button 66 px high, radius radii.lg",
      "fn": "DayStrip",
-     "line": 87,
+     "line": 93,
      "tag": "Pressy",
      "text": "<Pressy key={i} accessibilityRole=\"button\" accessibilityState={{ selected: on }} accessibilityLabel={`${DAYL[i",
      "file": "app/(tabs)/plans.tsx"
@@ -248,7 +249,7 @@
      "kind": "icon badge",
      "sig": "dot 12 px",
      "fn": "DayStrip",
-     "line": 97,
+     "line": 103,
      "tag": "View",
      "text": "<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c",
      "file": "app/(tabs)/plans.tsx"
@@ -257,7 +258,7 @@
      "kind": "icon badge",
      "sig": "dot 4 px",
      "fn": "DayStrip",
-     "line": 98,
+     "line": 104,
      "tag": "View",
      "text": "<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />",
      "file": "app/(tabs)/plans.tsx"
@@ -317,6 +318,15 @@
      "file": "features/plans/DietPlan.tsx"
     },
     {
+     "kind": "icon button",
+     "sig": "icon button 40 px, radius radii.pill",
+     "fn": "PlansCalendarSheet",
+     "line": 58,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityState={{ selected: on, disabled: off }} accessibilityLabel={d.",
+     "file": "features/plans/PlansCalendarSheet.tsx"
+    },
+    {
      "kind": "button or pill",
      "sig": "button 52 px high, radius radii.md",
      "fn": "LogPastWorkoutSheet",
@@ -336,16 +346,16 @@
     }
    ],
    "ds": {
-    "Row": 19,
-    "Txt": 72,
-    "Pressy": 7,
+    "Row": 22,
+    "Pressy": 9,
+    "Txt": 75,
     "IconBadge": 3,
     "Segmented": 1,
-    "IconButton": 2,
-    "FadeIn": 21,
+    "IconButton": 4,
+    "FadeIn": 22,
     "Callout": 1,
     "Card": 8,
-    "Button": 13,
+    "Button": 14,
     "StatusDot": 1,
     "ListCard": 2,
     "SectionLabel": 1,
@@ -357,9 +367,16 @@
    },
    "sheets": [
     {
+     "comp": "PlansCalendarSheet",
+     "label": "Pick a date",
+     "line": 62,
+     "in": "DayStrip",
+     "file": "app/(tabs)/plans.tsx"
+    },
+    {
      "comp": "isW ? <PlanMenuSheet /> : <DietMenuSheet />",
      "label": "",
-     "line": 128,
+     "line": 135,
      "in": "openMenu",
      "file": "app/(tabs)/plans.tsx"
     },
@@ -368,6 +385,13 @@
      "label": "Log workout",
      "line": 172,
      "in": "WorkoutPlan",
+     "file": "features/plans/WorkoutPlan.tsx"
+    },
+    {
+     "comp": "LogPastWorkoutSheet",
+     "label": "Log workout",
+     "line": 294,
+     "in": "StickyLog",
      "file": "features/plans/WorkoutPlan.tsx"
     },
     {
