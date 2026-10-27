@@ -3,15 +3,15 @@
 Checked on 26 Oct 2026 on branch `design-system-handoff`, after round 5 (see `docs/progress.md`). Each line was checked by running the command or opening the file or link. Light mode is out of scope by the designer's instruction, so nothing here covers it.
 
 <!-- numbers:start -->
-Numbers written by `scripts/publish.js` on 2026-10-27 05:21 from branch `experiment-blue-glass` at `8a37f87`:
+Numbers written by `scripts/publish.js` on 2026-10-27 06:02 from branch `experiment-blue-glass` at `3a70069`:
 
 | Measure | Value |
 |---|---|
 | Typecheck | 0 errors |
-| Lint | 0 errors, 671 warnings |
+| Lint | 0 errors, 673 warnings |
 | New hard-coded values on changed lines | 0 |
-| Library files | 44 (36 primitives, 8 patterns) |
-| Storybook stories | 237 |
+| Library files | 45 (36 primitives, 9 patterns) |
+| Storybook stories | 238 |
 | Hand-built elements (outside the demo panel) | 84 (3 on purpose, 81 to build) |
 | Dot-separator lines left | 239 in 74 files |
 <!-- numbers:end -->

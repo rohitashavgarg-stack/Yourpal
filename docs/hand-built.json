@@ -216,7 +216,7 @@
   },
   {
    "file": "app/(tabs)/progress.tsx",
-   "line": 154,
+   "line": 164,
    "kind": "card",
    "look": "card radius 20, fill c.surface2",
    "fn": "ProgressCard",

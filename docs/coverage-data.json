@@ -118,7 +118,8 @@
     }
    ],
    "ds": {
-    "FadeIn": 23,
+    "FadeIn": 25,
+    "PageEnd": 2,
     "Pressy": 10,
     "Row": 16,
     "Txt": 57,
@@ -404,15 +405,15 @@
      "kind": "card",
      "sig": "card radius 20, fill c.surface2",
      "fn": "ProgressCard",
-     "line": 154,
+     "line": 164,
      "tag": "View",
      "text": "<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: ",
      "file": "app/(tabs)/progress.tsx"
     }
    ],
    "ds": {
-    "Txt": 23,
-    "Row": 6,
+    "Txt": 24,
+    "Row": 7,
     "Callout": 1,
     "IconBadge": 1,
     "FadeIn": 4

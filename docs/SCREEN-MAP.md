@@ -106,7 +106,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 - Opens from: Tab bar: Today
 - Leads to: [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans), [Metric detail](#metric-detail), [Log weight](#log-weight), [Coach](#coach), [Active workout](#active-workout), [Progress](#progress), [Membership](#membership), [Check-in map](#check-in-map), [Streaks and badges](#streaks-and-badges)
 - Sheets it opens: `FlagSheet`, `UpdatesSheet`, `WaterSheet`, `HealthSheet`, `LogMealsSheet`, `DaySheet`, `StepsSheet`
-- Library pieces: `FadeIn`, `Button`, `Pressy`, `IconBadge`, `Card`, `FoodCard`, `StatusDot`, `WorkoutCardPattern`
+- Library pieces: `FadeIn`, `Button`, `Pressy`, `IconBadge`, `Card`, `PageEnd`, `FoodCard`, `StatusDot`
 - Data it reads: app state `loading`, `session`, `todayVariant`, `hc`, `wearable`, `time`, `wkDone`, `wkScenario`, `ci`, `scanFails`, `min`, `ciStart`, `ciOut`, `ciExtend`, `goal`, `awayDays`, `hasGym`, `dismissed`, `water`, `weight`, `openMeal`, `ciAt`, `membership`; profile `name`, `time`; screen stores `todayUiStore`, `planStore`, `goalStore`, `stepsStore`, `goalV2Store`, `goalSizeStore`, `goalCardStore`, `topCardStore`, `gymStore`, `missedWkStore`, `coachStore`, `reminderStore`, `greetStore`, `pushStore`; sample data `dur`, `fmtT`, `Meal`, `MealId`, `MEALS`, `KCAL_TARGET`, `TODAY_IDX`, `WEEK`, `MACRO_TARGET`
 
 ### Plans
