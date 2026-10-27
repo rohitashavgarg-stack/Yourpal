@@ -1,5 +1,9 @@
 # Design changelog (generated)
 
+- 2026-10-27 `5a7aa34` Icon buttons on web and Android: a thin border and a soft grey gradient that echo the iOS glass (library, tokens)
+- 2026-10-27 `7eed99d` publish: log sets weight and reps, checks on the right (features)
+- 2026-10-27 `ddd65b8` publish: log sets weight and reps, checks on the right (docs)
+
 - 2026-10-27 `d48b4ce` Plans: log sets, weight and reps for a previous workout, grey stat tiles, check marks on the right of logged rows (library, features)
 - 2026-10-27 `08c2230` publish: Plans calendar sheet, floating log, compact strip (features)
 - 2026-10-27 `4f38c9d` publish: Plans calendar sheet, floating log, compact strip (docs)

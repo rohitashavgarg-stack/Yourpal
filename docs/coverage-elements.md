@@ -23,7 +23,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Plans (routes)
 
 - Files: `app/(tabs)/plans.tsx`, `features/plans/WorkoutPlan.tsx`, `features/plans/DietPlan.tsx`, `features/plans/PlansCalendarSheet.tsx`, `features/plans/LogPastWorkoutSheet.tsx`, `features/plans/QtySheet.tsx`
-- Library components used: Txt x77, Row x24, FadeIn x22, Button x14, Pressy x11, Card x8, AmountStepper x6, IconButton x4, IconBadge x3, ListCard x2, Segmented x1, Callout x1, StatusDot x1, SectionLabel x1, ProgressBar x1, FoodCard x1, Chevron x1, SheetFooter x1
+- Library components used: Txt x79, Row x24, FadeIn x22, Button x14, Pressy x11, Card x8, AmountStepper x6, IconButton x4, IconBadge x3, ListCard x2, Segmented x1, Callout x1, StatusDot x1, SectionLabel x1, ProgressBar x1, FoodCard x1, Chevron x1, SheetFooter x1
 - States and edge cases: Plan type: Workout, Diet; Coach updated the plan: Off, On; Plan change request: None, Requested, Ready; No plan yet (before assessment): Off, On; Mid-workout when the update arrives: Off, On; Connection: Online, Offline; Diet type (plan + swaps): Veg, Eggetarian, Non-veg; Detail level: Detailed, Simple; Camera (scan food): Allowed, Denied; Scan result: Works, Fails; (action) Apply Coach update now; (action) Reset this prototype
 - Hand-built:
   - `app/(tabs)/plans.tsx:67` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => g`
@@ -564,7 +564,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Library components used: (see the screen's files)
 - Hand-built:
   - `features/plans/LogPastWorkoutSheet.tsx:93` icon badge: `<View style={{ width: 24, height: 24, borderRadius: radii.pill, alignItems: 'center', just`
-  - `features/plans/LogPastWorkoutSheet.tsx:113` icon button: `<Pressy accessibilityRole="checkbox" accessibilityState={{ checked: s.done }} accessibilit`
+  - `features/plans/LogPastWorkoutSheet.tsx:121` icon button: `<Pressy accessibilityRole="checkbox" accessibilityState={{ checked: s.done }} accessibilit`
 
 ## PlansCalendarSheet (bottom sheets)
 
