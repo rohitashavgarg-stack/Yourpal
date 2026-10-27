@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
 import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
-import Svg, { Defs, Polyline, RadialGradient, Rect, Stop } from 'react-native-svg';
+import Svg, { Circle, Defs, Polyline, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { ChevronRight } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -77,10 +77,16 @@ export function DrawLine({ pts, color, width = 2.5 }: { pts: [number, number][];
   return <APoly points={key} fill="none" stroke={color} strokeWidth={width} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={`${len}`} animatedProps={ap} />;
 }
 
+// A dot on every reading (up to 12 readings, the same rule as the trend chart); with more, only the latest one.
 export function Spark({ vals, color, w = 112, h = 44 }: { vals: number[]; color: string; w?: number; h?: number }) {
+  const pts = toPts(vals, w, h, 4);
+  const dots = pts.length <= 12 ? pts : [];
+  const last = pts[pts.length - 1];
   return (
     <Svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{ overflow: 'visible' }}>
-      <DrawLine pts={toPts(vals, w, h, 4)} color={color} />
+      <DrawLine pts={pts} color={color} />
+      {dots.map((p, i) => <Circle key={i} cx={p[0]} cy={p[1]} r={2.5} fill={color} />)}
+      <Circle cx={last[0]} cy={last[1]} r={4} fill={color} />
     </Svg>
   );
 }

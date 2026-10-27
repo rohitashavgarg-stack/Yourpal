@@ -96,7 +96,7 @@ function ProgressCard({ k }: { k: CardKey }) {
     const noData = t && !t.hasData;
     switch (k) {
       case 'weight': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withSpark(t!.big, ' kg', t!.sub, nums); break;
-      case 'lifts': body = withSpark('130', ' kg', 'Leg press · latest PR · 24 Sep', [110, 112, 115, 117.5, 120, 125, 130]); break;
+      case 'lifts': body = withSpark('130', ' kg', 'Leg press\nLatest PR on 24 Sep', [110, 112, 115, 117.5, 120, 125, 130]); break;
       case 'hr': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withSpark(t!.big, ' bpm', t!.sub, nums); break;
       case 'cons': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : v2
         ? (
@@ -127,8 +127,8 @@ function ProgressCard({ k }: { k: CardKey }) {
       case 'assess': body = assessNone
         ? plain('Not yet', '', 'First assessment Sat 10:00 am with Coach Vikram')
         : d.assess === 'Only first'
-          ? plain('Starting point saved', '', 'Squat 40 kg · deep squat hold 30 s · next Tue 30 Sep')
-          : plain('Squat +20 kg', '', `Latest 30 Sep vs start 2 Sep · hold 30 → 45 s · next ${d.assess === 'Due now' ? 'due this week' : 'this week'}`);
+          ? plain('Starting point saved', '', 'Deep squat hold 30 s\nNext assessment Tue 30 Sep')
+          : plain('Squat +20 kg', '', `Deep squat hold 30 → 45 s\nNext assessment ${d.assess === 'Due now' ? 'due this week' : 'this week'}`);
         break;
       case 'photos': body = (
         <>
@@ -169,8 +169,8 @@ function StreakEntry() {
       </IconBadge>
       <View style={{ flex: 1 }}>
         <Txt style={{ fontFamily: font.semibold }}>Streaks & badges</Txt>
-        <Txt v="caption">{st.weeks ? `${st.weeks}-week streak · ` : ''}{st.weekDone} of {st.target} this week · 5 of 10 badges</Txt>
-      </View>
+        {st.weeks ? <Txt v="caption">{st.weeks}-week streak</Txt> : null}
+        <Txt v="caption">{st.weekDone} of {st.target} this week</Txt>      </View>
       <ChevronRight size={18} color={c.muted} />
     </PCard>
   );
@@ -208,9 +208,7 @@ export default function ProgressScreen() {
           {!v2 && <FadeIn delay={40}><StreakEntry /></FadeIn>}
           {cards.map((k, i) => (
             <FadeIn key={k} delay={Math.min(i, 6) * 40}><ProgressCard k={k} /></FadeIn>
-          ))}
-          <Txt v="caption" style={{ textAlign: 'center' }}>No “bad” colours here · changes are shown with arrows and plain words</Txt>
-        </>
+          ))}        </>
       )}
     </TabScreen>
   );
