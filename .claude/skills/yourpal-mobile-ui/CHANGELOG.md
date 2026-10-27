@@ -1,5 +1,7 @@
 # Design changelog (generated)
 
+- 2026-10-27 `f30b6ec` Plans: week strip in a container with a fixed height, day header and warm-up and cool-down lists with hierarchy, solid diet cards, a meal stays open while you log it (screens, library, features)
+
 - 2026-10-27 `227080f` Today page end: picture shifted further left, glow follows (library)
 
 - 2026-10-27 `023cf2a` Today page end: gradient words (clear at the top, soft grey at the bottom), less empty space above, picture shifted left with the glow (library)

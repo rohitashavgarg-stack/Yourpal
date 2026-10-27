@@ -229,7 +229,7 @@
      "kind": "button or pill",
      "sig": "button 60 px high, radius radii.lg",
      "fn": "DayStrip",
-     "line": 74,
+     "line": 75,
      "tag": "Pressy",
      "text": "<Pressy key={i} accessibilityRole=\"button\" accessibilityState={{ selected: on }} accessibilityLabel={`${DAYL[i",
      "file": "app/(tabs)/plans.tsx"
@@ -238,7 +238,7 @@
      "kind": "icon badge",
      "sig": "dot 12 px",
      "fn": "DayStrip",
-     "line": 82,
+     "line": 83,
      "tag": "View",
      "text": "<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c",
      "file": "app/(tabs)/plans.tsx"
@@ -247,7 +247,7 @@
      "kind": "icon badge",
      "sig": "dot 4 px",
      "fn": "DayStrip",
-     "line": 83,
+     "line": 84,
      "tag": "View",
      "text": "<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />",
      "file": "app/(tabs)/plans.tsx"
@@ -256,7 +256,7 @@
      "kind": "button or pill",
      "sig": "button auto px high, radius radii.xl",
      "fn": "WorkoutPlan",
-     "line": 93,
+     "line": 94,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See w",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -265,7 +265,7 @@
      "kind": "button or pill",
      "sig": "button auto px high, radius radii.xl",
      "fn": "WorkoutPlan",
-     "line": 115,
+     "line": 116,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -274,7 +274,7 @@
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
-     "line": 179,
+     "line": 189,
      "tag": "View",
      "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -283,7 +283,7 @@
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
-     "line": 180,
+     "line": 190,
      "tag": "View",
      "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -299,15 +299,15 @@
     }
    ],
    "ds": {
-    "Row": 11,
-    "Txt": 63,
+    "Callout": 3,
+    "Row": 14,
+    "Txt": 66,
     "Button": 11,
     "Pressy": 5,
     "IconBadge": 4,
     "Segmented": 1,
     "IconButton": 2,
     "FadeIn": 22,
-    "Callout": 1,
     "Card": 9,
     "StatusDot": 1,
     "ProgressSegments": 1,
@@ -321,7 +321,7 @@
     {
      "comp": "isW ? <PlanMenuSheet /> : <DietMenuSheet />",
      "label": "",
-     "line": 112,
+     "line": 113,
      "in": "openMenu",
      "file": "app/(tabs)/plans.tsx"
     },
@@ -335,21 +335,21 @@
     {
      "comp": "it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode=\"sugg\"",
      "label": "Swap item",
-     "line": 125,
+     "line": 128,
      "in": "onSwap",
      "file": "features/plans/DietPlan.tsx"
     },
     {
      "comp": "UndoEatenSheet",
      "label": "Mark as not eaten",
-     "line": 128,
+     "line": 131,
      "in": "undo",
      "file": "features/plans/DietPlan.tsx"
     },
     {
      "comp": "UndoEatenSheet",
      "label": "Mark as not eaten",
-     "line": 177,
+     "line": 180,
      "in": "MealCard",
      "file": "features/plans/DietPlan.tsx"
     }

@@ -18,6 +18,7 @@ One food as its own card. It replaces the old food rows on the Plans diet page a
 | Prop | Type | Default | What it does |
 |---|---|---|---|
 | `state` | `'todo' \| 'eaten' \| 'skipped'` | required | Which look |
+| `solid` | boolean | false | A not-eaten card drawn solid: no dashed line, a 40 px tick circle. The Plans diet page uses it |
 | `pick` | boolean | false | The look for a list that is ticked and then saved: solid card, tick circle on the right, no dashed line |
 | `name` | string | required | The food |
 | `type` | `'veg' \| 'egg' \| 'nv'` | none | The veg, egg or non-veg mark. Left out, no mark |
