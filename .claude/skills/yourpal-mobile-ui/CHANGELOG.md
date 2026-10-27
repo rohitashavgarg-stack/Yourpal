@@ -1,5 +1,9 @@
 # Design changelog (generated)
 
+- 2026-10-27 `6ad1726` Save meal sheet: solid cards with the tick on the right (FoodCard pick); streak hierarchy; assessment label beside the headline; Today page end subtler (screens, library, features)
+- 2026-10-27 `8625e8c` publish: page end, streaks card, back to today (screens, features)
+- 2026-10-27 `b86eba7` publish: page end, streaks card, back to today (docs)
+
 - 2026-10-27 `067e04e` Today: page end fades into the background and is subtler, day quote removed; Progress: nested week card on Streaks, side-by-side assessment line, quiet Back to today (screens, library, features)
 - 2026-10-27 `537fbf7` publish: Today page end and Progress cards (docs)
 
