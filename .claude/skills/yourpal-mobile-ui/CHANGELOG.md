@@ -1,5 +1,7 @@
 # Design changelog (generated)
 
+- 2026-10-27 `8a37f87` Progress cards: dots on the small line charts, dot separators split into short lines, footer note removed (screens, features)
+
 - 2026-10-26 `553f151` Workout card: Start today anyway is a plain button, not glass (library)
 - 2026-10-26 `0de0568` publish: workout card moved and skipped lines (docs)
 

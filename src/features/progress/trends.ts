@@ -173,9 +173,9 @@ export function trend(k: MetricKey, range: Range, anchor: Date, live: Live): Tre
     const mag = k === 'steps' ? Math.round(Math.abs(dv)).toLocaleString('en-IN') : k === 'sleep' ? `${Math.round(Math.abs(dv) * 60)} min` : fmt(Math.abs(dv)).replace('%', '');
     sub = arrow === '→' ? `About the same as ${word}` : `${arrow}${mag}${k === 'weight' ? ' kg' : k === 'diet' ? '%' : ''} vs ${word}`;
   }
-  if (k === 'steps' || k === 'water') sub = `${totalKind ? 'Total today' : range === 'day' ? 'Total' : 'Daily average'} · ${sub}`;
-  if (k === 'sleep') sub = `Average per night · ${sub}`;
-  if (k === 'weight') sub = `${range === 'day' ? 'Reading' : 'Average'} · ${sub}`;
+  if (k === 'steps' || k === 'water') sub = `${totalKind ? 'Total today' : range === 'day' ? 'Total' : 'Daily average'}\n${sub}`;
+  if (k === 'sleep') sub = `Average per night\n${sub}`;
+  if (k === 'weight') sub = `${range === 'day' ? 'Reading' : 'Average'}\n${sub}`;
 
   const big = bigN == null ? '—' : fmt(bigN);
   const unit = k === 'diet' ? ' on plan' : k === 'cons' ? (range === 'day' ? ' workouts' : ' workouts') : UNIT_OF[k];
