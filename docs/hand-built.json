@@ -166,7 +166,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 94,
+   "line": 93,
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "fn": "WorkoutPlan",
@@ -176,7 +176,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 116,
+   "line": 115,
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "fn": "WorkoutPlan",
@@ -186,7 +186,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 189,
+   "line": 193,
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "fn": "WorkoutPlan",
@@ -196,7 +196,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 190,
+   "line": 194,
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "fn": "WorkoutPlan",

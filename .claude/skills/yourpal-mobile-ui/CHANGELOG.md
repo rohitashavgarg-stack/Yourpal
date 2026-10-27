@@ -1,5 +1,9 @@
 # Design changelog (generated)
 
+- 2026-10-27 `c3d5bc5` Plans day header: name 4 px bigger with Planned on the right, exercises, a divider and the coach in a rounded pill with the photo (features)
+- 2026-10-27 `8bb35c1` publish: Plans page hierarchy, solid diet cards, meal stays open (tokens, features)
+- 2026-10-27 `fb07769` publish: Plans page hierarchy, solid diet cards, meal stays open (docs)
+
 - 2026-10-27 `f30b6ec` Plans: week strip in a container with a fixed height, day header and warm-up and cool-down lists with hierarchy, solid diet cards, a meal stays open while you log it (screens, library, features)
 
 - 2026-10-27 `227080f` Today page end: picture shifted further left, glow follows (library)
