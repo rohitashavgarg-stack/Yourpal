@@ -227,9 +227,18 @@
    "hand": [
     {
      "kind": "button or pill",
+     "sig": "button 24 px high, radius radii.pill",
+     "fn": "DayStrip",
+     "line": 57,
+     "tag": "Pressy",
+     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Back to this week\" onPress={() => goto(THIS)} hitSlop={",
+     "file": "app/(tabs)/plans.tsx"
+    },
+    {
+     "kind": "button or pill",
      "sig": "button 60 px high, radius radii.lg",
      "fn": "DayStrip",
-     "line": 75,
+     "line": 81,
      "tag": "Pressy",
      "text": "<Pressy key={i} accessibilityRole=\"button\" accessibilityState={{ selected: on }} accessibilityLabel={`${DAYL[i",
      "file": "app/(tabs)/plans.tsx"
@@ -238,7 +247,7 @@
      "kind": "icon badge",
      "sig": "dot 12 px",
      "fn": "DayStrip",
-     "line": 83,
+     "line": 91,
      "tag": "View",
      "text": "<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c",
      "file": "app/(tabs)/plans.tsx"
@@ -247,7 +256,7 @@
      "kind": "icon badge",
      "sig": "dot 4 px",
      "fn": "DayStrip",
-     "line": 84,
+     "line": 92,
      "tag": "View",
      "text": "<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />",
      "file": "app/(tabs)/plans.tsx"
@@ -274,7 +283,7 @@
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
-     "line": 193,
+     "line": 195,
      "tag": "View",
      "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -283,7 +292,7 @@
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
-     "line": 194,
+     "line": 196,
      "tag": "View",
      "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -300,15 +309,15 @@
    ],
    "ds": {
     "Callout": 2,
-    "Row": 15,
-    "Txt": 66,
-    "Button": 11,
-    "Pressy": 5,
+    "Row": 13,
+    "Txt": 67,
+    "Pressy": 6,
     "IconBadge": 4,
     "Segmented": 1,
     "IconButton": 2,
     "FadeIn": 22,
     "Card": 9,
+    "Button": 10,
     "StatusDot": 1,
     "ProgressSegments": 1,
     "ListCard": 2,
@@ -321,7 +330,7 @@
     {
      "comp": "isW ? <PlanMenuSheet /> : <DietMenuSheet />",
      "label": "",
-     "line": 113,
+     "line": 122,
      "in": "openMenu",
      "file": "app/(tabs)/plans.tsx"
     },

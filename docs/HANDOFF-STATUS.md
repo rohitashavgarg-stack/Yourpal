@@ -3,7 +3,7 @@
 Checked on 26 Oct 2026 on branch `design-system-handoff`, after round 5 (see `docs/progress.md`). Each line was checked by running the command or opening the file or link. Light mode is out of scope by the designer's instruction, so nothing here covers it.
 
 <!-- numbers:start -->
-Numbers written by `scripts/publish.js` on 2026-10-27 10:22 from branch `experiment-blue-glass` at `c3d5bc5`:
+Numbers written by `scripts/publish.js` on 2026-10-27 10:41 from branch `experiment-blue-glass` at `ed95709`:
 
 | Measure | Value |
 |---|---|
@@ -12,7 +12,7 @@ Numbers written by `scripts/publish.js` on 2026-10-27 10:22 from branch `experim
 | New hard-coded values on changed lines | 0 |
 | Library files | 45 (36 primitives, 9 patterns) |
 | Storybook stories | 241 |
-| Hand-built elements (outside the demo panel) | 84 (3 on purpose, 81 to build) |
+| Hand-built elements (outside the demo panel) | 85 (3 on purpose, 82 to build) |
 | Dot-separator lines left | 233 in 73 files |
 <!-- numbers:end -->
 

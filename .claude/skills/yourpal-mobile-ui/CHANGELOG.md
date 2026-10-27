@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-27 `ed95709` Plans day header: coach pill under exercises and planned, separator above Warm-up, no clock icon (screens, features)
+- 2026-10-27 `e00bcb6` publish: Plans day header layout (docs)
+
 - 2026-10-27 `c3d5bc5` Plans day header: name 4 px bigger with Planned on the right, exercises, a divider and the coach in a rounded pill with the photo (features)
 - 2026-10-27 `8bb35c1` publish: Plans page hierarchy, solid diet cards, meal stays open (tokens, features)
 - 2026-10-27 `fb07769` publish: Plans page hierarchy, solid diet cards, meal stays open (docs)
