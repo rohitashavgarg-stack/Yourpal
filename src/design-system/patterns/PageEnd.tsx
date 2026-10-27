@@ -33,7 +33,7 @@ export function PageEnd({ line = 'Your pace.\nYour pal.' }: { line?: string }) {
           <>
             <Svg width={w} height={h} style={{ position: 'absolute', left: 0, top: 0 }}>
               <Defs>
-                <RadialGradient id="pageEndGlow" cx="60%" cy="52%" r="68%">
+                <RadialGradient id="pageEndGlow" cx="60%" cy="44%" r="56%">
                   <Stop offset="0" stopColor={fixed.blue} stopOpacity={0.95} />
                   <Stop offset="0.5" stopColor={fixed.blue} stopOpacity={0.3} />
                   <Stop offset="1" stopColor={fixed.blue} stopOpacity={0} />
@@ -45,6 +45,7 @@ export function PageEnd({ line = 'Your pace.\nYour pal.' }: { line?: string }) {
               style={{ position: 'absolute', left: -Math.round(w * 0.27), top: h - imgH, width: imgW, height: imgH }} />
             <LinearGradient pointerEvents="none" colors={[c.bg, `${c.bg}00`]} style={{ position: 'absolute', left: 0, right: 0, top: 0, height: '30%' }} />
             <LinearGradient pointerEvents="none" colors={[`${c.bg}00`, c.bg]} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '42%' }} />
+            <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 3, backgroundColor: c.bg }} />
           </>
         )}
       </View>

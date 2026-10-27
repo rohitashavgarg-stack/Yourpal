@@ -71,7 +71,7 @@ export function usePlans() {
 export const DAYL = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 export const DAYN = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 // The prototype's week starts Mon 22 Sep; other weeks repeat the same weekly plan.
-const dayDate = (i: number, w: number) => new Date(2026, 8, 22 + i + 7 * w);
+export const dayDate = (i: number, w: number) => new Date(2026, 8, 22 + i + 7 * w);
 export const dateOf = (i: number, w = 0) => dayDate(i, w).getDate();
 export const monthOf = (i: number, w = 0) => dayDate(i, w).toLocaleString('en-US', { month: 'short' });
 // -1 past, 0 today, 1 future, for the day on screen.

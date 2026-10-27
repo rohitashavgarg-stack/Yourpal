@@ -6,7 +6,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAnimatedReaction, useSharedValue } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { Check, ChevronsLeft, ChevronsRight, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
+import { Check, ChevronDown, ChevronsLeft, ChevronsRight, Dumbbell, Lock, MoreHorizontal, UtensilsCrossed } from '@/lib/icons';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
@@ -17,9 +17,10 @@ import { useDomain } from '@/lib/domain';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { StickyStart, useCanStart, WorkoutPlan } from '@/features/plans/WorkoutPlan';
+import { StickyLog, StickyStart, useCanLog, useCanStart, WorkoutPlan } from '@/features/plans/WorkoutPlan';
 import { DietPlan } from '@/features/plans/DietPlan';
 import { DietMenuSheet, PlanMenuSheet } from '@/features/plans/Sheets';
+import { PlansCalendarSheet } from '@/features/plans/PlansCalendarSheet';
 import { applyCoachUpdate, COACH_HL } from '@/features/plans/content';
 import { haptic } from '@/lib/haptics';
 import { DAYL, DAYN, dateOf, monthOf, dayPlan, Diet, resetPlans, setP, usePlans } from '@/features/plans/store';
@@ -52,12 +53,16 @@ function DayStrip() {
   }, [p.week]);
   const m0 = monthOf(0, cur), m6 = monthOf(6, cur);
   const monthTitle = m0 === m6 ? (MONTH_FULL[m0] ?? m0) : `${m0} – ${m6}`;
+  const { openSheet } = useOverlay();
   const goto = (k: number) => { ref.current?.scrollTo({ x: k * w, animated: true }); setPage(k); haptic.tick(); };
   return (
-    <View style={{ marginHorizontal: -16, marginBottom: 16, paddingTop: 16, paddingBottom: 16, paddingHorizontal: 16, gap: 10, backgroundColor: c.surface2 }}>
-      {/* the month on the left; on another week the way back sits on the right of the same row, so the strip keeps one size when you swipe */}
-      <Row style={{ justifyContent: 'space-between', height: 26, paddingHorizontal: 4 }}>
-        <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{monthTitle}</Txt>
+    <View style={{ marginBottom: 12, gap: 10 }}>
+      {/* the month is a heading above the strip; on another week the way back sits on the right of the same row, so the strip keeps one size when you swipe */}
+      <Row style={{ justifyContent: 'space-between', height: 28, paddingHorizontal: 4 }}>
+        <Pressy accessibilityRole="button" accessibilityLabel={`${monthTitle}. Open the calendar`} onPress={() => { haptic.tick(); openSheet(<PlansCalendarSheet />, { label: 'Pick a date' }); }} hitSlop={8} scaleTo={0.97} style={{ flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 28 }}>
+          <Txt accessibilityRole="header" accessibilityLiveRegion="polite" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, letterSpacing: -0.2 }}>{monthTitle}</Txt>
+          <ChevronDown size={18} color={c.ink} />
+        </Pressy>
         {cur !== 0 && (
           <Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => goto(THIS)} hitSlop={10} scaleTo={0.96}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 26, paddingHorizontal: 12, borderRadius: radii.pill, borderWidth: 1, borderColor: c.chipLine }}>
@@ -67,6 +72,7 @@ function DayStrip() {
           </Pressy>
         )}
       </Row>
+      <View style={{ marginHorizontal: -16, paddingVertical: 8, paddingHorizontal: 16, backgroundColor: c.surface2 }}>
       <View onLayout={(e) => setW(e.nativeEvent.layout.width)}>
         <ScrollView ref={ref} horizontal pagingEnabled showsHorizontalScrollIndicator={false} accessibilityLabel="Weeks, swipe for earlier or later weeks" scrollEventThrottle={16}
           onScroll={(e) => { const k = Math.round(e.nativeEvent.contentOffset.x / (w || 1)); if (k !== page && k >= 0 && k < WEEKS.length) { setPage(k); haptic.tick(); } }}
@@ -87,7 +93,7 @@ function DayStrip() {
                   <Pressy key={i} accessibilityRole="button" accessibilityState={{ selected: on }}
                     accessibilityLabel={`${DAYL[i]} ${dateOf(i, wk)} ${monthOf(i, wk)}${isToday ? ', today' : ''}${isW ? (plan ? `${locked ? "" : ", " + plan.name}${logged ? ', logged' : locked ? ', locked' : missed ? ', not logged' : ''}` : ', rest day') : ''}`}
                     onPress={() => setP({ day: i, week: wk })} scaleTo={0.94}
-                    style={{ flex: 1, height: 76, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center', gap: 2, backgroundColor: on ? c.ink : 'transparent', borderWidth: isToday ? 1.5 : 0, borderColor: c.accent }}>
+                    style={{ flex: 1, height: 66, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center', gap: 2, backgroundColor: on ? c.ink : 'transparent', borderWidth: isToday ? 1.5 : 0, borderColor: c.accent }}>
                     <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: on ? c.bg : c.ink, opacity: 0.7 }}>{l}</Txt>
                     <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 21, color: on ? c.bg : c.ink }}>{dateOf(i, wk)}</Txt>
                     {/* the mark under the date always gets the same 16 px slot, so a check, a lock or a dot never moves the numbers */}
@@ -103,6 +109,7 @@ function DayStrip() {
             </View>
           ))}
         </ScrollView>
+      </View>
       </View>
     </View>
   );
@@ -155,6 +162,7 @@ export default function Plans() {
 
   const paused = useLogsPaused();
   const canStart = useCanStart() && !paused;
+  const canLog = useCanLog() && !paused;
   const insets = useSafeAreaInsets();
   const sy = useSharedValue(0);
   const startRef = useRef<ViewInstance>(null);
@@ -165,7 +173,7 @@ export default function Plans() {
   useAnimatedReaction(() => Math.round(sy.value / 12), (v, prev) => { if (v !== prev) scheduleOnRN(check); }, [under]);
   return (
     <View style={{ flex: 1 }}>
-    <TabScreen title="Plans" scrollY={sy} header={<GymHeader />} compactTitle={false} bottomPad={canStart ? 190 : 130} titleRight={(
+    <TabScreen title="Plans" scrollY={sy} header={<GymHeader />} compactTitle={false} bottomPad={canStart || canLog ? 190 : 130} titleRight={(
       <Row style={{ gap: 8 }}>
         <Segmented iconOnly accessibilityLabel="Plan type" value={p.seg} onChange={(v) => setP({ seg: v })}
           options={[{ value: 'workout', label: 'Workout' }, { value: 'diet', label: 'Diet' }]}
@@ -196,7 +204,7 @@ export default function Plans() {
         {isW ? <WorkoutPlan startRef={startRef} /> : <DietPlan />}
       </View>
     </TabScreen>
-    {canStart && floating && <StickyStart />}
+    {floating && (canStart ? <StickyStart /> : canLog ? <StickyLog /> : null)}
     </View>
   );
 }
