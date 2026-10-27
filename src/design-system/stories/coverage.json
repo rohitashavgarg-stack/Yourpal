@@ -69,7 +69,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Callout.tsx",
    "doc": true,
-   "uses": 15,
+   "uses": 16,
    "files": 13,
    "inLibrary": 0
   },
@@ -114,7 +114,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/FadeIn.tsx",
    "doc": true,
-   "uses": 142,
+   "uses": 141,
    "files": 49,
    "inLibrary": 4
   },
@@ -231,8 +231,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/ProgressBar.tsx",
    "doc": true,
-   "uses": 6,
-   "files": 5,
+   "uses": 7,
+   "files": 6,
    "inLibrary": 0
   },
   {
@@ -822,7 +822,7 @@
    "group": "Bottom sheets"
   },
   {
-   "where": "src/app/(tabs)/progress.tsx:164",
+   "where": "src/app/(tabs)/progress.tsx:165",
    "kind": "card",
    "look": "card radius 20, fill c.surface2",
    "jsx": "<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: ",

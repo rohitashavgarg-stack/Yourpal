@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-27 `067e04e` Today: page end fades into the background and is subtler, day quote removed; Progress: nested week card on Streaks, side-by-side assessment line, quiet Back to today (screens, library, features)
+- 2026-10-27 `537fbf7` publish: Today page end and Progress cards (docs)
+
 - 2026-10-27 `3a70069` Today: illustrated page end (PageEnd pattern); Progress cards: label beside the number, assessments lines by weight (docs, screens, library)
 - 2026-10-27 `f430c88` publish: progress cards (docs)
 

@@ -27,7 +27,6 @@
    "features/today/ViewOnly.tsx",
    "features/today/TodayBudget.tsx",
    "features/today/TodayGreeting.tsx",
-   "features/today/DayQuote.tsx",
    "features/today/NoPlanCard.tsx",
    "features/reminders/PushBanner.tsx",
    "features/today/GoalCards.tsx",

@@ -36,7 +36,6 @@
     "features/today/ViewOnly.tsx",
     "features/today/TodayBudget.tsx",
     "features/today/TodayGreeting.tsx",
-    "features/today/DayQuote.tsx",
     "features/today/NoPlanCard.tsx",
     "features/reminders/PushBanner.tsx",
     "features/today/GoalCards.tsx",
@@ -118,11 +117,11 @@
     }
    ],
    "ds": {
-    "FadeIn": 25,
+    "FadeIn": 24,
     "PageEnd": 2,
     "Pressy": 10,
     "Row": 16,
-    "Txt": 57,
+    "Txt": 54,
     "Button": 11,
     "IconBadge": 7,
     "Card": 3,
@@ -405,7 +404,7 @@
      "kind": "card",
      "sig": "card radius 20, fill c.surface2",
      "fn": "ProgressCard",
-     "line": 164,
+     "line": 165,
      "tag": "View",
      "text": "<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: ",
      "file": "app/(tabs)/progress.tsx"
@@ -414,8 +413,9 @@
    "ds": {
     "Txt": 24,
     "Row": 7,
-    "Callout": 1,
+    "Callout": 2,
     "IconBadge": 1,
+    "ProgressBar": 1,
     "FadeIn": 4
    },
    "sheets": [],
