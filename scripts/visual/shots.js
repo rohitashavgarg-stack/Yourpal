@@ -50,7 +50,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
           await js(`(() => { const el = document.querySelector('[aria-label=' + ${JSON.stringify(JSON.stringify(lab))} + ']'); if (el) el.focus(); return !!el; })()`); await sleep(300);
           await send('Input.insertText', { text }); await sleep(700);
         }
-        if (e.scrollBy) { await js('(() => { const els = [...document.querySelectorAll("div")].filter((x) => x.scrollHeight > x.clientHeight + 50 && /auto|scroll/.test(getComputedStyle(x).overflowY)); const el = els.sort((m, n) => n.scrollHeight - m.scrollHeight)[0]; if (el) el.scrollTop = ' + e.scrollBy + '; return !!el; })()'); await sleep(1000); }
+        if (e.scrollBy) { await js('(() => { const els = [...document.querySelectorAll("div")].filter((x) => x.scrollHeight > x.clientHeight + 50 && /auto|scroll/.test(getComputedStyle(x).overflowY)); els.forEach((el) => { el.scrollTop = ' + e.scrollBy + '; }); return els.length; })()'); await sleep(1000); }
         if (e.scroll) { await js('(() => { const els = [...document.querySelectorAll("div")].filter((x) => x.scrollHeight > x.clientHeight + 50 && /auto|scroll/.test(getComputedStyle(x).overflowY)); const el = els.sort((m, n) => n.scrollHeight - m.scrollHeight)[0]; if (el) el.scrollTop = el.scrollHeight; return !!el; })()'); await sleep(1200); }
         const r = await send('Page.captureScreenshot', { format: 'png' }); fs.writeFileSync(path.join(out, theme, e.name + '.png'), Buffer.from(r.data, 'base64')); n++; process.stdout.write('.');
       }

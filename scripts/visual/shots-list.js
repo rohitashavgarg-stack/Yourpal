@@ -58,6 +58,7 @@ module.exports = [
   { name: 'state-today-top', url: '/', settle: 9000 },
   { name: 'state-plans-bottom', url: '/', clicks: ['Plans'], wait: 3000, scroll: true },
   { name: 'state-diet-eat1', url: '/plans?day=2&tab=diet', clicks: ['Diet', 'Mark eaten: '], wait: 2500 },
+  { name: 'state-plans-scrolled', url: '/', clicks: ['Plans'], wait: 3500, scrollBy: 420 },
   { name: 'state-progress-earlier', url: '/progress', settle: 9000, clicks: ['Earlier'], wait: 1500 },
   { name: 'state-login-offline', url: '/login?sc=' + q({ net: 'Offline' }), noSignedIn: true },
 ];

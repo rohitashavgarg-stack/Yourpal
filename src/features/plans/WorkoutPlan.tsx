@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import type { ViewInstance } from 'react-native';
 import { useLogsPaused } from '@/lib/logGate';
 import { StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
@@ -175,7 +176,7 @@ export function WorkoutPlan({ onStartMeasure }: { onStartMeasure?: (windowBottom
               </FadeIn>
             );
           })()}
-          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><Svg accessibilityElementsHidden width="100%" height={2} style={{ marginTop: 4 }}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg><ListCard dot={c.cAct} title="Warm-up" rows={plan.wu} /></FadeIn>}
+          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ marginTop: 4 }}><Svg width="100%" height={2}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg></View><ListCard dot={c.cAct} title="Warm-up" rows={plan.wu} /></FadeIn>}
           <FadeIn i={3}><Txt v="label" style={{ paddingHorizontal: 6 }}>Main workout</Txt></FadeIn>
           <FadeIn i={3}>
             <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
@@ -237,7 +238,7 @@ function InlineStart({ onMeasure }: { onMeasure?: (windowBottom: number | null) 
   const { d } = useDomain();
   const startWorkout = useStartWorkout();
   const live = !!d.session;
-  const ref = useRef<View>(null);
+  const ref = useRef<ViewInstance>(null);
   const measure = () => ref.current?.measureInWindow((_x, y, _w, h) => onMeasure?.(y + h));
   useEffect(() => () => onMeasure?.(null), []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
