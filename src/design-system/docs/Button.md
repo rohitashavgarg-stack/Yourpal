@@ -73,14 +73,14 @@ Every action in the app. One `Button` with a kind (colour) and a size (shape), a
 | primary | ink | none | background colour | the one main action |
 | accent | blue accent | none | accent ink | |
 | secondary | soft surface (`surface2`) | none | ink | |
-| ghost | none | none | accent text | a text action |
+| ghost | none | none | accent text | a text action, such as "Back to today" under the date |
 | outline | none | 1 px `line` | ink | |
 | white | white | none | dark | main button on a dark card |
 | glass | white at 12% | none | white, medium | second buttons on a dark card |
 | dashed | none | 1 px dashed `chipLine` | ink, medium | add something: "Ate something else?", "+ Add exercise", "+ Add item", "Add set" |
 | line | none | 1 px `chipLine` | ink, medium | a row of topic choices (coach, chat) |
 | quiet | none | 1 px `line` | ink, medium (use `muted` for the quiet colour) | "Skip meal", "Undo skip" |
-| soft | `accentSoft` | none | accent text | "This week", "Back to today", "About: ..." |
+| soft | `accentSoft` | none | accent text | "This week", "About: ..." |
 | whiteLine | white | 1 px `fixed.lineOnWhite` (#C9D1DD) | dark | buttons on the white workout clip stage ("Finish", "Hide") |
 | surface | `surface` | none | ink | a button on a soft surface (Profile "Edit") |
 | glassPrimary | transparent, glass tinted with the ink colour at 92% (white in dark mode, near-black in light) | none | the background colour | the same floating glass as glassAccent, in the primary colours: "Save meal" in the meal log sheet |

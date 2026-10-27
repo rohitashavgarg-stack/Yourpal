@@ -4,7 +4,7 @@
 
 ## Purpose
 
-The last thing on a long page. An illustration (`assets/illustrations/today-end.webp`, a member lacing up trainers beside a bag, a bottle and a mat), a big quiet line under it and the YourPal mark. The page ends with a picture and not with a card. It follows the way District closes its home page.
+The last thing on a long page. A subtle illustration (drawn at 55% so it stays quiet) that fades into the page colour at its foot, with the line sitting on the fade. An illustration (`assets/illustrations/today-end.webp`, a member lacing up trainers beside a bag, a bottle and a mat), a big quiet line under it and the YourPal mark. The page ends with a picture and not with a card. It follows the way District closes its home page.
 
 ## Props
 

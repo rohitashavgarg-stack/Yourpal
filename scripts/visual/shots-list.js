@@ -52,5 +52,7 @@ module.exports = [
   { name: 'state-plans-scan-denied', url: '/plans/log?stores=' + q({ plans: { cam: 'Denied' } }) },
   { name: 'state-export-offline', url: '/profile/export?sc=' + q({ net: 'Offline' }) },
   { name: 'state-today-end', url: '/', settle: 9000, scroll: true },
+  { name: 'state-progress-top', url: '/progress', settle: 9000 },
+  { name: 'state-progress-earlier', url: '/progress', settle: 9000, clicks: ['Earlier'], wait: 1500 },
   { name: 'state-login-offline', url: '/login?sc=' + q({ net: 'Offline' }), noSignedIn: true },
 ];

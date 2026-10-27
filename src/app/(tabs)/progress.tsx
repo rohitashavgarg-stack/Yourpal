@@ -28,6 +28,7 @@ import { GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Callout } from '@/design-system/primitives/Callout';
+import { ProgressBar } from '@/design-system/primitives/ProgressBar';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
@@ -137,8 +138,8 @@ function ProgressCard({ k }: { k: CardKey }) {
       case 'assess': body = assessNone
         ? plain('Not yet', '', 'First assessment Sat 10:00 am with Coach Vikram')
         : d.assess === 'Only first'
-          ? plain('Starting point saved', '', 'Deep squat hold 30 s\nNext assessment Tue 30 Sep', true)
-          : plain('Squat +20 kg', '', `Deep squat hold 30 → 45 s\nNext assessment ${d.assess === 'Due now' ? 'due this week' : 'this week'}`, true);
+          ? plain('Starting point saved', '', 'Deep squat hold 30 s\nNext assessment Tue 30 Sep')
+          : plain('Squat +20 kg', '', `Deep squat hold 30 → 45 s\nNext assessment ${d.assess === 'Due now' ? 'due this week' : 'this week'}`);
         break;
       case 'photos': body = (
         <>
@@ -177,10 +178,16 @@ function StreakEntry() {
       <IconBadge size={48} radius={radii.card} bg="rgba(255,138,61,0.16)">
         <Flame size={26} color={FLAME} fill={st.weeks > 0 ? FLAME : 'transparent'} strokeWidth={2} />
       </IconBadge>
-      <View style={{ flex: 1 }}>
-        <Txt style={{ fontFamily: font.semibold }}>Streaks & badges</Txt>
-        {st.weeks ? <Txt v="caption">{st.weeks}-week streak</Txt> : null}
-        <Txt v="caption">{st.weekDone} of {st.target} this week</Txt>      </View>
+      <View style={{ flex: 1, gap: 8 }}>
+        <View>
+          <Txt style={{ fontFamily: font.semibold }}>Streaks & badges</Txt>
+          {st.weeks ? <Txt v="caption">{st.weeks}-week streak</Txt> : null}
+        </View>
+        <Callout size="compact" gap={8}>
+          <Txt v="caption">{st.weekDone} of {st.target} this week</Txt>
+          <ProgressBar height={4} track="surface3" color={FLAME} percent={Math.min(100, Math.round((st.weekDone / Math.max(1, st.target)) * 100))} />
+        </Callout>
+      </View>
       <ChevronRight size={18} color={c.muted} />
     </PCard>
   );

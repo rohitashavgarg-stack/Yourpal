@@ -24,7 +24,6 @@ import { useCheckIn, useCheckInPanel } from '@/features/checkin/useCheckIn';
 import { ViewOnly } from '@/features/today/ViewOnly';
 import { TodayBudgetCard, topCardStore } from '@/features/today/TodayBudget';
 import { TodayGreeting } from '@/features/today/TodayGreeting';
-import { DayQuote } from '@/features/today/DayQuote';
 import { NoPlanCard } from '@/features/today/NoPlanCard';
 import { planStore } from '@/lib/planState';
 import { PushBanner } from '@/features/reminders/PushBanner';
@@ -156,8 +155,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 160
             <FadeIn step={50} i={1}>{!assigned ? <NoPlanCard /> : topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</FadeIn>
             {comebackNew && forYou.length > 0 && <FadeIn step={50} i={1}><ForYouStack /></FadeIn>}
             {order.map((k, i) => <FadeIn step={50} key={k} i={2 + i}>{slots[k]}</FadeIn>)}
-            <FadeIn step={50} i={7}><DayQuote /></FadeIn>
-            <FadeIn step={50} i={8}><PageEnd /></FadeIn>
+            <FadeIn step={50} i={7}><PageEnd /></FadeIn>
           </>
         ) : (
           <>
