@@ -136,7 +136,7 @@ The rule (CLAUDE.md): no dot separators ("text · text"). Use a title, a sentenc
 ### `src/app/workout.tsx` (6)
 
 - 125: `swapTo: (name, plan) => { closeSheet(); A.swap(s!.exIdx, name, plan); haptic.success(); toast(plan ? 'Swapped to ${name} · Coach Vikram will be notifi`
-- 145: `set((x) => ({ session: null, wkDone: { a: at, b: at + mins, k: Math.max(40, mins * 7) }, ...(msg ? { chat: [...x.chat, { me: true, t: msg, ctx: 'Leg d`
+- 145: `set((x) => ({ session: null, wkDone: { a: at, b: at + mins, k: Math.max(40, mins * 7), ex: finished.exercises }, ...(msg ? { chat: [...x.chat, { me: t`
 - 230: `{!newUi && <Txt v="caption" style={{ textAlign: 'center', paddingHorizontal: 6, paddingTop: 4 }}>Adjust the highlighted set and tick it · tap a set to`
 - 279: `<Txt style={{ fontSize: fontSizes.sm, color: 'rgba(244,244,246,0.8)' }}>{s.phase === 'cooldown' ? '4 stretches · slow and easy' : '4 moves · no weight`
 - 319: `<Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.7, color: cardMuted }}>EXERCISE {s.exIdx + 1} OF {s.ex.length} · {e.`
