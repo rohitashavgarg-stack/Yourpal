@@ -239,7 +239,8 @@ export default function ProgressScreen() {
           {!v2 && <FadeIn delay={40}><StreakEntry /></FadeIn>}
           {cards.map((k, i) => (
             <FadeIn key={k} delay={Math.min(i, 6) * 40}><ProgressCard k={k} /></FadeIn>
-          ))}        </>
+          ))}
+        </>
       )}
     </TabScreen>
   );
