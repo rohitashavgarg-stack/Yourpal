@@ -9,7 +9,7 @@ import { useAnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavHidden } from '@/components/FloatingTabBar';
 import { router } from 'expo-router';
-import { Activity, CalendarClock, Check, ChevronRight, Clock, Dumbbell, Lock, Play, Snowflake } from '@/lib/icons';
+import { CalendarClock, Check, ChevronRight, Clock, Dumbbell, Lock, Play, Snowflake } from '@/lib/icons';
 import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { Tag } from '@/components/bits';
@@ -29,6 +29,7 @@ import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { ListCard } from '@/design-system/primitives/ListCard';
+import StretchIcon from '@/lib/StretchIcon';
 import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
 
@@ -145,11 +146,11 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
                   </Row>
                 </Row>
                 <Row style={{ marginTop: 4, gap: 12 }}>
-                  <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt style={{ fontFamily: font.bold, fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.ex.length}</Txt> exercises</Txt>
+                  <Row style={{ gap: 6 }}><Dumbbell size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt style={{ fontFamily: font.bold, fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.ex.length}</Txt> exercises</Txt></Row>
                   {!!plan.time && !plan.done && (
                     <>
                       <View accessibilityElementsHidden style={{ width: 1, height: 16, backgroundColor: c.line }} />
-                      <View accessible accessibilityLabel={`Planned ${plan.time}`}><Row style={{ gap: 6 }}><CalendarClock size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.time}</Txt></Row></View>
+                      <View accessible accessibilityLabel={`Planned ${plan.time}`}><Row style={{ gap: 6 }}><CalendarClock size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.time} planned</Txt></Row></View>
                     </>
                   )}
                 </Row>
@@ -180,7 +181,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
               </FadeIn>
             );
           })()}
-          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ marginTop: 4 }}><Svg width="100%" height={2}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg></View><ListCard icon={<Activity size={20} color={c.ink} />} title="Warm-up" rows={plan.wu} /></FadeIn>}
+          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ marginTop: 4 }}><Svg width="100%" height={2}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg></View><ListCard icon={<StretchIcon size={22} color={c.ink} />} title="Warm-up" rows={plan.wu} /></FadeIn>}
           {/* a heading stays close to its own card (8 px); the sections are 24 px apart */}
           <FadeIn i={3} style={{ gap: 8 }}>
             <SectionLabel variant="section" icon={<Dumbbell size={20} color={c.ink} />}>Main workout</SectionLabel>

@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-27 `5fff37b` Plans: stretch icon for Warm-up, dumbbell and calendar icons in the facts row, roomier day pills (screens, features)
+- 2026-10-27 `a4af365` publish: Plans strip, headings, icons (docs)
+
 - 2026-10-27 `03e5b51` Plans: full-width grey week strip with the month, spacing between sections, plain icon headings, calendar icon for the planned time; calorie icons use the bolt, the flame is only for the streak (screens, library, features)
 - 2026-10-27 `4c227af` Plans: icon headings, coach beside the name, outlined week strip with a direction-aware way back, floating Start button measured live (screens, library, features)
 - 2026-10-27 `f0f76eb` publish: Plans start button, dashed separator, week strip (screens, library, features)
