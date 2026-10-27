@@ -86,7 +86,7 @@ export function LogMealsSheet({ mealId, draft: start }: { mealId: MealId; draft?
           const max = qty ? Math.max(qty.n * 4, step * 10) : 0;
           const to = (v: number) => qty && setAmount(k, Math.min(max, Math.max(step, Math.round(v * 100) / 100)) / qty.n);
           return (
-            <FoodCard key={k} state={on ? 'eaten' : 'todo'} name={n.n} type={it.type}
+            <FoodCard key={k} pick state={on ? 'eaten' : 'todo'} name={n.n} type={it.type}
               amount={qty ? <AmountStepper text={fmtQty(cur, qty.unit)} unit={qty.unit} onLess={() => to(cur - step)} onMore={() => to(cur + step)} lessDisabled={cur <= step} moreDisabled={cur >= max} /> : undefined}
               amountText={qty ? fmtQty(cur, qty.unit) : ''} kcal={`${n.k} kcal`} macros={`P ${n.p} · C ${Math.round((n.k * 0.5) / 4)} · F ${Math.round((n.k * 0.3) / 9)} g`}
               onPress={() => tick(k)} onCheck={() => tick(k)} onHold={() => { haptic.medium(); openFood(k, false); }}
@@ -99,8 +99,8 @@ export function LogMealsSheet({ mealId, draft: start }: { mealId: MealId; draft?
           const name = cut > 0 ? e.n.slice(0, cut) : e.n;
           const amount = cut > 0 ? e.n.slice(cut + 2) : '';
           return (
-            <FoodCard key={`x${j}`} state="eaten" name={name} type={e.type ?? 'veg'} tag="Yours" amountText={amount} kcal={`${e.k} kcal`}
-              onPress={() => removeExtra(j)} onHold={() => { haptic.medium(); openFood(j, true); }} label={`${e.n}, added by you. Tap to remove, hold for details`} />
+            <FoodCard key={`x${j}`} pick state="eaten" name={name} type={e.type ?? 'veg'} tag="Yours" amountText={amount} kcal={`${e.k} kcal`}
+              onPress={() => removeExtra(j)} onCheck={() => removeExtra(j)} checkLabel={`Remove ${e.n}`} onHold={() => { haptic.medium(); openFood(j, true); }} label={`${e.n}, added by you. Tap to remove, hold for details`} />
           );
         })}
         <Row style={{ gap: 8 }}>

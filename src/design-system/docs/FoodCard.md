@@ -18,6 +18,7 @@ One food as its own card. It replaces the old food rows on the Plans diet page a
 | Prop | Type | Default | What it does |
 |---|---|---|---|
 | `state` | `'todo' \| 'eaten' \| 'skipped'` | required | Which look |
+| `pick` | boolean | false | The look for a list that is ticked and then saved: solid card, tick circle on the right, no dashed line |
 | `name` | string | required | The food |
 | `type` | `'veg' \| 'egg' \| 'nv'` | none | The veg, egg or non-veg mark. Left out, no mark |
 | `amount` | node | none | The amount control of a not-eaten card (the stepper) |
@@ -33,6 +34,10 @@ One food as its own card. It replaces the old food rows on the Plans diet page a
 | `onSwap`, `onSkip` | () => void | none | Both set: swipe left shows Swap and Skip |
 | `skipLabel` | string | `Skip` | The second swipe button. "Delete" for a food the member added |
 | `checkLabel`, `label` | string | built from the name | Spoken labels of the check and the card |
+
+## Pick look
+
+`pick` is for a list the member ticks and then saves (the meal log sheet with Save meal). A solid card (soft green when ticked), the amount stepper before the tick and plain text after, the calories, and the tick circle on the right in both states. No dashed line and no darker macros strip. Use it only where changes are a draft until Save.
 
 ## States
 

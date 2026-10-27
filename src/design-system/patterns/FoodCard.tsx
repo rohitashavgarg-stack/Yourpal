@@ -20,12 +20,15 @@ import { Tag } from '../primitives/Tag';
  *   todo     a dashed card with the amount control, the calories and the macros, and the check on the right
  *   eaten    a solid card: the amount as plain text, the calories on the right, the macros in a darker strip (with a menu button if `onMenu` is set)
  *   skipped  the same card faded, name struck through
+ * `pick` is for a list the member ticks and then saves (the meal log sheet): a solid card with the tick circle on the right in both states, no dashed line and no macros strip.
  * Swipe left on a todo card (when `onSwap` and `onSkip` are set) to reveal Swap and Skip, 44 px each. Hold the card for the food page (`onHold`).
  */
 export type FoodCardState = 'todo' | 'eaten' | 'skipped';
 
 export type FoodCardProps = {
   state: FoodCardState;
+  /** A list that is ticked and then saved: solid card, tick circle on the right, no dashed line. */
+  pick?: boolean;
   name: string;
   /** The veg, egg or non-veg mark. Left out, no mark. */
   type?: FoodType;
@@ -63,7 +66,7 @@ const SKIP_W = 64;
 const GAP = 8;
 const REVEAL = ACTION + SKIP_W + GAP * 3;
 
-export function FoodCard({ state, name, type, amount, amountText, kcal, macros, tag, note, onPress, onCheck, onMenu, onHold, onSwap, onSkip, skipLabel = 'Skip', checkLabel, label }: FoodCardProps) {
+export function FoodCard({ state, pick, name, type, amount, amountText, kcal, macros, tag, note, onPress, onCheck, onMenu, onHold, onSwap, onSkip, skipLabel = 'Skip', checkLabel, label }: FoodCardProps) {
   const { c } = useTheme();
   const tx = useSharedValue(0);
   const base = useSharedValue(0);
@@ -99,6 +102,24 @@ export function FoodCard({ state, name, type, amount, amountText, kcal, macros, 
   );
   const common = { accessibilityRole: 'button' as const, accessibilityLabel: spoken, accessibilityActions: actions, onAccessibilityAction: (e: { nativeEvent: { actionName: string } }) => onAction(e.nativeEvent.actionName),
     onPress, onLongPress: onHold, delayLongPress: 480, scaleTo: 0.99, haptics: false };
+
+  if (pick) {
+    return (
+      <Pressy {...common} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 64, paddingVertical: 12, paddingLeft: 14, paddingRight: 6, borderRadius: radii.md, backgroundColor: eaten ? c.goodSoft : c.surface2 }}>
+        <View style={{ flex: 1, minWidth: 0, gap: 8 }}>
+          {title}
+          {(amount || amountText || kcal) ? (
+            <Row style={{ gap: 10, flexWrap: 'wrap' }}>
+              {eaten ? (amountText ? <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}>{amountText}</Txt> : null) : (amount ?? (amountText ? <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}>{amountText}</Txt> : null))}
+              {kcal ? <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{kcal}</Txt> : null}
+            </Row>
+          ) : null}
+          {!eaten && macros ? <Txt v="caption">{macros}</Txt> : null}
+        </View>
+        <CheckCircle on={eaten} size={40} tone="good" label={checkLabel ?? `${eaten ? 'Unmark' : 'Mark'} ${name}`} onPress={onCheck ?? onPress ?? (() => {})} />
+      </Pressy>
+    );
+  }
 
   if (eaten) {
     return (

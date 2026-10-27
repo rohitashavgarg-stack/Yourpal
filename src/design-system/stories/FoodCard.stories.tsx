@@ -21,6 +21,8 @@ export const Skipped: S = { args: { state: 'skipped', onCheck: () => {} } };
 export const NonVeg: S = { args: { type: 'nv', name: 'Chicken curry', kcal: '210 kcal', macros: 'P 24 · C 6 · F 10 g', amount: stepper, onCheck: () => {} } };
 export const AddedByYou: S = { args: { state: 'eaten', tag: 'Yours', name: 'Poha', amountText: '1 plate', kcal: '180 kcal', macros: undefined } };
 export const DeleteInsteadOfSkip: S = { args: { amount: stepper, tag: 'Yours', skipLabel: 'Delete', onCheck: () => {}, onSwap: () => {}, onSkip: () => {} } };
+export const PickTicked: S = { args: { pick: true, state: 'eaten', amountText: '1 plate', onCheck: () => {} } };
+export const PickNotTicked: S = { args: { pick: true, amount: stepper, onCheck: () => {} } };
 export const PickList: S = {
   render: () => (
     <View style={{ gap: 8 }}>
