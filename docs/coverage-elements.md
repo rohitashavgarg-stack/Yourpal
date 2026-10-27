@@ -38,7 +38,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Progress (routes)
 
 - Files: `app/(tabs)/progress.tsx`
-- Library components used: Txt x24, Row x7, FadeIn x4, Callout x2, IconBadge x1, ProgressBar x1
+- Library components used: Txt x26, Row x7, FadeIn x4, Callout x2, IconBadge x1, ProgressSegments x1
 - Hand-built:
   - `app/(tabs)/progress.tsx:165` card: `<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 2`
 
@@ -366,7 +366,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Streaks and badges (routes)
 
 - Files: `app/progress/streaks.tsx`, `features/streak/BadgeArt.tsx`, `features/streak/StreakHero.tsx`
-- Library components used: Txt x15, Row x5, SectionLabel x2, Card x1, Callout x1, IconBadge x1, FadeIn x1
+- Library components used: Txt x16, Row x5, SectionLabel x2, Card x1, Callout x1, IconBadge x1, FadeIn x1
 - States and edge cases: Streak: Active, Broken, New member; Earlier this week: 0, 1, 2, 3
 - Hand-built:
   - `app/progress/streaks.tsx:31` card: `<View accessible accessibilityLabel={earned ? '${b.title}, earned ${b.earned}' : '${b.titl`

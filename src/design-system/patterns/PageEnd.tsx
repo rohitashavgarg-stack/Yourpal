@@ -20,7 +20,7 @@ export function PageEnd({ line = 'Your pace.\nYour pal.' }: { line?: string }) {
   return (
     <View style={{ paddingTop: 40, paddingBottom: 8, gap: 20 }}>
       <View onLayout={(e) => setW(e.nativeEvent.layout.width)} style={{ width: '100%' }}>
-        {w > 0 && <Image source={ART} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" resizeMode="contain" style={{ width: w, height: Math.round((w * 1199) / 1312), opacity: 0.55 }} />}
+        {w > 0 && <Image source={ART} accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" resizeMode="contain" style={{ width: w, height: Math.round((w * 1199) / 1312), opacity: 0.32 }} />}
         <LinearGradient pointerEvents="none" colors={[`${c.bg}00`, c.bg]} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '38%' }} />
       </View>
       <Txt style={{ marginTop: -44, fontFamily: font.semibold, fontSize: fontSizes.xl6, lineHeight: 50, letterSpacing: -1.6, color: c.muted, opacity: 0.55, paddingHorizontal: 8 }}>{line}</Txt>

@@ -124,7 +124,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 - Opens from: [Today](#today), [Your goal](#your-goal), [Assessments](#assessments)
 - Leads to: [Lift detail](#lift-detail), [Assessment](#assessment), [Photos](#photos), [Metric detail](#metric-detail), [Streaks and badges](#streaks-and-badges)
 - Sheets it opens: `CalendarSheet`
-- Library pieces: `FadeIn`, `Callout`, `IconBadge`, `ProgressBar`
+- Library pieces: `FadeIn`, `Callout`, `IconBadge`, `ProgressSegments`
 - Data it reads: app state `weight`, `water`, `assess`, `hc`, `goal`, `wearable`; profile none; screen stores `progressStore`, `goalV2Store`, `stepsStore`, `streakStore`; sample data none
 
 ### Check-in map

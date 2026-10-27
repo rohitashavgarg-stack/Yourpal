@@ -86,7 +86,7 @@ function ProgressCard({ k }: { k: CardKey }) {
       if (stack) return <View style={{ flexShrink: 1, gap: 4 }}><Big big={big} unit={unit} /><View style={{ gap: 2 }}><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{first}</Txt>{!!detail && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{detail}</Txt>}</View></View>;
       return (
         <View style={{ flexShrink: 1, gap: 2 }}>
-          <Row style={{ alignItems: 'baseline', columnGap: 8, flexWrap: 'wrap' }}><Big big={big} unit={unit} />{!!detail && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{first}</Txt>}</Row>
+          <Row style={{ alignItems: 'baseline', columnGap: 8 }}><View style={{ flexShrink: 0 }}><Big big={big} unit={unit} /></View>{!!detail && <Txt v="caption" style={{ fontSize: fontSizes.sm, flexShrink: 1 }}>{first}</Txt>}</Row>
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{detail || first}</Txt>
         </View>
       );
@@ -139,7 +139,7 @@ function ProgressCard({ k }: { k: CardKey }) {
         ? plain('Not yet', '', 'First assessment Sat 10:00 am with Coach Vikram')
         : d.assess === 'Only first'
           ? plain('Starting point saved', '', 'Deep squat hold 30 s\nNext assessment Tue 30 Sep')
-          : plain('Squat +20 kg', '', `Deep squat hold 30 → 45 s\nNext assessment ${d.assess === 'Due now' ? 'due this week' : 'this week'}`);
+          : plain('Squat +20 kg', '', `Deep squat hold 30 → 45 s\nNext assessment ${d.assess === 'Due now' ? 'due this week' : 'this week'}`);
         break;
       case 'photos': body = (
         <>

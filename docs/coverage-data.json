@@ -411,11 +411,11 @@
     }
    ],
    "ds": {
-    "Txt": 24,
+    "Txt": 26,
     "Row": 7,
     "Callout": 2,
     "IconBadge": 1,
-    "ProgressBar": 1,
+    "ProgressSegments": 1,
     "FadeIn": 4
    },
    "sheets": [],
@@ -2190,7 +2190,7 @@
     }
    ],
    "ds": {
-    "Txt": 15,
+    "Txt": 16,
     "SectionLabel": 2,
     "Card": 1,
     "Row": 5,
