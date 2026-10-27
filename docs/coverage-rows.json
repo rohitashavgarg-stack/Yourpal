@@ -39,7 +39,7 @@
   "screen": "Plans",
   "group": "Routes",
   "status": "not started",
-  "hand": 8,
+  "hand": 9,
   "files": [
    "app/(tabs)/plans.tsx",
    "features/plans/WorkoutPlan.tsx",

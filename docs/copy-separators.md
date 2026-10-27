@@ -306,7 +306,7 @@ The rule (CLAUDE.md): no dot separators ("text · text"). Use a title, a sentenc
 
 - 75: `<Txt muted style={{ fontSize: fontSizes.md }}>35 min · works for any gym floor</Txt>`
 - 109: `<Txt style={{ flex: 1, fontSize: fontSizes.md }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md }}>Requested</Txt> · Coach Vikram wil`
-- 150: `{!!plan.done && <Txt v="caption" style={{ paddingHorizontal: 4, marginTop: 4 }}>{'Logged ${plan.done.replace(/^Done /, '').split(' · ').join(', ')}'}<`
+- 152: `{!!plan.done && <Txt v="caption" style={{ paddingHorizontal: 4, marginTop: 4 }}>{'Logged ${plan.done.replace(/^Done /, '').split(' · ').join(', ')}'}<`
 
 ### `src/features/progress/data.ts` (3)
 
@@ -399,7 +399,7 @@ The rule (CLAUDE.md): no dot separators ("text · text"). Use a title, a sentenc
 
 ### `src/app/(tabs)/plans.tsx` (1)
 
-- 157: `<Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: c.warn }}>You&apos;re offline · changes save on this phone and sync later</Txt>`
+- 166: `<Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, color: c.warn }}>You&apos;re offline · changes save on this phone and sync later</Txt>`
 
 ### `src/app/(tabs)/progress.tsx` (1)
 

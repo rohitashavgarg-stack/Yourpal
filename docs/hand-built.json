@@ -1,13 +1,13 @@
 {
  "generated": "2026-10-27",
  "rule": "unique elements outside src/web; on purpose = rows of docs/coverage-exceptions.md",
- "count": 84,
+ "count": 85,
  "onPurpose": 3,
- "toBuild": 81,
+ "toBuild": 82,
  "demoPanelExcluded": 21,
  "exceptionRows": 4,
  "byKind": {
-  "button or pill": 26,
+  "button or pill": 27,
   "bar": 9,
   "chip": 7,
   "card": 15,
@@ -21,7 +21,7 @@
    "onPurpose": 0
   },
   "Plans and food logging": {
-   "total": 16,
+   "total": 17,
    "onPurpose": 1
   },
   "Progress": {
@@ -136,7 +136,17 @@
   },
   {
    "file": "app/(tabs)/plans.tsx",
-   "line": 75,
+   "line": 57,
+   "kind": "button or pill",
+   "look": "button 24 px high, radius radii.pill",
+   "fn": "DayStrip",
+   "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Back to this week\" onPress={() => goto(THIS)} hitSlop={",
+   "onPurpose": false,
+   "group": "Plans and food logging"
+  },
+  {
+   "file": "app/(tabs)/plans.tsx",
+   "line": 81,
    "kind": "button or pill",
    "look": "button 60 px high, radius radii.lg",
    "fn": "DayStrip",
@@ -146,7 +156,7 @@
   },
   {
    "file": "app/(tabs)/plans.tsx",
-   "line": 83,
+   "line": 91,
    "kind": "icon badge",
    "look": "dot 12 px",
    "fn": "DayStrip",
@@ -156,7 +166,7 @@
   },
   {
    "file": "app/(tabs)/plans.tsx",
-   "line": 84,
+   "line": 92,
    "kind": "icon badge",
    "look": "dot 4 px",
    "fn": "DayStrip",
@@ -186,7 +196,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 193,
+   "line": 195,
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "fn": "WorkoutPlan",
@@ -196,7 +206,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 194,
+   "line": 196,
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "fn": "WorkoutPlan",
