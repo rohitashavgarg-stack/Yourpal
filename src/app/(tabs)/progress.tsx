@@ -78,18 +78,28 @@ function ProgressCard({ k }: { k: CardKey }) {
   let body: React.ReactNode = null;
   if (empty) body = <Txt muted style={{ fontSize: fontSizes.md }}>{empty}</Txt>;
   else {
+    // The number with what it measures beside it ("72.5 kg  Average"), the change underneath. `stack` is for a headline that is not a measure (assessments): two lines under it, the first one brighter.
+    const left = (big: string, unit: string, sub: string, stack?: boolean) => {
+      const [first, ...rest] = sub.split('\n');
+      const detail = rest.join('\n');
+      if (stack) return <View style={{ flexShrink: 1, gap: 4 }}><Big big={big} unit={unit} /><View style={{ gap: 2 }}><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{first}</Txt>{!!detail && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{detail}</Txt>}</View></View>;
+      return (
+        <View style={{ flexShrink: 1, gap: 2 }}>
+          <Row style={{ alignItems: 'baseline', columnGap: 8, flexWrap: 'wrap' }}><Big big={big} unit={unit} />{!!detail && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{first}</Txt>}</Row>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{detail || first}</Txt>
+        </View>
+      );
+    };
     const withSpark = (big: string, unit: string, sub: string, vals: number[]) => (
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
-        <View style={{ flexShrink: 1, gap: 2 }}><Big big={big} unit={unit} /><Txt v="caption" style={{ fontSize: fontSizes.sm }}>{sub}</Txt></View>
+        {left(big, unit, sub)}
         <Spark key={`${ps.range}-${ps.anchor}-${vals.join()}`} vals={vals.length > 1 ? vals : [vals[0] ?? 0, vals[0] ?? 0]} color={tint} />
       </Row>
     );
-    const plain = (big: string, unit: string, sub: string) => (
-      <View style={{ gap: 2 }}><Big big={big} unit={unit} /><Txt v="caption" style={{ fontSize: fontSizes.sm }}>{sub}</Txt></View>
-    );
+    const plain = (big: string, unit: string, sub: string, stack?: boolean) => left(big, unit, sub, stack);
     const withBars = (big: string, unit: string, sub: string) => (
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
-        <View style={{ flexShrink: 1, gap: 2 }}><Big big={big} unit={unit} /><Txt v="caption" style={{ fontSize: fontSizes.sm }}>{sub}</Txt></View>
+        {left(big, unit, sub)}
         <MiniBars key={`${ps.range}-${ps.anchor}`} vals={t!.vals} color={tint} w={112} />
       </Row>
     );
@@ -127,8 +137,8 @@ function ProgressCard({ k }: { k: CardKey }) {
       case 'assess': body = assessNone
         ? plain('Not yet', '', 'First assessment Sat 10:00 am with Coach Vikram')
         : d.assess === 'Only first'
-          ? plain('Starting point saved', '', 'Deep squat hold 30 s\nNext assessment Tue 30 Sep')
-          : plain('Squat +20 kg', '', `Deep squat hold 30 → 45 s\nNext assessment ${d.assess === 'Due now' ? 'due this week' : 'this week'}`);
+          ? plain('Starting point saved', '', 'Deep squat hold 30 s\nNext assessment Tue 30 Sep', true)
+          : plain('Squat +20 kg', '', `Deep squat hold 30 → 45 s\nNext assessment ${d.assess === 'Due now' ? 'due this week' : 'this week'}`, true);
         break;
       case 'photos': body = (
         <>

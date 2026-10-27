@@ -40,6 +40,7 @@ import { goalV2Store } from '@/features/goalv2/model';
 import { useGoalV2Rows } from '@/features/goalv2/signs';
 import { DESIGNS, GoalDesign, GoalPace, goalStore, PACES } from '@/features/today/GoalCards';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { PageEnd } from '@/design-system/patterns/PageEnd';
 
 export default function Today() {
   const { c } = useTheme();
@@ -156,6 +157,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 160
             {comebackNew && forYou.length > 0 && <FadeIn step={50} i={1}><ForYouStack /></FadeIn>}
             {order.map((k, i) => <FadeIn step={50} key={k} i={2 + i}>{slots[k]}</FadeIn>)}
             <FadeIn step={50} i={7}><DayQuote /></FadeIn>
+            <FadeIn step={50} i={8}><PageEnd /></FadeIn>
           </>
         ) : (
           <>
@@ -166,6 +168,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 160
             {d.todayVariant === 'Comeback' && <FadeIn step={50} i={0}><ComebackCard /></FadeIn>}
             <FadeIn step={50} i={1}>{!assigned ? <NoPlanCard /> : topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</FadeIn>
             {order.map((k, i) => <FadeIn step={50} key={k} i={2 + i}>{slots[k]}</FadeIn>)}
+            <FadeIn step={50} i={7}><PageEnd /></FadeIn>
           </>
         )}
       </TabScreen>
