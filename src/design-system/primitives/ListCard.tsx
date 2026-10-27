@@ -3,6 +3,7 @@ import { View, StyleProp, ViewStyle } from 'react-native';
 import { ChevronRight } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { Card } from '@/design-system/primitives/Card';
+import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 import { font, fontSizes, radii, shadows } from '@/design-system/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -15,9 +16,9 @@ import { useTheme } from '@/theme/ThemeProvider';
  */
 export type ListRow = { l: string; v?: string; sub?: string; right?: React.ReactNode; onPress?: () => void; muted?: boolean; warn?: boolean };
 export type TitledRow = { n: string; s: string };
-type RowsProps = { rows: ListRow[]; mono?: boolean; style?: StyleProp<ViewStyle>; children?: never; title?: never; dot?: never };
-type ContainerProps = { children: React.ReactNode; style?: StyleProp<ViewStyle>; rows?: never; mono?: never; title?: never; dot?: never };
-type TitledProps = { title: string; dot: string; rows: TitledRow[]; style?: never; mono?: never; children?: never };
+type RowsProps = { rows: ListRow[]; mono?: boolean; style?: StyleProp<ViewStyle>; children?: never; title?: never; icon?: never; tint?: never };
+type ContainerProps = { children: React.ReactNode; style?: StyleProp<ViewStyle>; rows?: never; mono?: never; title?: never; icon?: never; tint?: never };
+type TitledProps = { title: string; icon: React.ReactNode; tint: string; rows: TitledRow[]; style?: never; mono?: never; children?: never };
 export type ListCardProps = RowsProps | ContainerProps | TitledProps;
 
 export function ListCard(props: ListCardProps) {
@@ -62,17 +63,11 @@ function ContainerList({ children, style }: ContainerProps) {
 
 // Warm-up and cool-down: a title with how many moves, then numbered rows: the name on the left and the amount as its own small block on the right.
 // No extra note lines under the names.
-function TitledList({ dot, title, rows }: TitledProps) {
+function TitledList({ icon, tint, title, rows }: TitledProps) {
   const { c } = useTheme();
   return (
     <View style={{ gap: 8 }}>
-      <Row style={{ gap: 6, paddingHorizontal: 6, justifyContent: 'space-between' }}>
-        <Row style={{ gap: 6 }}>
-          <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot }} />
-          <Txt v="label">{title}</Txt>
-        </Row>
-        <Txt v="caption">{rows.length} moves</Txt>
-      </Row>
+      <SectionLabel variant="section" icon={icon} tint={tint} right={<Txt v="caption">{rows.length} moves</Txt>}>{title}</SectionLabel>
       <Card style={{ paddingVertical: 4, paddingHorizontal: 16 }}>
         {rows.map((w, i) => {
           return (

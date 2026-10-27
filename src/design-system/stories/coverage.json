@@ -170,7 +170,7 @@
    "doc": true,
    "uses": 61,
    "files": 36,
-   "inLibrary": 2
+   "inLibrary": 3
   },
   {
    "name": "NoteField",
@@ -258,7 +258,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Row.tsx",
    "doc": true,
-   "uses": 208,
+   "uses": 209,
    "files": 55,
    "inLibrary": 54
   },
@@ -285,9 +285,9 @@
    "group": "primitives",
    "file": "src/design-system/primitives/SectionLabel.tsx",
    "doc": true,
-   "uses": 18,
-   "files": 8,
-   "inLibrary": 0
+   "uses": 19,
+   "files": 9,
+   "inLibrary": 1
   },
   {
    "name": "SheetFooter",

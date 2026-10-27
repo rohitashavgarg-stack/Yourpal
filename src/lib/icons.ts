@@ -32,6 +32,7 @@ export { default as Salad } from 'lucide-react-native/icons/salad';
 export { default as Dumbbell } from 'lucide-react-native/icons/dumbbell';
 export { default as Ellipsis } from 'lucide-react-native/icons/ellipsis';
 export { default as Flame } from 'lucide-react-native/icons/flame';
+export { default as Snowflake } from 'lucide-react-native/icons/snowflake';
 export { default as Footprints } from 'lucide-react-native/icons/footprints';
 export { default as GlassWater } from 'lucide-react-native/icons/glass-water';
 export { default as Heart } from 'lucide-react-native/icons/heart';
@@ -81,6 +82,7 @@ export { default as ChartNoAxesColumn } from 'lucide-react-native/icons/chart-no
 export { default as Activity } from 'lucide-react-native/icons/activity';
 export { default as Ruler } from 'lucide-react-native/icons/ruler';
 export { default as ChevronsRight } from 'lucide-react-native/icons/chevrons-right';
+export { default as ChevronsLeft } from 'lucide-react-native/icons/chevrons-left';
 export { default as Compass } from 'lucide-react-native/icons/compass';
 export { default as PersonStanding } from 'lucide-react-native/icons/person-standing';
 export { default as Zap } from 'lucide-react-native/icons/zap';
