@@ -2,6 +2,23 @@
 
 Rules learned from the designer's corrections and from how the app was built. Read this with SKILL.md and catalog.md. The yourpal-design-learner agent adds to this file (see "How this skill improves itself" in SKILL.md). Each rule says where it comes from so it can be questioned.
 
+## 27 Oct 2026
+
+**Hierarchy on cards** (source: the designer's reference, the Streak page hero card)
+- The Streak hero card is the model. Top to bottom: the key number big and in the accent colour, then its name; one plain muted sentence; a progress picture (bar or segments) with one caption under it; a hairline between groups; the week as segments with the count in the caption highlighted in colour ("This week you have completed **1** of 4 sessions").
+- Every fact gets its own place: its own line, its own size or its own element. Never join unrelated facts on one line with a dot, a comma or "and". Two lines at most under a headline, never three.
+- A number and what it measures sit side by side ("72.5 kg  Average"), the change goes underneath ("↓0.5 kg vs last week"). If they do not fit on one row the label drops below. Keep a value such as "30 → 45 s" together with non-breaking spaces so it does not split.
+- A count of done out of target ("1 of 4") is shown as segments, one per session, the done ones in the card's colour, and the done number highlighted in the sentence. Inside a small card it sits in a nested Callout.
+- A section heading belongs to the card under it: more space above the heading than between it and its card (34 px above, 12 px below).
+- A small way back ("Back to today") is a quiet text button (ghost), not a filled pill.
+
+**Page end and lists** (source: District reference, Save meal sheet)
+- The end of a long page is an illustration, a big quiet line and the YourPal mark (PageEnd). The picture fades into the page colour and is drawn at about a third of its strength: "too visible" was the feedback twice. No quote above it.
+- A list that is ticked and then saved (the Save meal sheet) uses the FoodCard `pick` look: solid card, tick circle on the right, no dashed line. Dashed is only for a not-eaten food on the diet page.
+
+**Checking work** (source: this session)
+- After editing, restart the web dev server with `--clear` before screenshots. The file watcher on this machine does not pick up edits, so a running server shows old code.
+
 ## 26 Oct 2026
 
 **Workout card answers** (source: moved and skipped redesign)
