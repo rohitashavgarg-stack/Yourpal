@@ -9,7 +9,7 @@ import { useAnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavHidden } from '@/components/FloatingTabBar';
 import { router } from 'expo-router';
-import { CalendarClock, Check, ChevronRight, Clock, Dumbbell, Flame, Lock, Play, Snowflake } from '@/lib/icons';
+import { Activity, CalendarClock, Check, ChevronRight, Clock, Dumbbell, Lock, Play, Snowflake } from '@/lib/icons';
 import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { Tag } from '@/components/bits';
@@ -149,7 +149,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
                   {!!plan.time && !plan.done && (
                     <>
                       <View accessibilityElementsHidden style={{ width: 1, height: 16, backgroundColor: c.line }} />
-                      <Row accessible accessibilityLabel={`Planned ${plan.time}`} style={{ gap: 6 }}><CalendarClock size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.time}</Txt></Row>
+                      <View accessible accessibilityLabel={`Planned ${plan.time}`}><Row style={{ gap: 6 }}><CalendarClock size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.time}</Txt></Row></View>
                     </>
                   )}
                 </Row>
@@ -180,10 +180,10 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
               </FadeIn>
             );
           })()}
-          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ marginTop: 4 }}><Svg width="100%" height={2}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg></View><ListCard icon={<Flame size={16} color={c.cAct} />} tint={c.cAct} title="Warm-up" rows={plan.wu} /></FadeIn>}
+          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ marginTop: 4 }}><Svg width="100%" height={2}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg></View><ListCard icon={<Activity size={20} color={c.ink} />} title="Warm-up" rows={plan.wu} /></FadeIn>}
           {/* a heading stays close to its own card (8 px); the sections are 24 px apart */}
           <FadeIn i={3} style={{ gap: 8 }}>
-            <SectionLabel variant="section" icon={<Dumbbell size={16} color={c.accent} />} tint={c.accent}>Main workout</SectionLabel>
+            <SectionLabel variant="section" icon={<Dumbbell size={20} color={c.ink} />}>Main workout</SectionLabel>
             <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
               {plan.ex.map((e, i) => {
                 const tag = e.by === 'you' ? 'Edited by you' : e.by === 'created' ? 'Created by you' : e.hl ? 'New from Coach' : '';
@@ -210,7 +210,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
               })}
             </Card>
           </FadeIn>
-          {!!plan.cd?.length && <FadeIn i={4}><ListCard icon={<Snowflake size={16} color={c.cNutri} />} tint={c.cNutri} title="Cool-down" rows={plan.cd} /></FadeIn>}
+          {!!plan.cd?.length && <FadeIn i={4}><ListCard icon={<Snowflake size={20} color={c.ink} />} title="Cool-down" rows={plan.cd} /></FadeIn>}
           {rel > 0 && <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.sm }}>You can start this on {DAYL[p.day]}. Plans open on today by default.</Txt>}
           {!!plan.done && <Button kind="secondary" small label="View in workout history" onPress={() => router.push('/plans/history')} />}
         </LockedPlan>

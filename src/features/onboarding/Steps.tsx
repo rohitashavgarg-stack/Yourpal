@@ -4,7 +4,7 @@ import { LayoutChangeEvent, View } from 'react-native';
 import Animated, { Easing, useAnimatedProps, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Circle, Defs, Ellipse, G, LinearGradient as SvgGradient, Path, Rect, Stop } from 'react-native-svg';
-import { CalendarCheck, Camera, Check, ClipboardList, Dumbbell, Flame, Footprints, Heart, Lock, Moon, TrendingUp, Trophy } from '@/lib/icons';
+import { CalendarCheck, Camera, Check, ClipboardList, Dumbbell, Footprints, Heart, Lock, Moon, TrendingUp, Trophy, Zap } from '@/lib/icons';
 import { HEALTH_NAME } from '@/lib/health';
 import { PersonAvatar } from '@/components/Brand';
 import { Pressy, Row, Txt } from '@/components/ui';
@@ -305,7 +305,7 @@ export function HealthStep() {
     [<Footprints key="steps" size={20} color={c.ink} />, 'Steps', 'Daily count and goal streaks'],
     [<Heart key="hr" size={20} color={c.ink} />, 'Heart rate', 'Resting and during workouts'],
     [<Moon key="sleep" size={20} color={c.ink} />, 'Sleep', 'How rested you are for training'],
-    [<Flame key="kcal" size={20} color={c.ink} />, 'Active energy', 'Calories burned today'],
+    [<Zap key="kcal" size={20} color={c.ink} />, 'Active energy', 'Calories burned today'],
   ];
   return (
     <>

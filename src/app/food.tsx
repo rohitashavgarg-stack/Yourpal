@@ -6,7 +6,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-na
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ChefHat, ChevronDown, Flame, Info, Leaf, MessageCircle, X } from '@/lib/icons';
+import { ChefHat, ChevronDown, Info, Leaf, MessageCircle, X, Zap } from '@/lib/icons';
 import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { FoodMark, foodTypeLabel, RoundBtn } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -112,7 +112,7 @@ export default function FoodDetail() {
           <Txt style={{ fontFamily: font.semibold, paddingHorizontal: 4, paddingTop: 4 }}>Nutrition</Txt>
           <Card style={{ padding: 18, gap: 14 }}>
             <Row style={{ gap: 10 }}>
-              <IconBadge size={40} radius={radii.sm} bg={c.tAct}><Flame size={20} color={c.cAct} /></IconBadge>
+              <IconBadge size={40} radius={radii.sm} bg={c.tAct}><Zap size={20} color={c.cAct} /></IconBadge>
               <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 34 }}>{fd.k}</Txt><Txt muted>kcal</Txt>
               <View style={{ flex: 1 }} />
               <Txt v="caption" style={{ textAlign: 'right' }}>{Math.round((fd.k / KCAL_TARGET) * 100)}% of your{'\n'}daily 1,800</Txt>

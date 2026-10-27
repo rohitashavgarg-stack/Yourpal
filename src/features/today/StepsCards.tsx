@@ -3,7 +3,7 @@ import { DotText } from '@/features/trackers/DotText';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { ArrowRightLeft, Flame, Footprints, Plus, X } from '@/lib/icons';
+import { ArrowRightLeft, Footprints, Plus, X, Zap } from '@/lib/icons';
 import { Button, Field, Pressy, Row, Txt } from '@/components/ui';
 import { Ring } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
@@ -151,7 +151,7 @@ function DotFace({ s }: { s: S }) {
         <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: 'rgba(255,255,255,0.7)' }}>of {fmt(s.goal)}</Txt>
         <View style={{ gap: 3, alignItems: 'flex-end' }}>
           <Row style={{ gap: 6 }}><ArrowRightLeft size={13} color={fixed.white} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 18, color: fixed.white }}><Txt style={{ fontFamily: font.semibold }}>{km(s.total)}</Txt> km</Txt></Row>
-          <Row style={{ gap: 6 }}><Flame size={13} color={fixed.white} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 18, color: fixed.white }}><Txt style={{ fontFamily: font.semibold }}>{kcalOf(s.total)}</Txt> kcal</Txt></Row>
+          <Row style={{ gap: 6 }}><Zap size={13} color={fixed.white} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 18, color: fixed.white }}><Txt style={{ fontFamily: font.semibold }}>{kcalOf(s.total)}</Txt> kcal</Txt></Row>
         </View>
       </Row>
     </LinearGradient>
