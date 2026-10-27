@@ -16,9 +16,9 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Hand-built:
   - `features/today/TopCards.tsx:43` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Your goal: ${g.name}. ${progressLi`
   - `features/today/TopCards.tsx:306` bar: `<View key={k} style={{ width: k === i ? 16 : 6, height: 6, borderRadius: radii.xs, backgro`
-  - `features/today/ForYou.tsx:139` button or pill: `<Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, minWidth: 132, pa`
-  - `features/today/ForYou.tsx:160` bar: `<Animated.View style={[{ height: 6, borderRadius: radii.xs, backgroundColor: c.ink }, st]}`
-  - `features/today/ForYou.tsx:223` chip: `<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: round(28), borderW`
+  - `features/today/ForYou.tsx:119` button or pill: `<Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, minWidth: 132, pa`
+  - `features/today/ForYou.tsx:140` bar: `<Animated.View style={[{ height: 6, borderRadius: radii.xs, backgroundColor: c.ink }, st]}`
+  - `features/today/ForYou.tsx:203` chip: `<View key={t} style={{ height: 28, paddingHorizontal: 12, borderRadius: round(28), borderW`
 
 ## Plans (routes)
 
@@ -38,9 +38,9 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Progress (routes)
 
 - Files: `app/(tabs)/progress.tsx`
-- Library components used: Txt x26, Row x7, FadeIn x4, Callout x2, IconBadge x1, ProgressSegments x1
+- Library components used: Txt x29, Row x8, FadeIn x4, Callout x3, IconBadge x1, ProgressSegments x1
 - Hand-built:
-  - `app/(tabs)/progress.tsx:165` card: `<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 2`
+  - `app/(tabs)/progress.tsx:179` card: `<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 2`
 
 ## Check-in map (routes)
 

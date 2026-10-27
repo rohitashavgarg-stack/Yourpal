@@ -113,7 +113,7 @@ Every screen, sub-page, bottom sheet, popup, empty, loading and error state, and
 | LogoutSheet | `(sheet) features/shell/sheets.tsx:13` | Opened from lib/devSheets, profile/index | not started | 0 |
 | ProgrammeSwitcherSheet | `(sheet) features/shell/Switcher.tsx:16` | Opened from components/GymHeader, lib/devSheets | not started | 1 (1 icon badge) |
 | JoinConsentSheet | `(sheet) features/shell/Switcher.tsx:62` | Opened from lib/devSheets, profile/join | not started | 0 |
-| LogMealsSheet | `(sheet) features/today/LogMealsSheet.tsx:29` | Opened from lib/devSheets, features/today/ForYou, features/today/LogMealsSheet, features/today/MealsCard | not started | 0 |
+| LogMealsSheet | `(sheet) features/today/LogMealsSheet.tsx:29` | Opened from lib/devSheets, features/today/LogMealsSheet, features/today/MealsCard | not started | 0 |
 | QuickLogSheet | `(sheet) features/today/QuickLogSheet.tsx:36` | Opened from food, lib/devSheets, progress/metric, features/plans/DietPlan | not started | 1 (1 button or pill) |
 | StepsSheet | `(sheet) features/today/StepsCards.tsx:203` | Opened from lib/devSheets, progress/metric, features/today/StepsCards | not started | 1 (1 button or pill) |
 | UpdatesSheet | `(sheet) features/today/TopCards.tsx:316` | Opened from lib/devSheets, features/today/TopCards | not started | 0 |

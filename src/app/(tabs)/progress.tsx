@@ -3,7 +3,7 @@ import { HEALTH_NAME } from '@/lib/health';
 import { Image, RefreshControl, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronRight, Flame, Lock } from '@/lib/icons';
+import { CalendarClock, ChevronRight, Flame, Lock } from '@/lib/icons';
 import { useLook } from '@/features/progress/look';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -98,6 +98,18 @@ function ProgressCard({ k }: { k: CardKey }) {
       </Row>
     );
     const plain = (big: string, unit: string, sub: string, stack?: boolean) => left(big, unit, sub, stack);
+    // The headline, one plain line under it, then the next assessment in its own container with an icon and the date highlighted.
+    const assessBody = (big: string, line: string, lead: string, when: string, tail?: string) => (
+      <View style={{ gap: 8 }}>
+        <View style={{ gap: 2 }}><Big big={big} />{!!line && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{line}</Txt>}</View>
+        <Callout size="compact">
+          <Row style={{ gap: 10, alignItems: 'flex-start' }}>
+            <CalendarClock size={18} color={c.accentText} />
+            <Txt v="caption" style={{ flex: 1, fontSize: fontSizes.sm }}>{lead} <Txt v="caption" style={{ fontFamily: font.bold, fontSize: fontSizes.sm, color: c.accentText }}>{when}</Txt>{tail ? ` ${tail}` : ''}</Txt>
+          </Row>
+        </Callout>
+      </View>
+    );
     const withBars = (big: string, unit: string, sub: string) => (
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
         {left(big, unit, sub)}
@@ -136,10 +148,12 @@ function ProgressCard({ k }: { k: CardKey }) {
         </Row>
       ); break;
       case 'assess': body = assessNone
-        ? plain('Not yet', '', 'First assessment Sat 10:00 am with Coach Vikram')
+        ? assessBody('Not yet', '', 'Your first assessment is scheduled for', 'Sat 10:00 am', 'with Coach Vikram')
         : d.assess === 'Only first'
-          ? plain('Starting point saved', '', 'Deep squat hold 30 s\nNext assessment Tue 30 Sep')
-          : plain('Squat +20 kg', '', `Deep squat hold 30 → 45 s\nNext assessment ${d.assess === 'Due now' ? 'due this week' : 'this week'}`);
+          ? assessBody('Starting point saved', 'Deep squat hold 30 s', 'Your next assessment is scheduled for', 'Tue 30 Sep')
+          : d.assess === 'Due now'
+            ? assessBody('Squat +20 kg', 'Deep squat hold 30 → 45 s', 'Your next assessment is due', 'this week')
+            : assessBody('Squat +20 kg', 'Deep squat hold 30 → 45 s', 'Your next assessment is scheduled for', 'this week');
         break;
       case 'photos': body = (
         <>

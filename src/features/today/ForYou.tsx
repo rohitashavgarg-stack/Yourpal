@@ -4,22 +4,18 @@ import Animated, { Easing, interpolate, LinearTransition, SharedValue, useAnimat
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import { router } from 'expo-router';
-import { Clock, Dumbbell, Flame, Footprints, GlassWater, Scale, UtensilsCrossed, X } from '@/lib/icons';
 import { useStartWorkout } from '@/features/workout/StartSheet';
+import { Clock, Flame, Footprints, GlassWater, Scale, X } from '@/lib/icons';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { useOverlay } from '@/components/Overlay';
 import { FlagSheet } from '@/features/gym/sheets';
 import { usePtPending } from '@/features/shell/notifs';
-import { plannedMin, useDomain, workoutState } from '@/lib/domain';
+import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
-import { planStore } from '@/lib/planState';
-import { nextMeal } from './meals';
-import { LogMealsSheet } from './LogMealsSheet';
-import { MISSED_AFTER, missedWkStore } from './WorkoutCard';
 import { reminderStore, useReminders } from '@/features/reminders/reminders';
 import { useLogsPaused } from '@/lib/logGate';
-import { fmtT, MEALS } from '@/lib/data';
+import { fmtT } from '@/lib/data';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
@@ -51,12 +47,8 @@ export function useForYou(): Item[] {
   const reminders = logsPaused ? [] : allReminders; // nothing to log while logging is paused
   const ptPending = usePtPending();
   const { live } = useUpdates();
-  const { openSheet } = useOverlay();
   const { state } = useStore();
   const first = (state.profile.name || '').trim().split(' ')[0];
-  const startWorkout = useStartWorkout();
-  const missedWk = missedWkStore.use();
-  const plansOn = planStore.use().assigned;
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
   if (ptPending && d.hasGym && !logsPaused) out.push({ key: 'pt', title: updateCopy.pt.title, body: updateCopy.pt.body, critical: true, tone: 'accent', who: true, two: true });
@@ -65,19 +57,7 @@ export function useForYou(): Item[] {
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
     out.push({ key: u.key, title: u.title, body: u.body, tone: u.tone, who: ['plan', 'reply'].includes(u.key), icon: u.icon, btn: u.isPlan ? 'See changes' : u.btn, act: u.isPlan ? () => router.navigate('/plans') : u.act });
   });
-  // Log prompts: a meal that is due or overdue, and a workout that was planned and has not been logged. Never while logging is paused.
-  if (!logsPaused && plansOn) {
-    const nm = nextMeal(d);
-    const meal = nm ? MEALS.find((m) => m.id === nm) : undefined;
-    if (meal && d.min >= meal.t - 30) {
-      const late = d.min > meal.t + 60;
-      out.push({ key: 'log-meal', ...updateCopy.meal(meal.n, first, fmtT(meal.t).full, late), tone: 'accent', icon: UtensilsCrossed, btn: 'Log meal', act: () => openSheet(<LogMealsSheet mealId={meal.id} />, { label: 'Log meal' }) });
-    }
-    const planned = plannedMin(state.profile.time);
-    if (workoutState(d) === 'todo' && d.min - planned > MISSED_AFTER && !missedWk.answer && !live.some((u) => u.key === 'log')) {
-      out.push({ key: 'log-workout', ...updateCopy.workout(first, fmtT(planned).full), tone: 'accent', icon: Dumbbell, btn: 'Start workout', act: () => startWorkout() });
-    }
-  }
+  // The meal and workout "Did you have / Did you train" prompts are not in the stack: the meals card and the workout card carry them.
   // Personal reminders (log your water, log your weight, steps behind): a card each, last in the stack; the meals reminder lives in the meals card.
   reminders.filter((r) => r.key !== 'meals').forEach((r) => {
     if (r.key === 'water') out.push({ key: 'rem-water', ...updateCopy.water(first, reminderStore.get().waterAt == null ? null : fmtT(reminderStore.get().waterAt!).full), tone: 'accent', icon: GlassWater, btn: r.action, act: () => { set({ water: Math.min(3.5, Math.round((d.water + 0.25) * 100) / 100) }); reminderStore.set({ waterAt: d.min }); toast(toastCopy.glassAdded); } });

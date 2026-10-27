@@ -1,5 +1,7 @@
 # Design changelog (generated)
 
+- 2026-10-27 `f890f5e` Updates: meal and workout prompts removed from the stack; Assessments: lines stacked, next assessment in its own container with an icon and the date highlighted; design skill learned rules (screens, features)
+
 - 2026-10-27 `7a4e556` Streaks page: more space above the section headings so each heading sits with its own card (screens)
 - 2026-10-27 `57f2c27` publish: save meal cards, streak card, assessments, page end (docs)
 
