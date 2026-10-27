@@ -1,17 +1,17 @@
 {
  "generated": "2026-10-27",
  "rule": "unique elements outside src/web; on purpose = rows of docs/coverage-exceptions.md",
- "count": 85,
+ "count": 88,
  "onPurpose": 3,
- "toBuild": 82,
+ "toBuild": 85,
  "demoPanelExcluded": 21,
  "exceptionRows": 4,
  "byKind": {
-  "button or pill": 27,
+  "button or pill": 28,
   "bar": 9,
   "chip": 7,
-  "card": 15,
-  "icon badge": 20,
+  "card": 16,
+  "icon badge": 21,
   "input": 5,
   "icon button": 2
  },
@@ -21,8 +21,12 @@
    "onPurpose": 0
   },
   "Plans and food logging": {
-   "total": 17,
+   "total": 18,
    "onPurpose": 1
+  },
+  "Bottom sheets": {
+   "total": 10,
+   "onPurpose": 0
   },
   "Progress": {
    "total": 11,
@@ -30,10 +34,6 @@
   },
   "Gym tab": {
    "total": 7,
-   "onPurpose": 0
-  },
-  "Bottom sheets": {
-   "total": 8,
    "onPurpose": 0
   },
   "Onboarding and login": {
@@ -176,7 +176,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 99,
+   "line": 100,
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "fn": "WorkoutPlan",
@@ -186,7 +186,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 121,
+   "line": 122,
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "fn": "WorkoutPlan",
@@ -196,7 +196,17 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 211,
+   "line": 191,
+   "kind": "card",
+   "look": "card radius radii.card, fill c.goodSoft, padding 14",
+   "fn": "WorkoutPlan",
+   "text": "<View key={t.key} accessible accessibilityLabel={`${t.n} ${t.of} ${t.label}`} style={{ flex: 1, gap: 10, paddi",
+   "onPurpose": false,
+   "group": "Plans and food logging"
+  },
+  {
+   "file": "features/plans/WorkoutPlan.tsx",
+   "line": 224,
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "fn": "WorkoutPlan",
@@ -206,7 +216,7 @@
   },
   {
    "file": "features/plans/WorkoutPlan.tsx",
-   "line": 212,
+   "line": 225,
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "fn": "WorkoutPlan",
@@ -223,6 +233,26 @@
    "text": "<View accessibilityLabel=\"Changed from plan\" style={{ position: 'absolute', top: 0, right: 0, width: 8, height",
    "onPurpose": false,
    "group": "Plans and food logging"
+  },
+  {
+   "file": "features/plans/LogPastWorkoutSheet.tsx",
+   "line": 58,
+   "kind": "button or pill",
+   "look": "button 52 px high, radius radii.md",
+   "fn": "LogPastWorkoutSheet",
+   "text": "<Pressy key={e.id} accessibilityRole=\"checkbox\" accessibilityState={{ checked: !off }} accessibilityLabel={`${",
+   "onPurpose": false,
+   "group": "Bottom sheets"
+  },
+  {
+   "file": "features/plans/LogPastWorkoutSheet.tsx",
+   "line": 60,
+   "kind": "icon badge",
+   "look": "icon tile 24 px, radius radii.pill",
+   "fn": "LogPastWorkoutSheet",
+   "text": "<View style={{ width: 24, height: 24, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center'",
+   "onPurpose": false,
+   "group": "Bottom sheets"
   },
   {
    "file": "app/(tabs)/progress.tsx",

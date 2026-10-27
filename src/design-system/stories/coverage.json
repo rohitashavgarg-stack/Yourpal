@@ -78,7 +78,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Card.tsx",
    "doc": true,
-   "uses": 69,
+   "uses": 68,
    "files": 31,
    "inLibrary": 5
   },
@@ -240,8 +240,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/ProgressBar.tsx",
    "doc": true,
-   "uses": 5,
-   "files": 5,
+   "uses": 4,
+   "files": 4,
    "inLibrary": 0
   },
   {
@@ -258,7 +258,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Row.tsx",
    "doc": true,
-   "uses": 216,
+   "uses": 215,
    "files": 56,
    "inLibrary": 54
   },
@@ -348,7 +348,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Tag.tsx",
    "doc": true,
-   "uses": 29,
+   "uses": 30,
    "files": 18,
    "inLibrary": 1
   },
@@ -366,7 +366,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 874,
+   "uses": 873,
    "files": 86,
    "inLibrary": 138
   },
@@ -533,8 +533,8 @@
    "inLibrary": 0
   }
  ],
- "count": 85,
- "toBuild": 82,
+ "count": 88,
+ "toBuild": 85,
  "onPurpose": 3,
  "demoPanelExcluded": 21,
  "byGroup": {
@@ -543,8 +543,12 @@
    "onPurpose": 0
   },
   "Plans and food logging": {
-   "total": 17,
+   "total": 18,
    "onPurpose": 1
+  },
+  "Bottom sheets": {
+   "total": 10,
+   "onPurpose": 0
   },
   "Progress": {
    "total": 11,
@@ -552,10 +556,6 @@
   },
   "Gym tab": {
    "total": 7,
-   "onPurpose": 0
-  },
-  "Bottom sheets": {
-   "total": 8,
    "onPurpose": 0
   },
   "Onboarding and login": {
@@ -752,17 +752,24 @@
    "group": "Bottom sheets"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:121",
+   "where": "src/features/plans/LogPastWorkoutSheet.tsx:58",
    "kind": "button or pill",
-   "look": "button auto px high, radius radii.xl",
-   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca",
-   "group": "Plans and food logging"
+   "look": "button 52 px high, radius radii.md",
+   "jsx": "<Pressy key={e.id} accessibilityRole=\"checkbox\" accessibilityState={{ checked: !off }} accessibilityLabel={`${",
+   "group": "Bottom sheets"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:99",
+   "where": "src/features/plans/WorkoutPlan.tsx:100",
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See w",
+   "group": "Plans and food logging"
+  },
+  {
+   "where": "src/features/plans/WorkoutPlan.tsx:122",
+   "kind": "button or pill",
+   "look": "button auto px high, radius radii.xl",
+   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca",
    "group": "Plans and food logging"
   },
   {
@@ -904,6 +911,13 @@
    "look": "card radius radii.md, fill 'rgba(0, padding 14",
    "jsx": "<View style={{ alignSelf: 'stretch', padding: 14, borderRadius: radii.md, backgroundColor: 'rgba(0,0,0,0.72)' ",
    "group": "Onboarding and login"
+  },
+  {
+   "where": "src/features/plans/WorkoutPlan.tsx:191",
+   "kind": "card",
+   "look": "card radius radii.card, fill c.goodSoft, padding 14",
+   "jsx": "<View key={t.key} accessible accessibilityLabel={`${t.n} ${t.of} ${t.label}`} style={{ flex: 1, gap: 10, paddi",
+   "group": "Plans and food logging"
   },
   {
    "where": "src/features/progress/TrendUI.tsx:80",
@@ -1074,14 +1088,21 @@
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:211",
+   "where": "src/features/plans/LogPastWorkoutSheet.tsx:60",
+   "kind": "icon badge",
+   "look": "icon tile 24 px, radius radii.pill",
+   "jsx": "<View style={{ width: 24, height: 24, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center'",
+   "group": "Bottom sheets"
+  },
+  {
+   "where": "src/features/plans/WorkoutPlan.tsx:224",
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "jsx": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo",
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:212",
+   "where": "src/features/plans/WorkoutPlan.tsx:225",
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "jsx": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g",
