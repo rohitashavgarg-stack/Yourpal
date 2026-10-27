@@ -168,7 +168,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/IconBadge.tsx",
    "doc": true,
-   "uses": 61,
+   "uses": 60,
    "files": 36,
    "inLibrary": 2
   },
@@ -258,7 +258,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Row.tsx",
    "doc": true,
-   "uses": 212,
+   "uses": 213,
    "files": 55,
    "inLibrary": 54
   },
@@ -348,7 +348,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Tag.tsx",
    "doc": true,
-   "uses": 28,
+   "uses": 29,
    "files": 18,
    "inLibrary": 1
   },
@@ -649,7 +649,7 @@
   {
    "where": "src/app/(tabs)/plans.tsx:87",
    "kind": "button or pill",
-   "look": "button 70 px high, radius radii.lg",
+   "look": "button 76 px high, radius radii.lg",
    "jsx": "<Pressy key={i} accessibilityRole=\"button\" accessibilityState={{ selected: on }} accessibilityLabel={`${DAYL[i",
    "group": "Plans and food logging"
   },
@@ -752,14 +752,14 @@
    "group": "Bottom sheets"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:120",
+   "where": "src/features/plans/WorkoutPlan.tsx:121",
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca",
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:98",
+   "where": "src/features/plans/WorkoutPlan.tsx:99",
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See w",
@@ -1074,14 +1074,14 @@
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:205",
+   "where": "src/features/plans/WorkoutPlan.tsx:211",
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "jsx": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo",
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/plans/WorkoutPlan.tsx:206",
+   "where": "src/features/plans/WorkoutPlan.tsx:212",
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.sm",
    "jsx": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g",

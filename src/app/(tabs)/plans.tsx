@@ -87,7 +87,7 @@ function DayStrip() {
                   <Pressy key={i} accessibilityRole="button" accessibilityState={{ selected: on }}
                     accessibilityLabel={`${DAYL[i]} ${dateOf(i, wk)} ${monthOf(i, wk)}${isToday ? ', today' : ''}${isW ? (plan ? `${locked ? "" : ", " + plan.name}${logged ? ', logged' : locked ? ', locked' : missed ? ', not logged' : ''}` : ', rest day') : ''}`}
                     onPress={() => setP({ day: i, week: wk })} scaleTo={0.94}
-                    style={{ flex: 1, height: 70, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center', gap: 4, backgroundColor: on ? c.ink : 'transparent', borderWidth: isToday ? 1.5 : 0, borderColor: c.accent }}>
+                    style={{ flex: 1, height: 76, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center', gap: 2, backgroundColor: on ? c.ink : 'transparent', borderWidth: isToday ? 1.5 : 0, borderColor: c.accent }}>
                     <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: on ? c.bg : c.ink, opacity: 0.7 }}>{l}</Txt>
                     <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 21, color: on ? c.bg : c.ink }}>{dateOf(i, wk)}</Txt>
                     {/* the mark under the date always gets the same 16 px slot, so a check, a lock or a dot never moves the numbers */}

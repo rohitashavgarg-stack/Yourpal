@@ -61,6 +61,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
   const startWorkout = useStartWorkout();
   const paused = useLogsPaused();
   const canStart = useCanStart() && !paused;
+  const doneParts = (plan: { done?: string } | undefined) => { const [span = '', rest = ''] = (plan?.done ?? '').replace(/^Done /, '').split(' · '); const m = rest.match(/(\d+)\s*PR/); return { span, prs: m ? Number(m[1]) : 0 }; };
   const plan = dayPlan(d, p, p.day);
 
   if (p.noPlan) {
@@ -135,6 +136,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
                 <Row style={{ gap: 8 }}>
                   <Txt v="label">{DAYL[p.day]} {dateOf(p.day, p.week)}</Txt>
                   {isToday && <Tag label="Today" bg={c.surface2} fg={c.ink} />}
+                  {!!plan.done && <Tag label="Logged" bg={c.goodSoft} fg={c.good} />}
                 </Row>
                 {/* the name with who made the plan beside it, small, with their photo; under it how many exercises, a thin divider and when it is planned */}
                 <Row style={{ alignItems: 'flex-end', columnGap: 10, flexWrap: 'wrap' }}>
@@ -147,6 +149,12 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
                 </Row>
                 <Row style={{ marginTop: 4, gap: 12 }}>
                   <Row style={{ gap: 6 }}><Dumbbell size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt style={{ fontFamily: font.bold, fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.ex.length}</Txt> exercises</Txt></Row>
+                  {!!plan.done && !!doneParts(plan).span && (
+                    <>
+                      <View accessibilityElementsHidden style={{ width: 1, height: 16, backgroundColor: c.line }} />
+                      <View accessible accessibilityLabel={`Logged ${doneParts(plan).span}`}><Row style={{ gap: 6 }}><Check size={16} color={c.good} strokeWidth={2.6} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.good }}>{doneParts(plan).span} logged</Txt></Row></View>
+                    </>
+                  )}
                   {!!plan.time && !plan.done && (
                     <>
                       <View accessibilityElementsHidden style={{ width: 1, height: 16, backgroundColor: c.line }} />
@@ -156,9 +164,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
                 </Row>
                 {canStart && <InlineStart innerRef={startRef} />}
               </View>
-              {!!plan.done && <IconBadge accessibilityLabel="Logged" size={28} bg={c.good} style={{ marginBottom: 8 }}><Check size={16} color={c.bg} strokeWidth={3} /></IconBadge>}
             </Row>
-            {!!plan.done && <Txt v="caption" style={{ paddingHorizontal: 4, marginTop: 4 }}>{`Logged ${plan.done.replace(/^Done /, '').split(' · ').join(', ')}`}</Txt>}
             {!plan.done && rel < 0 && <Txt style={{ paddingHorizontal: 4, marginTop: 4, fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>Not logged</Txt>}
           </FadeIn>
           {!!plan.done && (() => {
@@ -169,7 +175,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
               <FadeIn i={2}>
                 <Card style={{ padding: 14, gap: 12 }}>
                   <Row>
-                    {[[String(logged), `of ${plan.ex.length}`, 'Logged'], [String(skipped), '', 'Not logged'], [String(swapped), '', 'Swapped']].map(([n, of, l], k) => (
+                    {[[String(logged), `of ${plan.ex.length}`, 'Logged'], [String(skipped), '', 'Not logged'], [String(swapped), '', 'Swapped'], ...(doneParts(plan).prs > 0 ? [[String(doneParts(plan).prs), '', doneParts(plan).prs === 1 ? 'PR' : 'PRs']] : [])].map(([n, of, l], k) => (
                       <View key={l} style={{ flex: 1, paddingLeft: k ? 12 : 0, borderLeftWidth: k ? 1 : 0, borderLeftColor: c.line }}>
                         <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xl2, lineHeight: 29 }}>{n}{!!of && <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{` ${of}`}</Txt>}</Txt>
                         <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17 }}>{l}</Txt>
@@ -181,7 +187,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
               </FadeIn>
             );
           })()}
-          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ marginTop: 4 }}><Svg width="100%" height={2}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg></View><ListCard icon={<StretchIcon size={22} color={c.ink} />} title="Warm-up" rows={plan.wu} /></FadeIn>}
+          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ marginTop: 4 }}><Svg width="100%" height={2}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg></View><ListCard icon={<StretchIcon size={22} color={c.ink} />} title="Warm-up" rows={plan.wu} done={!!plan.done} /></FadeIn>}
           {/* a heading stays close to its own card (8 px); the sections are 24 px apart */}
           <FadeIn i={3} style={{ gap: 8 }}>
             <SectionLabel variant="section" icon={<Dumbbell size={20} color={c.ink} />}>Main workout</SectionLabel>
@@ -211,7 +217,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
               })}
             </Card>
           </FadeIn>
-          {!!plan.cd?.length && <FadeIn i={4}><ListCard icon={<Snowflake size={20} color={c.ink} />} title="Cool-down" rows={plan.cd} /></FadeIn>}
+          {!!plan.cd?.length && <FadeIn i={4}><ListCard icon={<Snowflake size={20} color={c.ink} />} title="Cool-down" rows={plan.cd} done={!!plan.done} /></FadeIn>}
           {rel > 0 && <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.sm }}>You can start this on {DAYL[p.day]}. Plans open on today by default.</Txt>}
           {!!plan.done && <Button kind="secondary" small label="View in workout history" onPress={() => router.push('/plans/history')} />}
         </LockedPlan>
