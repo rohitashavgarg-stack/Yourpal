@@ -109,7 +109,7 @@ Every screen, sub-page, bottom sheet, popup, empty, loading and error state, and
 | DietSwapSheet | `(sheet) features/plans/Sheets.tsx:220` | Opened from lib/devSheets, features/plans/Sheets | not started | 0 |
 | HistSheet | `(sheet) features/plans/Sheets.tsx:250` | Opened from lib/devSheets, plans/history | not started | 0 |
 | ManualLogSheet | `(sheet) features/progress/LogSheets.tsx:12` | Opened from lib/devSheets, progress/metric | not started | 0 |
-| CalendarSheet | `(sheet) features/progress/TrendUI.tsx:97` | Opened from lib/devSheets, features/progress/TrendUI | not started | 1 (1 icon badge) |
+| CalendarSheet | `(sheet) features/progress/TrendUI.tsx:101` | Opened from lib/devSheets, features/progress/TrendUI | not started | 1 (1 icon badge) |
 | LogoutSheet | `(sheet) features/shell/sheets.tsx:13` | Opened from lib/devSheets, profile/index | not started | 0 |
 | ProgrammeSwitcherSheet | `(sheet) features/shell/Switcher.tsx:16` | Opened from components/GymHeader, lib/devSheets | not started | 1 (1 icon badge) |
 | JoinConsentSheet | `(sheet) features/shell/Switcher.tsx:62` | Opened from lib/devSheets, profile/join | not started | 0 |

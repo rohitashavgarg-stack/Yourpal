@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-27 `5672c4a` Progress: Today chip beside the date replaces Back to today, hint line removed, more spacing on the streak and assessment cards; demo panel: Top card option removed (screens, library, features)
+- 2026-10-27 `70ec3b6` publish: assessments white highlight (docs)
+
 - 2026-10-27 `a427ebd` Assessments: the next assessment icon and date are white, not blue (screens)
 - 2026-10-27 `afa6cba` publish: updates stack, assessments card (docs)
 
