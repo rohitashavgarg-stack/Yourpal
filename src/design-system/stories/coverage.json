@@ -6,7 +6,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/AmountStepper.tsx",
    "doc": true,
-   "uses": 4,
+   "uses": 7,
    "files": 3,
    "inLibrary": 0
   },
@@ -222,7 +222,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Pressy.tsx",
    "doc": true,
-   "uses": 103,
+   "uses": 105,
    "files": 50,
    "inLibrary": 31
   },
@@ -258,7 +258,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Row.tsx",
    "doc": true,
-   "uses": 218,
+   "uses": 220,
    "files": 57,
    "inLibrary": 54
   },
@@ -366,7 +366,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 876,
+   "uses": 878,
    "files": 87,
    "inLibrary": 138
   },

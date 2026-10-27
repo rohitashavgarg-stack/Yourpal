@@ -188,7 +188,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
               <FadeIn i={2}>
                 <Row style={{ gap: 8, alignItems: 'stretch' }}>
                   {tiles.map((t) => (
-                    <View key={t.key} accessible accessibilityLabel={`${t.n} ${t.of} ${t.label}`} style={{ flex: 1, gap: 10, padding: 14, borderRadius: radii.card, backgroundColor: c.goodSoft }}>
+                    <View key={t.key} accessible accessibilityLabel={`${t.n} ${t.of} ${t.label}`} style={{ flex: 1, gap: 10, padding: 14, borderRadius: radii.card, backgroundColor: c.surface2 }}>
                       {t.icon}
                       <View>
                         <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xl2, lineHeight: 29 }}>{t.n}{!!t.of && <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{` ${t.of}`}</Txt>}</Txt>

@@ -84,6 +84,16 @@ export function exSub(e: PEx) {
   return `${e.sets} × ${e.reps}${e.kg ? ` · ${k} kg` : ' reps'}`;
 }
 
+// What a logged past day says about one exercise: not done, or the sets that were done (the top set sets the weight and reps shown).
+function pastEx(past: Domain['pastLogs'][string] | undefined, e: PEx) {
+  if (!past) return null;
+  if (past.skip.includes(e.id)) return { res: 'skip' as const };
+  const done = (past.sets?.[e.id] ?? []).filter((x) => x.done);
+  if (!done.length) return null;
+  const top = done.reduce((a, b) => (b.kg > a.kg || (b.kg === a.kg && b.reps > a.reps) ? b : a));
+  return { sets: done.length, reps: top.reps, kg: top.kg, ...(e.t != null ? { t: top.sec } : null) };
+}
+
 export function dayPlan(d: Domain, p: PlansState, i: number): DayPlan | null {
   const cr = p.created[i];
   if (cr) return { name: cr.name, ex: cr.ex.map((e) => ({ ...e })), created: true };
@@ -93,7 +103,7 @@ export function dayPlan(d: Domain, p: PlansState, i: number): DayPlan | null {
   if (i === TODAY_IDX && p.week === 0 && workoutState(d) === 'done') { const w = wkDoneInfo(d); done = `${fmtT(w.a).full} – ${fmtT(w.b).full} ${d.hc && d.wearable ? ` · ${w.k} kcal` : ''}`; }
   const past = d.pastLogs?.[`${p.week}:${i}`]; // a day that has gone by and was logged afterwards
   if (past) done = `${fmtT(past.a).full} – ${fmtT(past.b).full}`;
-  return { name: b.name, time: b.time, wu: b.wu, cd: b.cd, done, ex: b.ex.map((e) => ({ ...e, hl: p.applied && p.hl.includes(e.id), ...(past && past.skip.includes(e.id) ? { res: 'skip' as const } : null) })) };
+  return { name: b.name, time: b.time, wu: b.wu, cd: b.cd, done, ex: b.ex.map((e) => ({ ...e, hl: p.applied && p.hl.includes(e.id), ...pastEx(past, e) })) };
 }
 
 // First free day after today (for "Create a workout").
