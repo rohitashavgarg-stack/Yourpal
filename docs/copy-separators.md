@@ -304,9 +304,9 @@ The rule (CLAUDE.md): no dot separators ("text · text"). Use a title, a sentenc
 
 ### `src/features/plans/WorkoutPlan.tsx` (3)
 
-- 79: `<Txt muted style={{ fontSize: fontSizes.md }}>35 min · works for any gym floor</Txt>`
-- 113: `<Txt style={{ flex: 1, fontSize: fontSizes.md }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md }}>Requested</Txt> · Coach Vikram wil`
-- 160: `{!!plan.done && <Txt v="caption" style={{ paddingHorizontal: 4, marginTop: 4 }}>{'Logged ${plan.done.replace(/^Done /, '').split(' · ').join(', ')}'}<`
+- 80: `<Txt muted style={{ fontSize: fontSizes.md }}>35 min · works for any gym floor</Txt>`
+- 114: `<Txt style={{ flex: 1, fontSize: fontSizes.md }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md }}>Requested</Txt> · Coach Vikram wil`
+- 161: `{!!plan.done && <Txt v="caption" style={{ paddingHorizontal: 4, marginTop: 4 }}>{'Logged ${plan.done.replace(/^Done /, '').split(' · ').join(', ')}'}<`
 
 ### `src/features/progress/data.ts` (3)
 
