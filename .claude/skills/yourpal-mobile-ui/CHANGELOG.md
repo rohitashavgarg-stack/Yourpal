@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-27 `e52e3e0` Today page end: edge to edge with a blue glow, large cropped illustration, text on its foot, dashed line and logo, like the reference (library)
+- 2026-10-27 `561cc6a` publish: date bar Today chip, card spacing, panel option removed (docs)
+
 - 2026-10-27 `5672c4a` Progress: Today chip beside the date replaces Back to today, hint line removed, more spacing on the streak and assessment cards; demo panel: Top card option removed (screens, library, features)
 - 2026-10-27 `70ec3b6` publish: assessments white highlight (docs)
 
