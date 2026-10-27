@@ -25,7 +25,6 @@ import { missedWkStore } from '@/features/today/WorkoutCard';
 import { reminderStore, useReminders } from '@/features/reminders/reminders';
 import { sendReminderPush } from '@/features/reminders/push';
 import { goalCardStore } from '@/features/today/goalCardState';
-import { topCardStore } from '@/features/today/TodayBudget';
 import { planStore } from '@/lib/planState';
 import { setP as setPlans } from '@/features/plans/store';
 import { greetStore } from '@/features/today/TodayGreeting';
@@ -135,7 +134,6 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
   const { state, setSc, set: setApp, setProfile } = useStore();
   const shell = useShell();
   const { isDark } = useTheme();
-  const topMode = topCardStore.use().mode;
   const plan = planStore.use();
   const greet = greetStore.use();
   const { d, set } = useDomain();
@@ -183,8 +181,6 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     { label: 'Greeting line', options: GREETING_STATES as unknown as string[], value: greet.state, onPick: (v: string) => greetStore.set({ state: v as GreetingState }) },
     // Plans: assigned by the coach, or not assigned (the member only tracks weight, water and Health or wearable data).
     { label: 'Plans', options: ['Assigned', 'Not assigned'], value: plan.assigned ? 'Assigned' : 'Not assigned', onPick: (v: string) => { planStore.set({ assigned: v === 'Assigned' }); setPlans({ noPlan: v !== 'Assigned' }); } },
-    // The top card of Today: the whole goal (live goal card) or today's calories with the goal as one line.
-    { label: 'Top card', options: ['Goal card', 'Today card'], value: topMode, onPick: (v: string) => topCardStore.set({ mode: v as 'Goal card' | 'Today card' }) },
     // Comeback: how long the member has been away.
     { label: 'Days away (Comeback)', options: ['2 days', '4 days', '8 days', '15 days'], value: d.todayVariant === 'Comeback' ? `${d.awayDays} days` : '', onPick: (v: string) => { sit.pick('Comeback'); set({ awayDays: parseInt(v, 10) }); } },
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },
@@ -264,7 +260,6 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       {dd('Membership')}
       {dd('Goal type')}
       {dd('Plans')}
-      {dd('Top card')}
       {dd('Meals today')}
       {dd('Greeting line')}
       {dd('Workout time')}

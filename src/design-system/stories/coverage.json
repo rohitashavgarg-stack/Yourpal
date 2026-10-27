@@ -114,7 +114,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/FadeIn.tsx",
    "doc": true,
-   "uses": 141,
+   "uses": 142,
    "files": 49,
    "inLibrary": 4
   },
@@ -258,7 +258,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Row.tsx",
    "doc": true,
-   "uses": 206,
+   "uses": 207,
    "files": 55,
    "inLibrary": 53
   },
@@ -366,7 +366,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 865,
+   "uses": 864,
    "files": 85,
    "inLibrary": 136
   },
@@ -591,7 +591,7 @@
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/progress/TrendUI.tsx:176",
+   "where": "src/features/progress/TrendUI.tsx:180",
    "kind": "bar",
    "look": "bar 3 px high, radius radii.xs",
    "jsx": "<View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2 }} />",
@@ -899,7 +899,7 @@
    "group": "Onboarding and login"
   },
   {
-   "where": "src/features/progress/TrendUI.tsx:76",
+   "where": "src/features/progress/TrendUI.tsx:80",
    "kind": "card",
    "look": "card radius radii.md, fill c.surface2, padding 2",
    "jsx": "<View accessibilityRole=\"radiogroup\" accessibilityLabel=\"Period\" style={{ flex: 1, flexDirection: 'row', gap: ",
@@ -1081,7 +1081,7 @@
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/progress/TrendUI.tsx:128",
+   "where": "src/features/progress/TrendUI.tsx:132",
    "kind": "icon badge",
    "look": "dot 4 px",
    "jsx": "<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.xs, backgroundColor: ",
@@ -1161,7 +1161,7 @@
    "why": "An image button. `IconButton` draws a fill and an icon; it does not clip a photo to its corners. One place in the app."
   },
   {
-   "where": "src/web/WebFrame.tsx:316",
+   "where": "src/web/WebFrame.tsx:311",
    "what": "Collapse / expand on the demo controls panel (web only, beside the phone)",
    "why": "Part of the demo tooling, not the app. It uses a plain Pressable on purpose (no press scale, no haptic); `IconButton` would add both."
   }

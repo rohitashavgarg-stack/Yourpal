@@ -253,10 +253,10 @@ The rule (CLAUDE.md): no dot separators ("text · text"). Use a title, a sentenc
 
 ### `src/web/WebFrame.tsx` (4)
 
-- 200: `if (v === 'Workout') { set({ wkScenario: 'Not started', wkDone: null, session: null }); said('Workout reset · ready to start again'); }`
-- 201: `else if (v === 'Meals') { set({ meals: mealsAt(d.min), openMeal: null }); said('Meals reset · back to the start of the day'); }`
-- 202: `else if (v === 'Steps') { stepsStore.set({ manual: [] }); said('Steps reset · manual steps removed'); }`
-- 203: `else { set({ ci: 'At the gym', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null }); said('Check-in reset · you can check in again'); `
+- 196: `if (v === 'Workout') { set({ wkScenario: 'Not started', wkDone: null, session: null }); said('Workout reset · ready to start again'); }`
+- 197: `else if (v === 'Meals') { set({ meals: mealsAt(d.min), openMeal: null }); said('Meals reset · back to the start of the day'); }`
+- 198: `else if (v === 'Steps') { stepsStore.set({ manual: [] }); said('Steps reset · manual steps removed'); }`
+- 199: `else { set({ ci: 'At the gym', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null }); said('Check-in reset · you can check in again'); `
 
 ### `src/app/checkin.tsx` (3)
 
@@ -484,7 +484,7 @@ The rule (CLAUDE.md): no dot separators ("text · text"). Use a title, a sentenc
 
 ### `src/features/progress/TrendUI.tsx` (1)
 
-- 165: `const selText = sel != null && t.vals[sel] != null ? '${t.buckets[sel].sub} · ${t.fmt(t.vals[sel] as number)}${unit}' : t.kind === 'bars' ? 'Tap a bar`
+- 169: `const selText = sel != null && t.vals[sel] != null ? '${t.buckets[sel].sub} · ${t.fmt(t.vals[sel] as number)}${unit}' : t.kind === 'bars' ? 'Tap a bar`
 
 ### `src/features/shell/goal.ts` (1)
 

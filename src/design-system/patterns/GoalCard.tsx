@@ -131,7 +131,7 @@ function GoalStripRow({ name, line, lineColor, pct, ringColor, pill, none }: { n
 
 /**
  * "Programme goal": the member's goal, in three looks. All of them follow the same goal state (GoalCardState).
- *   card   the dark card on Progress (and on Today when the demo switch "Top card" is "Goal card"): name, date, status pill, progress picture, numbers
+ *   card   the dark card on Progress: name, date, status pill, progress picture, numbers
  *   flat   the header of the goal page: no card, status colours of the page, a large visual with a "now" bubble
  *   strip  one row, the goal inside the Daily budget card on Today: target icon, "Goal", the name, and how far the member got ("1.6 of 6.0 kg")
  * `state` and `weighDays` pin a state for the demo panel and the screenshot page; without them the state comes from the member's data.

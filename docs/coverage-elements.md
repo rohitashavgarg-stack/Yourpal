@@ -633,7 +633,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `features/progress/TrendUI.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `features/progress/TrendUI.tsx:128` icon badge: `<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.x`
+  - `features/progress/TrendUI.tsx:132` icon badge: `<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.x`
 
 ## LogoutSheet (bottom sheets)
 
@@ -943,8 +943,8 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `features/progress/TrendUI.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `features/progress/TrendUI.tsx:76` card: `<View accessibilityRole="radiogroup" accessibilityLabel="Period" style={{ flex: 1, flexDir`
-  - `features/progress/TrendUI.tsx:176` bar: `<View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2`
+  - `features/progress/TrendUI.tsx:80` card: `<View accessibilityRole="radiogroup" accessibilityLabel="Period" style={{ flex: 1, flexDir`
+  - `features/progress/TrendUI.tsx:180` bar: `<View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2`
 
 ## features/goalv2/FinishBy.tsx (shared components and features)
 

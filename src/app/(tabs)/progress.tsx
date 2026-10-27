@@ -100,7 +100,7 @@ function ProgressCard({ k }: { k: CardKey }) {
     const plain = (big: string, unit: string, sub: string, stack?: boolean) => left(big, unit, sub, stack);
     // The headline, one plain line under it, then the next assessment in its own container with an icon and the date highlighted.
     const assessBody = (big: string, line: string, lead: string, when: string, tail?: string) => (
-      <View style={{ gap: 8 }}>
+      <View style={{ gap: 16 }}>
         <View style={{ gap: 2 }}><Big big={big} />{!!line && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{line}</Txt>}</View>
         <Callout size="compact">
           <Row style={{ gap: 10, alignItems: 'flex-start' }}>
@@ -188,7 +188,7 @@ function StreakEntry() {
   const { c } = useTheme();
   const st = useStreak();
   return (
-    <PCard onPress={() => router.push('/progress/streaks')} label={`Streaks and badges. ${st.weeks} week streak. Open`} style={{ gap: 14 }}>
+    <PCard onPress={() => router.push('/progress/streaks')} label={`Streaks and badges. ${st.weeks} week streak. Open`} style={{ gap: 20 }}>
       <Row style={{ gap: 14 }}>
         <IconBadge size={48} radius={radii.card} bg="rgba(255,138,61,0.16)">
           <Flame size={26} color={FLAME} fill={st.weeks > 0 ? FLAME : 'transparent'} strokeWidth={2} />

@@ -2817,7 +2817,7 @@
      "kind": "card",
      "sig": "card radius radii.md, fill c.surface2, padding 2",
      "fn": "RangeBarSlim",
-     "line": 76,
+     "line": 80,
      "tag": "View",
      "text": "<View accessibilityRole=\"radiogroup\" accessibilityLabel=\"Period\" style={{ flex: 1, flexDirection: 'row', gap: ",
      "file": "features/progress/TrendUI.tsx"
@@ -2826,7 +2826,7 @@
      "kind": "icon badge",
      "sig": "dot 4 px",
      "fn": "CalendarSheet",
-     "line": 128,
+     "line": 132,
      "tag": "View",
      "text": "<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.xs, backgroundColor: ",
      "file": "features/progress/TrendUI.tsx"
@@ -2835,7 +2835,7 @@
      "kind": "bar",
      "sig": "bar 3 px high, radius radii.xs",
      "fn": "TrendChart",
-     "line": 176,
+     "line": 180,
      "tag": "View",
      "text": "<View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2 }} />",
      "file": "features/progress/TrendUI.tsx"
@@ -2843,26 +2843,26 @@
    ],
    "ds": {
     "Segmented": 1,
-    "Row": 6,
+    "Row": 7,
     "IconButton": 5,
     "Pressy": 6,
-    "Txt": 11,
+    "Txt": 10,
+    "FadeIn": 2,
     "Button": 1,
-    "Option": 1,
-    "FadeIn": 1
+    "Option": 1
    },
    "sheets": [
     {
      "comp": "CalendarSheet",
      "label": "Pick a date",
-     "line": 43,
+     "line": 45,
      "in": "RangeBar",
      "file": "features/progress/TrendUI.tsx"
     },
     {
      "comp": "CalendarSheet",
      "label": "Pick a date",
-     "line": 88,
+     "line": 92,
      "in": "RangeBarSlim",
      "file": "features/progress/TrendUI.tsx"
     }
@@ -3100,7 +3100,7 @@
      "kind": "bar",
      "sig": "bar 4 px high, radius radii.xs",
      "fn": "TimeSlider",
-     "line": 116,
+     "line": 115,
      "tag": "View",
      "text": "<View pointerEvents=\"none\" style={{ height: 4, borderRadius: radii.xs, backgroundColor: P.track }}>",
      "file": "web/WebFrame.tsx"
@@ -3109,7 +3109,7 @@
      "kind": "bar",
      "sig": "bar 4 px high, radius radii.xs",
      "fn": "TimeSlider",
-     "line": 117,
+     "line": 116,
      "tag": "View",
      "text": "<View style={{ width: `${pct}%`, height: 4, borderRadius: radii.xs, backgroundColor: P.ink }} />",
      "file": "web/WebFrame.tsx"
@@ -3118,7 +3118,7 @@
      "kind": "icon badge",
      "sig": "dot 6 px",
      "fn": "TimeSlider",
-     "line": 119,
+     "line": 118,
      "tag": "View",
      "text": "<View key={h} pointerEvents=\"none\" style={{ position: 'absolute', left: `${(h / 23) * 100}%`, marginLeft: -3, ",
      "file": "web/WebFrame.tsx"
@@ -3127,7 +3127,7 @@
      "kind": "icon badge",
      "sig": "icon tile 22 px, radius radii.sm",
      "fn": "TimeSlider",
-     "line": 120,
+     "line": 119,
      "tag": "View",
      "text": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: `${pct}%`, marginLeft: -11, top: 4, width: 22,",
      "file": "web/WebFrame.tsx"
@@ -3136,7 +3136,7 @@
      "kind": "card",
      "sig": "card radius radii.md, fill fixed.white",
      "fn": "PanelBody",
-     "line": 310,
+     "line": 305,
      "tag": "View",
      "text": "<View style={{ backgroundColor: fixed.white, borderRadius: radii.md, borderWidth: 1, borderColor: P.line, padd",
      "file": "web/WebFrame.tsx"
@@ -3145,7 +3145,7 @@
      "kind": "icon badge",
      "sig": "icon tile 30 px, radius 15",
      "fn": "PanelBody",
-     "line": 311,
+     "line": 306,
      "tag": "View",
      "text": "<View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: P.ink, alignItems: 'center', justifyC",
      "file": "web/WebFrame.tsx"
@@ -3154,7 +3154,7 @@
      "kind": "icon button",
      "sig": "icon button 30 px, radius 15",
      "fn": "PanelBody",
-     "line": 316,
+     "line": 311,
      "tag": "Pressable",
      "text": "<Pressable accessibilityRole=\"button\" accessibilityLabel={open ? 'Collapse the controls' : 'Expand the control",
      "file": "web/WebFrame.tsx"
@@ -3163,7 +3163,7 @@
      "kind": "card",
      "sig": "card radius 20, fill fixed.white, padding 12",
      "fn": "useOpenEdgeCases",
-     "line": 345,
+     "line": 340,
      "tag": "View",
      "text": "<View style={{ backgroundColor: fixed.white, borderRadius: 20, padding: 12 }}>",
      "file": "web/WebFrame.tsx"
@@ -3172,7 +3172,7 @@
      "kind": "card",
      "sig": "card radius 20, fill fixed.white, padding 12",
      "fn": "EdgeTab",
-     "line": 353,
+     "line": 348,
      "tag": "View",
      "text": "<View style={{ backgroundColor: fixed.white, borderRadius: 20, padding: 12 }}>",
      "file": "web/WebFrame.tsx"
@@ -3183,14 +3183,14 @@
     {
      "comp": "View",
      "label": "Edge cases",
-     "line": 345,
+     "line": 340,
      "in": "useOpenEdgeCases",
      "file": "web/WebFrame.tsx"
     },
     {
      "comp": "View",
      "label": "Edge cases",
-     "line": 353,
+     "line": 348,
      "in": "EdgeTab",
      "file": "web/WebFrame.tsx"
     }

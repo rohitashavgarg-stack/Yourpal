@@ -836,7 +836,7 @@
   },
   {
    "file": "features/progress/TrendUI.tsx",
-   "line": 76,
+   "line": 80,
    "kind": "card",
    "look": "card radius radii.md, fill c.surface2, padding 2",
    "fn": "RangeBarSlim",
@@ -846,7 +846,7 @@
   },
   {
    "file": "features/progress/TrendUI.tsx",
-   "line": 128,
+   "line": 132,
    "kind": "icon badge",
    "look": "dot 4 px",
    "fn": "CalendarSheet",
@@ -856,7 +856,7 @@
   },
   {
    "file": "features/progress/TrendUI.tsx",
-   "line": 176,
+   "line": 180,
    "kind": "bar",
    "look": "bar 3 px high, radius radii.xs",
    "fn": "TrendChart",
