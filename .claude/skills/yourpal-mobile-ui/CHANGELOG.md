@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-27 `66746f5` Progress: remove stray whitespace left in the cards fragment (a phone read it as text outside a Text and showed a red error) (screens)
+- 2026-10-27 `675cf29` publish: Plans logged day page (docs)
+
 - 2026-10-27 `f6e13c2` Plans logged day: green Logged tag, the time it took beside the exercise count with a green check, PRs as a stat, green checks on warm-up and cool-down; roomier selected day (screens, library, features)
 - 2026-10-27 `942bc4c` publish: Plans warm-up icon, facts row, day pills (docs)
 
