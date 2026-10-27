@@ -27,7 +27,6 @@ import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { ListCard } from '@/design-system/primitives/ListCard';
-import { Callout } from '@/design-system/primitives/Callout';
 
 
 // Expired membership: the plan stays on the page, behind a strong blur (it cannot be tapped), with a lock and the reason on top.
@@ -132,14 +131,16 @@ export function WorkoutPlan() {
                   <Txt v="label">{DAYL[p.day]} {dateOf(p.day, p.week)}</Txt>
                   {isToday && <Tag label="Today" bg={c.surface2} fg={c.ink} />}
                 </Row>
-                <Txt accessibilityRole="header" style={{ fontFamily: font.regular, fontSize: 34, letterSpacing: -1.4 }}>{plan.name}</Txt>
-                <Row style={{ gap: 8 }}><PersonAvatar who={plan.created ? 'me' : 'coach'} size={22} /><Txt muted style={{ fontSize: fontSizes.sm, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'}</Txt></Row>
-                {/* the time is about the day, so it stays in the header in its own container; the exercise count belongs to the Main workout list below */}
-                {!!plan.time && !plan.done && (
-                  <Callout size="compact" style={{ marginTop: 10, alignSelf: 'flex-start' }}>
-                    <Row style={{ gap: 8 }}><Clock size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Planned <Txt style={{ fontFamily: font.bold, fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.time}</Txt></Txt></Row>
-                  </Callout>
-                )}
+                {/* the name on the left and when it is planned on the right; then one rounded pill: how many exercises, a thin divider, who made the plan */}
+                <Row style={{ justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+                  <Txt accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.regular, fontSize: fontSizes.xl5Plus, lineHeight: 49, letterSpacing: -1.5 }}>{plan.name}</Txt>
+                  {!!plan.time && !plan.done && <Row style={{ gap: 6 }}><Clock size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Planned {plan.time}</Txt></Row>}
+                </Row>
+                <Row style={{ alignSelf: 'flex-start', marginTop: 8, gap: 12, paddingHorizontal: 14, minHeight: 36, borderRadius: radii.pill, backgroundColor: c.surface2 }}>
+                  <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt style={{ fontFamily: font.bold, fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.ex.length}</Txt> exercises</Txt>
+                  <View accessibilityElementsHidden style={{ width: 1, height: 16, backgroundColor: c.line }} />
+                  <Row style={{ gap: 8 }}><PersonAvatar who={plan.created ? 'me' : 'coach'} size={20} /><Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'}</Txt></Row>
+                </Row>
               </View>
               {!!plan.done && <IconBadge accessibilityLabel="Logged" size={28} bg={c.good} style={{ marginBottom: 8 }}><Check size={16} color={c.bg} strokeWidth={3} /></IconBadge>}
             </Row>
@@ -167,7 +168,7 @@ export function WorkoutPlan() {
             );
           })()}
           {!!plan.wu?.length && <FadeIn i={2}><ListCard dot={c.cAct} title="Warm-up" rows={plan.wu} /></FadeIn>}
-          <FadeIn i={3}><Row style={{ justifyContent: 'space-between', paddingHorizontal: 6 }}><Txt v="label">Main workout</Txt><Txt v="caption">{plan.ex.length} exercises</Txt></Row></FadeIn>
+          <FadeIn i={3}><Txt v="label" style={{ paddingHorizontal: 6 }}>Main workout</Txt></FadeIn>
           <FadeIn i={3}>
             <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
               {plan.ex.map((e, i) => {
