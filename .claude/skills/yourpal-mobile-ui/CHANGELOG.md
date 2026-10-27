@@ -1,5 +1,9 @@
 # Design changelog (generated)
 
+- 2026-10-27 `94c8d17` Plans: dashed separator above Warm-up, Start workout under the coach pill with the floating button taking over once it scrolls away, week strip without the dates (features)
+- 2026-10-27 `592f88a` publish: Plans day header final layout (screens, features)
+- 2026-10-27 `052d150` publish: Plans day header final layout (docs)
+
 - 2026-10-27 `ed95709` Plans day header: coach pill under exercises and planned, separator above Warm-up, no clock icon (screens, features)
 - 2026-10-27 `e00bcb6` publish: Plans day header layout (docs)
 
