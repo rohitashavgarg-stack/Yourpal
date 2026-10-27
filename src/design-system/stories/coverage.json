@@ -114,7 +114,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/FadeIn.tsx",
    "doc": true,
-   "uses": 140,
+   "uses": 142,
    "files": 49,
    "inLibrary": 4
   },
@@ -258,7 +258,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Row.tsx",
    "doc": true,
-   "uses": 203,
+   "uses": 204,
    "files": 55,
    "inLibrary": 52
   },
@@ -366,9 +366,9 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 858,
+   "uses": 859,
    "files": 85,
-   "inLibrary": 131
+   "inLibrary": 132
   },
   {
    "name": "Wheel",
@@ -386,7 +386,7 @@
    "doc": true,
    "uses": 5,
    "files": 5,
-   "inLibrary": 0
+   "inLibrary": 1
   },
   {
    "name": "Banner",
@@ -439,6 +439,15 @@
    "file": "src/design-system/patterns/MealsCard.tsx",
    "doc": true,
    "uses": 1,
+   "files": 1,
+   "inLibrary": 0
+  },
+  {
+   "name": "PageEnd",
+   "group": "patterns",
+   "file": "src/design-system/patterns/PageEnd.tsx",
+   "doc": true,
+   "uses": 2,
    "files": 1,
    "inLibrary": 0
   },
@@ -813,7 +822,7 @@
    "group": "Bottom sheets"
   },
   {
-   "where": "src/app/(tabs)/progress.tsx:154",
+   "where": "src/app/(tabs)/progress.tsx:164",
    "kind": "card",
    "look": "card radius 20, fill c.surface2",
    "jsx": "<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: ",

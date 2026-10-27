@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-27 `3a70069` Today: illustrated page end (PageEnd pattern); Progress cards: label beside the number, assessments lines by weight (docs, screens, library)
+- 2026-10-27 `f430c88` publish: progress cards (docs)
+
 - 2026-10-27 `8a37f87` Progress cards: dots on the small line charts, dot separators split into short lines, footer note removed (screens, features)
 
 - 2026-10-26 `553f151` Workout card: Start today anyway is a plain button, not glass (library)

@@ -1,5 +1,5 @@
 {
- "lastCommit": "8a37f8785489f6ebf1663b635d42e7d535711975",
+ "lastCommit": "3a70069aca6d58e678c26253a4f161c0b1bf8dde",
  "components": [
   "AmountStepper",
   "Button, IconButton",
@@ -44,6 +44,7 @@
   "TrackerRow and tiles",
   "WeekCard",
   "FoodCard",
+  "PageEnd",
   "WorkoutCard"
  ],
  "buttonKinds": [
