@@ -55,8 +55,8 @@ export const Line: S = { args: { kind: 'line', size: 'chip', label: 'Check my fo
 /** Quiet line, muted label: the action that is not the main one. */
 export const QuietMuted: S = { args: { kind: 'quiet', size: 'small', label: 'Skip meal', muted: true } };
 export const QuietInk: S = { args: { kind: 'quiet', size: 'small', label: 'Undo skip' } };
-/** Accent-soft pill: a small way back ("This week", "Back to today"). */
-export const SoftXs: S = { args: { kind: 'soft', size: 'xs', label: 'Back to today' } };
+/** Accent-soft pill: a small way back ("This week"). */
+export const SoftXs: S = { args: { kind: 'soft', size: 'xs', label: 'This week' } };
 /** Removable context pill: label then an X. */
 export const SoftWithIconAfter: S = { args: { kind: 'soft', size: 'xs', weight: 'medium', label: 'About: Squat depth', iconAfter: <X size={14} color={fixed.blue} /> } };
 /** On the white clip stage of the workout. */

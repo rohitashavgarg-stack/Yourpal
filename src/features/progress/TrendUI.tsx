@@ -50,7 +50,7 @@ export function RangeBar() {
         </Row>
       </GestureDetector>
       {!win.current && (
-        <Button kind="soft" size="xs" label="Back to today" onPress={() => { haptic.tick(); progressStore.set({ anchor: sod(TODAY).getTime() }); }} style={{ alignSelf: 'center', marginTop: -2 }} />
+        <Button kind="ghost" size="xs" label="Back to today" onPress={() => { haptic.tick(); progressStore.set({ anchor: sod(TODAY).getTime() }); }} style={{ alignSelf: 'center', marginTop: -2 }} />
       )}
     </View>
   );

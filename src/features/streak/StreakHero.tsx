@@ -71,7 +71,7 @@ export function StreakHero() {
           <View key={i} style={{ flex: 1, height: 14, borderRadius: 7, backgroundColor: i < st.weekDone ? FLAME : track0 }} />
         ))}
       </Row>
-      <Txt v="caption">This week · {st.weekDone} of {st.target} sessions</Txt>
+      <Txt v="caption">This week you have completed <Txt v="caption" style={{ fontFamily: font.bold, color: FLAME }}>{st.weekDone}</Txt> of {st.target} sessions</Txt>
     </FadeIn>
   );
 }

@@ -409,7 +409,7 @@ The rule (CLAUDE.md): no dot separators ("text · text"). Use a title, a sentenc
 
 ### `src/app/(tabs)/progress.tsx` (1)
 
-- 68: `photos: 'Photos · Private', water: 'Water', hr: 'Resting heart rate · ${HEALTH_NAME}', sleep: 'Sleep · ${HEALTH_NAME}',`
+- 69: `photos: 'Photos · Private', water: 'Water', hr: 'Resting heart rate · ${HEALTH_NAME}', sleep: 'Sleep · ${HEALTH_NAME}',`
 
 ### `src/app/exercise-search.tsx` (1)
 
