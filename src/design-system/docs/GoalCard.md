@@ -28,7 +28,7 @@ The member's Programme goal, in three looks that all follow one goal state (`Goa
 
 | Variant | Where | Look |
 |---|---|---|
-| `card` | Progress (and Today when the demo "Top card" switch is "Goal card") | Dark card `#1A1D22`, 1 px `#3A3D48` edge, state-coloured glow from the bottom left. Name (24 px) with the date as subtext under it, state pill in front on the same row, the progress picture, then the numbers row |
+| `card` | Progress | Dark card `#1A1D22`, 1 px `#3A3D48` edge, state-coloured glow from the bottom left. Name (24 px) with the date as subtext under it, state pill in front on the same row, the progress picture, then the numbers row |
 | `flat` | Header of the goal page | No card, page colours. Large name, "N% of the way there", a status pill, then the large visual with a "now" bubble and Start / Goal at the ends. Not tappable |
 | `strip` | Top row of BudgetCard on Today | A 44 px thin ring with the % in it, the name with the state pill beside it, one line under it ("1.6 of 6.0 kg lost, by 30 Nov"), a chevron. 76 px min high |
 

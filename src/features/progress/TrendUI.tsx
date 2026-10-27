@@ -4,7 +4,7 @@ import { LayoutChangeEvent, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Circle, Line, Path } from 'react-native-svg';
-import { ChevronLeft, ChevronRight } from '@/lib/icons';
+import { ChevronLeft, ChevronRight, ChevronsRight } from '@/lib/icons';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -40,18 +40,22 @@ export function RangeBar() {
           <IconButton label="Earlier" disabled={!win.canPrev} onPress={() => go(-1)} style={{ opacity: win.canPrev ? 1 : 0.35 }}>
             <ChevronLeft size={20} color={c.ink} />
           </IconButton>
-          <Pressy accessibilityRole="button" accessibilityLabel={`${win.label}. Pick a date`} onPress={() => openSheet(<CalendarSheet />, { label: 'Pick a date' })} style={{ flex: 1, minHeight: 44, alignItems: 'center', justifyContent: 'center' }}>
-            <Txt accessibilityLiveRegion="polite" numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.base }}>{win.label}</Txt>
-            <Txt v="caption">{win.current ? 'Swipe or tap for a calendar' : 'Tap for a calendar'}</Txt>
-          </Pressy>
+          {/* the date opens the calendar; when it is not the current period a "Today" chip sits beside it and jumps straight back */}
+          <Row style={{ flex: 1, minHeight: 44, justifyContent: 'center', gap: 10 }}>
+            <Pressy accessibilityRole="button" accessibilityLabel={`${win.label}. Pick a date`} onPress={() => openSheet(<CalendarSheet />, { label: 'Pick a date' })} style={{ flexShrink: 1, minHeight: 44, justifyContent: 'center' }}>
+              <Txt accessibilityLiveRegion="polite" numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.base }}>{win.label}</Txt>
+            </Pressy>
+            {!win.current && (
+              <FadeIn>
+                <Button kind="line" size="xs" label="Today" accessibilityLabel="Back to today" iconAfter={<ChevronsRight size={14} color={c.ink} />} onPress={() => { haptic.tick(); progressStore.set({ anchor: sod(TODAY).getTime() }); }} />
+              </FadeIn>
+            )}
+          </Row>
           <IconButton label="Later" disabled={!win.canNext} onPress={() => go(1)} style={{ opacity: win.canNext ? 1 : 0.35 }}>
             <ChevronRight size={20} color={c.ink} />
           </IconButton>
         </Row>
       </GestureDetector>
-      {!win.current && (
-        <Button kind="ghost" size="xs" label="Back to today" onPress={() => { haptic.tick(); progressStore.set({ anchor: sod(TODAY).getTime() }); }} style={{ alignSelf: 'center', marginTop: -2 }} />
-      )}
     </View>
   );
 }

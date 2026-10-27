@@ -73,7 +73,7 @@ Every action in the app. One `Button` with a kind (colour) and a size (shape), a
 | primary | ink | none | background colour | the one main action |
 | accent | blue accent | none | accent ink | |
 | secondary | soft surface (`surface2`) | none | ink | |
-| ghost | none | none | accent text | a text action, such as "Back to today" under the date |
+| ghost | none | none | accent text | a text action |
 | outline | none | 1 px `line` | ink | |
 | white | white | none | dark | main button on a dark card |
 | glass | white at 12% | none | white, medium | second buttons on a dark card |
