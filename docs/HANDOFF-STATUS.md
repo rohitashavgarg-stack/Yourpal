@@ -3,7 +3,7 @@
 Checked on 26 Oct 2026 on branch `design-system-handoff`, after round 5 (see `docs/progress.md`). Each line was checked by running the command or opening the file or link. Light mode is out of scope by the designer's instruction, so nothing here covers it.
 
 <!-- numbers:start -->
-Numbers written by `scripts/publish.js` on 2026-10-27 06:33 from branch `experiment-blue-glass` at `6ad1726`:
+Numbers written by `scripts/publish.js` on 2026-10-27 06:41 from branch `experiment-blue-glass` at `6f0509e`:
 
 | Measure | Value |
 |---|---|

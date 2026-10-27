@@ -68,7 +68,8 @@ export default function Streaks() {
     <SubPage title="Streaks & badges" fallback="/progress">
       <StreakHero />
 
-      <SectionLabel variant="overline" inset={4}>LAST 12 WEEKS</SectionLabel>
+      {/* a heading belongs to the card under it: more space above it than below */}
+      <View style={{ marginTop: 14 }}><SectionLabel variant="overline" inset={4}>LAST 12 WEEKS</SectionLabel></View>
       <Card variant="tight" gap={10}>
         <Row style={{ gap: 6 }}>
           {Array.from({ length: pad }, (_, i) => <View key={`p${i}`} style={{ flex: 1, height: 28, borderRadius: 8, backgroundColor: c.surface2 }} />)}
@@ -89,7 +90,7 @@ export default function Streaks() {
 
       {!v2 && (
         <>
-          <SectionLabel variant="overline" inset={4}>{`BADGES · ${BADGES.filter((b) => b.earned).length} OF ${BADGES.length} EARNED`}</SectionLabel>
+          <View style={{ marginTop: 14 }}><SectionLabel variant="overline" inset={4}>{`BADGES · ${BADGES.filter((b) => b.earned).length} OF ${BADGES.length} EARNED`}</SectionLabel></View>
           <Row style={{ flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 12 }}>
             {BADGES.map((b) => <BadgeCard key={b.id} b={b} weeks={st.weeks} />)}
           </Row>
