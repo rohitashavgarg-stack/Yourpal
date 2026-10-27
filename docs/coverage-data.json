@@ -222,6 +222,7 @@
     "app/(tabs)/plans.tsx",
     "features/plans/WorkoutPlan.tsx",
     "features/plans/DietPlan.tsx",
+    "features/plans/LogPastWorkoutSheet.tsx",
     "features/plans/QtySheet.tsx"
    ],
    "hand": [
@@ -265,7 +266,7 @@
      "kind": "button or pill",
      "sig": "button auto px high, radius radii.xl",
      "fn": "WorkoutPlan",
-     "line": 99,
+     "line": 100,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See w",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -274,16 +275,25 @@
      "kind": "button or pill",
      "sig": "button auto px high, radius radii.xl",
      "fn": "WorkoutPlan",
-     "line": 121,
+     "line": 122,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your new plan is ready. View\" onPress={openUpdated} sca",
+     "file": "features/plans/WorkoutPlan.tsx"
+    },
+    {
+     "kind": "card",
+     "sig": "card radius radii.card, fill c.goodSoft, padding 14",
+     "fn": "WorkoutPlan",
+     "line": 191,
+     "tag": "View",
+     "text": "<View key={t.key} accessible accessibilityLabel={`${t.n} ${t.of} ${t.label}`} style={{ flex: 1, gap: 10, paddi",
      "file": "features/plans/WorkoutPlan.tsx"
     },
     {
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
-     "line": 211,
+     "line": 224,
      "tag": "View",
      "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, bo",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -292,7 +302,7 @@
      "kind": "icon badge",
      "sig": "icon tile 24 px, radius radii.sm",
      "fn": "WorkoutPlan",
-     "line": 212,
+     "line": 225,
      "tag": "View",
      "text": "<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.g",
      "file": "features/plans/WorkoutPlan.tsx"
@@ -305,27 +315,45 @@
      "tag": "View",
      "text": "<View accessibilityLabel=\"Changed from plan\" style={{ position: 'absolute', top: 0, right: 0, width: 8, height",
      "file": "features/plans/DietPlan.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "sig": "button 52 px high, radius radii.md",
+     "fn": "LogPastWorkoutSheet",
+     "line": 58,
+     "tag": "Pressy",
+     "text": "<Pressy key={e.id} accessibilityRole=\"checkbox\" accessibilityState={{ checked: !off }} accessibilityLabel={`${",
+     "file": "features/plans/LogPastWorkoutSheet.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "sig": "icon tile 24 px, radius radii.pill",
+     "fn": "LogPastWorkoutSheet",
+     "line": 60,
+     "tag": "View",
+     "text": "<View style={{ width: 24, height: 24, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center'",
+     "file": "features/plans/LogPastWorkoutSheet.tsx"
     }
    ],
    "ds": {
-    "Row": 17,
-    "Txt": 67,
-    "Pressy": 6,
+    "Row": 19,
+    "Txt": 72,
+    "Pressy": 7,
     "IconBadge": 3,
     "Segmented": 1,
     "IconButton": 2,
     "FadeIn": 21,
     "Callout": 1,
-    "Card": 9,
-    "Button": 11,
+    "Card": 8,
+    "Button": 13,
     "StatusDot": 1,
-    "ProgressSegments": 1,
     "ListCard": 2,
     "SectionLabel": 1,
     "ProgressBar": 1,
-    "AmountStepper": 1,
+    "AmountStepper": 3,
     "FoodCard": 1,
-    "Chevron": 1
+    "Chevron": 1,
+    "SheetFooter": 1
    },
    "sheets": [
     {
@@ -334,6 +362,13 @@
      "line": 128,
      "in": "openMenu",
      "file": "app/(tabs)/plans.tsx"
+    },
+    {
+     "comp": "LogPastWorkoutSheet",
+     "label": "Log workout",
+     "line": 172,
+     "in": "WorkoutPlan",
+     "file": "features/plans/WorkoutPlan.tsx"
     },
     {
      "comp": "QtySheet",

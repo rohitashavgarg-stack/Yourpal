@@ -304,9 +304,9 @@ The rule (CLAUDE.md): no dot separators ("text · text"). Use a title, a sentenc
 
 ### `src/features/plans/WorkoutPlan.tsx` (3)
 
-- 64: `const doneParts = (plan: { done?: string } | undefined) => { const [span = '', rest = ''] = (plan?.done ?? '').replace(/^Done /, '').split(' · '); con`
-- 81: `<Txt muted style={{ fontSize: fontSizes.md }}>35 min · works for any gym floor</Txt>`
-- 115: `<Txt style={{ flex: 1, fontSize: fontSizes.md }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md }}>Requested</Txt> · Coach Vikram wil`
+- 65: `const doneParts = (plan: { done?: string } | undefined) => { const [span = '', rest = ''] = (plan?.done ?? '').replace(/^Done /, '').split(' · '); con`
+- 82: `<Txt muted style={{ fontSize: fontSizes.md }}>35 min · works for any gym floor</Txt>`
+- 116: `<Txt style={{ flex: 1, fontSize: fontSizes.md }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md }}>Requested</Txt> · Coach Vikram wil`
 
 ### `src/features/progress/data.ts` (3)
 
@@ -394,8 +394,8 @@ The rule (CLAUDE.md): no dot separators ("text · text"). Use a title, a sentenc
 
 ### `src/lib/domain.tsx` (2)
 
-- 93: `const note = notes.join(' · ');`
-- 104: `chat: [{ me: true, t: 'Is my squat depth ok?', ctx: 'Squat', meta: 'Yesterday · Seen' }, { me: false, t: 'Go to parallel. Film one set and send it.', `
+- 94: `const note = notes.join(' · ');`
+- 105: `chat: [{ me: true, t: 'Is my squat depth ok?', ctx: 'Squat', meta: 'Yesterday · Seen' }, { me: false, t: 'Go to parallel. Film one set and send it.', `
 
 ### `src/app/(tabs)/plans.tsx` (1)
 

@@ -1,5 +1,9 @@
 # Design changelog (generated)
 
+- 2026-10-27 `66d0d8a` Plans: log a previous day's workout, Not logged tag, stat containers with icons and no progress bar, green-tinted cards on a logged day (library, features)
+- 2026-10-27 `75a7380` publish: logged day stats (screens, features)
+- 2026-10-27 `fd6f6d8` publish: logged day stats (docs, features)
+
 - 2026-10-27 `39c574a` Plans logged day: no Not logged stat, it is already the difference in 3 of 4 (features)
 
 - 2026-10-27 `66746f5` Progress: remove stray whitespace left in the cards fragment (a phone read it as text outside a Text and showed a red error) (screens)

@@ -9,7 +9,7 @@ import { useAnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavHidden } from '@/components/FloatingTabBar';
 import { router } from 'expo-router';
-import { CalendarClock, Check, ChevronRight, Clock, Dumbbell, Lock, Play, Snowflake } from '@/lib/icons';
+import { ArrowRightLeft, CalendarClock, Check, ChevronRight, Clock, Dumbbell, Lock, Play, Snowflake, Trophy } from '@/lib/icons';
 import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { Tag } from '@/components/bits';
@@ -177,19 +177,26 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
             const skipped = plan.ex.filter((e) => e.res === 'skip').length;
             const swapped = plan.ex.filter((e) => e.res === 'swap').length;
             const logged = plan.ex.length - skipped;
+            const prs = doneParts(plan).prs;
+            // each stat is its own container with an icon; only what happened is shown (no zeros), and no progress bar
+            const tiles = [
+              { key: 'logged', icon: <Check size={18} color={c.muted} strokeWidth={2.4} />, n: String(logged), of: `of ${plan.ex.length}`, label: 'Logged' },
+              ...(swapped > 0 ? [{ key: 'swapped', icon: <ArrowRightLeft size={18} color={c.muted} />, n: String(swapped), of: '', label: 'Swapped' }] : []),
+              ...(prs > 0 ? [{ key: 'prs', icon: <Trophy size={18} color={c.muted} />, n: String(prs), of: '', label: prs === 1 ? 'PR' : 'PRs' }] : []),
+            ];
             return (
               <FadeIn i={2}>
-                <Card style={{ padding: 14, gap: 12 }}>
-                  <Row>
-                    {[[String(logged), `of ${plan.ex.length}`, 'Logged'], [String(swapped), '', 'Swapped'], ...(doneParts(plan).prs > 0 ? [[String(doneParts(plan).prs), '', doneParts(plan).prs === 1 ? 'PR' : 'PRs']] : [])].map(([n, of, l], k) => (
-                      <View key={l} style={{ flex: 1, paddingLeft: k ? 12 : 0, borderLeftWidth: k ? 1 : 0, borderLeftColor: c.line }}>
-                        <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xl2, lineHeight: 29 }}>{n}{!!of && <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{` ${of}`}</Txt>}</Txt>
-                        <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17 }}>{l}</Txt>
+                <Row style={{ gap: 8, alignItems: 'stretch' }}>
+                  {tiles.map((t) => (
+                    <View key={t.key} accessible accessibilityLabel={`${t.n} ${t.of} ${t.label}`} style={{ flex: 1, gap: 10, padding: 14, borderRadius: radii.card, backgroundColor: c.goodSoft }}>
+                      {t.icon}
+                      <View>
+                        <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xl2, lineHeight: 29 }}>{t.n}{!!t.of && <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{` ${t.of}`}</Txt>}</Txt>
+                        <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17 }}>{t.label}</Txt>
                       </View>
-                    ))}
-                  </Row>
-                  <ProgressSegments height={4} gap={3} segments={plan.ex.map((e) => ({ color: e.res === 'skip' ? c.surface3 : c.ink, label: e.res === 'skip' ? 'Not logged' : 'Logged' }))} />
-                </Card>
+                    </View>
+                  ))}
+                </Row>
               </FadeIn>
             );
           })()}
@@ -197,7 +204,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
           {/* a heading stays close to its own card (8 px); the sections are 24 px apart */}
           <FadeIn i={3} style={{ gap: 8 }}>
             <SectionLabel variant="section" icon={<Dumbbell size={20} color={c.ink} />}>Main workout</SectionLabel>
-            <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
+            <Card tone={plan.done ? 'good' : 'surface'} style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
               {plan.ex.map((e, i) => {
                 const tag = e.by === 'you' ? 'Edited by you' : e.by === 'created' ? 'Created by you' : e.hl ? 'New from Coach' : '';
                 return (

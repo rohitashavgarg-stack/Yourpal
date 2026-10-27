@@ -39,11 +39,12 @@
   "screen": "Plans",
   "group": "Routes",
   "status": "not started",
-  "hand": 9,
+  "hand": 10,
   "files": [
    "app/(tabs)/plans.tsx",
    "features/plans/WorkoutPlan.tsx",
    "features/plans/DietPlan.tsx",
+   "features/plans/LogPastWorkoutSheet.tsx",
    "features/plans/QtySheet.tsx"
   ]
  },
@@ -819,6 +820,16 @@
   "hand": 0,
   "files": [
    "features/plans/DietPlan.tsx"
+  ]
+ },
+ {
+  "id": "sheet:LogPastWorkoutSheet",
+  "screen": "LogPastWorkoutSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "features/plans/LogPastWorkoutSheet.tsx"
   ]
  },
  {

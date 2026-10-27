@@ -63,6 +63,8 @@ module.exports = [
   { name: 'state-plans-pastweek', url: '/plans', exec: "(() => { const el = [...document.querySelectorAll(\"div\")].find((x) => x.scrollWidth > x.clientWidth + 50 && /auto|scroll/.test(getComputedStyle(x).overflowX) && x.clientWidth > 300); if (el) el.scrollLeft = el.scrollLeft - el.clientWidth; return !!el; })()", settle: 6000 },
   { name: 'state-plans-pastlog', url: '/plans', exec: "(() => { const el = [...document.querySelectorAll(\"div\")].find((x) => x.scrollWidth > x.clientWidth + 50 && /auto|scroll/.test(getComputedStyle(x).overflowX) && x.clientWidth > 300); if (el) el.scrollLeft = el.scrollLeft - el.clientWidth; return !!el; })()", clicks: ['Wed 17'], settle: 6000, wait: 1500 },
 { name: 'state-plans-pastsheet', url: '/plans', exec: "(() => { const el = [...document.querySelectorAll(\"div\")].find((x) => x.scrollWidth > x.clientWidth + 50 && /auto|scroll/.test(getComputedStyle(x).overflowX) && x.clientWidth > 300); if (el) el.scrollLeft = el.scrollLeft - el.clientWidth; return !!el; })()", clicks: ['Wed 17', 'Log this workout'], settle: 6000, wait: 1500 },
+  { name: 'state-diet-pastday', url: '/plans?day=0', clicks: ['Diet'], settle: 6000, wait: 2500 },
+  { name: 'state-plans-done-scrolled', url: '/plans?day=0', settle: 6000, scrollBy: 560 },
   { name: 'state-progress-earlier', url: '/progress', settle: 9000, clicks: ['Earlier'], wait: 1500 },
   { name: 'state-login-offline', url: '/login?sc=' + q({ net: 'Offline' }), noSignedIn: true },
 ];
