@@ -99,11 +99,16 @@ export function LogPastWorkoutSheet({ day, week }: { day: number; week: number }
                   <View style={{ gap: 8, paddingHorizontal: 12, paddingBottom: 12 }}>
                     {sets.map((s, i) => (
                       <Row key={i} style={{ gap: 8 }}>
-                        <Pressy accessibilityRole="checkbox" accessibilityState={{ checked: s.done }} accessibilityLabel={`Set ${i + 1}. ${s.done ? 'Done' : 'Not done'}`} onPress={() => { haptic.tick(); change(e.id, i, { done: !s.done }); }} hitSlop={6} scaleTo={0.9}
-                          style={{ width: 28, height: 28, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: s.done ? c.good : c.surface3 }}>
-                          {s.done ? <Check size={14} color={c.bg} strokeWidth={3} /> : <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>{i + 1}</Txt>}
-                        </Pressy>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', gap: 8, opacity: s.done ? 1 : 0.4 }} pointerEvents={s.done ? 'auto' : 'none'}>
+                        {weighted ? (
+                          <Txt style={{ width: 16, fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>{i + 1}</Txt>
+                        ) : (
+                          /* only reps or seconds: the row has room, so it says which set and what was planned */
+                          <View style={{ flex: 1, minWidth: 0, opacity: s.done ? 1 : 0.4 }}>
+                            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19 }}>{`Set ${i + 1}`}</Txt>
+                            <Txt v="caption">{`Planned ${timed ? `${e.t ?? 0} s` : `${e.reps} reps`}`}</Txt>
+                          </View>
+                        )}
+                        <View style={{ ...(weighted ? { flex: 1 } : null), flexDirection: 'row', justifyContent: 'flex-end', gap: 8, opacity: s.done ? 1 : 0.4 }} pointerEvents={s.done ? 'auto' : 'none'}>
                           {weighted && (
                             <AmountStepper text={`${round(s.kg)} kg`} unit="kg" accessibilityLabel={`Set ${i + 1} weight`} lessDisabled={s.kg <= 0} onLess={() => change(e.id, i, { kg: Math.max(0, round(s.kg - kgStep(s.kg))) })} onMore={() => change(e.id, i, { kg: round(s.kg + kgStep(s.kg)) })} />
                           )}
@@ -113,6 +118,10 @@ export function LogPastWorkoutSheet({ day, week }: { day: number; week: number }
                             <AmountStepper text={`${s.reps} reps`} unit="rep" accessibilityLabel={`Set ${i + 1} reps`} lessDisabled={s.reps <= 1} onLess={() => change(e.id, i, { reps: Math.max(1, s.reps - 1) })} onMore={() => change(e.id, i, { reps: s.reps + 1 })} />
                           )}
                         </View>
+                        <Pressy accessibilityRole="checkbox" accessibilityState={{ checked: s.done }} accessibilityLabel={`Set ${i + 1}. ${s.done ? 'Done' : 'Not done'}`} onPress={() => { haptic.tick(); change(e.id, i, { done: !s.done }); }} hitSlop={6} scaleTo={0.9}
+                          style={{ width: 28, height: 28, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: s.done ? c.good : 'transparent', borderWidth: s.done ? 0 : 1.5, borderColor: c.chipLine }}>
+                          {s.done && <Check size={14} color={c.bg} strokeWidth={3} />}
+                        </Pressy>
                       </Row>
                     ))}
                   </View>

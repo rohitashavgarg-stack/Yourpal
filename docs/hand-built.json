@@ -7,12 +7,12 @@
  "demoPanelExcluded": 21,
  "exceptionRows": 4,
  "byKind": {
-  "button or pill": 28,
+  "button or pill": 27,
   "bar": 9,
   "chip": 7,
   "card": 16,
   "icon badge": 21,
-  "icon button": 3,
+  "icon button": 4,
   "input": 5
  },
  "byGroup": {
@@ -198,7 +198,7 @@
    "file": "features/plans/WorkoutPlan.tsx",
    "line": 191,
    "kind": "card",
-   "look": "card radius radii.card, fill c.goodSoft, padding 14",
+   "look": "card radius radii.card, fill c.surface2, padding 14",
    "fn": "WorkoutPlan",
    "text": "<View key={t.key} accessible accessibilityLabel={`${t.n} ${t.of} ${t.label}`} style={{ flex: 1, gap: 10, paddi",
    "onPurpose": false,
@@ -246,21 +246,21 @@
   },
   {
    "file": "features/plans/LogPastWorkoutSheet.tsx",
-   "line": 58,
-   "kind": "button or pill",
-   "look": "button 52 px high, radius radii.md",
+   "line": 93,
+   "kind": "icon badge",
+   "look": "icon tile 24 px, radius radii.pill",
    "fn": "LogPastWorkoutSheet",
-   "text": "<Pressy key={e.id} accessibilityRole=\"checkbox\" accessibilityState={{ checked: !off }} accessibilityLabel={`${",
+   "text": "<View style={{ width: 24, height: 24, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center'",
    "onPurpose": false,
    "group": "Bottom sheets"
   },
   {
    "file": "features/plans/LogPastWorkoutSheet.tsx",
-   "line": 60,
-   "kind": "icon badge",
-   "look": "icon tile 24 px, radius radii.pill",
+   "line": 113,
+   "kind": "icon button",
+   "look": "icon button 28 px, radius radii.pill",
    "fn": "LogPastWorkoutSheet",
-   "text": "<View style={{ width: 24, height: 24, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center'",
+   "text": "<Pressy accessibilityRole=\"checkbox\" accessibilityState={{ checked: s.done }} accessibilityLabel={`Set ${i + 1",
    "onPurpose": false,
    "group": "Bottom sheets"
   },

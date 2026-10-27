@@ -62,7 +62,7 @@ function ContainerList({ children, style }: ContainerProps) {
 }
 
 // Warm-up and cool-down: a title with how many moves, then numbered rows: the name on the left and the amount as its own small block on the right.
-// No extra note lines under the names. On a logged day (`done`) the numbers become green checks.
+// No extra note lines under the names. On a logged day (`done`) the numbers go and a green check sits at the right end of each row.
 function TitledList({ icon, title, rows, done }: TitledProps) {
   const { c } = useTheme();
   return (
@@ -72,13 +72,20 @@ function TitledList({ icon, title, rows, done }: TitledProps) {
         {rows.map((w, i) => {
           return (
             <Row key={w.n} style={{ gap: 12, minHeight: 52, paddingVertical: 8, borderBottomWidth: i < rows.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-              <View style={{ width: 24, height: 24, borderRadius: radii.pill, backgroundColor: done ? c.good : c.surface2, alignItems: 'center', justifyContent: 'center' }}>
-                {done ? <Check size={13} color={c.bg} strokeWidth={3} /> : <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>{i + 1}</Txt>}
-              </View>
+              {!done && (
+                <View style={{ width: 24, height: 24, borderRadius: radii.pill, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>{i + 1}</Txt>
+                </View>
+              )}
               <Txt style={{ flex: 1, minWidth: 0, fontFamily: font.medium }}>{w.n}</Txt>
               <View style={{ maxWidth: '42%', paddingHorizontal: 10, paddingVertical: 5, borderRadius: radii.pill, backgroundColor: c.surface2 }}>
                 <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, textAlign: 'center' }}>{w.s}</Txt>
               </View>
+              {done && (
+                <View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.pill, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}>
+                  <Check size={13} color={c.bg} strokeWidth={3} />
+                </View>
+              )}
             </Row>
           );
         })}

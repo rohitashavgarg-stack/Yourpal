@@ -366,7 +366,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 878,
+   "uses": 880,
    "files": 87,
    "inLibrary": 138
   },
@@ -752,13 +752,6 @@
    "group": "Bottom sheets"
   },
   {
-   "where": "src/features/plans/LogPastWorkoutSheet.tsx:58",
-   "kind": "button or pill",
-   "look": "button 52 px high, radius radii.md",
-   "jsx": "<Pressy key={e.id} accessibilityRole=\"checkbox\" accessibilityState={{ checked: !off }} accessibilityLabel={`${",
-   "group": "Bottom sheets"
-  },
-  {
    "where": "src/features/plans/WorkoutPlan.tsx:100",
    "kind": "button or pill",
    "look": "button auto px high, radius radii.xl",
@@ -915,7 +908,7 @@
   {
    "where": "src/features/plans/WorkoutPlan.tsx:191",
    "kind": "card",
-   "look": "card radius radii.card, fill c.goodSoft, padding 14",
+   "look": "card radius radii.card, fill c.surface2, padding 14",
    "jsx": "<View key={t.key} accessible accessibilityLabel={`${t.n} ${t.of} ${t.label}`} style={{ flex: 1, gap: 10, paddi",
    "group": "Plans and food logging"
   },
@@ -1088,7 +1081,7 @@
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/plans/LogPastWorkoutSheet.tsx:60",
+   "where": "src/features/plans/LogPastWorkoutSheet.tsx:93",
    "kind": "icon badge",
    "look": "icon tile 24 px, radius radii.pill",
    "jsx": "<View style={{ width: 24, height: 24, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center'",
@@ -1135,6 +1128,13 @@
    "look": "icon tile 26 px, radius 13",
    "jsx": "<Animated.View style={[{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.accent, alignItems: 'cent",
    "group": "Workout session"
+  },
+  {
+   "where": "src/features/plans/LogPastWorkoutSheet.tsx:113",
+   "kind": "icon button",
+   "look": "icon button 28 px, radius radii.pill",
+   "jsx": "<Pressy accessibilityRole=\"checkbox\" accessibilityState={{ checked: s.done }} accessibilityLabel={`Set ${i + 1",
+   "group": "Bottom sheets"
   },
   {
    "where": "src/features/plans/PlansCalendarSheet.tsx:58",

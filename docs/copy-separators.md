@@ -300,7 +300,7 @@ The rule (CLAUDE.md): no dot separators ("text · text"). Use a title, a sentenc
 
 - 83: `if (e.mode === 'tw') return '${e.sets} × ${e.t ?? 0} s · ${k} kg';`
 - 84: `return '${e.sets} × ${e.reps}${e.kg ? ' · ${k} kg' : ' reps'}';`
-- 93: `if (i === TODAY_IDX && p.week === 0 && workoutState(d) === 'done') { const w = wkDoneInfo(d); done = '${fmtT(w.a).full} – ${fmtT(w.b).full} ${d.hc && `
+- 103: `if (i === TODAY_IDX && p.week === 0 && workoutState(d) === 'done') { const w = wkDoneInfo(d); done = '${fmtT(w.a).full} – ${fmtT(w.b).full} ${d.hc && `
 
 ### `src/features/plans/WorkoutPlan.tsx` (3)
 
