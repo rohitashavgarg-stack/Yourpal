@@ -28,7 +28,7 @@ import { GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Callout } from '@/design-system/primitives/Callout';
-import { ProgressBar } from '@/design-system/primitives/ProgressBar';
+import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
@@ -181,11 +181,11 @@ function StreakEntry() {
       <View style={{ flex: 1, gap: 8 }}>
         <View>
           <Txt style={{ fontFamily: font.semibold }}>Streaks & badges</Txt>
-          {st.weeks ? <Txt v="caption">{st.weeks}-week streak</Txt> : null}
+          {st.weeks ? <Txt v="caption"><Txt v="caption" style={{ fontFamily: font.bold, color: FLAME }}>{st.weeks}</Txt>-week streak</Txt> : null}
         </View>
         <Callout size="compact" gap={8}>
-          <Txt v="caption">{st.weekDone} of {st.target} this week</Txt>
-          <ProgressBar height={4} track="surface3" color={FLAME} percent={Math.min(100, Math.round((st.weekDone / Math.max(1, st.target)) * 100))} />
+          <ProgressSegments height={6} gap={4} segments={Array.from({ length: st.target }, (_, i) => ({ color: i < st.weekDone ? FLAME : c.surface3, label: i < st.weekDone ? 'Session done' : 'Session to do' }))} />
+          <Txt v="caption"><Txt v="caption" style={{ fontFamily: font.bold, color: FLAME }}>{st.weekDone}</Txt> of {st.target} sessions this week</Txt>
         </Callout>
       </View>
       <ChevronRight size={18} color={c.muted} />

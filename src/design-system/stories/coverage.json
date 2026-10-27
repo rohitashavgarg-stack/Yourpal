@@ -231,8 +231,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/ProgressBar.tsx",
    "doc": true,
-   "uses": 7,
-   "files": 6,
+   "uses": 6,
+   "files": 5,
    "inLibrary": 0
   },
   {
@@ -240,8 +240,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/ProgressBar.tsx",
    "doc": true,
-   "uses": 4,
-   "files": 4,
+   "uses": 5,
+   "files": 5,
    "inLibrary": 0
   },
   {
@@ -366,7 +366,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 859,
+   "uses": 862,
    "files": 85,
    "inLibrary": 132
   },
