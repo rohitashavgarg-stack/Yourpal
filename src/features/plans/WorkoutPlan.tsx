@@ -131,15 +131,18 @@ export function WorkoutPlan() {
                   <Txt v="label">{DAYL[p.day]} {dateOf(p.day, p.week)}</Txt>
                   {isToday && <Tag label="Today" bg={c.surface2} fg={c.ink} />}
                 </Row>
-                {/* the name on the left and when it is planned on the right; then one rounded pill: how many exercises, a thin divider, who made the plan */}
+                {/* the name on the left and when it is planned on the right; then how many exercises, a thin divider and who made the plan in a rounded pill with their photo */}
                 <Row style={{ justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
                   <Txt accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.regular, fontSize: fontSizes.xl5Plus, lineHeight: 49, letterSpacing: -1.5 }}>{plan.name}</Txt>
                   {!!plan.time && !plan.done && <Row style={{ gap: 6 }}><Clock size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Planned {plan.time}</Txt></Row>}
                 </Row>
-                <Row style={{ alignSelf: 'flex-start', marginTop: 8, gap: 12, paddingHorizontal: 14, minHeight: 36, borderRadius: radii.pill, backgroundColor: c.surface2 }}>
+                <Row style={{ marginTop: 8, gap: 12 }}>
                   <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt style={{ fontFamily: font.bold, fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.ex.length}</Txt> exercises</Txt>
                   <View accessibilityElementsHidden style={{ width: 1, height: 16, backgroundColor: c.line }} />
-                  <Row style={{ gap: 8 }}><PersonAvatar who={plan.created ? 'me' : 'coach'} size={20} /><Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'}</Txt></Row>
+                  <Row style={{ gap: 8, paddingLeft: 4, paddingRight: 12, minHeight: 32, borderRadius: radii.pill, backgroundColor: c.surface2 }}>
+                    <PersonAvatar who={plan.created ? 'me' : 'coach'} size={24} />
+                    <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19, flexShrink: 1 }}>{plan.created ? 'Created by you' : 'by Coach Vikram'}</Txt>
+                  </Row>
                 </Row>
               </View>
               {!!plan.done && <IconBadge accessibilityLabel="Logged" size={28} bg={c.good} style={{ marginBottom: 8 }}><Check size={16} color={c.bg} strokeWidth={3} /></IconBadge>}
