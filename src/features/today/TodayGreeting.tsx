@@ -12,6 +12,7 @@ import { useStreak } from '@/features/streak/useStreak';
 import { nextMeal } from './meals';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
+import { fontSizes } from '@/design-system/tokens';
 
 // Demo panel: preview any state of the line.
 export const greetStore = createStore(() => ({ state: 'Auto' as GreetingState }));
@@ -34,8 +35,8 @@ export function TodayGreeting() {
   };
   const ctx = forceCtx(base, g.state);
   const { top, lead, hl, tail } = greeting(ctx, first);
-  const size = 28; // one size for every greeting, so "Hello! Rohitashav" and "Good afternoon, Rohitashav" look the same
-  const big = { fontFamily: font.regular, fontSize: size, lineHeight: Math.round(size * 1.25), letterSpacing: -0.6, color: c.muted } as const; // both lines: light, grey; the key phrase is brighter
+  // the same type as a page title (Plans, Progress, Gym): one size and one typeface for every greeting too
+  const big = { fontFamily: font.regular, fontSize: fontSizes.xl5, lineHeight: 44, letterSpacing: -1.4, color: c.muted } as const; // both lines: light, grey; the key phrase is brighter
   return (
     <View accessible accessibilityLabel={`${top}. ${lead ? lead + ' ' : ''}${hl}${tail ?? ''}`} style={{ paddingHorizontal: 4, paddingTop: 12, gap: 0 }}>
       <Txt style={big}>{top}</Txt>

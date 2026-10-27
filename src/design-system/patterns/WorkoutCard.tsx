@@ -17,7 +17,7 @@ import { font, fontSizes, fixed, radii, onDark, gradients, round } from '@/desig
  *   missed     two hours past the plan with nothing logged: muted, amber edge, one question with three answers
  *   moved      the member answered "Move to tomorrow": the same full card, a neutral "Moved" chip, where it moved to, Undo
  *   skipped    the member answered "Skip": the same full card, the name faded and struck through, a neutral "Skipped" chip, what is next, Undo
- *   done       completed: time, exercises and calories
+ *   done       completed: how many exercises were marked and the calories
  *   rest       rest day
  *   paused     the membership has ended: one flat card that says why, no Start
  *   comeback   after a break: the easy session: 20 min, 4 exercises, half your usual load, "Start easy session" and "Not today"
@@ -41,7 +41,7 @@ export type WorkoutCardProps = {
   burned?: number;
   /** live */
   live?: { elapsed: string; done: number; total: number; next?: string };
-  /** done: "6:58 pm" and the three stats (value, unit, label). */
+  /** done: "6:58 pm" and the two stats (value, unit, label): the exercises that were marked, and the calories. */
   done?: { at: string; stats: [string, string, string][] };
   /** rest and skipped: "Next: Pull, Thu 6:30 pm". */
   restNext?: string;

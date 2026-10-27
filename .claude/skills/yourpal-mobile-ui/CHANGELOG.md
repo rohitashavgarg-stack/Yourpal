@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-28 `a27b8d3` Today: greeting in the page title type; workout complete card without Time and with the number of exercises marked (screens, library, features)
+- 2026-10-27 `fda1b10` publish: icon button glass look on web and Android (docs)
+
 - 2026-10-27 `5a7aa34` Icon buttons on web and Android: a thin border and a soft grey gradient that echo the iOS glass (library, tokens)
 - 2026-10-27 `7eed99d` publish: log sets weight and reps, checks on the right (features)
 - 2026-10-27 `ddd65b8` publish: log sets weight and reps, checks on the right (docs)

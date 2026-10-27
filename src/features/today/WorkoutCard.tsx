@@ -63,8 +63,7 @@ export function TodayWorkoutCard({ restart = false }: { restart?: boolean } = {}
   }
   if (ps === 'done') {
     const info = wkDoneInfo(d);
-    const mins = Math.max(1, Math.round(info.b - info.a));
-    done = { at: fmtT(info.b).full, stats: [[String(mins), ' min', 'Time'], [String(buildExercises().length), '', 'Exercises'], [String(info.k), ' kcal', 'Burned']] as [string, string, string][] };
+    done = { at: fmtT(info.b).full, stats: [[String(info.ex ?? buildExercises().length), '', info.ex === 1 ? 'Exercise' : 'Exercises'], [String(info.k), ' kcal', 'Burned']] as [string, string, string][] };
   }
   return (
     <WorkoutCardPattern state={ps} name={name} time={time} when={rel(d, WKT).t} meta={meta} coachUnread={cs.unread} onOpenCoach={() => router.push('/coach')}
