@@ -55,6 +55,7 @@ module.exports = [
   { name: 'state-progress-top', url: '/progress', settle: 9000 },
   { name: 'state-progress-assess', url: '/progress', settle: 9000, scrollBy: 330 },
   { name: 'state-streak-page', url: '/progress/streaks', settle: 9000 },
+  { name: 'state-today-top', url: '/', settle: 9000 },
   { name: 'state-progress-earlier', url: '/progress', settle: 9000, clicks: ['Earlier'], wait: 1500 },
   { name: 'state-login-offline', url: '/login?sc=' + q({ net: 'Offline' }), noSignedIn: true },
 ];
