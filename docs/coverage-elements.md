@@ -23,17 +23,17 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Plans (routes)
 
 - Files: `app/(tabs)/plans.tsx`, `features/plans/WorkoutPlan.tsx`, `features/plans/DietPlan.tsx`, `features/plans/QtySheet.tsx`
-- Library components used: Txt x66, FadeIn x22, Row x12, Button x11, Card x9, Pressy x6, IconBadge x4, Callout x2, IconButton x2, ListCard x2, Segmented x1, StatusDot x1, ProgressSegments x1, ProgressBar x1, AmountStepper x1, FoodCard x1, Chevron x1
+- Library components used: Txt x67, FadeIn x21, Row x15, Button x11, Card x9, Pressy x6, IconBadge x4, IconButton x2, ListCard x2, Segmented x1, Callout x1, StatusDot x1, ProgressSegments x1, SectionLabel x1, ProgressBar x1, AmountStepper x1, FoodCard x1, Chevron x1
 - States and edge cases: Plan type: Workout, Diet; Coach updated the plan: Off, On; Plan change request: None, Requested, Ready; No plan yet (before assessment): Off, On; Mid-workout when the update arrives: Off, On; Connection: Online, Offline; Diet type (plan + swaps): Veg, Eggetarian, Non-veg; Detail level: Detailed, Simple; Camera (scan food): Allowed, Denied; Scan result: Works, Fails; (action) Apply Coach update now; (action) Reset this prototype
 - Hand-built:
-  - `app/(tabs)/plans.tsx:58` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => g`
-  - `app/(tabs)/plans.tsx:82` button or pill: `<Pressy key={i} accessibilityRole="button" accessibilityState={{ selected: on }} accessibi`
-  - `app/(tabs)/plans.tsx:92` icon badge: `<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'das`
-  - `app/(tabs)/plans.tsx:93` icon badge: `<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />`
-  - `features/plans/WorkoutPlan.tsx:96` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Coach Vikram updated your plan. ${`
-  - `features/plans/WorkoutPlan.tsx:118` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Your new plan is ready. View" onPre`
-  - `features/plans/WorkoutPlan.tsx:199` icon badge: `<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, `
-  - `features/plans/WorkoutPlan.tsx:200` icon badge: `<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, `
+  - `app/(tabs)/plans.tsx:62` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => g`
+  - `app/(tabs)/plans.tsx:87` button or pill: `<Pressy key={i} accessibilityRole="button" accessibilityState={{ selected: on }} accessibi`
+  - `app/(tabs)/plans.tsx:97` icon badge: `<View style={{ width: 12, height: 12, borderRadius: 6, borderWidth: 1.5, borderStyle: 'das`
+  - `app/(tabs)/plans.tsx:98` icon badge: `<View style={{ width: 4, height: 4, borderRadius: radii.xs, backgroundColor: dot }} />`
+  - `features/plans/WorkoutPlan.tsx:97` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Coach Vikram updated your plan. ${`
+  - `features/plans/WorkoutPlan.tsx:119` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Your new plan is ready. View" onPre`
+  - `features/plans/WorkoutPlan.tsx:204` icon badge: `<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, `
+  - `features/plans/WorkoutPlan.tsx:205` icon badge: `<View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, `
   - `features/plans/DietPlan.tsx:110` icon badge: `<View accessibilityLabel="Changed from plan" style={{ position: 'absolute', top: 0, right:`
 
 ## Progress (routes)
