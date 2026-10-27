@@ -15,6 +15,9 @@ export const light = {
   muted: '#5C6370',
   line: '#E4E8EE',
   chipLine: '#D5DAE1',
+  glassEdge: 'rgba(15,23,42,0.10)',   // the thin border of an icon button on web and Android
+  glassFrom: 'rgba(255,255,255,0.90)', // top left of its grey gradient
+  glassTo: 'rgba(205,212,224,0.55)',   // bottom right
   accent: '#2F6BEA',
   accentText: '#2358C9',
   accentInk: '#FFFFFF',
@@ -51,6 +54,9 @@ export const dark: Palette = {
   muted: '#9AA3B2',
   line: '#262C37',
   chipLine: 'rgba(255,255,255,0.18)',
+  glassEdge: 'rgba(255,255,255,0.16)',
+  glassFrom: 'rgba(255,255,255,0.16)',
+  glassTo: 'rgba(255,255,255,0.04)',
   accent: '#4C82F7',
   accentText: '#8FB2FF',
   accentInk: '#FFFFFF',
