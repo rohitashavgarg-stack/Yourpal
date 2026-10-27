@@ -23,7 +23,7 @@ const SPEC: Record<CardVariant, { radius: number; padding: number; gap?: number 
   dark: { radius: 28, padding: 20 },
 };
 
-export type CardTone = 'surface' | 'accent' | 'warn' | 'good' | 'none';
+export type CardTone = 'surface' | 'accent' | 'warn' | 'none';
 export type CardPadding = { top?: number; bottom?: number; horizontal?: number };
 
 export type CardProps = Omit<ViewProps, 'style'> & {
@@ -32,7 +32,7 @@ export type CardProps = Omit<ViewProps, 'style'> & {
   gap?: number;
   /** Old name for variant="dark". Kept so existing <Card dark> calls keep working. */
   dark?: boolean;
-  /** The fill: the surface (default), soft blue or soft amber, soft green (for something that is done), or none: no fill at all, for a card that is only an outline (give it `border`). */
+  /** The fill: the surface (default), soft blue or soft amber, or none: no fill at all, for a card that is only an outline (give it `border`). */
   tone?: CardTone;
   /** No shadow, also in light mode (a card on a sheet or inside another surface). */
   flat?: boolean;
@@ -57,7 +57,7 @@ export function Card({ variant, dark, gap, tone = 'surface', flat, border, clip,
     : { padding: s.padding };
   return (
     <View {...rest} style={[{
-      backgroundColor: v === 'dark' ? c.dark : tone === 'none' ? 'transparent' : tone === 'accent' ? c.accentSoft : tone === 'warn' ? c.warnSoft : tone === 'good' ? c.goodSoft : c.surface, borderRadius: s.radius, ...pad,
+      backgroundColor: v === 'dark' ? c.dark : tone === 'none' ? 'transparent' : tone === 'accent' ? c.accentSoft : tone === 'warn' ? c.warnSoft : c.surface, borderRadius: s.radius, ...pad,
       ...(g !== undefined ? { gap: g } : null),
       ...(border ? { borderWidth: border.width ?? 1, borderColor: border.color } : null),
       ...(clip ? { overflow: 'hidden' as const } : null),

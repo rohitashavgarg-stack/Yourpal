@@ -1,9 +1,9 @@
 {
  "generated": "2026-10-27",
  "rule": "unique elements outside src/web; on purpose = rows of docs/coverage-exceptions.md",
- "count": 88,
+ "count": 89,
  "onPurpose": 3,
- "toBuild": 85,
+ "toBuild": 86,
  "demoPanelExcluded": 21,
  "exceptionRows": 4,
  "byKind": {
@@ -12,8 +12,8 @@
   "chip": 7,
   "card": 16,
   "icon badge": 21,
-  "input": 5,
-  "icon button": 2
+  "icon button": 3,
+  "input": 5
  },
  "byGroup": {
   "Today": {
@@ -25,7 +25,7 @@
    "onPurpose": 1
   },
   "Bottom sheets": {
-   "total": 10,
+   "total": 11,
    "onPurpose": 0
   },
   "Progress": {
@@ -136,7 +136,7 @@
   },
   {
    "file": "app/(tabs)/plans.tsx",
-   "line": 62,
+   "line": 67,
    "kind": "button or pill",
    "look": "button 26 px high, radius radii.pill",
    "fn": "DayStrip",
@@ -146,9 +146,9 @@
   },
   {
    "file": "app/(tabs)/plans.tsx",
-   "line": 87,
+   "line": 93,
    "kind": "button or pill",
-   "look": "button 76 px high, radius radii.lg",
+   "look": "button 66 px high, radius radii.lg",
    "fn": "DayStrip",
    "text": "<Pressy key={i} accessibilityRole=\"button\" accessibilityState={{ selected: on }} accessibilityLabel={`${DAYL[i",
    "onPurpose": false,
@@ -156,7 +156,7 @@
   },
   {
    "file": "app/(tabs)/plans.tsx",
-   "line": 97,
+   "line": 103,
    "kind": "icon badge",
    "look": "dot 12 px",
    "fn": "DayStrip",
@@ -166,7 +166,7 @@
   },
   {
    "file": "app/(tabs)/plans.tsx",
-   "line": 98,
+   "line": 104,
    "kind": "icon badge",
    "look": "dot 4 px",
    "fn": "DayStrip",
@@ -233,6 +233,16 @@
    "text": "<View accessibilityLabel=\"Changed from plan\" style={{ position: 'absolute', top: 0, right: 0, width: 8, height",
    "onPurpose": false,
    "group": "Plans and food logging"
+  },
+  {
+   "file": "features/plans/PlansCalendarSheet.tsx",
+   "line": 58,
+   "kind": "icon button",
+   "look": "icon button 40 px, radius radii.pill",
+   "fn": "PlansCalendarSheet",
+   "text": "<Pressy accessibilityRole=\"button\" accessibilityState={{ selected: on, disabled: off }} accessibilityLabel={d.",
+   "onPurpose": false,
+   "group": "Bottom sheets"
   },
   {
    "file": "features/plans/LogPastWorkoutSheet.tsx",

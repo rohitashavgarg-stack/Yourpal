@@ -168,8 +168,8 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
               </View>
             </Row>
             {!plan.done && rel < 0 && !paused && (
-              <View style={{ paddingHorizontal: 4, marginTop: 14 }}>
-                <Button kind="accent" label="Log this workout" icon={<Dumbbell size={18} color={c.accentInk} />} onPress={() => openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Log workout' })} />
+              <View ref={startRef} collapsable={false} style={{ paddingHorizontal: 4, marginTop: 14 }}>
+                <Button kind="secondary" label="Log this workout" icon={<Dumbbell size={18} color={c.ink} />} onPress={() => openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Log workout' })} />
               </View>
             )}
           </FadeIn>
@@ -188,7 +188,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
               <FadeIn i={2}>
                 <Row style={{ gap: 8, alignItems: 'stretch' }}>
                   {tiles.map((t) => (
-                    <View key={t.key} accessible accessibilityLabel={`${t.n} ${t.of} ${t.label}`} style={{ flex: 1, gap: 10, padding: 14, borderRadius: radii.card, backgroundColor: c.goodSoft }}>
+                    <View key={t.key} accessible accessibilityLabel={`${t.n} ${t.of} ${t.label}`} style={{ flex: 1, gap: 10, padding: 14, borderRadius: radii.card, backgroundColor: c.surface2 }}>
                       {t.icon}
                       <View>
                         <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xl2, lineHeight: 29 }}>{t.n}{!!t.of && <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{` ${t.of}`}</Txt>}</Txt>
@@ -204,7 +204,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
           {/* a heading stays close to its own card (8 px); the sections are 24 px apart */}
           <FadeIn i={3} style={{ gap: 8 }}>
             <SectionLabel variant="section" icon={<Dumbbell size={20} color={c.ink} />}>Main workout</SectionLabel>
-            <Card tone={plan.done ? 'good' : 'surface'} style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
+            <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
               {plan.ex.map((e, i) => {
                 const tag = e.by === 'you' ? 'Edited by you' : e.by === 'created' ? 'Created by you' : e.hl ? 'New from Coach' : '';
                 return (
@@ -268,6 +268,31 @@ function InlineStart({ innerRef }: { innerRef?: React.RefObject<ViewInstance | n
       <Button kind="accent" label={live ? 'Resume workout' : 'Start workout'} icon={<Play size={18} color={c.accentInk} fill={c.accentInk} />}
         onPress={() => (live ? router.push('/workout') : startWorkout())} />
     </View>
+  );
+}
+
+// Whether this day has gone by without being logged (drives the floating Log button and the scroll padding).
+export function useCanLog() {
+  const { d } = useDomain();
+  const { p } = usePlans();
+  if (p.noPlan || p.seg !== 'workout') return false;
+  const plan = dayPlan(d, p, p.day);
+  return !!plan && relDay(p) < 0 && !plan.done;
+}
+
+// The same floating button for a past day: "Log this workout". It is not the blue main action, so it is the white glass.
+export function StickyLog() {
+  const { c } = useTheme();
+  const { p } = usePlans();
+  const { openSheet } = useOverlay();
+  const insets = useSafeAreaInsets();
+  const hidden = useNavHidden();
+  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 88 }] }));
+  const bottom = Math.max(insets.bottom - 6, 14) + 84;
+  return (
+    <FadeIn pointerEvents="box-none" style={[{ position: 'absolute', left: 16, right: 16, bottom }, lift]}>
+      <Button kind="glassPrimary" label="Log this workout" icon={<Dumbbell size={18} color={c.bg} />} onPress={() => openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Log workout' })} />
+    </FadeIn>
   );
 }
 

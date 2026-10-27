@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-27 `fd931e7` Plans: compact full-width strip with the month heading above it and a calendar in a bottom sheet, floating Log this workout on past days, secondary log button, green only on stats and checks, softer glow edge on Today (screens, library, features)
+- 2026-10-27 `595db54` publish: log a past workout, logged day look (docs)
+
 - 2026-10-27 `66d0d8a` Plans: log a previous day's workout, Not logged tag, stat containers with icons and no progress bar, green-tinted cards on a logged day (library, features)
 - 2026-10-27 `75a7380` publish: logged day stats (screens, features)
 - 2026-10-27 `fd6f6d8` publish: logged day stats (docs, features)

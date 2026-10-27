@@ -68,15 +68,15 @@ function TitledList({ icon, title, rows, done }: TitledProps) {
   return (
     <View style={{ gap: 8 }}>
       <SectionLabel variant="section" icon={icon} right={<Txt v="caption">{rows.length} moves</Txt>}>{title}</SectionLabel>
-      <Card tone={done ? 'good' : 'surface'} style={{ paddingVertical: 4, paddingHorizontal: 16 }}>
+      <Card style={{ paddingVertical: 4, paddingHorizontal: 16 }}>
         {rows.map((w, i) => {
           return (
-            <Row key={w.n} style={{ gap: 12, minHeight: 52, paddingVertical: 8, borderBottomWidth: i < rows.length - 1 ? 1 : 0, borderBottomColor: done ? c.good + '33' : c.line }}>
+            <Row key={w.n} style={{ gap: 12, minHeight: 52, paddingVertical: 8, borderBottomWidth: i < rows.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
               <View style={{ width: 24, height: 24, borderRadius: radii.pill, backgroundColor: done ? c.good : c.surface2, alignItems: 'center', justifyContent: 'center' }}>
                 {done ? <Check size={13} color={c.bg} strokeWidth={3} /> : <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: c.muted }}>{i + 1}</Txt>}
               </View>
               <Txt style={{ flex: 1, minWidth: 0, fontFamily: font.medium }}>{w.n}</Txt>
-              <View style={{ maxWidth: '42%', paddingHorizontal: 10, paddingVertical: 5, borderRadius: radii.pill, backgroundColor: done ? c.good + '26' : c.surface2 }}>
+              <View style={{ maxWidth: '42%', paddingHorizontal: 10, paddingVertical: 5, borderRadius: radii.pill, backgroundColor: c.surface2 }}>
                 <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, textAlign: 'center' }}>{w.s}</Txt>
               </View>
             </Row>
