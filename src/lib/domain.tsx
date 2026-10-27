@@ -39,6 +39,7 @@ export type Domain = {
   meals: Partial<Record<MealId, MealLog>>;
   wkScenario: 'Not started' | 'Done' | 'Rest day';
   wkDone: { a: number; b: number; k: number } | null;
+  pastLogs: Record<string, { a: number; b: number; skip: string[] }>; // workouts logged for days that have gone by, keyed "week:day"; a and b are minutes of the day, skip lists the exercises not done
   session: Session | null;
   ci: CheckInScenario;
   ciAt: number | null;      // check-in time, minutes of the day (display)
@@ -98,7 +99,7 @@ export function initialDomain(): Domain {
   return {
     time: 'Evening', min: 1100, todayVariant: 'Regular', awayDays: 4, autoNote: '', loading: false, hc: false, wearable: false, hasGym: true, askGym: false,
     water: 1.8, weight: 72.4, weightLog: [{ t: 'Mon 22', v: 72.6 }, { t: 'Tue 23', v: 72.5 }],
-    meals: {}, wkScenario: 'Not started', wkDone: null, session: null,
+    meals: {}, wkScenario: 'Not started', wkDone: null, pastLogs: {}, session: null,
     ci: 'At the gym', ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null, scanFails: false, dismissed: {}, plans: basePlans(), planReq: 'none', coachUpdated: false,
     goal: { type: 'Weight loss', target: 6, by: '30 Nov' }, membership: 'Active', assess: 'Two done', ptLeft: 8, onBreak: false,
     chat: [{ me: true, t: 'Is my squat depth ok?', ctx: 'Squat', meta: 'Yesterday · Seen' }, { me: false, t: 'Go to parallel. Film one set and send it.', meta: '2 hours ago' }],
