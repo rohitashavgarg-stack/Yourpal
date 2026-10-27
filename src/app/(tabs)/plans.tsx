@@ -149,7 +149,7 @@ export default function Plans() {
     ],
     actions: [
       { label: 'Apply Coach update now', run: () => { set((s) => ({ plans: applyCoachUpdate(s.plans), planReq: 'none', coachUpdated: true })); setP({ applied: true, hl: COACH_HL, day: TODAY_IDX, seg: 'workout' }); } },
-      { label: 'Reset this prototype', run: () => { resetPlans(); set({ plans: basePlans(), planReq: 'none', coachUpdated: false }); } },
+      { label: 'Reset this prototype', run: () => { resetPlans(); set({ plans: basePlans(), planReq: 'none', coachUpdated: false, pastLogs: {} }); } },
     ],
   }, [p.seg, p.noPlan, p.mid, p.diet, p.detail, p.cam, p.day, p.applied, d.coachUpdated, d.planReq, d.offline, d.scanFails]);
 

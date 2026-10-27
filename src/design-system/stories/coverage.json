@@ -6,8 +6,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/AmountStepper.tsx",
    "doc": true,
-   "uses": 2,
-   "files": 2,
+   "uses": 4,
+   "files": 3,
    "inLibrary": 0
   },
   {
@@ -51,8 +51,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Button.tsx",
    "doc": true,
-   "uses": 145,
-   "files": 58,
+   "uses": 147,
+   "files": 59,
    "inLibrary": 11
   },
   {
@@ -222,8 +222,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Pressy.tsx",
    "doc": true,
-   "uses": 100,
-   "files": 48,
+   "uses": 101,
+   "files": 49,
    "inLibrary": 31
   },
   {
@@ -258,8 +258,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Row.tsx",
    "doc": true,
-   "uses": 213,
-   "files": 55,
+   "uses": 216,
+   "files": 56,
    "inLibrary": 54
   },
   {
@@ -294,8 +294,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Sheet.tsx",
    "doc": true,
-   "uses": 2,
-   "files": 2,
+   "uses": 3,
+   "files": 3,
    "inLibrary": 1
   },
   {
@@ -366,8 +366,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 868,
-   "files": 85,
+   "uses": 874,
+   "files": 86,
    "inLibrary": 138
   },
   {

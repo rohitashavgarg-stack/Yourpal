@@ -91,7 +91,9 @@ export function dayPlan(d: Domain, p: PlansState, i: number): DayPlan | null {
   if (!b) return null;
   let done = p.week === 0 ? b.done : undefined; // logged history only exists for this week
   if (i === TODAY_IDX && p.week === 0 && workoutState(d) === 'done') { const w = wkDoneInfo(d); done = `${fmtT(w.a).full} – ${fmtT(w.b).full} ${d.hc && d.wearable ? ` · ${w.k} kcal` : ''}`; }
-  return { name: b.name, time: b.time, wu: b.wu, cd: b.cd, done, ex: b.ex.map((e) => ({ ...e, hl: p.applied && p.hl.includes(e.id) })) };
+  const past = d.pastLogs?.[`${p.week}:${i}`]; // a day that has gone by and was logged afterwards
+  if (past) done = `${fmtT(past.a).full} – ${fmtT(past.b).full}`;
+  return { name: b.name, time: b.time, wu: b.wu, cd: b.cd, done, ex: b.ex.map((e) => ({ ...e, hl: p.applied && p.hl.includes(e.id), ...(past && past.skip.includes(e.id) ? { res: 'skip' as const } : null) })) };
 }
 
 // First free day after today (for "Create a workout").

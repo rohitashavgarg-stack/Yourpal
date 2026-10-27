@@ -30,6 +30,7 @@ import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { ListCard } from '@/design-system/primitives/ListCard';
 import StretchIcon from '@/lib/StretchIcon';
+import { LogPastWorkoutSheet } from './LogPastWorkoutSheet';
 import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
 
@@ -137,6 +138,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
                   <Txt v="label">{DAYL[p.day]} {dateOf(p.day, p.week)}</Txt>
                   {isToday && <Tag label="Today" bg={c.surface2} fg={c.ink} />}
                   {!!plan.done && <Tag label="Logged" bg={c.goodSoft} fg={c.good} />}
+                  {!plan.done && rel < 0 && <Tag label="Not logged" bg={c.warnSoft} fg={c.warn} />}
                 </Row>
                 {/* the name with who made the plan beside it, small, with their photo; under it how many exercises, a thin divider and when it is planned */}
                 <Row style={{ alignItems: 'flex-end', columnGap: 10, flexWrap: 'wrap' }}>
@@ -165,7 +167,11 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
                 {canStart && <InlineStart innerRef={startRef} />}
               </View>
             </Row>
-            {!plan.done && rel < 0 && <Txt style={{ paddingHorizontal: 4, marginTop: 4, fontSize: fontSizes.sm, lineHeight: 19, color: c.warn }}>Not logged</Txt>}
+            {!plan.done && rel < 0 && !paused && (
+              <View style={{ paddingHorizontal: 4, marginTop: 14 }}>
+                <Button kind="accent" label="Log this workout" icon={<Dumbbell size={18} color={c.accentInk} />} onPress={() => openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Log workout' })} />
+              </View>
+            )}
           </FadeIn>
           {!!plan.done && (() => {
             const skipped = plan.ex.filter((e) => e.res === 'skip').length;
@@ -175,7 +181,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
               <FadeIn i={2}>
                 <Card style={{ padding: 14, gap: 12 }}>
                   <Row>
-                    {[[String(logged), `of ${plan.ex.length}`, 'Logged'], [String(skipped), '', 'Not logged'], [String(swapped), '', 'Swapped'], ...(doneParts(plan).prs > 0 ? [[String(doneParts(plan).prs), '', doneParts(plan).prs === 1 ? 'PR' : 'PRs']] : [])].map(([n, of, l], k) => (
+                    {[[String(logged), `of ${plan.ex.length}`, 'Logged'], [String(swapped), '', 'Swapped'], ...(doneParts(plan).prs > 0 ? [[String(doneParts(plan).prs), '', doneParts(plan).prs === 1 ? 'PR' : 'PRs']] : [])].map(([n, of, l], k) => (
                       <View key={l} style={{ flex: 1, paddingLeft: k ? 12 : 0, borderLeftWidth: k ? 1 : 0, borderLeftColor: c.line }}>
                         <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xl2, lineHeight: 29 }}>{n}{!!of && <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{` ${of}`}</Txt>}</Txt>
                         <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17 }}>{l}</Txt>

@@ -1,5 +1,7 @@
 # Design changelog (generated)
 
+- 2026-10-27 `39c574a` Plans logged day: no Not logged stat, it is already the difference in 3 of 4 (features)
+
 - 2026-10-27 `66746f5` Progress: remove stray whitespace left in the cards fragment (a phone read it as text outside a Text and showed a red error) (screens)
 - 2026-10-27 `675cf29` publish: Plans logged day page (docs)
 
