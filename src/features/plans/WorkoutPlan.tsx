@@ -175,7 +175,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
               <FadeIn i={2}>
                 <Card style={{ padding: 14, gap: 12 }}>
                   <Row>
-                    {[[String(logged), `of ${plan.ex.length}`, 'Logged'], [String(skipped), '', 'Not logged'], [String(swapped), '', 'Swapped'], ...(doneParts(plan).prs > 0 ? [[String(doneParts(plan).prs), '', doneParts(plan).prs === 1 ? 'PR' : 'PRs']] : [])].map(([n, of, l], k) => (
+                    {[[String(logged), `of ${plan.ex.length}`, 'Logged'], [String(swapped), '', 'Swapped'], ...(doneParts(plan).prs > 0 ? [[String(doneParts(plan).prs), '', doneParts(plan).prs === 1 ? 'PR' : 'PRs']] : [])].map(([n, of, l], k) => (
                       <View key={l} style={{ flex: 1, paddingLeft: k ? 12 : 0, borderLeftWidth: k ? 1 : 0, borderLeftColor: c.line }}>
                         <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xl2, lineHeight: 29 }}>{n}{!!of && <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{` ${of}`}</Txt>}</Txt>
                         <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17 }}>{l}</Txt>
