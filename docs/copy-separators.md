@@ -456,7 +456,7 @@ The rule (CLAUDE.md): no dot separators ("text · text"). Use a title, a sentenc
 
 ### `src/app/progress/streaks.tsx` (1)
 
-- 92: `<SectionLabel variant="overline" inset={4}>{'BADGES · ${BADGES.filter((b) => b.earned).length} OF ${BADGES.length} EARNED'}</SectionLabel>`
+- 93: `<View style={{ marginTop: 14 }}><SectionLabel variant="overline" inset={4}>{'BADGES · ${BADGES.filter((b) => b.earned).length} OF ${BADGES.length} EAR`
 
 ### `src/design-system/_archive/ForYouGoalStrip.tsx` (1)
 

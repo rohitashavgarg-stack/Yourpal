@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-10-27 `7a4e556` Streaks page: more space above the section headings so each heading sits with its own card (screens)
+- 2026-10-27 `57f2c27` publish: save meal cards, streak card, assessments, page end (docs)
+
 - 2026-10-27 `6ad1726` Save meal sheet: solid cards with the tick on the right (FoodCard pick); streak hierarchy; assessment label beside the headline; Today page end subtler (screens, library, features)
 - 2026-10-27 `8625e8c` publish: page end, streaks card, back to today (screens, features)
 - 2026-10-27 `b86eba7` publish: page end, streaks card, back to today (docs)
