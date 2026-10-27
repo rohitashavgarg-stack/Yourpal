@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { CalendarClock, Check, Clock, Dumbbell, Flame, Lock, Moon, X, SkipForward } from '@/lib/icons';
+import { CalendarClock, Check, Clock, Dumbbell, Lock, Moon, X, SkipForward, Zap } from '@/lib/icons';
 import { Chip, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { Button } from '@/design-system/primitives/Button';
@@ -112,7 +112,7 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
   const { c } = useTheme();
   const burnedRow = burned != null ? (
     <Row style={{ gap: 8, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.12)' }}>
-      <Flame size={15} color={fixed.white} />
+      <Zap size={15} color={fixed.white} />
       <Txt style={{ flex: 1, fontSize: fontSizes.sm, lineHeight: 19, color: fixed.white }}>Burned today <Txt style={{ fontFamily: font.monoBold, fontSize: fontSizes.sm, lineHeight: 19, color: fixed.white }}>{burned}</Txt> kcal</Txt>
       <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: W60 }}>From your watch</Txt>
     </Row>

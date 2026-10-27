@@ -1,5 +1,10 @@
 # Design changelog (generated)
 
+- 2026-10-27 `03e5b51` Plans: full-width grey week strip with the month, spacing between sections, plain icon headings, calendar icon for the planned time; calorie icons use the bolt, the flame is only for the streak (screens, library, features)
+- 2026-10-27 `4c227af` Plans: icon headings, coach beside the name, outlined week strip with a direction-aware way back, floating Start button measured live (screens, library, features)
+- 2026-10-27 `f0f76eb` publish: Plans start button, dashed separator, week strip (screens, library, features)
+- 2026-10-27 `137d852` publish: Plans start button, dashed separator, week strip (docs)
+
 - 2026-10-27 `94c8d17` Plans: dashed separator above Warm-up, Start workout under the coach pill with the floating button taking over once it scrolls away, week strip without the dates (features)
 - 2026-10-27 `592f88a` publish: Plans day header final layout (screens, features)
 - 2026-10-27 `052d150` publish: Plans day header final layout (docs)

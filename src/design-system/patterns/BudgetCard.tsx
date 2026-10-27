@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Flame, UtensilsCrossed } from '@/lib/icons';
+import { UtensilsCrossed, Zap } from '@/lib/icons';
 import { Row, Txt } from '@/components/ui';
 import { GoalCard, RadialGlow } from '@/design-system/patterns/GoalCard';
 import { GoalCardState } from '@/features/today/goalCardState';
@@ -60,7 +60,7 @@ export function BudgetCard({ eaten, eatTarget, burned, burnTarget, burnSource = 
       <Row style={{ gap: 16, alignItems: 'flex-start', paddingHorizontal: 18, paddingTop: 14, paddingBottom: 18 }}>
         <Half icon={<UtensilsCrossed size={17} color={MINT} />} label="Eat today" unit="kcal" value={inr(eaten)} of={inr(eatTarget)} pct={eaten / eatTarget} color={MINT} />
         <View style={{ width: 1, alignSelf: 'stretch', backgroundColor: 'rgba(255,255,255,0.12)' }} />
-        <Half icon={<Flame size={17} color={BURN} />} label="Burn today" unit="kcal" value={inr(burned)} of={burnSource === 'watch' ? inr(burnTarget) : `${inr(burnTarget)} ${SOURCE_WORD[burnSource]}`} pct={burned / burnTarget} color={BURN} />
+        <Half icon={<Zap size={17} color={BURN} />} label="Burn today" unit="kcal" value={inr(burned)} of={burnSource === 'watch' ? inr(burnTarget) : `${inr(burnTarget)} ${SOURCE_WORD[burnSource]}`} pct={burned / burnTarget} color={BURN} />
       </Row>
     </View>
   );

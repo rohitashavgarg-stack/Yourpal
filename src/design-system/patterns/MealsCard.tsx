@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
-import { Beef, Check, ChevronRight, Clock, Flame, Lock, Plus, Salad, UtensilsCrossed, X } from '@/lib/icons';
+import { Beef, Check, ChevronRight, Clock, Lock, Plus, Salad, UtensilsCrossed, X, Zap } from '@/lib/icons';
 import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { FoodType } from '@/lib/data';
@@ -229,7 +229,7 @@ export function MealsCard(p: MealsCardProps) {
           <StatusPill status={meal.status} time={meal.meta.time} loggedAt={meal.loggedAt} />
         </Row>
         <MetaRow color={c.muted} dividerColor={c.line} items={[
-          { icon: <Flame size={14} color={c.muted} />, text: meal.meta.kcal },
+          { icon: <Zap size={14} color={c.muted} />, text: meal.meta.kcal },
           { icon: <Beef size={14} color={c.muted} />, text: meal.meta.protein },
         ]} />
       </View>

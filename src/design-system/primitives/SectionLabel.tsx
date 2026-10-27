@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleProp, TextStyle, View } from 'react-native';
 import { Row, Txt } from '@/components/ui';
-import { IconBadge } from './IconBadge';
 import { font, fontSizes } from '@/design-system/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -10,7 +9,7 @@ import { useTheme } from '@/theme/ThemeProvider';
  *   overline  11 px semibold, letter-spaced, muted (Coach, Streaks pages)
  *   quiet     13 px medium, muted (goal page)
  *   label     the Txt "label" variant with a 6 px inset (Profile and Settings pages)
- *   section   the heading of a part of a page (Warm-up, Main workout, Cool-down): a small round icon in the part's colour, the title at 17 px semibold, and an optional note on the right
+ *   section   the heading of a part of a page (Warm-up, Main workout, Cool-down): a plain icon (no badge, no colour: the page's own ink colour), the title at 17 px semibold, and an optional note on the right
  * `inset` is horizontal padding. It defaults to 6 for `label` and 0 for the others.
  */
 export type SectionLabelVariant = 'overline' | 'quiet' | 'label' | 'section';
@@ -20,13 +19,13 @@ const SPEC = {
   quiet: { fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 19 },
 } as const;
 
-export function SectionLabel({ children, variant = 'label', inset, style, icon, tint, right }: { children: React.ReactNode; variant?: SectionLabelVariant; inset?: number; style?: StyleProp<TextStyle>; icon?: React.ReactNode; tint?: string; right?: React.ReactNode }) {
+export function SectionLabel({ children, variant = 'label', inset, style, icon, right }: { children: React.ReactNode; variant?: SectionLabelVariant; inset?: number; style?: StyleProp<TextStyle>; icon?: React.ReactNode; right?: React.ReactNode }) {
   const { c } = useTheme();
   if (variant === 'section') {
     return (
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: inset ?? 6, minHeight: 32 }}>
         <Row style={{ gap: 10 }}>
-          {icon ? <IconBadge size={28} radius={14} bg={`${tint ?? c.accent}26`}>{icon}</IconBadge> : null}
+          {icon}
           <Txt accessibilityRole="header" style={[{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, letterSpacing: -0.2 }, style]}>{children}</Txt>
         </Row>
         {right}

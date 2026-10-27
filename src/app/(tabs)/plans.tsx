@@ -30,6 +30,7 @@ import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const JUMP: [string, number][] = [['Today (Wed)', TODAY_IDX], ['Past day (Mon)', 0], ['Rest day (Tue)', 1], ['Future (Thu)', 3]];
 
+const MONTH_FULL: Record<string, string> = { Jan: 'January', Feb: 'February', Mar: 'March', Apr: 'April', May: 'May', Jun: 'June', Jul: 'July', Aug: 'August', Sep: 'September', Oct: 'October', Nov: 'November', Dec: 'December' };
 const WEEKS = [-2, -1, 0, 1, 2, 3]; // two back, this week, three ahead
 const THIS = WEEKS.indexOf(0);
 
@@ -49,20 +50,23 @@ function DayStrip() {
     const k = WEEKS.indexOf(p.week);
     if (w > 0 && k >= 0 && k !== page) { ref.current?.scrollTo({ x: k * w, animated: true }); setPage(k); }
   }, [p.week]);
+  const m0 = monthOf(0, cur), m6 = monthOf(6, cur);
+  const monthTitle = m0 === m6 ? (MONTH_FULL[m0] ?? m0) : `${m0} – ${m6}`;
   const goto = (k: number) => { ref.current?.scrollTo({ x: k * w, animated: true }); setPage(k); haptic.tick(); };
   return (
-    <Callout size="compact">
-      {/* on another week a small way back floats on the bottom edge of the container: it is not part of the layout, so the container keeps one size when you swipe */}
-      {cur !== 0 && (
-        <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: -13, alignItems: 'center', zIndex: 2 }}>
+    <View style={{ marginHorizontal: -16, marginBottom: 16, paddingTop: 16, paddingBottom: 16, paddingHorizontal: 16, gap: 10, backgroundColor: c.surface2 }}>
+      {/* the month on the left; on another week the way back sits on the right of the same row, so the strip keeps one size when you swipe */}
+      <Row style={{ justifyContent: 'space-between', height: 26, paddingHorizontal: 4 }}>
+        <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{monthTitle}</Txt>
+        {cur !== 0 && (
           <Pressy accessibilityRole="button" accessibilityLabel="Back to this week" onPress={() => goto(THIS)} hitSlop={10} scaleTo={0.96}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 26, paddingHorizontal: 12, borderRadius: radii.pill, borderWidth: 1, borderColor: c.chipLine, backgroundColor: c.surface }}>
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 26, paddingHorizontal: 12, borderRadius: radii.pill, borderWidth: 1, borderColor: c.chipLine }}>
             {cur > 0 && <ChevronsLeft size={12} color={c.ink} />}
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 16 }}>This week</Txt>
             {cur < 0 && <ChevronsRight size={12} color={c.ink} />}
           </Pressy>
-        </View>
-      )}
+        )}
+      </Row>
       <View onLayout={(e) => setW(e.nativeEvent.layout.width)}>
         <ScrollView ref={ref} horizontal pagingEnabled showsHorizontalScrollIndicator={false} accessibilityLabel="Weeks, swipe for earlier or later weeks" scrollEventThrottle={16}
           onScroll={(e) => { const k = Math.round(e.nativeEvent.contentOffset.x / (w || 1)); if (k !== page && k >= 0 && k < WEEKS.length) { setPage(k); haptic.tick(); } }}
@@ -100,7 +104,7 @@ function DayStrip() {
           ))}
         </ScrollView>
       </View>
-    </Callout>
+    </View>
   );
 }
 
@@ -188,7 +192,7 @@ export default function Plans() {
         </Callout>
       )}
       <DayStrip />
-      <View key={p.seg} style={{ gap: 12 }}>
+      <View key={p.seg} style={{ gap: isW ? 24 : 12 }}>
         {isW ? <WorkoutPlan startRef={startRef} /> : <DietPlan />}
       </View>
     </TabScreen>
