@@ -23,7 +23,7 @@ const NAMES = {
   '/plans/exercise': 'Exercise', '/plans/history': 'Workout history', '/plans/log': 'What did you eat?', '/plans/updated': 'What changed', '/profile/appearance': 'Appearance',
   '/profile/delete': 'Delete account', '/profile/details': 'My details', '/profile/export': 'Export my data', '/profile/health': 'Connected apps', '/profile/help': 'Help and support',
   '/profile': 'Profile', '/profile/join': 'Join a programme', '/profile/notifications': 'Notification settings', '/profile/privacy': 'Privacy', '/profile/tracker-designs': 'Tracker designs',
-  '/profile/trackers': 'Quick trackers', '/profile/units': 'Units and detail', '/progress/assess': 'Assessment', '/progress/goal': 'Goal (progress)', '/progress/lift': 'Lift detail',
+  '/profile/trackers': 'Quick trackers', '/profile/units': 'Units and detail', '/progress/goal': 'Goal (progress)', '/progress/lift': 'Lift detail',
   '/progress/metric': 'Metric detail', '/progress/photos': 'Photos', '/progress/streaks': 'Streaks and badges', '/welcome': 'Welcome', '/workout': 'Active workout',
   '(app shell)': 'App shell (layout, floating tab bar host, overlays)',
 };

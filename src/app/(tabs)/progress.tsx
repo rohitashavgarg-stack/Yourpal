@@ -3,7 +3,7 @@ import { HEALTH_NAME } from '@/lib/health';
 import { Image, RefreshControl, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { CalendarClock, ChevronRight, Flame, Lock } from '@/lib/icons';
+import { ChevronRight, Flame, Lock } from '@/lib/icons';
 import { useLook } from '@/features/progress/look';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -17,7 +17,7 @@ import { haptic } from '@/lib/haptics';
 import { CardKey, NEW_EMPTY, ORDER } from '@/features/progress/data';
 import { MetricKey, trend } from '@/features/progress/trends';
 import { MiniBars, RangeBar, RangeBarSlim } from '@/features/progress/TrendUI';
-import { CardTitle, CornerGlow, GrowBar, PCard, Spark } from '@/features/progress/parts';
+import { CardTitle, CornerGlow, PCard, Spark } from '@/features/progress/parts';
 import { progressStore } from '@/features/progress/store';
 import { AFTER_PHOTO, BEFORE_PHOTO } from '@/features/progress/photoAssets';
 import { FLAME } from '@/features/streak/StreakChip';
@@ -58,20 +58,18 @@ function ProgressCard({ k }: { k: CardKey }) {
   const mk = TK[k];
   const t = mk ? trend(mk, ps.range, new Date(ps.anchor), { weight: d.weight, water: d.water }) : null;
   const nums = t ? t.vals.filter((v): v is number => v != null) : [];
-  const assessNone = isNew || d.assess === 'None yet';
 
   const connect = k === 'steps' && !d.hc;
   let empty = isNew ? NEW_EMPTY[k] ?? '' : '';
   if (connect) empty = `Read from ${HEALTH_NAME} once you allow it.`;
 
   const titles: Record<CardKey, string> = {
-    weight: 'Weight', cons: 'Consistency', diet: 'Diet', lifts: 'Lifts & PRs', steps: 'Steps', meas: 'Measurements', assess: 'Assessments',
+    weight: 'Weight', cons: 'Consistency', diet: 'Diet', lifts: 'Lifts & PRs', steps: 'Steps', meas: 'Measurements',
     photos: 'Photos · Private', water: 'Water', hr: `Resting heart rate · ${HEALTH_NAME}`, sleep: `Sleep · ${HEALTH_NAME}`,
   };
   const open = () => {
     if (connect) { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. Steps sync automatically`); return; }
     if (k === 'lifts') { progressStore.set({ lift: 'Leg press' }); router.push('/progress/lift'); }
-    else if (k === 'assess') router.push('/progress/assess');
     else if (k === 'photos') router.push('/progress/photos');
     else router.push({ pathname: '/progress/metric', params: { k } });
   };
@@ -98,18 +96,6 @@ function ProgressCard({ k }: { k: CardKey }) {
       </Row>
     );
     const plain = (big: string, unit: string, sub: string, stack?: boolean) => left(big, unit, sub, stack);
-    // The headline, one plain line under it, then the next assessment in its own container with an icon and the date highlighted.
-    const assessBody = (big: string, line: string, lead: string, when: string, tail?: string) => (
-      <View style={{ gap: 16 }}>
-        <View style={{ gap: 2 }}><Big big={big} />{!!line && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{line}</Txt>}</View>
-        <Callout size="compact">
-          <Row style={{ gap: 10, alignItems: 'flex-start' }}>
-            <CalendarClock size={18} color={c.ink} />
-            <Txt v="caption" style={{ flex: 1, fontSize: fontSizes.sm }}>{lead} <Txt v="caption" style={{ fontFamily: font.bold, fontSize: fontSizes.sm, color: c.ink }}>{when}</Txt>{tail ? ` ${tail}` : ''}</Txt>
-          </Row>
-        </Callout>
-      </View>
-    );
     const withBars = (big: string, unit: string, sub: string) => (
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
         {left(big, unit, sub)}
@@ -132,7 +118,7 @@ function ProgressCard({ k }: { k: CardKey }) {
           </Row>
         )
         : withBars(t!.big, Number(t!.big) === 1 ? ' workout' : ' workouts', t!.sub); break;
-      case 'diet': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : <>{plain(t!.big, ' on plan', t!.sub)}<GrowBar pct={nums.length ? Math.round(nums.reduce((a, b) => a + b, 0) / nums.length) : 0} color={c.good} /></>; break;
+      case 'diet': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withBars(t!.big, ps.range === 'day' ? ' kcal' : ' kcal a day', t!.sub); break;
       case 'sleep': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withBars(t!.big, '', t!.sub); break;
       case 'steps': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withBars(t!.big, ps.range === 'day' ? ' steps' : ' / day', t!.sub); break;
       case 'water': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withBars(t!.big, ps.range === 'day' ? ' L' : ' L / day', t!.sub); break;
@@ -147,14 +133,6 @@ function ProgressCard({ k }: { k: CardKey }) {
           ))}
         </Row>
       ); break;
-      case 'assess': body = assessNone
-        ? assessBody('Not yet', '', 'Your first assessment is scheduled for', 'Sat 10:00 am', 'with Coach Vikram')
-        : d.assess === 'Only first'
-          ? assessBody('Starting point saved', 'Deep squat hold 30 s', 'Your next assessment is scheduled for', 'Tue 30 Sep')
-          : d.assess === 'Due now'
-            ? assessBody('Squat +20 kg', 'Deep squat hold 30 → 45 s', 'Your next assessment is due', 'this week')
-            : assessBody('Squat +20 kg', 'Deep squat hold 30 → 45 s', 'Your next assessment is scheduled for', 'this week');
-        break;
       case 'photos': body = (
         <>
           <Row style={{ gap: 8 }}>

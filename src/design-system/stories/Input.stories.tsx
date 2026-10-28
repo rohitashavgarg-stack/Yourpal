@@ -9,6 +9,7 @@ export default meta;
 type S = StoryObj<typeof meta>;
 export const Default: S = {};
 export const WithPrefix: S = { args: { prefix: '+91', placeholder: 'Phone number', keyboardType: 'phone-pad' } };
+export const WithCountryPicker: S = { args: { prefix: '+91', onPrefixPress: () => {}, prefixLabel: 'Country code +91, India. Change', placeholder: 'Phone number', keyboardType: 'phone-pad' } };
 export const Error: S = { args: { error: true, value: '12', placeholder: 'Code' } };
 function NoteDemo({ error }: { error?: boolean }) {
   const [v, setV] = React.useState('');

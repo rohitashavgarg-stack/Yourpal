@@ -12,7 +12,7 @@ export const NOTIFS: Notif[] = [
   { id: 'n0', p: 'gold', t: 'Confirm your PT session', s: 'Coach Vikram marked Tue 23 Sep, 6–7 pm as done. It confirms itself on Fri 26 Sep.', when: '2h', unread: true, to: '/gym/confirm', pt: true },
   { id: 'n1', p: 'gold', t: 'Coach Vikram updated your plan', s: 'Leg day: lunges added', when: '2h', unread: true, to: '/plans' },
   { id: 'n2', p: 'gold', t: 'Coach Vikram replied', s: '“Keep your back straight…”', when: '5h', unread: true, to: '/gym' },
-  { id: 'n3', p: 'gold', t: 'Reassessment due this week', s: 'Book with the front desk', when: '1d', unread: false, to: '/progress' },
+  { id: 'n3', p: 'gold', t: 'Assessment 3 is due this week', s: 'Book with the front desk', when: '1d', unread: false, to: '/gym' },
   { id: 'n4', p: 'gold', t: 'Membership expires in 12 days', s: 'Renew at the front desk', when: '1d', unread: false, to: '/gym' },
   { id: 'n5', p: 'mehta', t: 'Dr. Mehta · Evening routine', s: 'Tapping switches programme', when: '2d', unread: true },
 ];

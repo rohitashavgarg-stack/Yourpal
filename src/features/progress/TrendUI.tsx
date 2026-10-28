@@ -10,7 +10,7 @@ import { useOverlay } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { dow, RANGES, Range, shift, sod, START, TODAY, Trend, windowOf } from './trends';
+import { dow, onKcalTarget, RANGES, Range, shift, sod, START, TODAY, Trend, windowOf } from './trends';
 import { progressStore } from './store';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { IconButton, Button } from '@/design-system/primitives/Button';
@@ -177,7 +177,7 @@ export function TrendChart({ t, unit, height = 170, onSwipe, color }: { t: Trend
           {t.vals.map((v, i) => (
             <Pressy key={i} accessibilityRole="button" accessibilityLabel={v == null ? `${t.buckets[i].sub}, no data` : `${t.buckets[i].sub}, ${t.fmt(v)}${unit}`} haptics={false} scaleTo={1} onPress={() => { if (v != null) { haptic.tick(); setSel(sel === i ? null : i); } }}
               style={{ width: colW, height: chartH, alignItems: 'center', justifyContent: 'flex-end' }}>
-              {v == null ? <View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2 }} /> : <ChartBar h={Math.max(3, (v / max) * (chartH - 6))} w={barW} color={t.goal != null && v >= t.goal ? c.good : col} dim={sel != null && sel !== i} />}
+              {v == null ? <View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2 }} /> : <ChartBar h={Math.max(3, (v / max) * (chartH - 6))} w={barW} color={t.key.startsWith('diet-') ? (onKcalTarget(v) ? c.good : c.muted) : t.goal != null && v >= t.goal ? c.good : col} dim={sel != null && sel !== i} />}
             </Pressy>
           ))}
         </View>

@@ -228,7 +228,7 @@ function WelcomeStep({ isPT, assess, hasGym }: { isPT: boolean; assess: string; 
       </View>
       <Card style={{ gap: 0, padding: 6 }}>
         {hasGym && <InfoRow icon={<PersonAvatar who="coach" size={30} />} t="Coach Vikram" s="You can message him any time" />}
-        {hasGym && <InfoRow icon={<CalendarCheck size={19} color={c.muted} />} t={assess === 'Scheduled' ? 'Sat 10:00 am with Coach Vikram' : 'Assessment not booked yet'} s={assess === 'Scheduled' ? 'Your first assessment · about 30 min' : 'The front desk will book it. You can still set up now.'} warn={assess !== 'Scheduled'} />}
+        {hasGym && <InfoRow icon={<CalendarCheck size={19} color={c.muted} />} t={assess === 'Scheduled' ? 'Your first assessment with Coach Vikram' : 'Assessment not booked yet'} s={assess === 'Scheduled' ? 'About 30 min. Coach Vikram will confirm the day and time with you.' : 'The front desk will book it. You can still set up now.'} warn={assess !== 'Scheduled'} />}
         <InfoRow icon={<Dumbbell size={19} color={c.muted} />} t="3 quick questions to set up your plan" s="About a minute. You can change answers later." last />
       </Card>
     </>

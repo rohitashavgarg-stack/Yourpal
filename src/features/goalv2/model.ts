@@ -64,14 +64,14 @@ const SPEC: Record<Exclude<GoalKind, 'consistency'>, Spec> = {
   weight: { name: (t) => `Lose ${t} kg`, unit: 'kg', start: 74.5, target: (t) => 74.5 - t, down: true, dp: 1, noun: 'weight' },
   muscle: { name: (t) => `Gain ${t} kg muscle`, unit: 'kg', start: 70, target: (t) => 70 + t, down: false, dp: 1, noun: 'weight' },
   lean: { name: (t) => `Body fat −${t}%`, unit: '%', start: 24, target: (t) => 24 - t, down: true, dp: 1, noun: 'body fat' },
-  strength: { name: (t) => `Squat ${t} kg`, unit: 'kg', start: 40, target: (t) => t, down: false, dp: 0, measuredBy: 'assessment', noun: 'squat' },
-  flexibility: { name: () => 'Deep squat hold 60 s', unit: 's', start: 30, target: () => 60, down: false, dp: 0, measuredBy: 'assessment', noun: 'deep squat hold' },
+  strength: { name: (t) => `Bench press ${t} kg`, unit: 'kg', start: 40, target: (t) => t, down: false, dp: 0, measuredBy: 'assessment', noun: 'bench press' },
+  flexibility: { name: () => 'Toe touch 15 cm', unit: 'cm', start: 6, target: () => 15, down: false, dp: 0, measuredBy: 'assessment', noun: 'toe touch' },
   agility: { name: () => 'Shuttle run 12 s', unit: 's', start: 15, target: () => 12, down: true, dp: 1, measuredBy: 'assessment', noun: 'shuttle run' },
 };
 
 export type Goal2 = {
   kind: GoalKind;
-  name: string; // "Lose 6 kg", "Squat 80 kg", "Train 4× weekly"
+  name: string; // "Lose 6 kg", "Bench press 80 kg", "Train 4× weekly"
   startDate: Date;
   endDate: Date | null; // null only for consistency
   startValue: number;

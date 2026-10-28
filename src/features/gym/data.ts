@@ -16,8 +16,8 @@ export const VISITS: Record<number, string> = { 1: 'c', 2: 'c', 3: 'c', 4: 'c', 
 
 export const ASSESS = [
   { g: 'Body', tone: 'nutri', rows: [['Weight', '74.5 kg', '72.4 kg', '−2.1 kg', 1], ['Waist', '92 cm', '89 cm', '−3 cm', 1], ['Body fat', '27%', '25.5%', '−1.5%', 1]] },
-  { g: 'Strength', tone: 'act', rows: [['Squat · 5 reps', '40 kg', '60 kg', '+20 kg', 1], ['Push-ups · 1 set', '12', '18', '+6', 1]] },
-  { g: 'Mobility & fitness', tone: 'heart', rows: [['Deep squat hold', '30 s', '45 s', '+15 s', 1], ['Sit-and-reach', '−4 cm', '−4 cm', 'Same', 0], ['Resting heart rate', '78 bpm', '72 bpm', '−6 bpm', 1]] },
+  { g: 'Strength', tone: 'act', rows: [['Leg press · 5 reps', '80 kg', '120 kg', '+40 kg', 1], ['Bench press · 5 reps', '40 kg', '60 kg', '+20 kg', 1]] },
+  { g: 'Mobility & fitness', tone: 'heart', rows: [['Toe touch', '6 cm', '6 cm', 'Same', 0], ['Resting heart rate', '78 bpm', '72 bpm', '−6 bpm', 1]] },
 ] as { g: string; tone: 'nutri' | 'act' | 'heart'; rows: [string, string, string, string, number][] }[];
 
 export const STAR_WORDS = ['Tap a star to rate', 'Not great', 'Could be better', 'Good', 'Great', 'Excellent'];

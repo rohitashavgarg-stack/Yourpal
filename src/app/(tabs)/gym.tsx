@@ -1,13 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { ClipboardCheck } from '@/lib/icons';
+import { ClipboardCheck, MessageCircle } from '@/lib/icons';
 import { fadeOut } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { PersonAvatar } from '@/components/Brand';
 import { PillBtn, Tag } from '@/components/bits';
-import { Pressy, Row, Txt } from '@/components/ui';
+import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
@@ -17,7 +17,7 @@ import { CardTitle, cardShadow, GrowBar, ListCard, PCard } from '@/features/prog
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { MembershipCard as MembershipStrip, useMembershipNotice } from '@/features/today/PaymentBanner';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
-import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
@@ -62,9 +62,9 @@ function AssessCard() {
   const { c } = useTheme();
   const { d } = useDomain();
   const a = d.assess, none = a === 'None yet', only = a === 'Only first', due = a === 'Due now';
-  const big = none ? 'Sat 10:00 am' : only ? 'Baseline saved' : '7 of 8 improved';
-  const sub = none ? 'First assessment with Coach Vikram' : only ? '8 tests · 2 Sep' : 'Reassessment 1 · 30 Sep vs start';
-  const next = none ? 'Your plan is built from it' : due ? 'Reassessment 2 · book at the front desk' : only ? 'Next: Tue 30 Sep · Coach Vikram' : 'Next: Tue 28 Oct · Coach Vikram';
+  const big = none ? 'To be confirmed' : only ? 'Baseline saved' : '6 of 7 improved';
+  const sub = none ? 'First assessment with Coach Vikram' : only ? 'Assessment 1 · 7 tests · 2 Sep' : 'Assessment 2 · 30 Sep vs Assessment 1';
+  const next = none ? 'Coach Vikram will confirm the day and time' : due ? 'Assessment 3 · book at the front desk' : only ? 'Next: Tue 30 Sep · Coach Vikram' : 'Next: Tue 28 Oct · Coach Vikram';
   return (
     <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${big}. ${sub}`} style={{ gap: 8 }}>
       <CardTitle title="Assessments" right={due ? <Tag label="Due this week" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>View ›</Txt>} />
@@ -80,31 +80,32 @@ function AssessCard() {
   );
 }
 
+// Chat with the coach is the main thing in the Gym tab: it is the first card, dark like the main cards on Today, with one clear button. The photo and name open the coach's profile; the button opens the chat.
 function ChatCard() {
-  const { c } = useTheme();
   const { d } = useDomain();
   const last = [...d.chat].reverse().find((m) => !m.me);
   return (
-    <PCard onPress={() => router.push('/gym/chat')} label={last ? `Coach Vikram: ${last.t}. Open chat` : 'Chat with Coach Vikram'} style={{ gap: 10 }}>
+    <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 14 }}>
       <Row style={{ gap: 14 }}>
-        {/* Photo and name open the coach's profile; the rest of the card opens the chat. */}
+        {/* Photo and name open the coach's profile. */}
         <Pressy accessibilityRole="button" accessibilityLabel="Coach Vikram. View profile" onPress={() => router.push('/coach')} scaleTo={0.97} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-          <PersonAvatar who="coach" size={68} />
-          <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 26, letterSpacing: -0.4 }}>Coach Vikram</Txt><Txt v="caption">Your trainer · View profile</Txt></View>
+          <PersonAvatar who="coach" size={60} />
+          <View style={{ flex: 1 }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 26, letterSpacing: -0.4, color: onDark.text }}>Coach Vikram</Txt>
+            <Txt v="caption" color={onDark.muted}>Your trainer. Ask about form, your plan or food.</Txt>
+          </View>
         </Pressy>
-        <Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>Chat ›</Txt>
       </Row>
       {d.chat.length && last ? (
-        <>
-          <Txt>“{last.t}”</Txt>
-          <Txt v="caption">{last.meta}</Txt>
-        </>
-      ) : d.chat.length ? (
-        <Txt muted>You sent a message. Coach Vikram replies here.</Txt>
+        <View style={{ gap: 2 }}>
+          <Txt color={onDark.soft}>“{last.t}”</Txt>
+          <Txt v="caption" color={onDark.muted}>{last.meta}</Txt>
+        </View>
       ) : (
-        <Txt muted>Ask about form, your plan or the gym. Coach Vikram replies here.</Txt>
+        <Txt color={onDark.soft}>{d.chat.length ? 'You sent a message. Coach Vikram replies here.' : 'Send your first message. Coach Vikram replies here.'}</Txt>
       )}
-    </PCard>
+      <Button kind="white" label="Message Coach Vikram" icon={<MessageCircle size={18} color={fixed.dark} />} onPress={() => router.push('/gym/chat')} />
+    </View>
   );
 }
 
@@ -139,11 +140,11 @@ export default function Gym() {
   useGymScenarios('Gym');
   return (
     <TabScreen title="Gym" header={<GymHeader />} compactTitle={false}>
-      <FadeIn i={0}><GymMembership /></FadeIn>
+      <FadeIn i={0}><ChatCard /></FadeIn>
+      <FadeIn i={1}><GymMembership /></FadeIn>
       {d.onBreak && <BreakCard />}
-      <FadeIn i={1}><AttendanceCard awaiting={awaiting} /></FadeIn>
-      <FadeIn i={2}><AssessCard /></FadeIn>
-      <FadeIn i={3}><ChatCard /></FadeIn>
+      <FadeIn i={2}><AttendanceCard awaiting={awaiting} /></FadeIn>
+      <FadeIn i={3}><AssessCard /></FadeIn>
       <FadeIn i={4}><PTCard isPT={isPT} /></FadeIn>
       <FadeIn i={5}>
         <ListCard rows={[

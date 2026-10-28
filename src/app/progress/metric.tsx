@@ -18,6 +18,7 @@ import { cardShadow, CornerGlow, Hint, ListCard, SubPage } from '@/features/prog
 import { useLook } from '@/features/progress/look';
 import { progressStore } from '@/features/progress/store';
 import { RANGES, Range, shift, trend } from '@/features/progress/trends';
+import { KCAL_TARGET } from '@/lib/data';
 import { RangeBar, TrendChart } from '@/features/progress/TrendUI';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes } from '@/design-system/tokens';
@@ -26,7 +27,7 @@ import { Callout } from '@/design-system/primitives/Callout';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
-const TIP_UNIT: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: ' steps', water: ' L', hr: ' bpm', sleep: '', diet: '', cons: ' workouts' };
+const TIP_UNIT: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: ' steps', water: ' L', hr: ' bpm', sleep: '', diet: ' kcal', cons: ' workouts' };
 
 export default function MetricDetail() {
   const { c, isDark } = useTheme();
@@ -55,6 +56,7 @@ export default function MetricDetail() {
   const bigUnit = k === 'steps' ? (ps.range === 'day' ? ' steps' : ' steps / day') : k === 'water' ? (ps.range === 'day' ? ' L' : ' L / day') : k === 'cons' && Number(t.big) === 1 ? ' workout' : t.unit;
   const extra = k === 'steps' ? [{ l: 'Source', v: HEALTH_NAME }, { l: 'Daily goal', v: '8,000' }]
     : k === 'water' ? [{ l: 'Daily target', v: '3 L' }]
+    : k === 'diet' ? [{ l: 'Daily target', v: `${KCAL_TARGET.toLocaleString('en-IN')} kcal`, sub: 'Set by Coach Vikram' }]
     : k === 'hr' ? [{ l: 'Source', v: HEALTH_NAME }]
     : k === 'weight' ? [{ l: 'Started', v: '74.5 kg · 2 Sep' }] : [];
   const rows = [...t.stats, ...extra];
