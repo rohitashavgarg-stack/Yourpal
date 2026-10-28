@@ -14,7 +14,7 @@ export function useEarlySigns(): string {
   const down = Math.round((74.5 - d.weight) * 10) / 10;
   const parts = [
     `${st.weekDone} of ${st.target} ${st.target === 1 ? 'workout' : 'workouts'} this week`,
-    diet.hasData ? `diet ${diet.big} kcal a day` : null,
+    diet.hasData ? `diet ${diet.big} kcal avg. per day` : null,
     down > 0 ? `weight ↓${down.toFixed(1)} kg` : null,
   ].filter(Boolean);
   return `Early signs: ${parts.join(' · ')}`;
