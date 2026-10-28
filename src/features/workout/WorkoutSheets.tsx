@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { ArrowRightLeft, ChevronRight, MessageCircle, Play, Search, SkipForward, SlidersHorizontal } from '@/lib/icons';
+import { ArrowRightLeft, ChevronRight, MessageCircle, Play, Search, SkipForward } from '@/lib/icons';
 import { router } from 'expo-router';
 import { Button, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
@@ -43,7 +43,6 @@ export function WkMenuSheet({ api }: { api: ApiRef }) {
         <MenuRow icon={ArrowRightLeft} t="Swap exercise" s="Pick an alternative for today or for your plan" onPress={() => api.current.openSwap()} />
         <MenuRow icon={MessageCircle} t="Ask Coach Vikram" s="Opens chat with this exercise attached" onPress={() => api.current.askCoach()} />
         <MenuRow icon={Play} t="Form tips & video" s={`Cues for ${e.name}`} onPress={() => api.current.formTips()} />
-        <MenuRow icon={SlidersHorizontal} t="Options for the current set" s="Warm-up, note, copy to all sets" onPress={() => { const i = api.current.currentSet(); if (i >= 0) api.current.openSetMenu(i); }} />
         <MenuRow icon={SkipForward} t="Skip this exercise" s="Remaining sets are marked skipped" onPress={() => api.current.skipExercise()} last />
       </View>
     </>

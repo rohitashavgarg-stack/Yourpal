@@ -252,7 +252,7 @@ export function ReadyContent({ assess }: { assess: string }) {
     ['Injuries', p.injury === 'Yes' ? 'Shared with your coach' : 'None'],
   ];
   const next: [React.ReactNode, string, string][] = [
-    [<CalendarCheck key="book" size={17} color={c.ink} />, booked ? 'Assessment · Sat 10:00 am' : 'Book your assessment', booked ? 'A 30-minute check-in with Coach Vikram: measurements, movement and your goal.' : 'Ask at the front desk. Coach Vikram builds your plan from it.'],
+    [<CalendarCheck key="book" size={17} color={c.ink} />, booked ? 'Assessment with Coach Vikram' : 'Book your assessment', booked ? 'A 30-minute check-in: measurements, movement and your goal. Coach Vikram will confirm the day and time.' : 'Ask at the front desk. Coach Vikram builds your plan from it.'],
     [<ClipboardList key="plan" size={17} color={c.ink} />, 'Your plan lands on Today', "Workouts and meals from Coach Vikram. We'll notify you when it arrives."],
     [<Dumbbell key="train" size={17} color={c.ink} />, 'Start training', 'Until then, log your meals, water and weight.'],
   ];

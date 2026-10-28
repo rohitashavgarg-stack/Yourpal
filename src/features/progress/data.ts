@@ -2,18 +2,18 @@ import type { LiftName } from './store';
 import type { MetricKey } from './trends';
 export type { MetricKey } from './trends';
 
-export type CardKey = 'weight' | 'cons' | 'diet' | 'lifts' | 'steps' | 'meas' | 'assess' | 'photos' | 'water' | 'hr' | 'sleep';
+export type CardKey = 'weight' | 'cons' | 'diet' | 'lifts' | 'steps' | 'meas' | 'photos' | 'water' | 'hr' | 'sleep';
 
 export const ORDER: Record<string, CardKey[]> = {
-  'Weight loss': ['weight', 'assess', 'cons', 'diet', 'lifts', 'steps', 'hr', 'sleep', 'meas', 'photos', 'water'],
-  Strength: ['lifts', 'assess', 'cons', 'weight', 'diet', 'meas', 'hr', 'sleep', 'steps', 'photos', 'water'],
-  'Muscle gain': ['meas', 'assess', 'lifts', 'weight', 'diet', 'cons', 'sleep', 'hr', 'steps', 'photos', 'water'],
+  'Weight loss': ['weight', 'cons', 'diet', 'lifts', 'steps', 'hr', 'sleep', 'meas', 'photos', 'water'],
+  Strength: ['lifts', 'cons', 'weight', 'diet', 'meas', 'hr', 'sleep', 'steps', 'photos', 'water'],
+  'Muscle gain': ['meas', 'lifts', 'weight', 'diet', 'cons', 'sleep', 'hr', 'steps', 'photos', 'water'],
 };
 
 ORDER['Lean body'] = ORDER['Weight loss'];
-ORDER.Flexibility = ['assess', 'cons', 'meas', 'diet', 'weight', 'lifts', 'sleep', 'hr', 'steps', 'photos', 'water'];
-ORDER.Agility = ['assess', 'cons', 'lifts', 'diet', 'weight', 'meas', 'sleep', 'hr', 'steps', 'photos', 'water'];
-ORDER['General fitness'] = ['cons', 'steps', 'diet', 'weight', 'assess', 'lifts', 'meas', 'sleep', 'hr', 'photos', 'water'];
+ORDER.Flexibility = ['cons', 'meas', 'diet', 'weight', 'lifts', 'sleep', 'hr', 'steps', 'photos', 'water'];
+ORDER.Agility = ['cons', 'lifts', 'diet', 'weight', 'meas', 'sleep', 'hr', 'steps', 'photos', 'water'];
+ORDER['General fitness'] = ['cons', 'steps', 'diet', 'weight', 'lifts', 'meas', 'sleep', 'hr', 'photos', 'water'];
 ORDER['Not sure yet'] = ORDER['General fitness'];
 
 export const NEW_EMPTY: Partial<Record<CardKey, string>> = {
@@ -33,20 +33,15 @@ export const LIFT_DATA: Record<LiftName, { pr: string; prd: string; last: string
 export const LIFT_METRICS = ['Est. 1RM', 'Top weight', 'Volume'] as const;
 export const LIFT_TITLES = ['Estimated 1-rep max', 'Top weight', 'Weekly volume'];
 
-export const ASSESS_ROWS = [
-  { l: 'Weight', v: '74.5 → 72.4 kg' }, { l: 'Waist', v: '92 → 89 cm' }, { l: 'Body fat', v: 'Starting point → −1.5%' },
-  { l: 'Squat', v: '40 → 60 kg' }, { l: 'Deep squat hold', v: '30 → 45 s' },
-];
-
 export const GOALS = ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness'];
 export const NUMERIC_GOALS = ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'General fitness'];
-export const GOAL_VERB: Record<string, string> = { 'Weight loss': 'Lose (kg)', 'Muscle gain': 'Gain (kg)', 'Lean body': 'Lower body fat (%)', Strength: 'Squat target (kg)', 'General fitness': 'Train (days a week)' };
+export const GOAL_VERB: Record<string, string> = { 'Weight loss': 'Lose (kg)', 'Muscle gain': 'Gain (kg)', 'Lean body': 'Lower body fat (%)', Strength: 'Bench press target (kg)', 'General fitness': 'Train (days a week)' };
 export const GOAL_DEFAULT: Record<string, number> = { 'Weight loss': 6, 'Muscle gain': 3, 'Lean body': 3, Strength: 80, 'General fitness': 4 };
 
 export function goalTitle(g0: { type: string; target: number; by: string }) {
   // a numeric goal with no target would read "Train 0× weekly": fall back to the default target, or to the goal's own name
   const g = NUMERIC_GOALS.includes(g0.type) && !g0.target ? { ...g0, target: GOAL_DEFAULT[g0.type] ?? 0 } : g0;
-  let t = g.type === 'Weight loss' ? `Lose ${g.target} kg` : g.type === 'Muscle gain' ? `Gain ${g.target} kg` : g.type === 'Strength' ? `Squat ${g.target} kg`
+  let t = g.type === 'Weight loss' ? `Lose ${g.target} kg` : g.type === 'Muscle gain' ? `Gain ${g.target} kg` : g.type === 'Strength' ? `Bench press ${g.target} kg`
     : g.type === 'General fitness' ? `Train ${g.target}× weekly` : g.type === 'Lean body' ? `Body fat −${g.target}%` : g.type;
   if (g.by && g.by !== '—') t += ` by ${g.by}`;
   return t;

@@ -2,6 +2,7 @@
 // Values are deterministic mock numbers (same date, same value) that follow the story in the rest
 // of the app: joined 2 Sep at 74.5 kg, now 72.4 kg, today is Wed 24 Sep 2026.
 import { stepsStore } from '@/features/today/StepsCards';
+import { KCAL_TARGET } from '@/lib/data';
 
 
 export type Range = 'day' | 'week' | 'month' | 'year';
@@ -65,7 +66,7 @@ export function dayVal(k: MetricKey, d: Date, live: Live): number | null {
     case 'weight': return today ? live.weight : Math.round((74.5 - 0.095 * i + (r - 0.5) * 0.3) * 10) / 10;
     case 'meas': return Math.round((92 - 0.13 * i) * 10) / 10;
     case 'cons': return today ? 0 : [0, 2, 3, 5].includes(dow(day)) && r > 0.12 ? 1 : 0;
-    case 'diet': return Math.round(Math.min(96, 68 + i * 0.5 + r * 22));
+    case 'diet': return Math.round(1500 + r * 520); // calories eaten that day
     case 'steps': return today ? 5230 + stepsStore.get().manual.reduce((a, e) => a + e.n, 0) : Math.round(4200 + r * 5400 + (dow(day) >= 5 ? 900 : 0));
     case 'water': return today ? live.water : Math.round((1.6 + r * 1.6) * 10) / 10;
     case 'hr': return Math.round(70 - i * 0.25 + (r - 0.5) * 2);
@@ -84,7 +85,10 @@ export const HOURLY: MetricKey[] = ['steps', 'water', 'hr'];
 export type Bucket = { label: string; sub: string };
 export type Kind = 'bars' | 'line';
 export const KIND: Record<MetricKey, Kind> = { steps: 'bars', water: 'bars', cons: 'bars', diet: 'bars', sleep: 'bars', weight: 'line', hr: 'line', meas: 'line' };
-export const GOAL: Partial<Record<MetricKey, number>> = { steps: 8000, water: 3 };
+export const GOAL: Partial<Record<MetricKey, number>> = { steps: 8000, water: 3, diet: KCAL_TARGET };
+// Calories: a day counts as on target within this share of the daily target (10%).
+export const KCAL_BAND = 0.1;
+export const onKcalTarget = (n: number) => Math.abs(n - KCAL_TARGET) <= KCAL_TARGET * KCAL_BAND;
 
 function daysOf(win: Win) { const out: Date[] = []; for (let d = win.start; d <= win.end; d = addDays(d, 1)) out.push(d); return out; }
 const isSum = (k: MetricKey) => k === 'cons';
@@ -98,7 +102,7 @@ function agg(k: MetricKey, vs: (number | null)[]) {
 
 export type Trend = {
   win: Win; buckets: Bucket[]; vals: (number | null)[]; kind: Kind; goal?: number; key: string;
-  big: string; unit: string; sub: string; hasData: boolean; empty?: string; stats: { l: string; v: string }[];
+  big: string; unit: string; sub: string; hasData: boolean; empty?: string; stats: { l: string; v: string; sub?: string }[];
   fmt: (n: number) => string;
 };
 
@@ -110,12 +114,17 @@ function formatter(k: MetricKey) {
       case 'water': return `${Math.round(n * 10) / 10}`;
       case 'hr': return `${Math.round(n)}`;
       case 'sleep': { const h = Math.floor(n), m = Math.round((n - h) * 60); return `${h}h ${m < 10 ? '0' : ''}${m}m`; }
-      case 'diet': return `${Math.round(n)}%`;
+      case 'diet': return Math.round(n).toLocaleString('en-IN');
       case 'cons': return `${Math.round(n * 10) / 10}`;
     }
   };
 }
-const UNIT_OF: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: '', water: ' L', hr: ' bpm', sleep: '', diet: '', cons: '' };
+// What the highest and lowest reading is called for each metric.
+const EXTREME_LABELS: Record<MetricKey, [string, string]> = {
+  weight: ['Heaviest', 'Lightest'], meas: ['Largest', 'Smallest'], steps: ['Most steps', 'Fewest steps'], water: ['Most water', 'Least water'],
+  hr: ['Highest reading', 'Lowest reading'], sleep: ['Longest sleep', 'Shortest sleep'], diet: ['Most eaten', 'Least eaten'], cons: ['Most workouts', 'Fewest workouts'],
+};
+const UNIT_OF: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: '', water: ' L', hr: ' bpm', sleep: '', diet: ' kcal', cons: '' };
 
 export function trend(k: MetricKey, range: Range, anchor: Date, live: Live): Trend {
   const win = windowOf(range, anchor);
@@ -171,26 +180,32 @@ export function trend(k: MetricKey, range: Range, anchor: Date, live: Live): Tre
     const dv = bigN - prevN;
     const arrow = Math.abs(dv) < (k === 'weight' ? 0.05 : 0.5) ? '→' : dv > 0 ? '↑' : '↓';
     const mag = k === 'steps' ? Math.round(Math.abs(dv)).toLocaleString('en-IN') : k === 'sleep' ? `${Math.round(Math.abs(dv) * 60)} min` : fmt(Math.abs(dv)).replace('%', '');
-    sub = arrow === '→' ? `About the same as ${word}` : `${arrow}${mag}${k === 'weight' ? ' kg' : k === 'diet' ? '%' : ''} vs ${word}`;
+    sub = arrow === '→' ? `About the same as ${word}` : `${arrow}${mag}${k === 'weight' ? ' kg' : k === 'diet' ? ' kcal' : ''} vs ${word}`;
   }
   if (k === 'steps' || k === 'water') sub = `${totalKind ? 'Total today' : range === 'day' ? 'Total' : 'Daily average'}\n${sub}`;
   if (k === 'sleep') sub = `Average per night\n${sub}`;
+  if (k === 'diet') sub = `${range === 'day' ? 'Eaten' : 'Average'}, target ${KCAL_TARGET.toLocaleString('en-IN')} kcal\n${sub}`;
   if (k === 'weight') sub = `${range === 'day' ? 'Reading' : 'Average'}\n${sub}`;
 
   const big = bigN == null ? '—' : fmt(bigN);
-  const unit = k === 'diet' ? ' on plan' : k === 'cons' ? (range === 'day' ? ' workouts' : ' workouts') : UNIT_OF[k];
+  const unit = k === 'diet' ? (range === 'day' ? ' kcal' : ' kcal a day') : k === 'cons' ? (range === 'day' ? ' workouts' : ' workouts') : UNIT_OF[k];
 
   // stats under the chart
-  const stats: { l: string; v: string }[] = [];
+  const stats: { l: string; v: string; sub?: string }[] = [];
   if (hasData) {
     const shown = vals.filter((x): x is number => x != null);
     if (shown.length) {
-      stats.push({ l: 'Highest', v: `${fmt(Math.max(...shown))}${UNIT_OF[k]}` }, { l: 'Lowest', v: `${fmt(Math.min(...shown))}${UNIT_OF[k]}` });
+      // Say what the number is and when it happened ("Most steps, 9,200, Wed 22 Oct"), not a bare "Highest" and "Lowest".
+      const hi = Math.max(...shown), lo = Math.min(...shown);
+      const when = (n: number) => buckets[vals.findIndex((x) => x === n)]?.sub;
+      const [hiL, loL] = EXTREME_LABELS[k];
+      const show = (n: number) => (k === 'cons' ? `${fmt(n)} ${n === 1 ? 'workout' : 'workouts'}` : `${fmt(n)}${UNIT_OF[k]}`);
+      stats.push({ l: hiL, v: show(hi), sub: when(hi) }, { l: loL, v: show(lo), sub: when(lo) });
     }
     if (k === 'steps') { const gd = have.filter((x) => x >= 8000).length; stats.push({ l: 'Days at 8,000+', v: `${gd} of ${have.length}` }, { l: 'Total steps', v: have.reduce((a, b) => a + b, 0).toLocaleString('en-IN') }); }
     if (k === 'water') { const gd = have.filter((x) => x >= 3).length; stats.push({ l: 'Days at 3 L', v: `${gd} of ${have.length}` }); }
     if (k === 'cons') stats.push({ l: 'Active days', v: `${have.filter((x) => x > 0).length} of ${have.length}` });
-    if (k === 'diet') stats.push({ l: 'Days above 80%', v: `${have.filter((x) => x >= 80).length} of ${have.length}` });
+    if (k === 'diet') stats.push({ l: 'Days on target', sub: `Within ${KCAL_BAND * 100}% of ${KCAL_TARGET.toLocaleString('en-IN')} kcal`, v: `${have.filter(onKcalTarget).length} of ${have.length}` });
   }
 
   const empty = !hasData ? (win.end < sod(START) ? `No data yet. You joined on ${fmtDay(START)}.` : win.start > TODAY ? 'Nothing here yet.' : 'No entries for this period.') : undefined;

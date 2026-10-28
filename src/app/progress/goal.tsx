@@ -50,7 +50,7 @@ export default function EditGoal() {
             <StepBtn label="Raise target" sign="+" onPress={() => setG({ ...g, target: Math.round((g.target + st) * 10) / 10 })} />
           </Row>
         ) : (
-          <Txt muted style={{ fontSize: fontSizes.md }}>Measured with assessment tests (deep squat hold, sit-and-reach, shuttle run). Coach Vikram sets the targets with you.</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md }}>Measured with assessment tests (toe touch, shuttle run). Coach Vikram sets the targets with you.</Txt>
         )}
         {g.type === 'Weight loss' && g.target > 15 && (
           <FadeIn exiting={fadeOut()} style={{ paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: c.warnSoft }}>

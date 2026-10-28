@@ -18,6 +18,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { INDIA, isValidNumber, Country } from '@/lib/countries';
+import { CountrySheet } from '@/features/shell/CountrySheet';
 import { Callout } from '@/design-system/primitives/Callout';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
@@ -31,6 +33,7 @@ export default function Login() {
   const sc = state.sc;
   const [step, setStep] = useState<Step>('phone');
   const [phone, setPhone] = useState(state.phone || '');
+  const [country, setCountry] = useState<Country>(INDIA);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<'none' | 'notFound' | 'offline' | 'invalid'>('none');
   const [code, setCode] = useState('');
@@ -100,7 +103,7 @@ export default function Login() {
     return () => clearTimeout(t);
   }, [code]);
 
-  const valid = /^[6-9]\d{9}$/.test(phone);
+  const valid = isValidNumber(country, phone);
   const send = () => {
     if (!valid) { setErr('invalid'); haptic.error(); return; }
     if (sc.net === 'Offline') { setErr('offline'); haptic.error(); return; }
@@ -113,7 +116,8 @@ export default function Login() {
   };
 
   const openJoin = () => openSheet(<JoinCode onDone={() => { toast("Code accepted. You're joining Wulf Fitness"); }} />, { label: 'Join with a code' });
-  const masked = phone ? `+91 ${phone.slice(0, 2)}xxx x${phone.slice(-4)}` : '';
+  const masked = phone ? `${country.code} ${phone.slice(0, 2)}xxx x${phone.slice(-4)}` : '';
+  const pickCountry = () => openSheet(<CountrySheet value={country} onPick={(k) => { setCountry(k); setPhone((p) => p.slice(0, k.max)); setErr('none'); }} />, { label: 'Country code' });
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
@@ -137,9 +141,11 @@ export default function Login() {
               <Txt muted>Use the number you gave your gym. We&apos;ll text you a code.</Txt>
             </View>
             <Field
-              prefix="+91"
+              prefix={country.code}
+              onPrefixPress={pickCountry}
+              prefixLabel={`Country code ${country.code}, ${country.name}. Change`}
               value={phone}
-              onChangeText={(t) => { setPhone(t.replace(/\D/g, '').slice(0, 10)); if (err !== 'none') setErr('none'); }}
+              onChangeText={(t) => { setPhone(t.replace(/\D/g, '').slice(0, country.max)); if (err !== 'none') setErr('none'); }}
               keyboardType="phone-pad"
               textContentType="telephoneNumber"
               autoComplete="tel"
@@ -149,7 +155,7 @@ export default function Login() {
               returnKeyType="done"
               onSubmitEditing={send}
             />
-            {err === 'invalid' && <FadeIn><Txt v="caption" color={c.warn}>Enter a 10-digit mobile number.</Txt></FadeIn>}
+            {err === 'invalid' && <FadeIn><Txt v="caption" color={c.warn}>{country.min === country.max ? `Enter a ${country.max}-digit mobile number.` : `Enter your mobile number.`}</Txt></FadeIn>}
             {err === 'notFound' && (
               <FadeIn>
                 <Callout tone="warn" size="lg" gap={10}>
@@ -164,7 +170,7 @@ export default function Login() {
             )}
             {err === 'offline' && <OfflineBanner />}
             <View style={{ flexGrow: 1 }} />
-            <Button label={busy ? 'Sending code…' : 'Send code'} onPress={send} disabled={busy || phone.length < 10} />
+            <Button label={busy ? 'Sending code…' : 'Send code'} onPress={send} disabled={busy || phone.length < country.min} />
             <Pressy accessibilityRole="button" onPress={openJoin} style={{ height: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
               <Ticket size={17} color={c.accentText} />
               <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>I have a join code from my gym</Txt>

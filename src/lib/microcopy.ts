@@ -96,7 +96,7 @@ export const updateCopy = {
   membership: { title: 'Your membership ends in 12 days', body: 'It expires on 6 Oct. Renew at Wulf Fitness reception to keep going.' },
   plan: { title: 'Coach Vikram updated your plan', body: 'Leg day has a few changes: lunges added, leg extension removed.' },
   reply: { title: 'Coach Vikram replied to you', body: '“Keep your back straight on rows.”' },
-  reassess: (first: string) => ({ title: `Your reassessment is due${nm(first)}`, body: 'Book a slot at the front desk this week so Coach Vikram can update your plan.' }),
+  reassess: (first: string) => ({ title: `Your next assessment is due${nm(first)}`, body: 'Book a slot at the front desk this week so Coach Vikram can update your plan.' }),
   memberSoon: { title: 'Your membership ends soon', body: 'It expires in 12 days. Renew at the front desk to keep your plan going.' },
   checkedIn: (first: string, at: string) => ({ title: `You checked in at ${at}`, body: `Log today's workout when you are done${nm(first)}.` }),
 };

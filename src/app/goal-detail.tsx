@@ -25,7 +25,7 @@ import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 
 type Past = { name: string; when: string; result: string; amount?: string };
 const HISTORY: Past[] = [
-  { name: 'Squat 60 kg', when: 'Mar to Jun 2026', result: 'Reached' },
+  { name: 'Bench press 60 kg', when: 'Mar to Jun 2026', result: 'Reached' },
   { name: 'Lose 4 kg', when: 'Oct 2025 to Jan 2026', result: 'Reached', amount: '4.0 kg' },
 ];
 
@@ -166,7 +166,7 @@ function History({ extra }: { extra: Past[] }) {
 }
 
 function assessLine(a: string) {
-  return a === 'Two done' ? { l: 'Latest 30 Sep', s: 'Next one is due this week' } : a === 'Only first' ? { l: 'Starting point saved 2 Sep', s: 'Next: Tue 30 Sep' } : a === 'Due now' ? { l: 'Latest 30 Sep', s: 'Due now. Book with the front desk' } : { l: 'No assessment yet', s: 'First one Sat 10:00 am' };
+  return a === 'Two done' ? { l: 'Assessment 2 on 30 Sep', s: 'Assessment 3 is due this week' } : a === 'Only first' ? { l: 'Assessment 1 on 2 Sep', s: 'Next: Tue 30 Sep' } : a === 'Due now' ? { l: 'Assessment 2 on 30 Sep', s: 'Assessment 3 is due. Book with the front desk' } : { l: 'No assessment yet', s: 'Coach Vikram will confirm the day and time' };
 }
 
 export default function GoalDetail() {
@@ -242,7 +242,7 @@ export default function GoalDetail() {
           <Drivers g={g} />
           {g.measuredBy === 'assessment' && <Section title="How it is measured" />}
           {g.measuredBy === 'assessment' && (
-            <Pressy accessibilityRole="button" onPress={() => router.push('/progress/assess')} scaleTo={0.98}>
+            <Pressy accessibilityRole="button" onPress={() => router.push('/gym/assessments')} scaleTo={0.98}>
               <Card variant="compact" gap={12}>
                 <Row style={{ gap: 12 }}>
                   <IconBadge size={40} bg={c.accentSoft}><ClipboardCheck size={19} color={c.accentText} /></IconBadge>

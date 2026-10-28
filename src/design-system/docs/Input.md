@@ -18,6 +18,7 @@ Every `TextInput` prop, a ref (`forwardRef`), and:
 | Prop | Type | Default | What it does |
 |---|---|---|---|
 | `prefix` | string | none | Muted text before the input ("+91") |
+| `onPrefixPress` | () => void | none | Makes the prefix a button with a small arrow (a country code the member can change). `prefixLabel` is its spoken label |
 | `error` | boolean | false | 1.5 px amber line |
 | `style` | TextStyle | none | Applied to the inner TextInput |
 

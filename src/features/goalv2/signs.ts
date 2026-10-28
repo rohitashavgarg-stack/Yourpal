@@ -1,6 +1,7 @@
 import { useDomain } from '@/lib/domain';
 import { useStreak } from '@/features/streak/useStreak';
 import { TODAY, trend } from '@/features/progress/trends';
+import { KCAL_TARGET } from '@/lib/data';
 import { goalV2Store, GoalDesignVersion, STATUS_SCENARIOS, StatusScenario } from './model';
 import { ScenarioRow } from '@/lib/store';
 import { WEEK_TARGET } from '@/features/streak/data';
@@ -13,7 +14,7 @@ export function useEarlySigns(): string {
   const down = Math.round((74.5 - d.weight) * 10) / 10;
   const parts = [
     `${st.weekDone} of ${st.target} ${st.target === 1 ? 'workout' : 'workouts'} this week`,
-    diet.hasData ? `diet ${diet.big} on plan` : null,
+    diet.hasData ? `diet ${diet.big} kcal a day` : null,
     down > 0 ? `weight ↓${down.toFixed(1)} kg` : null,
   ].filter(Boolean);
   return `Early signs: ${parts.join(' · ')}`;
@@ -28,7 +29,7 @@ export function useDrivers(): Driver[] {
   const down = Math.round((74.5 - d.weight) * 10) / 10;
   const clamp = (v: number) => Math.max(0, Math.min(1, v));
   const out: Driver[] = [{ key: 'workouts', label: 'Workouts this week', value: `${st.weekDone}/${st.target}`, unit: '', pct: clamp(st.weekDone / Math.max(1, st.target)) }];
-  if (diet.hasData) out.push({ key: 'diet', label: 'Diet on plan', value: diet.big, unit: diet.unit, pct: clamp((parseFloat(diet.big) || 0) / 100) });
+  if (diet.hasData) out.push({ key: 'diet', label: 'Calories a day', value: diet.big, unit: ' kcal', pct: clamp(1 - Math.abs((parseFloat(diet.big.replace(/,/g, '')) || 0) - KCAL_TARGET) / KCAL_TARGET) });
   if (down > 0) out.push({ key: 'weight', label: 'Weight down', value: down.toFixed(1), unit: ' kg', pct: clamp(down / 6) });
   return out;
 }
