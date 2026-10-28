@@ -69,7 +69,7 @@ export default function GymAssessments() {
               <Path d="M0 140 C 90 110 180 170 260 130 S 340 120 400 140 V 900 H0z" fill={fixed.white} opacity={0.08} />
             </Svg>
             <Txt style={{ fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.85)' }}>{showStart ? 'Assessment 1 · 2 Sep' : 'Assessment 2 · 30 Sep vs Assessment 1'}</Txt>
-            <Txt style={{ fontFamily: font.display, fontSize: 34, lineHeight: 44, color: fixed.white }}>{showStart ? '7 tests recorded' : '6 of 7 improved'}</Txt>
+            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl5, lineHeight: 44, color: fixed.white }}>{showStart ? '7 tests recorded' : '6 of 7 improved'}</Txt>
             <Txt style={{ fontSize: fontSizes.md, color: 'rgba(255,255,255,0.9)' }}>{showStart ? 'Your baseline. Every later assessment is compared with this.' : 'Biggest win: leg press +40 kg. Next focus: toe touch.'}</Txt>
           </LinearGradient>
           {!only && (
