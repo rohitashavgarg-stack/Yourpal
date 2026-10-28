@@ -1,5 +1,7 @@
 # Design changelog (generated)
 
+- 2026-10-28 `14bb3be` Page titles and the Today greeting share one smaller size (28 px) so the greeting does not wrap (features)
+
 - 2026-10-28 `a27b8d3` Today: greeting in the page title type; workout complete card without Time and with the number of exercises marked (screens, library, features)
 - 2026-10-27 `fda1b10` publish: icon button glass look on web and Android (docs)
 
