@@ -36,7 +36,7 @@ export function TodayGreeting() {
   const ctx = forceCtx(base, g.state);
   const { top, lead, hl, tail } = greeting(ctx, first);
   // the same type as a page title (Plans, Progress, Gym): one size and one typeface for every greeting too
-  const big = { fontFamily: font.regular, fontSize: fontSizes.xl5, lineHeight: 44, letterSpacing: -1.4, color: c.muted } as const; // both lines: light, grey; the key phrase is brighter
+  const big = { fontFamily: font.regular, fontSize: fontSizes.xl3Plus, lineHeight: 37, letterSpacing: -1.1, color: c.muted } as const; // both lines: light, grey; the key phrase is brighter
   return (
     <View accessible accessibilityLabel={`${top}. ${lead ? lead + ' ' : ''}${hl}${tail ?? ''}`} style={{ paddingHorizontal: 4, paddingTop: 12, gap: 0 }}>
       <Txt style={big}>{top}</Txt>
