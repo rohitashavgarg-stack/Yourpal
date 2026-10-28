@@ -22,6 +22,7 @@ export const Tight: S = { args: { variant: 'tight' } };
 /** Filled with the soft accent colour: a summary (the confirmed session). */
 export const AccentTone: S = { args: { variant: 'roomy', tone: 'accent', flat: true } };
 export const WarnTone: S = { args: { variant: 'roomy', tone: 'warn', flat: true } };
+export const OutlineOnly: S = { args: { variant: 'tight', tone: 'none', flat: true, border: { color: fixed.blue, width: 1 } } };
 export const Flat: S = { args: { variant: 'tight', flat: true } };
 /** A line around it: the selected plan on the break page uses a 1.5 px accent line. */
 export const Border: S = { args: { variant: 'tight', border: { color: fixed.blue, width: 1.5 } } };
