@@ -188,7 +188,7 @@ export function trend(k: MetricKey, range: Range, anchor: Date, live: Live): Tre
   if (k === 'weight') sub = `${range === 'day' ? 'Reading' : 'Average'}\n${sub}`;
 
   const big = bigN == null ? '—' : fmt(bigN);
-  const unit = k === 'diet' ? (range === 'day' ? ' kcal' : ' kcal a day') : k === 'cons' ? (range === 'day' ? ' workouts' : ' workouts') : UNIT_OF[k];
+  const unit = k === 'diet' ? (range === 'day' ? ' kcal' : ' kcal avg. per day') : k === 'cons' ? (range === 'day' ? ' workouts' : ' workouts') : UNIT_OF[k];
 
   // stats under the chart
   const stats: { l: string; v: string; sub?: string }[] = [];

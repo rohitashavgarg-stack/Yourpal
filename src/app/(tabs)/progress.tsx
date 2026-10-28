@@ -118,7 +118,7 @@ function ProgressCard({ k }: { k: CardKey }) {
           </Row>
         )
         : withBars(t!.big, Number(t!.big) === 1 ? ' workout' : ' workouts', t!.sub); break;
-      case 'diet': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withBars(t!.big, ps.range === 'day' ? ' kcal' : ' kcal a day', t!.sub); break;
+      case 'diet': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withBars(t!.big, t!.unit, t!.sub.split('\n').slice(1).join('\n')); break; // the headline line says it all; only the change is under it
       case 'sleep': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withBars(t!.big, '', t!.sub); break;
       case 'steps': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withBars(t!.big, ps.range === 'day' ? ' steps' : ' / day', t!.sub); break;
       case 'water': body = noData ? <Txt muted style={{ fontSize: fontSizes.md }}>{t!.empty}</Txt> : withBars(t!.big, ps.range === 'day' ? ' L' : ' L / day', t!.sub); break;
