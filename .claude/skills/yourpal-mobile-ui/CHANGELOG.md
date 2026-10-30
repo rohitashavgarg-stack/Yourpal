@@ -1,5 +1,9 @@
 # Design changelog (generated)
 
+- 2026-10-28 `cbb3289` Diet card: one headline line, 1,766 kcal avg. per day (screens, features)
+- 2026-10-28 `d15d37a` Use the font size token on the assessments hero (screens)
+- 2026-10-28 `2962bc5` Assessments on Gym only, Assessment 1/2/3 names, toe touch and leg press and bench tests, calories-first diet, chat first on Gym, country code picker, clearer highest and lowest (screens, library, features)
+
 - 2026-10-28 `98a4656` Stories: use the design-system white, not a hard-coded colour (other)
 - 2026-10-28 `e50b64a` Storybook: stories for the section heading, the titled list (logged too) and the outline-only card (other)
 - 2026-10-28 `44811a0` publish: page titles and greeting at 28 px (docs)

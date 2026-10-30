@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-28",
+ "generated": "2026-10-30",
  "library": [
   {
    "name": "AmountStepper",
@@ -69,7 +69,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Callout.tsx",
    "doc": true,
-   "uses": 17,
+   "uses": 16,
    "files": 13,
    "inLibrary": 0
   },
@@ -78,8 +78,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Card.tsx",
    "doc": true,
-   "uses": 68,
-   "files": 31,
+   "uses": 66,
+   "files": 30,
    "inLibrary": 5
   },
   {
@@ -114,8 +114,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/FadeIn.tsx",
    "doc": true,
-   "uses": 142,
-   "files": 49,
+   "uses": 140,
+   "files": 48,
    "inLibrary": 4
   },
   {
@@ -186,8 +186,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/ListCard.tsx",
    "doc": true,
-   "uses": 24,
-   "files": 18,
+   "uses": 23,
+   "files": 17,
    "inLibrary": 3
   },
   {
@@ -222,9 +222,9 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Pressy.tsx",
    "doc": true,
-   "uses": 105,
-   "files": 50,
-   "inLibrary": 31
+   "uses": 106,
+   "files": 51,
+   "inLibrary": 32
   },
   {
    "name": "ProgressBar",
@@ -258,8 +258,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Row.tsx",
    "doc": true,
-   "uses": 220,
-   "files": 57,
+   "uses": 221,
+   "files": 58,
    "inLibrary": 54
   },
   {
@@ -339,8 +339,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/SubPage.tsx",
    "doc": true,
-   "uses": 30,
-   "files": 30,
+   "uses": 29,
+   "files": 29,
    "inLibrary": 0
   },
   {
@@ -348,7 +348,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Tag.tsx",
    "doc": true,
-   "uses": 30,
+   "uses": 31,
    "files": 18,
    "inLibrary": 1
   },
@@ -366,7 +366,7 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 880,
+   "uses": 873,
    "files": 87,
    "inLibrary": 138
   },
@@ -533,11 +533,15 @@
    "inLibrary": 0
   }
  ],
- "count": 89,
- "toBuild": 86,
+ "count": 90,
+ "toBuild": 87,
  "onPurpose": 3,
  "demoPanelExcluded": 21,
  "byGroup": {
+  "Other": {
+   "total": 1,
+   "onPurpose": 0
+  },
   "Today": {
    "total": 12,
    "onPurpose": 0
@@ -815,21 +819,28 @@
    "group": "Workout session"
   },
   {
-   "where": "src/features/workout/WorkoutSheets.tsx:86",
+   "where": "src/features/workout/WorkoutSheets.tsx:85",
    "kind": "button or pill",
    "look": "button 56 px high, radius radii.xl",
    "jsx": "<Pressy accessibilityRole=\"search\" accessibilityLabel=\"Search all exercises\" onPress={() => closeSheet(() => r",
    "group": "Bottom sheets"
   },
   {
-   "where": "src/features/workout/WorkoutSheets.tsx:96",
+   "where": "src/features/workout/WorkoutSheets.tsx:95",
    "kind": "button or pill",
    "look": "button 60 px high, radius radii.md",
    "jsx": "<Pressy key={a.n} accessibilityRole=\"button\" accessibilityLabel={`${a.n}. ${a.s}`} onPress={() => api.current.",
    "group": "Bottom sheets"
   },
   {
-   "where": "src/app/(tabs)/progress.tsx:179",
+   "where": "src/app/(tabs)/gym.tsx:88",
+   "kind": "card",
+   "look": "card radius radii.xl, fill onDark.card, padding 18",
+   "jsx": "<View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 14 }}>",
+   "group": "Other"
+  },
+  {
+   "where": "src/app/(tabs)/progress.tsx:157",
    "kind": "card",
    "look": "card radius 20, fill c.surface2",
    "jsx": "<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: ",
@@ -997,7 +1008,7 @@
    "group": "Plans and food logging"
   },
   {
-   "where": "src/app/gym/assessments.tsx:77",
+   "where": "src/app/gym/assessments.tsx:82",
    "kind": "icon badge",
    "look": "dot 8 px",
    "jsx": "<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone] }} />",
