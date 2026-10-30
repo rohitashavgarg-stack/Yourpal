@@ -6,14 +6,25 @@
    "files": [
     "app/(tabs)/gym.tsx"
    ],
-   "hand": [],
+   "hand": [
+    {
+     "kind": "card",
+     "sig": "card radius radii.xl, fill onDark.card, padding 18",
+     "fn": "ChatCard",
+     "line": 88,
+     "tag": "View",
+     "text": "<View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 14 }}>",
+     "file": "app/(tabs)/gym.tsx"
+    }
+   ],
    "ds": {
     "FadeIn": 7,
-    "Txt": 20,
+    "Txt": 18,
     "Row": 3,
     "StatusDot": 1,
     "IconBadge": 1,
-    "Pressy": 1
+    "Pressy": 1,
+    "Button": 1
    },
    "sheets": [],
    "scenarios": [],
@@ -466,16 +477,16 @@
      "kind": "card",
      "sig": "card radius 20, fill c.surface2",
      "fn": "ProgressCard",
-     "line": 179,
+     "line": 157,
      "tag": "View",
      "text": "<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: ",
      "file": "app/(tabs)/progress.tsx"
     }
    ],
    "ds": {
-    "Txt": 29,
-    "Row": 9,
-    "Callout": 3,
+    "Txt": 26,
+    "Row": 8,
+    "Callout": 2,
     "IconBadge": 1,
     "ProgressSegments": 1,
     "FadeIn": 4
@@ -780,7 +791,7 @@
      "kind": "icon badge",
      "sig": "dot 8 px",
      "fn": "GymAssessments",
-     "line": 77,
+     "line": 82,
      "tag": "View",
      "text": "<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone] }} />",
      "file": "app/gym/assessments.tsx"
@@ -792,15 +803,15 @@
     "IconBadge": 1,
     "Txt": 15,
     "Pill": 1,
-    "Row": 2,
-    "Button": 2
+    "Row": 3,
+    "Button": 3
    },
    "sheets": [],
    "scenarios": [],
    "reachedFrom": [
     "app/(tabs)/gym.tsx",
     "app/coach.tsx",
-    "app/progress/assess.tsx"
+    "app/goal-detail.tsx"
    ]
   },
   {
@@ -1022,8 +1033,7 @@
    "scenarios": [],
    "reachedFrom": [
     "app/(tabs)/gym.tsx",
-    "app/gym/assessments.tsx",
-    "app/progress/assess.tsx"
+    "app/gym/assessments.tsx"
    ]
   },
   {
@@ -1090,7 +1100,8 @@
    "file": "app/login.tsx",
    "files": [
     "app/login.tsx",
-    "components/OtpInput.tsx"
+    "components/OtpInput.tsx",
+    "features/shell/CountrySheet.tsx"
    ],
    "hand": [
     {
@@ -1105,19 +1116,26 @@
    ],
    "ds": {
     "FadeIn": 12,
-    "Txt": 27,
+    "Txt": 30,
     "Field": 2,
     "Callout": 2,
-    "Row": 4,
+    "Row": 5,
     "Button": 5,
-    "Pressy": 2
+    "Pressy": 3
    },
    "sheets": [
     {
      "comp": "JoinCode",
      "label": "Join with a code",
-     "line": 115,
+     "line": 118,
      "in": "openJoin",
+     "file": "app/login.tsx"
+    },
+    {
+     "comp": "CountrySheet",
+     "label": "Country code",
+     "line": 120,
+     "in": "pickCountry",
      "file": "app/login.tsx"
     }
    ],
@@ -2078,26 +2096,6 @@
    "reachedFrom": []
   },
   {
-   "route": "/progress/assess",
-   "file": "app/progress/assess.tsx",
-   "files": [
-    "app/progress/assess.tsx"
-   ],
-   "hand": [],
-   "ds": {
-    "FadeIn": 2,
-    "Card": 2,
-    "Txt": 5,
-    "Button": 2
-   },
-   "sheets": [],
-   "scenarios": [],
-   "reachedFrom": [
-    "app/(tabs)/progress.tsx",
-    "app/goal-detail.tsx"
-   ]
-  },
-  {
    "route": "/progress/goal",
    "file": "app/progress/goal.tsx",
    "files": [
@@ -2166,28 +2164,28 @@
     {
      "comp": "StepsSheet",
      "label": "Add steps",
-     "line": 77,
+     "line": 79,
      "in": "MetricDetail",
      "file": "app/progress/metric.tsx"
     },
     {
      "comp": "WaterSheet",
      "label": "Water",
-     "line": 78,
+     "line": 80,
      "in": "MetricDetail",
      "file": "app/progress/metric.tsx"
     },
     {
      "comp": "QuickLogSheet",
      "label": "Log a meal",
-     "line": 79,
+     "line": 81,
      "in": "MetricDetail",
      "file": "app/progress/metric.tsx"
     },
     {
      "comp": "ManualLogSheet",
      "label": "",
-     "line": 80,
+     "line": 82,
      "in": "MetricDetail",
      "file": "app/progress/metric.tsx"
     }
@@ -2424,7 +2422,7 @@
      "kind": "button or pill",
      "sig": "button 56 px high, radius radii.xl",
      "fn": "WorkoutSwapSheet",
-     "line": 86,
+     "line": 85,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"search\" accessibilityLabel=\"Search all exercises\" onPress={() => closeSheet(() => r",
      "file": "features/workout/WorkoutSheets.tsx"
@@ -2433,7 +2431,7 @@
      "kind": "button or pill",
      "sig": "button 60 px high, radius radii.md",
      "fn": "WorkoutSwapSheet",
-     "line": 96,
+     "line": 95,
      "tag": "Pressy",
      "text": "<Pressy key={a.n} accessibilityRole=\"button\" accessibilityLabel={`${a.n}. ${a.s}`} onPress={() => api.current.",
      "file": "features/workout/WorkoutSheets.tsx"

@@ -5,8 +5,9 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Gym (routes)
 
 - Files: `app/(tabs)/gym.tsx`
-- Library components used: Txt x20, FadeIn x7, Row x3, StatusDot x1, IconBadge x1, Pressy x1
-- Hand-built: none
+- Library components used: Txt x18, FadeIn x7, Row x3, StatusDot x1, IconBadge x1, Pressy x1, Button x1
+- Hand-built:
+  - `app/(tabs)/gym.tsx:88` card: `<View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 14 `
 
 ## Today (routes)
 
@@ -40,9 +41,9 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Progress (routes)
 
 - Files: `app/(tabs)/progress.tsx`
-- Library components used: Txt x29, Row x9, FadeIn x4, Callout x3, IconBadge x1, ProgressSegments x1
+- Library components used: Txt x26, Row x8, FadeIn x4, Callout x2, IconBadge x1, ProgressSegments x1
 - Hand-built:
-  - `app/(tabs)/progress.tsx:179` card: `<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 2`
+  - `app/(tabs)/progress.tsx:157` card: `<View style={{ alignSelf: 'flex-start', height: 40, paddingHorizontal: 18, borderRadius: 2`
 
 ## Check-in map (routes)
 
@@ -95,9 +96,9 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Assessments (routes)
 
 - Files: `app/gym/assessments.tsx`
-- Library components used: Txt x15, Card x4, FadeIn x3, Row x2, Button x2, IconBadge x1, Pill x1
+- Library components used: Txt x15, Card x4, FadeIn x3, Row x3, Button x3, IconBadge x1, Pill x1
 - Hand-built:
-  - `app/gym/assessments.tsx:77` icon badge: `<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone]`
+  - `app/gym/assessments.tsx:82` icon badge: `<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone]`
 
 ## Attendance (routes)
 
@@ -161,8 +162,8 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 
 ## Log in (routes)
 
-- Files: `app/login.tsx`, `components/OtpInput.tsx`
-- Library components used: Txt x27, FadeIn x12, Button x5, Row x4, Field x2, Callout x2, Pressy x2
+- Files: `app/login.tsx`, `components/OtpInput.tsx`, `features/shell/CountrySheet.tsx`
+- Library components used: Txt x30, FadeIn x12, Row x5, Button x5, Pressy x3, Field x2, Callout x2
 - States and edge cases: Phone number: In CRM, Not found; Code entered: Correct, Wrong; Android SMS auto-read: Off, On; Connection: Online, Offline; Programmes on this number: Three, Only one; (action) Fill a valid number; (action) Jump to code step
 - Hand-built:
   - `components/OtpInput.tsx:25` input: `<TextInput ref={ref} value={value} onChangeText={(t) => onChange(t.replace(/\D/g, '').slic`
@@ -332,12 +333,6 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `app/profile/units.tsx`
 - Library components used: Row x1, Pill x1
 - States and edge cases: Weight: kg, lb; Diet detail level: Simple, Detailed
-- Hand-built: none
-
-## Assessment (routes)
-
-- Files: `app/progress/assess.tsx`
-- Library components used: Txt x5, FadeIn x2, Card x2, Button x2
 - Hand-built: none
 
 ## Goal (progress) (routes)
@@ -652,6 +647,12 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Hand-built:
   - `features/progress/TrendUI.tsx:132` icon badge: `<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.x`
 
+## CountrySheet (bottom sheets)
+
+- Files: `features/shell/CountrySheet.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
 ## LogoutSheet (bottom sheets)
 
 - Files: `features/shell/sheets.tsx`
@@ -732,8 +733,8 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `features/workout/WorkoutSheets.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `features/workout/WorkoutSheets.tsx:86` button or pill: `<Pressy accessibilityRole="search" accessibilityLabel="Search all exercises" onPress={() =`
-  - `features/workout/WorkoutSheets.tsx:96` button or pill: `<Pressy key={a.n} accessibilityRole="button" accessibilityLabel={'${a.n}. ${a.s}'} onPress`
+  - `features/workout/WorkoutSheets.tsx:85` button or pill: `<Pressy accessibilityRole="search" accessibilityLabel="Search all exercises" onPress={() =`
+  - `features/workout/WorkoutSheets.tsx:95` button or pill: `<Pressy key={a.n} accessibilityRole="button" accessibilityLabel={'${a.n}. ${a.s}'} onPress`
 
 ## SetMenuSheet (bottom sheets)
 

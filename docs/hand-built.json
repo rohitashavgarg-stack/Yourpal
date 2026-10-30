@@ -1,21 +1,25 @@
 {
- "generated": "2026-10-28",
+ "generated": "2026-10-30",
  "rule": "unique elements outside src/web; on purpose = rows of docs/coverage-exceptions.md",
- "count": 89,
+ "count": 90,
  "onPurpose": 3,
- "toBuild": 86,
+ "toBuild": 87,
  "demoPanelExcluded": 21,
  "exceptionRows": 4,
  "byKind": {
+  "card": 17,
   "button or pill": 27,
   "bar": 9,
   "chip": 7,
-  "card": 16,
   "icon badge": 21,
   "icon button": 4,
   "input": 5
  },
  "byGroup": {
+  "Other": {
+   "total": 1,
+   "onPurpose": 0
+  },
   "Today": {
    "total": 12,
    "onPurpose": 0
@@ -54,6 +58,16 @@
   }
  },
  "items": [
+  {
+   "file": "app/(tabs)/gym.tsx",
+   "line": 88,
+   "kind": "card",
+   "look": "card radius radii.xl, fill onDark.card, padding 18",
+   "fn": "ChatCard",
+   "text": "<View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 14 }}>",
+   "onPurpose": false,
+   "group": "Other"
+  },
   {
    "file": "features/today/TopCards.tsx",
    "line": 43,
@@ -266,7 +280,7 @@
   },
   {
    "file": "app/(tabs)/progress.tsx",
-   "line": 179,
+   "line": 157,
    "kind": "card",
    "look": "card radius 20, fill c.surface2",
    "fn": "ProgressCard",
@@ -346,7 +360,7 @@
   },
   {
    "file": "app/gym/assessments.tsx",
-   "line": 77,
+   "line": 82,
    "kind": "icon badge",
    "look": "dot 8 px",
    "fn": "GymAssessments",
@@ -776,7 +790,7 @@
   },
   {
    "file": "features/workout/WorkoutSheets.tsx",
-   "line": 86,
+   "line": 85,
    "kind": "button or pill",
    "look": "button 56 px high, radius radii.xl",
    "fn": "WorkoutSwapSheet",
@@ -786,7 +800,7 @@
   },
   {
    "file": "features/workout/WorkoutSheets.tsx",
-   "line": 96,
+   "line": 95,
    "kind": "button or pill",
    "look": "button 60 px high, radius radii.md",
    "fn": "WorkoutSwapSheet",
