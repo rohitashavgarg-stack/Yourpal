@@ -2,9 +2,9 @@ import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Check, ChevronLeft } from '@/lib/icons';
+import { Activity, Armchair, BicepsFlexed, Check, ChevronLeft, Dumbbell, Footprints, PersonStanding, Ruler as RulerIcon, Shirt } from '@/lib/icons';
 import { IconButton } from '@/design-system/primitives/Button';
-import { Button, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
+import { Button, Field, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
 import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
@@ -15,9 +15,12 @@ import { SubPage } from '@/features/progress/parts';
 import { goBack } from '@/features/shell/parts';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { Chip } from '@/design-system/primitives/Chip';
-import { INJURY_AREAS, NUMS, NumKey, STEPS, SelfEntry, compare, fmtAt, habitLabel } from '@/features/selfassess/data';
+import { BODY_SIZES, INJURY_AREAS, NUMS, NumKey, STEPS, SelfEntry, compare, fmtAt, habitLabel } from '@/features/selfassess/data';
 import { NUDGE_DAYS, useSelfAssess } from '@/features/selfassess/useSelfAssess';
 import { RulerStep } from '@/features/selfassess/RulerStep';
+import { SleepDial, sleepMinutes } from '@/features/selfassess/SleepDial';
+import { BreathTimer } from '@/features/selfassess/BreathTimer';
+import { fmtClock } from '@/features/plans/TimeSheet';
 import { HeightPicker, WeightPicker } from '@/features/body/BodyLog';
 
 // One screen for each step, in the order of the app's assessment flow (see data.ts). A choice moves on by itself; a measurement is dragged on a ruler
@@ -38,6 +41,7 @@ export default function SelfAssessment() {
   const [areas, setAreas] = useState<string[]>([]);
   const [conditions, setConditions] = useState('');
   const [days, setDays] = useState(NUDGE_DAYS);
+  const [sleepT, setSleepT] = useState({ bed: 22 * 60 + 50, wake: 7 * 60 + 50 }); // 10:50 pm to 7:50 am, as in the design
   const [saved, setSaved] = useState<SelfEntry | null>(null);
   const advance = useRef<ReturnType<typeof setTimeout> | null>(null);
   const entry = viewing ?? saved;
@@ -53,7 +57,7 @@ export default function SelfAssessment() {
     if (step) {
       const s0 = startOf(step);
       if (s0 && vals[s0.k] == null) setNum(s0.k, s0.v); // Continue on the opening number keeps it
-      if (step.kind === 'scale' && !answers[step.key]) setAnswers((a) => ({ ...a, [step.key]: '3' }));
+      if (step.kind === 'sleep') setNum('sleep', Math.round((sleepMinutes(sleepT.bed, sleepT.wake) / 60) * 10) / 10);
     }
     next();
   };
@@ -61,7 +65,9 @@ export default function SelfAssessment() {
     if (step) {
       const s0 = startOf(step);
       if (s0) setVals((x) => { const n = { ...x }; delete n[s0.k]; return n; });
-      if (step.kind === 'scale') setAnswers((a) => { const n = { ...a }; delete n[step.key]; return n; });
+      if (step.kind === 'sleep') setVals((x) => { const n = { ...x }; delete n.sleep; return n; });
+      if (step.kind === 'timer') setVals((x) => { const n = { ...x }; delete n[step.k]; return n; });
+      if (step.kind === 'body') setVals((x) => { const n = { ...x }; BODY_SIZES.forEach((k) => delete n[k]); return n; });
     }
     next();
   };
@@ -77,6 +83,7 @@ export default function SelfAssessment() {
     (Object.keys(NUMS) as NumKey[]).forEach((k) => { const n = parseFloat((vals[k] ?? '').replace(',', '.')); if (!Number.isNaN(n) && n > 0) tests[k] = n; });
     const a: Record<string, string> = { ...answers, injuries: areas.length ? areas.join(', ') : 'None', nextDays: String(days) };
     if (conditions.trim()) a.conditions = conditions.trim();
+    if (tests.sleep) { a.bedtime = fmtClock(sleepT.bed); a.wake = fmtClock(sleepT.wake); }
     const e: SelfEntry = { id: 's' + Date.now(), at: new Date().toISOString(), by: 'member', answers: a, tests };
     save(e);
     if (tests.weight) set({ weight: tests.weight }); // Progress reads the weight from here
@@ -86,25 +93,29 @@ export default function SelfAssessment() {
     haptic.success();
   };
 
-  const rulerLike = step?.kind === 'height' || step?.kind === 'weight' || step?.kind === 'ruler' || step?.kind === 'scale';
+  const rulerLike = step?.kind === 'height' || step?.kind === 'weight' || step?.kind === 'ruler' || step?.kind === 'sleep' || step?.kind === 'timer' || step?.kind === 'body';
   const bottom = Math.max(insets.bottom, 16) + 6;
   // The bottom bar: Back on the left as an icon button; Skip and Continue together on the right. The first step has Maybe later where Back would be.
-  const canSkip = rulerLike || step?.kind === 'choice';
   const hasContinue = rulerLike || step?.kind === 'injuries' || step?.kind === 'next';
   const footer = (
     <Row style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 10 }}>
       {idx === 0
         ? <Button kind="secondary" label="Maybe later" onPress={() => { later(); goBack('/gym/assessments'); }} />
         : step && <IconButton label="Back" onPress={back} size={56} radius={radii.lg} bg={c.surface2}><ChevronLeft size={24} color={c.ink} /></IconButton>}
-      <View style={{ flex: 1 }} />
-      {canSkip && <Button kind="secondary" label="Skip" onPress={skip} />}
-      {hasContinue && <Button kind="accent" label={step?.kind === 'next' ? 'Save assessment' : 'Continue'} onPress={step?.kind === 'next' ? finish : step?.kind === 'injuries' ? next : cont} />}
+      {hasContinue && <Button kind="accent" label={step?.kind === 'next' ? 'Save assessment' : 'Continue'} onPress={step?.kind === 'next' ? finish : step?.kind === 'injuries' ? next : cont} style={{ flex: 1 }} />}
+      {!hasContinue && <View style={{ flex: 1 }} />}
       {!step && <Button kind="accent" label="Done" onPress={() => goBack('/gym/assessments')} style={{ flex: 1 }} />}
     </Row>
   );
+  // Skip: a blue text button at the top right of the page
+  const skipBtn = step && (rulerLike || step.kind === 'choice') ? (
+    <Pressy accessibilityRole="button" accessibilityLabel="Skip this step" onPress={skip} scaleTo={0.96} style={{ minHeight: 44, minWidth: 44, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center' }}>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, color: c.accentText }}>Skip</Txt>
+    </Pressy>
+  ) : undefined;
 
   return (
-    <SubPage title="Self assessment" fallback="/gym/assessments" footer={footer}>
+    <SubPage title="Self assessment" fallback="/gym/assessments" footer={footer} right={skipBtn}>
       {!viewing && step && (
         <View style={{ gap: 8 }}>
           <Row style={{ justifyContent: 'space-between' }}>
@@ -123,7 +134,22 @@ export default function SelfAssessment() {
         </View>
       )}
 
-      {step?.kind === 'choice' && (
+      {step?.kind === 'choice' && step.cards && (
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
+          {step.options.map((o) => {
+            const on = answers[step.key] === o.v;
+            const Icon = { armchair: Armchair, footprints: Footprints, person: PersonStanding, activity: Activity, dumbbell: Dumbbell }[o.icon as 'armchair'] ?? Activity;
+            return (
+              <Pressy key={o.v} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => pick(step.key, o.v)} scaleTo={0.97}
+                style={{ width: '47%', flexGrow: 1, minHeight: 132, borderRadius: radii.lg, padding: 16, justifyContent: 'space-between', backgroundColor: on ? c.accentSoft : c.surface, borderWidth: 1.5, borderColor: on ? c.accent : 'transparent' }}>
+                <View style={{ width: 48, height: 48, borderRadius: radii.md, backgroundColor: on ? c.accent : c.surface2, alignItems: 'center', justifyContent: 'center' }}><Icon size={24} color={on ? c.accentInk : c.accentText} /></View>
+                <Txt style={{ fontFamily: on ? font.semibold : font.medium, fontSize: fontSizes.base, color: on ? c.accentText : c.ink }}>{o.v}</Txt>
+              </Pressy>
+            );
+          })}
+        </View>
+      )}
+      {step?.kind === 'choice' && !step.cards && (
         <View style={{ gap: 10 }}>
           {step.how && <How lines={step.how} />}
           {step.options.map((o) => {
@@ -142,6 +168,22 @@ export default function SelfAssessment() {
         </View>
       )}
 
+      {step?.kind === 'body' && (
+        <View style={{ gap: 12 }}>
+          {BODY_SIZES.map((k) => {
+            const Icon = { chest: Shirt, waist: RulerIcon, hip: PersonStanding, arms: BicepsFlexed, legs: Footprints, calves: Activity }[k as 'chest'];
+            return (
+              <Row key={k} style={{ gap: 12 }}>
+                <View style={{ width: 52, height: 52, borderRadius: radii.md, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><Icon size={24} color={c.accentText} /></View>
+                <Txt style={{ width: 64, fontFamily: font.semibold }}>{NUMS[k].label}</Txt>
+                <View style={{ flex: 1 }}>
+                  <Field accessibilityLabel={`${NUMS[k].label} size in cm`} value={vals[k] ?? ''} onChangeText={(x) => setVals((v) => ({ ...v, [k]: x.replace(/[^0-9.,]/g, '') }))} keyboardType="decimal-pad" placeholder={`Enter ${NUMS[k].label.toLowerCase()} size`} prefix="cm" />
+                </View>
+              </Row>
+            );
+          })}
+        </View>
+      )}
       {step?.kind === 'height' && <HeightPicker cm={numOf('height', 165)} onChange={(v) => setNum('height', Math.round(v))} />}
       {step?.kind === 'weight' && <WeightPicker kg={numOf('weight', d.weight)} onChange={(v) => setNum('weight', Math.round(v * 10) / 10)} />}
       {step?.kind === 'ruler' && (
@@ -150,9 +192,13 @@ export default function SelfAssessment() {
           <RulerStep key={step.id} a11y={step.title} value={numOf(step.k, step.start)} onChange={(v) => setNum(step.k, v)} unit={NUMS[step.k].unit} min={step.min} max={step.max} step={step.step} decimals={step.dp} major={step.major} />
         </View>
       )}
-      {step?.kind === 'scale' && (
-        <RulerStep key={step.id} a11y={step.title} value={Number(answers[step.key]) || 3} onChange={(v) => setAnswers((a) => ({ ...a, [step.key]: String(v) }))} min={1} max={5} step={1} major={1} caption={step.labels[(Number(answers[step.key]) || 3) - 1]} />
+      {step?.kind === 'timer' && (
+        <View style={{ gap: 14 }}>
+          {step.how && <How lines={step.how} />}
+          <BreathTimer key={step.id} seconds={vals[step.k] != null ? Number(vals[step.k]) : undefined} onChange={(sec) => setVals((x) => { const n = { ...x }; if (sec == null) delete n[step.k]; else n[step.k] = String(sec); return n; })} />
+        </View>
       )}
+      {step?.kind === 'sleep' && <SleepDial bed={sleepT.bed} wake={sleepT.wake} onChange={(bed, wake) => { setSleepT({ bed, wake }); setNum('sleep', Math.round((sleepMinutes(bed, wake) / 60) * 10) / 10); }} />}
       {step?.kind === 'injuries' && (
         <View style={{ gap: 14 }}>
           <Txt v="label">MOST COMMON</Txt>
