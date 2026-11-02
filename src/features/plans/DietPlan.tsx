@@ -147,7 +147,7 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
     <FoodCard state={it.st} name={food.name} type={it.type} tag={it.mine ? 'Yours' : undefined}
       amount={food.qty ? <QtyControl mid={mid} it={it} qty={food.qty} locked={false} /> : undefined} amountText={amountText}
       kcal={`${kShown} kcal`} macros={macros} note="Skipped for today"
-      onPress={it.st === 'todo' ? check : undefined} onMore={more} onHold={openFood} onSwap={onSwap} onSkip={onSkip} skipLabel={it.mine ? 'Delete' : 'Skip'}
+      onCheck={check} onMore={it.st === 'eaten' ? more : undefined} onHold={openFood} onSwap={onSwap} onSkip={onSkip} skipLabel={it.mine ? 'Delete' : 'Skip'}
       checkLabel={`Mark eaten: ${it.n}`} label={`${food.name}${amountText ? `, ${amountText}` : ''}, ${it.st === 'skipped' ? 'skipped for today' : `${kShown} kcal`}. Hold for nutrition and recipe`} />
   );
 }
