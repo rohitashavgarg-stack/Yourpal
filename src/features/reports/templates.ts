@@ -26,7 +26,7 @@ const css = `
 const page = (body: string) => `<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>${css}</style></head><body>${body}</body></html>`;
 
 export type InvoiceData = {
-  no: string; date: string; gym: string; member: string; memberId: string;
+  no: string; date: string; gym: string; member: string;
   item: string; amount: string; method: string;
 };
 
@@ -38,7 +38,6 @@ export function invoiceHtml(i: InvoiceData) {
     </div>
     <h2>Billed to</h2>
     <div><b>${esc(i.member)}</b></div>
-    <div class="muted">Member ID ${esc(i.memberId)}</div>
     <h2>Details</h2>
     <table>
       <tr><th>Item</th><th class="r">Amount</th></tr>
