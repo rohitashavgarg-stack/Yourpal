@@ -93,7 +93,7 @@ function ChatCard() {
           <PersonAvatar who="coach" size={60} />
           <View style={{ flex: 1 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 26, letterSpacing: -0.4, color: onDark.text }}>Coach Vikram</Txt>
-            <Txt v="caption" color={onDark.muted}>Your trainer. Ask about form, your plan or food.</Txt>
+            <Txt v="caption" color={onDark.muted}>Your trainer</Txt>
           </View>
         </Pressy>
       </Row>
