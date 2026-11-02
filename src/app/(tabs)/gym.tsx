@@ -97,8 +97,8 @@ function ChatCard() {
           </View>
         </Pressy>
       </Row>
+      {/* The last message sits in a soft container on the dark card, with its time under it. */}
       {d.chat.length && last ? (
-        {/* The last message sits in a soft container on the dark card, with its time under it. */}
         <View accessible accessibilityLabel={`Last message: ${last.t}. ${last.meta}`} style={{ gap: 6, padding: 14, borderRadius: radii.lg, backgroundColor: 'rgba(255,255,255,0.08)' }}>
           <Txt numberOfLines={3} color={onDark.text}>{last.t}</Txt>
           <Txt v="caption" color={onDark.muted}>{last.meta}</Txt>
