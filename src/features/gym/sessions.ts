@@ -6,7 +6,7 @@ import { gymStore } from '@/features/gym/state';
 export type SessionStatus = 'upcoming' | 'awaiting' | 'confirmed' | 'flagged';
 export type Session = {
   id: string; day: string; long: string; time: string; focus: string; status: SessionStatus;
-  rating?: number; note?: string; exercises: { n: string; d: string }[];
+  rating?: number; remarks?: string; note?: string; exercises: { n: string; d: string }[];
 };
 
 const LEGS = [{ n: 'Back squat', d: '4 sets of 8 at 60 kg' }, { n: 'Leg press', d: '3 sets of 12 at 120 kg' }, { n: 'Romanian deadlift', d: '3 sets of 10 at 40 kg' }, { n: 'Calf raise', d: '3 sets of 15' }];
@@ -30,8 +30,9 @@ export function useSessions(): Session[] {
   const waiting = isPT && g.awaiting === 'Yes';
   return BASE.flatMap((b): Session[] => {
     if (b.id === 's30' || b.id === 's25') return [{ ...b, status: 'upcoming' }];
-    if (b.id === 's23') return waiting ? [{ ...b, status: g.sessionState === 'awaiting' ? 'awaiting' : g.sessionState, rating: g.sessionState === 'confirmed' ? g.rating : undefined }] : [];
-    return [{ ...b, status: 'confirmed', rating: b.id === 's22' ? 5 : b.id === 's16' ? 4 : 5 }];
+    if (b.id === 's23') return waiting ? [{ ...b, status: g.sessionState === 'awaiting' ? 'awaiting' : g.sessionState, rating: g.sessionState === 'confirmed' ? g.rating : undefined, remarks: g.sessionState === 'confirmed' && g.remarks ? g.remarks : undefined }] : [];
+    const sample: Record<string, string> = { s22: 'Loved the bench work', s16: 'Pulldown felt heavy, want to go slower', s11: 'Good first week back' };
+    return [{ ...b, status: 'confirmed', rating: b.id === 's22' ? 5 : b.id === 's16' ? 4 : 5, remarks: sample[b.id] }];
   });
 }
 

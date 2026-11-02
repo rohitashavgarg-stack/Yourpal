@@ -89,6 +89,14 @@ export default function SessionDetail() {
               </View>
             ))}
           </CardList>
+          {s.remarks ? (
+            <>
+              <Txt v="label" style={{ paddingHorizontal: 4 }}>YOUR REMARKS</Txt>
+              <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18 }}>
+                <Txt style={{ fontSize: fontSizes.base, lineHeight: 22 }}>{s.remarks}</Txt>
+              </View>
+            </>
+          ) : null}
           {s.note ? (
             <>
               <Txt v="label" style={{ paddingHorizontal: 4 }}>NOTE FROM COACH VIKRAM</Txt>

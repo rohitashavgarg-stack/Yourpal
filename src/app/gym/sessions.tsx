@@ -42,6 +42,7 @@ function Stop({ s, first, last }: { s: Session; first: boolean; last: boolean })
           </View>
           {s.rating ? <Stars n={s.rating} /> : <StatusTag s={s} />}
         </Row>
+        {s.remarks ? <Txt numberOfLines={2} style={{ fontSize: fontSizes.md, lineHeight: 20, color: c.muted }}>{s.remarks}</Txt> : null}
       </Pressy>
     </Row>
   );
