@@ -1,5 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
+import Svg, { Circle } from 'react-native-svg';
 import { router } from 'expo-router';
 import { ChevronRight, ClipboardCheck, CreditCard, Dumbbell, MessageCircle } from '@/lib/icons';
 import { fadeOut } from '@/theme/motion';
@@ -110,36 +111,36 @@ function AttendanceCard({ awaiting }: { awaiting: boolean }) {
   );
 }
 
-// The Assessments card: how the last assessment went, and when the next one is due (a thin bar fills as that day gets closer). It opens the Assessments page.
+// The Assessments card, laid out like the Attendance card: a big result on the left and one small picture on the right.
+// The picture is a ring that fills as the next assessment gets closer, with the days left inside it.
 function AssessCard() {
   const { c } = useTheme();
   const { entries, nextAt, daysLeft, due } = useSelfAssess();
   const last = entries[0];
   const h = headlineOf(last, entries[1]);
   const gapDays = Math.max(1, Math.round((nextAt - Date.parse(last.at)) / 86400000));
-  const pct = Math.max(0, Math.min(100, Math.round((1 - daysLeft / gapDays) * 100)));
-  const nextLine = daysLeft <= 0 ? 'Your next assessment is due' : daysLeft === 1 ? 'Next assessment tomorrow' : `Next assessment in ${daysLeft} days`;
+  const pct = due ? 1 : Math.max(0, Math.min(1, 1 - daysLeft / gapDays));
+  const R = 26, C2 = 2 * Math.PI * R;
+  const col = due ? c.warn : c.accent;
   return (
-    <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${h.text}. ${nextLine}`} style={{ gap: 14 }}>
-      <CardTitle title="Assessments" right={due ? <Tag label="Due now" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>View ›</Txt>} />
-      <Row style={{ gap: 14 }}>
-        <IconBadge size={52} radius={radii.md} bg={c.tNutri}><ClipboardCheck size={26} strokeWidth={1.8} color={c.cNutri} /></IconBadge>
+    <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${h.text}. ${due ? 'Your next assessment is due' : `Next in ${daysLeft} days`}`} style={{ gap: 10 }}>
+      <CardTitle title="Assessments" right={due ? <Tag label="Due now" bg={c.warnSoft} fg={c.warn} /> : undefined} />
+      <Row style={{ justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
         <View style={{ flex: 1, minWidth: 0 }}>
           <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, color: h.good ? c.good : c.ink }}>{h.text}</Txt>
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`Assessment ${entries.length}, ${fmtAt(last.at)}`}</Txt>
         </View>
+        <View importantForAccessibility="no-hide-descendants" style={{ width: 64, height: 64, alignItems: 'center', justifyContent: 'center' }}>
+          <Svg width={64} height={64} viewBox="0 0 64 64" style={{ position: 'absolute' }}>
+            <Circle cx={32} cy={32} r={R} stroke={c.surface3} strokeWidth={6} fill="none" />
+            <Circle cx={32} cy={32} r={R} stroke={col} strokeWidth={6} fill="none" strokeLinecap="round" strokeDasharray={`${C2 * pct} ${C2}`} rotation={-90} origin="32, 32" />
+          </Svg>
+          <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.lg, color: due ? c.warn : c.ink }}>{due ? '!' : String(Math.max(0, daysLeft))}</Txt>
+        </View>
       </Row>
-      {due ? (
-        <View style={{ gap: 10 }}>
-          <Txt style={{ fontSize: fontSizes.md, color: c.warn }}>{nextLine}</Txt>
-          <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />
-        </View>
-      ) : (
-        <View style={{ gap: 8 }}>
-          <TimeBar pct={pct} />
-          <Txt style={{ fontSize: fontSizes.md, color: c.muted }}>{nextLine}</Txt>
-        </View>
-      )}
+      {due
+        ? <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />
+        : <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`Next assessment in ${daysLeft} days, ${fmtAt(new Date(nextAt).toISOString())}`}</Txt>}
     </PCard>
   );
 }
