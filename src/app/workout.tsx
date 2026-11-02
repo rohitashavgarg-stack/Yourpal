@@ -231,7 +231,11 @@ export default function Workout() {
           )}
         </FadeIn>
       )}
-      <Button kind="dashed" size="medium" label="Add set" icon={<Plus size={17} color={c.ink} />} onPress={() => A.addSet(s.exIdx)} />
+      {/* both ways to add more are on the workout itself: another set of this exercise, or another exercise at the end of today's list */}
+      <Row style={{ gap: 8 }}>
+        <View style={{ flex: 1 }}><Button kind="dashed" size="medium" label="Add set" icon={<Plus size={17} color={c.ink} />} onPress={() => A.addSet(s.exIdx)} /></View>
+        <View style={{ flex: 1 }}><Button kind="dashed" size="medium" label="Add exercise" icon={<Plus size={17} color={c.ink} />} onPress={() => api.current.openAdd()} /></View>
+      </Row>
       {!newUi && <Txt v="caption" style={{ textAlign: 'center', paddingHorizontal: 6, paddingTop: 4 }}>Adjust the highlighted set and tick it · tap a set to edit · swipe right = done, left = swap/skip · hold for options</Txt>}
     </View>
   );
