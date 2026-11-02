@@ -39,7 +39,7 @@ function Spark({ angle, dist, size, color, delay }: { angle: number; dist: numbe
   return <Animated.View pointerEvents="none" style={[{ position: 'absolute', width: size, height: size, borderRadius: size / 2, backgroundColor: color }, st]} />;
 }
 
-const BADGE = 88; // the signed badge
+const BADGE = 72; // the signed badge
 const SPARK_COLORS = ['#CFCBFF', '#8FB2FF', '#FFFFFF', '#B9A8FF'];
 
 // The tilted sheets. They arrive stacked: the front sheet rises into place with the back two hidden behind it, then the back two fan out to
@@ -108,7 +108,7 @@ export function WaiverSigned({ sig }: { sig: Sig }) {
             </View>
           </Rise>
         </View>
-        <Paper sig={sig} width={264} />
+        <Paper sig={sig} width={288} />
       </View>
       <Rise delay={1000} from={30}>
         <View style={{ paddingHorizontal: 20, paddingBottom: Math.max(insets.bottom, 16) + 6 }}>
