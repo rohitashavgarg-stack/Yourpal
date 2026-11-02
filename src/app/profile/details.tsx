@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ageFrom, defaultDob, fmtDob } from '@/lib/dob';
 import { PersonAvatar } from '@/components/Brand';
 import { View } from 'react-native';
-import { Button, Field, NoteField, Pill, Row, Txt } from '@/components/ui';
+import { Button, Field, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { haptic } from '@/lib/haptics';
 import { font } from '@/theme/tokens';
@@ -103,9 +103,6 @@ function BodyRow({ label, value, onPress, last }: { label: string; value: string
   );
 }
 
-const GENDERS = ['Male', 'Female', 'Other'];
-const DIETS = ['Veg', 'Eggetarian', 'Non-veg', 'Jain', 'Vegan'];
-
 export default function MyDetails() {
   const { c } = useTheme();
   const { state, setProfile } = useStore();
@@ -114,10 +111,6 @@ export default function MyDetails() {
   const { d } = useDomain();
   const { s: shell } = useShell();
   const [name, setName] = useState(p.name);
-  const [days, setDays] = useState(p.days);
-  const [diet, setDiet] = useState(p.diet);
-  const [inj, setInj] = useState<'No' | 'Yes'>(p.injury);
-  const [note, setNote] = useState(p.injuryNote);
   const [err, setErr] = useState(0);
   const [photo, setPhoto] = useState<string | null | undefined>(undefined); // undefined = unchanged, null = removed
   const shake = useShake(err);
@@ -126,10 +119,9 @@ export default function MyDetails() {
     title: 'My details',
     rows: [
       { label: 'Name', options: ['Filled', 'Empty'], value: name.trim() ? 'Filled' : 'Empty', onPick: (v) => { setName(v === 'Empty' ? '' : p.name || 'Rohitashav Garg'); setErr(0); } },
-      { label: 'Injuries', options: ['No', 'Yes'], value: inj, onPick: (v) => setInj(v as any) },
     ],
     actions: [{ label: 'Try saving', run: () => save() }],
-  }, [name, inj]);
+  }, [name]);
 
   const pickPhoto = async (src: 'library' | 'camera') => {
     try {
@@ -143,7 +135,7 @@ export default function MyDetails() {
   const hasCustom = photo === undefined ? !!p.photo : !!photo;
   const save = () => {
     if (!name.trim()) { setErr((n) => n + 1); return; }
-    setProfile({ name: name.trim(), days, diet, injury: inj, injuryNote: inj === 'Yes' ? note : '', ...(photo !== undefined ? { photo: photo ?? undefined } : {}) });
+    setProfile({ name: name.trim(), ...(photo !== undefined ? { photo: photo ?? undefined } : {}) });
     goBack('/profile');
     toast('Saved. Coach Vikram sees the update');
   };
@@ -183,31 +175,6 @@ export default function MyDetails() {
         <BodyRow label="Height" value={p.heightCm ? `${p.heightCm} cm` : 'Add'} onPress={() => router.push('/log-height')} />
         <BodyRow label="Weight" last value={shell.unitsW === 'lb' ? `${(d.weight * 2.20462).toFixed(1)} lb` : `${d.weight.toFixed(1)} kg`} onPress={() => router.push('/log-weight')} />
       </View>
-      <Txt v="caption" style={{ marginTop: 8, paddingHorizontal: 6 }}>Gender</Txt>
-      <Row style={{ gap: 6, marginTop: -4 }}>
-        {GENDERS.map((g) => <Pill key={g} label={g} on={p.gender === g} onPress={() => { setProfile({ gender: p.gender === g ? '' : g }); haptic.tick(); }} style={{ flex: 1 }} />)}
-      </Row>
-
-      <Label style={{ marginTop: 16 }}>Days you can train</Label>
-      <Row style={{ gap: 6, marginTop: -4 }}>
-        {[2, 3, 4, 5, 6].map((n) => <Pill key={n} label={String(n)} on={days === n} onPress={() => setDays(n)} style={{ flex: 1, paddingHorizontal: 0 }} />)}
-      </Row>
-
-      <Label style={{ marginTop: 16 }}>Diet type</Label>
-      <Row style={{ gap: 6, flexWrap: 'wrap', marginTop: -4 }}>
-        {DIETS.map((x) => <Pill key={x} label={x} on={diet === x} onPress={() => setDiet(x)} />)}
-      </Row>
-
-      <Label style={{ marginTop: 16 }}>Injuries or pain</Label>
-      <Row style={{ gap: 6, marginTop: -4 }}>
-        <Pill label="No" on={inj === 'No'} onPress={() => setInj('No')} style={{ flex: 1 }} />
-        <Pill label="Yes, add note" on={inj === 'Yes'} onPress={() => setInj('Yes')} style={{ flex: 1 }} />
-      </Row>
-      {inj === 'Yes' && (
-        <FadeIn exiting={fadeOut()}>
-          <NoteField value={note} onChangeText={setNote} placeholder="e.g. left knee pain on lunges, worse when I squat below parallel" accessibilityLabel="Injury note" />
-        </FadeIn>
-      )}
 
     </SubPage>
   );
