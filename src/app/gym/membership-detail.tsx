@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
 import { CreditCard, Download } from '@/lib/icons';
 import { Row, Txt } from '@/components/ui';
-import { Tag } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { GrowBar, Hint, SubPage } from '@/features/progress/parts';
+import { Hint, SubPage } from '@/features/progress/parts';
 import { LineRow, ListCard as PayList } from '@/features/shell/parts';
 import { IconButton } from '@/design-system/primitives/Button';
-import { Card } from '@/design-system/primitives/Card';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { useMemberships } from '@/features/gym/memberships';
 import { PAUSE_HISTORY, PAUSE_TOTAL } from '@/features/gym/data';
@@ -24,7 +21,8 @@ import { rupees } from '@/features/reports/payments';
 import type { Payment } from '@/features/reports/payments';
 import { radii, fontSizes } from '@/design-system/tokens';
 
-// One membership: its dates, personal training sessions (if it has them), pauses (view only, the front desk sets them) and payments with invoices.
+// One membership: its time left and dates, personal training sessions (if it has them), pauses (view only, the front desk sets them) and payments with invoices.
+// Personal training and pauses are small rows in a list, not cards: the time left is the main thing on this page.
 export default function MembershipDetail() {
   const { c } = useTheme();
   const { id } = useLocalSearchParams<{ id?: string }>();
@@ -50,19 +48,19 @@ export default function MembershipDetail() {
   const left = PAUSE_TOTAL - used;
   const history = PAUSE_HISTORY.slice(0, used);
   const showPauses = m.status !== 'Expired';
+  const value = (t: string) => <Txt style={{ fontFamily: font.semibold }}>{t}</Txt>;
 
   return (
-    <SubPage title="Membership" fallback="/gym/membership"
-      // A soft tint from the top of the screen, like the other pages.
-      backdrop={<LinearGradient pointerEvents="none" colors={[c.accent + '40', c.accent + '14', c.accent + '00']} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 260 }} />}>
+    <SubPage title="Membership" fallback="/gym/membership">
       {/* The icon first, then the big heading and the status. */}
       <View style={{ gap: 12, paddingTop: 4 }}>
         <IconBadge size={64} radius={radii.lg} bg={c.surface} borderWidth={1} borderColor={c.line}><CreditCard size={32} strokeWidth={1.9} color={c.accentText} /></IconBadge>
         <Txt accessibilityRole="header" v="display">{m.name}</Txt>
         <Row><StatusChip m={m} /></Row>
       </View>
-      {/* Time left in big numbers, the bar, and the two dates under it. */}
-      <View style={{ borderRadius: radii.xl, backgroundColor: c.surface, padding: 18, gap: 14 }}>
+
+      {/* Time left in big numbers, the bar, and the two dates under it. Straight on the page, no card. */}
+      <View style={{ gap: 14 }}>
         {m.status === 'Active' ? (
           <Row style={{ alignItems: 'baseline', gap: 6 }}>
             <Txt style={{ fontFamily: font.displayBold, fontSize: 40, lineHeight: 52, letterSpacing: -1.2, color: m.warn ? c.warn : c.ink }}>{m.left.n}</Txt>
@@ -85,43 +83,12 @@ export default function MembershipDetail() {
         {m.status !== 'Active' && <Txt muted style={{ fontSize: fontSizes.md }}>{m.note}</Txt>}
       </View>
 
-      {m.pt && (
-        <>
-          <Txt v="label" style={{ paddingHorizontal: 6 }}>PERSONAL TRAINING</Txt>
-          <Card variant="roomy" gap={10}>
-            <Row style={{ justifyContent: 'space-between' }}>
-              <Txt style={{ fontFamily: font.semibold }}>{m.pt.trainer}</Txt>
-              <Tag label="Trainer" bg={c.accentSoft} fg={c.accentText} />
-            </Row>
-            <Row style={{ alignItems: 'baseline', gap: 6 }}>
-              <Txt style={{ fontFamily: font.displayBold, fontSize: 40, lineHeight: 52, letterSpacing: -1.2 }}>{m.pt.left}</Txt>
-              <Txt muted>{`of ${m.pt.total} sessions left`}</Txt>
-            </Row>
-            <GrowBar pct={Math.round((m.pt.left / m.pt.total) * 100)} color={c.accent} />
-          </Card>
-        </>
-      )}
-
-      {showPauses && (
-        <>
-          <Txt v="label" style={{ paddingHorizontal: 6 }}>PAUSES</Txt>
-          <Card variant="roomy" gap={10}>
-            <Row style={{ alignItems: 'baseline', gap: 6 }}>
-              <Txt style={{ fontFamily: font.displayBold, fontSize: 40, lineHeight: 52, letterSpacing: -1.2 }}>{left}</Txt>
-              <Txt muted>{`of ${PAUSE_TOTAL} pauses left`}</Txt>
-            </Row>
-            <GrowBar pct={Math.round((left / PAUSE_TOTAL) * 100)} color={c.accent} />
-            {history.length === 0 ? <Txt muted style={{ fontSize: fontSizes.md }}>No pauses yet.</Txt> : history.map((h) => (
-              <Row key={h.from} style={{ justifyContent: 'space-between' }}>
-                <View style={{ gap: 1 }}>
-                  <Txt style={{ fontFamily: font.medium }}>{h.from} – {h.to}</Txt>
-                  <Txt v="caption">{h.reason}</Txt>
-                </View>
-                <Tag label={`${h.days} days`} bg={c.accentSoft} fg={c.accentText} />
-              </Row>
-            ))}
-          </Card>
-        </>
+      {(m.pt || showPauses) && (
+        <PayList>
+          {m.pt && <LineRow title="Personal training" sub={m.pt.trainer} right={value(`${m.pt.left} of ${m.pt.total} sessions left`)} last={!showPauses} />}
+          {showPauses && <LineRow title="Pauses" sub="Set by the front desk" right={value(`${left} of ${PAUSE_TOTAL} left`)} last={history.length === 0} />}
+          {history.map((h, i) => <LineRow key={h.from} title={`${h.from} – ${h.to}`} sub={h.reason} right={<Txt muted>{`${h.days} days`}</Txt>} minH={52} last={i === history.length - 1} />)}
+        </PayList>
       )}
 
       <Txt v="label" style={{ paddingHorizontal: 6 }}>PAYMENTS</Txt>
@@ -130,7 +97,7 @@ export default function MembershipDetail() {
           <LineRow key={p.id} title={p.item} sub={p.date} last={i === m.payments.length - 1}
             right={(
               <Row style={{ gap: 10 }}>
-                <Txt style={{ fontFamily: font.semibold }}>{rupees(p.amount)}</Txt>
+                {value(rupees(p.amount))}
                 <IconButton label={'Download invoice for ' + p.item} onPress={() => invoice(p)} size={36} disabled={busyId === p.id}><Download size={18} color={c.ink} /></IconButton>
               </Row>
             )} />
