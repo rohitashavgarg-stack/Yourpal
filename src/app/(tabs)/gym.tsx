@@ -15,6 +15,8 @@ import { font } from '@/theme/tokens';
 import { CardTitle, cardShadow, GrowBar, PCard } from '@/features/progress/parts';
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { useMemberships } from '@/features/gym/memberships';
+import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
+import { fmtAt, headlineOf } from '@/features/selfassess/data';
 import { TimeBar } from '@/app/gym/membership';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
@@ -108,24 +110,29 @@ function AttendanceCard({ awaiting }: { awaiting: boolean }) {
   );
 }
 
+// The Assessments card: how the last assessment went, and when the next one is due (a thin bar fills as that day gets closer). It opens the Assessments page.
 function AssessCard() {
   const { c } = useTheme();
-  const { d } = useDomain();
-  const a = d.assess, none = a === 'None yet', only = a === 'Only first', due = a === 'Due now';
-  const big = none ? 'To be confirmed' : only ? 'Baseline saved' : '6 of 7 improved';
-  const sub = none ? 'First assessment with Coach Vikram' : only ? 'Assessment 1 · 7 tests · 2 Sep' : 'Assessment 2 · 30 Sep vs Assessment 1';
-  const next = none ? 'Coach Vikram will confirm the day and time' : due ? 'Assessment 3 · book at the front desk' : only ? 'Next: Tue 30 Sep · Coach Vikram' : 'Next: Tue 28 Oct · Coach Vikram';
+  const { entries, nextAt, daysLeft, due } = useSelfAssess();
+  const last = entries[0];
+  const h = headlineOf(last, entries[1]);
+  const gapDays = Math.max(1, Math.round((nextAt - Date.parse(last.at)) / 86400000));
+  const pct = Math.max(0, Math.min(100, Math.round((1 - daysLeft / gapDays) * 100)));
+  const nextLine = daysLeft <= 0 ? 'Your next assessment is due' : daysLeft === 1 ? 'Next assessment tomorrow' : `Next assessment in ${daysLeft} days`;
   return (
-    <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${big}. ${sub}`} style={{ gap: 8 }}>
-      <CardTitle title="Assessments" right={due ? <Tag label="Due this week" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>View ›</Txt>} />
+    <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${h.text}. ${nextLine}`} style={{ gap: 14 }}>
+      <CardTitle title="Assessments" right={due ? <Tag label="Due now" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>View ›</Txt>} />
       <Row style={{ gap: 14 }}>
         <IconBadge size={52} radius={radii.md} bg={c.tNutri}><ClipboardCheck size={26} strokeWidth={1.8} color={c.cNutri} /></IconBadge>
         <View style={{ flex: 1, minWidth: 0 }}>
-          <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34 }}>{big}</Txt>
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{sub}</Txt>
+          <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, color: h.good ? c.good : c.ink }}>{h.text}</Txt>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`Assessment ${entries.length}, ${fmtAt(last.at)}`}</Txt>
         </View>
       </Row>
-      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{next}</Txt>
+      <View style={{ gap: 8 }}>
+        <TimeBar pct={pct} warn={daysLeft <= 0} />
+        <Txt style={{ fontSize: fontSizes.md, color: daysLeft <= 0 ? c.warn : c.muted }}>{nextLine}</Txt>
+      </View>
     </PCard>
   );
 }

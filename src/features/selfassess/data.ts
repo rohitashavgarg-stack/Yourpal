@@ -96,3 +96,10 @@ export function compare(now: SelfEntry, prev: SelfEntry | undefined) {
 }
 
 export const habitLabel: Record<string, string> = { fat: 'Body fat', activity: 'Activity', freq: 'Workouts a week', water: 'Water', level: 'Level', flex: 'Flexibility', injuries: 'Injuries' };
+
+/** The one line that says how an assessment went next to the one before it. */
+export function headlineOf(e: SelfEntry, prev: SelfEntry | undefined) {
+  const judged = compare(e, prev).filter((r) => r.prev != null && r.n.dir !== 'none');
+  const better = judged.filter((r) => r.good).length;
+  return { text: !prev ? 'Your baseline' : judged.length ? `${better} of ${judged.length} improved` : 'Saved', good: !!prev && judged.length > 0 && better > 0 };
+}
