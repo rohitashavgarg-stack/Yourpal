@@ -16,7 +16,8 @@ export function useSelfAssess() {
   const entries = useMemo(() => [...(sa?.entries ?? []), COACH_SAMPLE].sort((a, b) => Date.parse(b.at) - Date.parse(a.at)), [sa?.entries]);
   const lastAt = Date.parse(entries[0].at);
   const snoozed = !!sa?.snoozeUntil && Date.parse(sa.snoozeUntil) > now;
-  const due = d.hasGym && !snoozed && (now - lastAt) / DAY >= NUDGE_DAYS;
+  const chosen = Number(entries.find((e) => e.by === 'member')?.answers.nextDays); // the days the member picked in the last step
+  const due = d.hasGym && !snoozed && (now - lastAt) / DAY >= (chosen > 0 ? chosen : NUDGE_DAYS);
   return {
     entries, due,
     save: (e: SelfEntry) => setProfile({ selfAssess: { entries: [e, ...(sa?.entries ?? [])] } }),

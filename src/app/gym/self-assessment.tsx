@@ -2,10 +2,11 @@ import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Check } from '@/lib/icons';
-import { Button, Field, Pressy, Row, Txt } from '@/components/ui';
-import { Tag } from '@/components/bits';
+import { Check, Minus, Plus } from '@/lib/icons';
+import { Button, Field, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
+import { RoundBtn, Tag } from '@/components/bits';
 import { useDomain } from '@/lib/domain';
+import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
 import { font } from '@/theme/tokens';
@@ -13,28 +14,29 @@ import { SubPage } from '@/features/progress/parts';
 import { goBack } from '@/features/shell/parts';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { Chip } from '@/design-system/primitives/Chip';
-import { QUESTIONS, SelfEntry, TESTS, compare, fmtAt } from '@/features/selfassess/data';
-import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
+import { INJURY_AREAS, NUMS, NumKey, STEPS, SelfEntry, compare, fmtAt, habitLabel } from '@/features/selfassess/data';
+import { NUDGE_DAYS, useSelfAssess } from '@/features/selfassess/useSelfAssess';
 
-// One screen for each step: first the habit questions (tap an answer and it moves on), then the measurements (one at a time), then the result.
-type Step = { kind: 'q'; q: (typeof QUESTIONS)[number] } | { kind: 't'; t: (typeof TESTS)[number] };
-const STEPS: Step[] = [...QUESTIONS.map((q) => ({ kind: 'q' as const, q })), ...TESTS.map((t) => ({ kind: 't' as const, t }))];
-
+// One screen for each step, in the order of the app's assessment flow (see data.ts). A choice moves on by itself; a measurement waits for Next or Skip.
 // With an id it only shows that assessment (the member's own, or one the coach entered).
 export default function SelfAssessment() {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const { d, set } = useDomain();
+  const { state, setProfile } = useStore();
   const { entries, save, later } = useSelfAssess();
   const viewing = id ? entries.find((e) => e.id === id) : undefined;
-  const [idx, setIdx] = useState(viewing ? STEPS.length : 0);
+  const total = STEPS.length;
+  const [idx, setIdx] = useState(viewing ? total : 0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [vals, setVals] = useState<Record<string, string>>({ weight: String(d.weight) });
+  const [vals, setVals] = useState<Record<string, string>>({ weight: String(d.weight), ...(state.profile.heightCm ? { height: state.profile.heightCm } : {}) });
+  const [areas, setAreas] = useState<string[]>([]);
+  const [conditions, setConditions] = useState('');
+  const [days, setDays] = useState(NUDGE_DAYS);
   const [saved, setSaved] = useState<SelfEntry | null>(null);
   const advance = useRef<ReturnType<typeof setTimeout> | null>(null);
   const entry = viewing ?? saved;
-  const total = STEPS.length;
   const step = idx < total ? STEPS[idx] : null;
 
   const next = () => setIdx((i) => Math.min(total, i + 1));
@@ -43,24 +45,27 @@ export default function SelfAssessment() {
     setAnswers((a) => ({ ...a, [k]: o }));
     haptic.tick();
     if (advance.current) clearTimeout(advance.current);
-    advance.current = setTimeout(next, 220); // a moment to see the choice, then on to the next question
+    advance.current = setTimeout(next, 220); // a moment to see the choice, then on
   };
   const finish = () => {
     const tests: SelfEntry['tests'] = {};
-    TESTS.forEach((t) => { const n = parseFloat((vals[t.k] ?? '').replace(',', '.')); if (!Number.isNaN(n) && n > 0) tests[t.k] = n; });
-    const e: SelfEntry = { id: 's' + Date.now(), at: new Date().toISOString(), by: 'member', answers, tests };
+    (Object.keys(NUMS) as NumKey[]).forEach((k) => { const n = parseFloat((vals[k] ?? '').replace(',', '.')); if (!Number.isNaN(n) && n > 0) tests[k] = n; });
+    const a: Record<string, string> = { ...answers, injuries: areas.length ? areas.join(', ') : 'None', nextDays: String(days) };
+    if (conditions.trim()) a.conditions = conditions.trim();
+    const e: SelfEntry = { id: 's' + Date.now(), at: new Date().toISOString(), by: 'member', answers: a, tests };
     save(e);
     if (tests.weight) set({ weight: tests.weight }); // Progress reads the weight from here
+    if (tests.height) setProfile({ heightCm: String(tests.height) });
     setSaved(e);
     setIdx(total);
     haptic.success();
   };
 
+  const filled = step?.kind === 'fields' && step.fields.some((f) => (vals[f.k] ?? '').trim());
   const bottom = Math.max(insets.bottom, 16) + 6;
-  const last = idx === total - 1;
   const footer = (
     <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 8 }}>
-      {step?.kind === 'q' && (
+      {step?.kind === 'choice' && (
         <Row style={{ gap: 8 }}>
           {idx === 0
             ? <Button kind="secondary" label="Maybe later" onPress={() => { later(); goBack('/gym/assessments'); }} style={{ flex: 1 }} />
@@ -68,8 +73,14 @@ export default function SelfAssessment() {
           <Button kind="secondary" label="Skip" onPress={next} style={{ flex: 1 }} />
         </Row>
       )}
-      {step?.kind === 't' && <>
-        <Button kind="accent" label={last ? (vals[step.t.k] ? 'Save assessment' : 'Skip and save') : (vals[step.t.k] ? 'Next' : 'Skip')} onPress={last ? finish : next} />
+      {(step?.kind === 'fields' || step?.kind === 'injuries') && <>
+        <Button kind="accent" label={step.kind === 'fields' && !filled ? 'Skip' : 'Continue'} onPress={next} />
+        {idx === 0
+          ? <Button kind="secondary" label="Maybe later" onPress={() => { later(); goBack('/gym/assessments'); }} />
+          : <Button kind="secondary" label="Back" onPress={back} />}
+      </>}
+      {step?.kind === 'next' && <>
+        <Button kind="accent" label="Save assessment" onPress={finish} />
         <Button kind="secondary" label="Back" onPress={back} />
       </>}
       {!step && <Button kind="accent" label="Done" onPress={() => goBack('/gym/assessments')} />}
@@ -80,38 +91,79 @@ export default function SelfAssessment() {
     <SubPage title="Self assessment" fallback="/gym/assessments" footer={footer}>
       {!viewing && step && (
         <View style={{ gap: 8 }}>
-          <View accessibilityRole="progressbar" accessibilityValue={{ min: 0, max: total, now: idx }} style={{ height: 6, borderRadius: 3, backgroundColor: c.surface3, overflow: 'hidden' }}>
-            <View style={{ width: `${((idx + 1) / (total + 1)) * 100}%`, height: 6, borderRadius: 3, backgroundColor: c.accent }} />
-          </View>
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`${idx + 1} of ${total}, ${step.kind === 'q' ? 'a few questions' : 'your measurements'}`}</Txt>
-        </View>
-      )}
-
-      {step?.kind === 'q' && (
-        <View style={{ gap: 18 }}>
-          <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 30 }}>{step.q.ask}</Txt>
-          <View style={{ gap: 10 }}>
-            {step.q.options.map((o) => {
-              const on = answers[step.q.k] === o;
-              return (
-                <Pressy key={o} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => pick(step.q.k, o)} scaleTo={0.98}
-                  style={{ minHeight: 56, borderRadius: radii.lg, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: on ? c.accentSoft : c.surface, borderWidth: 1.5, borderColor: on ? c.accent : 'transparent' }}>
-                  <Txt style={{ fontFamily: on ? font.semibold : font.medium, color: on ? c.accentText : c.ink }}>{o}</Txt>
-                  {on && <Check size={20} color={c.accentText} strokeWidth={2.6} />}
-                </Pressy>
-              );
-            })}
+          <Row style={{ justifyContent: 'space-between' }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm }}>{`STEP ${idx + 1}`}<Txt muted style={{ fontSize: fontSizes.sm }}>{` /${total}`}</Txt></Txt>
+          </Row>
+          <View accessibilityRole="progressbar" accessibilityValue={{ min: 0, max: total, now: idx + 1 }} style={{ height: 6, borderRadius: 3, backgroundColor: c.surface3, overflow: 'hidden' }}>
+            <View style={{ width: `${((idx + 1) / total) * 100}%`, height: 6, borderRadius: 3, backgroundColor: c.accent }} />
           </View>
         </View>
       )}
 
-      {step?.kind === 't' && (
+      {step && (
+        <View style={{ gap: 6 }}>
+          <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 30 }}>{step.title}</Txt>
+          {!!step.sub && <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>{step.sub}</Txt>}
+        </View>
+      )}
+
+      {step?.kind === 'choice' && (
+        <View style={{ gap: 10 }}>
+          {step.how && <How lines={step.how} />}
+          {step.options.map((o) => {
+            const on = answers[step.key] === o.v;
+            return (
+              <Pressy key={o.v} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => pick(step.key, o.v)} scaleTo={0.98}
+                style={{ minHeight: 56, borderRadius: radii.lg, paddingHorizontal: 18, paddingVertical: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: on ? c.accentSoft : c.surface, borderWidth: 1.5, borderColor: on ? c.accent : 'transparent' }}>
+                <View style={{ flex: 1 }}>
+                  <Txt style={{ fontFamily: on ? font.semibold : font.medium, color: on ? c.accentText : c.ink }}>{o.v}</Txt>
+                  {!!o.sub && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{o.sub}</Txt>}
+                </View>
+                {on && <Check size={20} color={c.accentText} strokeWidth={2.6} />}
+              </Pressy>
+            );
+          })}
+        </View>
+      )}
+
+      {step?.kind === 'fields' && (
         <View style={{ gap: 14 }}>
-          <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 30 }}>{step.t.label.replace(' (optional)', '')}</Txt>
-          <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>{step.t.hint}</Txt>
-          <Field key={step.t.k} autoFocus accessibilityLabel={step.t.label} value={vals[step.t.k] ?? ''} onChangeText={(x) => setVals((v) => ({ ...v, [step.t.k]: x.replace(/[^0-9.,]/g, '') }))}
-            keyboardType="decimal-pad" placeholder={step.t.unit || 'Number'} prefix={step.t.unit || undefined} returnKeyType="next" onSubmitEditing={last ? finish : next} />
-          {step.t.k === 'fat' && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>You can leave this empty.</Txt>}
+          {step.how && <How lines={step.how} />}
+          {step.fields.map((f, i) => (
+            <View key={f.k} style={{ gap: 6 }}>
+              {!!f.label && <Txt style={{ fontFamily: font.medium }}>{f.label}</Txt>}
+              <Field key={`${step.id}-${f.k}`} autoFocus={i === 0} accessibilityLabel={f.label ?? step.title} value={vals[f.k] ?? ''} onChangeText={(x) => setVals((v) => ({ ...v, [f.k]: x.replace(/[^0-9.,]/g, '') }))}
+                keyboardType="decimal-pad" placeholder={f.placeholder} prefix={NUMS[f.k].unit} />
+            </View>
+          ))}
+        </View>
+      )}
+
+      {step?.kind === 'injuries' && (
+        <View style={{ gap: 14 }}>
+          <Txt v="label">MOST COMMON</Txt>
+          <Row style={{ gap: 8, flexWrap: 'wrap' }}>
+            {INJURY_AREAS.map((a) => <Pill key={a} label={a} on={areas.includes(a)} onPress={() => { setAreas((x) => (x.includes(a) ? x.filter((y) => y !== a) : [...x, a])); haptic.tick(); }} />)}
+          </Row>
+          <Pressy accessibilityRole="button" onPress={() => { setAreas([]); setConditions(''); haptic.tick(); next(); }} scaleTo={0.98}
+            style={{ minHeight: 52, borderRadius: radii.pill, borderWidth: 1, borderColor: c.chipLine, alignItems: 'center', justifyContent: 'center' }}>
+            <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>Don’t have any</Txt>
+          </Pressy>
+          <Txt v="label">MEDICAL CONDITIONS</Txt>
+          <NoteField value={conditions} onChangeText={setConditions} placeholder="Any medical conditions (optional)" accessibilityLabel="Medical conditions" minHeight={84} />
+        </View>
+      )}
+
+      {step?.kind === 'next' && (
+        <View style={{ alignItems: 'center', gap: 14, paddingTop: 8 }}>
+          <Row style={{ gap: 20 }}>
+            <RoundBtn label="Fewer days" onPress={() => setDays((n) => Math.max(15, n - 5))}><Minus size={22} color={c.ink} /></RoundBtn>
+            <View style={{ alignItems: 'center' }}>
+              <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.displayBold, fontSize: 52, lineHeight: 64, letterSpacing: -1.5 }}>{days}</Txt>
+              <Txt muted>Days</Txt>
+            </View>
+            <RoundBtn label="More days" onPress={() => setDays((n) => Math.min(90, n + 5))}><Plus size={22} color={c.ink} /></RoundBtn>
+          </Row>
         </View>
       )}
 
@@ -120,12 +172,24 @@ export default function SelfAssessment() {
   );
 }
 
+// The steps for the test, as the Figma shows them under "How to perform".
+function How({ lines }: { lines: string[] }) {
+  const { c } = useTheme();
+  const numbered = !lines[0].includes(':');
+  return (
+    <View style={{ gap: 6, padding: 14, borderRadius: radii.lg, backgroundColor: c.surface }}>
+      <Txt v="label">HOW TO PERFORM</Txt>
+      {lines.map((l, i) => <Txt key={i} style={{ fontSize: fontSizes.md, lineHeight: 21 }}>{numbered ? `${i + 1}. ${l}` : l}</Txt>)}
+    </View>
+  );
+}
+
 function Result({ entry, prev, fresh }: { entry: SelfEntry; prev: SelfEntry | undefined; fresh: boolean }) {
   const { c } = useTheme();
   const rows = compare(entry, prev);
-  const both = rows.filter((r) => r.prev != null);
-  const better = both.filter((r) => r.good).length;
-  const habits = Object.entries(entry.answers).filter(([, v]) => v);
+  const judged = rows.filter((r) => r.prev != null && r.n.dir !== 'none');
+  const better = judged.filter((r) => r.good).length;
+  const habits = Object.entries(entry.answers).filter(([k, v]) => v && habitLabel[k]);
   return (
     <View style={{ gap: 18 }}>
       <View style={{ alignItems: 'center', gap: 8, paddingTop: 4 }}>
@@ -135,14 +199,14 @@ function Result({ entry, prev, fresh }: { entry: SelfEntry; prev: SelfEntry | un
           <Chip label={fmtAt(entry.at)} />
           {entry.by === 'coach' && <Chip label="Entered by coach" />}
         </Row>
-        {both.length > 0 && <Txt muted style={{ fontSize: fontSizes.md }}>{`${better} of ${both.length} improved since the last one`}</Txt>}
+        {judged.length > 0 && <Txt muted style={{ fontSize: fontSizes.md }}>{`${better} of ${judged.length} improved since the last one`}</Txt>}
       </View>
 
       {rows.length > 0 && (
         <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, paddingHorizontal: 16 }}>
           {rows.map((r, i) => (
-            <Row key={r.t.k} style={{ minHeight: 54, gap: 10, borderBottomWidth: i < rows.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-              <Txt style={{ flex: 1, fontFamily: font.medium }}>{r.t.label.replace(' (optional)', '')}</Txt>
+            <Row key={r.k} style={{ minHeight: 54, gap: 10, borderBottomWidth: i < rows.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
+              <Txt style={{ flex: 1, fontFamily: font.medium }}>{r.n.label}</Txt>
               <Txt v="mono">{r.prev != null ? `${r.prev} → ${r.now}` : `${r.now}`}</Txt>
               {r.prev != null && <Tag label={r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`} bg={r.good ? c.goodSoft : c.surface2} fg={r.good ? c.good : c.muted} style={{ minWidth: 58, alignItems: 'center' }} />}
             </Row>
@@ -152,9 +216,9 @@ function Result({ entry, prev, fresh }: { entry: SelfEntry; prev: SelfEntry | un
 
       {habits.length > 0 && (
         <View style={{ gap: 8 }}>
-          <Txt v="label" style={{ paddingHorizontal: 4 }}>HABITS</Txt>
+          <Txt v="label" style={{ paddingHorizontal: 4 }}>ABOUT YOU</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>
-            {habits.map(([k, v]) => <Chip key={k} label={`${QUESTIONS.find((q) => q.k === k)?.label.split(' ')[0] ?? k}: ${v}`} />)}
+            {habits.map(([k, v]) => <Chip key={k} label={`${habitLabel[k]}: ${v}`} />)}
           </Row>
         </View>
       )}
