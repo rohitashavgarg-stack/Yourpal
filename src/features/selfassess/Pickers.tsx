@@ -294,15 +294,11 @@ export function PinStack({ value, onChange, plate = 25, count = 16 }: { value: n
           <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.displayBold, fontSize: 72, lineHeight: 84, letterSpacing: -2 }}>{String(Math.round(value))}</Txt>
           <Txt muted style={{ fontSize: fontSizes.lg }}>kg</Txt>
         </View>
-        <Txt muted style={{ fontSize: fontSizes.md }}>Drag the pin up or down the stack.</Txt>
-        <Row style={{ gap: 8, flexWrap: 'wrap' }}>
-          {[-25, -5, 5, 25].map((d) => (
-            <Pressy key={d} accessibilityRole="button" accessibilityLabel={`${d > 0 ? 'Add' : 'Take off'} ${Math.abs(d)} kg`} onPress={() => bump(d)} scaleTo={0.94}
-              style={{ height: 44, minWidth: 60, paddingHorizontal: 12, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surface }}>
-              <Txt style={{ fontFamily: font.semibold }}>{`${d > 0 ? '+' : '−'}${Math.abs(d)}`}</Txt>
-            </Pressy>
-          ))}
-        </Row>
+        <Txt muted style={{ fontSize: fontSizes.md }}>Drag the pin up or down the stack, or use the stepper for small changes.</Txt>
+        <View style={{ gap: 6 }}>
+          <MiniStepper minusLabel="Take off 5 kg" plusLabel="Add 5 kg" onMinus={() => bump(-5)} onPlus={() => bump(5)} />
+          <Txt muted style={{ fontSize: fontSizes.sm }}>5 kg each tap</Txt>
+        </View>
       </View>
       <View {...pan.panHandlers} accessibilityRole="adjustable" accessibilityLabel="Weight stack" accessibilityValue={{ text: `${value} kilograms` }} style={{ width: 150, height: H }}>
         {Array.from({ length: count }, (_, r) => {
@@ -400,6 +396,21 @@ export function StepperStep({ value, onChange, unit, step, min, max, jumps, visu
   );
 }
 
+// A compact minus | plus control in one rounded box.
+function MiniStepper({ onMinus, onPlus, minusLabel, plusLabel }: { onMinus: () => void; onPlus: () => void; minusLabel: string; plusLabel: string }) {
+  const { c } = useTheme();
+  const half = (label: string, onPress: () => void, icon: React.ReactNode) => (
+    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} scaleTo={0.92} style={{ flex: 1, height: 52, alignItems: 'center', justifyContent: 'center' }}>{icon}</Pressy>
+  );
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', width: 150, borderRadius: radii.lg, backgroundColor: c.surface }}>
+      {half(minusLabel, onMinus, <Minus size={24} color={c.ink} />)}
+      <View style={{ width: 1, height: 26, backgroundColor: c.line }} />
+      {half(plusLabel, onPlus, <Plus size={24} color={c.ink} />)}
+    </View>
+  );
+}
+
 // A stack of plates on a pin, as on a leg press machine: one plate for about every 25 kg.
 function PlateStack({ kg }: { kg: number }) {
   const { c } = useTheme();
@@ -467,23 +478,43 @@ export function BpStep({ sys, dia, pulse, onChange }: { sys: number; dia: number
   );
 }
 
-// Next assessment: a few ready-made gaps as tiles, and the date it lands on.
+// Next assessment: ready-made gaps as tiles, or any number of days of your own, and the date it lands on.
 export function DayTiles({ days, onChange, today }: { days: number; onChange: (d: number) => void; today: number }) {
   const { c } = useTheme();
   const date = new Date(today + days * 86400000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  const set = (n: number) => { haptic.tick(); onChange(Math.min(365, Math.max(1, n))); };
+  const presets = [30, 45, 60, 90];
+  const own = !presets.includes(days);
   return (
-    <View style={{ gap: 18 }}>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-        {[30, 45, 60, 90].map((n) => {
+    <View style={{ gap: 16 }}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+        {presets.map((n) => {
           const on = days === n;
           return (
-            <Pressy key={n} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => { haptic.tick(); onChange(n); }} scaleTo={0.96}
-              style={{ width: '47%', flexGrow: 1, height: 104, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? c.accent : c.surface }}>
-              <Txt style={{ fontFamily: font.displayBold, fontSize: 40, lineHeight: 48, color: on ? c.accentInk : c.ink }}>{String(n)}</Txt>
-              <Txt style={{ fontSize: fontSizes.md, color: on ? c.accentInk : c.muted }}>Days</Txt>
+            <Pressy key={n} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => set(n)} scaleTo={0.96}
+              style={{ width: '48%', height: 84, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? c.accent : c.surface }}>
+              <Txt style={{ fontFamily: font.displayBold, fontSize: 34, lineHeight: 40, color: on ? c.accentInk : c.ink }}>{String(n)}</Txt>
+              <Txt style={{ fontSize: fontSizes.sm, color: on ? c.accentInk : c.muted }}>Days</Txt>
             </Pressy>
           );
         })}
+      </View>
+      <View style={{ gap: 8, padding: 14, borderRadius: radii.lg, backgroundColor: own ? c.accentSoft : c.surface, borderWidth: 1.5, borderColor: own ? c.accent : 'transparent' }}>
+        <Txt v="label">OR CHOOSE YOUR OWN</Txt>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <Row style={{ gap: 8 }}>
+            <Pressy accessibilityRole="button" accessibilityLabel="A week less" onPress={() => set(days - 7)} scaleTo={0.94} style={{ height: 44, minWidth: 52, paddingHorizontal: 10, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surface2 }}><Txt style={{ fontFamily: font.semibold }}>−7</Txt></Pressy>
+            <RoundBtn label="One day less" onPress={() => set(days - 1)}><Minus size={20} color={c.ink} /></RoundBtn>
+          </Row>
+          <View style={{ alignItems: 'center' }}>
+            <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.displayBold, fontSize: 36, lineHeight: 42 }}>{String(days)}</Txt>
+            <Txt muted style={{ fontSize: fontSizes.sm }}>Days</Txt>
+          </View>
+          <Row style={{ gap: 8 }}>
+            <RoundBtn label="One day more" onPress={() => set(days + 1)}><Plus size={20} color={c.ink} /></RoundBtn>
+            <Pressy accessibilityRole="button" accessibilityLabel="A week more" onPress={() => set(days + 7)} scaleTo={0.94} style={{ height: 44, minWidth: 52, paddingHorizontal: 10, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surface2 }}><Txt style={{ fontFamily: font.semibold }}>+7</Txt></Pressy>
+          </Row>
+        </Row>
       </View>
       <Txt style={{ textAlign: 'center', fontFamily: font.medium }}>{`Scheduled for ${date}`}</Txt>
     </View>
