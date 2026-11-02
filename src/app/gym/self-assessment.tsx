@@ -2,7 +2,8 @@ import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Check } from '@/lib/icons';
+import { Check, ChevronLeft } from '@/lib/icons';
+import { IconButton } from '@/design-system/primitives/Button';
 import { Button, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
 import { useDomain } from '@/lib/domain';
@@ -87,35 +88,19 @@ export default function SelfAssessment() {
 
   const rulerLike = step?.kind === 'height' || step?.kind === 'weight' || step?.kind === 'ruler' || step?.kind === 'scale';
   const bottom = Math.max(insets.bottom, 16) + 6;
+  // The bottom bar: Back on the left as an icon button; Skip and Continue together on the right. The first step has Maybe later where Back would be.
+  const canSkip = rulerLike || step?.kind === 'choice';
+  const hasContinue = rulerLike || step?.kind === 'injuries' || step?.kind === 'next';
   const footer = (
-    <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 8 }}>
-      {step?.kind === 'choice' && (
-        <Row style={{ gap: 8 }}>
-          {idx === 0
-            ? <Button kind="secondary" label="Maybe later" onPress={() => { later(); goBack('/gym/assessments'); }} style={{ flex: 1 }} />
-            : <Button kind="secondary" label="Back" onPress={back} style={{ flex: 1 }} />}
-          <Button kind="secondary" label="Skip" onPress={next} style={{ flex: 1 }} />
-        </Row>
-      )}
-      {rulerLike && <>
-        <Button kind="accent" label="Continue" onPress={cont} />
-        <Row style={{ gap: 8 }}>
-          {idx === 0
-            ? <Button kind="secondary" label="Maybe later" onPress={() => { later(); goBack('/gym/assessments'); }} style={{ flex: 1 }} />
-            : <Button kind="secondary" label="Back" onPress={back} style={{ flex: 1 }} />}
-          <Button kind="secondary" label="Skip" onPress={skip} style={{ flex: 1 }} />
-        </Row>
-      </>}
-      {step?.kind === 'injuries' && <>
-        <Button kind="accent" label="Continue" onPress={next} />
-        <Button kind="secondary" label="Back" onPress={back} />
-      </>}
-      {step?.kind === 'next' && <>
-        <Button kind="accent" label="Save assessment" onPress={finish} />
-        <Button kind="secondary" label="Back" onPress={back} />
-      </>}
-      {!step && <Button kind="accent" label="Done" onPress={() => goBack('/gym/assessments')} />}
-    </View>
+    <Row style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 10 }}>
+      {idx === 0
+        ? <Button kind="secondary" label="Maybe later" onPress={() => { later(); goBack('/gym/assessments'); }} />
+        : step && <IconButton label="Back" onPress={back} size={56} radius={radii.lg} bg={c.surface2}><ChevronLeft size={24} color={c.ink} /></IconButton>}
+      <View style={{ flex: 1 }} />
+      {canSkip && <Button kind="secondary" label="Skip" onPress={skip} />}
+      {hasContinue && <Button kind="accent" label={step?.kind === 'next' ? 'Save assessment' : 'Continue'} onPress={step?.kind === 'next' ? finish : step?.kind === 'injuries' ? next : cont} />}
+      {!step && <Button kind="accent" label="Done" onPress={() => goBack('/gym/assessments')} style={{ flex: 1 }} />}
+    </Row>
   );
 
   return (
