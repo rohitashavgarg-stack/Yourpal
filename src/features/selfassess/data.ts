@@ -3,14 +3,15 @@
 export type TestKey = 'weight' | 'waist' | 'hr' | 'toe' | 'pushups' | 'plank' | 'fat';
 export type SelfEntry = { id: string; at: string; by: 'member' | 'coach'; answers: Record<string, string>; tests: Partial<Record<TestKey, number>> };
 
-export const QUESTIONS: { k: string; label: string; options: string[] }[] = [
-  { k: 'sleep', label: 'Sleep a night', options: ['Under 5 h', '5 to 6 h', '7 to 8 h', 'Over 8 h'] },
-  { k: 'energy', label: 'Energy through the day', options: ['1', '2', '3', '4', '5'] },
-  { k: 'stress', label: 'Stress', options: ['Low', 'Medium', 'High'] },
-  { k: 'pain', label: 'Pain or injuries', options: ['None', 'Mild', 'Needs care'] },
-  { k: 'food', label: 'Food', options: ['Mostly home', 'Mixed', 'Mostly outside'] },
-  { k: 'water', label: 'Water a day', options: ['Under 1 L', '1 to 2 L', '2 to 3 L', 'Over 3 L'] },
-  { k: 'steps', label: 'Steps a day', options: ['Under 4k', '4k to 8k', '8k to 12k', 'Over 12k'] },
+// ask: the question as it is shown on its own screen
+export const QUESTIONS: { k: string; label: string; ask: string; options: string[] }[] = [
+  { k: 'sleep', label: 'Sleep a night', ask: 'How much do you sleep at night?', options: ['Under 5 h', '5 to 6 h', '7 to 8 h', 'Over 8 h'] },
+  { k: 'energy', label: 'Energy through the day', ask: 'How is your energy through the day? 1 is low, 5 is high.', options: ['1', '2', '3', '4', '5'] },
+  { k: 'stress', label: 'Stress', ask: 'How stressed have you felt lately?', options: ['Low', 'Medium', 'High'] },
+  { k: 'pain', label: 'Pain or injuries', ask: 'Do you have any pain or injuries?', options: ['None', 'Mild', 'Needs care'] },
+  { k: 'food', label: 'Food', ask: 'Where does most of your food come from?', options: ['Mostly home', 'Mixed', 'Mostly outside'] },
+  { k: 'water', label: 'Water a day', ask: 'How much water do you drink in a day?', options: ['Under 1 L', '1 to 2 L', '2 to 3 L', 'Over 3 L'] },
+  { k: 'steps', label: 'Steps a day', ask: 'About how many steps do you walk in a day?', options: ['Under 4k', '4k to 8k', '8k to 12k', 'Over 12k'] },
 ];
 
 // lower: a lower number is the better result

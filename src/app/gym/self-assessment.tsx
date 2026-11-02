@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Check } from '@/lib/icons';
-import { Button, Field, Pill, Row, Txt } from '@/components/ui';
+import { Button, Field, Pressy, Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
 import { useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -12,14 +12,14 @@ import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
 import { goBack } from '@/features/shell/parts';
 import { radii, fontSizes } from '@/design-system/tokens';
-import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { Chip } from '@/design-system/primitives/Chip';
 import { QUESTIONS, SelfEntry, TESTS, compare, fmtAt } from '@/features/selfassess/data';
 import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
 
-const STEPS = ['Questions', 'Measurements', 'Result'];
+// One screen for each step: first the habit questions (tap an answer and it moves on), then the measurements (one at a time), then the result.
+type Step = { kind: 'q'; q: (typeof QUESTIONS)[number] } | { kind: 't'; t: (typeof TESTS)[number] };
+const STEPS: Step[] = [...QUESTIONS.map((q) => ({ kind: 'q' as const, q })), ...TESTS.map((t) => ({ kind: 't' as const, t }))];
 
-// The self assessment: quick questions about habits, then the measurements the member takes alone, then a result next to the last assessment.
 // With an id it only shows that assessment (the member's own, or one the coach entered).
 export default function SelfAssessment() {
   const { c } = useTheme();
@@ -28,12 +28,23 @@ export default function SelfAssessment() {
   const { d, set } = useDomain();
   const { entries, save, later } = useSelfAssess();
   const viewing = id ? entries.find((e) => e.id === id) : undefined;
-  const [stage, setStage] = useState(viewing ? 2 : 0);
+  const [idx, setIdx] = useState(viewing ? STEPS.length : 0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [vals, setVals] = useState<Record<string, string>>({ weight: String(d.weight) });
   const [saved, setSaved] = useState<SelfEntry | null>(null);
+  const advance = useRef<ReturnType<typeof setTimeout> | null>(null);
   const entry = viewing ?? saved;
+  const total = STEPS.length;
+  const step = idx < total ? STEPS[idx] : null;
 
+  const next = () => setIdx((i) => Math.min(total, i + 1));
+  const back = () => { if (advance.current) clearTimeout(advance.current); setIdx((i) => Math.max(0, i - 1)); };
+  const pick = (k: string, o: string) => {
+    setAnswers((a) => ({ ...a, [k]: o }));
+    haptic.tick();
+    if (advance.current) clearTimeout(advance.current);
+    advance.current = setTimeout(next, 220); // a moment to see the choice, then on to the next question
+  };
   const finish = () => {
     const tests: SelfEntry['tests'] = {};
     TESTS.forEach((t) => { const n = parseFloat((vals[t.k] ?? '').replace(',', '.')); if (!Number.isNaN(n) && n > 0) tests[t.k] = n; });
@@ -41,63 +52,70 @@ export default function SelfAssessment() {
     save(e);
     if (tests.weight) set({ weight: tests.weight }); // Progress reads the weight from here
     setSaved(e);
-    setStage(2);
+    setIdx(total);
     haptic.success();
   };
 
   const bottom = Math.max(insets.bottom, 16) + 6;
+  const last = idx === total - 1;
   const footer = (
     <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 8 }}>
-      {stage === 0 && <>
-        <Button kind="accent" label="Next" onPress={() => setStage(1)} />
-        <Button kind="secondary" label="Maybe later" onPress={() => { later(); goBack('/gym/assessments'); }} />
+      {step?.kind === 'q' && (
+        <Row style={{ gap: 8 }}>
+          {idx === 0
+            ? <Button kind="secondary" label="Maybe later" onPress={() => { later(); goBack('/gym/assessments'); }} style={{ flex: 1 }} />
+            : <Button kind="secondary" label="Back" onPress={back} style={{ flex: 1 }} />}
+          <Button kind="secondary" label="Skip" onPress={next} style={{ flex: 1 }} />
+        </Row>
+      )}
+      {step?.kind === 't' && <>
+        <Button kind="accent" label={last ? (vals[step.t.k] ? 'Save assessment' : 'Skip and save') : (vals[step.t.k] ? 'Next' : 'Skip')} onPress={last ? finish : next} />
+        <Button kind="secondary" label="Back" onPress={back} />
       </>}
-      {stage === 1 && <>
-        <Button kind="accent" label="Save assessment" onPress={finish} />
-        <Button kind="secondary" label="Back" onPress={() => setStage(0)} />
-      </>}
-      {stage === 2 && <Button kind="accent" label="Done" onPress={() => goBack('/gym/assessments')} />}
+      {!step && <Button kind="accent" label="Done" onPress={() => goBack('/gym/assessments')} />}
     </View>
   );
 
   return (
     <SubPage title="Self assessment" fallback="/gym/assessments" footer={footer}>
-      {!viewing && (
+      {!viewing && step && (
         <View style={{ gap: 8 }}>
-          <ProgressSegments height={6} gap={4} segments={STEPS.map((s, i) => ({ color: i <= stage ? c.accent : c.surface3, label: s }))} />
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`Step ${stage + 1} of 3, ${STEPS[stage].toLowerCase()}`}</Txt>
+          <View accessibilityRole="progressbar" accessibilityValue={{ min: 0, max: total, now: idx }} style={{ height: 6, borderRadius: 3, backgroundColor: c.surface3, overflow: 'hidden' }}>
+            <View style={{ width: `${((idx + 1) / (total + 1)) * 100}%`, height: 6, borderRadius: 3, backgroundColor: c.accent }} />
+          </View>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`${idx + 1} of ${total}, ${step.kind === 'q' ? 'a few questions' : 'your measurements'}`}</Txt>
         </View>
       )}
 
-      {stage === 0 && (
+      {step?.kind === 'q' && (
         <View style={{ gap: 18 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27 }}>How have the last few weeks been?</Txt>
-          {QUESTIONS.map((q) => (
-            <View key={q.k} style={{ gap: 8 }}>
-              <Txt style={{ fontFamily: font.medium }}>{q.label}</Txt>
-              <Row style={{ gap: 6, flexWrap: 'wrap' }}>
-                {q.options.map((o) => <Pill key={o} label={o} on={answers[q.k] === o} onPress={() => { setAnswers((a) => ({ ...a, [q.k]: a[q.k] === o ? '' : o })); haptic.tick(); }} />)}
-              </Row>
-            </View>
-          ))}
+          <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 30 }}>{step.q.ask}</Txt>
+          <View style={{ gap: 10 }}>
+            {step.q.options.map((o) => {
+              const on = answers[step.q.k] === o;
+              return (
+                <Pressy key={o} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => pick(step.q.k, o)} scaleTo={0.98}
+                  style={{ minHeight: 56, borderRadius: radii.lg, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: on ? c.accentSoft : c.surface, borderWidth: 1.5, borderColor: on ? c.accent : 'transparent' }}>
+                  <Txt style={{ fontFamily: on ? font.semibold : font.medium, color: on ? c.accentText : c.ink }}>{o}</Txt>
+                  {on && <Check size={20} color={c.accentText} strokeWidth={2.6} />}
+                </Pressy>
+              );
+            })}
+          </View>
         </View>
       )}
 
-      {stage === 1 && (
-        <View style={{ gap: 16 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27 }}>Your measurements</Txt>
-          <Txt muted style={{ fontSize: fontSizes.md }}>Fill in what you can. You can skip any of them.</Txt>
-          {TESTS.map((t) => (
-            <View key={t.k} style={{ gap: 6 }}>
-              <Txt style={{ fontFamily: font.medium }}>{t.label}</Txt>
-              <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{t.hint}</Txt>
-              <Field accessibilityLabel={t.label} value={vals[t.k] ?? ''} onChangeText={(x) => setVals((v) => ({ ...v, [t.k]: x.replace(/[^0-9.,]/g, '') }))} keyboardType="decimal-pad" placeholder={t.unit || 'Number'} prefix={t.unit || undefined} />
-            </View>
-          ))}
+      {step?.kind === 't' && (
+        <View style={{ gap: 14 }}>
+          <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 30 }}>{step.t.label.replace(' (optional)', '')}</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>{step.t.hint}</Txt>
+          <Field key={step.t.k} autoFocus accessibilityLabel={step.t.label} value={vals[step.t.k] ?? ''} onChangeText={(x) => setVals((v) => ({ ...v, [step.t.k]: x.replace(/[^0-9.,]/g, '') }))}
+            keyboardType="decimal-pad" placeholder={step.t.unit || 'Number'} prefix={step.t.unit || undefined} returnKeyType="next" onSubmitEditing={last ? finish : next} />
+          {step.t.k === 'fat' && <Txt v="caption" style={{ fontSize: fontSizes.sm }}>You can leave this empty.</Txt>}
         </View>
       )}
 
-      {stage === 2 && entry && <Result entry={entry} prev={entries.find((e) => e.id !== entry.id && Date.parse(e.at) < Date.parse(entry.at))} fresh={!viewing} />}
+      {!step && entry && <Result entry={entry} prev={entries.find((e) => e.id !== entry.id && Date.parse(e.at) < Date.parse(entry.at))} fresh={!viewing} />}
     </SubPage>
   );
 }
