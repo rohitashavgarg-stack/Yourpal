@@ -111,44 +111,33 @@ function AttendanceCard({ awaiting }: { awaiting: boolean }) {
   );
 }
 
-// The Assessments card: how many are done, a trail with one numbered circle for each (a dashed one for the next, when it is due),
-// the last result, and the numbers that matter with their change. When the next one is due it has the Start button; until then it says when.
+// The Assessments card answers two things: is it working, and what do I do next.
+// So it leads with how the member has changed since their first assessment (the numbers that moved), says how many are done, and ends with one next step:
+// the date of the next assessment, or a Start button when it is due. The full history is one tap away on the Assessments page.
 function AssessCard() {
   const { c } = useTheme();
   const { entries, nextAt, due } = useSelfAssess();
   const total = entries.length;
-  const last = entries[0];
-  const h = headlineOf(last, entries[1]);
-  const rows = compare(last, entries[1]);
-  const stats = (['weight', 'waist', 'pulse', 'bench', 'sleep'] as NumKey[]).map((k) => rows.find((r) => r.k === k)).filter((r) => !!r).slice(0, 3) as ReturnType<typeof compare>;
-  const shown = Math.min(total, 6); // the trail shows the latest six
+  const first = entries[total - 1];
+  const rows = compare(entries[0], total > 1 ? first : undefined);
+  const order: NumKey[] = ['weight', 'waist', 'bench', 'legpress', 'pulse', 'sleep'];
+  const stats = order.map((k) => rows.find((r) => r.k === k)).filter((r) => !!r && (total === 1 || r.prev != null)).slice(0, 3) as ReturnType<typeof compare>;
+  const fmtDiff = (d: number) => (d === 0 ? 'Same' : `${d > 0 ? '+' : '−'}${Math.abs(d)}`);
   return (
-    <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${total} done. Last: ${h.text}`} style={{ gap: 12 }}>
-      <CardTitle title="Assessments" right={due ? <Tag label="Due now" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>View ›</Txt>} />
-      <View>
-        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34 }}>{total === 1 ? '1 assessment done' : `${total} assessments done`}</Txt>
-      </View>
-      <View style={{ flexDirection: 'row', gap: 8 }} importantForAccessibility="no-hide-descendants">
-        {Array.from({ length: shown }, (_, i) => {
-          const n = total - shown + i + 1;
-          const latest = n === total;
-          return (
-            <View key={n} style={{ width: 32, height: 32, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: latest ? c.accent : c.surface3 }}>
-              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: latest ? c.accentInk : c.muted }}>{String(n)}</Txt>
-            </View>
-          );
-        })}
-        {due && <View style={{ width: 32, height: 32, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: c.warn, borderStyle: 'dashed' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.warn }}>{String(total + 1)}</Txt></View>}
-      </View>
+    <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${total} done. ${total > 1 ? 'Change since your first assessment' : 'Your baseline'}`} style={{ gap: 12 }}>
+      <CardTitle title="Assessments" right={due ? <Tag label="Due now" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, color: c.muted }}>{total === 1 ? '1 done' : `${total} done`}</Txt>} />
+      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{total > 1 ? `Since your first assessment, ${fmtAt(first.at)}` : 'Your baseline'}</Txt>
       {stats.length > 0 && (
         <Row style={{ gap: 8 }}>
-          {stats.map((r) => (
-            <View key={r.k} style={{ flex: 1, borderRadius: radii.md, backgroundColor: c.surface2, paddingVertical: 10, paddingHorizontal: 12, gap: 1 }}>
-              <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{r.n.label}</Txt>
-              <Txt style={{ fontFamily: font.semibold }}>{`${r.now} ${r.n.unit}`}</Txt>
-              {r.prev != null && <Txt style={{ fontSize: fontSizes.sm, color: r.good ? c.good : c.muted }}>{r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`}</Txt>}
-            </View>
-          ))}
+          {stats.map((r) => {
+            const colour = total === 1 || r.n.dir === 'none' ? c.ink : r.good ? c.good : r.diff === 0 ? c.muted : c.warn;
+            return (
+              <View key={r.k} style={{ flex: 1, borderRadius: radii.md, backgroundColor: c.surface2, paddingVertical: 12, paddingHorizontal: 12, gap: 2 }}>
+                <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 30, color: colour }}>{total === 1 ? String(r.now) : fmtDiff(r.now - (r.prev as number))}</Txt>
+                <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`${r.n.label} ${r.n.unit}`}</Txt>
+              </View>
+            );
+          })}
         </Row>
       )}
       {due
