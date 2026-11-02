@@ -24,6 +24,7 @@ import { FLAME } from '@/features/streak/StreakChip';
 import { useStreak } from '@/features/streak/useStreak';
 import { showProgressLoading, useProgressScenarios } from '@/features/progress/scenarios';
 import { GoalCard2 } from '@/features/goalv2/GoalCard2';
+import { ReportRow } from '@/features/reports/ReportRow';
 import { GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
@@ -207,6 +208,7 @@ export default function ProgressScreen() {
       {v2 && !ps.loading && <FadeIn><GoalCard2 size="expanded" /></FadeIn>}
       {v2 && ps.loading && <Skeleton h={190} />}
       <View onLayout={(e) => setBar({ y: e.nativeEvent.layout.y, h: e.nativeEvent.layout.height })}><RangeBar /></View>
+      {!ps.loading && <ReportRow />}
       {!v2 && (ps.loading ? <Skeleton h={150} /> : <FadeIn><GoalTickCard /></FadeIn>)}
       {ps.loading ? (
         <>
