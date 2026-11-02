@@ -34,6 +34,7 @@ export type Profile = {
   eat: string;
   injury: 'No' | 'Yes';
   injuryNote: string;
+  waiver?: { name: string; signedAt: string }; // the gym waiver, once signed
   photosPrivate: boolean;
   notifications: 'unset' | 'on' | 'off';
 };
