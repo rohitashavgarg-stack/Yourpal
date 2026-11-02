@@ -111,38 +111,42 @@ function AttendanceCard({ awaiting }: { awaiting: boolean }) {
   );
 }
 
-// The Assessments card answers two things: is it working, and what do I do next.
-// So it leads with how the member has changed since their first assessment (the numbers that moved), says how many are done, and ends with one next step:
-// the date of the next assessment, or a Start button when it is due. The full history is one tap away on the Assessments page.
+// The Assessments card, in three levels of weight. First and biggest: how many assessments are completed, with a numbered circle for each.
+// Then, quieter: the last assessment and its date. Quietest: the next assessment (or a Start button when it is due).
 function AssessCard() {
   const { c } = useTheme();
   const { entries, nextAt, due } = useSelfAssess();
   const total = entries.length;
-  const first = entries[total - 1];
-  const rows = compare(entries[0], total > 1 ? first : undefined);
-  const order: NumKey[] = ['weight', 'waist', 'bench', 'legpress', 'pulse', 'sleep'];
-  const stats = order.map((k) => rows.find((r) => r.k === k)).filter((r) => !!r && (total === 1 || r.prev != null)).slice(0, 3) as ReturnType<typeof compare>;
-  const fmtDiff = (d: number) => (d === 0 ? 'Same' : `${d > 0 ? '+' : '−'}${Math.abs(d)}`);
+  const last = entries[0];
+  const shown = Math.min(total, 5); // the trail shows the latest five
   return (
-    <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${total} done. ${total > 1 ? 'Change since your first assessment' : 'Your baseline'}`} style={{ gap: 12 }}>
-      <CardTitle title="Assessments" right={due ? <Tag label="Due now" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, color: c.muted }}>{total === 1 ? '1 done' : `${total} done`}</Txt>} />
-      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{total > 1 ? `Since your first assessment, ${fmtAt(first.at)}` : 'Your baseline'}</Txt>
-      {stats.length > 0 && (
-        <Row style={{ gap: 8 }}>
-          {stats.map((r) => {
-            const colour = total === 1 || r.n.dir === 'none' ? c.ink : r.good ? c.good : r.diff === 0 ? c.muted : c.warn;
+    <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${total} completed. Last: Assessment ${total}, ${fmtAt(last.at)}`} style={{ gap: 14 }}>
+      <CardTitle title="Assessments" right={due ? <Tag label="Due now" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>View ›</Txt>} />
+      <Row style={{ alignItems: 'center', justifyContent: 'space-between', gap: 14 }}>
+        <View>
+          <Txt style={{ fontFamily: font.displayBold, fontSize: 56, lineHeight: 62, letterSpacing: -1.5 }}>{String(total)}</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>completed</Txt>
+        </View>
+        <View importantForAccessibility="no-hide-descendants" style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 8 }}>
+          {Array.from({ length: shown }, (_, i) => {
+            const n = total - shown + i + 1;
+            const latest = n === total;
             return (
-              <View key={r.k} style={{ flex: 1, borderRadius: radii.md, backgroundColor: c.surface2, paddingVertical: 12, paddingHorizontal: 12, gap: 2 }}>
-                <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 30, color: colour }}>{total === 1 ? String(r.now) : fmtDiff(r.now - (r.prev as number))}</Txt>
-                <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`${r.n.label} ${r.n.unit}`}</Txt>
+              <View key={n} style={{ width: 36, height: 36, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: latest ? c.accent : c.surface3 }}>
+                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: latest ? c.accentInk : c.muted }}>{String(n)}</Txt>
               </View>
             );
           })}
-        </Row>
-      )}
+        </View>
+      </Row>
+      <View style={{ height: 1, backgroundColor: c.line }} />
+      <View style={{ gap: 2 }}>
+        <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last assessment</Txt>
+        <Txt style={{ fontSize: fontSizes.md }}>{`Assessment ${total}, ${fmtAt(last.at)}`}</Txt>
+      </View>
       {due
         ? <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />
-        : <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`Next assessment ${fmtAt(new Date(nextAt).toISOString())}`}</Txt>}
+        : <Txt style={{ fontSize: fontSizes.sm, color: c.muted }}>{`Next assessment ${fmtAt(new Date(nextAt).toISOString())}`}</Txt>}
     </PCard>
   );
 }
