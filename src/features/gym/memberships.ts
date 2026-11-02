@@ -10,6 +10,7 @@ export type Membership = {
   pct: number;       // how much of the time has gone, 0 to 100
   note: string;      // one line under the card: what is happening
   warn?: boolean;    // the note needs attention (ending soon)
+  left: { n: string; unit: string }; // time left in big numbers for the small cards: 37 days left, 13 months left
   payments: Payment[];
 };
 
@@ -22,19 +23,19 @@ const pay = (id: string, no: string, item: string, date: string, amount: number,
 export function useMemberships(): Membership[] {
   const { d } = useDomain();
   const main: Membership = d.membership === 'Expired'
-    ? { id: 'm1', name: 'Annual plan', branch: 'Vaishali Nagar', memberId: 'GLD-4821', start: '14 Oct 2025', end: '21 Sep 2026', status: 'Expired', pct: 100, note: 'Ended on 21 Sep. Your history stays here.', payments: [] }
+    ? { id: 'm1', name: 'Annual plan', branch: 'Vaishali Nagar', memberId: 'GLD-4821', start: '14 Oct 2025', end: '21 Sep 2026', status: 'Expired', pct: 100, note: 'Ended on 21 Sep. Your history stays here.', left: { n: '0', unit: 'days left' }, payments: [] }
     : d.membership === 'Expiring'
-      ? { id: 'm1', name: 'Annual plan', branch: 'Vaishali Nagar', memberId: 'GLD-4821', start: '14 Oct 2025', end: '6 Oct 2026', status: 'Active', pct: 96, note: 'Ends in 12 days', warn: true, payments: [] }
-      : { id: 'm1', name: 'Annual plan', branch: 'Vaishali Nagar', memberId: 'GLD-4821', start: '14 Oct 2025', end: '14 Oct 2027', status: 'Active', pct: 14, note: 'Active till 14 Oct 2027', payments: [] };
+      ? { id: 'm1', name: 'Annual plan', branch: 'Vaishali Nagar', memberId: 'GLD-4821', start: '14 Oct 2025', end: '6 Oct 2026', status: 'Active', pct: 96, note: 'Ends in 12 days', warn: true, left: { n: '12', unit: 'days left' }, payments: [] }
+      : { id: 'm1', name: 'Annual plan', branch: 'Vaishali Nagar', memberId: 'GLD-4821', start: '14 Oct 2025', end: '14 Oct 2027', status: 'Active', pct: 14, note: 'Active till 14 Oct 2027', left: { n: '13', unit: 'months left' }, payments: [] };
   main.payments = [
     pay('p1', 'INV-2025-0412', 'Annual membership', '14 Oct 2025', 12000, 'front desk'),
     pay('p2', 'INV-2025-0411', 'Joining fee', '14 Oct 2025', 1000, 'front desk'),
   ];
   return [
     main,
-    { id: 'm2', name: 'Quarterly plan', branch: 'Malviya Nagar', memberId: 'GLD-5307', start: '1 Aug 2026', end: '31 Oct 2026', status: 'Active', pct: 70, note: 'Ends in 37 days', payments: [pay('p3', 'INV-2026-0189', 'Quarterly membership', '1 Aug 2026', 4500, 'UPI')] },
-    { id: 'm3', name: 'Student plan', branch: 'Vaishali Nagar', memberId: 'GLD-4990', start: '1 Jan 2026', end: '31 Mar 2027', status: 'Suspended', pct: 55, note: 'Suspended by the gym. Ask at the front desk.', payments: [pay('p4', 'INV-2026-0007', 'Student membership', '1 Jan 2026', 3000, 'cash')] },
-    { id: 'm4', name: 'Monthly plan', branch: 'Vaishali Nagar', memberId: 'GLD-4309', start: '1 Jun 2025', end: '30 Jun 2025', status: 'Expired', pct: 100, note: 'Ended on 30 Jun 2025', payments: [pay('p5', 'INV-2025-0201', 'Monthly membership', '1 Jun 2025', 1500, 'cash')] },
-    { id: 'm5', name: 'Joining offer', branch: 'Vaishali Nagar', memberId: 'GLD-4120', start: '1 Mar 2025', end: '31 May 2025', status: 'Expired', pct: 100, note: 'Ended on 31 May 2025', payments: [pay('p6', 'INV-2025-0102', 'Joining offer', '1 Mar 2025', 3600, 'UPI')] },
+    { id: 'm2', name: 'Quarterly plan', branch: 'Malviya Nagar', memberId: 'GLD-5307', start: '1 Aug 2026', end: '31 Oct 2026', status: 'Active', pct: 70, note: 'Ends in 37 days', left: { n: '37', unit: 'days left' }, payments: [pay('p3', 'INV-2026-0189', 'Quarterly membership', '1 Aug 2026', 4500, 'UPI')] },
+    { id: 'm3', name: 'Student plan', branch: 'Vaishali Nagar', memberId: 'GLD-4990', start: '1 Jan 2026', end: '31 Mar 2027', status: 'Suspended', pct: 55, note: 'Suspended by the gym. Ask at the front desk.', left: { n: '—', unit: 'suspended' }, payments: [pay('p4', 'INV-2026-0007', 'Student membership', '1 Jan 2026', 3000, 'cash')] },
+    { id: 'm4', name: 'Monthly plan', branch: 'Vaishali Nagar', memberId: 'GLD-4309', start: '1 Jun 2025', end: '30 Jun 2025', status: 'Expired', pct: 100, note: 'Ended on 30 Jun 2025', left: { n: '0', unit: 'days left' }, payments: [pay('p5', 'INV-2025-0201', 'Monthly membership', '1 Jun 2025', 1500, 'cash')] },
+    { id: 'm5', name: 'Joining offer', branch: 'Vaishali Nagar', memberId: 'GLD-4120', start: '1 Mar 2025', end: '31 May 2025', status: 'Expired', pct: 100, note: 'Ended on 31 May 2025', left: { n: '0', unit: 'days left' }, payments: [pay('p6', 'INV-2025-0102', 'Joining offer', '1 Mar 2025', 3600, 'UPI')] },
   ];
 }
