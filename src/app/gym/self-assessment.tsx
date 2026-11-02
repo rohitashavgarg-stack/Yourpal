@@ -316,10 +316,13 @@ function Result({ entry, prev, fresh }: { entry: SelfEntry; prev: SelfEntry | un
           <View key={grp.g} style={{ backgroundColor: c.surface, borderRadius: radii.xl, paddingTop: 14, paddingHorizontal: 16, paddingBottom: 4 }}>
             <Row style={{ gap: 8 }}><View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone] }} /><Txt v="label">{grp.g}</Txt></Row>
             {list.map((r, i) => (
-              <Row key={r.k} style={{ minHeight: 52, gap: 10, borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-                <Txt style={{ flex: 1, fontFamily: font.medium }}>{r.n.label}</Txt>
-                <Txt v="mono">{r.prev != null ? `${r.prev} → ${r.now}` : `${r.now} ${r.n.unit}`}</Txt>
-                {r.prev != null && <Tag label={r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`} bg={r.good ? c.goodSoft : c.surface2} fg={r.good ? c.good : c.muted} style={{ minWidth: 58, alignItems: 'center' }} />}
+              <Row key={r.k} style={{ minHeight: 56, gap: 8, alignItems: 'center', borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
+                <Txt style={{ flex: 1, fontFamily: font.medium }} numberOfLines={1}>{r.n.label}</Txt>
+                {/* the value and the change each have a column of their own, so every row lines up */}
+                <View style={{ width: 112, alignItems: 'flex-end' }}><Txt v="mono" numberOfLines={1}>{r.prev != null ? `${r.prev} → ${r.now}` : `${r.now} ${r.n.unit}`}</Txt></View>
+                <View style={{ width: 62, alignItems: 'flex-end' }}>
+                  {r.prev != null && <Tag label={r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`} bg={r.good ? c.goodSoft : c.surface2} fg={r.good ? c.good : c.muted} style={{ minWidth: 58, alignItems: 'center' }} />}
+                </View>
               </Row>
             ))}
           </View>
