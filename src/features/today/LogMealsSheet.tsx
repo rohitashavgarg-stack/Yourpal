@@ -18,6 +18,7 @@ import { fmtQty, parseQty, stepFor } from '@/features/plans/qty';
 import { AmountStepper } from '@/design-system/primitives/AmountStepper';
 import { FoodCard } from '@/design-system/patterns/FoodCard';
 import { toastCopy } from '@/lib/microcopy';
+import { TimeSheet } from '@/features/plans/TimeSheet';
 
 // What the sheet edits before it is saved: which planned foods were eaten, how much of each, and the foods added with "Ate something else".
 export type MealDraft = { eaten: number[]; por: Record<number, number>; extra: Extra[] };
@@ -34,7 +35,7 @@ export function LogMealsSheet({ mealId, draft: start }: { mealId: MealId; draft?
   const { closeSheet, openSheet, toast } = useOverlay();
   const m = MEALS.find((q) => q.id === mealId)!;
   const x = mealLog(d, mealId);
-  const [dr, setDr] = useState<MealDraft>({ eaten: start?.eaten ?? x.eaten, por: start?.por ?? x.por ?? {}, extra: x.extra });
+  const [dr, setDr] = useState<MealDraft>({ eaten: start?.eaten ?? x.eaten, por: start?.por ?? x.por ?? {}, extra: start?.extra ?? x.extra });
 
   const tick = gate((k: number) => { haptic.light(); setDr((s) => ({ ...s, eaten: s.eaten.includes(k) ? s.eaten.filter((i) => i !== k) : [...s.eaten, k] })); });
   const total = m.items.length + dr.extra.length, eatenN = dr.eaten.length + dr.extra.length;
@@ -45,11 +46,21 @@ export function LogMealsSheet({ mealId, draft: start }: { mealId: MealId; draft?
   // something that is not on the plan: scan the plate, write it or pick from the catalogue; then back here with what was ticked so far
   const elseFood = gate(() => closeSheet(() => openSheet(<QuickLogSheet mealId={mealId} mode="scan" backTo={() => openSheet(<LogMealsSheet mealId={mealId} draft={{ eaten: dr.eaten, por: dr.por }} />, { label: 'Log meal' })} />, { label: 'Log a meal' })));
   const openFood = (k: number, extra: boolean) => closeSheet(() => router.push({ pathname: '/food', params: { mid: mealId, k: String(k), extra: extra ? '1' : '0' } }));
-  const save = gate(() => {
+  const anyEaten = dr.eaten.length > 0 || dr.extra.length > 0;
+  const commit = (at?: number) => {
     const prev = d.meals;
-    patch(mealId, { eaten: dr.eaten, por: dr.por, extra: dr.extra, skip: false, at: dr.eaten.length || dr.extra.length ? x.at ?? d.min : x.at });
+    patch(mealId, { eaten: dr.eaten, por: dr.por, extra: dr.extra, skip: false, at: anyEaten ? at ?? x.at ?? d.min : x.at });
     haptic.success();
-    closeSheet(() => toast(toastCopy.mealSaved(m.n), { undo: () => set({ meals: prev }) }));
+    toast(toastCopy.mealSaved(m.n), { undo: () => set({ meals: prev }) });
+  };
+  // Save asks when the meal was eaten. It is already set to now (or to the time the meal already has), so the usual case is one more tap.
+  const save = gate(() => {
+    if (!anyEaten) { closeSheet(() => commit()); return; }
+    closeSheet(() => openSheet(
+      <TimeSheet title={`When did you eat ${m.n}?`} initial={x.at ?? d.min} max={d.min} saveLabel="Save meal" onSave={commit}
+        onCancel={() => openSheet(<LogMealsSheet mealId={mealId} draft={{ eaten: dr.eaten, por: dr.por, extra: dr.extra }} />, { label: 'Log meal' })} />,
+      { label: 'Ate at' },
+    ));
   });
   const skip = gate(() => {
     if (x.skip) { patch(mealId, { skip: false }); return; }

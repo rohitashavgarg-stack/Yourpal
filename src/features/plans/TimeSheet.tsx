@@ -29,7 +29,7 @@ function Step({ label, value, onLess, onMore }: { label: string; value: string; 
 }
 
 // "When did you eat?" Hours, minutes (steps of 5) and am or pm. A time later than now is not allowed.
-export function TimeSheet({ title, initial, max, onSave }: { title: string; initial: number; max: number; onSave: (min: number) => void }) {
+export function TimeSheet({ title, initial, max, onSave, saveLabel = 'Save time', onCancel }: { title: string; initial: number; max: number; onSave: (min: number) => void; saveLabel?: string; onCancel?: () => void }) {
   const { closeSheet } = useOverlay();
   const [min, setMin] = useState(Math.min(initial, max));
   const h = Math.floor(min / 60);
@@ -52,8 +52,8 @@ export function TimeSheet({ title, initial, max, onSave }: { title: string; init
         </View>
       </Row>
       <Txt v="caption" style={{ textAlign: 'center', minHeight: 18 }}>{tooLate ? 'That time has not come yet. Pick a time up to now.' : ' '}</Txt>
-      <Button kind="primary" label="Save time" disabled={tooLate} onPress={() => closeSheet(() => onSave(min))} />
-      <Button kind="secondary" label="Cancel" onPress={() => closeSheet()} />
+      <Button kind="primary" label={saveLabel} disabled={tooLate} onPress={() => closeSheet(() => onSave(min))} />
+      <Button kind="secondary" label={onCancel ? 'Back' : 'Cancel'} onPress={() => closeSheet(onCancel)} />
     </View>
   );
 }
