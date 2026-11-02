@@ -40,6 +40,8 @@ export function useSessionActions() {
     toggleWarm(exIdx: number, i: number) { updEx(exIdx, (e) => { e.sets[i] = { ...e.sets[i], w: !e.sets[i].w }; return e; }); },
     setNote(exIdx: number, i: number, note: string) { updEx(exIdx, (e) => { e.sets[i] = { ...e.sets[i], note }; return e; }); },
     copyToAll(exIdx: number, k: number, r: number) { updEx(exIdx, (e) => { e.sets = e.sets.map((x) => (x.st === 'todo' && !x.w ? { ...x, k, r } : x)); return e; }); },
+    // An exercise the member adds in the middle of a workout goes to the end of today's list. It does not touch the coach's plan.
+    addExercise(ex: Ex) { upd((s) => ({ ex: [...s.ex, ex] })); },
     skipExercise(exIdx: number) { updEx(exIdx, (e) => { e.sets = e.sets.map((x) => (x.st === 'todo' ? { ...x, st: 'skipped' } : x)); return e; }); },
     swap(exIdx: number, name: string, plan: boolean) { updEx(exIdx, (e) => ({ ...e, name, swapped: !plan })); },
     completeAll(exIdx: number) { updEx(exIdx, (e) => { e.sets = e.sets.map((x) => (x.st === 'todo' ? { ...x, st: 'done', dr: x.r, dk: x.k, dt: x.t } : x)); return e; }); },
