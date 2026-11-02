@@ -487,18 +487,17 @@ export function DayTiles({ days, onChange, today }: { days: number; onChange: (d
   const own = !presets.includes(days);
   return (
     <View style={{ gap: 16 }}>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+      <Row style={{ gap: 8 }}>
         {presets.map((n) => {
           const on = days === n;
           return (
-            <Pressy key={n} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => set(n)} scaleTo={0.96}
-              style={{ width: '48%', height: 84, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? c.accent : c.surface }}>
-              <Txt style={{ fontFamily: font.displayBold, fontSize: 34, lineHeight: 40, color: on ? c.accentInk : c.ink }}>{String(n)}</Txt>
-              <Txt style={{ fontSize: fontSizes.sm, color: on ? c.accentInk : c.muted }}>Days</Txt>
+            <Pressy key={n} accessibilityRole="button" accessibilityLabel={`${n} days`} accessibilityState={{ selected: on }} onPress={() => set(n)} scaleTo={0.96}
+              style={{ flex: 1, height: 46, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? c.accent : c.surface }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, color: on ? c.accentInk : c.ink }}>{`${n} d`}</Txt>
             </Pressy>
           );
         })}
-      </View>
+      </Row>
       <View style={{ gap: 8, padding: 14, borderRadius: radii.lg, backgroundColor: own ? c.accentSoft : c.surface, borderWidth: 1.5, borderColor: own ? c.accent : 'transparent' }}>
         <Txt v="label">OR CHOOSE YOUR OWN</Txt>
         <Row style={{ justifyContent: 'space-between' }}>
