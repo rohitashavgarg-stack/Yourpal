@@ -2,9 +2,9 @@ import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Check, Minus, Plus } from '@/lib/icons';
-import { Button, Field, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
-import { RoundBtn, Tag } from '@/components/bits';
+import { Check } from '@/lib/icons';
+import { Button, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
+import { Tag } from '@/components/bits';
 import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -16,8 +16,11 @@ import { radii, fontSizes } from '@/design-system/tokens';
 import { Chip } from '@/design-system/primitives/Chip';
 import { INJURY_AREAS, NUMS, NumKey, STEPS, SelfEntry, compare, fmtAt, habitLabel } from '@/features/selfassess/data';
 import { NUDGE_DAYS, useSelfAssess } from '@/features/selfassess/useSelfAssess';
+import { RulerStep } from '@/features/selfassess/RulerStep';
+import { HeightPicker, WeightPicker } from '@/features/body/BodyLog';
 
-// One screen for each step, in the order of the app's assessment flow (see data.ts). A choice moves on by itself; a measurement waits for Next or Skip.
+// One screen for each step, in the order of the app's assessment flow (see data.ts). A choice moves on by itself; a measurement is dragged on a ruler
+// and waits for Continue (or Skip, to leave it out).
 // With an id it only shows that assessment (the member's own, or one the coach entered).
 export default function SelfAssessment() {
   const { c } = useTheme();
@@ -39,7 +42,28 @@ export default function SelfAssessment() {
   const entry = viewing ?? saved;
   const step = idx < total ? STEPS[idx] : null;
 
+  const numOf = (k: NumKey, d0: number) => { const n = parseFloat(vals[k] ?? ''); return Number.isNaN(n) ? d0 : n; };
+  const setNum = (k: NumKey, v: number) => setVals((x) => ({ ...x, [k]: String(v) }));
+  // the number a ruler step opens on, and the key it is kept under
+  const startOf = (st: (typeof STEPS)[number]): { k: NumKey; v: number } | null =>
+    st.kind === 'height' ? { k: 'height', v: 165 } : st.kind === 'weight' ? { k: 'weight', v: d.weight } : st.kind === 'ruler' ? { k: st.k, v: st.start } : null;
   const next = () => setIdx((i) => Math.min(total, i + 1));
+  const cont = () => {
+    if (step) {
+      const s0 = startOf(step);
+      if (s0 && vals[s0.k] == null) setNum(s0.k, s0.v); // Continue on the opening number keeps it
+      if (step.kind === 'scale' && !answers[step.key]) setAnswers((a) => ({ ...a, [step.key]: '3' }));
+    }
+    next();
+  };
+  const skip = () => {
+    if (step) {
+      const s0 = startOf(step);
+      if (s0) setVals((x) => { const n = { ...x }; delete n[s0.k]; return n; });
+      if (step.kind === 'scale') setAnswers((a) => { const n = { ...a }; delete n[step.key]; return n; });
+    }
+    next();
+  };
   const back = () => { if (advance.current) clearTimeout(advance.current); setIdx((i) => Math.max(0, i - 1)); };
   const pick = (k: string, o: string) => {
     setAnswers((a) => ({ ...a, [k]: o }));
@@ -61,7 +85,7 @@ export default function SelfAssessment() {
     haptic.success();
   };
 
-  const filled = step?.kind === 'fields' && step.fields.some((f) => (vals[f.k] ?? '').trim());
+  const rulerLike = step?.kind === 'height' || step?.kind === 'weight' || step?.kind === 'ruler' || step?.kind === 'scale';
   const bottom = Math.max(insets.bottom, 16) + 6;
   const footer = (
     <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 8 }}>
@@ -73,11 +97,18 @@ export default function SelfAssessment() {
           <Button kind="secondary" label="Skip" onPress={next} style={{ flex: 1 }} />
         </Row>
       )}
-      {(step?.kind === 'fields' || step?.kind === 'injuries') && <>
-        <Button kind="accent" label={step.kind === 'fields' && !filled ? 'Skip' : 'Continue'} onPress={next} />
-        {idx === 0
-          ? <Button kind="secondary" label="Maybe later" onPress={() => { later(); goBack('/gym/assessments'); }} />
-          : <Button kind="secondary" label="Back" onPress={back} />}
+      {rulerLike && <>
+        <Button kind="accent" label="Continue" onPress={cont} />
+        <Row style={{ gap: 8 }}>
+          {idx === 0
+            ? <Button kind="secondary" label="Maybe later" onPress={() => { later(); goBack('/gym/assessments'); }} style={{ flex: 1 }} />
+            : <Button kind="secondary" label="Back" onPress={back} style={{ flex: 1 }} />}
+          <Button kind="secondary" label="Skip" onPress={skip} style={{ flex: 1 }} />
+        </Row>
+      </>}
+      {step?.kind === 'injuries' && <>
+        <Button kind="accent" label="Continue" onPress={next} />
+        <Button kind="secondary" label="Back" onPress={back} />
       </>}
       {step?.kind === 'next' && <>
         <Button kind="accent" label="Save assessment" onPress={finish} />
@@ -126,19 +157,17 @@ export default function SelfAssessment() {
         </View>
       )}
 
-      {step?.kind === 'fields' && (
+      {step?.kind === 'height' && <HeightPicker cm={numOf('height', 165)} onChange={(v) => setNum('height', Math.round(v))} />}
+      {step?.kind === 'weight' && <WeightPicker kg={numOf('weight', d.weight)} onChange={(v) => setNum('weight', Math.round(v * 10) / 10)} />}
+      {step?.kind === 'ruler' && (
         <View style={{ gap: 14 }}>
           {step.how && <How lines={step.how} />}
-          {step.fields.map((f, i) => (
-            <View key={f.k} style={{ gap: 6 }}>
-              {!!f.label && <Txt style={{ fontFamily: font.medium }}>{f.label}</Txt>}
-              <Field key={`${step.id}-${f.k}`} autoFocus={i === 0} accessibilityLabel={f.label ?? step.title} value={vals[f.k] ?? ''} onChangeText={(x) => setVals((v) => ({ ...v, [f.k]: x.replace(/[^0-9.,]/g, '') }))}
-                keyboardType="decimal-pad" placeholder={f.placeholder} prefix={NUMS[f.k].unit} />
-            </View>
-          ))}
+          <RulerStep key={step.id} a11y={step.title} value={numOf(step.k, step.start)} onChange={(v) => setNum(step.k, v)} unit={NUMS[step.k].unit} min={step.min} max={step.max} step={step.step} decimals={step.dp} major={step.major} />
         </View>
       )}
-
+      {step?.kind === 'scale' && (
+        <RulerStep key={step.id} a11y={step.title} value={Number(answers[step.key]) || 3} onChange={(v) => setAnswers((a) => ({ ...a, [step.key]: String(v) }))} min={1} max={5} step={1} major={1} caption={step.labels[(Number(answers[step.key]) || 3) - 1]} />
+      )}
       {step?.kind === 'injuries' && (
         <View style={{ gap: 14 }}>
           <Txt v="label">MOST COMMON</Txt>
@@ -154,18 +183,7 @@ export default function SelfAssessment() {
         </View>
       )}
 
-      {step?.kind === 'next' && (
-        <View style={{ alignItems: 'center', gap: 14, paddingTop: 8 }}>
-          <Row style={{ gap: 20 }}>
-            <RoundBtn label="Fewer days" onPress={() => setDays((n) => Math.max(15, n - 5))}><Minus size={22} color={c.ink} /></RoundBtn>
-            <View style={{ alignItems: 'center' }}>
-              <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.displayBold, fontSize: 52, lineHeight: 64, letterSpacing: -1.5 }}>{days}</Txt>
-              <Txt muted>Days</Txt>
-            </View>
-            <RoundBtn label="More days" onPress={() => setDays((n) => Math.min(90, n + 5))}><Plus size={22} color={c.ink} /></RoundBtn>
-          </Row>
-        </View>
-      )}
+      {step?.kind === 'next' && <RulerStep a11y="Days until the next assessment" value={days} onChange={setDays} unit="Days" min={15} max={90} step={5} major={2} />}
 
       {!step && entry && <Result entry={entry} prev={entries.find((e) => e.id !== entry.id && Date.parse(e.at) < Date.parse(entry.at))} fresh={!viewing} />}
     </SubPage>

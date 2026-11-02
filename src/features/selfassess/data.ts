@@ -25,41 +25,49 @@ export const NUMS: Record<NumKey, { label: string; unit: string; dir: 'down' | '
   sugar: { label: 'Blood sugar', unit: 'mg/dl', dir: 'down', dp: 0 },
 };
 
-type Field = { k: NumKey; label?: string; placeholder: string };
 type Opt = { v: string; sub?: string };
+// ruler: drag a ruler to set the number. start is where it opens; major is how many ticks between the labelled ones.
 export type Step =
-  | { id: string; kind: 'fields'; title: string; sub?: string; fields: Field[]; how?: string[] }
+  | { id: string; kind: 'height'; title: string; sub?: string }
+  | { id: string; kind: 'weight'; title: string; sub?: string }
+  | { id: string; kind: 'ruler'; title: string; sub?: string; k: NumKey; min: number; max: number; step: number; dp: number; major: number; start: number; how?: string[] }
+  | { id: string; kind: 'scale'; title: string; sub?: string; key: string; labels: string[] }
   | { id: string; kind: 'choice'; title: string; sub?: string; key: string; options: Opt[]; how?: string[] }
   | { id: string; kind: 'injuries'; title: string; sub: string }
   | { id: string; kind: 'next'; title: string; sub: string };
 
 export const INJURY_AREAS = ['Neck', 'Shoulder', 'Arm', 'Back', 'Hip', 'Leg', 'Knee', 'Ankle', 'Foot', 'Chest'];
 
+const BODY_SUB = 'Body Measurements. Track body metrics for accurate assessment.';
+const BENCH = ['Lie on the bench with feet flat and grip the bar evenly.', 'Lower the bar slowly to your chest.', 'Press the bar upward in a controlled motion.', 'Stop when you reach your max reps and re-rack the bar safely.'];
+const LEG = ['Sit with your back supported and feet on the platform.', 'Push the platform upward until your legs are almost straight.', 'Lower the platform slowly with control.', 'Stop when you reach your max reps and lock the safety handle.'];
+const BREATH = ['Sit relaxed and take a normal breath in and out.', 'Take a deep breath and start holding.', 'Stay still and maintain calm breathing control.', 'Stop the timer when you cannot hold your breath any longer.'];
+const BP_SUB = 'Please check and enter your blood pressure for better understanding. Skip it if you have no monitor.';
+
 export const STEPS: Step[] = [
-  { id: 'hw', kind: 'fields', title: 'Choose height and weight', fields: [{ k: 'height', label: 'Height', placeholder: 'cm' }, { k: 'weight', label: 'Weight', placeholder: 'kg' }] },
-  { id: 'body', kind: 'fields', title: 'Body Measurements', sub: 'Track body metrics for accurate assessment', fields: (['chest', 'waist', 'hip', 'arms', 'legs', 'calves'] as NumKey[]).map((k) => ({ k, label: NUMS[k].label, placeholder: `Enter ${NUMS[k].label.toLowerCase()} size` })) },
+  { id: 'height', kind: 'height', title: 'Choose height' },
+  { id: 'weight', kind: 'weight', title: 'Choose weight' },
+  { id: 'chest', kind: 'ruler', title: 'Chest size', sub: BODY_SUB, k: 'chest', min: 60, max: 160, step: 1, dp: 0, major: 10, start: 95 },
+  { id: 'waist', kind: 'ruler', title: 'Waist size', sub: BODY_SUB, k: 'waist', min: 50, max: 160, step: 1, dp: 0, major: 10, start: 80 },
+  { id: 'hip', kind: 'ruler', title: 'Hip size', sub: BODY_SUB, k: 'hip', min: 60, max: 170, step: 1, dp: 0, major: 10, start: 95 },
+  { id: 'arms', kind: 'ruler', title: 'Arm size', sub: BODY_SUB, k: 'arms', min: 15, max: 60, step: 1, dp: 0, major: 5, start: 30 },
+  { id: 'legs', kind: 'ruler', title: 'Leg size', sub: BODY_SUB, k: 'legs', min: 30, max: 100, step: 1, dp: 0, major: 10, start: 55 },
+  { id: 'calves', kind: 'ruler', title: 'Calf size', sub: BODY_SUB, k: 'calves', min: 20, max: 60, step: 1, dp: 0, major: 5, start: 36 },
   { id: 'fat', kind: 'choice', title: 'Body fat %?', sub: 'Pick the range that looks most like you.', key: 'fat', options: ['3-5 %', '6-9 %', '10-12 %', '13-17 %', '17-22 %', '23-27 %', '28-32 %', '33-37 %', 'Not sure'].map((v) => ({ v })) },
-  { id: 'sleep', kind: 'fields', title: 'Sleep duration', sub: 'To provide you with the best results, tell us how long you sleep at night.', fields: [{ k: 'sleep', label: 'Hours of sleep', placeholder: 'For example 8' }] },
-  { id: 'activity', kind: 'choice', title: 'Activity Level', key: 'activity', options: [{ v: '1', sub: 'Not active' }, { v: '2', sub: 'Lightly active' }, { v: '3', sub: 'Moderately active' }, { v: '4', sub: 'Somewhat athletic' }, { v: '5', sub: 'Very athletic' }] },
+  { id: 'sleep', kind: 'ruler', title: 'Sleep duration', sub: 'To provide you with the best results, tell us how long you sleep at night.', k: 'sleep', min: 0, max: 14, step: 0.5, dp: 1, major: 2, start: 7 },
+  { id: 'activity', kind: 'scale', title: 'Activity Level', key: 'activity', labels: ['Not active', 'Lightly active', 'Moderately active', 'Somewhat athletic', 'Very athletic'] },
   { id: 'freq', kind: 'choice', title: 'Workout Frequency per week', key: 'freq', options: [{ v: '1', sub: 'Day per week' }, { v: '2', sub: 'Days per week' }, { v: '3', sub: 'Days per week' }, { v: '4', sub: 'Days per week' }, { v: '5', sub: 'Days per week' }, { v: "I don't workout" }] },
   { id: 'water', kind: 'choice', title: 'How much water do you drink in a day?', key: 'water', options: ['More than 4 l', '3-4 l', '1-2 l', 'Less than 1 l'].map((v) => ({ v })) },
   { id: 'level', kind: 'choice', title: 'Training Level', key: 'level', options: [{ v: 'Beginner', sub: 'New to fitness training' }, { v: 'Intermediate', sub: 'Workout regularly' }, { v: 'Advanced', sub: 'Seasoned athlete seeking new challenges' }] },
-  {
-    id: 'strength', kind: 'fields', title: 'Strength Test', sub: 'Bench press measures upper body strength. Leg press measures lower body strength. Skip what you did not do.',
-    fields: [{ k: 'bench', label: 'Bench Press Test', placeholder: 'Kg' }, { k: 'legpress', label: 'Leg Press Test', placeholder: 'Kg' }],
-    how: ['Bench press: lie on the bench with feet flat and grip the bar evenly, lower the bar slowly to your chest, press it up in a controlled motion, and stop at your max reps and re-rack the bar safely.', 'Leg press: sit with your back supported and feet on the platform, push it until your legs are almost straight, lower it with control, and stop at your max reps and lock the safety handle.'],
-  },
-  {
-    id: 'flex', kind: 'choice', title: 'Flexibility Test', sub: 'Sit & Reach Flexibility Test helps to find the flexibility', key: 'flex', options: ['Poor', 'Moderate', 'Good', 'Very Good', 'Excellent'].map((v) => ({ v })),
-    how: ['Sit with legs straight and feet against the box.', 'Start when you are ready.', 'Reach forward as far as you can and hold for 2 seconds.', 'Note how far you reached, then pick the closest picture.'],
-  },
-  {
-    id: 'breath', kind: 'fields', title: 'Breath-Hold Test', sub: 'Check breath-hold endurance', fields: [{ k: 'breath', label: 'Time you held your breath', placeholder: 'Seconds' }],
-    how: ['Sit relaxed and take a normal breath in and out.', 'Take a deep breath and start holding.', 'Stay still and maintain calm breathing control.', 'Stop the timer when you cannot hold your breath any longer.'],
-  },
+  { id: 'bench', kind: 'ruler', title: 'Bench Press Test', sub: 'Measure upper body strength. The most weight you lifted.', k: 'bench', min: 0, max: 200, step: 2.5, dp: 1, major: 4, start: 40, how: BENCH },
+  { id: 'legpress', kind: 'ruler', title: 'Leg Press Test', sub: 'Measure lower body strength. The most weight you pressed.', k: 'legpress', min: 0, max: 400, step: 5, dp: 0, major: 4, start: 100, how: LEG },
+  { id: 'flex', kind: 'choice', title: 'Flexibility Test', sub: 'Sit & Reach Flexibility Test helps to find the flexibility', key: 'flex', options: ['Poor', 'Moderate', 'Good', 'Very Good', 'Excellent'].map((v) => ({ v })), how: ['Sit with legs straight and feet against the box.', 'Start when you are ready.', 'Reach forward as far as you can and hold for 2 seconds.', 'Note how far you reached, then pick the closest picture.'] },
+  { id: 'breath', kind: 'ruler', title: 'Breath-Hold Test', sub: 'Check breath-hold endurance. How long you held your breath.', k: 'breath', min: 0, max: 180, step: 1, dp: 0, major: 10, start: 30, how: BREATH },
   { id: 'injuries', kind: 'injuries', title: 'Injuries & Diseases', sub: 'Please mention any existing injuries for better assessment' },
-  { id: 'bp', kind: 'fields', title: 'Blood Pressure', sub: 'Please check and enter your blood pressure for better understanding. Skip it if you have no monitor.', fields: [{ k: 'sys', label: 'Systolic', placeholder: 'mm/hg' }, { k: 'dia', label: 'Diastolic', placeholder: 'mm/hg' }, { k: 'pulse', label: 'Pulse rate', placeholder: 'bpm' }] },
-  { id: 'sugar', kind: 'fields', title: 'Blood Glucose', sub: 'Please check and enter your blood sugar for better understanding. Skip it if you have no meter.', fields: [{ k: 'sugar', label: 'Sugar', placeholder: 'mg/dl' }] },
+  { id: 'sys', kind: 'ruler', title: 'Blood Pressure: Systolic', sub: BP_SUB, k: 'sys', min: 80, max: 200, step: 1, dp: 0, major: 10, start: 120 },
+  { id: 'dia', kind: 'ruler', title: 'Blood Pressure: Diastolic', sub: BP_SUB, k: 'dia', min: 50, max: 130, step: 1, dp: 0, major: 10, start: 80 },
+  { id: 'pulse', kind: 'ruler', title: 'Pulse rate', sub: BP_SUB, k: 'pulse', min: 40, max: 140, step: 1, dp: 0, major: 10, start: 72 },
+  { id: 'sugar', kind: 'ruler', title: 'Blood Glucose', sub: 'Please check and enter your blood sugar for better understanding. Skip it if you have no meter.', k: 'sugar', min: 50, max: 300, step: 1, dp: 0, major: 10, start: 100 },
   { id: 'next', kind: 'next', title: 'Next assessment', sub: 'When would you like to take the next assessment?' },
 ];
 
