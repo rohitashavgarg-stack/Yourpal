@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { Ex, SetT } from '@/lib/data';
 import { Session, useDomain } from '@/lib/domain';
 import { haptic } from '@/lib/haptics';
+import { cancelTimerEnd, scheduleTimerEnd } from '@/lib/notify';
 
 export const REST_SEC = 105;
 
@@ -24,7 +25,7 @@ export function useSessionActions() {
         const s = e.sets[i];
         e.sets[i] = { ...s, st: 'done', dr: vals ? vals.r : s.r, dk: vals ? vals.k : s.k, dt: vals ? vals.t : s.t };
         return e;
-      }, () => ({ setTimer: null, rest: { endAt: Date.now() + REST_SEC * 1000, total: REST_SEC } }));
+      }, () => { scheduleTimerEnd(Date.now() + REST_SEC * 1000, 'Rest is over. Time for your next set.'); return { setTimer: null, rest: { endAt: Date.now() + REST_SEC * 1000, total: REST_SEC } }; });
     },
     unlogSet(exIdx: number, i: number) {
       haptic.light();
@@ -40,6 +41,8 @@ export function useSessionActions() {
     toggleWarm(exIdx: number, i: number) { updEx(exIdx, (e) => { e.sets[i] = { ...e.sets[i], w: !e.sets[i].w }; return e; }); },
     setNote(exIdx: number, i: number, note: string) { updEx(exIdx, (e) => { e.sets[i] = { ...e.sets[i], note }; return e; }); },
     copyToAll(exIdx: number, k: number, r: number) { updEx(exIdx, (e) => { e.sets = e.sets.map((x) => (x.st === 'todo' && !x.w ? { ...x, k, r } : x)); return e; }); },
+    // An exercise the member adds in the middle of a workout goes to the end of today's list. It does not touch the coach's plan.
+    addExercise(ex: Ex) { upd((s) => ({ ex: [...s.ex, ex] })); },
     skipExercise(exIdx: number) { updEx(exIdx, (e) => { e.sets = e.sets.map((x) => (x.st === 'todo' ? { ...x, st: 'skipped' } : x)); return e; }); },
     swap(exIdx: number, name: string, plan: boolean) { updEx(exIdx, (e) => ({ ...e, name, swapped: !plan })); },
     completeAll(exIdx: number) { updEx(exIdx, (e) => { e.sets = e.sets.map((x) => (x.st === 'todo' ? { ...x, st: 'done', dr: x.r, dk: x.k, dt: x.t } : x)); return e; }); },
@@ -49,10 +52,12 @@ export function useSessionActions() {
       upd((s) => {
         if (!s.rest) return {};
         const left = Math.max(0, (s.rest.endAt - Date.now()) / 1000);
-        return { rest: { endAt: Date.now() + (left + 30) * 1000, total: Math.max(s.rest.total, left + 30) } };
+        const endAt = Date.now() + (left + 30) * 1000;
+        scheduleTimerEnd(endAt, 'Rest is over. Time for your next set.');
+        return { rest: { endAt, total: Math.max(s.rest.total, left + 30) } };
       });
     },
-    skipRest() { upd(() => ({ rest: null })); },
+    skipRest() { cancelTimerEnd(); upd(() => ({ rest: null })); },
     goEx(exIdx: number) { upd(() => ({ exIdx, rest: null })); },
     phase(phase: Session['phase']) { upd(() => ({ phase, itemTimer: null, rest: null, ...(phase === 'cooldown' ? { listDone: {} } : {}) })); },
   }), [upd, updEx]);

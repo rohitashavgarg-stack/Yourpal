@@ -1,39 +1,104 @@
 import React from 'react';
-import { PersonAvatar } from '@/components/Brand';
+import { View } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Circle, Path } from 'react-native-svg';
-import { Button, Card, Txt } from '@/components/ui';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { PersonAvatar } from '@/components/Brand';
+import { Button, Row, Txt } from '@/components/ui';
 import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
+import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { Hint, ListCard, SubPage } from '@/features/progress/parts';
-import { PT_TOTAL } from '@/features/gym/data';
-import { useGymScenarios } from '@/features/gym/state';
+import { ListCard, SubPage } from '@/features/progress/parts';
+import { LineRow, ListCard as CardList } from '@/features/shell/parts';
+import { PT_STATS, PT_TOTAL } from '@/features/gym/data';
+import { useGoalV2 } from '@/features/goalv2/model';
+import { gymStore, useGymScenarios } from '@/features/gym/state';
+import { CalendarCheck, ClipboardCheck, Dumbbell, MessageCircle, Salad, Target, TrendingUp } from '@/lib/icons';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
+// What personal training gives a member: an icon, a short title and one short line each.
+const BENEFITS = [
+  { Icon: Dumbbell, t: 'Workout plan for you', s: 'Built around your goal' },
+  { Icon: Salad, t: 'Diet plan for you', s: 'Fits your food and your day' },
+  { Icon: TrendingUp, t: 'Adjusts as you log', s: 'Changes when your progress does' },
+  { Icon: ClipboardCheck, t: 'Progress checks', s: 'Assessments that show how you improve' },
+  { Icon: CalendarCheck, t: 'Regular sessions', s: 'Time with your coach' },
+  { Icon: MessageCircle, t: 'Ask your coach', s: 'Chat about form, your plan or food' },
+] as const;
+
 export default function PersonalTraining() {
+  const { c } = useTheme();
+  const insets = useSafeAreaInsets();
   const { d } = useDomain();
   const { state } = useStore();
   const isPT = state.sc.member === 'PT member';
+  const gs = gymStore.use();
+  const awaiting = isPT && gs.awaiting === 'Yes' && gs.sessionState === 'awaiting';
+  const g = useGoalV2();
   useGymScenarios('Gym · Personal training');
+
+  const stats = [
+    { n: PT_STATS.inPT, l: 'members in PT' },
+    { n: PT_STATS.reachedGoal, l: 'reached a goal' },
+    { n: PT_TOTAL, l: 'sessions' },
+  ];
+
+  // The page has its own big heading, so the header bar carries no title.
   return (
-    <SubPage title="Personal training" fallback="/gym">
-      <LinearGradient colors={[fixed.blue, '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ height: 200, borderRadius: radii.xl, overflow: 'hidden', justifyContent: 'flex-end', padding: 18 }}>
-        <Svg width="100%" height="100%" viewBox="0 0 358 200" preserveAspectRatio="xMidYMid slice" style={{ position: 'absolute', left: 0, top: 0 }}>
-          <Path d="M0 170 C 90 130 180 200 260 160 S 340 150 400 170 V 900 H0z" fill={fixed.white} opacity={0.08} />
-          <Circle cx={270} cy={40} r={150} fill={fixed.white} opacity={0.1} />
-          <Circle cx={270} cy={40} r={90} fill={fixed.white} opacity={0.14} />
-        </Svg>
-        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 36, color: '#F4F4F6' }}>Personal{'\n'}training</Txt>
-      </LinearGradient>
-      <Card style={{ padding: 18, gap: 6 }}>
-        <Txt style={{ fontFamily: font.semibold }}>What PT includes</Txt>
-        <Txt muted style={{ fontSize: fontSizes.md }}>Personalised workout and diet · plan adjusted from your logs · regular sessions</Txt>
-      </Card>
-      {isPT && <ListCard rows={[{ l: 'Sessions left', v: `${d.ptLeft} of ${PT_TOTAL}` }, { l: 'Next session', v: 'Thu 25 · 6 pm' }, { l: 'Package renews', v: '30 Oct' }]} />}
-      <Button label="Talk to Coach Vikram" icon={<PersonAvatar who="coach" size={26} />} onPress={() => router.push('/gym/chat')} />
-      {!isPT && <Hint style={{ fontSize: fontSizes.xs }}>Shown here and at a few moments (after an assessment, a plateau, a recap), once each and dismissible. Never during a workout.</Hint>}
+    <SubPage
+      title=""
+      fallback="/gym"
+      // A soft tint from the top of the screen that fades into the page and scrolls away with the content.
+      backdrop={<LinearGradient pointerEvents="none" colors={[c.accentSoft, c.bg]} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 380 }} />}
+      // The one button floats over the page near the bottom and stays there while the page scrolls.
+      footer={(
+        <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
+          <Button label="Talk to Coach Vikram" icon={<PersonAvatar who="coach" size={26} />} onPress={() => router.push('/gym/chat')}
+            style={{ shadowColor: fixed.black, shadowOpacity: 0.28, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: 10 }} />
+        </View>
+      )}>
+      {/* The icon first, then the big heading. No sub heading. */}
+      <View style={{ gap: 12, paddingTop: 4 }}>
+        <IconBadge size={64} radius={radii.lg} bg={c.surface} borderWidth={1} borderColor={c.line}><Dumbbell size={32} strokeWidth={1.9} color={c.accentText} /></IconBadge>
+        <Txt accessibilityRole="header" v="display">Personal training</Txt>
+      </View>
+
+      {/* How many people are in personal training here, how many reached a goal, and how long a package is. */}
+      <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18 }}>
+        <Row style={{ gap: 0, alignItems: 'flex-start' }}>
+          {stats.map((x, i) => (
+            <View key={x.l} accessible accessibilityLabel={`${x.n} ${x.l}`} style={{ flex: 1, gap: 2, paddingLeft: i ? 14 : 0, marginLeft: i ? 14 : 0, borderLeftWidth: i ? 1 : 0, borderLeftColor: c.line }}>
+              <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34 }}>{x.n}</Txt>
+              <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{x.l}</Txt>
+            </View>
+          ))}
+        </Row>
+      </View>
+
+      {isPT && <ListCard rows={[{ l: 'Sessions left', v: `${d.ptLeft} of ${PT_TOTAL}` }, { l: 'Next session', v: 'Thu 25, 6 pm' }, { l: 'Package renews', v: '30 Oct' }]} />}
+
+      {isPT && (
+        <CardList>
+          <LineRow title="Your sessions" sub={awaiting ? '1 session to confirm' : 'Upcoming and past'} minH={64} last onPress={() => router.push('/gym/sessions')}
+            icon={<CalendarCheck size={18} strokeWidth={1.9} color={c.ink} />} />
+        </CardList>
+      )}
+
+      <Txt v="label" style={{ paddingHorizontal: 4 }}>FOR YOU</Txt>
+      <CardList>
+        <LineRow title="Your goal" sub={g.name} minH={64} last icon={<Target size={18} strokeWidth={1.9} color={c.ink} />} />
+      </CardList>
+
+      <Txt v="label" style={{ paddingHorizontal: 4 }}>WHAT YOU GET</Txt>
+      <CardList>
+        {BENEFITS.map(({ Icon, t, s }, i) => (
+          <LineRow key={t} title={t} sub={s} minH={64} last={i === BENEFITS.length - 1}
+            icon={<Icon size={18} strokeWidth={1.9} color={c.ink} />} />
+        ))}
+      </CardList>
+      <View style={{ height: 64 }} />
     </SubPage>
   );
 }

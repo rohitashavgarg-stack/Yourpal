@@ -12,7 +12,7 @@ import { Sheet } from '@/design-system/primitives/Sheet';
 import { Snackbar } from '@/design-system/primitives/Snackbar';
 
 // One overlay host for bottom sheets and toasts, rendered inside the phone.
-type SheetOpts = { label?: string; glow?: string }; // glow: a soft radial colour bleeding in from the top-right corner
+type SheetOpts = { label?: string; glow?: string; fixed?: boolean }; // glow: a soft radial colour bleeding in from the top-right corner
 type ToastOpts = { undo?: () => void };
 type Ctx = {
   setToastLift: (px: number) => void;
@@ -51,7 +51,7 @@ export function OverlayProvider({ children }: { children: React.ReactNode }) {
     <OverlayCtx.Provider value={value}>
       {children}
       {sheet && (
-        <Sheet key={sheet.key} label={sheet.opts.label} glow={sheet.opts.glow} registerClose={(fn) => (closer.current = fn)} onClosed={() => { closer.current = null; setSheet(null); }}>
+        <Sheet key={sheet.key} label={sheet.opts.label} glow={sheet.opts.glow} fixed={sheet.opts.fixed} registerClose={(fn) => (closer.current = fn)} onClosed={() => { closer.current = null; setSheet(null); }}>
           {sheet.node}
         </Sheet>
       )}

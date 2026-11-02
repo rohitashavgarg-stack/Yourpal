@@ -37,3 +37,31 @@ export async function cancelStillTraining() {
     await N?.cancelScheduledNotificationAsync(ID);
   } catch {}
 }
+
+// The workout timer: one notification at the moment the timer ends, for when the app is in the background. It never asks for
+// permission here (the check-in nudge does); with no permission it simply does not show.
+const TIMER_ID = 'timer-end';
+export async function scheduleTimerEnd(atMs: number, body: string) {
+  try {
+    const N = await mod();
+    if (!N || atMs <= Date.now() + 1000) return;
+    N.setNotificationHandler({
+      handleNotification: async () => ({ shouldPlaySound: false, shouldSetBadge: false, shouldShowBanner: false, shouldShowList: false }),
+    });
+    const st = await N.getPermissionsAsync();
+    if (!st.granted) return;
+    await N.cancelScheduledNotificationAsync(TIMER_ID).catch(() => {});
+    await N.scheduleNotificationAsync({
+      identifier: TIMER_ID,
+      content: { title: 'Timer done', body, ...(Platform.OS === 'android' ? { channelId: CHANNEL } : {}) } as any,
+      trigger: { type: N.SchedulableTriggerInputTypes.DATE, date: new Date(atMs), ...(Platform.OS === 'android' ? { channelId: CHANNEL } : {}) } as any,
+    });
+  } catch {}
+}
+
+export async function cancelTimerEnd() {
+  try {
+    const N = await mod();
+    await N?.cancelScheduledNotificationAsync(TIMER_ID);
+  } catch {}
+}

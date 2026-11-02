@@ -30,7 +30,11 @@ export function useDietActions() {
     }
     if (on) haptic.success();
     clearSkip(mid, it.key);
-    patchMeal(mid, (x, s) => ({ eaten: on ? Array.from(new Set([...x.eaten, it.idx])) : x.eaten.filter((k) => k !== it.idx), skip: false, at: x.at ?? s.min }));
+    patchMeal(mid, (x, s) => {
+      const eaten = on ? Array.from(new Set([...x.eaten, it.idx])) : x.eaten.filter((k) => k !== it.idx);
+      // the time the meal was eaten is set when the first food is checked, and cleared when nothing is eaten any more
+      return { eaten, skip: false, at: eaten.length || x.extra.length ? (x.at ?? s.min) : undefined };
+    });
   };
 
   const skipItem = (mid: MealId, it: DItem) => {
@@ -75,6 +79,8 @@ export function useDietActions() {
     });
   };
 
+  const setMealTime = (mid: MealId, min: number) => patchMeal(mid, () => ({ at: min }));
+
   const addExtra = (mid: MealId, e: Extra) => patchMeal(mid, (x, s) => ({ extra: [...x.extra, e], skip: false, at: x.at ?? s.min }));
 
   const resetDiet = () => {
@@ -84,5 +90,5 @@ export function useDietActions() {
 
   // an expired membership is view-only: every change to the diet says so instead
   const { gate } = useLogGate();
-  return { eat: gate(eat), skipItem: gate(skipItem), mealAll: gate(mealAll), setPor: gate(setPor), applySwap: gate(applySwap), deleteExtra: gate(deleteExtra), addExtra: gate(addExtra), resetDiet, withUndo, patchMeal };
+  return { eat: gate(eat), skipItem: gate(skipItem), mealAll: gate(mealAll), setPor: gate(setPor), applySwap: gate(applySwap), deleteExtra: gate(deleteExtra), addExtra: gate(addExtra), setMealTime: gate(setMealTime), resetDiet, withUndo, patchMeal };
 }

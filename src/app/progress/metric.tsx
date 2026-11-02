@@ -26,6 +26,7 @@ import { Card } from '@/design-system/primitives/Card';
 import { Callout } from '@/design-system/primitives/Callout';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { useMembershipState } from '@/features/gym/memberships';
 
 const TIP_UNIT: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: ' steps', water: ' L', hr: ' bpm', sleep: '', diet: ' kcal', cons: ' workouts' };
 
@@ -38,7 +39,7 @@ export default function MetricDetail() {
   const ps = progressStore.use();
   const raw = useLocalSearchParams<{ k?: string }>().k;
   const k: MetricKey = raw && raw in METRIC_TITLES ? (raw as MetricKey) : 'weight';
-  const paused = d.membership === 'Expired';
+  const paused = useMembershipState() === 'Expired';
   const anchor = new Date(ps.anchor);
   const t = trend(k, ps.range, anchor, { weight: d.weight, water: d.water });
 

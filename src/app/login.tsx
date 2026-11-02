@@ -6,7 +6,7 @@ import { fadeOut } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { ChevronLeft, ChevronRight, Phone, WifiOff, Ticket } from '@/lib/icons';
+import { ChevronLeft, ChevronRight, Phone, WifiOff } from '@/lib/icons';
 import { ProgLogo } from '@/features/shell/parts';
 import { setShell, switchProgramme, useShell } from '@/features/shell/state';
 import { Button, Card, Field, Pressy, Row, Txt } from '@/components/ui';
@@ -22,8 +22,9 @@ import { INDIA, isValidNumber, Country } from '@/lib/countries';
 import { CountrySheet } from '@/features/shell/CountrySheet';
 import { Callout } from '@/design-system/primitives/Callout';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { openLegal } from '@/features/legal/links';
 
-type Step = 'phone' | 'otp' | 'programme';
+type Step = 'phone' | 'otp' | 'join' | 'programme';
 
 export default function Login() {
   const { c, isDark } = useTheme();
@@ -44,6 +45,22 @@ export default function Login() {
   const [lockIn, setLockIn] = useState(0);
   const [reading, setReading] = useState(false);
   const { s: shell, progs, multi } = useShell();
+  // Past the join code step (a code accepted, or "I don't have one"): choose where to start, or go straight in.
+  const afterJoin = () => { if (multi && shell.sc.pick === 'Shown') setStep('programme'); else finish(); };
+  const [joinCode, setJoinCode] = useState('');
+  // Why a code was turned down (null: nothing wrong). Sample codes: GOLD21 works, OLD19 has expired, USED77 is already used.
+  const [joinBad, setJoinBad] = useState<string | null>(null);
+  const tryJoin = () => {
+    const code = joinCode.trim().toUpperCase();
+    const why = code === 'GOLD21' ? null
+      : code === 'OLD19' ? 'This code has expired. Ask the front desk for a new one.'
+      : code === 'USED77' ? 'This code has already been used. Ask the front desk for a new one.'
+      : 'We could not find this code. Check it and try again.';
+    if (why) { setJoinBad(why); haptic.error(); return; }
+    haptic.success();
+    toast("Code accepted. You're joining Wulf Fitness");
+    afterJoin();
+  };
   const finish = (id?: string) => {
     if (id) { const n = switchProgramme(id); if (n) haptic.success(); }
     set({ loggedIn: true, phone });
@@ -93,7 +110,7 @@ export default function Login() {
       if (sc.otp === 'Correct') {
         setCodeState('ok'); haptic.success();
         // Several programmes on this number: let the member choose where to start. One: go straight in.
-        setTimeout(() => { if (multi && shell.sc.pick === 'Shown') setStep('programme'); else finish(); }, 650);
+        setTimeout(() => setStep('join'), 650);
       } else {
         const n = tries + 1; setTries(n); haptic.error(); setShake((k) => k + 1);
         if (n >= 3) { setCodeState('locked'); setLockIn(59); }
@@ -115,14 +132,13 @@ export default function Login() {
     }, 700);
   };
 
-  const openJoin = () => openSheet(<JoinCode onDone={() => { toast("Code accepted. You're joining Wulf Fitness"); }} />, { label: 'Join with a code' });
   const masked = phone ? `${country.code} ${phone.slice(0, 2)}xxx x${phone.slice(-4)}` : '';
   const pickCountry = () => openSheet(<CountrySheet value={country} onPick={(k) => { setCountry(k); setPhone((p) => p.slice(0, k.max)); setErr('none'); }} />, { label: 'Country code' });
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
       <ScrollView contentContainerStyle={{ paddingTop: insets.top + 8, paddingHorizontal: 20, paddingBottom: insets.bottom + 24, flexGrow: 1, gap: 16 }} keyboardShouldPersistTaps="handled">
-        {step === 'otp' || step === 'programme' ? (
+        {step === 'otp' || step === 'join' || step === 'programme' ? (
           <RoundBtn label="Back to phone number" onPress={() => { setStep('phone'); setErr('none'); setCode(''); setCodeState('idle'); }} glass>
             <ChevronLeft size={22} color={c.ink} />
           </RoundBtn>
@@ -171,11 +187,12 @@ export default function Login() {
             {err === 'offline' && <OfflineBanner />}
             <View style={{ flexGrow: 1 }} />
             <Button label={busy ? 'Sending code…' : 'Send code'} onPress={send} disabled={busy || phone.length < country.min} />
-            <Pressy accessibilityRole="button" onPress={openJoin} style={{ height: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-              <Ticket size={17} color={c.accentText} />
-              <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>I have a join code from my gym</Txt>
-            </Pressy>
-            <Txt v="caption" style={{ textAlign: 'center' }}>By continuing you agree to the Terms and Privacy Policy.</Txt>
+            <Txt v="caption" style={{ textAlign: 'center' }}>
+              By continuing you agree to the{' '}
+              <Txt v="caption" accessibilityRole="link" onPress={() => openLegal('terms', () => toast('Could not open the page. Try again in a moment'))} style={{ fontFamily: font.semibold, color: c.accentText }}>Terms</Txt>
+              {' '}and{' '}
+              <Txt v="caption" accessibilityRole="link" onPress={() => openLegal('privacy', () => toast('Could not open the page. Try again in a moment'))} style={{ fontFamily: font.semibold, color: c.accentText }}>Privacy Policy</Txt>.
+            </Txt>
           </FadeIn>
         )}
 
@@ -219,6 +236,21 @@ export default function Login() {
             <Txt v="caption" style={{ textAlign: 'center' }}>Tip: any 6 digits work in this prototype. Use the edge-case panel to test a wrong code.</Txt>
           </FadeIn>
         )}
+        {step === 'join' && (
+          <FadeIn key="join" style={{ gap: 18, flexGrow: 1 }}>
+            <View style={{ gap: 6 }}>
+              <Txt v="title">Do you have a join code?</Txt>
+              <Txt muted>Your gym shares a code on WhatsApp or at the front desk. You can skip this and join later.</Txt>
+            </View>
+            <Field value={joinCode} onChangeText={(t) => { setJoinCode(t.toUpperCase()); setJoinBad(null); }} autoCapitalize="characters" placeholder="e.g. GOLD21" accessibilityLabel="Join code" error={!!joinBad} autoFocus returnKeyType="done" onSubmitEditing={tryJoin} />
+            {joinBad && <FadeIn><Txt accessibilityRole="alert" v="label" color={c.warn}>{joinBad}</Txt></FadeIn>}
+            <View style={{ flexGrow: 1 }} />
+            <Button label="Join gym" onPress={tryJoin} disabled={joinCode.length < 4} />
+            <Pressy accessibilityRole="button" onPress={afterJoin} style={{ height: 48, alignItems: 'center', justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>I don’t have a code</Txt>
+            </Pressy>
+          </FadeIn>
+        )}
         {step === 'programme' && (
           <FadeIn key="programme" style={{ gap: 14, flexGrow: 1 }}>
             <View style={{ gap: 6 }}>
@@ -256,25 +288,5 @@ function OfflineBanner() {
         <Txt style={{ flex: 1, fontSize: fontSizes.md }} muted>No internet connection. Check Wi-Fi or data and try again.</Txt>
       </Row>
     </FadeIn>
-  );
-}
-
-function JoinCode({ onDone }: { onDone: () => void }) {
-  const { c } = useTheme();
-  const { closeSheet } = useOverlay();
-  const [v, setV] = useState('');
-  const [bad, setBad] = useState(false);
-  const ok = () => {
-    if (v.trim().toUpperCase() !== 'GOLD21') { setBad(true); haptic.error(); return; }
-    haptic.success(); closeSheet(onDone);
-  };
-  return (
-    <View style={{ gap: 12 }}>
-      <Txt v="title">Join with a code</Txt>
-      <Txt muted>Your gym shares a code on WhatsApp or at the front desk. Try GOLD21.</Txt>
-      <Field value={v} onChangeText={(t) => { setV(t.toUpperCase()); setBad(false); }} autoCapitalize="characters" placeholder="e.g. GOLD21" accessibilityLabel="Join code" error={bad} />
-      {bad && <Txt v="caption" color={c.warn}>That code isn&apos;t active. Check it with the front desk.</Txt>}
-      <Button label="Join gym" onPress={ok} disabled={v.length < 4} />
-    </View>
   );
 }

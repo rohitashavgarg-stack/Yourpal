@@ -69,15 +69,15 @@ export default function ConfirmSession() {
     setDone(true); haptic.success();
     const left = Math.max(0, d.ptLeft - 1);
     t.current = setTimeout(() => {
-      gymStore.set({ sessionState: 'confirmed', rating });
+      gymStore.set({ sessionState: 'confirmed', rating, remarks: remarks.trim() });
       set({ ptLeft: left });
-      if (router.canGoBack()) router.back(); else router.replace('/gym/attendance');
+      if (router.canGoBack()) router.back(); else router.replace('/gym/sessions');
       toast(`Session confirmed. ${left} of ${PT_TOTAL} left in your package`);
     }, 900);
   };
 
   return (
-    <SubPage title="Confirm session" fallback="/gym/attendance">
+    <SubPage title="Confirm session" fallback="/gym/sessions">
       <Card variant="roomy" tone="accent" flat gap={4}>
         <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 33 }}>Tue 23 Sep · 6:00–7:00 pm</Txt>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>

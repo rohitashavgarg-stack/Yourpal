@@ -49,10 +49,11 @@ export function Switch({ on, onChange, label, locked }: { on: boolean; onChange?
 }
 
 // A row with a title, optional subtitle and trailing control. Hairline between rows.
-export function LineRow({ title, sub, right, onPress, color, last, minH = 60, a11yHint }: { title: string; sub?: string; right?: React.ReactNode; onPress?: () => void; color?: string; last?: boolean; minH?: number; a11yHint?: string }) {
+export function LineRow({ title, sub, right, onPress, color, last, minH = 60, a11yHint, icon }: { title: string; sub?: string; right?: React.ReactNode; onPress?: () => void; color?: string; last?: boolean; minH?: number; a11yHint?: string; icon?: React.ReactNode }) {
   const { c } = useTheme();
   const body = (
     <>
+      {icon ? <View style={{ width: 36, height: 36, borderRadius: 12, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>{icon}</View> : null}
       <View style={{ flex: 1, gap: 1 }}>
         <Txt style={{ fontFamily: font.medium, color: color ?? c.ink }}>{title}</Txt>
         {sub ? <Txt v="caption">{sub}</Txt> : null}

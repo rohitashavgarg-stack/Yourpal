@@ -43,7 +43,8 @@
           "cameraPermission": "YourPal uses the camera so you can send a photo to your coach."
         }
       ],
-      "expo-video"
+      "expo-video",
+      "expo-sharing"
     ]
   }
 }

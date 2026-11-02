@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Image, ImageResizeMode, ImageSourcePropType, ImageStyle, StyleProp, Text, View } from 'react-native';
+import Svg, { Circle, Path } from 'react-native-svg';
 import { Crown } from '@/lib/icons';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -8,7 +9,7 @@ import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { fixed, onDark } from '@/design-system/tokens';
 
 // Drop your real files into assets/brand/ (same names) and they replace the fallbacks below:
-//   wulf-logo.jpg (gym) · trainer.jpg (Coach Vikram). The member shows initials unless they add their own photo in My details.
+//   wulf-logo.jpg (gym) · trainer.jpg (Coach Vikram). The member shows a silhouette unless they add their own photo in My details.
 // The placeholders that ship in the repo are 2x2 px, which is how we know nothing was supplied yet.
 const LOGO = require('../../../assets/brand/wulf-logo.jpg');
 const COACH = require('../../../assets/brand/trainer.jpg');
@@ -46,13 +47,20 @@ export function PersonAvatar({ who = 'me', size = 44, ring, square, photo }: { w
   const { c } = useTheme();
   const { state } = useStore();
   const src = COACH;
-  const initials = (state.profile.name || 'You').trim().split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? '').join('') || 'Y';
   const box = { width: size, height: size, borderRadius: square ? Math.round(size * 0.28) : size / 2, flexShrink: 0 } as const;
   const border = ring ? { borderWidth: 2, borderColor: c.surface } : null;
   const premium = who === 'me' && state.sc.member === 'PT member' && size >= 36;
-  const fallback = (
-    <View accessibilityLabel={who === 'coach' ? 'Coach Vikram' : 'You'} style={[box, { backgroundColor: who === 'coach' ? c.accentSoft : c.accent, alignItems: 'center', justifyContent: 'center' }, border]}>
-      <Text style={{ fontFamily: font.semibold, fontSize: Math.round(size * (who === 'coach' ? 0.4 : 0.36)), lineHeight: Math.round(size * 0.5), color: who === 'coach' ? c.accentText : fixed.white }}>{who === 'coach' ? 'V' : initials}</Text>
+  // The member with no photo gets a head-and-shoulders silhouette on a soft tint. The coach keeps the letter V.
+  const fallback = who === 'coach' ? (
+    <View accessibilityLabel="Coach Vikram" style={[box, { backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }, border]}>
+      <Text style={{ fontFamily: font.semibold, fontSize: Math.round(size * 0.4), lineHeight: Math.round(size * 0.5), color: c.accentText }}>V</Text>
+    </View>
+  ) : (
+    <View accessibilityLabel="You" style={[box, { backgroundColor: c.accentSoft, overflow: 'hidden' }, border]}>
+      <Svg width={size} height={size} viewBox="0 0 84 84">
+        <Circle cx={42} cy={34} r={14} fill={c.accentText} opacity={0.85} />
+        <Path d="M14 84c0-18 12-30 28-30s28 12 28 30z" fill={c.accentText} opacity={0.85} />
+      </Svg>
     </View>
   );
   const custom = who === 'me' ? (photo !== undefined ? photo : state.profile.photo) : undefined;

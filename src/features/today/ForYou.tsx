@@ -28,6 +28,7 @@ import { goalCardStore } from './goalCardState';
 import { Card } from '@/design-system/primitives/Card';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { useMembershipState } from '@/features/gym/memberships';
 
 // The slim goal strip moved to src/design-system/_archive/ForYouGoalStrip.tsx (archived: nothing renders it). Re-exported so the old import keeps working.
 export { GoalStrip } from '@/design-system/_archive/ForYouGoalStrip';
@@ -44,6 +45,7 @@ export function useForYou(): Item[] {
   const { toast } = useOverlay();
   const allReminders = useReminders();
   const logsPaused = useLogsPaused();
+  const memState = useMembershipState();
   const reminders = logsPaused ? [] : allReminders; // nothing to log while logging is paused
   const ptPending = usePtPending();
   const { live } = useUpdates();
@@ -52,7 +54,7 @@ export function useForYou(): Item[] {
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
   if (ptPending && d.hasGym && !logsPaused) out.push({ key: 'pt', title: updateCopy.pt.title, body: updateCopy.pt.body, critical: true, tone: 'accent', who: true, two: true });
-  if (d.hasGym && d.membership === 'Expiring') out.push({ key: 'member-exp', title: updateCopy.membership.title, body: updateCopy.membership.body, tone: 'warn', icon: Clock, btn: 'See plan', act: () => router.push('/gym/membership') });
+  if (d.hasGym && memState === 'Expiring') out.push({ key: 'member-exp', title: updateCopy.membership.title, body: updateCopy.membership.body, tone: 'warn', icon: Clock, btn: 'See plan', act: () => router.push('/gym/membership') });
   const order = ['reassess', 'reply', 'plan', 'log'];
   live.filter((u) => u.key !== 'member').sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key)).forEach((u) => {
     out.push({ key: u.key, title: u.title, body: u.body, tone: u.tone, who: ['plan', 'reply'].includes(u.key), icon: u.icon, btn: u.isPlan ? 'See changes' : u.btn, act: u.isPlan ? () => router.navigate('/plans') : u.act });

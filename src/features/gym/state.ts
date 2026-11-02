@@ -9,6 +9,7 @@ export const gymStore = createStore(() => ({
   awaiting: 'Yes' as 'Yes' | 'No',
   sessionState: 'awaiting' as SessionState,
   rating: 0,
+  remarks: '',
   blocked: false,
   typing: false,
   breakFrom: 6,
@@ -38,7 +39,7 @@ export function useGymScenarios(title: string, extraRows: ScenarioRow[] = [], ex
     rows: [
       ...extraRows,
       { label: 'Membership', options: ['Active', 'Expiring', 'Expired'], value: d.membership, onPick: (v) => set({ membership: v as any }) },
-      { label: 'PT session awaiting confirmation (PT only)', options: ['Yes', 'No'], value: g.awaiting, onPick: (v) => gymStore.set({ awaiting: v as any, sessionState: 'awaiting', rating: 0 }) },
+      { label: 'PT session awaiting confirmation (PT only)', options: ['Yes', 'No'], value: g.awaiting, onPick: (v) => gymStore.set({ awaiting: v as any, sessionState: 'awaiting', rating: 0, remarks: '' }) },
       { label: 'Chat', options: ['Has messages', 'Empty'], value: d.chat.length ? 'Has messages' : 'Empty', onPick: (v) => { set({ chat: v === 'Empty' ? [] : defaultChat() }); gymStore.set({ blocked: false }); } },
       { label: 'Connection (chat sending)', options: ['Online', 'Offline'], value: d.offline ? 'Offline' : 'Online', onPick: (v) => set({ offline: v === 'Offline' }) },
       { label: 'Assessments', options: ['Two done', 'Only first', 'Due now', 'None yet'], value: d.assess, onPick: (v) => { set({ assess: v as any }); gymStore.set({ asView: 0 }); } },

@@ -8,7 +8,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { Button, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { haptic } from '@/lib/haptics';
+import { useTimerEnd } from '@/lib/useTimerEnd';
 import { mmss } from '@/lib/useNow';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
@@ -21,6 +21,7 @@ const C = 2 * Math.PI * R;
 export function RestPanel({ rest, now, onAdd30, onSkip, onDone, docked }: { rest: { endAt: number; total: number }; now: number; onAdd30: () => void; onSkip: () => void; onDone: () => void; docked?: boolean }) {
   const { c, isDark } = useTheme();
   const insets = useSafeAreaInsets();
+  const cue = useTimerEnd();
   const left = Math.max(0, (rest.endAt - now) / 1000);
   const finished = left <= 0;
   const p = useSharedValue(1 - left / rest.total);
@@ -40,7 +41,7 @@ export function RestPanel({ rest, now, onAdd30, onSkip, onDone, docked }: { rest
   }, [last5]);
   useEffect(() => {
     if (!finished) return;
-    haptic.success();
+    cue(); // the two-beep buzzer and the vibration, unless the member turned them off
     beat.value = withSequence(withTiming(0.85, { duration: 1 }), withSpring(1, { damping: 6, stiffness: 260 }));
     doneT.current = setTimeout(onDone, 1500);
     return () => clearTimeout(doneT.current);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { router } from 'expo-router';
 import { useDomain } from '@/lib/domain';
+import { membershipState, useMembershipState, useMemberships } from '@/features/gym/memberships';
 import { Banner } from '@/design-system/patterns/Banner';
 
 // Membership is view-only in the app: this only tells the member what is going on and points to the membership page.
@@ -12,11 +13,23 @@ type Notice = { icon: 'clock' | 'pause' | 'ok'; tone: 'warn' | 'plain'; title: s
 const ACT = 'Renew at Wulf Fitness reception.';
 
 export function useMembershipNotice(): Notice {
-  const { d } = useDomain();
-  switch (d.membership) {
-    case 'Expiring': return { icon: 'clock', tone: 'warn', once: true, title: 'Membership ends in 12 days', line: 'Expires on 6 Oct.', act: ACT };
-    case 'Expired': return { icon: 'pause', tone: 'warn', title: 'Membership expired', line: 'Logging and other features are paused. Your history is safe.', act: ACT };
-    default: return { icon: 'ok', tone: 'plain', title: 'Annual plan is active', line: 'Expires on 14 Oct 2027.', act: 'Renew early at Wulf Fitness reception.' };
+  const ms = useMemberships();
+  switch (membershipState(ms)) {
+    case 'Expiring': {
+      const m = ms.find((x) => x.status === 'Active' && x.warn);
+      return { icon: 'clock', tone: 'warn', once: true, title: `Membership ends in ${m?.left.n ?? '12'} days`, line: `Expires on ${m?.end ?? '6 Oct'}.`, act: ACT };
+    }
+    case 'Expired': {
+      // none is active: say whether one was suspended by the gym or they have all ended
+      const suspended = ms.some((x) => x.status === 'Suspended');
+      return suspended
+        ? { icon: 'pause', tone: 'warn', title: 'Membership suspended', line: 'Logging and other features are paused. Ask at the front desk.', act: 'Talk to Wulf Fitness reception.' }
+        : { icon: 'pause', tone: 'warn', title: 'Membership expired', line: 'Logging and other features are paused. Your history is safe.', act: ACT };
+    }
+    default: {
+      const next = ms.filter((x) => x.status === 'Active').sort((x, y) => y.pct - x.pct)[0];
+      return { icon: 'ok', tone: 'plain', title: 'Membership is active', line: next ? `Next one ends on ${next.end}.` : '', act: 'Renew early at Wulf Fitness reception.' };
+    }
   }
 }
 
@@ -24,8 +37,9 @@ export function useMembershipNotice(): Notice {
 export function usePaymentNotice() {
   const { d } = useDomain();
   const n = useMembershipNotice();
+  const state = useMembershipState();
   // only an ended membership gets the strip (it stays at the top); "ends in 12 days" is a card in the updates stack
-  if (!d.hasGym || d.membership !== 'Expired') return null;
+  if (!d.hasGym || state !== 'Expired') return null;
   return n;
 }
 
@@ -39,7 +53,8 @@ export function MembershipCard({ n }: { n: Notice }) {
 export function PaymentBanner() {
   const { d, set } = useDomain();
   const n = usePaymentNotice();
+  const state = useMembershipState();
   if (!n) return null;
-  const cross = () => set((x) => ({ dismissed: { ...x.dismissed, ['membership-' + d.membership]: true } }));
+  const cross = () => set((x) => ({ dismissed: { ...x.dismissed, ['membership-' + state]: true } }));
   return <Banner variant="strip" icon={n.icon} tone={n.tone} title={n.title} line={n.line} once={n.once} onPress={() => router.push('/gym/membership')} onDismiss={cross} />;
 }

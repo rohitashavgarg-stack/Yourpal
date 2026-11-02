@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ageFrom, defaultDob, fmtDob } from '@/lib/dob';
 import { PersonAvatar } from '@/components/Brand';
 import { View } from 'react-native';
-import { Button, Field, NoteField, Pill, Row, Txt } from '@/components/ui';
+import { Button, Field, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { haptic } from '@/lib/haptics';
 import { font } from '@/theme/tokens';
@@ -10,6 +10,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Camera, ChevronRight, Image as ImageIcon, Trash2 } from '@/lib/icons';
 import { router } from 'expo-router';
 import { DobPicker } from '@/features/body/BodyLog';
+import { GenderSheet } from '@/features/profile/PrefSheets';
 import { useDomain } from '@/lib/domain';
 import { useShell } from '@/features/shell/state';
 import { Platform } from 'react-native';
@@ -17,7 +18,7 @@ import { Pressy } from '@/components/ui';
 import { useScenarios, useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fadeOut } from '@/theme/motion';
-import { goBack, Label, Note, SubPage, useShake } from '@/features/shell/parts';
+import { Label, SubPage, useShake } from '@/features/shell/parts';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
@@ -103,9 +104,6 @@ function BodyRow({ label, value, onPress, last }: { label: string; value: string
   );
 }
 
-const GENDERS = ['Male', 'Female', 'Other'];
-const DIETS = ['Veg', 'Eggetarian', 'Non-veg', 'Jain', 'Vegan'];
-
 export default function MyDetails() {
   const { c } = useTheme();
   const { state, setProfile } = useStore();
@@ -114,10 +112,6 @@ export default function MyDetails() {
   const { d } = useDomain();
   const { s: shell } = useShell();
   const [name, setName] = useState(p.name);
-  const [days, setDays] = useState(p.days);
-  const [diet, setDiet] = useState(p.diet);
-  const [inj, setInj] = useState<'No' | 'Yes'>(p.injury);
-  const [note, setNote] = useState(p.injuryNote);
   const [err, setErr] = useState(0);
   const [photo, setPhoto] = useState<string | null | undefined>(undefined); // undefined = unchanged, null = removed
   const shake = useShake(err);
@@ -126,10 +120,8 @@ export default function MyDetails() {
     title: 'My details',
     rows: [
       { label: 'Name', options: ['Filled', 'Empty'], value: name.trim() ? 'Filled' : 'Empty', onPick: (v) => { setName(v === 'Empty' ? '' : p.name || 'Rohitashav Garg'); setErr(0); } },
-      { label: 'Injuries', options: ['No', 'Yes'], value: inj, onPick: (v) => setInj(v as any) },
     ],
-    actions: [{ label: 'Try saving', run: () => save() }],
-  }, [name, inj]);
+  }, [name]);
 
   const pickPhoto = async (src: 'library' | 'camera') => {
     try {
@@ -137,33 +129,24 @@ export default function MyDetails() {
       if (!perm.granted && Platform.OS !== 'web') { toast(src === 'camera' ? 'Camera is off. Allow it in Settings.' : 'Photos are off. Allow access in Settings.'); return; }
       const opts: ImagePicker.ImagePickerOptions = { mediaTypes: ['images'], allowsEditing: true, aspect: [1, 1], quality: 0.8 };
       const r = src === 'camera' ? await ImagePicker.launchCameraAsync(opts) : await ImagePicker.launchImageLibraryAsync(opts);
-      if (!r.canceled && r.assets?.[0]?.uri) { setPhoto(r.assets[0].uri); haptic.mark(); }
+      if (!r.canceled && r.assets?.[0]?.uri) { setPhoto(r.assets[0].uri); setProfile({ photo: r.assets[0].uri }); haptic.mark(); }
     } catch { toast(src === 'camera' ? 'Camera is not available here' : 'Could not open your photos'); }
   };
   const hasCustom = photo === undefined ? !!p.photo : !!photo;
-  const save = () => {
-    if (!name.trim()) { setErr((n) => n + 1); return; }
-    setProfile({ name: name.trim(), days, diet, injury: inj, injuryNote: inj === 'Yes' ? note : '', ...(photo !== undefined ? { photo: photo ?? undefined } : {}) });
-    goBack('/profile');
-    toast('Saved. Coach Vikram sees the update');
-  };
 
   return (
-    <SubPage title="My details" fallback="/profile" footer={<>
-      <Note center>Changes are shared with your trainer so your plan stays safe.</Note>
-      <Button kind="accent" label="Save" onPress={save} />
-    </>}>
+    <SubPage title="My details" fallback="/profile">
       <View style={{ alignItems: 'center', paddingVertical: 4, gap: 8 }}>
-        <Pressy accessibilityRole="button" accessibilityLabel="Change profile photo" onPress={() => openSheet(<PhotoSheet hasCustom={hasCustom} onPick={pickPhoto} onRemove={() => setPhoto(null)} />, { label: 'Profile photo' })} scaleTo={0.96}>
+        <Pressy accessibilityRole="button" accessibilityLabel="Change profile photo" onPress={() => openSheet(<PhotoSheet hasCustom={hasCustom} onPick={pickPhoto} onRemove={() => { setPhoto(null); setProfile({ photo: undefined }); }} />, { label: 'Profile photo' })} scaleTo={0.96}>
           <PersonAvatar who="me" size={96} photo={photo} />
         </Pressy>
-        <Pressy accessibilityRole="button" onPress={() => openSheet(<PhotoSheet hasCustom={hasCustom} onPick={pickPhoto} onRemove={() => setPhoto(null)} />, { label: 'Profile photo' })} scaleTo={0.96} style={{ minHeight: 32, justifyContent: 'center' }}>
+        <Pressy accessibilityRole="button" onPress={() => openSheet(<PhotoSheet hasCustom={hasCustom} onPick={pickPhoto} onRemove={() => { setPhoto(null); setProfile({ photo: undefined }); }} />, { label: 'Profile photo' })} scaleTo={0.96} style={{ minHeight: 32, justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.accentText }}>Change photo</Txt>
         </Pressy>
       </View>
       <Label style={{ marginTop: 16 }}>Name</Label>
       <View style={{ marginTop: -6 }}>
-        <Field value={name} onChangeText={(t) => { setName(t); if (err) setErr(0); }} error={!!err} accessibilityLabel="Name" autoCapitalize="words" returnKeyType="done" />
+        <Field value={name} onChangeText={(t) => { setName(t); if (t.trim()) setProfile({ name: t.trim() }); setErr((n) => (t.trim() ? 0 : n + 1)); }} error={!!err} accessibilityLabel="Name" autoCapitalize="words" returnKeyType="done" />
       </View>
       {!!err && (
         <FadeIn exiting={fadeOut()} style={shake}>
@@ -177,37 +160,18 @@ export default function MyDetails() {
         <Button small kind="secondary" label="Change" accessibilityLabel="Change mobile number" onPress={() => openSheet(<ChangePhoneSheet />, { label: 'Change mobile number' })} />
       </Row>
 
+      <Label style={{ marginTop: 16 }}>Gender</Label>
+      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.surface }}>
+        <Txt style={{ flex: 1, fontFamily: font.semibold }}>{p.gender || 'Not set'}</Txt>
+        <Button small kind="secondary" label="Change" accessibilityLabel="Change gender" onPress={() => openSheet(<GenderSheet />, { label: 'Gender' })} />
+      </Row>
+
       <Label style={{ marginTop: 16 }}>Body details</Label>
       <View style={{ marginTop: -6, borderRadius: radii.lg, backgroundColor: c.surface, overflow: 'hidden' }}>
         <BodyRow label="Date of birth" value={p.dob ? `${fmtDob(p.dob)} · ${ageFrom(p.dob)} yrs` : p.age ? `${p.age} years` : 'Add'} onPress={() => openSheet(<DobSheet />, { label: 'Date of birth' })} />
         <BodyRow label="Height" value={p.heightCm ? `${p.heightCm} cm` : 'Add'} onPress={() => router.push('/log-height')} />
         <BodyRow label="Weight" last value={shell.unitsW === 'lb' ? `${(d.weight * 2.20462).toFixed(1)} lb` : `${d.weight.toFixed(1)} kg`} onPress={() => router.push('/log-weight')} />
       </View>
-      <Txt v="caption" style={{ marginTop: 8, paddingHorizontal: 6 }}>Gender</Txt>
-      <Row style={{ gap: 6, marginTop: -4 }}>
-        {GENDERS.map((g) => <Pill key={g} label={g} on={p.gender === g} onPress={() => { setProfile({ gender: p.gender === g ? '' : g }); haptic.tick(); }} style={{ flex: 1 }} />)}
-      </Row>
-
-      <Label style={{ marginTop: 16 }}>Days you can train</Label>
-      <Row style={{ gap: 6, marginTop: -4 }}>
-        {[2, 3, 4, 5, 6].map((n) => <Pill key={n} label={String(n)} on={days === n} onPress={() => setDays(n)} style={{ flex: 1, paddingHorizontal: 0 }} />)}
-      </Row>
-
-      <Label style={{ marginTop: 16 }}>Diet type</Label>
-      <Row style={{ gap: 6, flexWrap: 'wrap', marginTop: -4 }}>
-        {DIETS.map((x) => <Pill key={x} label={x} on={diet === x} onPress={() => setDiet(x)} />)}
-      </Row>
-
-      <Label style={{ marginTop: 16 }}>Injuries or pain</Label>
-      <Row style={{ gap: 6, marginTop: -4 }}>
-        <Pill label="No" on={inj === 'No'} onPress={() => setInj('No')} style={{ flex: 1 }} />
-        <Pill label="Yes, add note" on={inj === 'Yes'} onPress={() => setInj('Yes')} style={{ flex: 1 }} />
-      </Row>
-      {inj === 'Yes' && (
-        <FadeIn exiting={fadeOut()}>
-          <NoteField value={note} onChangeText={setNote} placeholder="e.g. left knee pain on lunges, worse when I squat below parallel" accessibilityLabel="Injury note" />
-        </FadeIn>
-      )}
 
     </SubPage>
   );

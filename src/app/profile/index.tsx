@@ -5,12 +5,11 @@ import { WaterCard } from '@/features/today/Trackers';
 import { HrDot } from '@/features/trackers/Widgets';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useGoalV2 } from '@/features/goalv2/model';
-import { HEALTH_NAME } from '@/lib/health';
-import { useOpenEdgeCases } from '@/web/WebFrame';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { router } from 'expo-router';
-import { ArrowRight, Check, ChevronRight, LogOut } from '@/lib/icons';
+import { Volume2, Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Lock, LogOut, MessageCircle, Star, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
+import { Chip, ChipTone } from '@/design-system/primitives/Chip';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Avatar } from '@/components/GymHeader';
 import { useOverlay } from '@/components/Overlay';
@@ -23,6 +22,8 @@ import { LineRow, ListCard, Note, SubPage } from '@/features/shell/parts';
 import { resetShell, useShell } from '@/features/shell/state';
 import { goalSummary } from '@/features/shell/goal';
 import { LogoutSheet } from '@/features/shell/sheets';
+import { openLegal } from '@/features/legal/links';
+import { FeedbackSheet } from '@/features/feedback/FeedbackSheet';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
@@ -53,15 +54,18 @@ export default function Profile() {
     ],
   }, [state.sc.member, state.sc.theme, s.sc.progs, s.deleting]);
 
-  const trackers = (['water', 'weight', 'steps'] as const).filter((k) => s.trk[k]).map((k) => k[0].toUpperCase() + k.slice(1)).join(', ') || 'None';
+  const trackerCount = (['water', 'weight', 'steps'] as const).filter((k) => s.trk[k]).length;
   const go = (path: string) => () => router.push(path as any);
-  const openEdgeCases = useOpenEdgeCases();
   const g2 = useGoalV2();
-  const group = (title: string, rows: { l: string; s?: string; go: () => void; color?: string }[]) => (
+  // Each row has an icon on the left and, only when it carries a real state, a chip on the right. No sub lines.
+  const group = (title: string, rows: { l: string; icon: React.ReactNode; chip?: { label: string; tone?: ChipTone }; go: () => void; color?: string }[]) => (
     <View style={{ gap: 8 }}>
       <Txt v="label" style={{ paddingHorizontal: 4 }}>{title}</Txt>
       <ListCard>
-        {rows.map((r, i) => <LineRow key={r.l} title={r.l} sub={r.s} color={r.color} onPress={r.go} last={i === rows.length - 1} />)}
+        {rows.map((r, i) => (
+          <LineRow key={r.l} title={r.l} icon={r.icon} color={r.color} onPress={r.go} last={i === rows.length - 1} a11yHint={r.chip?.label}
+            right={r.chip ? <Row style={{ gap: 8, alignItems: 'center' }}><Chip label={r.chip.label} tone={r.chip.tone} /><ChevronRight size={18} color={c.muted} /></Row> : undefined} />
+        ))}
       </ListCard>
     </View>
   );
@@ -106,28 +110,33 @@ export default function Profile() {
       </View>
 
       <TrackerPromo onPress={go('/profile/tracker-designs')} />
+
       {group('ACCOUNT', [
-        { l: 'My details', s: 'Date of birth, height, weight, diet, injuries', go: go('/profile/details') },
-        ...(d.hasGym ? [{ l: 'Membership pauses', s: d.onBreak ? 'Paused by the front desk' : 'History and pauses left', go: go('/gym/break') }] : []),
+        { l: 'My details', icon: <UserRound size={18} color={c.ink} />, go: go('/profile/details') },
+        { l: 'Preferences', icon: <SlidersHorizontal size={18} color={c.ink} />, go: go('/profile/preferences') },
+        ...(d.hasGym ? [{ l: 'Waiver', icon: <PenLine size={18} color={c.ink} />, chip: p.waiver ? { label: 'Completed', tone: 'good' as ChipTone } : { label: 'Pending', tone: 'warn' as ChipTone }, go: go('/profile/waiver') }] : []),
       ])}
       {group('PREFERENCES AND SETTINGS', [
-        { l: 'Appearance', s: state.sc.theme, go: go('/profile/appearance') },
-        { l: 'Units & diet detail level', s: `${s.unitsW} · ${s.unitsL} · ${s.detail}`, go: go('/profile/units') },
-        { l: 'Connected apps', s: d.hc ? `${HEALTH_NAME} · connected` : `${HEALTH_NAME} · not connected`, go: go('/profile/health') },
-        { l: 'Quick trackers to show', s: trackers, go: go('/profile/trackers') },
+        { l: 'Appearance', icon: <Sun size={18} color={c.ink} />, chip: { label: state.sc.theme }, go: go('/profile/appearance') },
+        { l: 'Sound', icon: <Volume2 size={18} color={c.ink} />, chip: state.profile.timer?.sound === false ? { label: 'Off' } : { label: `${Math.round((state.profile.timer?.volume ?? 1) * 100)}%` }, go: go('/profile/sound') },
+        { l: 'Units & diet detail level', icon: <Ruler size={18} color={c.ink} />, go: go('/profile/units') },
+        { l: 'Connected apps', icon: <Smartphone size={18} color={c.ink} />, chip: d.hc ? { label: 'Connected', tone: 'good' as ChipTone } : { label: 'Not connected' }, go: go('/profile/health') },
+        { l: 'Quick trackers to show', icon: <Activity size={18} color={c.ink} />, chip: { label: trackerCount ? trackerCount + ' on' : 'None' }, go: go('/profile/trackers') },
       ])}
       {group('PRIVACY AND ALERTS', [
-        { l: 'Privacy & what each provider sees', go: go('/profile/privacy') },
-        { l: 'Notifications', s: s.notif.remind || s.notif.water ? 'Reminders on' : 'Reminders off by default', go: go('/profile/notifications') },
-        { l: 'Export my data', go: go('/profile/export') },
-        { l: 'Delete account', go: go('/profile/delete'), color: c.warn },
+        { l: 'Privacy & what each provider sees', icon: <Lock size={18} color={c.ink} />, go: go('/profile/privacy') },
+        { l: 'Notifications', icon: <Bell size={18} color={c.ink} />, chip: s.notif.remind || s.notif.water ? { label: 'On', tone: 'good' as ChipTone } : { label: 'Off' }, go: go('/profile/notifications') },
+        { l: 'Export my data', icon: <Share size={18} color={c.ink} />, go: go('/profile/export') },
+        { l: 'Delete account', icon: <Trash2 size={18} color={c.warn} />, go: go('/profile/delete'), color: c.warn },
       ])}
-      {group('SUPPORT', [
-        { l: 'Help & support', go: go('/profile/help') },
-        { l: 'Demo controls', s: 'Goal type, Today states, time of day, light or dark', go: openEdgeCases },
+      {group('SUPPORT AND LEGAL', [
+        { l: 'Help & support', icon: <MessageCircle size={18} color={c.ink} />, go: go('/profile/help') },
+        ...(d.hasGym ? [{ l: 'Rate your gym', icon: <Star size={18} color={c.ink} />, chip: p.feedback?.last ? { label: p.feedback.last.rating + ' of 5' } : undefined, go: () => openSheet(<FeedbackSheet />, { label: 'Feedback' }) }] : []),
+        { l: 'Privacy Policy', icon: <ShieldCheck size={18} color={c.ink} />, go: () => openLegal('privacy', () => toast('Could not open the page. Try again in a moment')) },
+        { l: 'Terms and conditions', icon: <ClipboardList size={18} color={c.ink} />, go: () => openLegal('terms', () => toast('Could not open the page. Try again in a moment')) },
       ])}
 
-      <Button kind="secondary" label="Log out" icon={<LogOut size={18} color={c.ink} />} onPress={() => openSheet(<LogoutSheet />, { label: 'Log out' })} />
+      <Button kind="warn" label="Log out" icon={<LogOut size={18} color={c.danger} />} onPress={() => openSheet(<LogoutSheet />, { label: 'Log out' })} />
       <BigFooter />
     </SubPage>
   );

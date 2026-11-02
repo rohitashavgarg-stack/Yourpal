@@ -35,7 +35,7 @@ export type ShellState = {
 
 const fresh = (): ShellState => ({
   progs: [
-    { id: 'gold', name: "Wulf Fitness · Vaishali Nagar", short: "Wulf Fitness", kind: 'Gym', logo: 'W', color: '#B5541A', clinic: false, unread: 0 },
+    { id: 'gold', name: "Wulf Fitness", short: "Wulf Fitness", kind: 'Gym', logo: 'W', color: '#B5541A', clinic: false, unread: 0 },
     { id: 'fit', name: 'FitZone', short: 'FitZone', kind: 'Gym', logo: 'F', color: '#128A62', clinic: false, unread: 0 },
     { id: 'mehta', name: 'Dr. Mehta Skin Clinic', short: 'Dr. Mehta Skin', kind: 'Clinic', logo: 'M', color: '#B8532B', clinic: true, unread: 1 },
   ],

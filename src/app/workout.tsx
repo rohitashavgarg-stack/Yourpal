@@ -21,11 +21,14 @@ import { useSessionActions } from '@/features/workout/actions';
 import { COL_LABEL, firstTodo, openSets, setLabel, stats } from '@/features/workout/session';
 import { Draft, SetRow } from '@/features/workout/SetRow';
 import { RestPanel } from '@/features/workout/RestPanel';
+import { useTimerEnd } from '@/lib/useTimerEnd';
+import { scheduleTimerEnd } from '@/lib/notify';
 import { ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { askCoach, coachStore } from '@/features/coach/coach';
 import { FinishScreen, FinishStats } from '@/features/workout/FinishScreen';
 import { workoutUiStore } from '@/features/workout/ui';
 import { NewExercise, NewList } from '@/features/workout/NewWorkoutUI';
+import { AddExerciseSheet } from '@/features/workout/AddExerciseSheet';
 import { FinishConfirmSheet, FormTipsSheet, SetMenuSheet, SwapSheet, WkApi, WkMenuSheet } from '@/features/workout/WorkoutSheets';
 import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
 import { IconButton } from '@/design-system/primitives/Button';
@@ -94,11 +97,12 @@ export default function Workout() {
     setDraftS({ k: x.k, r: x.r, t: x.t });
   }, [s?.exIdx, activeIdx, e?.id]);
 
+  const cue = useTimerEnd();
   // Timers: timed set auto-logs at zero; warm-up / cool-down items tick themselves off.
   useEffect(() => {
     if (!s) return;
-    if (s.setTimer && now >= s.setTimer.endAt) { haptic.success(); logSet(s.setTimer.i, { r: 0, k: draft.k, t: s.setTimer.total }); }
-    if (s.itemTimer && now >= s.itemTimer.endAt) { haptic.success(); A.upd((x) => ({ listDone: { ...x.listDone, [x.itemTimer!.id]: true }, itemTimer: null })); }
+    if (s.setTimer && now >= s.setTimer.endAt) { cue(); logSet(s.setTimer.i, { r: 0, k: draft.k, t: s.setTimer.total }); }
+    if (s.itemTimer && now >= s.itemTimer.endAt) { cue(); A.upd((x) => ({ listDone: { ...x.listDone, [x.itemTimer!.id]: true }, itemTimer: null })); }
   }, [now]);
 
   const finishNow = () => {
@@ -113,6 +117,7 @@ export default function Workout() {
   api.current = {
     openSwap: () => openSheet(<SwapSheet api={api} />, { label: 'Swap exercise' }),
     openSetMenu: (i) => openSheet(<SetMenuSheet api={api} i={i} />, { label: 'Set options' }),
+    openAdd: () => openSheet(<AddExerciseSheet />, { label: 'Add exercise' }),
     openNote: (i) => closeSheet(() => { setNoteFor(i); setNoteDraft(e?.sets[i]?.note ?? ''); }),
     skipSet: (i) => closeSheet(() => skipSet(i)),
     toggleWarm: (i) => { closeSheet(); A.toggleWarm(s!.exIdx, i); },
@@ -207,7 +212,7 @@ export default function Workout() {
             onMenu={() => api.current.openSetMenu(i)}
             onTimer={() => {
               if (timing) { const el = Math.max(1, Math.round((Date.now() - (s.setTimer!.endAt - s.setTimer!.total * 1000)) / 1000)); logSet(i, { r: 0, k: draft.k, t: el }); }
-              else { haptic.medium(); A.upd((xs) => ({ setTimer: { exIdx: xs.exIdx, i, endAt: Date.now() + draft.t * 1000, total: draft.t } })); }
+              else { haptic.medium(); scheduleTimerEnd(Date.now() + draft.t * 1000, 'Your timed set is done.'); A.upd((xs) => ({ setTimer: { exIdx: xs.exIdx, i, endAt: Date.now() + draft.t * 1000, total: draft.t } })); }
             }} />
         );
       })}
@@ -226,7 +231,11 @@ export default function Workout() {
           )}
         </FadeIn>
       )}
-      <Button kind="dashed" size="medium" label="Add set" icon={<Plus size={17} color={c.ink} />} onPress={() => A.addSet(s.exIdx)} />
+      {/* both ways to add more are on the workout itself: another set of this exercise, or another exercise at the end of today's list */}
+      <Row style={{ gap: 8 }}>
+        <View style={{ flex: 1 }}><Button kind="dashed" size="medium" label="Add set" icon={<Plus size={17} color={c.ink} />} onPress={() => A.addSet(s.exIdx)} /></View>
+        <View style={{ flex: 1 }}><Button kind="dashed" size="medium" label="Add exercise" icon={<Plus size={17} color={c.ink} />} onPress={() => api.current.openAdd()} /></View>
+      </Row>
       {!newUi && <Txt v="caption" style={{ textAlign: 'center', paddingHorizontal: 6, paddingTop: 4 }}>Adjust the highlighted set and tick it · tap a set to edit · swipe right = done, left = swap/skip · hold for options</Txt>}
     </View>
   );

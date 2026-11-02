@@ -47,9 +47,9 @@ export function stats(s: Session) {
     e.sets.forEach((x) => {
       if (x.st !== 'done') return;
       sets++;
-      if (!x.w && (e.mode === 'rw' || e.mode === 'tw') && (x.dk ?? x.k) > planMax && (!pr || (x.dk ?? x.k) > pr.kg)) pr = { name: e.name, kg: x.dk ?? x.k };
+      if (!e.added && !x.w && (e.mode === 'rw' || e.mode === 'tw') && (x.dk ?? x.k) > planMax && (!pr || (x.dk ?? x.k) > pr.kg)) pr = { name: e.name, kg: x.dk ?? x.k };
     });
   });
   const exercises = s.ex.filter((e) => e.sets.some((x) => x.st === 'done')).length;
-  return { mins, sets, exercises, totalEx: s.ex.length, pr: pr as { name: string; kg: number } | null, kcal: Math.max(40, mins * 7) };
+  return { mins, sets, exercises, totalEx: s.ex.filter((e) => !e.added).length, pr: pr as { name: string; kg: number } | null, kcal: Math.max(40, mins * 7) };
 }
