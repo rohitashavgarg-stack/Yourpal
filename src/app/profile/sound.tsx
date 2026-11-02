@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs -- the slider's touch handler reads the latest value through a ref */
 import React, { useMemo, useRef, useState } from 'react';
 import { PanResponder, View } from 'react-native';
 import { Volume1, Volume2 } from '@/lib/icons';
