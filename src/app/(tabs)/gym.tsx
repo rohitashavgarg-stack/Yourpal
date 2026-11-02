@@ -16,6 +16,7 @@ import { font } from '@/theme/tokens';
 import { CardTitle, cardShadow, GrowBar, ListCard, PCard } from '@/features/progress/parts';
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { useMemberships } from '@/features/gym/memberships';
+import { TimeBar } from '@/app/gym/membership';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
@@ -23,15 +24,18 @@ import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { Chip } from '@/design-system/primitives/Chip';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
 
-// One card for all memberships: how many are active, and a warning chip when one is ending soon or none is active. It opens the Memberships page.
+// One card for all memberships. The header says how many are active (with a warning chip when one is ending soon, or the membership is paused);
+// under it each active membership shows its name, how long is left and a thin bar. It opens the Memberships page.
 function GymMembership() {
   const { c } = useTheme();
+  const { d } = useDomain();
   const ms = useMemberships();
-  const active = ms.filter((m) => m.status === 'Active');
+  const active = ms.filter((m) => m.status === 'Active').sort((x, y) => y.pct - x.pct); // the one ending first on top
   const soon = active.some((m) => m.warn);
+  const shown = active.slice(0, 3);
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`Memberships. ${active.length} active${soon ? ', one ending soon' : ''}. See all`} onPress={() => router.push('/gym/membership')} scaleTo={0.985}
-      style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16 }}>
+      style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
       <Row style={{ gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: radii.md, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><CreditCard size={22} color={c.accentText} /></View>
         <View style={{ flex: 1, gap: 6 }}>
@@ -39,10 +43,26 @@ function GymMembership() {
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>
             <Chip label={active.length ? `${active.length} active` : 'None active'} tone={active.length ? 'good' : 'warn'} />
             {soon && <Chip label="Ending soon" tone="warn" />}
+            {d.onBreak && <Chip label="Paused" tone="warn" />}
           </Row>
         </View>
         <ChevronRight size={18} color={c.muted} />
       </Row>
+      {shown.length > 0 ? (
+        <View style={{ gap: 12 }}>
+          {shown.map((m) => (
+            <View key={m.id} style={{ gap: 6 }}>
+              <Row style={{ justifyContent: 'space-between', gap: 10 }}>
+                <Txt style={{ fontFamily: font.medium, flexShrink: 1 }} numberOfLines={1}>{m.name}</Txt>
+                <Txt style={{ fontSize: fontSizes.sm, color: m.warn ? c.warn : c.muted }}>{m.note}</Txt>
+              </Row>
+              <TimeBar pct={m.pct} warn={m.warn} />
+            </View>
+          ))}
+        </View>
+      ) : (
+        <Txt muted style={{ fontSize: fontSizes.md }}>No active membership. Renew at the front desk to log again.</Txt>
+      )}
     </Pressy>
   );
 }
