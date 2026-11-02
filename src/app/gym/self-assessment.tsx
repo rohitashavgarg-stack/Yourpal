@@ -2,11 +2,12 @@ import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Activity, Armchair, BicepsFlexed, Check, ChevronLeft, Dumbbell, Footprints, PersonStanding, Ruler as RulerIcon, Shirt } from '@/lib/icons';
+import { Info, Activity, Armchair, BicepsFlexed, Check, ChevronLeft, Dumbbell, Footprints, PersonStanding, Ruler as RulerIcon, Shirt } from '@/lib/icons';
 import { IconButton } from '@/design-system/primitives/Button';
 import { Button, Field, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
 import { useDomain } from '@/lib/domain';
+import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
@@ -20,7 +21,7 @@ import { NUDGE_DAYS, useSelfAssess } from '@/features/selfassess/useSelfAssess';
 import { RulerStep } from '@/features/selfassess/RulerStep';
 import { SleepDial, sleepMinutes } from '@/features/selfassess/SleepDial';
 import { BreathTimer } from '@/features/selfassess/BreathTimer';
-import { BarbellVisual, BpStep, DayTiles, FatPicker, FlexBars, FreqPicker, LevelCards, SideRuler, StepperStep, WATER_STOPS, WaterSlider } from '@/features/selfassess/Pickers';
+import { BarbellCard, BpStep, DayTiles, FatImages, FlexBars, FreqPicker, LevelCards, PinStack, WATER_STOPS, WaterSlider } from '@/features/selfassess/Pickers';
 import { fmtClock } from '@/features/plans/TimeSheet';
 import { HeightPicker, WeightPicker } from '@/features/body/BodyLog';
 
@@ -53,7 +54,7 @@ export default function SelfAssessment() {
   const setNum = (k: NumKey, v: number) => setVals((x) => ({ ...x, [k]: String(v) }));
   // the number a ruler step opens on, and the key it is kept under
   const startOf = (st: (typeof STEPS)[number]): { k: NumKey; v: number } | null =>
-    st.kind === 'height' ? { k: 'height', v: 165 } : st.kind === 'weight' ? { k: 'weight', v: d.weight } : st.kind === 'ruler' || st.kind === 'stepper' ? { k: st.k, v: st.start } : st.kind === 'fat' ? { k: 'fat', v: 25 } : null;
+    st.kind === 'height' ? { k: 'height', v: 165 } : st.kind === 'weight' ? { k: 'weight', v: d.weight } : st.kind === 'ruler' || st.kind === 'stepper' ? { k: st.k, v: st.start } : null;
   const next = () => setIdx((i) => Math.min(total, i + 1));
   const cont = () => {
     if (step) {
@@ -72,6 +73,7 @@ export default function SelfAssessment() {
       if (step.kind === 'sleep') setVals((x) => { const n = { ...x }; delete n.sleep; return n; });
       if (step.kind === 'bp') setVals((x) => { const n = { ...x }; delete n.sys; delete n.dia; delete n.pulse; return n; });
       if (step.kind === 'water') setAnswers((a) => { const n = { ...a }; delete n.water; return n; });
+      if (step.kind === 'fat') setAnswers((a) => { const n = { ...a }; delete n.fat; return n; });
       if (step.kind === 'timer') setVals((x) => { const n = { ...x }; delete n[step.k]; return n; });
       if (step.kind === 'body') setVals((x) => { const n = { ...x }; BODY_SIZES.forEach((k) => delete n[k]); return n; });
     }
@@ -87,6 +89,8 @@ export default function SelfAssessment() {
   const finish = () => {
     const tests: SelfEntry['tests'] = {};
     (Object.keys(NUMS) as NumKey[]).forEach((k) => { const n = parseFloat((vals[k] ?? '').replace(',', '.')); if (!Number.isNaN(n) && n > 0) tests[k] = n; });
+    const band = /^(\d+)-(\d+)/.exec(answers.fat ?? '');
+    if (band) tests.fat = Math.round((Number(band[1]) + Number(band[2])) / 2);
     const a: Record<string, string> = { ...answers, injuries: areas.length ? areas.join(', ') : 'None', nextDays: String(days) };
     if (conditions.trim()) a.conditions = conditions.trim();
     if (tests.sleep) { a.bedtime = fmtClock(sleepT.bed); a.wake = fmtClock(sleepT.wake); }
@@ -149,14 +153,8 @@ export default function SelfAssessment() {
           <FlexBars options={step.options} value={answers[step.key]} onPick={(v) => pick(step.key, v)} />
         </View>
       )}
-      {step?.kind === 'fat' && <FatPicker value={numOf('fat', 25)} onChange={(v) => setNum('fat', v)} />}
+      {step?.kind === 'fat' && <FatImages value={answers.fat} onPick={(v) => { setAnswers((a) => ({ ...a, fat: v })); haptic.tick(); }} />}
       {step?.kind === 'bp' && <BpStep sys={numOf('sys', 120)} dia={numOf('dia', 80)} pulse={numOf('pulse', 72)} onChange={(k, v) => setNum(k, v)} />}
-      {step?.kind === 'stepper' && (
-        <View style={{ gap: 18 }}>
-          {step.how && <How lines={step.how} />}
-          <StepperStep value={numOf(step.k, step.start)} onChange={(v) => setNum(step.k, v)} unit={NUMS[step.k].unit} step={step.step} min={step.min} max={step.max} jumps={step.jumps} visual={<BarbellVisual kg={numOf(step.k, step.start)} />} />
-        </View>
-      )}
       {step?.kind === 'choice' && step.cards && (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
           {step.options.map((o) => {
@@ -212,12 +210,13 @@ export default function SelfAssessment() {
       {step?.kind === 'ruler' && step.side && (
         <View style={{ gap: 14 }}>
           {step.how && <How lines={step.how} />}
-          <SideRuler key={step.id} value={numOf(step.k, step.start)} onChange={(v) => setNum(step.k, v)} unit={NUMS[step.k].unit} min={step.min} max={step.max} step={step.step} major={step.major} />
+          <PinStack key={step.id} value={numOf(step.k, step.start)} onChange={(v) => setNum(step.k, v)} />
         </View>
       )}
       {step?.kind === 'ruler' && !step.side && (
         <View style={{ gap: 14 }}>
           {step.how && <How lines={step.how} />}
+          {step.k === 'bench' && <BarbellCard kg={numOf('bench', step.start)} />}
           {step.k === 'sugar' && <Row style={{ justifyContent: 'center' }}><Chip label={numOf('sugar', 100) < 70 ? 'Low' : numOf('sugar', 100) <= 140 ? 'Normal range' : 'High'} tone={numOf('sugar', 100) >= 70 && numOf('sugar', 100) <= 140 ? 'good' : 'warn'} /></Row>}
           <RulerStep key={step.id} a11y={step.title} value={numOf(step.k, step.start)} onChange={(v) => setNum(step.k, v)} unit={NUMS[step.k].unit} min={step.min} max={step.max} step={step.step} decimals={step.dp} major={step.major} />
         </View>
@@ -251,15 +250,28 @@ export default function SelfAssessment() {
   );
 }
 
-// The steps for the test, as the Figma shows them under "How to perform".
+// "How to perform" is a small blue button; the steps open in a sheet so they do not fill the page.
 function How({ lines }: { lines: string[] }) {
   const { c } = useTheme();
+  const { openSheet } = useOverlay();
   const numbered = !lines[0].includes(':');
   return (
-    <View style={{ gap: 6, padding: 14, borderRadius: radii.lg, backgroundColor: c.surface }}>
-      <Txt v="label">HOW TO PERFORM</Txt>
-      {lines.map((l, i) => <Txt key={i} style={{ fontSize: fontSizes.md, lineHeight: 21 }}>{numbered ? `${i + 1}. ${l}` : l}</Txt>)}
-    </View>
+    <Pressy accessibilityRole="button" accessibilityLabel="How to perform" onPress={() => openSheet(
+      <View style={{ gap: 12, paddingBottom: 8 }}>
+        <Txt v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>How to perform</Txt>
+        {lines.map((l, i) => (
+          <Row key={i} style={{ gap: 12, alignItems: 'flex-start' }}>
+            <View style={{ width: 28, height: 28, borderRadius: radii.pill, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.accentText }}>{i + 1}</Txt>
+            </View>
+            <Txt style={{ flex: 1, fontSize: fontSizes.md, lineHeight: 22 }}>{numbered ? l : l.replace(/^[A-Za-z ]+: /, '')}</Txt>
+          </Row>
+        ))}
+      </View>, { label: 'How to perform' })} scaleTo={0.96}
+      style={{ alignSelf: 'flex-start', minHeight: 36, paddingHorizontal: 12, borderRadius: radii.pill, flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: c.accentSoft }}>
+      <Info size={16} color={c.accentText} />
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.accentText }}>How to perform</Txt>
+    </Pressy>
   );
 }
 

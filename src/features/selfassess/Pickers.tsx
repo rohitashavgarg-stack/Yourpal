@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/refs -- the slider's touch handler reads the latest value through a ref */
 import React, { useMemo, useRef, useState } from 'react';
-import { PanResponder, View } from 'react-native';
+import { Image, PanResponder, View } from 'react-native';
 import Svg, { ClipPath, Defs, G, Line, Path, Rect, Text as SvgText } from 'react-native-svg';
-import { Minus, Plus } from '@/lib/icons';
+import { Info, Minus, Plus } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { RoundBtn } from '@/components/bits';
 import { Ruler } from '@/design-system/primitives/Ruler';
@@ -33,32 +33,43 @@ export function FatGrid({ options, value, onPick }: Pick) {
   );
 }
 
-// Body fat: a big percentage on a ruler, and under it the ranges to pick from.
-const FAT_BANDS: [number, number][] = [[3, 5], [6, 9], [10, 12], [13, 17], [17, 22], [23, 27], [28, 32], [33, 37]];
-export function FatPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+// Body fat: a photo for each range (one sheet of photos, cut into tiles the way the design cuts it). Tap the one that looks most like you.
+const SHEET = require('../../../assets/selfassess/body-fat.png');
+// where each range's photo sits on the sheet, in percent of the tile: width, height, left, top
+const FAT_TILES: { v: string; w: string; h: string; l: string; t: string }[] = [
+  { v: '3-5 %', w: '301%', h: '407.72%', l: '0%', t: '-59.73%' },
+  { v: '6-9 %', w: '302.01%', h: '407.72%', l: '-101.01%', t: '-59.73%' },
+  { v: '10-12 %', w: '302.01%', h: '416.1%', l: '-201.68%', t: '-62.33%' },
+  { v: '13-17 %', w: '302.01%', h: '410.47%', l: '0%', t: '-178.04%' },
+  { v: '17-22 %', w: '302.01%', h: '410.47%', l: '-101.01%', t: '-178.04%' },
+  { v: '23-27 %', w: '301%', h: '410.47%', l: '-201%', t: '-178.04%' },
+  { v: '28-32 %', w: '301%', h: '410.47%', l: '0%', t: '-294.93%' },
+  { v: '33-37 %', w: '301%', h: '410.47%', l: '-201%', t: '-294.93%' },
+];
+export function FatImages({ value, onPick }: { value: string | undefined; onPick: (v: string) => void }) {
   const { c } = useTheme();
+  const tile = (v: string, content: React.ReactNode) => {
+    const on = value === v;
+    return (
+      <Pressy key={v} accessibilityRole="button" accessibilityLabel={v === 'Not sure' ? 'Not sure' : `Body fat ${v}`} accessibilityState={{ selected: on }} onPress={() => onPick(v)} scaleTo={0.96} style={{ width: '31%', flexGrow: 1, alignItems: 'center', gap: 8 }}>
+        <View style={{ width: '100%', aspectRatio: 1, borderRadius: radii.lg, overflow: 'hidden', borderWidth: 2.5, borderColor: on ? c.accent : 'transparent', backgroundColor: c.accentSoft }}>
+          {content}
+          {on && <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: c.accent + '4D' }} />}
+        </View>
+        <Txt style={{ fontFamily: on ? font.semibold : font.medium, fontSize: fontSizes.md, color: on ? c.accentText : c.ink }}>{v}</Txt>
+      </Pressy>
+    );
+  };
   return (
-    <View style={{ gap: 22 }}>
-      <View style={{ alignItems: 'center' }}>
-        <Row style={{ alignItems: 'baseline', gap: 6 }}>
-          <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.displayBold, fontSize: 72, lineHeight: 84, letterSpacing: -2 }}>{String(Math.round(value))}</Txt>
-          <Txt muted style={{ fontSize: fontSizes.xl }}>%</Txt>
-        </Row>
+    <View style={{ gap: 18 }}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 14 }}>
+        {FAT_TILES.map((t) => tile(t.v, <Image source={SHEET} resizeMode="stretch" style={{ position: 'absolute', width: t.w as `${number}%`, height: t.h as `${number}%`, left: t.l as `${number}%`, top: t.t as `${number}%` }} />))}
+        {tile('Not sure', <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Txt style={{ fontFamily: font.displayBold, fontSize: 44, color: c.accentText }}>?</Txt></View>)}
       </View>
-      <Ruler accessibilityLabel="Body fat percentage" value={value} onChange={onChange} min={3} max={50} step={1} majorEvery={5} label={(v) => String(Math.round(v))} />
-      <View style={{ height: 1, backgroundColor: c.line }} />
-      <Txt v="label" style={{ textAlign: 'center' }}>OR SELECT FROM BELOW</Txt>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-        {FAT_BANDS.map(([lo, hi]) => {
-          const on = value >= lo && value <= hi;
-          return (
-            <Pressy key={lo} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => { haptic.tick(); onChange(Math.round((lo + hi) / 2)); }} scaleTo={0.96}
-              style={{ width: '22%', flexGrow: 1, height: 52, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? c.accent : c.surface }}>
-              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: on ? c.accentInk : c.ink }}>{`${lo}-${hi}%`}</Txt>
-            </Pressy>
-          );
-        })}
-      </View>
+      <Row style={{ gap: 8, padding: 12, borderRadius: radii.md, backgroundColor: c.accentSoft, alignItems: 'flex-start' }}>
+        <Info size={18} color={c.accentText} />
+        <Txt style={{ flex: 1, fontSize: fontSizes.sm, lineHeight: 19 }}>Images are provided for reference, actual body types may vary.</Txt>
+      </Row>
     </View>
   );
 }
@@ -239,6 +250,68 @@ export function BarbellVisual({ kg }: { kg: number }) {
       <View style={{ width: 96, height: 10, borderRadius: radii.xs, backgroundColor: c.muted }} />
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>{side.map((i, k) => plate(i, 'r' + k))}</View>
     </View>
+  );
+}
+
+// The barbell on a card of its own, big, so the plates are easy to see as the weight changes.
+export function BarbellCard({ kg }: { kg: number }) {
+  const { c } = useTheme();
+  return (
+    <View style={{ borderRadius: radii.xl, backgroundColor: c.surface, paddingVertical: 26, paddingHorizontal: 12, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+      <BarbellVisual kg={kg} />
+    </View>
+  );
+}
+
+// Leg press: a stack of plates, one for every 25 kg, and a pin. Drag up and down the stack to move the pin; the plates under it light up and the weight is what they add up to.
+export function PinStack({ value, onChange, plate = 25, count = 16 }: { value: number; onChange: (v: number) => void; plate?: number; count?: number }) {
+  const { c } = useTheme();
+  const rowH = 21;
+  const H = count * rowH;
+  const live = useRef({ value, onChange });
+  live.current = { value, onChange };
+  const pan = useMemo(() => {
+    const set = (y: number) => {
+      const k = Math.min(count, Math.max(0, count - Math.floor(y / rowH))); // plates from the bottom, up to the one touched
+      const w = k * plate;
+      if (w !== live.current.value) { haptic.tick(); live.current.onChange(w); }
+    };
+    return PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderTerminationRequest: () => false,
+      onPanResponderGrant: (e) => set(e.nativeEvent.locationY),
+      onPanResponderMove: (e) => set(e.nativeEvent.locationY),
+    });
+  }, [count, plate]);
+  const k = Math.round(value / plate);
+  const bump = (d: number) => { haptic.tick(); onChange(Math.min(count * plate, Math.max(0, value + d))); };
+  return (
+    <Row style={{ gap: 18, alignItems: 'center' }}>
+      <View style={{ flex: 1, gap: 16 }}>
+        <View>
+          <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.displayBold, fontSize: 72, lineHeight: 84, letterSpacing: -2 }}>{String(Math.round(value))}</Txt>
+          <Txt muted style={{ fontSize: fontSizes.lg }}>kg</Txt>
+        </View>
+        <Txt muted style={{ fontSize: fontSizes.md }}>Drag the pin up or down the stack.</Txt>
+        <Row style={{ gap: 8, flexWrap: 'wrap' }}>
+          {[-25, -5, 5, 25].map((d) => (
+            <Pressy key={d} accessibilityRole="button" accessibilityLabel={`${d > 0 ? 'Add' : 'Take off'} ${Math.abs(d)} kg`} onPress={() => bump(d)} scaleTo={0.94}
+              style={{ height: 44, minWidth: 60, paddingHorizontal: 12, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surface }}>
+              <Txt style={{ fontFamily: font.semibold }}>{`${d > 0 ? '+' : '−'}${Math.abs(d)}`}</Txt>
+            </Pressy>
+          ))}
+        </Row>
+      </View>
+      <View {...pan.panHandlers} accessibilityRole="adjustable" accessibilityLabel="Weight stack" accessibilityValue={{ text: `${value} kilograms` }} style={{ width: 150, height: H }}>
+        {Array.from({ length: count }, (_, r) => {
+          const fromBottom = count - r; // 1 is the bottom plate
+          const on = fromBottom <= k;
+          return <View key={r} pointerEvents="none" style={{ height: rowH - 3, marginBottom: 3, borderRadius: radii.xs, backgroundColor: on ? (fromBottom % 2 ? c.accent : c.accentText) : c.surface3 }} />;
+        })}
+        {k > 0 && <View pointerEvents="none" style={{ position: 'absolute', left: -14, right: -14, top: (count - k) * rowH + (rowH - 3) / 2 - 2, height: 4, borderRadius: radii.xs, backgroundColor: c.warn }} />}
+      </View>
+    </Row>
   );
 }
 
