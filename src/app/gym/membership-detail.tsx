@@ -55,8 +55,10 @@ export default function MembershipDetail() {
       {/* The icon first, then the big heading and the status. */}
       <View style={{ gap: 12, paddingTop: 4 }}>
         <IconBadge size={64} radius={radii.lg} bg={c.surface} borderWidth={1} borderColor={c.line}><CreditCard size={32} strokeWidth={1.9} color={c.accentText} /></IconBadge>
-        <Txt accessibilityRole="header" v="display">{m.name}</Txt>
-        <Row><StatusChip m={m} /></Row>
+        <Row style={{ gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Txt accessibilityRole="header" v="display">{m.name}</Txt>
+          <StatusChip m={m} />
+        </Row>
       </View>
 
       {/* Time left in big numbers, the bar, and the two dates under it. Straight on the page, no card. */}
