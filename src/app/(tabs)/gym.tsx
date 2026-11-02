@@ -163,17 +163,17 @@ function AssessCard() {
           </Row>
         )}
       </View>
-      {/* the upcoming assessment, with its date as a little calendar tile (amber when it is due) */}
-      <Row style={{ gap: 12, paddingHorizontal: 4 }}>
+      {/* the upcoming assessment in a container like the last one: its date as a little calendar tile (amber when it is due), and when it is */}
+      <Row style={{ gap: 12, padding: 12, borderRadius: radii.lg, backgroundColor: c.surface2 }}>
         <View style={{ width: 48, height: 52, borderRadius: radii.md, backgroundColor: due ? c.warnSoft : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 24, color: due ? c.warn : c.accentText }}>{String(new Date(nextAt).getDate())}</Txt>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 16, color: due ? c.warn : c.accentText }}>{new Date(nextAt).toLocaleString('en-US', { month: 'short' }).toUpperCase()}</Txt>
         </View>
         <View style={{ flex: 1, gap: 1 }}>
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Upcoming</Txt>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Upcoming assessment</Txt>
           <Txt style={{ fontFamily: font.semibold }}>{`Assessment ${total + 1}`}</Txt>
-          <Txt style={{ fontSize: fontSizes.sm, color: due ? c.warn : c.muted }}>{daysLeft <= 0 ? 'Due now' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`}</Txt>
         </View>
+        <Tag label={daysLeft <= 0 ? 'Due now' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`} bg={due ? c.warnSoft : c.surface} fg={due ? c.warn : c.muted} />
       </Row>
       {due && <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />}
     </PCard>
