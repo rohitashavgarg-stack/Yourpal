@@ -13,7 +13,7 @@ import { goBack } from '@/features/shell/parts';
 import { Signature } from '@/features/profile/Signature';
 import { WaiverBackdrop } from '@/features/profile/WaiverBackdrop';
 import { WaiverBadge } from '@/features/profile/WaiverBadge';
-import { WaiverIllustration, WAIVER_ART } from '@/features/profile/WaiverIllustration';
+import { WaiverSheetBack1, WaiverSheetBack2, WaiverSheetFront, WAIVER_ART } from '@/features/profile/WaiverIllustration';
 import { WAIVER_GYM, fmtSigned } from '@/features/profile/waiver';
 
 type Sig = { signedAt: string; path: string; w: number; h: number };
@@ -39,28 +39,38 @@ function Spark({ angle, dist, size, color, delay }: { angle: number; dist: numbe
   return <Animated.View pointerEvents="none" style={[{ position: 'absolute', width: size, height: size, borderRadius: size / 2, backgroundColor: color }, st]} />;
 }
 
+const BADGE = 88; // the signed badge
 const SPARK_COLORS = ['#CFCBFF', '#8FB2FF', '#FFFFFF', '#B9A8FF'];
 
-// The tilted sheets. The member's own signature sits on the line of the front sheet. The whole stack slides up, settles, then floats gently.
+// The tilted sheets. They arrive stacked: the front sheet rises into place with the back two hidden behind it, then the back two fan out to
+// their places. The member's own signature sits on the line of the front sheet. When it has settled the stack floats gently.
 function Paper({ sig, width }: { sig: Sig; width: number }) {
   const still = useReducedMotion();
-  const enter = useSharedValue(still ? 1 : 0);
+  const rise = useSharedValue(still ? 1 : 0);
+  const fan = useSharedValue(still ? 1 : 0);
   const float = useSharedValue(0);
+  const s = width / WAIVER_ART.w;
   useEffect(() => {
     if (still) return;
-    enter.value = withDelay(700, withSpring(1, { damping: 12, stiffness: 90 }));
-    float.value = withDelay(1500, withRepeat(withSequence(withTiming(1, { duration: 2400, easing: Easing.inOut(Easing.sin) }), withTiming(0, { duration: 2400, easing: Easing.inOut(Easing.sin) })), -1));
+    rise.value = withDelay(650, withSpring(1, { damping: 13, stiffness: 95 }));
+    fan.value = withDelay(1250, withSpring(1, { damping: 11, stiffness: 80 }));
+    float.value = withDelay(2300, withRepeat(withSequence(withTiming(1, { duration: 2400, easing: Easing.inOut(Easing.sin) }), withTiming(0, { duration: 2400, easing: Easing.inOut(Easing.sin) })), -1));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  const st = useAnimatedStyle(() => ({
-    opacity: Math.min(1, enter.value * 1.5),
-    transform: [{ translateY: (1 - enter.value) * 70 - float.value * 6 }, { rotate: `${(1 - enter.value) * 6}deg` }],
+  const stack = useAnimatedStyle(() => ({
+    opacity: Math.min(1, rise.value * 1.5),
+    transform: [{ translateY: (1 - rise.value) * 70 - float.value * 6 }],
   }));
-  const s = width / WAIVER_ART.w;
+  // each back sheet starts behind the front one (shifted left, tilted the other way) and ends where the file puts it
+  const back1 = useAnimatedStyle(() => ({ transform: [{ translateX: (1 - fan.value) * -78 * s }, { translateY: (1 - fan.value) * 6 * s }, { rotate: `${(1 - fan.value) * -14}deg` }] }));
+  const back2 = useAnimatedStyle(() => ({ transform: [{ translateX: (1 - fan.value) * -50 * s }, { translateY: (1 - fan.value) * 4 * s }, { rotate: `${(1 - fan.value) * -9}deg` }] }));
   const sigW = 112 * s;
   const sigH = (sigW * sig.h) / sig.w;
+  const fill = { position: 'absolute', left: 0, top: 0 } as const;
   return (
-    <Animated.View style={[{ width, height: WAIVER_ART.h * s }, st]}>
-      <WaiverIllustration width={width} />
+    <Animated.View style={[{ width, height: WAIVER_ART.h * s }, stack]}>
+      <Animated.View style={[fill, back1]}><WaiverSheetBack1 width={width} /></Animated.View>
+      <Animated.View style={[fill, back2]}><WaiverSheetBack2 width={width} /></Animated.View>
+      <View style={fill}><WaiverSheetFront width={width} /></View>
       {/* the signature stands on the line at the bottom of the front sheet, tilted -5 degrees like the sheet */}
       <View pointerEvents="none" style={{ position: 'absolute', left: 46 * s, top: 279 * s - sigH, width: sigW, height: sigH, transformOrigin: 'left bottom', transform: [{ rotate: '-5deg' }] } as any}>
         <Signature d={sig.path} w={sig.w} h={sig.h} color={fixed.dark} />
@@ -81,9 +91,9 @@ export function WaiverSigned({ sig }: { sig: Sig }) {
       </View>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 }}>
         <View style={{ alignItems: 'center', gap: 12 }}>
-          <View style={{ width: 104, height: 104, alignItems: 'center', justifyContent: 'center' }}>
-            <WaiverBadge size={104} />
-            <View pointerEvents="none" style={{ position: 'absolute', left: 52, top: 52, width: 0, height: 0 }}>
+          <View style={{ width: BADGE, height: BADGE, alignItems: 'center', justifyContent: 'center' }}>
+            <WaiverBadge size={BADGE} />
+            <View pointerEvents="none" style={{ position: 'absolute', left: BADGE / 2, top: BADGE / 2, width: 0, height: 0 }}>
               {Array.from({ length: 12 }, (_, i) => (
                 <Spark key={i} angle={(i / 12) * Math.PI * 2} dist={i % 2 ? 78 : 104} size={i % 3 ? 5 : 7} color={SPARK_COLORS[i % SPARK_COLORS.length]} delay={380 + (i % 4) * 40} />
               ))}
@@ -98,7 +108,7 @@ export function WaiverSigned({ sig }: { sig: Sig }) {
             </View>
           </Rise>
         </View>
-        <Paper sig={sig} width={236} />
+        <Paper sig={sig} width={264} />
       </View>
       <Rise delay={1000} from={30}>
         <View style={{ paddingHorizontal: 20, paddingBottom: Math.max(insets.bottom, 16) + 6 }}>

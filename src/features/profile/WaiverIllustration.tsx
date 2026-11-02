@@ -3,15 +3,35 @@ import Svg, { ClipPath, Defs, G, Path, Rect } from 'react-native-svg';
 
 // The designer's waiver illustration (three tilted sheets with text outlines), turned into SVG components.
 // Generated from "Waiver illustration.svg": the blur, inner shadow and noise filters are left out because react-native-svg has none.
-// The sheet is 279 wide and 319 tall in the file; it scales to the width it is given.
+// The file is 279 wide and 319 tall. Each sheet is its own component, the same size, so they lie on top of each other and the back two can fan out.
 export const WAIVER_ART = { w: 279, h: 319 };
 
-export function WaiverIllustration({ width }: { width: number }) {
-  return (
-    <Svg width={width} height={(width * WAIVER_ART.h) / WAIVER_ART.w} viewBox="0 0 279 319" fill="none">
+function Sheet({ width, children }: { width: number; children: React.ReactNode }) {
+  return <Svg width={width} height={(width * WAIVER_ART.h) / WAIVER_ART.w} viewBox="0 0 279 319" fill="none">{children}</Svg>;
+}
 
+/** The sheet furthest back (the faintest). */
+export function WaiverSheetBack1({ width }: { width: number }) {
+  return (
+    <Sheet width={width}>
       <Rect x="93.8633" y="20.1597" width="187" height="252" rx="10.6721" rotation="9" origin="93.8633, 20.1597" fill="white" fillOpacity="0.1"/>
+    </Sheet>
+  );
+}
+
+/** The middle sheet. */
+export function WaiverSheetBack2({ width }: { width: number }) {
+  return (
+    <Sheet width={width}>
       <Rect x="65.1025" y="29.6323" width="185.726" height="256.581" rx="10.6721" rotation="1" origin="65.1025, 29.6323" fill="white" fillOpacity="0.3"/>
+    </Sheet>
+  );
+}
+
+/** The front sheet: heading, text outlines, the signature line and "Your Signature". */
+export function WaiverSheetFront({ width }: { width: number }) {
+  return (
+    <Sheet width={width}>
       <G>
       <G clipPath="url(#clip0_39477_15216)">
       <Rect y="19.6099" width="224.997" height="299.996" rx="10.6721" rotation="-5" origin="0, 19.6099" fill="white"/>
@@ -68,7 +88,6 @@ export function WaiverIllustration({ width }: { width: number }) {
       <Rect x="24.105" y="201.143" width="199" height="4" rx="2" rotation="-5" origin="24.105, 201.143" fill="white"/>
       </ClipPath>
       </Defs>
-
-    </Svg>
+    </Sheet>
   );
 }
