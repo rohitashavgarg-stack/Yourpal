@@ -63,13 +63,11 @@ export default function MembershipDetail() {
 
       {/* Time left in big numbers, the bar, and the two dates under it. Straight on the page, no card. */}
       <View style={{ gap: 14 }}>
-        {m.status === 'Active' ? (
+        {m.status === 'Active' && (
           <Row style={{ alignItems: 'baseline', gap: 6 }}>
             <Txt style={{ fontFamily: font.displayBold, fontSize: 40, lineHeight: 52, letterSpacing: -1.2, color: m.warn ? c.warn : c.ink }}>{m.left.n}</Txt>
             <Txt muted>{m.left.unit}</Txt>
           </Row>
-        ) : (
-          <Txt style={{ fontFamily: font.displayBold, fontSize: 32, lineHeight: 42, letterSpacing: -0.8 }}>{m.status === 'Suspended' ? 'Suspended' : 'Ended'}</Txt>
         )}
         {m.status === 'Active' && <TimeBar pct={m.pct} warn={m.warn} />}
         <Row style={{ justifyContent: 'space-between' }}>
