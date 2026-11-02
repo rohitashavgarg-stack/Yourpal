@@ -115,7 +115,6 @@ export default function Profile() {
         { l: 'My details', icon: <UserRound size={18} color={c.ink} />, go: go('/profile/details') },
         { l: 'Preferences', icon: <SlidersHorizontal size={18} color={c.ink} />, go: go('/profile/preferences') },
         ...(d.hasGym ? [{ l: 'Waiver', icon: <PenLine size={18} color={c.ink} />, chip: p.waiver ? { label: 'Completed', tone: 'good' as ChipTone } : { label: 'Pending', tone: 'warn' as ChipTone }, go: go('/profile/waiver') }] : []),
-        ...(d.hasGym ? [{ l: 'Membership pauses', icon: <Pause size={18} color={c.ink} />, chip: d.onBreak ? { label: 'Paused', tone: 'warn' as ChipTone } : undefined, go: go('/gym/break') }] : []),
       ])}
       {group('PREFERENCES AND SETTINGS', [
         { l: 'Appearance', icon: <Sun size={18} color={c.ink} />, chip: { label: state.sc.theme }, go: go('/profile/appearance') },
