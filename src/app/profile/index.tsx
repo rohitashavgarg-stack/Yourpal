@@ -6,7 +6,6 @@ import { HrDot } from '@/features/trackers/Widgets';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useGoalV2 } from '@/features/goalv2/model';
 import { HEALTH_NAME } from '@/lib/health';
-import { useOpenEdgeCases } from '@/web/WebFrame';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { router } from 'expo-router';
@@ -56,7 +55,6 @@ export default function Profile() {
 
   const trackers = (['water', 'weight', 'steps'] as const).filter((k) => s.trk[k]).map((k) => k[0].toUpperCase() + k.slice(1)).join(', ') || 'None';
   const go = (path: string) => () => router.push(path as any);
-  const openEdgeCases = useOpenEdgeCases();
   const g2 = useGoalV2();
   const group = (title: string, rows: { l: string; s?: string; go: () => void; color?: string }[]) => (
     <View style={{ gap: 8 }}>
@@ -123,11 +121,8 @@ export default function Profile() {
         { l: 'Export my data', go: go('/profile/export') },
         { l: 'Delete account', go: go('/profile/delete'), color: c.warn },
       ])}
-      {group('SUPPORT', [
+      {group('SUPPORT AND LEGAL', [
         { l: 'Help & support', go: go('/profile/help') },
-        { l: 'Demo controls', s: 'Goal type, Today states, time of day, light or dark', go: openEdgeCases },
-      ])}
-      {group('LEGAL', [
         { l: 'Privacy Policy', go: () => openLegal('privacy', () => toast('Could not open the page. Try again in a moment')) },
         { l: 'Terms and conditions', go: () => openLegal('terms', () => toast('Could not open the page. Try again in a moment')) },
       ])}
