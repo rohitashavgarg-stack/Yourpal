@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import Svg, { Circle } from 'react-native-svg';
 import { Activity, Armchair, BicepsFlexed, Check, ChevronDown, ChevronLeft, Dumbbell, Footprints, PersonStanding, Ruler as RulerIcon, Shirt } from '@/lib/icons';
 import { IconButton } from '@/design-system/primitives/Button';
 import { Button, Field, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
@@ -14,7 +16,7 @@ import { haptic } from '@/lib/haptics';
 import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
 import { goBack } from '@/features/shell/parts';
-import { radii, fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Chip } from '@/design-system/primitives/Chip';
 import { BODY_SIZES, INJURY_AREAS, NUMS, NumKey, STEPS, SelfEntry, compare, fmtAt, habitLabel } from '@/features/selfassess/data';
 import { NUDGE_DAYS, useSelfAssess } from '@/features/selfassess/useSelfAssess';
@@ -277,39 +279,57 @@ function How({ lines }: { lines: string[] }) {
   );
 }
 
+// The groups the measurements are shown in, each with the colour of its dot (the same ones the coach's assessment uses).
+const GROUPS: { g: string; tone: 'nutri' | 'act' | 'heart'; keys: NumKey[] }[] = [
+  { g: 'Body', tone: 'nutri', keys: ['height', 'weight', 'fat', 'chest', 'waist', 'hip', 'arms', 'legs', 'calves'] },
+  { g: 'Strength and fitness', tone: 'act', keys: ['bench', 'legpress', 'breath'] },
+  { g: 'Health', tone: 'heart', keys: ['sleep', 'sys', 'dia', 'pulse', 'sugar'] },
+];
+
+// The last page: a blue summary card (how many improved, and since when), then the measurements in three groups, then what the member said about themselves.
 function Result({ entry, prev, fresh }: { entry: SelfEntry; prev: SelfEntry | undefined; fresh: boolean }) {
   const { c } = useTheme();
   const rows = compare(entry, prev);
   const judged = rows.filter((r) => r.prev != null && r.n.dir !== 'none');
   const better = judged.filter((r) => r.good).length;
   const habits = Object.entries(entry.answers).filter(([k, v]) => v && habitLabel[k]);
+  const dot = { nutri: c.cNutri, act: c.cAct, heart: c.cHeart };
+  const who = entry.by === 'coach' ? 'Assessment by Coach Vikram' : 'Self assessment';
   return (
-    <View style={{ gap: 18 }}>
-      <View style={{ alignItems: 'center', gap: 8, paddingTop: 4 }}>
-        <View style={{ width: 64, height: 64, borderRadius: radii.pill, backgroundColor: c.goodSoft, alignItems: 'center', justifyContent: 'center' }}><Check size={30} color={c.good} strokeWidth={2.6} /></View>
-        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 30 }}>{fresh ? 'Self assessment saved' : entry.by === 'coach' ? 'Assessment by Coach Vikram' : 'Self assessment'}</Txt>
-        <Row style={{ gap: 6 }}>
-          <Chip label={fmtAt(entry.at)} />
-          {entry.by === 'coach' && <Chip label="Entered by coach" />}
+    <View style={{ gap: 14 }}>
+      <LinearGradient colors={[fixed.blue, '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: radii.xl, padding: 20, gap: 6, overflow: 'hidden' }}>
+        <Svg width="100%" height="100%" viewBox="0 0 358 170" preserveAspectRatio="xMidYMid slice" style={{ position: 'absolute', left: 0, top: 0 }}>
+          <Circle cx={300} cy={20} r={120} fill={fixed.white} opacity={0.08} />
+          <Circle cx={40} cy={180} r={90} fill={fixed.white} opacity={0.06} />
+        </Svg>
+        <Row style={{ gap: 8 }}>
+          <View style={{ width: 28, height: 28, borderRadius: radii.pill, backgroundColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center' }}><Check size={16} color={fixed.white} strokeWidth={2.8} /></View>
+          <Txt style={{ fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.9)' }}>{fresh ? 'Self assessment saved' : who}</Txt>
         </Row>
-        {judged.length > 0 && <Txt muted style={{ fontSize: fontSizes.md }}>{`${better} of ${judged.length} improved since the last one`}</Txt>}
-      </View>
+        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl5, lineHeight: 44, color: fixed.white }}>{judged.length ? `${better} of ${judged.length} improved` : rows.length ? `${rows.length} measurements` : 'Saved'}</Txt>
+        <Txt style={{ fontSize: fontSizes.md, color: 'rgba(255,255,255,0.9)' }}>{prev ? `${fmtAt(entry.at)}, compared with ${fmtAt(prev.at)}` : fmtAt(entry.at)}</Txt>
+      </LinearGradient>
 
-      {rows.length > 0 && (
-        <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, paddingHorizontal: 16 }}>
-          {rows.map((r, i) => (
-            <Row key={r.k} style={{ minHeight: 54, gap: 10, borderBottomWidth: i < rows.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-              <Txt style={{ flex: 1, fontFamily: font.medium }}>{r.n.label}</Txt>
-              <Txt v="mono">{r.prev != null ? `${r.prev} → ${r.now}` : `${r.now}`}</Txt>
-              {r.prev != null && <Tag label={r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`} bg={r.good ? c.goodSoft : c.surface2} fg={r.good ? c.good : c.muted} style={{ minWidth: 58, alignItems: 'center' }} />}
-            </Row>
-          ))}
-        </View>
-      )}
+      {GROUPS.map((grp) => {
+        const list = rows.filter((r) => grp.keys.includes(r.k));
+        if (!list.length) return null;
+        return (
+          <View key={grp.g} style={{ backgroundColor: c.surface, borderRadius: radii.xl, paddingTop: 14, paddingHorizontal: 16, paddingBottom: 4 }}>
+            <Row style={{ gap: 8 }}><View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone] }} /><Txt v="label">{grp.g}</Txt></Row>
+            {list.map((r, i) => (
+              <Row key={r.k} style={{ minHeight: 52, gap: 10, borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
+                <Txt style={{ flex: 1, fontFamily: font.medium }}>{r.n.label}</Txt>
+                <Txt v="mono">{r.prev != null ? `${r.prev} → ${r.now}` : `${r.now} ${r.n.unit}`}</Txt>
+                {r.prev != null && <Tag label={r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`} bg={r.good ? c.goodSoft : c.surface2} fg={r.good ? c.good : c.muted} style={{ minWidth: 58, alignItems: 'center' }} />}
+              </Row>
+            ))}
+          </View>
+        );
+      })}
 
       {habits.length > 0 && (
-        <View style={{ gap: 8 }}>
-          <Txt v="label" style={{ paddingHorizontal: 4 }}>ABOUT YOU</Txt>
+        <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 16, gap: 10 }}>
+          <Txt v="label">ABOUT YOU</Txt>
           <Row style={{ gap: 6, flexWrap: 'wrap' }}>
             {habits.map(([k, v]) => <Chip key={k} label={`${habitLabel[k]}: ${v}`} />)}
           </Row>
