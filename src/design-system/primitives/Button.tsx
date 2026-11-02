@@ -69,8 +69,8 @@ function kindSpec(kind: ButtonKind, c: ReturnType<typeof useTheme>['c']): KindSp
     case 'soft': return { bg: c.accentSoft, fg: c.accentText };
     case 'whiteLine': return { bg: fixed.white, fg: fixed.dark, line: fixed.lineOnWhite };
     case 'surface': return { bg: c.surface, fg: c.ink };
-    // red text on a soft red fill, for an action that ends something (Log out)
-    case 'warn': return { bg: c.warnSoft, fg: c.warn };
+    // red text on a soft red fill, for an action that ends or removes something (Log out, Remove contact)
+    case 'warn': return { bg: c.danger + '1F', fg: c.danger };
     // blue glass: real iOS glass tinted with the accent (blurred glass with a blue tint elsewhere). For the one main action that floats over scrolling content.
     // the same glass in the primary colours (white in dark mode, near-black in light), for a floating primary button that is not blue (Save meal)
     case 'glassPrimary': return { bg: 'transparent', fg: c.bg, glass: `${c.ink}EB` };
