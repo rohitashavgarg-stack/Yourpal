@@ -8,7 +8,7 @@ import { useGoalV2 } from '@/features/goalv2/model';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { router } from 'expo-router';
-import { Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Lock, LogOut, MessageCircle, Pause, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
+import { Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Lock, LogOut, MessageCircle, Pause, Star, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
 import { Chip, ChipTone } from '@/design-system/primitives/Chip';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Avatar } from '@/components/GymHeader';
@@ -23,6 +23,7 @@ import { resetShell, useShell } from '@/features/shell/state';
 import { goalSummary } from '@/features/shell/goal';
 import { LogoutSheet } from '@/features/shell/sheets';
 import { openLegal } from '@/features/legal/links';
+import { FeedbackSheet } from '@/features/feedback/FeedbackSheet';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
@@ -130,6 +131,7 @@ export default function Profile() {
       ])}
       {group('SUPPORT AND LEGAL', [
         { l: 'Help & support', icon: <MessageCircle size={18} color={c.ink} />, go: go('/profile/help') },
+        ...(d.hasGym ? [{ l: 'Rate your gym', icon: <Star size={18} color={c.ink} />, chip: p.feedback?.last ? { label: p.feedback.last.rating + ' of 5' } : undefined, go: () => openSheet(<FeedbackSheet />, { label: 'Feedback' }) }] : []),
         { l: 'Privacy Policy', icon: <ShieldCheck size={18} color={c.ink} />, go: () => openLegal('privacy', () => toast('Could not open the page. Try again in a moment')) },
         { l: 'Terms and conditions', icon: <ClipboardList size={18} color={c.ink} />, go: () => openLegal('terms', () => toast('Could not open the page. Try again in a moment')) },
       ])}

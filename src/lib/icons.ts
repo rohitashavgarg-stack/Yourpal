@@ -95,4 +95,5 @@ export { default as Sunset } from 'lucide-react-native/icons/sunset';
 export { default as UserRound } from 'lucide-react-native/icons/user-round';
 export { default as LogIn } from 'lucide-react-native/icons/log-in';
 export { default as Flag } from 'lucide-react-native/icons/flag';
+export { default as Star } from 'lucide-react-native/icons/star';
 export { default as ChevronUp } from 'lucide-react-native/icons/chevron-up';

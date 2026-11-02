@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { router } from 'expo-router';
 import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronLeft } from '@/lib/icons';
+import { ArrowRight, ChevronLeft } from '@/lib/icons';
 import { Button, Txt } from '@/components/ui';
 import { RoundBtn } from '@/components/bits';
 import { haptic } from '@/lib/haptics';
@@ -102,7 +102,8 @@ export function WaiverSigned({ sig }: { sig: Sig }) {
       </View>
       <Rise delay={1000} from={30}>
         <View style={{ paddingHorizontal: 20, paddingBottom: Math.max(insets.bottom, 16) + 6 }}>
-          <Button kind="white" size="tight" label="Go to Dashboard" onPress={() => router.replace('/(tabs)')} />
+          <Button kind="white" label="Go to Dashboard" iconAfter={<ArrowRight size={20} color={fixed.dark} />} onPress={() => router.replace('/(tabs)')}
+            style={{ shadowColor: '#8E84F5', shadowOpacity: 0.55, shadowRadius: 22, shadowOffset: { width: 0, height: 6 }, elevation: 10 }} />
         </View>
       </Rise>
     </View>
