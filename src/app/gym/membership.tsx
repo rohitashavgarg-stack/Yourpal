@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { ChevronRight, Phone } from '@/lib/icons';
+import { ChevronRight, FileText, Phone } from '@/lib/icons';
+import { LineRow, ListCard } from '@/features/shell/parts';
 import { Button, Pressy, Row, Segmented, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -61,6 +62,9 @@ export default function Memberships() {
           <Txt muted>{tab === 'Suspended' ? 'No suspended memberships.' : tab === 'Past' ? 'No past memberships yet.' : 'No active memberships.'}</Txt>
         </View>
       )}
+      <ListCard>
+        <LineRow title="All payments" icon={<FileText size={18} color={c.ink} />} last onPress={() => router.push('/gym/payments')} />
+      </ListCard>
       <Callout size="lg" gap={10}>
         <Txt style={{ fontFamily: font.semibold }}>Renewals and freezes happen at the front desk</Txt>
         <Txt muted style={{ fontSize: fontSizes.md }}>The app shows your memberships but can’t renew or pause them. The front desk can renew, freeze or change your plan.</Txt>
