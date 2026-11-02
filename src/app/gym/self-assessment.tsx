@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Info, Activity, Armchair, BicepsFlexed, Check, ChevronLeft, Dumbbell, Footprints, PersonStanding, Ruler as RulerIcon, Shirt } from '@/lib/icons';
+import { Activity, Armchair, BicepsFlexed, Check, ChevronDown, ChevronLeft, Dumbbell, Footprints, PersonStanding, Ruler as RulerIcon, Shirt } from '@/lib/icons';
 import { IconButton } from '@/design-system/primitives/Button';
 import { Button, Field, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
@@ -103,6 +103,7 @@ export default function SelfAssessment() {
     haptic.success();
   };
 
+  const noScroll = !!step; // the steps never scroll (only the result page, which has a long list)
   const rulerLike = step?.kind === 'height' || step?.kind === 'weight' || step?.kind === 'ruler' || step?.kind === 'sleep' || step?.kind === 'timer' || step?.kind === 'body' || step?.kind === 'fat' || step?.kind === 'water' || step?.kind === 'bp' || step?.kind === 'stepper';
   const bottom = Math.max(insets.bottom, 16) + 6;
   // The bottom bar: Back on the left as an icon button; Skip and Continue together on the right. The first step has Maybe later where Back would be.
@@ -125,7 +126,8 @@ export default function SelfAssessment() {
   ) : undefined;
 
   return (
-    <SubPage title="Self assessment" fallback="/gym/assessments" footer={footer} right={skipBtn}>
+    <SubPage title="Self assessment" fallback="/gym/assessments" footer={footer} right={skipBtn} scroll={!noScroll}>
+      <View style={noScroll ? { flex: 1, paddingHorizontal: 16, paddingTop: 4, gap: 12 } : { gap: 12 }} pointerEvents="box-none">
       {!viewing && step && (
         <View style={{ gap: 8 }}>
           <Row style={{ justifyContent: 'space-between' }}>
@@ -246,6 +248,7 @@ export default function SelfAssessment() {
       {step?.kind === 'next' && <DayTiles days={days} onChange={setDays} today={today} />}
 
       {!step && entry && <Result entry={entry} prev={entries.find((e) => e.id !== entry.id && Date.parse(e.at) < Date.parse(entry.at))} fresh={!viewing} />}
+      </View>
     </SubPage>
   );
 }
@@ -268,9 +271,9 @@ function How({ lines }: { lines: string[] }) {
           </Row>
         ))}
       </View>, { label: 'How to perform' })} scaleTo={0.96}
-      style={{ alignSelf: 'flex-start', minHeight: 36, paddingHorizontal: 12, borderRadius: radii.pill, flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: c.accentSoft }}>
-      <Info size={16} color={c.accentText} />
-      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.accentText }}>How to perform</Txt>
+      style={{ alignSelf: 'center', height: 40, paddingHorizontal: 16, borderRadius: radii.pill, flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: c.surface, borderWidth: 1, borderColor: c.chipLine }}>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.ink }}>How to Perform</Txt>
+      <ChevronDown size={16} color={c.ink} />
     </Pressy>
   );
 }

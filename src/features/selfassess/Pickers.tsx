@@ -51,8 +51,8 @@ export function FatImages({ value, onPick }: { value: string | undefined; onPick
   const tile = (v: string, content: React.ReactNode) => {
     const on = value === v;
     return (
-      <Pressy key={v} accessibilityRole="button" accessibilityLabel={v === 'Not sure' ? 'Not sure' : `Body fat ${v}`} accessibilityState={{ selected: on }} onPress={() => onPick(v)} scaleTo={0.96} style={{ width: '31%', flexGrow: 1, alignItems: 'center', gap: 8 }}>
-        <View style={{ width: '100%', aspectRatio: 1, borderRadius: radii.lg, overflow: 'hidden', borderWidth: 2.5, borderColor: on ? c.accent : 'transparent', backgroundColor: c.accentSoft }}>
+      <Pressy key={v} accessibilityRole="button" accessibilityLabel={v === 'Not sure' ? 'Not sure' : `Body fat ${v}`} accessibilityState={{ selected: on }} onPress={() => onPick(v)} scaleTo={0.96} style={{ width: '31%', flexGrow: 1, alignItems: 'center', gap: 6 }}>
+        <View style={{ width: '82%', aspectRatio: 1, borderRadius: radii.lg, overflow: 'hidden', borderWidth: 2.5, borderColor: on ? c.accent : 'transparent', backgroundColor: c.accentSoft }}>
           {content}
           {on && <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: c.accent + '4D' }} />}
         </View>
@@ -62,7 +62,7 @@ export function FatImages({ value, onPick }: { value: string | undefined; onPick
   };
   return (
     <View style={{ gap: 18 }}>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 14 }}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', rowGap: 10, columnGap: 8 }}>
         {FAT_TILES.map((t) => tile(t.v, <Image source={SHEET} resizeMode="stretch" style={{ position: 'absolute', width: t.w as `${number}%`, height: t.h as `${number}%`, left: t.l as `${number}%`, top: t.t as `${number}%` }} />))}
         {tile('Not sure', <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Txt style={{ fontFamily: font.displayBold, fontSize: 44, color: c.accentText }}>?</Txt></View>)}
       </View>
@@ -253,12 +253,13 @@ export function BarbellVisual({ kg }: { kg: number }) {
   );
 }
 
-// The barbell on a card of its own, big, so the plates are easy to see as the weight changes.
+// The barbell straight on the page, with a thin line under it like the floor, so the plates are easy to see as the weight changes.
 export function BarbellCard({ kg }: { kg: number }) {
   const { c } = useTheme();
   return (
-    <View style={{ borderRadius: radii.xl, backgroundColor: c.surface, paddingVertical: 26, paddingHorizontal: 12, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+    <View style={{ alignItems: 'center', gap: 10, paddingTop: 6 }}>
       <BarbellVisual kg={kg} />
+      <View style={{ alignSelf: 'stretch', height: 1, backgroundColor: c.line }} />
     </View>
   );
 }
