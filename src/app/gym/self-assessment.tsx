@@ -112,7 +112,7 @@ function Result({ entry, prev, fresh }: { entry: SelfEntry; prev: SelfEntry | un
     <View style={{ gap: 18 }}>
       <View style={{ alignItems: 'center', gap: 8, paddingTop: 4 }}>
         <View style={{ width: 64, height: 64, borderRadius: radii.pill, backgroundColor: c.goodSoft, alignItems: 'center', justifyContent: 'center' }}><Check size={30} color={c.good} strokeWidth={2.6} /></View>
-        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 30 }}>{fresh ? 'Saved' : entry.by === 'coach' ? 'Assessment by Coach Vikram' : 'Self assessment'}</Txt>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 30 }}>{fresh ? 'Self assessment saved' : entry.by === 'coach' ? 'Assessment by Coach Vikram' : 'Self assessment'}</Txt>
         <Row style={{ gap: 6 }}>
           <Chip label={fmtAt(entry.at)} />
           {entry.by === 'coach' && <Chip label="Entered by coach" />}
