@@ -18,6 +18,9 @@ import { Callout } from '@/design-system/primitives/Callout';
 import { FoodCard } from '@/design-system/patterns/FoodCard';
 import { radii, fontSizes } from '@/design-system/tokens';
 
+// Members cannot edit the diet plan for now. Flip this to true to bring the "Edit diet plan" row back.
+const ALLOW_DIET_EDIT = false;
+
 // ---------- Workout plan menu ----------
 export function PlanMenuSheet() {
   const { d } = useDomain();
@@ -49,7 +52,7 @@ export function DietMenuSheet() {
     <>
       <BigTitle>Diet plan</BigTitle>
       <View>
-        <ListRow label="Edit diet plan" onPress={() => closeSheet(() => startDietEdit(d))} />
+        {ALLOW_DIET_EDIT && <ListRow label="Edit diet plan" onPress={() => closeSheet(() => startDietEdit(d))} />}
         <ListRow label="Ask for a diet change" onPress={() => closeSheet(() => router.push({ pathname: '/plans/ask', params: { kind: 'diet' } }))} />
         <ListRow label="Reset to Coach's version" last onPress={() => openSheet(<ResetSheet kind="diet" />, { label: 'Reset plan' })} />
       </View>
