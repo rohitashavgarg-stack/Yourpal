@@ -132,10 +132,9 @@ function AssessCard() {
         <View importantForAccessibility="no-hide-descendants" style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 8 }}>
           {Array.from({ length: shown }, (_, i) => {
             const n = total - shown + i + 1;
-            const latest = n === total;
-            // every completed assessment is filled blue; the latest also has a ring around it
+            // every completed assessment looks the same: filled blue
             return (
-              <View key={n} style={{ width: 36, height: 36, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accent, borderWidth: latest ? 3 : 0, borderColor: c.accentSoft }}>
+              <View key={n} style={{ width: 36, height: 36, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accent }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.accentInk }}>{String(n)}</Txt>
               </View>
             );
