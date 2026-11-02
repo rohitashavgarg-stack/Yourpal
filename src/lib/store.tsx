@@ -35,6 +35,7 @@ export type Profile = {
   injury: 'No' | 'Yes';
   injuryNote: string;
   feedback?: { since: string; lastAt?: string; snoozeUntil?: string; last?: { rating: number; tags: string[]; note: string } }; // when to ask for feedback next, and the last answer (it goes to the admin)
+  selfAssess?: { entries: { id: string; at: string; by: 'member' | 'coach'; answers: Record<string, string>; tests: Record<string, number | undefined> }[]; snoozeUntil?: string }; // the member's own assessments, and when the monthly nudge asks again
   waiver?: { signedAt: string; path: string; w: number; h: number }; // the gym waiver, once signed: the date and the drawn signature (an SVG path and the size of the pad)
   photosPrivate: boolean;
   notifications: 'unset' | 'on' | 'off';

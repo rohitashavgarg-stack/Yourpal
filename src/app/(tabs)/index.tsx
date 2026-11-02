@@ -30,6 +30,8 @@ import { PushBanner } from '@/features/reminders/PushBanner';
 import { WaiverCard, useNeedsWaiver } from '@/features/profile/WaiverCard';
 import { FeedbackCard } from '@/features/feedback/FeedbackCard';
 import { useFeedbackDue } from '@/features/feedback/feedback';
+import { SelfAssessCard } from '@/features/selfassess/SelfAssessCard';
+import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
 import { GOAL_STATE_OPTIONS, goalCardStore } from '@/features/today/goalCardState';
 
 const SHOW_GREETING = false; // the big greeting is off for now, the goal sits right under the header
@@ -68,6 +70,7 @@ export default function Today() {
   const payNotice = usePaymentNotice();
   const needWaiver = useNeedsWaiver();
   const askFeedback = useFeedbackDue() && !needWaiver; // one ask at a time: the waiver comes first
+  const askSelf = useSelfAssess().due && !needWaiver && !askFeedback; // then feedback, then the monthly check-in
   const layout = todayUiStore.use().layout;
   const isNew = layout === 'New';
   const focus = useRightNowFocus(isNew);
@@ -155,6 +158,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 160
             {!!payNotice && <FadeIn step={50} i={0}><View style={{ marginTop: 14, marginBottom: comebackNew ? -12 : 6 }} onLayout={(e) => setStripY(e.nativeEvent.layout.y)}><PaymentBanner /></View></FadeIn>}
             {needWaiver && <FadeIn step={50} i={0}><WaiverCard /></FadeIn>}
             {askFeedback && <FadeIn step={50} i={0}><FeedbackCard /></FadeIn>}
+            {askSelf && <FadeIn step={50} i={0}><SelfAssessCard /></FadeIn>}
             {comebackNew && <FadeIn step={50} i={0}><WorkoutCard restart /></FadeIn>}
             {!comebackNew && <FadeIn step={50} i={0}><TodayGreeting /></FadeIn>}
             {!comebackNew && forYou.length > 0 && <FadeIn step={50} i={0}><ForYouStack /></FadeIn>}
@@ -170,6 +174,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 160
             {!!payNotice && <FadeIn step={50} i={0}><PaymentBanner /></FadeIn>}
             {needWaiver && <FadeIn step={50} i={0}><WaiverCard /></FadeIn>}
             {askFeedback && <FadeIn step={50} i={0}><FeedbackCard /></FadeIn>}
+            {askSelf && <FadeIn step={50} i={0}><SelfAssessCard /></FadeIn>}
             {ptPending && d.hasGym && <FadeIn step={50} i={0}><PtConfirmCard /></FadeIn>}
             {d.todayVariant === 'With updates' && <FadeIn step={50} i={0}><UpdatesCard /></FadeIn>}
             {d.todayVariant === 'Comeback' && <FadeIn step={50} i={0}><ComebackCard /></FadeIn>}

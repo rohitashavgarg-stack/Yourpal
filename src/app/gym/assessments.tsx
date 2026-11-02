@@ -18,7 +18,30 @@ import { ASSESS } from '@/features/gym/data';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
+import { fmtAt } from '@/features/selfassess/data';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+
+// Do a self assessment, and see the ones done so far (the member's own and the ones the coach entered in his app).
+function SelfAssessSection() {
+  const { c } = useTheme();
+  const { entries } = useSelfAssess();
+  return (
+    <View style={{ gap: 10 }}>
+      <Card style={{ padding: 16, gap: 12 }}>
+        <Row style={{ gap: 12 }}>
+          <IconBadge size={44} radius={radii.md} bg={c.accentSoft}><ClipboardCheck size={22} strokeWidth={1.9} color={c.accentText} /></IconBadge>
+          <View style={{ flex: 1 }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>Self assessment</Txt>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Questions and measurements, about 5 minutes</Txt>
+          </View>
+        </Row>
+        <Button kind="accent" label="Start" onPress={() => router.push('/gym/self-assessment')} />
+      </Card>
+      <ListCard rows={entries.map((e) => ({ l: e.by === 'coach' ? 'Entered by Coach Vikram' : 'Self assessment', sub: fmtAt(e.at), onPress: () => router.push({ pathname: '/gym/self-assessment', params: { id: e.id } }) }))} />
+    </View>
+  );
+}
 
 export default function GymAssessments() {
   const { c, isDark } = useTheme();
@@ -47,6 +70,7 @@ export default function GymAssessments() {
 
   return (
     <SubPage title="Assessments" fallback="/gym">
+      <SelfAssessSection />
       {none ? (
         <FadeIn style={{ gap: 12 }}>
           <Card style={{ paddingVertical: 26, paddingHorizontal: 20, alignItems: 'center', gap: 10 }}>
