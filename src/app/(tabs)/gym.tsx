@@ -8,12 +8,11 @@ import { GymHeader } from '@/components/GymHeader';
 import { PersonAvatar } from '@/components/Brand';
 import { PillBtn, Tag } from '@/components/bits';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
-import { useOverlay } from '@/components/Overlay';
 import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { CardTitle, cardShadow, GrowBar, ListCard, PCard } from '@/features/progress/parts';
+import { CardTitle, cardShadow, GrowBar, PCard } from '@/features/progress/parts';
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { useMemberships } from '@/features/gym/memberships';
 import { TimeBar } from '@/app/gym/membership';
@@ -199,7 +198,6 @@ function PTCard({ isPT }: { isPT: boolean }) {
 export default function Gym() {
   const { d } = useDomain();
   const { state } = useStore();
-  const { toast } = useOverlay();
   const g = gymStore.use();
   const isPT = state.sc.member === 'PT member';
   const awaiting = isPT && g.awaiting === 'Yes' && g.sessionState === 'awaiting';
@@ -212,13 +210,6 @@ export default function Gym() {
       {d.onBreak && <BreakCard />}
       <FadeIn i={3}><AttendanceCard awaiting={awaiting} /></FadeIn>
       <FadeIn i={4}><AssessCard /></FadeIn>
-      <FadeIn i={5}>
-        <ListCard rows={[
-          { l: 'Memberships and payments', onPress: () => router.push('/gym/membership') },
-          { l: 'Membership pauses', onPress: () => router.push('/gym/break') },
-          { l: 'Help & support', onPress: () => toast("Help opens the gym's support chat and FAQs") },
-        ]} />
-      </FadeIn>
     </TabScreen>
   );
 }
