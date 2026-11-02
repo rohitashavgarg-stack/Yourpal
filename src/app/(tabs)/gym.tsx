@@ -98,10 +98,10 @@ function AttendanceCard({ awaiting }: { awaiting: boolean }) {
     <PCard onPress={() => router.push('/gym/attendance')} label={`Attendance, 18 visits this month${awaiting ? ', 1 session to confirm' : ''}`} style={{ gap: 12 }}>
       <CardTitle title="Attendance" right={awaiting ? <Tag label="1 session to confirm" bg={c.accent} fg={fixed.white} /> : undefined} />
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
-        <View>
+        <Row style={{ alignItems: 'baseline', gap: 8 }}>
           <Txt style={{ fontFamily: font.display, fontSize: 37, lineHeight: 44 }}>18</Txt>
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>visits this month</Txt>
-        </View>
+        </Row>
         <View importantForAccessibility="no-hide-descendants" style={{ width: 10 * 8 + 9 * 3, flexDirection: 'row', flexWrap: 'wrap', gap: 3 }}>
           {cells.map((v, i) => <StatusDot key={i} size={8} color={v && v !== 'x' ? c.accent : c.surface2} />)}
         </View>
