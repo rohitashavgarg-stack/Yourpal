@@ -1,9 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { FileText } from '@/lib/icons';
 import { Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { Chip } from '@/design-system/primitives/Chip';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { SubPage } from '@/features/shell/parts';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { Signature } from '@/features/profile/Signature';
@@ -15,9 +18,13 @@ type Sig = { signedAt: string; path: string; w: number; h: number };
 export function WaiverDetails({ sig }: { sig: Sig }) {
   const { c } = useTheme();
   return (
-    <SubPage title="Waiver" fallback="/profile" gap={16}>
-      <View style={{ gap: 8 }}>
-        <Txt accessibilityRole="header" v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>{WAIVER_GYM}</Txt>
+    <SubPage title="Waiver" fallback="/profile" gap={16}
+      // A soft tint from the top of the screen, like the other pages.
+      backdrop={<LinearGradient pointerEvents="none" colors={[c.accentSoft, c.bg]} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 380 }} />}>
+      {/* The form icon first, then the big heading: the gym. The page title above already says "Waiver". */}
+      <View style={{ gap: 12, paddingTop: 4 }}>
+        <IconBadge size={64} radius={radii.lg} bg={c.surface} borderWidth={1} borderColor={c.line}><FileText size={32} strokeWidth={1.9} color={c.accentText} /></IconBadge>
+        <Txt accessibilityRole="header" v="display">{WAIVER_GYM}</Txt>
         <Row style={{ gap: 6 }}>
           <Chip label="Signed" tone="good" />
           <Chip label={fmtSigned(sig.signedAt)} />

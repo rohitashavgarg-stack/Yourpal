@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PenLine } from '@/lib/icons';
+import { FileText, PenLine } from '@/lib/icons';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
@@ -11,6 +11,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
 import { font } from '@/theme/tokens';
 import { Chip } from '@/design-system/primitives/Chip';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { CheckCircle } from '@/design-system/primitives/CheckCircle';
 import { SubPage, useShake } from '@/features/shell/parts';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
@@ -43,6 +44,8 @@ export default function Waiver() {
   const bottom = Math.max(insets.bottom, 16) + 6;
   return (
     <SubPage title="Waiver" variant="progress" fallback="/profile"
+      // A soft tint from the top of the screen, like the other pages.
+      backdrop={<LinearGradient pointerEvents="none" colors={[c.accentSoft, c.bg]} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 380 }} />}
       // The tick and the Sign button stay together at the bottom of the screen while the points scroll behind them.
       footer={(
         <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
@@ -60,9 +63,10 @@ export default function Waiver() {
           </View>
         </View>
       )}>
-      {/* One heading: the gym. The page title above already says "Waiver". */}
-      <View style={{ gap: 8 }}>
-        <Txt accessibilityRole="header" v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>{WAIVER_GYM}</Txt>
+      {/* The form icon first, then the big heading: the gym. The page title above already says "Waiver". */}
+      <View style={{ gap: 12, paddingTop: 4 }}>
+        <IconBadge size={64} radius={radii.lg} bg={c.surface} borderWidth={1} borderColor={c.line}><FileText size={32} strokeWidth={1.9} color={c.accentText} /></IconBadge>
+        <Txt accessibilityRole="header" v="display">{WAIVER_GYM}</Txt>
         <Row style={{ gap: 6 }}>
           <Chip label="Pending" tone="warn" />
           <Chip label={`${WAIVER_POINTS.length} points`} />
