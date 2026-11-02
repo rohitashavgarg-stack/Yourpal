@@ -26,14 +26,14 @@ const css = `
 const page = (body: string) => `<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>${css}</style></head><body>${body}</body></html>`;
 
 export type InvoiceData = {
-  no: string; date: string; gym: string; branch: string; member: string; memberId: string;
+  no: string; date: string; gym: string; member: string; memberId: string;
   item: string; amount: string; method: string;
 };
 
 export function invoiceHtml(i: InvoiceData) {
   return page(`
     <div class="top">
-      <div><div class="brand">${esc(i.gym)}</div><div class="muted">${esc(i.branch)}</div></div>
+      <div class="brand">${esc(i.gym)}</div>
       <div style="text-align:right"><h1>Invoice</h1><div class="muted">${esc(i.no)}</div><div class="muted">${esc(i.date)}</div></div>
     </div>
     <h2>Billed to</h2>

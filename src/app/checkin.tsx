@@ -120,7 +120,7 @@ export default function CheckIn() {
         shadowColor: fixed.shadow, shadowOpacity: isDark ? 0 : 0.12, shadowRadius: 30, shadowOffset: { width: 0, height: -10 } }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.regular, fontSize: 28, letterSpacing: -1.1 }}>Wulf Fitness</Txt>
-          <Txt muted style={{ fontSize: fontSizes.sm }}>Vaishali Nagar, Jaipur · 20 m check-in area</Txt>
+          <Txt muted style={{ fontSize: fontSizes.sm }}>Check in within 20 m of the gym</Txt>
         </View>
         <FadeIn key={status.t} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, paddingHorizontal: 14, borderRadius: radii.md, backgroundColor: status.bg }}>
           <IconBadge size={34} radius={radii.md} bg={isDark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.5)'}>

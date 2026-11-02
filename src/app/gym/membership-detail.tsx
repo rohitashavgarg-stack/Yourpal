@@ -31,7 +31,7 @@ export default function MembershipDetail() {
   const invoice = async (p: Payment) => {
     setBusyId(p.id);
     try {
-      const html = invoiceHtml({ no: p.no, date: p.date, gym: 'Wulf Fitness', branch: m.branch, member: state.profile.name || 'Member', memberId: m.memberId, item: p.item, amount: rupees(p.amount), method: p.method });
+      const html = invoiceHtml({ no: p.no, date: p.date, gym: 'Wulf Fitness', member: state.profile.name || 'Member', memberId: m.memberId, item: p.item, amount: rupees(p.amount), method: p.method });
       const ok = await sharePdf(html, 'Invoice ' + p.no);
       if (!ok) toast('Saving a file is not available on this phone');
     } catch { toast('Could not make the invoice. Try again'); }
@@ -49,7 +49,7 @@ export default function MembershipDetail() {
         <Txt style={{ fontSize: fontSizes.md, color: m.warn ? c.warn : c.muted }}>{m.note}</Txt>
       </View>
       <ListCard rows={[
-        { l: 'Plan', v: m.name, muted: true }, { l: 'Member ID', v: m.memberId, muted: true }, { l: 'Branch', v: m.branch, muted: true },
+        { l: 'Plan', v: m.name, muted: true }, { l: 'Member ID', v: m.memberId, muted: true },
         { l: 'Started', v: m.start, muted: true }, { l: m.status === 'Expired' ? 'Ended' : 'Ends', v: m.end, muted: true },
       ]} />
       <Txt v="label" style={{ paddingHorizontal: 6 }}>Payments</Txt>

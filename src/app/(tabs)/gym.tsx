@@ -54,10 +54,7 @@ function GymMembership() {
         <Row style={{ gap: 10, alignItems: 'stretch' }}>
           {shown.map((m) => (
             <View key={m.id} style={{ flex: 1, borderRadius: radii.md, backgroundColor: c.surface2, padding: 12, gap: 8 }}>
-              <View style={{ gap: 1 }}>
-                <Txt style={{ fontFamily: font.medium }} numberOfLines={1}>{m.name}</Txt>
-                <Txt v="caption" numberOfLines={1}>{m.branch}</Txt>
-              </View>
+              <Txt style={{ fontFamily: font.medium }} numberOfLines={1}>{m.name}</Txt>
               <Row style={{ alignItems: 'baseline', gap: 5 }}>
                 <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 33, letterSpacing: -0.6, color: m.warn ? c.warn : c.ink }}>{m.left.n}</Txt>
                 <Txt muted style={{ fontSize: fontSizes.sm }}>{m.left.unit}</Txt>

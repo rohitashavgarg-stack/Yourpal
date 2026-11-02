@@ -33,10 +33,7 @@ function MembershipCard({ m }: { m: Membership }) {
     <Pressy accessibilityRole="button" accessibilityLabel={`${m.name}, ${m.status}. ${m.note}`} onPress={() => router.push({ pathname: '/gym/membership-detail', params: { id: m.id } })} scaleTo={0.985}
       style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 10 }}>
       <Row style={{ justifyContent: 'space-between' }}>
-        <View style={{ flex: 1, gap: 1 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{m.name}</Txt>
-          <Txt v="caption">{m.branch}</Txt>
-        </View>
+        <Txt style={{ flex: 1, fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{m.name}</Txt>
         <StatusChip m={m} />
       </Row>
       {m.status === 'Active' && <TimeBar pct={m.pct} warn={m.warn} />}
