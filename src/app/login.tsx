@@ -22,6 +22,7 @@ import { INDIA, isValidNumber, Country } from '@/lib/countries';
 import { CountrySheet } from '@/features/shell/CountrySheet';
 import { Callout } from '@/design-system/primitives/Callout';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { openLegal } from '@/features/legal/links';
 
 type Step = 'phone' | 'otp' | 'programme';
 
@@ -175,7 +176,12 @@ export default function Login() {
               <Ticket size={17} color={c.accentText} />
               <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>I have a join code from my gym</Txt>
             </Pressy>
-            <Txt v="caption" style={{ textAlign: 'center' }}>By continuing you agree to the Terms and Privacy Policy.</Txt>
+            <Txt v="caption" style={{ textAlign: 'center' }}>
+              By continuing you agree to the{' '}
+              <Txt v="caption" accessibilityRole="link" onPress={() => openLegal('terms', () => toast('Could not open the page. Try again in a moment'))} style={{ fontFamily: font.semibold, color: c.accentText }}>Terms</Txt>
+              {' '}and{' '}
+              <Txt v="caption" accessibilityRole="link" onPress={() => openLegal('privacy', () => toast('Could not open the page. Try again in a moment'))} style={{ fontFamily: font.semibold, color: c.accentText }}>Privacy Policy</Txt>.
+            </Txt>
           </FadeIn>
         )}
 

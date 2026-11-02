@@ -23,6 +23,7 @@ import { LineRow, ListCard, Note, SubPage } from '@/features/shell/parts';
 import { resetShell, useShell } from '@/features/shell/state';
 import { goalSummary } from '@/features/shell/goal';
 import { LogoutSheet } from '@/features/shell/sheets';
+import { openLegal } from '@/features/legal/links';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
@@ -125,6 +126,10 @@ export default function Profile() {
       {group('SUPPORT', [
         { l: 'Help & support', go: go('/profile/help') },
         { l: 'Demo controls', s: 'Goal type, Today states, time of day, light or dark', go: openEdgeCases },
+      ])}
+      {group('LEGAL', [
+        { l: 'Privacy Policy', go: () => openLegal('privacy', () => toast('Could not open the page. Try again in a moment')) },
+        { l: 'Terms and conditions', go: () => openLegal('terms', () => toast('Could not open the page. Try again in a moment')) },
       ])}
 
       <Button kind="secondary" label="Log out" icon={<LogOut size={18} color={c.ink} />} onPress={() => openSheet(<LogoutSheet />, { label: 'Log out' })} />
