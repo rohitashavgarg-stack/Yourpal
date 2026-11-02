@@ -8,7 +8,7 @@ import { useGoalV2 } from '@/features/goalv2/model';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { router } from 'expo-router';
-import { Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Lock, LogOut, MessageCircle, Pause, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
+import { Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Lock, LogOut, MessageCircle, Pause, Phone, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
 import { Chip, ChipTone } from '@/design-system/primitives/Chip';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Avatar } from '@/components/GymHeader';
@@ -113,6 +113,7 @@ export default function Profile() {
       {group('ACCOUNT', [
         { l: 'My details', icon: <UserRound size={18} color={c.ink} />, go: go('/profile/details') },
         { l: 'Preferences', icon: <SlidersHorizontal size={18} color={c.ink} />, go: go('/profile/preferences') },
+        { l: 'Emergency contact', icon: <Phone size={18} color={c.ink} />, chip: p.emergency ? { label: p.emergency.name } : { label: 'Add', tone: 'warn' as ChipTone }, go: go('/profile/emergency') },
         ...(d.hasGym ? [{ l: 'Membership pauses', icon: <Pause size={18} color={c.ink} />, chip: d.onBreak ? { label: 'Paused', tone: 'warn' as ChipTone } : undefined, go: go('/gym/break') }] : []),
       ])}
       {group('PREFERENCES AND SETTINGS', [

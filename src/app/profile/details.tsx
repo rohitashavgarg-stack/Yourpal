@@ -134,6 +134,7 @@ export default function MyDetails() {
     } catch { toast(src === 'camera' ? 'Camera is not available here' : 'Could not open your photos'); }
   };
   const hasCustom = photo === undefined ? !!p.photo : !!photo;
+  const dirty = name !== p.name || photo !== undefined;
   const save = () => {
     if (!name.trim()) { setErr((n) => n + 1); return; }
     setProfile({ name: name.trim(), ...(photo !== undefined ? { photo: photo ?? undefined } : {}) });
@@ -142,10 +143,10 @@ export default function MyDetails() {
   };
 
   return (
-    <SubPage title="My details" fallback="/profile" footer={<>
+    <SubPage title="My details" fallback="/profile" footer={dirty ? <>
       <Note center>Changes are shared with your trainer so your plan stays safe.</Note>
       <Button kind="accent" label="Save" onPress={save} />
-    </>}>
+    </> : undefined}>
       <View style={{ alignItems: 'center', paddingVertical: 4, gap: 8 }}>
         <Pressy accessibilityRole="button" accessibilityLabel="Change profile photo" onPress={() => openSheet(<PhotoSheet hasCustom={hasCustom} onPick={pickPhoto} onRemove={() => setPhoto(null)} />, { label: 'Profile photo' })} scaleTo={0.96}>
           <PersonAvatar who="me" size={96} photo={photo} />

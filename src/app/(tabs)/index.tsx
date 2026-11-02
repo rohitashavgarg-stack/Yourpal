@@ -27,6 +27,7 @@ import { TodayGreeting } from '@/features/today/TodayGreeting';
 import { NoPlanCard } from '@/features/today/NoPlanCard';
 import { planStore } from '@/lib/planState';
 import { PushBanner } from '@/features/reminders/PushBanner';
+import { EmergencyCard, useNeedsEmergency } from '@/features/profile/EmergencyCard';
 import { GOAL_STATE_OPTIONS, goalCardStore } from '@/features/today/goalCardState';
 
 const SHOW_GREETING = false; // the big greeting is off for now, the goal sits right under the header
@@ -63,6 +64,7 @@ export default function Today() {
   const forYou = useForYou();
   const [stripY, setStripY] = useState(0); // where the membership strip sits in the page: it docks under the header once scrolled to
   const payNotice = usePaymentNotice();
+  const needEc = useNeedsEmergency();
   const layout = todayUiStore.use().layout;
   const isNew = layout === 'New';
   const focus = useRightNowFocus(isNew);
@@ -148,6 +150,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 160
             {/* top: the membership strip, then the updates; on a comeback day the comeback card comes first and the updates after the goal */}
             {comebackNew && <FadeIn step={50} i={0}><ComebackGreeting /></FadeIn>}
             {!!payNotice && <FadeIn step={50} i={0}><View style={{ marginTop: 14, marginBottom: comebackNew ? -12 : 6 }} onLayout={(e) => setStripY(e.nativeEvent.layout.y)}><PaymentBanner /></View></FadeIn>}
+            {needEc && <FadeIn step={50} i={0}><EmergencyCard /></FadeIn>}
             {comebackNew && <FadeIn step={50} i={0}><WorkoutCard restart /></FadeIn>}
             {!comebackNew && <FadeIn step={50} i={0}><TodayGreeting /></FadeIn>}
             {!comebackNew && forYou.length > 0 && <FadeIn step={50} i={0}><ForYouStack /></FadeIn>}
@@ -161,6 +164,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 160
           <>
             {/* account banner and the other things that need an answer come first; on a comeback day the comeback card (the workout) comes right before the goal */}
             {!!payNotice && <FadeIn step={50} i={0}><PaymentBanner /></FadeIn>}
+            {needEc && <FadeIn step={50} i={0}><EmergencyCard /></FadeIn>}
             {ptPending && d.hasGym && <FadeIn step={50} i={0}><PtConfirmCard /></FadeIn>}
             {d.todayVariant === 'With updates' && <FadeIn step={50} i={0}><UpdatesCard /></FadeIn>}
             {d.todayVariant === 'Comeback' && <FadeIn step={50} i={0}><ComebackCard /></FadeIn>}
