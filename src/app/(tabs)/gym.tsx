@@ -156,11 +156,11 @@ export default function Gym() {
   return (
     <TabScreen title="Gym" header={<GymHeader />} compactTitle={false}>
       <FadeIn i={0}><ChatCard /></FadeIn>
-      <FadeIn i={1}><GymMembership /></FadeIn>
+      <FadeIn i={1}><PTCard isPT={isPT} /></FadeIn>
+      <FadeIn i={2}><GymMembership /></FadeIn>
       {d.onBreak && <BreakCard />}
-      <FadeIn i={2}><AttendanceCard awaiting={awaiting} /></FadeIn>
-      <FadeIn i={3}><AssessCard /></FadeIn>
-      <FadeIn i={4}><PTCard isPT={isPT} /></FadeIn>
+      <FadeIn i={3}><AttendanceCard awaiting={awaiting} /></FadeIn>
+      <FadeIn i={4}><AssessCard /></FadeIn>
       <FadeIn i={5}>
         <ListCard rows={[
           { l: 'Membership & payments', onPress: () => router.push('/gym/membership') },
