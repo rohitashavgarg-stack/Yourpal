@@ -48,9 +48,15 @@ export default function Login() {
   // Past the join code step (a code accepted, or "I don't have one"): choose where to start, or go straight in.
   const afterJoin = () => { if (multi && shell.sc.pick === 'Shown') setStep('programme'); else finish(); };
   const [joinCode, setJoinCode] = useState('');
-  const [joinBad, setJoinBad] = useState(false);
+  // Why a code was turned down (null: nothing wrong). Sample codes: GOLD21 works, OLD19 has expired, USED77 is already used.
+  const [joinBad, setJoinBad] = useState<string | null>(null);
   const tryJoin = () => {
-    if (joinCode.trim().toUpperCase() !== 'GOLD21') { setJoinBad(true); haptic.error(); return; }
+    const code = joinCode.trim().toUpperCase();
+    const why = code === 'GOLD21' ? null
+      : code === 'OLD19' ? 'This code has expired. Ask the front desk for a new one.'
+      : code === 'USED77' ? 'This code has already been used. Ask the front desk for a new one.'
+      : 'We could not find this code. Check it and try again.';
+    if (why) { setJoinBad(why); haptic.error(); return; }
     haptic.success();
     toast("Code accepted. You're joining Wulf Fitness");
     afterJoin();
@@ -234,10 +240,10 @@ export default function Login() {
           <FadeIn key="join" style={{ gap: 18, flexGrow: 1 }}>
             <View style={{ gap: 6 }}>
               <Txt v="title">Do you have a join code?</Txt>
-              <Txt muted>Your gym shares a code on WhatsApp or at the front desk. Try GOLD21. You can skip this and join later.</Txt>
+              <Txt muted>Your gym shares a code on WhatsApp or at the front desk. You can skip this and join later.</Txt>
             </View>
-            <Field value={joinCode} onChangeText={(t) => { setJoinCode(t.toUpperCase()); setJoinBad(false); }} autoCapitalize="characters" placeholder="e.g. GOLD21" accessibilityLabel="Join code" error={joinBad} autoFocus returnKeyType="done" onSubmitEditing={tryJoin} />
-            {joinBad && <FadeIn><Txt v="label" color={c.warn}>That code isn&apos;t active. Check it with the front desk.</Txt></FadeIn>}
+            <Field value={joinCode} onChangeText={(t) => { setJoinCode(t.toUpperCase()); setJoinBad(null); }} autoCapitalize="characters" placeholder="e.g. GOLD21" accessibilityLabel="Join code" error={!!joinBad} autoFocus returnKeyType="done" onSubmitEditing={tryJoin} />
+            {joinBad && <FadeIn><Txt accessibilityRole="alert" v="label" color={c.warn}>{joinBad}</Txt></FadeIn>}
             <View style={{ flexGrow: 1 }} />
             <Button label="Join gym" onPress={tryJoin} disabled={joinCode.length < 4} />
             <Pressy accessibilityRole="button" onPress={afterJoin} style={{ height: 48, alignItems: 'center', justifyContent: 'center' }}>
