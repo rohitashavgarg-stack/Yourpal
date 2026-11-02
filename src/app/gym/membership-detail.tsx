@@ -56,8 +56,9 @@ export default function MembershipDetail() {
       <View style={{ gap: 12, paddingTop: 4 }}>
         <IconBadge size={64} radius={radii.lg} bg={c.surface} borderWidth={1} borderColor={c.line}><CreditCard size={32} strokeWidth={1.9} color={c.accentText} /></IconBadge>
         <Row style={{ gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-          <Txt accessibilityRole="header" v="display">{m.name}</Txt>
-          <StatusChip m={m} />
+          <Txt accessibilityRole="header" v="display" style={{ includeFontPadding: false }}>{m.name}</Txt>
+          {/* the big text's line box is taller than its letters, so the chip is nudged down to sit on the middle of the letters */}
+          <View style={{ marginTop: 4 }}><StatusChip m={m} /></View>
         </Row>
       </View>
 
