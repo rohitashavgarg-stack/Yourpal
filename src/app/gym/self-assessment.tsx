@@ -30,12 +30,26 @@ import { HeightPicker, WeightPicker } from '@/features/body/BodyLog';
 // One screen for each step, in the order of the app's assessment flow (see data.ts). A choice moves on by itself; a measurement is dragged on a ruler
 // and waits for Continue (or Skip, to leave it out).
 // With an id it only shows that assessment (the member's own, or one the coach entered).
+// Shown when the member goes back out in the middle of an assessment: the answers are not kept, so ask first.
+function LeaveSheet() {
+  const { closeSheet } = useOverlay();
+  return (
+    <View style={{ gap: 12, paddingBottom: 8 }}>
+      <Txt v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>Leave the assessment?</Txt>
+      <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 21 }}>Your answers so far will not be saved.</Txt>
+      <Button kind="accent" label="Keep going" onPress={() => closeSheet()} />
+      <Button kind="warn" label="Leave" onPress={() => closeSheet(() => goBack('/gym/assessments'))} />
+    </View>
+  );
+}
+
 export default function SelfAssessment() {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const { d, set } = useDomain();
   const { state, setProfile } = useStore();
+  const { openSheet } = useOverlay();
   const { entries, save, later } = useSelfAssess();
   const viewing = id ? entries.find((e) => e.id === id) : undefined;
   const total = STEPS.length;
@@ -130,7 +144,7 @@ export default function SelfAssessment() {
   ) : undefined;
 
   return (
-    <SubPage title="Assessment" fallback="/gym/assessments" footer={footer} right={skipBtn} scroll={!noScroll}>
+    <SubPage title="Assessment" fallback="/gym/assessments" footer={footer} right={skipBtn} scroll={!noScroll} onBack={() => { if (step && idx > 0) { openSheet(<LeaveSheet />, { label: 'Leave the assessment' }); return true; } return false; }}>
       <View style={noScroll ? { flex: 1, paddingHorizontal: 16, paddingTop: 4, gap: 12 } : { gap: 12 }} pointerEvents="box-none">
       {!viewing && step && (
         <View style={{ gap: 8 }}>

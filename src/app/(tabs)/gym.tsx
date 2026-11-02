@@ -129,10 +129,17 @@ function AssessCard() {
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`Assessment ${entries.length}, ${fmtAt(last.at)}`}</Txt>
         </View>
       </Row>
-      <View style={{ gap: 8 }}>
-        <TimeBar pct={pct} warn={daysLeft <= 0} />
-        <Txt style={{ fontSize: fontSizes.md, color: daysLeft <= 0 ? c.warn : c.muted }}>{nextLine}</Txt>
-      </View>
+      {due ? (
+        <View style={{ gap: 10 }}>
+          <Txt style={{ fontSize: fontSizes.md, color: c.warn }}>{nextLine}</Txt>
+          <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />
+        </View>
+      ) : (
+        <View style={{ gap: 8 }}>
+          <TimeBar pct={pct} />
+          <Txt style={{ fontSize: fontSizes.md, color: c.muted }}>{nextLine}</Txt>
+        </View>
+      )}
     </PCard>
   );
 }
