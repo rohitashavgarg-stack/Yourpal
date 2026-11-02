@@ -1,39 +1,51 @@
-import React from 'react';
-import { View } from 'react-native';
-import { Button, Txt } from '@/components/ui';
+import React, { useState } from 'react';
+import { Button, NoteField, Pill, Row } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
-import { useTheme } from '@/theme/ThemeProvider';
-import { font } from '@/theme/tokens';
-import { ListCard, SubPage } from '@/features/shell/parts';
-import { fontSizes } from '@/design-system/tokens';
-import { DaysSheet, DietSheet, InjurySheet } from '@/features/profile/PrefSheets';
+import { haptic } from '@/lib/haptics';
+import { fadeOut } from '@/theme/motion';
+import { goBack, Label, SubPage } from '@/features/shell/parts';
+import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { DIETS, TRAIN_DAYS } from '@/features/profile/PrefSheets';
 
-// Training days, diet and injuries. Read-only here; Change opens a small sheet.
+// Training days, diet and injuries. Tap to change; the Save button appears once something is different.
 export default function Preferences() {
-  const { c } = useTheme();
-  const { state } = useStore();
-  const { openSheet } = useOverlay();
+  const { state, setProfile } = useStore();
+  const { toast } = useOverlay();
   const p = state.profile;
-  const rows = [
-    { l: 'Days you can train', v: p.days ? String(p.days) : 'Not set', sheet: <DaysSheet /> },
-    { l: 'Diet type', v: p.diet || 'Not set', sheet: <DietSheet /> },
-    { l: 'Injuries or pain', v: p.injury === 'Yes' ? 'Yes' : 'None', note: p.injury === 'Yes' ? p.injuryNote : '', sheet: <InjurySheet /> },
-  ];
+  const [days, setDays] = useState(p.days);
+  const [diet, setDiet] = useState(p.diet);
+  const [inj, setInj] = useState<'No' | 'Yes'>(p.injury);
+  const [note, setNote] = useState(p.injuryNote);
+  const dirty = days !== p.days || diet !== p.diet || inj !== p.injury || (inj === 'Yes' && note !== p.injuryNote);
+  const save = () => {
+    setProfile({ days, diet, injury: inj, injuryNote: inj === 'Yes' ? note : '' });
+    haptic.success();
+    goBack('/profile');
+    toast('Saved. Coach Vikram sees the update');
+  };
   return (
-    <SubPage title="Preferences" fallback="/profile">
-      <ListCard>
-        {rows.map((r, i) => (
-          <View key={r.l} style={{ minHeight: 60, paddingLeft: 16, paddingRight: 10, flexDirection: 'row', alignItems: 'center', gap: 10, borderBottomWidth: i === rows.length - 1 ? 0 : 1, borderBottomColor: c.line }}>
-            <View style={{ flex: 1, paddingVertical: 8 }}>
-              <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{r.l}</Txt>
-              <Txt style={{ fontFamily: font.semibold }} numberOfLines={1}>{r.v}</Txt>
-              {!!r.note && <Txt muted style={{ fontSize: fontSizes.md }} numberOfLines={2}>{r.note}</Txt>}
-            </View>
-            <Button small kind="secondary" label="Change" accessibilityLabel={`Change ${r.l}`} onPress={() => openSheet(r.sheet, { label: r.l })} />
-          </View>
-        ))}
-      </ListCard>
+    <SubPage title="Preferences" fallback="/profile" footer={dirty ? <Button kind="accent" label="Save" onPress={save} /> : undefined}>
+      <Label>Days you can train</Label>
+      <Row style={{ gap: 6, marginTop: -4 }}>
+        {TRAIN_DAYS.map((n) => <Pill key={n} label={String(n)} on={days === n} onPress={() => setDays(n)} style={{ flex: 1, paddingHorizontal: 0 }} />)}
+      </Row>
+
+      <Label style={{ marginTop: 16 }}>Diet type</Label>
+      <Row style={{ gap: 6, flexWrap: 'wrap', marginTop: -4 }}>
+        {DIETS.map((x) => <Pill key={x} label={x} on={diet === x} onPress={() => setDiet(x)} />)}
+      </Row>
+
+      <Label style={{ marginTop: 16 }}>Injuries or pain</Label>
+      <Row style={{ gap: 6, marginTop: -4 }}>
+        <Pill label="No" on={inj === 'No'} onPress={() => setInj('No')} style={{ flex: 1 }} />
+        <Pill label="Yes, add note" on={inj === 'Yes'} onPress={() => setInj('Yes')} style={{ flex: 1 }} />
+      </Row>
+      {inj === 'Yes' && (
+        <FadeIn exiting={fadeOut()}>
+          <NoteField value={note} onChangeText={setNote} placeholder="e.g. left knee pain on lunges, worse when I squat below parallel" accessibilityLabel="Injury note" />
+        </FadeIn>
+      )}
     </SubPage>
   );
 }
