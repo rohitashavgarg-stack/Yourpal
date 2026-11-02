@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { Check, ChevronRight, ClipboardCheck, Clock, CreditCard, Dumbbell, MessageCircle } from '@/lib/icons';
+import { ChevronRight, ClipboardCheck, CreditCard, Dumbbell, MessageCircle } from '@/lib/icons';
 import { fadeOut } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -15,7 +15,6 @@ import { font } from '@/theme/tokens';
 import { CardTitle, cardShadow, GrowBar, PCard } from '@/features/progress/parts';
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { useMemberships } from '@/features/gym/memberships';
-import { useStreak } from '@/features/streak/useStreak';
 import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
 import { fmtAt, headlineOf } from '@/features/selfassess/data';
 import { TimeBar } from '@/app/gym/membership';
@@ -91,49 +90,22 @@ function BreakCard() {
   );
 }
 
-// Attendance: this week first, one circle for each day (a tick for a visit, a dumbbell for a home workout, a clock for a session waiting to be confirmed,
-// today outlined), then how many sessions of the week's target are done and the month's visits. A session to confirm gets an accent border and a button.
-const WEEK_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 function AttendanceCard({ awaiting }: { awaiting: boolean }) {
   const { c } = useTheme();
-  const st = useStreak();
-  const week = [22, 23, 24, 25, 26, 27, 28].map((day) => VISITS[day]); // this week, Monday to Sunday (the app's calendar has today on Wednesday)
-  const todayIdx = 2;
-  const month = Object.values(VISITS).filter((v) => v === 'c' || v === 'h' || v === 'p').length;
+  const cells = Array.from({ length: 30 }, (_, j) => VISITS[j + 1]);
   return (
-    <PCard onPress={() => router.push('/gym/attendance')} label={`Attendance. ${st.weekDone} of ${st.target} sessions this week, ${month} visits this month${awaiting ? ', 1 session to confirm' : ''}`}
-      style={{ gap: 14, ...(awaiting ? { borderWidth: 1.5, borderColor: c.accent } : null) }}>
-      <CardTitle title="Attendance" />
-      {st.fresh ? (
-        <View style={{ gap: 10 }}>
-          <Txt muted style={{ fontSize: fontSizes.md }}>No visits yet. Check in when you get to the gym.</Txt>
-          <Button kind="accent" label="Check in" onPress={() => router.push('/checkin')} />
+    <PCard onPress={() => router.push('/gym/attendance')} label={`Attendance, 18 visits this month${awaiting ? ', 1 session to confirm' : ''}`} style={{ gap: 8 }}>
+      <CardTitle title="Attendance" right={awaiting ? <Tag label="1 session to confirm" bg={c.accent} fg={fixed.white} /> : undefined} />
+      <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
+        <View>
+          <Txt style={{ fontFamily: font.display, fontSize: 37, lineHeight: 44 }}>18</Txt>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>visits this month</Txt>
         </View>
-      ) : (
-        <>
-          <Row style={{ gap: 6 }}>
-            {week.map((v, i) => {
-              const done = v === 'c' || v === 'p', home = v === 'h', wait = v === 'a', today = i === todayIdx;
-              return (
-                <View key={i} style={{ flex: 1, alignItems: 'center', gap: 6 }}>
-                  <View style={{ width: 38, height: 38, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: done ? c.accent : home ? c.surface3 : wait ? 'transparent' : c.surface2, borderWidth: wait || (today && !done && !home) ? 2 : 0, borderColor: c.accent }}>
-                    {done && <Check size={18} color={c.accentInk} strokeWidth={2.8} />}
-                    {home && <Dumbbell size={17} color={c.muted} />}
-                    {wait && <Clock size={17} color={c.accentText} />}
-                  </View>
-                  <Txt style={{ fontSize: fontSizes.sm, fontFamily: today ? font.semibold : font.regular, color: today ? c.ink : c.muted }}>{WEEK_DAYS[i]}</Txt>
-                </View>
-              );
-            })}
-          </Row>
-          <Row style={{ justifyContent: 'space-between', gap: 12 }}>
-            <Txt style={{ fontFamily: font.semibold }}>{`${st.weekDone} of ${st.target} sessions this week`}</Txt>
-            <Txt muted style={{ fontSize: fontSizes.md }}>{`${month} visits this month`}</Txt>
-          </Row>
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last visit Wed 24, 6:42 pm</Txt>
-          {awaiting && <Button kind="accent" label="Confirm your session" onPress={() => router.push('/gym/attendance')} />}
-        </>
-      )}
+        <View importantForAccessibility="no-hide-descendants" style={{ width: 10 * 8 + 9 * 3, flexDirection: 'row', flexWrap: 'wrap', gap: 3 }}>
+          {cells.map((v, i) => <StatusDot key={i} size={8} color={v && v !== 'x' ? (v === 'h' ? c.surface3 : c.accent) : c.surface2} />)}
+        </View>
+      </Row>
+      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last: Wed 24 · 6:42 pm · Location</Txt>
     </PCard>
   );
 }
