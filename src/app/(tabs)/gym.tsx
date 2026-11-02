@@ -133,9 +133,10 @@ function AssessCard() {
           {Array.from({ length: shown }, (_, i) => {
             const n = total - shown + i + 1;
             const latest = n === total;
+            // every completed assessment is filled blue; the latest also has a ring around it
             return (
-              <View key={n} style={{ width: 36, height: 36, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: latest ? c.accent : c.surface3 }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: latest ? c.accentInk : c.muted }}>{String(n)}</Txt>
+              <View key={n} style={{ width: 36, height: 36, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accent, borderWidth: latest ? 3 : 0, borderColor: c.accentSoft }}>
+                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.accentInk }}>{String(n)}</Txt>
               </View>
             );
           })}
