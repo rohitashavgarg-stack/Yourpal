@@ -149,7 +149,7 @@ export default function Onboarding() {
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
       {step === 'welcome' && <LinearGradient pointerEvents="none" colors={isDark ? ['rgba(224,128,48,0.30)', 'rgba(224,128,48,0.09)', 'rgba(224,128,48,0)'] : ['rgba(224,128,48,0.42)', 'rgba(224,128,48,0.13)', 'rgba(224,128,48,0)']} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 460 }} />}
       <View style={{ paddingTop: insets.top + 6, paddingHorizontal: 16, height: insets.top + 58, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        {step !== 'ready' && (
+        {step !== 'ready' && step !== 'welcome' && (
           <RoundBtn label="Back" onPress={back} glass>
             <ChevronLeft size={22} color={c.ink} />
           </RoundBtn>
