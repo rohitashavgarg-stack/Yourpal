@@ -109,14 +109,17 @@ export default function SelfAssessment() {
   // The bottom bar: Back on the left as an icon button; Skip and Continue together on the right. The first step has Maybe later where Back would be.
   const hasContinue = rulerLike || step?.kind === 'choice' || step?.kind === 'injuries' || step?.kind === 'next';
   const unanswered = (step?.kind === 'choice' && !answers[step.key]) || (step?.kind === 'fat' && !answers.fat);
-  const footer = (
+  const footer = !step ? (
+    <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, alignItems: 'center', paddingBottom: bottom }}>
+      <Button kind="accent" label="Done" onPress={() => goBack('/gym/assessments')} style={{ minWidth: 200, shadowColor: fixed.black, shadowOpacity: 0.28, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: 10 }} />
+    </View>
+  ) : (
     <Row style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 10 }}>
       {idx === 0
         ? <Button kind="secondary" label="Maybe later" onPress={() => { later(); goBack('/gym/assessments'); }} />
         : step && <IconButton label="Back" onPress={back} size={56} radius={radii.lg} bg={c.surface2}><ChevronLeft size={24} color={c.ink} /></IconButton>}
       {hasContinue && <Button kind="accent" label={step?.kind === 'next' ? 'Save assessment' : 'Continue'} onPress={step?.kind === 'next' ? finish : step?.kind === 'injuries' || step?.kind === 'choice' ? next : cont} disabled={unanswered} style={{ flex: 1 }} />}
       {!hasContinue && <View style={{ flex: 1 }} />}
-      {!step && <Button kind="accent" label="Done" onPress={() => goBack('/gym/assessments')} style={{ flex: 1 }} />}
     </Row>
   );
   // Skip: a blue text button at the top right of the page
@@ -297,18 +300,15 @@ function Result({ entry, prev, fresh }: { entry: SelfEntry; prev: SelfEntry | un
   const who = entry.by === 'coach' ? 'Assessment by Coach Vikram' : 'Self assessment';
   return (
     <View style={{ gap: 14 }}>
-      <LinearGradient colors={[fixed.blue, '#3E8FEA', '#5CC2E6']} locations={[0, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: radii.xl, padding: 20, gap: 6, overflow: 'hidden' }}>
-        <Svg width="100%" height="100%" viewBox="0 0 358 170" preserveAspectRatio="xMidYMid slice" style={{ position: 'absolute', left: 0, top: 0 }}>
-          <Circle cx={300} cy={20} r={120} fill={fixed.white} opacity={0.08} />
-          <Circle cx={40} cy={180} r={90} fill={fixed.white} opacity={0.06} />
-        </Svg>
-        <Row style={{ gap: 8 }}>
-          <View style={{ width: 28, height: 28, borderRadius: radii.pill, backgroundColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center' }}><Check size={16} color={fixed.white} strokeWidth={2.8} /></View>
-          <Txt style={{ fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.9)' }}>{fresh ? 'Self assessment saved' : who}</Txt>
+      <View style={{ alignItems: 'center', gap: 8, paddingTop: 4 }}>
+        <View style={{ width: 64, height: 64, borderRadius: radii.pill, backgroundColor: c.goodSoft, alignItems: 'center', justifyContent: 'center' }}><Check size={30} color={c.good} strokeWidth={2.6} /></View>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 30 }}>{fresh ? 'Self assessment saved' : who}</Txt>
+        <Row style={{ gap: 6 }}>
+          <Chip label={fmtAt(entry.at)} />
+          {entry.by === 'coach' && <Chip label="Entered by coach" />}
         </Row>
-        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl5, lineHeight: 44, color: fixed.white }}>{judged.length ? `${better} of ${judged.length} improved` : rows.length ? `${rows.length} measurements` : 'Saved'}</Txt>
-        <Txt style={{ fontSize: fontSizes.md, color: 'rgba(255,255,255,0.9)' }}>{prev ? `${fmtAt(entry.at)}, compared with ${fmtAt(prev.at)}` : fmtAt(entry.at)}</Txt>
-      </LinearGradient>
+        {judged.length > 0 && <Txt muted style={{ fontSize: fontSizes.md }}>{`${better} of ${judged.length} improved since the last one`}</Txt>}
+      </View>
 
       {GROUPS.map((grp) => {
         const list = rows.filter((r) => grp.keys.includes(r.k));
@@ -337,6 +337,7 @@ function Result({ entry, prev, fresh }: { entry: SelfEntry; prev: SelfEntry | un
       )}
 
       {fresh && <Button kind="outline" label="See trends in Progress" onPress={() => router.navigate('/progress')} />}
+      <View style={{ height: 80 }} />
     </View>
   );
 }
