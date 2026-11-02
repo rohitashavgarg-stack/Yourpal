@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { ClipboardCheck, MessageCircle } from '@/lib/icons';
+import { ClipboardCheck, Dumbbell, MessageCircle } from '@/lib/icons';
 import { fadeOut } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -20,6 +20,7 @@ import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { Chip } from '@/design-system/primitives/Chip';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
 
 function GymMembership() {
@@ -109,24 +110,38 @@ function ChatCard() {
   );
 }
 
+// Personal training: one bold dark card, like the coach chat card above it, for PT members and regular members.
+// Little text: an icon, a title, one short line, and one button. The detail lives on the Personal training page.
 function PTCard({ isPT }: { isPT: boolean }) {
   const { c } = useTheme();
   const { d } = useDomain();
+  const head = (title: string, sub: string) => (
+    <Row style={{ gap: 14 }}>
+      <IconBadge size={48} radius={radii.md} bg={c.accentSoft}><Dumbbell size={24} strokeWidth={1.9} color={c.accentText} /></IconBadge>
+      <View style={{ flex: 1 }}>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, color: onDark.text }}>{title}</Txt>
+        <Txt v="caption" color={onDark.muted}>{sub}</Txt>
+      </View>
+    </Row>
+  );
   if (!isPT) {
     return (
-      <PCard onPress={() => router.push('/gym/pt')} label="Personal training. Personalised workout and diet" style={{ gap: 8 }}>
-        <CardTitle title="Personal training" />
-        <Txt>Personalised workout & diet · adjusted from your logs</Txt>
-      </PCard>
+      <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+        {head('Personal training', 'Workout and diet from a coach')}
+        <Button kind="white" label="See how it works" onPress={() => router.push('/gym/pt')} />
+      </View>
     );
   }
   return (
-    <PCard onPress={() => router.push('/gym/pt')} label={`Your PT package, ${d.ptLeft} of ${PT_TOTAL} sessions left`} style={{ gap: 8 }}>
-      <CardTitle title="Your PT package" />
-      <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39 }}>{d.ptLeft} of {PT_TOTAL}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: c.muted }}> sessions left</Txt></Txt>
-      <GrowBar pct={Math.round((d.ptLeft / PT_TOTAL) * 100)} color={c.accent} />
-      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>With Coach Vikram · renews 30 Oct</Txt>
-    </PCard>
+    <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+      {head('Your PT package', 'With Coach Vikram')}
+      <View style={{ gap: 10 }}>
+        <Txt accessibilityLabel={`${d.ptLeft} of ${PT_TOTAL} sessions left`} style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39, color: onDark.text }}>{d.ptLeft}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: onDark.muted }}> of {PT_TOTAL} sessions left</Txt></Txt>
+        <GrowBar pct={Math.round((d.ptLeft / PT_TOTAL) * 100)} color={c.accent} track="rgba(255,255,255,0.14)" />
+        <Chip label="Renews 30 Oct" onDark />
+      </View>
+      <Button kind="white" label="View sessions" onPress={() => router.push('/gym/pt')} />
+    </View>
   );
 }
 
