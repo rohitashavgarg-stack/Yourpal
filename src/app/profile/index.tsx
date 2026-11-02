@@ -23,7 +23,6 @@ import { resetShell, useShell } from '@/features/shell/state';
 import { goalSummary } from '@/features/shell/goal';
 import { LogoutSheet } from '@/features/shell/sheets';
 import { openLegal } from '@/features/legal/links';
-import { DaysSheet, DietSheet, GenderSheet, InjurySheet } from '@/features/profile/PrefSheets';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
@@ -111,27 +110,19 @@ export default function Profile() {
 
       <TrackerPromo onPress={go('/profile/tracker-designs')} />
 
-      {/* About you: read-only. Change opens a small sheet, so nothing is edited by a stray tap. */}
-      <View style={{ gap: 8 }}>
-        <Txt v="label" style={{ paddingHorizontal: 4 }}>ABOUT YOU</Txt>
-        <ListCard>
-          {([
-            { l: 'Gender', v: p.gender || 'Not set', sheet: <GenderSheet /> },
-            { l: 'Days you can train', v: p.days ? String(p.days) : 'Not set', sheet: <DaysSheet /> },
-            { l: 'Diet type', v: p.diet || 'Not set', sheet: <DietSheet /> },
-            { l: 'Injuries or pain', v: p.injury === 'Yes' ? 'Yes' : 'None', sheet: <InjurySheet /> },
-          ]).map((r, i, a) => (
-            <View key={r.l} style={{ minHeight: 60, paddingLeft: 16, paddingRight: 10, flexDirection: 'row', alignItems: 'center', gap: 10, borderBottomWidth: i === a.length - 1 ? 0 : 1, borderBottomColor: c.line }}>
-              <View style={{ flex: 1, paddingVertical: 8 }}>
-                <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{r.l}</Txt>
-                <Txt style={{ fontFamily: font.semibold }} numberOfLines={1}>{r.v}</Txt>
-                {r.l === 'Injuries or pain' && p.injury === 'Yes' && !!p.injuryNote && <Txt muted style={{ fontSize: fontSizes.md }} numberOfLines={2}>{p.injuryNote}</Txt>}
-              </View>
-              <Button small kind="secondary" label="Change" accessibilityLabel={`Change ${r.l}`} onPress={() => openSheet(r.sheet, { label: r.l })} />
-            </View>
-          ))}
-        </ListCard>
-      </View>
+      {/* Preferences: its own card with a short summary; the page behind it holds the details */}
+      <Pressy accessibilityRole="button" accessibilityLabel="Preferences" onPress={go('/profile/preferences')} scaleTo={0.985}
+        style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 12 }}>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>Preferences</Txt>
+          <ChevronRight size={18} color={c.muted} />
+        </Row>
+        <Row style={{ gap: 8, flexWrap: 'wrap' }}>
+          <Chip label={p.days ? p.days + ' days a week' : 'Training days'} />
+          {!!p.diet && <Chip label={p.diet} />}
+          <Chip label={p.injury === 'Yes' ? 'Injury noted' : 'No injuries'} tone={p.injury === 'Yes' ? 'warn' : undefined} />
+        </Row>
+      </Pressy>
 
       {group('ACCOUNT', [
         { l: 'My details', icon: <UserRound size={18} color={c.ink} />, go: go('/profile/details') },

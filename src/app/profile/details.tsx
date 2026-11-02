@@ -10,6 +10,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Camera, ChevronRight, Image as ImageIcon, Trash2 } from '@/lib/icons';
 import { router } from 'expo-router';
 import { DobPicker } from '@/features/body/BodyLog';
+import { GenderSheet } from '@/features/profile/PrefSheets';
 import { useDomain } from '@/lib/domain';
 import { useShell } from '@/features/shell/state';
 import { Platform } from 'react-native';
@@ -167,6 +168,12 @@ export default function MyDetails() {
       <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.surface }}>
         <Txt v="mono" style={{ flex: 1 }}>{maskNum(state.phone)}</Txt>
         <Button small kind="secondary" label="Change" accessibilityLabel="Change mobile number" onPress={() => openSheet(<ChangePhoneSheet />, { label: 'Change mobile number' })} />
+      </Row>
+
+      <Label style={{ marginTop: 16 }}>Gender</Label>
+      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.surface }}>
+        <Txt style={{ flex: 1, fontFamily: font.semibold }}>{p.gender || 'Not set'}</Txt>
+        <Button small kind="secondary" label="Change" accessibilityLabel="Change gender" onPress={() => openSheet(<GenderSheet />, { label: 'Gender' })} />
       </Row>
 
       <Label style={{ marginTop: 16 }}>Body details</Label>
