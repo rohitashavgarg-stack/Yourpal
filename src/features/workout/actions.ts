@@ -49,26 +49,10 @@ export function useSessionActions() {
       haptic.medium();
       upd((s) => {
         if (!s.rest) return {};
-        const from = s.rest.pausedAt ?? Date.now();
-        const left = Math.max(0, (s.rest.endAt - from) / 1000);
-        const endAt = from + (left + 30) * 1000;
-        if (!s.rest.pausedAt) scheduleTimerEnd(endAt, 'Rest is over. Time for your next set.');
-        return { rest: { endAt, total: Math.max(s.rest.total, left + 30), pausedAt: s.rest.pausedAt } };
-      });
-    },
-    // Pause keeps the time that is left; resume carries on from it.
-    pauseRest() {
-      haptic.light();
-      cancelTimerEnd();
-      upd((s) => (s.rest && !s.rest.pausedAt ? { rest: { ...s.rest, pausedAt: Date.now() } } : {}));
-    },
-    resumeRest() {
-      haptic.light();
-      upd((s) => {
-        if (!s.rest?.pausedAt) return {};
-        const endAt = s.rest.endAt + (Date.now() - s.rest.pausedAt);
+        const left = Math.max(0, (s.rest.endAt - Date.now()) / 1000);
+        const endAt = Date.now() + (left + 30) * 1000;
         scheduleTimerEnd(endAt, 'Rest is over. Time for your next set.');
-        return { rest: { endAt, total: s.rest.total } };
+        return { rest: { endAt, total: Math.max(s.rest.total, left + 30) } };
       });
     },
     skipRest() { cancelTimerEnd(); upd(() => ({ rest: null })); },
