@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { router } from 'expo-router';
-import { ChevronRight, ClipboardCheck, CreditCard, Dumbbell, MessageCircle } from '@/lib/icons';
+import { FingerprintPattern, Smartphone, ChevronRight, ClipboardCheck, CreditCard, Dumbbell, MessageCircle } from '@/lib/icons';
 import { fadeOut } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -16,6 +16,7 @@ import { font } from '@/theme/tokens';
 import { CardTitle, cardShadow, GrowBar, PCard } from '@/features/progress/parts';
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { useMemberships } from '@/features/gym/memberships';
+import { pastMonth } from '@/features/gym/attendanceMonths';
 import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
 import { NumKey, compare, fmtAt, headlineOf } from '@/features/selfassess/data';
 import { TimeBar } from '@/app/gym/membership';
@@ -94,19 +95,37 @@ function BreakCard() {
 function AttendanceCard({ awaiting }: { awaiting: boolean }) {
   const { c } = useTheme();
   const cells = Array.from({ length: 30 }, (_, j) => VISITS[j + 1]);
+  const lastMonth = pastMonth(1).count; // visits last month, to put next to this month's
   return (
-    <PCard onPress={() => router.push('/gym/attendance')} label={`Attendance, 18 visits this month${awaiting ? ', 1 session to confirm' : ''}`} style={{ gap: 8 }}>
+    <PCard onPress={() => router.push('/gym/attendance')} label={`Attendance, 18 visits this month, ${lastMonth} last month${awaiting ? ', 1 session to confirm' : ''}`} style={{ gap: 12 }}>
       <CardTitle title="Attendance" right={awaiting ? <Tag label="1 session to confirm" bg={c.accent} fg={fixed.white} /> : undefined} />
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
-        <View>
-          <Txt style={{ fontFamily: font.display, fontSize: 37, lineHeight: 44 }}>18</Txt>
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>visits this month</Txt>
-        </View>
+        <Row style={{ alignItems: 'flex-end', gap: 14 }}>
+          <View>
+            <Txt style={{ fontFamily: font.display, fontSize: 37, lineHeight: 44 }}>18</Txt>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>visits this month</Txt>
+          </View>
+          {/* last month's visits, on the side of this month's */}
+          <View style={{ paddingBottom: 1 }}>
+            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 30, color: c.muted }}>{String(lastMonth)}</Txt>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>last month</Txt>
+          </View>
+        </Row>
         <View importantForAccessibility="no-hide-descendants" style={{ width: 10 * 8 + 9 * 3, flexDirection: 'row', flexWrap: 'wrap', gap: 3 }}>
           {cells.map((v, i) => <StatusDot key={i} size={8} color={v && v !== 'x' ? (v === 'h' ? c.surface3 : c.accent) : c.surface2} />)}
         </View>
       </Row>
-      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last: Wed 24 · 6:42 pm · Location</Txt>
+      {/* the last visit: when, and how the member checked in. Check-in is with the biometric device or with the phone, so those two get their icons. */}
+      <Row style={{ gap: 10 }}>
+        <View style={{ flex: 1, gap: 1 }}>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last visit</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>Wed 24, 6:42 pm</Txt>
+        </View>
+        <View accessible accessibilityLabel="Checked in with the phone" style={{ flexDirection: 'row', gap: 6 }}>
+          <IconBadge size={32} radius={radii.sm} bg={c.surface2}><FingerprintPattern size={17} color={c.muted} /></IconBadge>
+          <IconBadge size={32} radius={radii.sm} bg={c.accentSoft}><Smartphone size={17} color={c.accentText} /></IconBadge>
+        </View>
+      </Row>
     </PCard>
   );
 }

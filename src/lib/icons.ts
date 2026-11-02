@@ -99,6 +99,7 @@ export { default as Star } from 'lucide-react-native/icons/star';
 export { default as Shirt } from 'lucide-react-native/icons/shirt';
 export { default as BicepsFlexed } from 'lucide-react-native/icons/biceps-flexed';
 export { default as Armchair } from 'lucide-react-native/icons/armchair';
+export { default as FingerprintPattern } from 'lucide-react-native/icons/fingerprint-pattern';
 export { default as Download } from 'lucide-react-native/icons/download';
 export { default as FileText } from 'lucide-react-native/icons/file-text';
 export { default as ChevronUp } from 'lucide-react-native/icons/chevron-up';
