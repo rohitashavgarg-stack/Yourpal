@@ -11,6 +11,7 @@ import { Hint, SubPage } from '@/features/progress/parts';
 import { LineRow, ListCard as PayList } from '@/features/shell/parts';
 import { IconButton } from '@/design-system/primitives/Button';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { Chip } from '@/design-system/primitives/Chip';
 import { useMemberships } from '@/features/gym/memberships';
 import { PAUSE_HISTORY, PAUSE_TOTAL } from '@/features/gym/data';
 import { gymStore } from '@/features/gym/state';
@@ -76,6 +77,10 @@ export default function MembershipDetail() {
             <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Started</Txt>
             <Txt style={{ fontFamily: font.semibold }}>{m.start}</Txt>
           </View>
+          <View style={{ gap: 1, alignItems: 'center' }}>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Price</Txt>
+            <Txt style={{ fontFamily: font.semibold }}>{rupees(m.price)}</Txt>
+          </View>
           <View style={{ gap: 1, alignItems: 'flex-end' }}>
             <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{m.status === 'Expired' ? 'Ended' : 'Ends'}</Txt>
             <Txt style={{ fontFamily: font.semibold }}>{m.end}</Txt>
@@ -96,8 +101,12 @@ export default function MembershipDetail() {
 
       <Txt v="label" style={{ paddingHorizontal: 6 }}>PAYMENTS</Txt>
       <PayList>
-        {m.payments.map((p) => (
-          <LineRow key={p.id} title={p.item} sub={p.date}
+        {m.next && (
+          <LineRow title={m.next.item} sub={`Due ${m.next.due}`} last={m.payments.length === 0}
+            right={<Row style={{ gap: 10 }}>{value(rupees(m.next.amount))}<Chip label="Upcoming" tone="warn" /></Row>} />
+        )}
+        {m.payments.map((p, i) => (
+          <LineRow key={p.id} title={p.item} sub={p.date} last={i === m.payments.length - 1}
             right={(
               <Row style={{ gap: 10 }}>
                 {value(rupees(p.amount))}
@@ -105,7 +114,6 @@ export default function MembershipDetail() {
               </Row>
             )} />
         ))}
-        <LineRow title="Total price" right={<Txt style={{ fontFamily: font.bold, fontSize: fontSizes.lg }}>{rupees(m.payments.reduce((t, p) => t + p.amount, 0))}</Txt>} last />
       </PayList>
       <Hint>Pauses, renewals and plan changes happen at the front desk.</Hint>
     </SubPage>
