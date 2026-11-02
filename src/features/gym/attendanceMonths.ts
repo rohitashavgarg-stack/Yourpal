@@ -14,7 +14,7 @@ export function pastMonth(back: number): PastMonth {
   const visits: PastMonth['visits'] = {};
   for (let d = 1; d <= days; d++) {
     const w = (lead + d - 1) % 7;
-    if ([0, 2, 4].includes(w) || (d + back) % 5 === 0) visits[d] = (d + back) % 6 === 0 ? 'h' : (d + back) % 9 === 0 ? 'p' : 'c';
+    if ([0, 2, 4].includes(w) || (d + back) % 5 === 0) visits[d] = (d + back) % 9 === 0 ? 'p' : 'c';
   }
   return { name: first.toLocaleString('en-US', { month: 'long' }), days, lead, visits, count: Object.keys(visits).length };
 }

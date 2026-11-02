@@ -16,7 +16,6 @@ import { font } from '@/theme/tokens';
 import { CardTitle, cardShadow, GrowBar, PCard } from '@/features/progress/parts';
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { useMemberships } from '@/features/gym/memberships';
-import { pastMonth } from '@/features/gym/attendanceMonths';
 import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
 import { NumKey, compare, fmtAt, headlineOf } from '@/features/selfassess/data';
 import { TimeBar } from '@/app/gym/membership';
@@ -95,20 +94,16 @@ function BreakCard() {
 function AttendanceCard({ awaiting }: { awaiting: boolean }) {
   const { c } = useTheme();
   const cells = Array.from({ length: 30 }, (_, j) => VISITS[j + 1]);
-  const lastMonth = pastMonth(1).count; // visits last month, to put next to this month's
   return (
-    <PCard onPress={() => router.push('/gym/attendance')} label={`Attendance, 18 visits this month, ${lastMonth} last month${awaiting ? ', 1 session to confirm' : ''}`} style={{ gap: 12 }}>
+    <PCard onPress={() => router.push('/gym/attendance')} label={`Attendance, 18 visits this month${awaiting ? ', 1 session to confirm' : ''}`} style={{ gap: 12 }}>
       <CardTitle title="Attendance" right={awaiting ? <Tag label="1 session to confirm" bg={c.accent} fg={fixed.white} /> : undefined} />
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
-        <Row style={{ alignItems: 'flex-end', gap: 10 }}>
+        <View>
           <Txt style={{ fontFamily: font.display, fontSize: 37, lineHeight: 44 }}>18</Txt>
-          <View style={{ paddingBottom: 6 }}>
-            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>visits this month</Txt>
-            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`${lastMonth} last month`}</Txt>
-          </View>
-        </Row>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>visits this month</Txt>
+        </View>
         <View importantForAccessibility="no-hide-descendants" style={{ width: 10 * 8 + 9 * 3, flexDirection: 'row', flexWrap: 'wrap', gap: 3 }}>
-          {cells.map((v, i) => <StatusDot key={i} size={8} color={v && v !== 'x' ? (v === 'h' ? c.surface3 : c.accent) : c.surface2} />)}
+          {cells.map((v, i) => <StatusDot key={i} size={8} color={v && v !== 'x' ? c.accent : c.surface2} />)}
         </View>
       </Row>
       <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last visit Wed 24, 6:42 pm</Txt>

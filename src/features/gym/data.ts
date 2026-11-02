@@ -12,7 +12,7 @@ export function membershipView(m: Domain['membership'], c: Palette) {
 }
 
 // September attendance: c = check-in, h = home workout, p = PT session, a = PT awaiting confirmation, x = visit with nothing logged
-export const VISITS: Record<number, string> = { 1: 'c', 2: 'c', 3: 'c', 4: 'c', 6: 'c', 7: 'c', 8: 'c', 9: 'c', 10: 'c', 11: 'c', 13: 'x', 14: 'c', 15: 'c', 16: 'c', 18: 'h', 20: 'c', 22: 'p', 23: 'a', 24: 'c' };
+export const VISITS: Record<number, string> = { 1: 'c', 2: 'c', 3: 'c', 4: 'c', 6: 'c', 7: 'c', 8: 'c', 9: 'c', 10: 'c', 11: 'c', 13: 'x', 14: 'c', 15: 'c', 16: 'c', 18: 'c', 20: 'c', 22: 'p', 23: 'a', 24: 'c' };
 
 export const ASSESS = [
   { g: 'Body', tone: 'nutri', rows: [['Weight', '74.5 kg', '72.4 kg', '−2.1 kg', 1], ['Waist', '92 cm', '89 cm', '−3 cm', 1], ['Body fat', '27%', '25.5%', '−1.5%', 1]] },

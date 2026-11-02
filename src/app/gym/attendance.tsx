@@ -65,9 +65,7 @@ export default function Attendance() {
     const v = past.visits[d] === 'p' && !isPT ? 'c' : past.visits[d];
     return v === 'p'
       ? { key: 'm' + d, t: `${dayName(past, d)} · PT session`, s: 'Coach Vikram · you rated it 5★', tag: 'Confirmed', type: 'pt' as const, icon: 'pt' as const, tone: 'good' as const, ptOnly: true }
-      : v === 'h'
-        ? { key: 'm' + d, t: dayName(past, d), s: 'Workout, no check-in', tag: 'Home', type: 'c' as const, icon: 'home' as const }
-        : { key: 'm' + d, t: dayName(past, d), s: 'Workout logged', tag: d % 2 ? 'Location' : 'Front desk', type: 'c' as const, icon: 'loc' as const };
+      : { key: 'm' + d, t: dayName(past, d), s: 'Workout logged', tag: d % 2 ? 'Location' : 'Front desk', type: 'c' as const, icon: 'loc' as const };
   }) : [];
 
   let rows: Att[] = [];
@@ -80,7 +78,6 @@ export default function Attendance() {
     { key: '24', t: 'Wed 24 · 6:42 pm', s: 'Workout logged', tag: 'Location', type: 'c', icon: 'loc' },
     { key: '22', t: 'Mon 22 · PT session', s: 'Coach Vikram · you rated it 5★', tag: 'Confirmed', type: 'pt', icon: 'pt', ptOnly: true },
     { key: '20', t: 'Sat 20 · 7:05 pm', s: 'Workout logged', tag: 'Front desk', type: 'c', icon: 'loc' },
-    { key: '18', t: 'Thu 18', s: 'Workout, no check-in', tag: 'Home', type: 'c', icon: 'home' },
     { key: '16', t: 'Tue 16 · PT session', s: 'Coach Vikram · you rated it 4★', tag: 'Confirmed', type: 'pt', icon: 'pt', ptOnly: true },
     { key: '13', t: 'Sat 13 · 6:50 pm', s: 'Nothing logged', tag: 'Location', type: 'c', icon: 'loc' },
   ]);
@@ -126,7 +123,7 @@ export default function Attendance() {
           ))}
         </View>
         <Row style={{ gap: 14, flexWrap: 'wrap', marginTop: 12 }}>
-          {[{ l: 'Check-in', col: c.accent }, { l: 'Home', col: c.surface3 }, ...(isPT ? [{ l: 'PT session', col: c.good }] : [])].map((x) => (
+          {[{ l: 'Check-in', col: c.accent }, ...(isPT ? [{ l: 'PT session', col: c.good }] : [])].map((x) => (
             <Row key={x.l} style={{ gap: 6 }}><StatusDot size={10} color={x.col} /><Txt v="caption">{x.l}</Txt></Row>
           ))}
         </Row>
