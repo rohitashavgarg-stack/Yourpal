@@ -1,80 +1,64 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { Button, Pressy, Row, Txt } from '@/components/ui';
-import { Pill } from '@/design-system/primitives/Pill';
-import { Chip } from '@/design-system/primitives/Chip';
-import { useDomain } from '@/lib/domain';
+import { Pressy, Row, Txt } from '@/components/ui';
+import { Star } from '@/lib/icons';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { GrowBar, SubPage } from '@/features/progress/parts';
-import { ListCard as CardList } from '@/features/shell/parts';
-import { PT_TOTAL } from '@/features/gym/data';
+import { SubPage } from '@/features/progress/parts';
+import { PtConfirmCard } from '@/features/today/TopCards';
 import { useGymScenarios } from '@/features/gym/state';
-import { useAwaitingSession, useSessions } from '@/features/gym/sessions';
-import { DateTile, StatusTag } from '@/features/gym/SessionBits';
+import { Session, useAwaitingSession, useSessions } from '@/features/gym/sessions';
+import { StatusTag } from '@/features/gym/SessionBits';
 import { radii, fontSizes } from '@/design-system/tokens';
-import { FadeIn } from '@/design-system/primitives/FadeIn';
 
-// PT sessions for a PT member: the package, the invite to confirm, then upcoming and past sessions.
-export default function Sessions() {
+function Stars({ n }: { n: number }) {
   const { c } = useTheme();
-  const { d } = useDomain();
-  const all = useSessions();
-  const waiting = useAwaitingSession();
-  const [tab, setTab] = useState<'up' | 'past'>('up');
-  useGymScenarios('Gym · Sessions');
+  return (
+    <View accessible accessibilityLabel={`You rated it ${n} stars`} style={{ flexDirection: 'row', gap: 2 }}>
+      {[1, 2, 3, 4, 5].map((i) => <Star key={i} size={15} color={i <= n ? c.ink : c.surface3} fill={i <= n ? c.ink : c.surface3} />)}
+    </View>
+  );
+}
 
-  const used = PT_TOTAL - d.ptLeft;
-  const list = all.filter((s) => (tab === 'up' ? s.status === 'upcoming' : s.status !== 'upcoming'));
+// One stop on the trail: a dot on the line, and the session next to it.
+function Stop({ s, first, last }: { s: Session; first: boolean; last: boolean }) {
+  const { c } = useTheme();
+  const done = s.status === 'confirmed';
+  const dot = s.status === 'awaiting' ? c.accent : done ? c.good : s.status === 'flagged' ? c.warn : c.surface3;
+  return (
+    <Row style={{ alignItems: 'stretch', gap: 12 }}>
+      <View style={{ width: 16, alignItems: 'center' }}>
+        <View style={{ width: 2, height: 20, backgroundColor: first ? 'transparent' : c.line }} />
+        <View style={{ width: 14, height: 14, borderRadius: radii.pill, backgroundColor: done || s.status !== 'upcoming' ? dot : c.bg, borderWidth: 2, borderColor: dot }} />
+        <View style={{ width: 2, flex: 1, backgroundColor: last ? 'transparent' : c.line }} />
+      </View>
+      <Pressy accessibilityRole="button" accessibilityLabel={`${s.focus}, ${s.long}`} onPress={() => router.push({ pathname: '/gym/session', params: { id: s.id } })}
+        style={{ flex: 1, backgroundColor: c.surface, borderRadius: radii.card, padding: 14, gap: 8, marginBottom: last ? 0 : 10 }}>
+        <Row style={{ justifyContent: 'space-between', gap: 8 }}>
+          <View style={{ flex: 1, gap: 1 }}>
+            <Txt style={{ fontFamily: font.semibold }}>{s.focus}</Txt>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`${s.day}, ${s.time}`}</Txt>
+          </View>
+          {s.rating ? <Stars n={s.rating} /> : <StatusTag s={s} />}
+        </Row>
+      </Pressy>
+    </Row>
+  );
+}
+
+// PT sessions for a PT member: the session to confirm (the same card as on Today), then the trail of upcoming and completed sessions.
+export default function Sessions() {
+  const waiting = useAwaitingSession();
+  const all = useSessions();
+  useGymScenarios('Gym · Sessions');
 
   return (
     <SubPage title="Sessions" fallback="/gym">
-      <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 12 }}>
-        <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <Txt accessibilityLabel={`${used} of ${PT_TOTAL} sessions used`} style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 36 }}>
-            {used}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: c.muted }}> of {PT_TOTAL} used</Txt>
-          </Txt>
-          <Chip label="Renews 30 Oct" />
-        </Row>
-        <GrowBar pct={Math.round((used / PT_TOTAL) * 100)} color={c.accent} />
+      {waiting && <PtConfirmCard />}
+      <View>
+        {all.map((s, i) => <Stop key={s.id} s={s} first={i === 0} last={i === all.length - 1} />)}
       </View>
-
-      {waiting && (
-        <FadeIn style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 16, gap: 14, borderWidth: 1.5, borderColor: c.accent }}>
-          <Row style={{ gap: 12 }}>
-            <DateTile s={waiting} />
-            <View style={{ flex: 1, gap: 1 }}>
-              <Txt style={{ fontFamily: font.semibold }}>Confirm your session</Txt>
-              <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`${waiting.focus} with Coach Vikram`}</Txt>
-            </View>
-          </Row>
-          <Button label="Confirm session" onPress={() => router.push({ pathname: '/gym/session', params: { id: waiting.id } })} />
-        </FadeIn>
-      )}
-
-      <Row style={{ gap: 8 }}>
-        <Pill label="Upcoming" on={tab === 'up'} onPress={() => setTab('up')} style={{ flex: 1 }} />
-        <Pill label="Past" on={tab === 'past'} onPress={() => setTab('past')} style={{ flex: 1 }} />
-      </Row>
-
-      {list.length === 0 ? (
-        <Txt muted style={{ textAlign: 'center', paddingVertical: 24 }}>{tab === 'up' ? 'No sessions booked' : 'No past sessions yet'}</Txt>
-      ) : (
-        <CardList>
-          {list.map((s, i) => (
-            <Pressy key={s.id} accessibilityRole="button" accessibilityLabel={`${s.focus}, ${s.long}`} onPress={() => router.push({ pathname: '/gym/session', params: { id: s.id } })}
-              style={{ minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, borderBottomWidth: i < list.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-              <DateTile s={s} />
-              <View style={{ flex: 1, gap: 1 }}>
-                <Txt style={{ fontFamily: font.medium }}>{s.focus}</Txt>
-                <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{s.time}</Txt>
-              </View>
-              <StatusTag s={s} />
-            </Pressy>
-          ))}
-        </CardList>
-      )}
     </SubPage>
   );
 }
