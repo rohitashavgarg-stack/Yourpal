@@ -2,18 +2,17 @@ import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { PersonAvatar } from '@/components/Brand';
-import { Button, Row, Txt } from '@/components/ui';
+import { Button, Txt } from '@/components/ui';
 import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
-import { font } from '@/theme/tokens';
 import { ListCard, SubPage } from '@/features/progress/parts';
 import { LineRow, ListCard as CardList } from '@/features/shell/parts';
 import { PT_TOTAL } from '@/features/gym/data';
 import { useGymScenarios } from '@/features/gym/state';
 import { CalendarCheck, Dumbbell, MessageCircle, Salad, TrendingUp } from '@/lib/icons';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
-import { radii, fontSizes, onDark } from '@/design-system/tokens';
+import { radii } from '@/design-system/tokens';
 
 // What personal training gives a member: an icon, a short title and one short line each.
 const BENEFITS = [
@@ -30,17 +29,14 @@ export default function PersonalTraining() {
   const { state } = useStore();
   const isPT = state.sc.member === 'PT member';
   useGymScenarios('Gym · Personal training');
+  // The page has its own big heading, so the header bar carries no title.
   return (
-    <SubPage title="Personal training" fallback="/gym">
-      {/* Same dark card as the Personal training card on the Gym tab. */}
-      <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18 }}>
-        <Row style={{ gap: 14 }}>
-          <IconBadge size={56} radius={radii.md} bg={c.accentSoft}><Dumbbell size={28} strokeWidth={1.9} color={c.accentText} /></IconBadge>
-          <View style={{ flex: 1 }}>
-            <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 29, color: onDark.text }}>Personal training</Txt>
-            <Txt v="caption" color={onDark.muted}>A coach who builds around you</Txt>
-          </View>
-        </Row>
+    <SubPage title="" fallback="/gym">
+      {/* The icon first, then the big heading, then one short line. */}
+      <View style={{ gap: 12, paddingTop: 4 }}>
+        <IconBadge size={64} radius={radii.lg} bg={c.accentSoft}><Dumbbell size={32} strokeWidth={1.9} color={c.accentText} /></IconBadge>
+        <Txt accessibilityRole="header" v="display">Personal training</Txt>
+        <Txt muted>A coach who builds around you</Txt>
       </View>
 
       {isPT && <ListCard rows={[{ l: 'Sessions left', v: `${d.ptLeft} of ${PT_TOTAL}` }, { l: 'Next session', v: 'Thu 25, 6 pm' }, { l: 'Package renews', v: '30 Oct' }]} />}
