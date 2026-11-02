@@ -77,14 +77,15 @@ export default function MembershipDetail() {
             <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Started</Txt>
             <Txt style={{ fontFamily: font.semibold }}>{m.start}</Txt>
           </View>
-          <View style={{ gap: 1, alignItems: 'center' }}>
-            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Price</Txt>
-            <Txt style={{ fontFamily: font.semibold }}>{rupees(m.price)}</Txt>
-          </View>
           <View style={{ gap: 1, alignItems: 'flex-end' }}>
             <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{m.status === 'Expired' ? 'Ended' : 'Ends'}</Txt>
             <Txt style={{ fontFamily: font.semibold }}>{m.end}</Txt>
           </View>
+        </Row>
+        {/* the price on its own line below the dates, not squeezed between them */}
+        <Row style={{ justifyContent: 'space-between' }}>
+          <Txt muted>Price</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg }}>{rupees(m.price)}</Txt>
         </Row>
         {m.status !== 'Active' && <Txt muted style={{ fontSize: fontSizes.md }}>{m.note}</Txt>}
       </View>
