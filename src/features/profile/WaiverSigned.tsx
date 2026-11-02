@@ -90,7 +90,7 @@ export function WaiverSigned({ sig }: { sig: Sig }) {
         <RoundBtn label="Back" onPress={() => goBack('/profile')} glass><ChevronLeft size={22} color={fixed.white} /></RoundBtn>
       </View>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 }}>
-        <View style={{ alignItems: 'center', gap: 12 }}>
+        <View style={{ alignItems: 'center', gap: 12, transform: [{ translateY: -32 }] }}>
           <View style={{ width: BADGE, height: BADGE, alignItems: 'center', justifyContent: 'center' }}>
             <WaiverBadge size={BADGE} />
             <View pointerEvents="none" style={{ position: 'absolute', left: BADGE / 2, top: BADGE / 2, width: 0, height: 0 }}>
