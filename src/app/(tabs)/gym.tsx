@@ -118,7 +118,7 @@ function AssessCard() {
   const { entries, nextAt, daysLeft, due } = useSelfAssess();
   const total = entries.length;
   const last = entries[0];
-  const shown = Math.min(total, 5); // the trail shows the latest five
+  const shown = Math.min(total, 4); // the trail shows the latest four, then the next one
   const rows = compare(last, entries[1]);
   const stats = (['weight', 'waist', 'pulse', 'bench', 'sleep'] as NumKey[]).map((k) => rows.find((r) => r.k === k)).filter((r) => !!r).slice(0, 3) as ReturnType<typeof compare>;
   return (
@@ -129,14 +129,18 @@ function AssessCard() {
           <Txt style={{ fontFamily: font.displayBold, fontSize: 56, lineHeight: 62, letterSpacing: -1.5 }}>{String(total)}</Txt>
           <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>completed</Txt>
         </View>
-        <View importantForAccessibility="no-hide-descendants" style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 8 }}>
-          {Array.from({ length: shown }, (_, i) => {
+        {/* the trail: each completed assessment is a filled circle, and the next one is a dashed circle at the end of the line */}
+        <View importantForAccessibility="no-hide-descendants" style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+          {Array.from({ length: shown + 1 }, (_, i) => {
             const n = total - shown + i + 1;
-            // every completed assessment looks the same: filled blue
+            const next = i === shown;
             return (
-              <View key={n} style={{ width: 36, height: 36, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accent }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.accentInk }}>{String(n)}</Txt>
-              </View>
+              <React.Fragment key={n}>
+                {i > 0 && <View style={{ width: 10, height: 2, backgroundColor: next ? c.accent + '55' : c.accent }} />}
+                <View style={{ width: 36, height: 36, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: next ? 'transparent' : c.accent, borderWidth: next ? 2 : 0, borderColor: c.accent + '80', borderStyle: 'dashed' }}>
+                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: next ? c.accentText : c.accentInk }}>{String(n)}</Txt>
+                </View>
+              </React.Fragment>
             );
           })}
         </View>
@@ -173,7 +177,7 @@ function AssessCard() {
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Upcoming assessment</Txt>
           <Txt style={{ fontFamily: font.semibold }}>{`Assessment ${total + 1}`}</Txt>
         </View>
-        <Tag label={daysLeft <= 0 ? 'Due now' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`} bg={due ? c.warnSoft : c.surface} fg={due ? c.warn : c.muted} />
+        <Tag label={daysLeft <= 0 ? 'Due now' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`} bg={due ? c.warnSoft : c.surface} fg={due ? c.warn : c.muted} style={{ alignSelf: 'center' }} />
       </Row>
       {due && <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />}
     </PCard>
