@@ -83,6 +83,8 @@ export default function MembershipDetail() {
         {m.status !== 'Active' && <Txt muted style={{ fontSize: fontSizes.md }}>{m.note}</Txt>}
       </View>
 
+      <View style={{ height: 1, backgroundColor: c.line }} />
+
       {(m.pt || showPauses) && (
         <PayList>
           {m.pt && <LineRow title="Personal training" sub={m.pt.trainer} right={value(`${m.pt.left} of ${m.pt.total} sessions left`)} last={!showPauses} />}
