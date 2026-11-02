@@ -61,23 +61,26 @@ export default function ConnectedApps() {
 
       <Row style={{ justifyContent: 'space-between', paddingHorizontal: 4, marginTop: 6 }}>
         <Txt v="label">{on ? 'SYNCING' : 'YOU WILL SEE ON TODAY'}</Txt>
-        {on && <Txt v="caption" style={{ fontSize: fontSizes.xs }}>Tap a switch to pause one</Txt>}
+        <Txt v="caption" style={{ fontSize: fontSizes.xs }}>{on ? 'Tap a switch to pause one' : 'Tap a switch to turn one off'}</Txt>
       </Row>
       <ListCard>
         {READS.map(({ Icon, t, s, v, tone }, i) => {
           const bg = (c as any)[tone[0]], fg = (c as any)[tone[1]];
           const noWatch = on && t !== 'Steps' && !d.wearable;
           const live = on && metrics[t] && !noWatch;
+          const paused = !metrics[t] && !noWatch;
           return (
             <Row key={t} style={{ gap: 14, minHeight: 72, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
-              <IconBadge size={44} radius={15} bg={bg} style={{ opacity: on && !metrics[t] ? 0.5 : 1 }}>
+              <IconBadge size={44} radius={15} bg={bg} style={{ opacity: paused || noWatch ? 0.5 : 1 }}>
                 <Icon size={22} strokeWidth={1.9} color={fg} />
               </IconBadge>
               <View style={{ flex: 1, paddingVertical: 10 }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{t}</Txt>
-                <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{noWatch ? 'Needs a watch or band' : live ? `Today · ${v}` : on ? 'Paused' : s}</Txt>
+                <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{noWatch ? 'Connect a watch or band' : live ? `${v} today` : paused ? (on ? 'Paused' : 'Off') : s}</Txt>
               </View>
-              {on && !noWatch && <Switch label={`Read ${t}`} on={!!metrics[t]} onChange={(val) => { setMetrics((m) => ({ ...m, [t]: val })); haptic.tap(); toast(`${t} ${val ? 'will sync' : 'sync paused'}`); }} />}
+              {/* Every row has a switch. With no watch or band the switch stays off and locked. */}
+              <Switch label={`Read ${t}`} on={!noWatch && !!metrics[t]} locked={noWatch}
+                onChange={(val) => { setMetrics((m) => ({ ...m, [t]: val })); haptic.tap(); toast(on ? `${t} ${val ? 'will sync' : 'sync paused'}` : `${t} ${val ? 'will show on Today' : 'is off'}`); }} />
             </Row>
           );
         })}
