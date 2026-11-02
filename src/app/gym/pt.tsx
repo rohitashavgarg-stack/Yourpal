@@ -4,8 +4,7 @@ import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PersonAvatar } from '@/components/Brand';
-import { Tag } from '@/components/bits';
-import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
+import { Button, Row, Txt } from '@/components/ui';
 import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -13,12 +12,11 @@ import { font } from '@/theme/tokens';
 import { ListCard, SubPage } from '@/features/progress/parts';
 import { LineRow, ListCard as CardList } from '@/features/shell/parts';
 import { PT_STATS, PT_TOTAL } from '@/features/gym/data';
-import { coachStore } from '@/features/coach/coach';
 import { useGoalV2 } from '@/features/goalv2/model';
 import { useGymScenarios } from '@/features/gym/state';
-import { CalendarCheck, ChevronRight, ClipboardCheck, Dumbbell, MessageCircle, Salad, Target, TrendingUp } from '@/lib/icons';
+import { CalendarCheck, ClipboardCheck, Dumbbell, MessageCircle, Salad, Target, TrendingUp } from '@/lib/icons';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
-import { radii, fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // What personal training gives a member: an icon, a short title and one short line each.
 const BENEFITS = [
@@ -35,7 +33,6 @@ export default function PersonalTraining() {
   const insets = useSafeAreaInsets();
   const { d } = useDomain();
   const { state } = useStore();
-  const cs = coachStore.use();
   const isPT = state.sc.member === 'PT member';
   const g = useGoalV2();
   useGymScenarios('Gym · Personal training');
@@ -43,7 +40,7 @@ export default function PersonalTraining() {
   const stats = [
     { n: PT_STATS.inPT, l: 'members in PT' },
     { n: PT_STATS.reachedGoal, l: 'reached a goal' },
-    { n: PT_TOTAL, l: 'sessions in a package' },
+    { n: PT_TOTAL, l: 'sessions' },
   ];
 
   // The page has its own big heading, so the header bar carries no title.
@@ -53,10 +50,11 @@ export default function PersonalTraining() {
       fallback="/gym"
       // A soft tint from the top of the screen that fades into the page and scrolls away with the content.
       backdrop={<LinearGradient pointerEvents="none" colors={[c.accentSoft, c.bg]} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 380 }} />}
-      // The button stays at the bottom while the page scrolls.
+      // The one button floats over the page near the bottom and stays there while the page scrolls.
       footer={(
-        <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 16) + 6, backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>
-          <Button label="Talk to Coach Vikram" icon={<PersonAvatar who="coach" size={26} />} onPress={() => router.push('/gym/chat')} />
+        <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
+          <Button label="Talk to Coach Vikram" icon={<PersonAvatar who="coach" size={26} />} onPress={() => router.push('/gym/chat')}
+            style={{ shadowColor: fixed.black, shadowOpacity: 0.28, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: 10 }} />
         </View>
       )}>
       {/* The icon first, then the big heading. No sub heading. */}
@@ -77,23 +75,6 @@ export default function PersonalTraining() {
         </Row>
       </View>
 
-      {/* The coach. Tapping opens his page. */}
-      <Pressy accessibilityRole="button" accessibilityLabel="Coach Vikram. View profile" onPress={() => router.push('/coach')} scaleTo={0.98}>
-        <Card style={{ gap: 10 }}>
-          <Row style={{ gap: 14 }}>
-            <PersonAvatar who="coach" size={56} />
-            <View style={{ flex: 1 }}>
-              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>Coach Vikram</Txt>
-              <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Your trainer at Wulf Fitness</Txt>
-            </View>
-            <ChevronRight size={18} color={c.muted} />
-          </Row>
-          {cs.away
-            ? <Tag label="Away until Mon 10:00 am" bg={c.warnSoft} fg={c.warn} style={{ alignSelf: 'flex-start' }} />
-            : <Tag label={isPT ? 'Replies within the hour' : 'Usually replies in a few hours'} bg={c.goodSoft} fg={c.good} style={{ alignSelf: 'flex-start' }} />}
-        </Card>
-      </Pressy>
-
       {isPT && <ListCard rows={[{ l: 'Sessions left', v: `${d.ptLeft} of ${PT_TOTAL}` }, { l: 'Next session', v: 'Thu 25, 6 pm' }, { l: 'Package renews', v: '30 Oct' }]} />}
 
       <Txt v="label" style={{ paddingHorizontal: 4 }}>FOR YOU</Txt>
@@ -108,6 +89,7 @@ export default function PersonalTraining() {
             icon={<Icon size={18} strokeWidth={1.9} color={c.ink} />} />
         ))}
       </CardList>
+      <View style={{ height: 64 }} />
     </SubPage>
   );
 }
