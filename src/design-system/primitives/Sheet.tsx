@@ -15,6 +15,8 @@ export type SheetProps = {
   label?: string;
   /** A colour that bleeds in from the top right corner as a soft radial glow. */
   glow?: string;
+  /** The content does not scroll (a drawing pad). Use only for content that always fits. */
+  fixed?: boolean;
   onClosed: () => void;
   /** The sheet hands its animated close function to this callback so the host can close it. */
   registerClose: (fn: (after?: () => void) => void) => void;
@@ -48,7 +50,7 @@ function useKeyboardHeight() {
 }
 
 /** The bottom sheet: springs in, drags down to close, lifts above the keyboard. Open it with `useOverlay().openSheet`. */
-export function Sheet({ children, label, glow, onClosed, registerClose }: SheetProps) {
+export function Sheet({ children, label, glow, fixed, onClosed, registerClose }: SheetProps) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const kb = useKeyboardHeight();
@@ -109,9 +111,15 @@ export function Sheet({ children, label, glow, onClosed, registerClose }: SheetP
             <View style={{ width: 40, height: 5, borderRadius: radii.xs, backgroundColor: c.line }} />
           </View>
         </GestureDetector>
-        <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 8, gap: 12 }} keyboardShouldPersistTaps="handled">
-          <FooterCtx.Provider value={setFooter}>{children}</FooterCtx.Provider>
-        </ScrollView>
+        {fixed ? (
+          <View style={{ paddingHorizontal: 20, paddingBottom: 8, gap: 12 }}>
+            <FooterCtx.Provider value={setFooter}>{children}</FooterCtx.Provider>
+          </View>
+        ) : (
+          <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 8, gap: 12 }} keyboardShouldPersistTaps="handled">
+            <FooterCtx.Provider value={setFooter}>{children}</FooterCtx.Provider>
+          </ScrollView>
+        )}
         {footer ? <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>{footer}</View> : null}
       </Animated.View>
     </View>

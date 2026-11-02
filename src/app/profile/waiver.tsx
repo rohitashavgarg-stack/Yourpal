@@ -65,7 +65,7 @@ export default function Waiver() {
     <SubPage title="Waiver" variant="progress" fallback="/profile"
       footer={(
         <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
-          <Button kind="accent" label="Sign" icon={<PenLine size={18} color={c.accentInk} />} disabled={!agree} onPress={() => openSheet(<SignSheet />, { label: 'Sign here' })}
+          <Button kind="accent" label="Sign" icon={<PenLine size={18} color={c.accentInk} />} disabled={!agree} onPress={() => openSheet(<SignSheet />, { label: 'Sign here', fixed: true })}
             style={{ shadowColor: fixed.black, shadowOpacity: 0.28, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: 10 }} />
         </View>
       )}>
