@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { ArrowRightLeft, ChevronRight, MessageCircle, Play, Plus, Search, SkipForward } from '@/lib/icons';
+import { ArrowRightLeft, ChevronRight, MessageCircle, Play, Search, SkipForward } from '@/lib/icons';
 import { router } from 'expo-router';
 import { Button, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
@@ -17,7 +17,7 @@ import { radii, fontSizes } from '@/design-system/tokens';
 export type WkApi = {
   openSwap: () => void; openSetMenu: (i: number) => void; openNote: (i: number) => void; skipSet: (i: number) => void;
   copyToAll: () => void; askCoach: () => void; formTips: () => void; skipExercise: () => void; finishNow: () => void; toggleWarm: (i: number) => void;
-  currentSet: () => number; swapTo: (name: string, plan: boolean) => void; openAdd: () => void;
+  currentSet: () => number; swapTo: (name: string, plan: boolean) => void;
 };
 type ApiRef = React.MutableRefObject<WkApi>;
 
@@ -43,7 +43,6 @@ export function WkMenuSheet({ api }: { api: ApiRef }) {
         <MenuRow icon={ArrowRightLeft} t="Swap exercise" s="Pick an alternative for today or for your plan" onPress={() => api.current.openSwap()} />
         <MenuRow icon={MessageCircle} t="Ask Coach Vikram" s="Opens chat with this exercise attached" onPress={() => api.current.askCoach()} />
         <MenuRow icon={Play} t="Form tips & video" s={`Cues for ${e.name}`} onPress={() => api.current.formTips()} />
-        <MenuRow icon={Plus} t="Add exercise" s="Adds to the end of today's workout" onPress={() => api.current.openAdd()} />
         <MenuRow icon={SkipForward} t="Skip this exercise" s="Remaining sets are marked skipped" onPress={() => api.current.skipExercise()} last />
       </View>
     </>

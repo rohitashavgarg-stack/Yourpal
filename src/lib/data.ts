@@ -91,7 +91,7 @@ export const FOOD_DB: Record<string, FoodInfo> = {
 // ---------- Workouts ----------
 export type Mode = 'rw' | 'r' | 't' | 'tw'; // reps+weight, reps, time, time+weight
 export type SetT = { r: number; k: number; t: number; w: boolean; st: 'todo' | 'done' | 'skipped'; dr?: number; dk?: number; dt?: number; note?: string };
-export type Ex = { id: string; name: string; mode: Mode; step: number; last?: string; alts: { n: string; s: string }[]; cue: string; muscles: string; sets: SetT[]; swapped?: boolean; added?: boolean /* added by the member during the workout */ };
+export type Ex = { id: string; name: string; mode: Mode; step: number; last?: string; alts: { n: string; s: string }[]; cue: string; muscles: string; sets: SetT[]; swapped?: boolean };
 export type ListItem = { id: string; n: string; sub: string; t?: number };
 
 const S = (r: number, k: number, t = 0, w = false): SetT => ({ r, k, t, w, st: 'todo' });
