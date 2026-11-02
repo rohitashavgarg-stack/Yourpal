@@ -142,8 +142,8 @@ function AssessCard() {
           })}
         </View>
       </Row>
-      {/* the last assessment as a small card of its own: its name and date, and a few of its numbers with the change since the one before */}
-      <View style={{ gap: 12, padding: 12, borderRadius: radii.lg, backgroundColor: c.surface2 }}>
+      {/* the last assessment, straight on the card: its name and date, and a few of its numbers with the change since the one before */}
+      <View style={{ gap: 12 }}>
         <Row style={{ gap: 12 }}>
           <IconBadge size={40} radius={radii.md} bg={c.tNutri}><ClipboardCheck size={20} strokeWidth={1.9} color={c.cNutri} /></IconBadge>
           <View style={{ flex: 1, gap: 1 }}>
@@ -155,7 +155,7 @@ function AssessCard() {
         {stats.length > 0 && (
           <Row style={{ gap: 8 }}>
             {stats.map((r) => (
-              <View key={r.k} style={{ flex: 1, borderRadius: radii.md, backgroundColor: c.surface, paddingVertical: 8, paddingHorizontal: 10, gap: 1 }}>
+              <View key={r.k} style={{ flex: 1, borderRadius: radii.md, backgroundColor: c.surface2, paddingVertical: 8, paddingHorizontal: 10, gap: 1 }}>
                 <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{r.n.label}</Txt>
                 <Txt style={{ fontFamily: font.semibold }}>{`${r.now} ${r.n.unit}`}</Txt>
                 {r.prev != null && <Txt style={{ fontSize: fontSizes.sm, color: r.good ? c.good : c.muted }}>{r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`}</Txt>}
@@ -164,8 +164,8 @@ function AssessCard() {
           </Row>
         )}
       </View>
-      {/* the upcoming assessment, with its date as a little calendar tile (amber when it is due) */}
-      <Row style={{ gap: 12, paddingHorizontal: 4 }}>
+      {/* the upcoming assessment in a container of its own, with its date as a little calendar tile (amber when it is due) */}
+      <Row style={{ gap: 12, padding: 12, borderRadius: radii.lg, backgroundColor: c.surface2 }}>
         <View style={{ width: 48, height: 52, borderRadius: radii.md, backgroundColor: due ? c.warnSoft : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 24, color: due ? c.warn : c.accentText }}>{String(new Date(nextAt).getDate())}</Txt>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 16, color: due ? c.warn : c.accentText }}>{new Date(nextAt).toLocaleString('en-US', { month: 'short' }).toUpperCase()}</Txt>
