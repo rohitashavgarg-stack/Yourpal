@@ -17,7 +17,7 @@ import { CardTitle, cardShadow, GrowBar, PCard } from '@/features/progress/parts
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { useMemberships } from '@/features/gym/memberships';
 import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
-import { fmtAt, headlineOf } from '@/features/selfassess/data';
+import { NumKey, compare, fmtAt, headlineOf } from '@/features/selfassess/data';
 import { TimeBar } from '@/app/gym/membership';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
@@ -111,36 +111,36 @@ function AttendanceCard({ awaiting }: { awaiting: boolean }) {
   );
 }
 
-// The Assessments card, laid out like the Attendance card: a big result on the left and one small picture on the right.
-// The picture is a ring that fills as the next assessment gets closer, with the days left inside it.
+// The Assessments card shows the last assessment: how it went, and the numbers that matter with their change since the one before.
+// When the next one is due it says so and has the Start button; until then it only says when the next one is.
 function AssessCard() {
   const { c } = useTheme();
-  const { entries, nextAt, daysLeft, due } = useSelfAssess();
+  const { entries, nextAt, due } = useSelfAssess();
   const last = entries[0];
   const h = headlineOf(last, entries[1]);
-  const gapDays = Math.max(1, Math.round((nextAt - Date.parse(last.at)) / 86400000));
-  const pct = due ? 1 : Math.max(0, Math.min(1, 1 - daysLeft / gapDays));
-  const R = 26, C2 = 2 * Math.PI * R;
-  const col = due ? c.warn : c.accent;
+  const rows = compare(last, entries[1]);
+  const stats = (['weight', 'waist', 'pulse', 'bench', 'sleep'] as NumKey[]).map((k) => rows.find((r) => r.k === k)).filter((r) => !!r).slice(0, 3) as ReturnType<typeof compare>;
   return (
-    <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${h.text}. ${due ? 'Your next assessment is due' : `Next in ${daysLeft} days`}`} style={{ gap: 10 }}>
-      <CardTitle title="Assessments" right={due ? <Tag label="Due now" bg={c.warnSoft} fg={c.warn} /> : undefined} />
-      <Row style={{ justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-        <View style={{ flex: 1, minWidth: 0 }}>
-          <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, color: h.good ? c.good : c.ink }}>{h.text}</Txt>
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`Assessment ${entries.length}, ${fmtAt(last.at)}`}</Txt>
-        </View>
-        <View importantForAccessibility="no-hide-descendants" style={{ width: 64, height: 64, alignItems: 'center', justifyContent: 'center' }}>
-          <Svg width={64} height={64} viewBox="0 0 64 64" style={{ position: 'absolute' }}>
-            <Circle cx={32} cy={32} r={R} stroke={c.surface3} strokeWidth={6} fill="none" />
-            <Circle cx={32} cy={32} r={R} stroke={col} strokeWidth={6} fill="none" strokeLinecap="round" strokeDasharray={`${C2 * pct} ${C2}`} rotation={-90} origin="32, 32" />
-          </Svg>
-          <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.lg, color: due ? c.warn : c.ink }}>{due ? '!' : String(Math.max(0, daysLeft))}</Txt>
-        </View>
-      </Row>
+    <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. Assessment ${entries.length}. ${h.text}`} style={{ gap: 12 }}>
+      <CardTitle title="Assessments" right={due ? <Tag label="Due now" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>View ›</Txt>} />
+      <View>
+        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, color: h.good ? c.good : c.ink }}>{h.text}</Txt>
+        <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`Assessment ${entries.length}, ${fmtAt(last.at)}`}</Txt>
+      </View>
+      {stats.length > 0 && (
+        <Row style={{ gap: 8 }}>
+          {stats.map((r) => (
+            <View key={r.k} style={{ flex: 1, borderRadius: radii.md, backgroundColor: c.surface2, paddingVertical: 10, paddingHorizontal: 12, gap: 1 }}>
+              <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{r.n.label}</Txt>
+              <Txt style={{ fontFamily: font.semibold }}>{`${r.now} ${r.n.unit}`}</Txt>
+              {r.prev != null && <Txt style={{ fontSize: fontSizes.sm, color: r.good ? c.good : c.muted }}>{r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`}</Txt>}
+            </View>
+          ))}
+        </Row>
+      )}
       {due
         ? <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />
-        : <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`Next assessment in ${daysLeft} days, ${fmtAt(new Date(nextAt).toISOString())}`}</Txt>}
+        : <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`Next assessment ${fmtAt(new Date(nextAt).toISOString())}`}</Txt>}
     </PCard>
   );
 }
