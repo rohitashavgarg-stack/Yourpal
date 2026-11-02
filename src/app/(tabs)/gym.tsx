@@ -34,6 +34,9 @@ function GymMembership() {
   const soon = active.some((m) => m.warn);
   const shown = active.slice(0, 2);
   const more = active.length - shown.length;
+  // One line under the title says it all: how many are active and what needs a look. It turns amber when something does.
+  const attention = d.onBreak || soon || active.length === 0;
+  const line = d.onBreak ? 'Paused for now' : active.length === 0 ? 'Nothing active right now' : soon ? `${active.length} active, one ends soon` : `${active.length} active, next ends on ${active[0].end}`;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`Memberships. ${active.length} active${soon ? ', one ending soon' : ''}. See all`} onPress={() => router.push('/gym/membership')} scaleTo={0.985}
       style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
@@ -41,14 +44,9 @@ function GymMembership() {
         <View style={{ width: 44, height: 44, borderRadius: radii.md, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><CreditCard size={22} color={c.accentText} /></View>
         <View style={{ flex: 1, gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>Memberships</Txt>
-          <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{active.length ? `Next one ends on ${active[0].end}` : 'Nothing active right now'}</Txt>
+          <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: attention ? c.warn : c.muted }}>{line}</Txt>
         </View>
         <ChevronRight size={18} color={c.muted} />
-      </Row>
-      <Row style={{ gap: 6, flexWrap: 'wrap' }}>
-        <Chip label={active.length ? `${active.length} active` : 'None active'} tone={active.length ? 'good' : 'warn'} />
-        {soon && <Chip label="Ending soon" tone="warn" />}
-        {d.onBreak && <Chip label="Paused" tone="warn" />}
       </Row>
       {shown.length > 0 ? (
         <Row style={{ gap: 10, alignItems: 'stretch' }}>
