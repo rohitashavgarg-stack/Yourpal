@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { Ex, SetT } from '@/lib/data';
 import { Session, useDomain } from '@/lib/domain';
 import { haptic } from '@/lib/haptics';
+import { cancelTimerEnd, scheduleTimerEnd } from '@/lib/notify';
 
 export const REST_SEC = 105;
 
@@ -24,7 +25,7 @@ export function useSessionActions() {
         const s = e.sets[i];
         e.sets[i] = { ...s, st: 'done', dr: vals ? vals.r : s.r, dk: vals ? vals.k : s.k, dt: vals ? vals.t : s.t };
         return e;
-      }, () => ({ setTimer: null, rest: { endAt: Date.now() + REST_SEC * 1000, total: REST_SEC } }));
+      }, () => { scheduleTimerEnd(Date.now() + REST_SEC * 1000, 'Rest is over. Time for your next set.'); return { setTimer: null, rest: { endAt: Date.now() + REST_SEC * 1000, total: REST_SEC } }; });
     },
     unlogSet(exIdx: number, i: number) {
       haptic.light();
@@ -48,11 +49,29 @@ export function useSessionActions() {
       haptic.medium();
       upd((s) => {
         if (!s.rest) return {};
-        const left = Math.max(0, (s.rest.endAt - Date.now()) / 1000);
-        return { rest: { endAt: Date.now() + (left + 30) * 1000, total: Math.max(s.rest.total, left + 30) } };
+        const from = s.rest.pausedAt ?? Date.now();
+        const left = Math.max(0, (s.rest.endAt - from) / 1000);
+        const endAt = from + (left + 30) * 1000;
+        if (!s.rest.pausedAt) scheduleTimerEnd(endAt, 'Rest is over. Time for your next set.');
+        return { rest: { endAt, total: Math.max(s.rest.total, left + 30), pausedAt: s.rest.pausedAt } };
       });
     },
-    skipRest() { upd(() => ({ rest: null })); },
+    // Pause keeps the time that is left; resume carries on from it.
+    pauseRest() {
+      haptic.light();
+      cancelTimerEnd();
+      upd((s) => (s.rest && !s.rest.pausedAt ? { rest: { ...s.rest, pausedAt: Date.now() } } : {}));
+    },
+    resumeRest() {
+      haptic.light();
+      upd((s) => {
+        if (!s.rest?.pausedAt) return {};
+        const endAt = s.rest.endAt + (Date.now() - s.rest.pausedAt);
+        scheduleTimerEnd(endAt, 'Rest is over. Time for your next set.');
+        return { rest: { endAt, total: s.rest.total } };
+      });
+    },
+    skipRest() { cancelTimerEnd(); upd(() => ({ rest: null })); },
     goEx(exIdx: number) { upd(() => ({ exIdx, rest: null })); },
     phase(phase: Session['phase']) { upd(() => ({ phase, itemTimer: null, rest: null, ...(phase === 'cooldown' ? { listDone: {} } : {}) })); },
   }), [upd, updEx]);

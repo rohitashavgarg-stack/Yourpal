@@ -17,7 +17,7 @@ export type Session = {
   exIdx: number;
   ex: Ex[];
   listDone: Record<string, boolean>;
-  rest: { endAt: number; total: number } | null;
+  rest: { endAt: number; total: number; pausedAt?: number } | null; // pausedAt: when the member paused it (the time left stops there)
   setTimer?: { exIdx: number; i: number; endAt: number; total: number } | null; // timed set running
   itemTimer?: { id: string; endAt: number } | null; // warm-up / cool-down timer
 };

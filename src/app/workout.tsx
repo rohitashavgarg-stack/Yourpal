@@ -21,6 +21,8 @@ import { useSessionActions } from '@/features/workout/actions';
 import { COL_LABEL, firstTodo, openSets, setLabel, stats } from '@/features/workout/session';
 import { Draft, SetRow } from '@/features/workout/SetRow';
 import { RestPanel } from '@/features/workout/RestPanel';
+import { useTimerEnd } from '@/lib/useTimerEnd';
+import { scheduleTimerEnd } from '@/lib/notify';
 import { ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { askCoach, coachStore } from '@/features/coach/coach';
 import { FinishScreen, FinishStats } from '@/features/workout/FinishScreen';
@@ -94,11 +96,12 @@ export default function Workout() {
     setDraftS({ k: x.k, r: x.r, t: x.t });
   }, [s?.exIdx, activeIdx, e?.id]);
 
+  const cue = useTimerEnd();
   // Timers: timed set auto-logs at zero; warm-up / cool-down items tick themselves off.
   useEffect(() => {
     if (!s) return;
-    if (s.setTimer && now >= s.setTimer.endAt) { haptic.success(); logSet(s.setTimer.i, { r: 0, k: draft.k, t: s.setTimer.total }); }
-    if (s.itemTimer && now >= s.itemTimer.endAt) { haptic.success(); A.upd((x) => ({ listDone: { ...x.listDone, [x.itemTimer!.id]: true }, itemTimer: null })); }
+    if (s.setTimer && now >= s.setTimer.endAt) { cue(); logSet(s.setTimer.i, { r: 0, k: draft.k, t: s.setTimer.total }); }
+    if (s.itemTimer && now >= s.itemTimer.endAt) { cue(); A.upd((x) => ({ listDone: { ...x.listDone, [x.itemTimer!.id]: true }, itemTimer: null })); }
   }, [now]);
 
   const finishNow = () => {
@@ -207,7 +210,7 @@ export default function Workout() {
             onMenu={() => api.current.openSetMenu(i)}
             onTimer={() => {
               if (timing) { const el = Math.max(1, Math.round((Date.now() - (s.setTimer!.endAt - s.setTimer!.total * 1000)) / 1000)); logSet(i, { r: 0, k: draft.k, t: el }); }
-              else { haptic.medium(); A.upd((xs) => ({ setTimer: { exIdx: xs.exIdx, i, endAt: Date.now() + draft.t * 1000, total: draft.t } })); }
+              else { haptic.medium(); scheduleTimerEnd(Date.now() + draft.t * 1000, 'Your timed set is done.'); A.upd((xs) => ({ setTimer: { exIdx: xs.exIdx, i, endAt: Date.now() + draft.t * 1000, total: draft.t } })); }
             }} />
         );
       })}
