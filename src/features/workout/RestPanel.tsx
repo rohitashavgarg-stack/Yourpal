@@ -9,6 +9,7 @@ import { Button, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
+import { playTimerEnd } from '@/lib/timerSound';
 import { mmss } from '@/lib/useNow';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
@@ -41,6 +42,7 @@ export function RestPanel({ rest, now, onAdd30, onSkip, onDone, docked }: { rest
   useEffect(() => {
     if (!finished) return;
     haptic.success();
+    playTimerEnd(); // the two-beep buzzer
     beat.value = withSequence(withTiming(0.85, { duration: 1 }), withSpring(1, { damping: 6, stiffness: 260 }));
     doneT.current = setTimeout(onDone, 1500);
     return () => clearTimeout(doneT.current);
