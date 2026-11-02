@@ -3,7 +3,7 @@ import { HEALTH_NAME } from '@/lib/health';
 import { Image, RefreshControl, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronRight, Flame, Lock } from '@/lib/icons';
+import { ChevronRight, Flame, Lock, MoreHorizontal } from '@/lib/icons';
 import { useLook } from '@/features/progress/look';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -24,7 +24,8 @@ import { FLAME } from '@/features/streak/StreakChip';
 import { useStreak } from '@/features/streak/useStreak';
 import { showProgressLoading, useProgressScenarios } from '@/features/progress/scenarios';
 import { GoalCard2 } from '@/features/goalv2/GoalCard2';
-import { ReportRow } from '@/features/reports/ReportRow';
+import { ProgressMenuSheet } from '@/features/reports/ProgressMenuSheet';
+import { IconButton } from '@/design-system/primitives/Button';
 import { GoalTickCard } from '@/features/today/GoalTickCard';
 import { goalV2Store } from '@/features/goalv2/model';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
@@ -191,6 +192,7 @@ export default function ProgressScreen() {
   const { d } = useDomain();
   const ps = progressStore.use();
   const insets = useSafeAreaInsets();
+  const { openSheet } = useOverlay();
   const v2 = goalV2Store.use().version === 'Version 2';
   const [bar, setBar] = useState({ y: 0, h: 0 });
   useEffect(() => { if (firstLoad) { firstLoad = false; showProgressLoading(1000); } }, []);
@@ -203,12 +205,15 @@ export default function ProgressScreen() {
   const cards = order.filter((k) => !hidden.includes(k));
 
   return (
-    <TabScreen title="Progress" header={<GymHeader />} compactTitle={false} pinned={v2 ? <RangeBarSlim /> : undefined} pinAfter={v2 && bar.h > 0 && !ps.loading ? bar.y + bar.h - (insets.top + 8 + 56) : undefined}
+    <TabScreen title="Progress" header={<GymHeader />} compactTitle={false} titleRight={(
+      <IconButton label="Progress menu" onPress={() => openSheet(<ProgressMenuSheet />, { label: 'Progress menu' })} size={52} radius={radii.xl} bg={c.surface} borderWidth={1} borderColor={c.line}>
+        <MoreHorizontal size={22} color={c.ink} />
+      </IconButton>
+    )} pinned={v2 ? <RangeBarSlim /> : undefined} pinAfter={v2 && bar.h > 0 && !ps.loading ? bar.y + bar.h - (insets.top + 8 + 56) : undefined}
       refreshControl={<RefreshControl refreshing={ps.refreshing} tintColor={c.accentText} onRefresh={() => { progressStore.set({ refreshing: true }); showProgressLoading(900); }} />}>
       {v2 && !ps.loading && <FadeIn><GoalCard2 size="expanded" /></FadeIn>}
       {v2 && ps.loading && <Skeleton h={190} />}
       <View onLayout={(e) => setBar({ y: e.nativeEvent.layout.y, h: e.nativeEvent.layout.height })}><RangeBar /></View>
-      {!ps.loading && <ReportRow />}
       {!v2 && (ps.loading ? <Skeleton h={150} /> : <FadeIn><GoalTickCard /></FadeIn>)}
       {ps.loading ? (
         <>

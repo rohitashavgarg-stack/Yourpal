@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { Button, Field, Pill, Row, Txt } from '@/components/ui';
+import { useStore } from '@/lib/store';
+import { downloadDietPlan, downloadWorkoutPlan } from '@/features/reports/planPdf';
 import { FoodMark } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
 import { basePlans, LIBRARY, MealId, SWAPS } from '@/lib/data';
@@ -27,7 +29,9 @@ export function PlanMenuSheet() {
   const { p } = usePlans();
   const { closeSheet, openSheet, toast } = useOverlay();
   const plan = dayPlan(d, p, p.day);
+  const { state } = useStore();
   const go = (fn: () => void) => closeSheet(fn);
+  const pdf = () => go(() => { downloadWorkoutPlan(d, p, state.profile.name || 'Member').catch(() => toast('Could not make the PDF. Try again')); });
   return (
     <>
       <BigTitle>{plan ? plan.name : 'Rest day'}</BigTitle>
@@ -37,7 +41,8 @@ export function PlanMenuSheet() {
         <ListRow label="Ask Coach to change the plan" onPress={() => go(() => router.push({ pathname: '/plans/ask', params: { kind: 'workout' } }))} />
         <ListRow label="Reset to Coach's version" onPress={() => openSheet(<ResetSheet kind="workout" />, { label: 'Reset plan' })} />
         <ListRow label="Exercise library" onPress={() => openSheet(<LibrarySheet mode="browse" />, { label: 'Exercise library' })} />
-        <ListRow label="Workout history" last onPress={() => go(() => router.push('/plans/history'))} />
+        <ListRow label="Workout history" onPress={() => go(() => router.push('/plans/history'))} />
+        <ListRow label="Download plan as PDF" chevron={false} last onPress={pdf} />
       </View>
     </>
   );
@@ -47,14 +52,17 @@ export function PlanMenuSheet() {
 export function DietMenuSheet() {
   const { d } = useDomain();
   const { p } = usePlans();
-  const { closeSheet, openSheet } = useOverlay();
+  const { closeSheet, openSheet, toast } = useOverlay();
+  const { state } = useStore();
+  const pdf = () => closeSheet(() => { downloadDietPlan(d, p, state.profile.name || 'Member').catch(() => toast('Could not make the PDF. Try again')); });
   return (
     <>
       <BigTitle>Diet plan</BigTitle>
       <View>
         {ALLOW_DIET_EDIT && <ListRow label="Edit diet plan" onPress={() => closeSheet(() => startDietEdit(d))} />}
         <ListRow label="Ask for a diet change" onPress={() => closeSheet(() => router.push({ pathname: '/plans/ask', params: { kind: 'diet' } }))} />
-        <ListRow label="Reset to Coach's version" last onPress={() => openSheet(<ResetSheet kind="diet" />, { label: 'Reset plan' })} />
+        <ListRow label="Reset to Coach's version" onPress={() => openSheet(<ResetSheet kind="diet" />, { label: 'Reset plan' })} />
+        <ListRow label="Download plan as PDF" chevron={false} last onPress={pdf} />
       </View>
       <Txt v="label">Detail level</Txt>
       <Row style={{ gap: 8 }}>

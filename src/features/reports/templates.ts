@@ -81,3 +81,49 @@ export function reportHtml(r: ReportData) {
     <div class="foot">Made on ${esc(r.made)} from the data in your YourPal app.</div>
   `);
 }
+
+export type WorkoutPlanData = {
+  member: string; gym: string; made: string;
+  days: { day: string; name: string; time?: string; warm: string[]; ex: { n: string; line: string }[]; cool: string[] }[];
+};
+
+export function workoutPlanHtml(w: WorkoutPlanData) {
+  const days = w.days.map((d) => `
+    <h2>${esc(d.day)}</h2>
+    <div><b>${esc(d.name)}</b>${d.time ? ` <span class="muted">at ${esc(d.time)}</span>` : ''}</div>
+    ${d.ex.length ? `<table>${d.ex.map((e) => `<tr><td>${esc(e.n)}</td><td class="r">${esc(e.line)}</td></tr>`).join('')}</table>` : '<div class="muted">Rest day</div>'}
+    ${d.warm.length ? `<div class="muted" style="margin-top:6px">Warm-up: ${esc(d.warm.join(', '))}</div>` : ''}
+    ${d.cool.length ? `<div class="muted">Cool-down: ${esc(d.cool.join(', '))}</div>` : ''}
+  `).join('');
+  return page(`
+    <div class="top">
+      <div><div class="brand">${esc(w.gym)}</div><div class="muted">Workout plan</div></div>
+      <div style="text-align:right"><h1>${esc(w.member)}</h1><div class="muted">From Coach Vikram</div></div>
+    </div>
+    ${days}
+    <div class="foot">Made on ${esc(w.made)} from the plan in your YourPal app.</div>
+  `);
+}
+
+export type DietPlanData = {
+  member: string; gym: string; made: string; diet: string;
+  meals: { n: string; time: string; items: { n: string; kcal: number; macros: string }[] }[];
+  totalKcal: number;
+};
+
+export function dietPlanHtml(p: DietPlanData) {
+  const meals = p.meals.map((m) => `
+    <h2>${esc(m.n)} <span style="text-transform:none;letter-spacing:0">at ${esc(m.time)}</span></h2>
+    <table>${m.items.map((i) => `<tr><td>${esc(i.n)}<div class="muted" style="font-size:12px">${esc(i.macros)}</div></td><td class="r">${i.kcal} kcal</td></tr>`).join('')}</table>
+  `).join('');
+  return page(`
+    <div class="top">
+      <div><div class="brand">${esc(p.gym)}</div><div class="muted">Diet plan</div></div>
+      <div style="text-align:right"><h1>${esc(p.member)}</h1><div class="muted">${esc(p.diet)}</div></div>
+    </div>
+    ${meals}
+    <h2>Total</h2>
+    <table><tr class="total"><td>For the day</td><td class="r">${p.totalKcal} kcal</td></tr></table>
+    <div class="foot">Made on ${esc(p.made)} from the plan in your YourPal app.</div>
+  `);
+}
