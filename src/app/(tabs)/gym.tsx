@@ -115,7 +115,7 @@ function AttendanceCard({ awaiting }: { awaiting: boolean }) {
 // Then, quieter: the last assessment and its date. Quietest: the next assessment (or a Start button when it is due).
 function AssessCard() {
   const { c } = useTheme();
-  const { entries, nextAt, due } = useSelfAssess();
+  const { entries, nextAt, daysLeft, due } = useSelfAssess();
   const total = entries.length;
   const last = entries[0];
   const shown = Math.min(total, 5); // the trail shows the latest five
@@ -163,9 +163,19 @@ function AssessCard() {
           </Row>
         )}
       </View>
-      {due
-        ? <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />
-        : <Txt style={{ fontSize: fontSizes.sm, color: c.muted }}>{`Next assessment ${fmtAt(new Date(nextAt).toISOString())}`}</Txt>}
+      {/* the upcoming assessment, with its date as a little calendar tile (amber when it is due) */}
+      <Row style={{ gap: 12, paddingHorizontal: 4 }}>
+        <View style={{ width: 48, height: 52, borderRadius: radii.md, backgroundColor: due ? c.warnSoft : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}>
+          <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 24, color: due ? c.warn : c.accentText }}>{String(new Date(nextAt).getDate())}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 16, color: due ? c.warn : c.accentText }}>{new Date(nextAt).toLocaleString('en-US', { month: 'short' }).toUpperCase()}</Txt>
+        </View>
+        <View style={{ flex: 1, gap: 1 }}>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Upcoming</Txt>
+          <Txt style={{ fontFamily: font.semibold }}>{`Assessment ${total + 1}`}</Txt>
+          <Txt style={{ fontSize: fontSizes.sm, color: due ? c.warn : c.muted }}>{daysLeft <= 0 ? 'Due now' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`}</Txt>
+        </View>
+      </Row>
+      {due && <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />}
     </PCard>
   );
 }
