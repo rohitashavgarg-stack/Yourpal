@@ -70,9 +70,9 @@ export function SleepDial({ bed, wake, onChange }: { bed: number; wake: number; 
         {/* the icons sit on the two handles */}
         <View pointerEvents="none" style={{ position: 'absolute', left: a.x - 19, top: a.y - 19, width: 38, height: 38, alignItems: 'center', justifyContent: 'center' }}><Moon size={19} color={c.bg} /></View>
         <View pointerEvents="none" style={{ position: 'absolute', left: b.x - 19, top: b.y - 19, width: 38, height: 38, alignItems: 'center', justifyContent: 'center' }}><Sun size={19} color={c.bg} /></View>
-        {marks.map((k) => { const p = at(k.m, R - 52); return <Txt key={k.t} pointerEvents="none" style={{ position: 'absolute', left: p.x - 24, top: p.y - 9, width: 48, textAlign: 'center', fontSize: fontSizes.sm, lineHeight: 18, color: c.muted }}>{k.t}</Txt>; })}
+        {marks.map((k) => { const p = at(k.m, R - 46); return <View key={k.t} pointerEvents="none" style={{ position: 'absolute', left: p.x - 20, top: p.y - 9, width: 40, alignItems: 'center' }}><Txt style={{ fontSize: fontSizes.sm, lineHeight: 18, color: c.muted }}>{k.t}</Txt></View>; })}
         <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.displayBold, fontSize: 34, lineHeight: 42, letterSpacing: -0.8 }}>{`${hours}h ${mins}m`}</Txt>
+          <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.displayBold, fontSize: 26, lineHeight: 32, letterSpacing: -0.6 }}>{`${hours}h ${mins}m`}</Txt>
           <Txt muted style={{ fontSize: fontSizes.sm }}>Sleep duration</Txt>
         </View>
       </View>

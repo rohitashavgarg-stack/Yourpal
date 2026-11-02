@@ -2,7 +2,7 @@
 // keeping the ones a member can do alone. Left out: the client's gender (the profile has it), the body composition report upload
 // and the treadmill test (they need the gym's machines). The coach can enter the same form from his own app.
 
-export type NumKey = 'height' | 'weight' | 'chest' | 'waist' | 'hip' | 'arms' | 'legs' | 'calves' | 'sleep' | 'bench' | 'legpress' | 'breath' | 'sys' | 'dia' | 'pulse' | 'sugar';
+export type NumKey = 'height' | 'weight' | 'chest' | 'waist' | 'hip' | 'arms' | 'legs' | 'calves' | 'sleep' | 'fat' | 'bench' | 'legpress' | 'breath' | 'sys' | 'dia' | 'pulse' | 'sugar';
 export type SelfEntry = { id: string; at: string; by: 'member' | 'coach'; answers: Record<string, string>; tests: Partial<Record<NumKey, number>> };
 
 // dir: which way is better (none: it is just a size, so there is no better or worse)
@@ -15,6 +15,7 @@ export const NUMS: Record<NumKey, { label: string; unit: string; dir: 'down' | '
   arms: { label: 'Arms', unit: 'cm', dir: 'none', dp: 0 },
   legs: { label: 'Legs', unit: 'cm', dir: 'none', dp: 0 },
   calves: { label: 'Calves', unit: 'cm', dir: 'none', dp: 0 },
+  fat: { label: 'Body fat', unit: '%', dir: 'down', dp: 0 },
   sleep: { label: 'Sleep', unit: 'h', dir: 'up', dp: 1 },
   bench: { label: 'Bench press', unit: 'kg', dir: 'up', dp: 0 },
   legpress: { label: 'Leg press', unit: 'kg', dir: 'up', dp: 0 },
@@ -31,10 +32,14 @@ export type Step =
   | { id: string; kind: 'height'; title: string; sub?: string }
   | { id: string; kind: 'weight'; title: string; sub?: string }
   | { id: string; kind: 'body'; title: string; sub?: string }
-  | { id: string; kind: 'ruler'; title: string; sub?: string; k: NumKey; min: number; max: number; step: number; dp: number; major: number; start: number; how?: string[] }
+  | { id: string; kind: 'ruler'; title: string; sub?: string; k: NumKey; min: number; max: number; step: number; dp: number; major: number; start: number; how?: string[]; side?: boolean }
   | { id: string; kind: 'sleep'; title: string; sub?: string }
+  | { id: string; kind: 'fat'; title: string; sub?: string }
+  | { id: string; kind: 'water'; title: string; sub?: string }
+  | { id: string; kind: 'bp'; title: string; sub?: string }
+  | { id: string; kind: 'stepper'; title: string; sub?: string; k: NumKey; start: number; step: number; min: number; max: number; jumps: number[]; how?: string[] }
   | { id: string; kind: 'timer'; title: string; sub?: string; k: NumKey; how?: string[] }
-  | { id: string; kind: 'choice'; title: string; sub?: string; key: string; options: Opt[]; how?: string[]; cards?: boolean }
+  | { id: string; kind: 'choice'; title: string; sub?: string; key: string; options: Opt[]; how?: string[]; cards?: boolean; variant?: 'freq' | 'water' | 'levels' | 'flex' }
   | { id: string; kind: 'injuries'; title: string; sub: string }
   | { id: string; kind: 'next'; title: string; sub: string };
 
@@ -52,20 +57,18 @@ export const STEPS: Step[] = [
   { id: 'height', kind: 'height', title: 'Choose height' },
   { id: 'weight', kind: 'weight', title: 'Choose weight' },
   { id: 'body', kind: 'body', title: 'Body Measurements', sub: 'Track body metrics for accurate assessment' },
-  { id: 'fat', kind: 'choice', title: 'Body fat %?', sub: 'Pick the range that looks most like you.', key: 'fat', options: ['3-5 %', '6-9 %', '10-12 %', '13-17 %', '17-22 %', '23-27 %', '28-32 %', '33-37 %', 'Not sure'].map((v) => ({ v })) },
+  { id: 'fat', kind: 'fat', title: 'Body fat %?', sub: 'Set the number, or pick the range that looks most like you.' },
   { id: 'sleep', kind: 'sleep', title: 'Sleep duration', sub: 'To provide you with the best results, tell us how long you sleep at night.' },
   { id: 'activity', kind: 'choice', cards: true, title: 'Activity Level', key: 'activity', options: [{ v: 'Not active', icon: 'armchair' }, { v: 'Lightly active', icon: 'footprints' }, { v: 'Moderately active', icon: 'person' }, { v: 'Somewhat athletic', icon: 'activity' }, { v: 'Very athletic', icon: 'dumbbell' }] },
-  { id: 'freq', kind: 'choice', title: 'Workout Frequency per week', key: 'freq', options: [{ v: '1', sub: 'Day per week' }, { v: '2', sub: 'Days per week' }, { v: '3', sub: 'Days per week' }, { v: '4', sub: 'Days per week' }, { v: '5', sub: 'Days per week' }, { v: "I don't workout" }] },
-  { id: 'water', kind: 'choice', title: 'How much water do you drink in a day?', key: 'water', options: ['More than 4 l', '3-4 l', '1-2 l', 'Less than 1 l'].map((v) => ({ v })) },
-  { id: 'level', kind: 'choice', title: 'Training Level', key: 'level', options: [{ v: 'Beginner', sub: 'New to fitness training' }, { v: 'Intermediate', sub: 'Workout regularly' }, { v: 'Advanced', sub: 'Seasoned athlete seeking new challenges' }] },
-  { id: 'bench', kind: 'ruler', title: 'Bench Press Test', sub: 'Measure upper body strength. The most weight you lifted.', k: 'bench', min: 0, max: 200, step: 2.5, dp: 1, major: 4, start: 40, how: BENCH },
-  { id: 'legpress', kind: 'ruler', title: 'Leg Press Test', sub: 'Measure lower body strength. The most weight you pressed.', k: 'legpress', min: 0, max: 400, step: 5, dp: 0, major: 4, start: 100, how: LEG },
-  { id: 'flex', kind: 'choice', title: 'Flexibility Test', sub: 'Sit & Reach Flexibility Test helps to find the flexibility', key: 'flex', options: ['Poor', 'Moderate', 'Good', 'Very Good', 'Excellent'].map((v) => ({ v })), how: ['Sit with legs straight and feet against the box.', 'Start when you are ready.', 'Reach forward as far as you can and hold for 2 seconds.', 'Note how far you reached, then pick the closest picture.'] },
+  { id: 'freq', kind: 'choice', variant: 'freq', title: 'Workout Frequency per week', key: 'freq', options: [{ v: '1', sub: 'Day per week' }, { v: '2', sub: 'Days per week' }, { v: '3', sub: 'Days per week' }, { v: '4', sub: 'Days per week' }, { v: '5', sub: 'Days per week' }, { v: "I don't workout" }] },
+  { id: 'water', kind: 'water', title: 'How much water do you drink in a day?' },
+  { id: 'level', kind: 'choice', variant: 'levels', title: 'Training Level', key: 'level', options: [{ v: 'Beginner', sub: 'New to fitness training' }, { v: 'Intermediate', sub: 'Workout regularly' }, { v: 'Advanced', sub: 'Seasoned athlete seeking new challenges' }] },
+  { id: 'bench', kind: 'stepper', title: 'Bench Press Test', sub: 'Measure upper body strength. The most weight you lifted.', k: 'bench', start: 40, step: 2.5, min: 0, max: 300, jumps: [-10, -5, 5, 10], how: BENCH },
+  { id: 'legpress', kind: 'ruler', side: true, title: 'Leg Press Test', sub: 'Measure lower body strength. The most weight you pressed.', k: 'legpress', min: 0, max: 400, step: 5, dp: 0, major: 4, start: 100, how: LEG },
+  { id: 'flex', kind: 'choice', variant: 'flex', title: 'Flexibility Test', sub: 'Sit & Reach Flexibility Test helps to find the flexibility', key: 'flex', options: ['Poor', 'Moderate', 'Good', 'Very Good', 'Excellent'].map((v) => ({ v })), how: ['Sit with legs straight and feet against the box.', 'Start when you are ready.', 'Reach forward as far as you can and hold for 2 seconds.', 'Note how far you reached, then pick the closest picture.'] },
   { id: 'breath', kind: 'timer', title: 'Breath-Hold Test', sub: 'Check breath-hold endurance. Time how long you can hold your breath.', k: 'breath', how: BREATH },
   { id: 'injuries', kind: 'injuries', title: 'Injuries & Diseases', sub: 'Please mention any existing injuries for better assessment' },
-  { id: 'sys', kind: 'ruler', title: 'Blood Pressure: Systolic', sub: BP_SUB, k: 'sys', min: 80, max: 200, step: 1, dp: 0, major: 10, start: 120 },
-  { id: 'dia', kind: 'ruler', title: 'Blood Pressure: Diastolic', sub: BP_SUB, k: 'dia', min: 50, max: 130, step: 1, dp: 0, major: 10, start: 80 },
-  { id: 'pulse', kind: 'ruler', title: 'Pulse rate', sub: BP_SUB, k: 'pulse', min: 40, max: 140, step: 1, dp: 0, major: 10, start: 72 },
+  { id: 'bp', kind: 'bp', title: 'Blood Pressure', sub: BP_SUB },
   { id: 'sugar', kind: 'ruler', title: 'Blood Glucose', sub: 'Please check and enter your blood sugar for better understanding. Skip it if you have no meter.', k: 'sugar', min: 50, max: 300, step: 1, dp: 0, major: 10, start: 100 },
   { id: 'next', kind: 'next', title: 'Next assessment', sub: 'When would you like to take the next assessment?' },
 ];
