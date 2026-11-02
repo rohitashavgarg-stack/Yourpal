@@ -130,7 +130,7 @@ export default function SelfAssessment() {
   ) : undefined;
 
   return (
-    <SubPage title="Self assessment" fallback="/gym/assessments" footer={footer} right={skipBtn} scroll={!noScroll}>
+    <SubPage title="Assessment" fallback="/gym/assessments" footer={footer} right={skipBtn} scroll={!noScroll}>
       <View style={noScroll ? { flex: 1, paddingHorizontal: 16, paddingTop: 4, gap: 12 } : { gap: 12 }} pointerEvents="box-none">
       {!viewing && step && (
         <View style={{ gap: 8 }}>
@@ -297,15 +297,14 @@ function Result({ entry, prev, fresh }: { entry: SelfEntry; prev: SelfEntry | un
   const better = judged.filter((r) => r.good).length;
   const habits = Object.entries(entry.answers).filter(([k, v]) => v && habitLabel[k]);
   const dot = { nutri: c.cNutri, act: c.cAct, heart: c.cHeart };
-  const who = entry.by === 'coach' ? 'Assessment by Coach Vikram' : 'Self assessment';
+  const who = 'Assessment';
   return (
     <View style={{ gap: 14 }}>
       <View style={{ alignItems: 'center', gap: 8, paddingTop: 4 }}>
         <View style={{ width: 64, height: 64, borderRadius: radii.pill, backgroundColor: c.goodSoft, alignItems: 'center', justifyContent: 'center' }}><Check size={30} color={c.good} strokeWidth={2.6} /></View>
-        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 30 }}>{fresh ? 'Self assessment saved' : who}</Txt>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 30 }}>{fresh ? 'Assessment saved' : who}</Txt>
         <Row style={{ gap: 6 }}>
           <Chip label={fmtAt(entry.at)} />
-          {entry.by === 'coach' && <Chip label="Entered by coach" />}
         </Row>
         {judged.length > 0 && <Txt muted style={{ fontSize: fontSizes.md }}>{`${better} of ${judged.length} improved since the last one`}</Txt>}
       </View>

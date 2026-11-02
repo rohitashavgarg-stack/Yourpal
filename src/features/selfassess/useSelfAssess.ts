@@ -17,9 +17,12 @@ export function useSelfAssess() {
   const lastAt = Date.parse(entries[0].at);
   const snoozed = !!sa?.snoozeUntil && Date.parse(sa.snoozeUntil) > now;
   const chosen = Number(entries.find((e) => e.by === 'member')?.answers.nextDays); // the days the member picked in the last step
-  const due = d.hasGym && !snoozed && (now - lastAt) / DAY >= (chosen > 0 ? chosen : NUDGE_DAYS);
+  const gap = chosen > 0 ? chosen : NUDGE_DAYS;
+  const due = d.hasGym && !snoozed && (now - lastAt) / DAY >= gap;
+  const nextAt = lastAt + gap * DAY; // when the next assessment is due
+  const daysLeft = Math.ceil((nextAt - now) / DAY);
   return {
-    entries, due,
+    entries, due, nextAt, daysLeft,
     save: (e: SelfEntry) => setProfile({ selfAssess: { entries: [e, ...(sa?.entries ?? [])] } }),
     later: () => setProfile({ selfAssess: { entries: sa?.entries ?? [], snoozeUntil: new Date(Date.now() + LATER_DAYS * DAY).toISOString() } }),
   };
