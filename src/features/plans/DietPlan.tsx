@@ -24,6 +24,7 @@ import { QuickLogSheet } from '@/features/today/QuickLogSheet';
 import { ItemMenuSheet, SwapSheet } from './Sheets';
 import { QtySheet } from './QtySheet';
 import { fmtClock, TimeSheet } from './TimeSheet';
+import { isOffTime, suggestAt } from './mealTime';
 import { fmtNum, fmtQty, Qty, splitFood, stepFor, unitLabel } from './qty';
 import { DItem, dietItems, dietTotals, setP, useCountUp, usePlans } from './store';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
@@ -117,6 +118,7 @@ function QtyControl({ mid, it, qty, locked }: { mid: MealId; it: DItem; qty: Qty
 // The look is the FoodCard pattern (src/design-system/patterns/FoodCard.tsx); this reads the member's day and does the logging.
 function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean }) {
   const A = useDietActions();
+  const { d } = useDomain();
   const { p } = usePlans();
   // the page opens the first meal with nothing eaten; once a food in this meal is ticked or skipped that would be the next meal, so pin this one open until the member closes it
   const pin = () => { if (p.openMeal == null) setP({ openMeal: mid }); };
@@ -130,11 +132,21 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
   const onSkip = () => { pin(); if (it.mine) A.deleteExtra(mid, it); else A.skipItem(mid, it); };
   const openFood = () => { haptic.medium(); router.push({ pathname: '/food', params: { mid, k: String(it.idx), extra: it.mine ? '1' : '0' } }); };
   const undo = () => openSheet(<UndoEatenSheet what={it.n} onConfirm={() => A.eat(mid, it, false)} />, { label: 'Mark as not eaten' });
+  // Checking a food records the time it was eaten. On the first food of a meal, when that is far from the meal's own time, ask first.
+  const meal = MEALS.find((q) => q.id === mid)!;
+  const check = () => {
+    pin();
+    if (mealLog(d, mid).at == null && isOffTime(meal.t, d.min)) {
+      openSheet(<TimeSheet title={`When did you eat ${meal.n}?`} initial={suggestAt(meal.t, d.min)} max={d.min} saveLabel="Mark as eaten" onSave={(min) => { A.eat(mid, it, true); A.setMealTime(mid, min); }} />, { label: 'Ate at' });
+      return;
+    }
+    A.eat(mid, it, true);
+  };
   return (
     <FoodCard state={it.st} name={food.name} type={it.type} tag={it.mine ? 'Yours' : undefined}
       amount={food.qty ? <QtyControl mid={mid} it={it} qty={food.qty} locked={false} /> : undefined} amountText={amountText}
       kcal={`${kShown} kcal`} macros={macros} note="Skipped for today"
-      onCheck={() => { pin(); A.eat(mid, it, true); }} onMenu={undo} onHold={openFood} onSwap={onSwap} onSkip={onSkip} skipLabel={it.mine ? 'Delete' : 'Skip'}
+      onCheck={check} onMenu={undo} onHold={openFood} onSwap={onSwap} onSkip={onSkip} skipLabel={it.mine ? 'Delete' : 'Skip'}
       checkLabel={`Mark eaten: ${it.n}`} label={`${food.name}${amountText ? `, ${amountText}` : ''}, ${it.st === 'skipped' ? 'skipped for today' : `${kShown} kcal`}. Hold for nutrition and recipe`} />
   );
 }
