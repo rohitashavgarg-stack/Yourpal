@@ -51,5 +51,5 @@ export function stats(s: Session) {
     });
   });
   const exercises = s.ex.filter((e) => e.sets.some((x) => x.st === 'done')).length;
-  return { mins, sets, exercises, totalEx: s.ex.length, pr: pr as { name: string; kg: number } | null, kcal: Math.max(40, mins * 7) };
+  return { mins, sets, exercises, totalEx: s.ex.filter((e) => !e.added).length, pr: pr as { name: string; kg: number } | null, kcal: Math.max(40, mins * 7) };
 }

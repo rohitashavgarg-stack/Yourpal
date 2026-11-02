@@ -84,7 +84,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
             <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 38, lineHeight: 36 }}>Nice work, Rohitashav</Txt>
           </View>
           <Row style={{ backgroundColor: c.tile, borderRadius: 20, paddingVertical: 12, paddingHorizontal: 4 }}>
-            {[[String(s.mins), ' min', 'Time'], [String(s.sets), '', s.sets === 1 ? 'Set done' : 'Sets done'], [`${s.exercises}/${s.totalEx}`, '', 'Exercises']].map(([v, u, l], i) => (
+            {[[String(s.mins), ' min', 'Time'], [String(s.sets), '', s.sets === 1 ? 'Set done' : 'Sets done'], [s.exercises > s.totalEx ? String(s.exercises) : `${s.exercises}/${s.totalEx}`, '', 'Exercises']].map(([v, u, l], i) => (
               <View key={l} style={{ flex: 1, alignItems: 'center', borderLeftWidth: i ? 1 : 0, borderLeftColor: c.line }}>
                 <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 36 }}>{v}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.lg }}>{u}</Txt></Txt>
                 <Txt v="caption">{l}</Txt>

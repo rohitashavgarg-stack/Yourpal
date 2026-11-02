@@ -56,11 +56,6 @@ export default function NotificationSettings() {
             right={<Switch label={r.l} on={s.notif[r.k] !== false} onChange={flip(r.k)} />} />
         ))}
       </ListCard>
-      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, marginTop: 8 }}>Workout timer</Txt>
-      <ListCard>
-        <LineRow title="Buzzer" sub="A sound when a timer ends" right={<Switch label="Buzzer" on={state.profile.timer?.sound !== false} onChange={(v) => setProfile({ timer: { ...state.profile.timer, sound: v } })} />} />
-        <LineRow title="Vibration" sub="A buzz when a timer ends" last right={<Switch label="Vibration" on={state.profile.timer?.vibrate !== false} onChange={(v) => setProfile({ timer: { ...state.profile.timer, vibrate: v } })} />} />
-      </ListCard>
       <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, marginTop: 8 }}>Reminders</Txt>
       <Note style={{ fontSize: fontSizes.sm }}>Small nudges when something is missing. They show in the app and, if you allow it, on your phone.</Note>
       <ListCard>
