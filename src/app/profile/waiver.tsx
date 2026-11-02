@@ -16,6 +16,7 @@ import { SubPage, useShake } from '@/features/shell/parts';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { WAIVER_TITLE, WAIVER_POINTS } from '@/features/profile/waiver';
 import { WaiverSigned } from '@/features/profile/WaiverSigned';
+import { WaiverDetails } from '@/features/profile/WaiverDetails';
 import { SignSheet } from '@/features/profile/SignSheet';
 
 // Read the waiver, tick that you agree, then sign on the sign pad. Once signed this page turns into the signed screen.
@@ -27,6 +28,7 @@ export default function Waiver() {
   const insets = useSafeAreaInsets();
   const [agree, setAgree] = useState(false);
   const [tries, setTries] = useState(0);
+  const [fresh] = useState(!w); // signed during this visit: the celebration. Opened later from Profile: what was signed.
   const shake = useShake(tries);
   const toggle = () => { setAgree((v) => !v); haptic.tick(); };
   // Signing needs the tick. Tapping Sign without it shakes the tick row instead of doing nothing.
@@ -35,8 +37,8 @@ export default function Waiver() {
     openSheet(<SignSheet />, { label: 'Sign here', fixed: true });
   };
 
-  // Signed: the signed screen built from the designer's SVGs, with the member's own signature on the paper. Profile opens this every time.
-  if (w) return <WaiverSigned sig={w} />;
+  // Just signed: the celebration screen. Opened again from Profile: the signed details (paper with the signature, the date and the points).
+  if (w) return fresh ? <WaiverSigned sig={w} /> : <WaiverDetails sig={w} />;
 
   const bottom = Math.max(insets.bottom, 16) + 6;
   return (
