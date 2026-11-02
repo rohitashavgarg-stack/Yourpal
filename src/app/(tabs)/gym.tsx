@@ -162,13 +162,14 @@ function ChatCard() {
 function PTCard({ isPT }: { isPT: boolean }) {
   const { c } = useTheme();
   const { d } = useDomain();
-  const head = (title: string, sub: string) => (
+  const head = (title: string, sub: string, right?: React.ReactNode) => (
     <Row style={{ gap: 14 }}>
       <IconBadge size={48} radius={radii.md} bg={c.accentSoft}><Dumbbell size={24} strokeWidth={1.9} color={c.accentText} /></IconBadge>
       <View style={{ flex: 1 }}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, color: onDark.text }}>{title}</Txt>
         <Txt v="caption" color={onDark.muted}>{sub}</Txt>
       </View>
+      {right}
     </Row>
   );
   if (!isPT) {
@@ -181,11 +182,10 @@ function PTCard({ isPT }: { isPT: boolean }) {
   }
   return (
     <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
-      {head('Your PT package', 'With Coach Vikram')}
+      {head('Your PT package', 'With Coach Vikram', <Chip label="Renews 30 Oct" onDark />)}
       <View style={{ gap: 10 }}>
         <Txt accessibilityLabel={`${d.ptLeft} of ${PT_TOTAL} sessions left`} style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39, color: onDark.text }}>{d.ptLeft}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: onDark.muted }}> of {PT_TOTAL} sessions left</Txt></Txt>
         <GrowBar pct={Math.round((d.ptLeft / PT_TOTAL) * 100)} color={c.accent} track="rgba(255,255,255,0.14)" />
-        <Chip label="Renews 30 Oct" onDark />
       </View>
       <Button kind="white" label="View sessions" onPress={() => router.push('/gym/pt')} />
     </View>
