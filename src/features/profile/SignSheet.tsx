@@ -2,19 +2,20 @@ import React, { useMemo, useState } from 'react';
 import { PanResponder, View } from 'react-native';
 import Svg, { Line, Path } from 'react-native-svg';
 import { Button, Row, Txt } from '@/components/ui';
+import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
-import { goBack, SubPage } from '@/features/shell/parts';
 import { radii, fontSizes } from '@/design-system/tokens';
 
 type Pt = { x: number; y: number };
-const PAD_H = 280;
+const PAD_H = 220;
 
-// The sign pad: draw your signature with a finger. Done saves it and the waiver shows as signed.
-export default function SignPad() {
+// The sign pad, in a bottom sheet: draw your signature with a finger. Done saves it, and the waiver page turns into the signed screen.
+export function SignSheet() {
   const { c } = useTheme();
   const { setProfile } = useStore();
+  const { closeSheet } = useOverlay();
   const [strokes, setStrokes] = useState<Pt[][]>([]);
   const [w, setW] = useState(0);
   const pan = useMemo(() => PanResponder.create({
@@ -32,31 +33,28 @@ export default function SignPad() {
   const drawn = strokes.reduce((n, st) => n + st.length, 0) >= 12;
   const done = () => {
     if (!drawn) return;
-    setProfile({ waiver: { signedAt: new Date().toISOString(), path: d, w, h: PAD_H } });
     haptic.success();
-    goBack('/profile/waiver');
+    closeSheet(() => setProfile({ waiver: { signedAt: new Date().toISOString(), path: d, w, h: PAD_H } }));
   };
   return (
-    <SubPage title="Sign here" variant="progress" scroll={false} fallback="/profile/waiver" footer={
-      <Row style={{ gap: 10, paddingHorizontal: 16, paddingTop: 10, paddingBottom: 24 }}>
+    <View style={{ gap: 12, paddingBottom: 8 }}>
+      <Txt v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>Sign here</Txt>
+      <View {...pan.panHandlers} onLayout={(e) => setW(Math.round(e.nativeEvent.layout.width))} accessibilityLabel="Signature pad. Draw your signature with your finger."
+        style={{ height: PAD_H, borderRadius: radii.lg, backgroundColor: c.surface2, overflow: 'hidden' }}>
+        <Svg width="100%" height={PAD_H} pointerEvents="none">
+          <Line x1={20} y1={PAD_H - 48} x2={Math.max(w - 20, 20)} y2={PAD_H - 48} stroke={c.chipLine} strokeWidth={1.5} strokeDasharray="4 4" />
+          <Path d={d} stroke={c.ink} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        </Svg>
+        {!strokes.length && (
+          <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 48, alignItems: 'center', justifyContent: 'center' }}>
+            <Txt muted style={{ fontSize: fontSizes.md }}>Sign here with your finger</Txt>
+          </View>
+        )}
+      </View>
+      <Row style={{ gap: 10 }}>
         <Button kind="secondary" label="Clear" disabled={!strokes.length} onPress={() => { setStrokes([]); haptic.light(); }} style={{ flex: 1 }} />
         <Button kind="accent" label="Done" disabled={!drawn} onPress={done} style={{ flex: 2 }} />
       </Row>
-    }>
-      <View style={{ flex: 1, paddingHorizontal: 16, paddingTop: 12 }}>
-        <View {...pan.panHandlers} onLayout={(e) => setW(Math.round(e.nativeEvent.layout.width))} accessibilityLabel="Signature pad. Draw your signature with your finger."
-          style={{ height: PAD_H, borderRadius: radii.lg, backgroundColor: c.surface, overflow: 'hidden' }}>
-          <Svg width="100%" height={PAD_H} pointerEvents="none">
-            <Line x1={20} y1={PAD_H - 56} x2={Math.max(w - 20, 20)} y2={PAD_H - 56} stroke={c.chipLine} strokeWidth={1.5} strokeDasharray="4 4" />
-            <Path d={d} stroke={c.ink} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" fill="none" />
-          </Svg>
-          {!strokes.length && (
-            <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 56, alignItems: 'center', justifyContent: 'center' }}>
-              <Txt muted style={{ fontSize: fontSizes.md }}>Sign here with your finger</Txt>
-            </View>
-          )}
-        </View>
-      </View>
-    </SubPage>
+    </View>
   );
 }

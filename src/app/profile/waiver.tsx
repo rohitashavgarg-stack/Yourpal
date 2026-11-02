@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Check, PenLine } from '@/lib/icons';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
+import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
@@ -10,9 +11,10 @@ import { font } from '@/theme/tokens';
 import { Chip } from '@/design-system/primitives/Chip';
 import { CheckCircle } from '@/design-system/primitives/CheckCircle';
 import { Label, SubPage } from '@/features/shell/parts';
-import { radii, fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { WAIVER_TITLE, WAIVER_POINTS, fmtSigned } from '@/features/profile/waiver';
 import { Signature } from '@/features/profile/Signature';
+import { SignSheet } from '@/features/profile/SignSheet';
 
 function Points() {
   const { c } = useTheme();
@@ -33,6 +35,8 @@ export default function Waiver() {
   const { c } = useTheme();
   const { state } = useStore();
   const w = state.profile.waiver;
+  const { openSheet } = useOverlay();
+  const insets = useSafeAreaInsets();
   const [agree, setAgree] = useState(false);
   const toggle = () => { setAgree((v) => !v); haptic.tick(); };
 
@@ -56,8 +60,15 @@ export default function Waiver() {
     );
   }
 
+  // Not signed yet: the Sign button floats over the page near the bottom and stays there while it scrolls. It opens the sign pad as a sheet.
   return (
-    <SubPage title="Waiver" fallback="/profile" gap={16}>
+    <SubPage title="Waiver" variant="progress" fallback="/profile"
+      footer={(
+        <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
+          <Button kind="accent" label="Sign" icon={<PenLine size={18} color={c.accentInk} />} disabled={!agree} onPress={() => openSheet(<SignSheet />, { label: 'Sign here' })}
+            style={{ shadowColor: fixed.black, shadowOpacity: 0.28, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: 10 }} />
+        </View>
+      )}>
       <Row style={{ justifyContent: 'space-between' }}>
         <Txt v="title" style={{ fontSize: fontSizes.xl, lineHeight: 27, flex: 1 }}>{WAIVER_TITLE}</Txt>
         <Chip label="Pending" tone="warn" />
@@ -68,7 +79,7 @@ export default function Waiver() {
         <CheckCircle on={agree} size={28} tone="good" label="I agree" onPress={toggle} />
         <Txt style={{ flex: 1 }}>I have read and agree</Txt>
       </Pressy>
-      <Button kind="accent" label="Sign" icon={<PenLine size={18} color={c.accentInk} />} disabled={!agree} onPress={() => router.push('/profile/sign')} />
+      <View style={{ height: 64 }} />
     </SubPage>
   );
 }
