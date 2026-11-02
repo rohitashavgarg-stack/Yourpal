@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Check, PenLine } from '@/lib/icons';
+import { PenLine } from '@/lib/icons';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
@@ -10,10 +10,10 @@ import { haptic } from '@/lib/haptics';
 import { font } from '@/theme/tokens';
 import { Chip } from '@/design-system/primitives/Chip';
 import { CheckCircle } from '@/design-system/primitives/CheckCircle';
-import { Label, SubPage } from '@/features/shell/parts';
+import { SubPage } from '@/features/shell/parts';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
-import { WAIVER_TITLE, WAIVER_POINTS, fmtSigned } from '@/features/profile/waiver';
-import { Signature } from '@/features/profile/Signature';
+import { WAIVER_TITLE, WAIVER_POINTS } from '@/features/profile/waiver';
+import { WaiverSigned } from '@/features/profile/WaiverSigned';
 import { SignSheet } from '@/features/profile/SignSheet';
 
 function Points() {
@@ -40,25 +40,8 @@ export default function Waiver() {
   const [agree, setAgree] = useState(false);
   const toggle = () => { setAgree((v) => !v); haptic.tick(); };
 
-  if (w) {
-    return (
-      <SubPage title="Waiver" fallback="/profile" gap={16}>
-        <View style={{ alignItems: 'center', gap: 8, paddingTop: 8 }}>
-          <View style={{ width: 72, height: 72, borderRadius: radii.pill, backgroundColor: c.goodSoft, alignItems: 'center', justifyContent: 'center' }}>
-            <Check size={34} color={c.good} strokeWidth={2.4} />
-          </View>
-          <Txt v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>Waiver signed</Txt>
-          <Txt muted style={{ fontSize: fontSizes.md }}>{fmtSigned(w.signedAt)}</Txt>
-        </View>
-        <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 8 }}>
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Your signature</Txt>
-          <Signature d={w.path} w={w.w} h={w.h} color={c.ink} />
-        </View>
-        <Label>{WAIVER_TITLE}</Label>
-        <View style={{ marginTop: -6 }}><Points /></View>
-      </SubPage>
-    );
-  }
+  // Signed: the confirmation screen, with the member's own signature on the paper.
+  if (w) return <WaiverSigned sig={w} />;
 
   // Not signed yet: the Sign button floats over the page near the bottom and stays there while it scrolls. It opens the sign pad as a sheet.
   return (

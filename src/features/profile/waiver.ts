@@ -1,5 +1,6 @@
 // Sample waiver text. The real text comes per gym from the admin Waiver Forms page.
-export const WAIVER_TITLE = 'Wulf Fitness waiver';
+export const WAIVER_GYM = 'Wulf Fitness';
+export const WAIVER_TITLE = `${WAIVER_GYM} waiver`;
 export const WAIVER_POINTS = [
   'I am in good health and able to take part in exercise. I will tell the staff about any injury or condition that changes this.',
   'I understand that exercise carries some risk of injury, and I take part at my own risk.',
