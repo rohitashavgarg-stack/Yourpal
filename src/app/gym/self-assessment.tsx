@@ -21,7 +21,7 @@ import { NUDGE_DAYS, useSelfAssess } from '@/features/selfassess/useSelfAssess';
 import { RulerStep } from '@/features/selfassess/RulerStep';
 import { SleepDial, sleepMinutes } from '@/features/selfassess/SleepDial';
 import { BreathTimer } from '@/features/selfassess/BreathTimer';
-import { BarbellCard, BpStep, DayTiles, FatImages, FlexBars, FreqPicker, LevelCards, PinStack, WATER_STOPS, WaterSlider } from '@/features/selfassess/Pickers';
+import { BarbellCard, BpStep, DayTiles, FatImages, GlucoseGauge, FlexBars, FreqPicker, LevelCards, PinStack, WATER_STOPS, WaterSlider } from '@/features/selfassess/Pickers';
 import { fmtClock } from '@/features/plans/TimeSheet';
 import { HeightPicker, WeightPicker } from '@/features/body/BodyLog';
 
@@ -83,8 +83,6 @@ export default function SelfAssessment() {
   const pick = (k: string, o: string) => {
     setAnswers((a) => ({ ...a, [k]: o }));
     haptic.tick();
-    if (advance.current) clearTimeout(advance.current);
-    advance.current = setTimeout(next, 220); // a moment to see the choice, then on
   };
   const finish = () => {
     const tests: SelfEntry['tests'] = {};
@@ -107,13 +105,14 @@ export default function SelfAssessment() {
   const rulerLike = step?.kind === 'height' || step?.kind === 'weight' || step?.kind === 'ruler' || step?.kind === 'sleep' || step?.kind === 'timer' || step?.kind === 'body' || step?.kind === 'fat' || step?.kind === 'water' || step?.kind === 'bp' || step?.kind === 'stepper';
   const bottom = Math.max(insets.bottom, 16) + 6;
   // The bottom bar: Back on the left as an icon button; Skip and Continue together on the right. The first step has Maybe later where Back would be.
-  const hasContinue = rulerLike || step?.kind === 'injuries' || step?.kind === 'next';
+  const hasContinue = rulerLike || step?.kind === 'choice' || step?.kind === 'injuries' || step?.kind === 'next';
+  const unanswered = (step?.kind === 'choice' && !answers[step.key]) || (step?.kind === 'fat' && !answers.fat);
   const footer = (
     <Row style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 10 }}>
       {idx === 0
         ? <Button kind="secondary" label="Maybe later" onPress={() => { later(); goBack('/gym/assessments'); }} />
         : step && <IconButton label="Back" onPress={back} size={56} radius={radii.lg} bg={c.surface2}><ChevronLeft size={24} color={c.ink} /></IconButton>}
-      {hasContinue && <Button kind="accent" label={step?.kind === 'next' ? 'Save assessment' : 'Continue'} onPress={step?.kind === 'next' ? finish : step?.kind === 'injuries' ? next : cont} style={{ flex: 1 }} />}
+      {hasContinue && <Button kind="accent" label={step?.kind === 'next' ? 'Save assessment' : 'Continue'} onPress={step?.kind === 'next' ? finish : step?.kind === 'injuries' || step?.kind === 'choice' ? next : cont} disabled={unanswered} style={{ flex: 1 }} />}
       {!hasContinue && <View style={{ flex: 1 }} />}
       {!step && <Button kind="accent" label="Done" onPress={() => goBack('/gym/assessments')} style={{ flex: 1 }} />}
     </Row>
@@ -215,11 +214,11 @@ export default function SelfAssessment() {
           <PinStack key={step.id} value={numOf(step.k, step.start)} onChange={(v) => setNum(step.k, v)} />
         </View>
       )}
-      {step?.kind === 'ruler' && !step.side && (
+      {step?.kind === 'ruler' && step.k === 'sugar' && <GlucoseGauge value={numOf('sugar', 100)} onChange={(v) => setNum('sugar', v)} />}
+      {step?.kind === 'ruler' && !step.side && step.k !== 'sugar' && (
         <View style={{ gap: 14 }}>
           {step.how && <How lines={step.how} />}
           {step.k === 'bench' && <BarbellCard kg={numOf('bench', step.start)} />}
-          {step.k === 'sugar' && <Row style={{ justifyContent: 'center' }}><Chip label={numOf('sugar', 100) < 70 ? 'Low' : numOf('sugar', 100) <= 140 ? 'Normal range' : 'High'} tone={numOf('sugar', 100) >= 70 && numOf('sugar', 100) <= 140 ? 'good' : 'warn'} /></Row>}
           <RulerStep key={step.id} a11y={step.title} value={numOf(step.k, step.start)} onChange={(v) => setNum(step.k, v)} unit={NUMS[step.k].unit} min={step.min} max={step.max} step={step.step} decimals={step.dp} major={step.major} />
         </View>
       )}

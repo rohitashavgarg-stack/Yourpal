@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/refs -- the slider's touch handler reads the latest value through a ref */
 import React, { useMemo, useRef, useState } from 'react';
 import { Image, PanResponder, View } from 'react-native';
-import Svg, { ClipPath, Defs, G, Line, Path, Rect, Text as SvgText } from 'react-native-svg';
+import Svg, { Circle, ClipPath, Defs, G, Line, Path, Rect, Text as SvgText } from 'react-native-svg';
 import { Info, Minus, Plus } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { RoundBtn } from '@/components/bits';
@@ -316,6 +316,63 @@ export function PinStack({ value, onChange, plate = 25, count = 16 }: { value: n
   );
 }
 
+// Blood glucose: a half-circle gauge in four colour zones (low, normal, a little high, high). Drag around the gauge or use minus and plus; the needle follows.
+const G_MIN = 50, G_MAX = 300;
+const GW = 300, GC = { x: 150, y: 150 }, GR = 118;
+const gAngle = (v: number) => Math.PI * (1 - (v - G_MIN) / (G_MAX - G_MIN)); // 50 on the left, 300 on the right
+const gPt = (v: number, r = GR) => ({ x: GC.x + r * Math.cos(gAngle(v)), y: GC.y - r * Math.sin(gAngle(v)) });
+const gArc = (a: number, b: number) => { const p = gPt(a), q = gPt(b); return `M ${p.x} ${p.y} A ${GR} ${GR} 0 0 1 ${q.x} ${q.y}`; };
+export function GlucoseGauge({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  const { c } = useTheme();
+  const live = useRef({ value, onChange });
+  live.current = { value, onChange };
+  const pan = useMemo(() => {
+    const set = (x: number, y: number) => {
+      const ang = Math.atan2(GC.y - y, x - GC.x); // 0 on the right, pi on the left
+      const t = 1 - Math.min(1, Math.max(0, ang < 0 ? (x < GC.x ? Math.PI : 0) : ang) / Math.PI);
+      const v = Math.round(G_MIN + t * (G_MAX - G_MIN));
+      if (v !== live.current.value) { haptic.tick(); live.current.onChange(v); }
+    };
+    return PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderTerminationRequest: () => false,
+      onPanResponderGrant: (e) => set(e.nativeEvent.locationX, e.nativeEvent.locationY),
+      onPanResponderMove: (e) => set(e.nativeEvent.locationX, e.nativeEvent.locationY),
+    });
+  }, []);
+  const zones: { a: number; b: number; color: string }[] = [
+    { a: 50, b: 70, color: c.warn }, { a: 70, b: 140, color: c.good }, { a: 140, b: 200, color: c.cAct }, { a: 200, b: 300, color: c.danger },
+  ];
+  const zone = value < 70 ? 'Low' : value <= 140 ? 'Normal range' : value <= 200 ? 'A little high' : 'High';
+  const zoneColor = value < 70 ? c.warn : value <= 140 ? c.good : value <= 200 ? c.cAct : c.danger;
+  const tip = gPt(value, GR - 34), mark = gPt(value);
+  const bump = (d: number) => { haptic.tick(); onChange(Math.min(G_MAX, Math.max(G_MIN, value + d))); };
+  return (
+    <View style={{ alignItems: 'center', gap: 14 }}>
+      <View {...pan.panHandlers} accessibilityRole="adjustable" accessibilityLabel="Blood glucose gauge" accessibilityValue={{ text: `${value} milligrams per decilitre, ${zone}` }} style={{ width: GW, height: 170 }}>
+        <Svg width={GW} height={170} pointerEvents="none">
+          {zones.map((z) => <Path key={z.a} d={gArc(z.a, z.b)} stroke={z.color} strokeWidth={22} fill="none" opacity={value >= z.a && value <= z.b ? 1 : 0.45} />)}
+          <Line x1={GC.x} y1={GC.y} x2={tip.x} y2={tip.y} stroke={c.ink} strokeWidth={4} strokeLinecap="round" />
+          <Circle cx={GC.x} cy={GC.y} r={10} fill={c.ink} />
+          <Circle cx={mark.x} cy={mark.y} r={15} fill={c.surface} stroke={zoneColor} strokeWidth={5} />
+        </Svg>
+      </View>
+      <Row style={{ gap: 22 }}>
+        <RoundBtn label="Lower" onPress={() => bump(-1)}><Minus size={24} color={c.ink} /></RoundBtn>
+        <View style={{ alignItems: 'center', minWidth: 130 }}>
+          <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.displayBold, fontSize: 60, lineHeight: 70, letterSpacing: -2 }}>{String(value)}</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md }}>mg/dl</Txt>
+        </View>
+        <RoundBtn label="Higher" onPress={() => bump(1)}><Plus size={24} color={c.ink} /></RoundBtn>
+      </Row>
+      <View style={{ height: 32, paddingHorizontal: 14, borderRadius: radii.pill, backgroundColor: zoneColor + '2E', justifyContent: 'center' }}>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: zoneColor }}>{zone}</Txt>
+      </View>
+    </View>
+  );
+}
+
 // Bench press: the barbell on top, a big number with round minus and plus buttons, and quick jumps.
 export function StepperStep({ value, onChange, unit, step, min, max, jumps, visual }: { value: number; onChange: (v: number) => void; unit: string; step: number; min: number; max: number; jumps: number[]; visual?: React.ReactNode }) {
   const { c } = useTheme();
@@ -371,27 +428,41 @@ export function SideRuler({ value, onChange, unit, min, max, step, major }: { va
   );
 }
 
-// Blood pressure: the two readings as a pair of cards, the pulse under them. Each has its own minus and plus.
+// Blood pressure: a monitor screen showing the reading the way a cuff does (top number over bottom number, pulse underneath).
+// Tap one of the three numbers to select it, then drag the ruler under the screen to set it.
+const BP_RANGE = { sys: { lo: 80, hi: 200 }, dia: { lo: 50, hi: 130 }, pulse: { lo: 40, hi: 140 } } as const;
 export function BpStep({ sys, dia, pulse, onChange }: { sys: number; dia: number; pulse: number; onChange: (k: 'sys' | 'dia' | 'pulse', v: number) => void }) {
   const { c } = useTheme();
-  const Card = ({ k, label, unit, v, lo, hi, wide }: { k: 'sys' | 'dia' | 'pulse'; label: string; unit: string; v: number; lo: number; hi: number; wide?: boolean }) => (
-    <View style={{ width: wide ? '100%' : '48%', flexGrow: 1, borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 10 }}>
-      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{label}</Txt>
-      <Row style={{ alignItems: 'baseline', gap: 6 }}>
-        <Txt style={{ fontFamily: font.displayBold, fontSize: 44, lineHeight: 52, letterSpacing: -1 }}>{String(v)}</Txt>
-        <Txt muted style={{ fontSize: fontSizes.sm }}>{unit}</Txt>
-      </Row>
-      <Row style={{ gap: 10 }}>
-        <RoundBtn label={`Lower ${label}`} onPress={() => { haptic.tick(); onChange(k, Math.max(lo, v - 1)); }}><Minus size={20} color={c.ink} /></RoundBtn>
-        <RoundBtn label={`Raise ${label}`} onPress={() => { haptic.tick(); onChange(k, Math.min(hi, v + 1)); }}><Plus size={20} color={c.ink} /></RoundBtn>
-      </Row>
-    </View>
-  );
+  const [active, setActive] = useState<'sys' | 'dia' | 'pulse'>('sys');
+  const vals = { sys, dia, pulse };
+  const cat = sys >= 130 || dia >= 85 ? { t: 'High', col: c.warn } : sys >= 120 ? { t: 'Elevated', col: c.cAct } : { t: 'Normal', col: c.good };
+  const LCD = '#0B0E14';
+  const digit = (k: 'sys' | 'dia' | 'pulse', label: string, unit: string, size: number) => {
+    const on = active === k;
+    return (
+      <Pressy key={k} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={`${label} ${vals[k]} ${unit}`} onPress={() => { haptic.tick(); setActive(k); }} scaleTo={0.97}
+        style={{ alignItems: 'center', paddingVertical: 6, paddingHorizontal: 18, borderRadius: radii.md, backgroundColor: on ? 'rgba(143,178,255,0.16)' : 'transparent', borderWidth: 1.5, borderColor: on ? c.accentText : 'transparent' }}>
+        <Txt style={{ fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.6)' }}>{label}</Txt>
+        <Row style={{ alignItems: 'baseline', gap: 6 }}>
+          <Txt style={{ fontFamily: font.displayBold, fontSize: size, lineHeight: size + 8, letterSpacing: -1.5, color: '#FFFFFF' }}>{String(vals[k])}</Txt>
+          <Txt style={{ fontSize: fontSizes.sm, color: 'rgba(255,255,255,0.6)' }}>{unit}</Txt>
+        </Row>
+      </Pressy>
+    );
+  };
   return (
-    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-      {Card({ k: 'sys', label: 'Systolic', unit: 'mm/hg', v: sys, lo: 80, hi: 200 })}
-      {Card({ k: 'dia', label: 'Diastolic', unit: 'mm/hg', v: dia, lo: 50, hi: 130 })}
-      {Card({ k: 'pulse', label: 'Pulse rate', unit: 'bpm', v: pulse, lo: 40, hi: 140, wide: true })}
+    <View style={{ gap: 22 }}>
+      <View style={{ borderRadius: radii.xl, backgroundColor: LCD, paddingVertical: 18, paddingHorizontal: 14, alignItems: 'center', gap: 4 }}>
+        {digit('sys', 'SYS', 'mm/hg', 56)}
+        <View style={{ width: '70%', height: 1, backgroundColor: 'rgba(255,255,255,0.18)' }} />
+        {digit('dia', 'DIA', 'mm/hg', 56)}
+        <View style={{ width: '70%', height: 1, backgroundColor: 'rgba(255,255,255,0.18)' }} />
+        {digit('pulse', 'PULSE', 'bpm', 36)}
+      </View>
+      <View style={{ alignSelf: 'center', height: 32, paddingHorizontal: 14, borderRadius: radii.pill, backgroundColor: cat.col + '2E', justifyContent: 'center' }}>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: cat.col }}>{cat.t}</Txt>
+      </View>
+      <Ruler key={active} accessibilityLabel={active === 'sys' ? 'Systolic' : active === 'dia' ? 'Diastolic' : 'Pulse rate'} value={vals[active]} onChange={(v) => onChange(active, v)} min={BP_RANGE[active].lo} max={BP_RANGE[active].hi} step={1} majorEvery={10} label={(v) => String(Math.round(v))} />
     </View>
   );
 }
