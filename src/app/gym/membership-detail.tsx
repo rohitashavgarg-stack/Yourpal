@@ -14,13 +14,25 @@ import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { Chip } from '@/design-system/primitives/Chip';
 import { useMemberships } from '@/features/gym/memberships';
 import { PAUSE_HISTORY, PAUSE_TOTAL } from '@/features/gym/data';
-import { gymStore } from '@/features/gym/state';
+import { dateLabel, gymStore } from '@/features/gym/state';
+import { useDomain } from '@/lib/domain';
+import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { StatusChip, TimeBar } from '@/app/gym/membership';
 import { sharePdf } from '@/features/reports/pdf';
 import { invoiceHtml } from '@/features/reports/templates';
 import { rupees } from '@/features/reports/payments';
 import type { Payment } from '@/features/reports/payments';
 import { radii, fontSizes } from '@/design-system/tokens';
+
+// A row of dots: one for each session or pause. The ones still to come are blue, the ones already used are grey.
+function Dots({ total, left, size = 10 }: { total: number; left: number; size?: number }) {
+  const { c } = useTheme();
+  return (
+    <Row style={{ gap: 6, flexWrap: 'wrap' }} accessibilityLabel={`${left} of ${total} left`}>
+      {Array.from({ length: total }, (_, i) => <StatusDot key={i} size={size} color={i < total - left ? c.surface3 : c.accent} />)}
+    </Row>
+  );
+}
 
 // One membership: its time left and dates, personal training sessions (if it has them), pauses (view only, the front desk sets them) and payments with invoices.
 // Personal training and pauses are small rows in a list, not cards: the time left is the main thing on this page.
@@ -30,6 +42,7 @@ export default function MembershipDetail() {
   const m = useMemberships().find((x) => x.id === id);
   const { state } = useStore();
   const g = gymStore.use();
+  const { d } = useDomain();
   const { toast } = useOverlay();
   const [busyId, setBusyId] = useState<string | null>(null);
   if (!m) return <SubPage title="Membership" fallback="/gym/membership"><Txt muted>This membership is not here any more.</Txt></SubPage>;
@@ -50,6 +63,7 @@ export default function MembershipDetail() {
   const history = PAUSE_HISTORY.slice(0, used);
   const showPauses = m.status !== 'Expired';
   const value = (t: string) => <Txt style={{ fontFamily: font.semibold }}>{t}</Txt>;
+  const paused = m.id === 'm1' && d.onBreak;
 
   return (
     <SubPage title="Membership" fallback="/gym/membership">
@@ -97,7 +111,9 @@ export default function MembershipDetail() {
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>PERSONAL TRAINING</Txt>
           <PayList>
-            <LineRow title={m.pt.trainer} sub="Personal trainer" right={value(`${m.pt.left} of ${m.pt.total} sessions left`)} last />
+            <LineRow title={m.pt.trainer} sub="Personal trainer" right={value(`${m.pt.left} of ${m.pt.total} left`)} last={false} />
+            {/* one dot per session: the ones still to come are blue, the ones used are grey */}
+            <View style={{ paddingBottom: 16 }}><Dots total={m.pt.total} left={m.pt.left} /></View>
           </PayList>
         </>
       )}
@@ -106,7 +122,9 @@ export default function MembershipDetail() {
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>PAUSES</Txt>
           <PayList>
-            <LineRow title="Pauses left" sub="Set by the front desk" right={value(`${left} of ${PAUSE_TOTAL}`)} last={history.length === 0} />
+            {/* a pause that is on right now comes first, then how many are left (one dot each), then the ones taken */}
+            {paused && <LineRow title={`Paused until ${dateLabel(g.breakUntil)}`} sub="Your end date moves out by the paused days" color={c.warn} />}
+            <LineRow title="Pauses left" right={<Row style={{ gap: 10 }}><Dots total={PAUSE_TOTAL} left={left} size={12} />{value(`${left} of ${PAUSE_TOTAL}`)}</Row>} last={history.length === 0} />
             {history.map((h, i) => <LineRow key={h.from} title={`${h.from} – ${h.to}`} sub={h.reason} right={<Txt muted>{`${h.days} days`}</Txt>} minH={52} last={i === history.length - 1} />)}
           </PayList>
         </>
