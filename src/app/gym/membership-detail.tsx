@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { CreditCard, Download } from '@/lib/icons';
+import { CreditCard, Download, PauseCircle } from '@/lib/icons';
 import { Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
@@ -31,6 +31,30 @@ function Dots({ total, left, size = 10 }: { total: number; left: number; size?: 
     <View accessible accessibilityLabel={`${left} of ${total} left`} style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap' }}>
       {Array.from({ length: total }, (_, i) => <StatusDot key={i} size={size} color={i < total - left ? c.surface3 : c.accent} />)}
     </View>
+  );
+}
+
+// "14 to 27 Jul" when both dates are in one month.
+const range = (from: string, to: string) => {
+  const [d1, m1] = from.split(' ');
+  const [d2, m2] = to.split(' ');
+  return m1 === m2 ? `${d1} to ${d2} ${m2}` : `${from} to ${to}`;
+};
+
+// One pause as its own small card: a pause icon, the dates, the reason and how many days. The one on right now is amber.
+function PauseCard({ title, sub, days, warn }: { title: string; sub: string; days?: number; warn?: boolean }) {
+  const { c } = useTheme();
+  return (
+    <Row style={{ gap: 12, padding: 14, borderRadius: radii.lg, backgroundColor: warn ? c.warnSoft : c.surface }}>
+      <View style={{ width: 40, height: 40, borderRadius: radii.md, backgroundColor: warn ? c.warn + '2E' : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}>
+        <PauseCircle size={20} color={warn ? c.warn : c.accentText} />
+      </View>
+      <View style={{ flex: 1, gap: 1 }}>
+        <Txt style={{ fontFamily: font.semibold, color: warn ? c.warn : c.ink }}>{title}</Txt>
+        <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{sub}</Txt>
+      </View>
+      {days != null && <Chip label={`${days} days`} />}
+    </Row>
   );
 }
 
@@ -110,23 +134,35 @@ export default function MembershipDetail() {
       {m.pt && (
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>PERSONAL TRAINING</Txt>
-          <PayList>
-            <LineRow title={m.pt.trainer} sub="Personal trainer" right={value(`${m.pt.left} of ${m.pt.total} left`)} last={false} />
-            {/* one dot per session: the ones still to come are blue, the ones used are grey */}
-            <View style={{ paddingBottom: 16 }}><Dots total={m.pt.total} left={m.pt.left} /></View>
-          </PayList>
+          <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
+            <View style={{ gap: 1 }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base }}>{m.pt.trainer}</Txt>
+              <Txt v="caption">Personal trainer</Txt>
+            </View>
+            {/* one dot for each session, six to a row: blue for the ones still to come, grey for the ones used. The count sits beside them. */}
+            <Row style={{ gap: 16, alignItems: 'center' }}>
+              <View style={{ width: 6 * 18 + 5 * 8, flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                {Array.from({ length: m.pt.total }, (_, i) => <StatusDot key={i} size={18} color={i < m.pt!.total - m.pt!.left ? c.surface3 : c.accent} />)}
+              </View>
+              <View accessible accessibilityLabel={`${m.pt.left} of ${m.pt.total} sessions left`} style={{ flex: 1, alignItems: 'flex-end' }}>
+                <Txt style={{ fontFamily: font.displayBold, fontSize: 40, lineHeight: 48, letterSpacing: -1.2 }}>{m.pt.left}</Txt>
+                <Txt muted style={{ fontSize: fontSizes.sm }}>{`of ${m.pt.total} left`}</Txt>
+              </View>
+            </Row>
+          </View>
         </>
       )}
 
       {showPauses && (
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>PAUSES</Txt>
-          <PayList>
-            {/* a pause that is on right now comes first, then how many are left (one dot each), then the ones taken */}
-            {paused && <LineRow title={`Paused until ${dateLabel(g.breakUntil)}`} sub="Your end date moves out by the paused days" color={c.warn} />}
-            <LineRow title="Pauses left" right={<Row style={{ gap: 10 }}><Dots total={PAUSE_TOTAL} left={left} size={12} />{value(`${left} of ${PAUSE_TOTAL}`)}</Row>} last={history.length === 0} />
-            {history.map((h, i) => <LineRow key={h.from} title={`${h.from} – ${h.to}`} sub={h.reason} right={<Txt muted>{`${h.days} days`}</Txt>} minH={52} last={i === history.length - 1} />)}
-          </PayList>
+          <View style={{ gap: 8 }}>
+            {paused && <PauseCard warn title={`Paused until ${dateLabel(g.breakUntil)}`} sub="Your end date moves out by the paused days" />}
+            <PayList>
+              <LineRow title="Pauses left" right={<Row style={{ gap: 10 }}><Dots total={PAUSE_TOTAL} left={left} size={14} />{value(`${left} of ${PAUSE_TOTAL}`)}</Row>} last />
+            </PayList>
+            {history.map((h) => <PauseCard key={h.from} title={range(h.from, h.to)} sub={h.reason} days={h.days} />)}
+          </View>
         </>
       )}
 
