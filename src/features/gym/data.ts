@@ -24,6 +24,8 @@ export const STAR_WORDS = ['Tap a star to rate', 'Not great', 'Could be better',
 export const FLAG_REASONS = ["I wasn't there", 'Wrong date or time', 'Session was cut short'];
 export const BREAK_REASONS = ['Travel', 'Work', 'Family', 'Other'];
 export const PT_TOTAL = 12;
+// Sample numbers for the Personal training page. The real ones come from the gym.
+export const PT_STATS = { inPT: 48, reachedGoal: 41 };
 export const PAUSE_TOTAL = 2;
 export const PAUSE_HISTORY = [
   { from: '14 Jul', to: '27 Jul', days: 14, reason: 'Travel' },

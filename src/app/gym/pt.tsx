@@ -2,17 +2,19 @@ import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { PersonAvatar } from '@/components/Brand';
-import { Button, Txt } from '@/components/ui';
+import { Button, Row, Txt } from '@/components/ui';
 import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ListCard, SubPage } from '@/features/progress/parts';
 import { LineRow, ListCard as CardList } from '@/features/shell/parts';
-import { PT_TOTAL } from '@/features/gym/data';
+import { PT_STATS, PT_TOTAL } from '@/features/gym/data';
+import { useGoalV2 } from '@/features/goalv2/model';
 import { useGymScenarios } from '@/features/gym/state';
-import { CalendarCheck, Dumbbell, MessageCircle, Salad, TrendingUp } from '@/lib/icons';
+import { CalendarCheck, Dumbbell, MessageCircle, Salad, Target, TrendingUp } from '@/lib/icons';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
-import { radii } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
+import { font } from '@/theme/tokens';
 
 // What personal training gives a member: an icon, a short title and one short line each.
 const BENEFITS = [
@@ -28,18 +30,35 @@ export default function PersonalTraining() {
   const { d } = useDomain();
   const { state } = useStore();
   const isPT = state.sc.member === 'PT member';
+  const g = useGoalV2();
   useGymScenarios('Gym · Personal training');
   // The page has its own big heading, so the header bar carries no title.
   return (
     <SubPage title="" fallback="/gym">
-      {/* The icon first, then the big heading, then one short line. */}
+      {/* The icon first, then the big heading. No sub heading. */}
       <View style={{ gap: 12, paddingTop: 4 }}>
         <IconBadge size={64} radius={radii.lg} bg={c.accentSoft}><Dumbbell size={32} strokeWidth={1.9} color={c.accentText} /></IconBadge>
         <Txt accessibilityRole="header" v="display">Personal training</Txt>
-        <Txt muted>A coach who builds around you</Txt>
+      </View>
+
+      {/* How many people are in personal training here, and how many have reached a goal with it. */}
+      <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18 }}>
+        <Row style={{ gap: 0 }}>
+          {[{ n: PT_STATS.inPT, l: 'members in PT' }, { n: PT_STATS.reachedGoal, l: 'reached a goal' }].map((x, i) => (
+            <View key={x.l} accessible accessibilityLabel={`${x.n} ${x.l}`} style={{ flex: 1, gap: 2, paddingLeft: i ? 18 : 0, borderLeftWidth: i ? 1 : 0, borderLeftColor: c.line }}>
+              <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39 }}>{x.n}</Txt>
+              <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{x.l}</Txt>
+            </View>
+          ))}
+        </Row>
       </View>
 
       {isPT && <ListCard rows={[{ l: 'Sessions left', v: `${d.ptLeft} of ${PT_TOTAL}` }, { l: 'Next session', v: 'Thu 25, 6 pm' }, { l: 'Package renews', v: '30 Oct' }]} />}
+
+      <Txt v="label" style={{ paddingHorizontal: 4 }}>FOR YOU</Txt>
+      <CardList>
+        <LineRow title="Your goal" sub={g.name} minH={64} last icon={<Target size={18} strokeWidth={1.9} color={c.ink} />} />
+      </CardList>
 
       <Txt v="label" style={{ paddingHorizontal: 4 }}>WHAT YOU GET</Txt>
       <CardList>
