@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { ChevronRight, ClipboardCheck, Dumbbell, MessageCircle } from '@/lib/icons';
+import { ChevronRight, ClipboardCheck, CreditCard, Dumbbell, MessageCircle } from '@/lib/icons';
 import { fadeOut } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -15,7 +15,6 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { CardTitle, cardShadow, GrowBar, ListCard, PCard } from '@/features/progress/parts';
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
-import { MembershipCard as MembershipStrip, useMembershipNotice } from '@/features/today/PaymentBanner';
 import { useMemberships } from '@/features/gym/memberships';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
@@ -24,21 +23,27 @@ import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { Chip } from '@/design-system/primitives/Chip';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
 
-// The main membership as a card. When there are more memberships, a quiet row under it says how many and opens the list.
+// One card for all memberships: how many are active, and a warning chip when one is ending soon or none is active. It opens the Memberships page.
 function GymMembership() {
   const { c } = useTheme();
-  const n = useMemberships().filter((m) => m.id !== 'm1' && m.status !== 'Expired').length;
+  const ms = useMemberships();
+  const active = ms.filter((m) => m.status === 'Active');
+  const soon = active.some((m) => m.warn);
   return (
-    <View style={{ gap: 8 }}>
-      <MembershipStrip n={useMembershipNotice()} />
-      {n > 0 && (
-        <Pressy accessibilityRole="button" accessibilityLabel={`${n} more membership${n > 1 ? 's' : ''}. See all`} onPress={() => router.push('/gym/membership')} scaleTo={0.985}
-          style={{ minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, borderRadius: radii.lg, backgroundColor: c.surface }}>
-          <Txt style={{ fontFamily: font.medium }}>{n} more membership{n > 1 ? 's' : ''}</Txt>
-          <ChevronRight size={18} color={c.muted} />
-        </Pressy>
-      )}
-    </View>
+    <Pressy accessibilityRole="button" accessibilityLabel={`Memberships. ${active.length} active${soon ? ', one ending soon' : ''}. See all`} onPress={() => router.push('/gym/membership')} scaleTo={0.985}
+      style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16 }}>
+      <Row style={{ gap: 12 }}>
+        <View style={{ width: 44, height: 44, borderRadius: radii.md, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><CreditCard size={22} color={c.accentText} /></View>
+        <View style={{ flex: 1, gap: 6 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>Memberships</Txt>
+          <Row style={{ gap: 6, flexWrap: 'wrap' }}>
+            <Chip label={active.length ? `${active.length} active` : 'None active'} tone={active.length ? 'good' : 'warn'} />
+            {soon && <Chip label="Ending soon" tone="warn" />}
+          </Row>
+        </View>
+        <ChevronRight size={18} color={c.muted} />
+      </Row>
+    </Pressy>
   );
 }
 
