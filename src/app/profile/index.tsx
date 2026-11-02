@@ -8,7 +8,7 @@ import { useGoalV2 } from '@/features/goalv2/model';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { router } from 'expo-router';
-import { Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Lock, LogOut, MessageCircle, Pause, Star, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
+import { Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Lock, LogOut, MessageCircle, Star, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
 import { Chip, ChipTone } from '@/design-system/primitives/Chip';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Avatar } from '@/components/GymHeader';
