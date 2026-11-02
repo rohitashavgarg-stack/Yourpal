@@ -19,6 +19,10 @@ export type Membership = {
   payments: Payment[];
 };
 
+// How the admin's statuses show in the app. Frozen is still an Active membership (the pause shows on it); Transferred is a Past one.
+export const fromAdmin = (s: 'Active' | 'Frozen' | 'Suspended' | 'Expired' | 'Transferred'): MStatus =>
+  s === 'Suspended' ? 'Suspended' : s === 'Expired' || s === 'Transferred' ? 'Expired' : 'Active';
+
 export const tabOf = (m: Membership): MTab => (m.status === 'Active' ? 'Active' : m.status === 'Suspended' ? 'Suspended' : 'Past');
 export const MTABS: MTab[] = ['Active', 'Suspended', 'Past'];
 
@@ -39,11 +43,23 @@ export function useMemberships(): Membership[] {
     pay('p1', 'INV-2025-0412', 'Annual membership', '14 Oct 2025', 12000, 'front desk'),
     pay('p2', 'INV-2025-0411', 'Joining fee', '14 Oct 2025', 1000, 'front desk'),
   ];
+  // In the Expiring and Expired scenarios the quarterly plan has ended too, so the app can show those states.
+  const second: Membership = d.membership === 'Active'
+    ? { id: 'm2', name: 'Quarterly plan', price: 4500, next: { item: 'Quarterly membership renewal', due: '31 Oct 2026', amount: 4500 }, start: '1 Aug 2026', end: '31 Oct 2026', status: 'Active', pct: 70, note: 'Ends in 37 days', left: { n: '37', unit: 'days left' }, payments: [pay('p3', 'INV-2026-0189', 'Quarterly membership', '1 Aug 2026', 4500, 'UPI')] }
+    : { id: 'm2', name: 'Quarterly plan', price: 4500, start: '1 Aug 2026', end: '20 Sep 2026', status: 'Expired', pct: 100, note: 'Ended on 20 Sep 2026', left: { n: '0', unit: 'days left' }, payments: [pay('p3', 'INV-2026-0189', 'Quarterly membership', '1 Aug 2026', 4500, 'UPI')] };
   return [
     main,
-    { id: 'm2', name: 'Quarterly plan', price: 4500, next: { item: 'Quarterly membership renewal', due: '31 Oct 2026', amount: 4500 }, start: '1 Aug 2026', end: '31 Oct 2026', status: 'Active', pct: 70, note: 'Ends in 37 days', left: { n: '37', unit: 'days left' }, payments: [pay('p3', 'INV-2026-0189', 'Quarterly membership', '1 Aug 2026', 4500, 'UPI')] },
+    second,
     { id: 'm3', name: 'Student plan', price: 3000, start: '1 Jan 2026', end: '31 Mar 2027', status: 'Suspended', pct: 55, note: 'Suspended by the gym. Ask at the front desk.', left: { n: '—', unit: 'suspended' }, payments: [pay('p4', 'INV-2026-0007', 'Student membership', '1 Jan 2026', 3000, 'cash')] },
     { id: 'm4', name: 'Monthly plan', price: 1500, start: '1 Jun 2025', end: '30 Jun 2025', status: 'Expired', pct: 100, note: 'Ended on 30 Jun 2025', left: { n: '0', unit: 'days left' }, payments: [pay('p5', 'INV-2025-0201', 'Monthly membership', '1 Jun 2025', 1500, 'cash')] },
     { id: 'm5', name: 'Joining offer', price: 3600, start: '1 Mar 2025', end: '31 May 2025', status: 'Expired', pct: 100, note: 'Ended on 31 May 2025', left: { n: '0', unit: 'days left' }, payments: [pay('p6', 'INV-2025-0102', 'Joining offer', '1 Mar 2025', 3600, 'UPI')] },
   ];
 }
+
+/** What the rest of the app reads: Expired when no membership is active (logging pauses), Expiring when every active one is ending soon, otherwise Active. */
+export function membershipState(ms: Membership[]): 'Active' | 'Expiring' | 'Expired' {
+  const active = ms.filter((m) => m.status === 'Active');
+  if (active.length === 0) return 'Expired';
+  return active.every((m) => m.warn) ? 'Expiring' : 'Active';
+}
+export const useMembershipState = () => membershipState(useMemberships());

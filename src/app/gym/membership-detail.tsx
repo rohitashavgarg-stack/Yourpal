@@ -39,7 +39,7 @@ function PauseTile({ p }: { p: Slot }) {
   const { c } = useTheme();
   const now = p.kind === 'now';
   return (
-    <View style={{ width: '48%', flexGrow: 1, minHeight: 104, borderRadius: radii.lg, padding: 14, gap: 4, justifyContent: 'space-between', backgroundColor: now ? c.warnSoft : c.surface }}>
+    <View style={{ width: '48%', flexGrow: 1, minHeight: 104, borderRadius: radii.lg, padding: 14, gap: 4, justifyContent: 'space-between', backgroundColor: now ? c.warnSoft : c.surface2 }}>
       <Row style={{ justifyContent: 'space-between' }}>
         <Txt v="caption" style={{ fontSize: fontSizes.sm, color: now ? c.warn : c.muted }}>{`Pause ${p.n}`}</Txt>
         {now && <PauseCircle size={16} color={c.warn} />}
@@ -157,7 +157,8 @@ export default function MembershipDetail() {
       {showPauses && (
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>PAUSES</Txt>
-          {/* A progress bar for the pauses used (one segment for each pause the membership allows), then a tile for each pause taken. */}
+          {/* One container: a progress bar for the pauses used (one segment for each pause the membership allows), then a tile for each pause taken. */}
+          <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
           <View style={{ gap: 8 }}>
             <Row style={{ justifyContent: 'space-between' }}>
               <Txt style={{ fontFamily: font.semibold }}>{`${usedCount} of ${PAUSE_TOTAL} used`}</Txt>
@@ -175,6 +176,7 @@ export default function MembershipDetail() {
               <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>{allPauses ? 'Show fewer' : `See all ${slots.length}`}</Txt>
             </Pressy>
           )}
+          </View>
         </>
       )}
 
