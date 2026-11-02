@@ -28,6 +28,7 @@ import { askCoach, coachStore } from '@/features/coach/coach';
 import { FinishScreen, FinishStats } from '@/features/workout/FinishScreen';
 import { workoutUiStore } from '@/features/workout/ui';
 import { NewExercise, NewList } from '@/features/workout/NewWorkoutUI';
+import { AddExerciseSheet } from '@/features/workout/AddExerciseSheet';
 import { FinishConfirmSheet, FormTipsSheet, SetMenuSheet, SwapSheet, WkApi, WkMenuSheet } from '@/features/workout/WorkoutSheets';
 import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
 import { IconButton } from '@/design-system/primitives/Button';
@@ -116,6 +117,7 @@ export default function Workout() {
   api.current = {
     openSwap: () => openSheet(<SwapSheet api={api} />, { label: 'Swap exercise' }),
     openSetMenu: (i) => openSheet(<SetMenuSheet api={api} i={i} />, { label: 'Set options' }),
+    openAdd: () => openSheet(<AddExerciseSheet />, { label: 'Add exercise' }),
     openNote: (i) => closeSheet(() => { setNoteFor(i); setNoteDraft(e?.sets[i]?.note ?? ''); }),
     skipSet: (i) => closeSheet(() => skipSet(i)),
     toggleWarm: (i) => { closeSheet(); A.toggleWarm(s!.exIdx, i); },
