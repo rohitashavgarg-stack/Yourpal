@@ -24,16 +24,6 @@ import { rupees } from '@/features/reports/payments';
 import type { Payment } from '@/features/reports/payments';
 import { radii, fontSizes } from '@/design-system/tokens';
 
-// A row of dots: one for each session or pause. The ones still to come are blue, the ones already used are grey.
-function Dots({ total, left, size = 10 }: { total: number; left: number; size?: number }) {
-  const { c } = useTheme();
-  return (
-    <View accessible accessibilityLabel={`${left} of ${total} left`} style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap' }}>
-      {Array.from({ length: total }, (_, i) => <StatusDot key={i} size={size} color={i < total - left ? c.surface3 : c.accent} />)}
-    </View>
-  );
-}
-
 // "14 to 27 Jul" when both dates are in one month.
 const range = (from: string, to: string) => {
   const [d1, m1] = from.split(' ');
@@ -41,20 +31,28 @@ const range = (from: string, to: string) => {
   return m1 === m2 ? `${d1} to ${d2} ${m2}` : `${from} to ${to}`;
 };
 
-// One pause as its own small card: a pause icon, the dates, the reason and how many days. The one on right now is amber.
-function PauseCard({ title, sub, days, warn }: { title: string; sub: string; days?: number; warn?: boolean }) {
+type Slot = { kind: 'taken' | 'now' | 'free'; title?: string; days?: number; reason?: string };
+
+// One pause slot. Taken: the dates, how many days and why. Now: amber, until when. Free: an outlined tile that says Available.
+function PauseTile({ n, p }: { n: number; p: Slot }) {
   const { c } = useTheme();
+  const free = p.kind === 'free';
+  const now = p.kind === 'now';
   return (
-    <Row style={{ gap: 12, padding: 14, borderRadius: radii.lg, backgroundColor: warn ? c.warnSoft : c.surface }}>
-      <View style={{ width: 40, height: 40, borderRadius: radii.md, backgroundColor: warn ? c.warn + '2E' : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}>
-        <PauseCircle size={20} color={warn ? c.warn : c.accentText} />
-      </View>
-      <View style={{ flex: 1, gap: 1 }}>
-        <Txt style={{ fontFamily: font.semibold, color: warn ? c.warn : c.ink }}>{title}</Txt>
-        <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{sub}</Txt>
-      </View>
-      {days != null && <Chip label={`${days} days`} />}
-    </Row>
+    <View style={{ width: '48%', flexGrow: 1, minHeight: 104, borderRadius: radii.lg, padding: 14, gap: 4, justifyContent: 'space-between', backgroundColor: free ? 'transparent' : now ? c.warnSoft : c.surface, borderWidth: free ? 1.5 : 0, borderColor: c.chipLine }}>
+      <Row style={{ justifyContent: 'space-between' }}>
+        <Txt v="caption" style={{ fontSize: fontSizes.sm, color: now ? c.warn : c.muted }}>{`Pause ${n}`}</Txt>
+        {now && <PauseCircle size={16} color={c.warn} />}
+      </Row>
+      {free ? (
+        <Txt muted style={{ fontFamily: font.medium }}>Available</Txt>
+      ) : (
+        <View style={{ gap: 2 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, color: now ? c.warn : c.ink }}>{p.title}</Txt>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{now ? 'On right now' : `${p.days} days, ${p.reason}`}</Txt>
+        </View>
+      )}
+    </View>
   );
 }
 
@@ -88,6 +86,11 @@ export default function MembershipDetail() {
   const showPauses = m.status !== 'Expired';
   const value = (t: string) => <Txt style={{ fontFamily: font.semibold }}>{t}</Txt>;
   const paused = m.id === 'm1' && d.onBreak;
+  const slots: Slot[] = [
+    ...history.map((h): Slot => ({ kind: 'taken', title: range(h.from, h.to), days: h.days, reason: h.reason })),
+    ...(paused ? [{ kind: 'now', title: `Until ${dateLabel(g.breakUntil)}` } as Slot] : []),
+  ];
+  while (slots.length < PAUSE_TOTAL) slots.push({ kind: 'free' });
 
   return (
     <SubPage title="Membership" fallback="/gym/membership">
@@ -156,12 +159,9 @@ export default function MembershipDetail() {
       {showPauses && (
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>PAUSES</Txt>
-          <View style={{ gap: 8 }}>
-            {paused && <PauseCard warn title={`Paused until ${dateLabel(g.breakUntil)}`} sub="Your end date moves out by the paused days" />}
-            <PayList>
-              <LineRow title="Pauses left" right={<Row style={{ gap: 10 }}><Dots total={PAUSE_TOTAL} left={left} size={14} />{value(`${left} of ${PAUSE_TOTAL}`)}</Row>} last />
-            </PayList>
-            {history.map((h) => <PauseCard key={h.from} title={range(h.from, h.to)} sub={h.reason} days={h.days} />)}
+          {/* One tile for each pause the membership allows: a taken pause shows its dates, the one on right now is amber, an unused one says Available. */}
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+            {slots.map((p, i) => <PauseTile key={i} n={i + 1} p={p} />)}
           </View>
         </>
       )}
