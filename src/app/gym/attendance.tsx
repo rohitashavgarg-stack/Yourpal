@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { Check, Clock, House, MapPin } from '@/lib/icons';
+import { Check, ChevronLeft, ChevronRight, Clock, House, MapPin } from '@/lib/icons';
 import { fadeOut } from '@/theme/motion';
 import { Button, Pill, Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
@@ -10,6 +10,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { cardShadow, Hint, SubPage } from '@/features/progress/parts';
 import { VISITS } from '@/features/gym/data';
+import { dayName, pastMonth } from '@/features/gym/attendanceMonths';
+import { Pressy } from '@/components/ui';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Card } from '@/design-system/primitives/Card';
@@ -27,8 +29,11 @@ export default function Attendance() {
   const awaiting = isPT && g.awaiting === 'Yes' && g.sessionState === 'awaiting';
   useGymScenarios('Gym · Attendance', isPT ? [{ label: 'Filter', options: ['All', 'Check-ins', 'PT sessions'], value: ['All', 'Check-ins', 'PT sessions'][g.attFilter], onPick: (v) => gymStore.set({ attFilter: ['All', 'Check-ins', 'PT sessions'].indexOf(v) as any }) }] : [], [], [g.attFilter, isPT]);
 
+  const [back, setBack] = useState(0); // months before September (0 is the current month)
+  const past = back > 0 ? pastMonth(back) : null;
+
   // Calendar cells (September, Monday first, 30 days + padding to 35).
-  const cells = Array.from({ length: 35 }, (_, k) => {
+  const septCells = Array.from({ length: 35 }, (_, k) => {
     const inMonth = k <= 29, dN = k + 1;
     let v: string | null = VISITS[dN] ?? null;
     if (v === 'p' && !isPT) v = 'c';
@@ -44,13 +49,34 @@ export default function Attendance() {
     return { n: inMonth ? String(dN) : '', bg, fg, fw, ring, today: dN === 24, aria };
   });
 
+  // An earlier month: its cells (the 1st lands on its own weekday) and one row for each visit, newest first.
+  const pastCells = past ? Array.from({ length: Math.ceil((past.lead + past.days) / 7) * 7 }, (_, k) => {
+    const dN = k - past.lead + 1, inMonth = dN >= 1 && dN <= past.days;
+    let v: string | null = inMonth ? past.visits[dN] ?? null : null;
+    if (v === 'p' && !isPT) v = 'c';
+    let bg = 'transparent', fg = inMonth ? c.ink : c.surface3, fw = font.regular;
+    if (v === 'c') { bg = c.accent; fg = fixed.white; fw = font.semibold; }
+    if (v === 'h') bg = c.surface3;
+    if (v === 'p') { bg = c.good; fg = fixed.dark; fw = font.semibold; }
+    return { n: inMonth ? String(dN) : '', bg, fg, fw, ring: null as string | null, today: false, aria: inMonth ? `${dN} ${past.name}${v === 'c' ? ', checked in' : v === 'h' ? ', home workout' : v === 'p' ? ', PT session' : ''}` : '' };
+  }) : null;
+  const cells = pastCells ?? septCells;
+  const pastRows: Att[] = past ? Object.keys(past.visits).map(Number).sort((x, y) => y - x).map((d) => {
+    const v = past.visits[d] === 'p' && !isPT ? 'c' : past.visits[d];
+    return v === 'p'
+      ? { key: 'm' + d, t: `${dayName(past, d)} · PT session`, s: 'Coach Vikram · you rated it 5★', tag: 'Confirmed', type: 'pt' as const, icon: 'pt' as const, tone: 'good' as const, ptOnly: true }
+      : v === 'h'
+        ? { key: 'm' + d, t: dayName(past, d), s: 'Workout, no check-in', tag: 'Home', type: 'c' as const, icon: 'home' as const }
+        : { key: 'm' + d, t: dayName(past, d), s: 'Workout logged', tag: 'Location', type: 'c' as const, icon: 'loc' as const };
+  }) : [];
+
   let rows: Att[] = [];
   if (isPT && g.awaiting === 'Yes') {
     if (g.sessionState === 'awaiting') rows.push({ key: 'a', t: 'Tue 23 · PT session', s: 'Coach Vikram · 6–7 pm', tag: 'Awaiting confirmation', type: 'pt', icon: 'wait', tone: 'accent' });
     if (g.sessionState === 'confirmed') rows.push({ key: 'a', t: 'Tue 23 · PT session', s: `Coach Vikram · you rated it ${g.rating}★`, tag: 'Confirmed', type: 'pt', icon: 'pt', tone: 'good' });
     if (g.sessionState === 'flagged') rows.push({ key: 'a', t: 'Tue 23 · PT session', s: 'Flagged to gym admin · not counted', tag: 'Under review', type: 'pt', icon: 'wait', tone: 'warn' });
   }
-  rows = rows.concat([
+  if (past) rows = pastRows; else rows = rows.concat([
     { key: '24', t: 'Wed 24 · 6:42 pm', s: 'Workout logged', tag: 'Location', type: 'c', icon: 'loc' },
     { key: '22', t: 'Mon 22 · PT session', s: 'Coach Vikram · you rated it 5★', tag: 'Confirmed', type: 'pt', icon: 'pt', ptOnly: true },
     { key: '20', t: 'Sat 20 · 7:05 pm', s: 'Workout logged', tag: 'Front desk', type: 'c', icon: 'loc' },
@@ -71,7 +97,7 @@ export default function Attendance() {
 
   return (
     <SubPage title="Attendance" fallback="/gym">
-      {awaiting && (
+      {awaiting && back === 0 && (
         <FadeIn exiting={fadeOut()} style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 8, borderWidth: 1.5, borderColor: c.accent }, cardShadow(isDark)]}>
           <Txt style={{ fontFamily: font.semibold }}>Confirm your session</Txt>
           <Txt muted style={{ fontSize: fontSizes.md }}>Coach Vikram marked Tue 23 Sep, 6–7 pm as completed</Txt>
@@ -79,8 +105,13 @@ export default function Attendance() {
         </FadeIn>
       )}
       <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 16 }, cardShadow(isDark)]}>
-        <Row style={{ justifyContent: 'space-between', marginBottom: 10 }}>
-          <Txt style={{ fontFamily: font.semibold }}>September</Txt><Txt v="label">18 visits</Txt>
+        <Row style={{ justifyContent: 'space-between', marginBottom: 10, gap: 8 }}>
+          <Pressy accessibilityRole="button" accessibilityLabel="Earlier month" onPress={() => setBack((n) => Math.min(6, n + 1))} disabled={back >= 6} scaleTo={0.92} style={{ width: 40, height: 40, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: back >= 6 ? 0.4 : 1 }}><ChevronLeft size={20} color={c.ink} /></Pressy>
+          <View style={{ alignItems: 'center' }}>
+            <Txt style={{ fontFamily: font.semibold }}>{past ? past.name : 'September'}</Txt>
+            <Txt v="label">{`${past ? past.count : 18} visits`}</Txt>
+          </View>
+          <Pressy accessibilityRole="button" accessibilityLabel="Later month" onPress={() => setBack((n) => Math.max(0, n - 1))} disabled={back === 0} scaleTo={0.92} style={{ width: 40, height: 40, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: back === 0 ? 0.4 : 1 }}><ChevronRight size={20} color={c.ink} /></Pressy>
         </Row>
         <View style={{ flexDirection: 'row', marginBottom: 4 }}>
           {'MTWTFSS'.split('').map((l, i) => <Txt key={i} style={{ flex: 1, textAlign: 'center', fontSize: fontSizes.xs2, color: c.muted }}>{l}</Txt>)}
