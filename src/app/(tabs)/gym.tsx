@@ -119,6 +119,8 @@ function AssessCard() {
   const total = entries.length;
   const last = entries[0];
   const shown = Math.min(total, 5); // the trail shows the latest five
+  const rows = compare(last, entries[1]);
+  const stats = (['weight', 'waist', 'pulse', 'bench', 'sleep'] as NumKey[]).map((k) => rows.find((r) => r.k === k)).filter((r) => !!r).slice(0, 3) as ReturnType<typeof compare>;
   return (
     <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${total} completed. Last: Assessment ${total}, ${fmtAt(last.at)}`} style={{ gap: 14 }}>
       <CardTitle title="Assessments" right={due ? <Tag label="Due now" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>View ›</Txt>} />
@@ -139,15 +141,28 @@ function AssessCard() {
           })}
         </View>
       </Row>
-      {/* the last assessment as a small card of its own: an icon, its name, and its date */}
-      <Row style={{ gap: 12, padding: 12, borderRadius: radii.lg, backgroundColor: c.surface2 }}>
-        <IconBadge size={40} radius={radii.md} bg={c.tNutri}><ClipboardCheck size={20} strokeWidth={1.9} color={c.cNutri} /></IconBadge>
-        <View style={{ flex: 1, gap: 1 }}>
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last assessment</Txt>
-          <Txt style={{ fontFamily: font.semibold }}>{`Assessment ${total}`}</Txt>
-        </View>
-        <Chip label={fmtAt(last.at)} />
-      </Row>
+      {/* the last assessment as a small card of its own: its name and date, and a few of its numbers with the change since the one before */}
+      <View style={{ gap: 12, padding: 12, borderRadius: radii.lg, backgroundColor: c.surface2 }}>
+        <Row style={{ gap: 12 }}>
+          <IconBadge size={40} radius={radii.md} bg={c.tNutri}><ClipboardCheck size={20} strokeWidth={1.9} color={c.cNutri} /></IconBadge>
+          <View style={{ flex: 1, gap: 1 }}>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last assessment</Txt>
+            <Txt style={{ fontFamily: font.semibold }}>{`Assessment ${total}`}</Txt>
+          </View>
+          <Chip label={fmtAt(last.at)} />
+        </Row>
+        {stats.length > 0 && (
+          <Row style={{ gap: 8 }}>
+            {stats.map((r) => (
+              <View key={r.k} style={{ flex: 1, borderRadius: radii.md, backgroundColor: c.surface, paddingVertical: 8, paddingHorizontal: 10, gap: 1 }}>
+                <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{r.n.label}</Txt>
+                <Txt style={{ fontFamily: font.semibold }}>{`${r.now} ${r.n.unit}`}</Txt>
+                {r.prev != null && <Txt style={{ fontSize: fontSizes.sm, color: r.good ? c.good : c.muted }}>{r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`}</Txt>}
+              </View>
+            ))}
+          </Row>
+        )}
+      </View>
       {due
         ? <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />
         : <Txt style={{ fontSize: fontSizes.sm, color: c.muted }}>{`Next assessment ${fmtAt(new Date(nextAt).toISOString())}`}</Txt>}
