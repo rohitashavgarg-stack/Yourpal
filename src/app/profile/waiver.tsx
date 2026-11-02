@@ -14,10 +14,9 @@ import { Chip } from '@/design-system/primitives/Chip';
 import { CheckCircle } from '@/design-system/primitives/CheckCircle';
 import { SubPage, useShake } from '@/features/shell/parts';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
-import { WAIVER_TITLE, WAIVER_POINTS } from '@/features/profile/waiver';
+import { WAIVER_GYM, WAIVER_POINTS } from '@/features/profile/waiver';
 import { WaiverSigned } from '@/features/profile/WaiverSigned';
 import { WaiverDetails } from '@/features/profile/WaiverDetails';
-import { WaiverSheetFront } from '@/features/profile/WaiverIllustration';
 import { SignSheet } from '@/features/profile/SignSheet';
 
 // Read the waiver, tick that you agree, then sign on the sign pad. Once signed this page turns into the signed screen.
@@ -61,10 +60,9 @@ export default function Waiver() {
           </View>
         </View>
       )}>
-      {/* The top of the page: the waiver paper straight on the page, then the title and what is left to do. */}
-      <View style={{ alignItems: 'center', gap: 12, paddingTop: 4 }}>
-        <WaiverSheetFront width={190} />
-        <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27 }}>{WAIVER_TITLE}</Txt>
+      {/* One heading: the gym. The page title above already says "Waiver". */}
+      <View style={{ gap: 8 }}>
+        <Txt accessibilityRole="header" v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>{WAIVER_GYM}</Txt>
         <Row style={{ gap: 6 }}>
           <Chip label="Pending" tone="warn" />
           <Chip label={`${WAIVER_POINTS.length} points`} />
