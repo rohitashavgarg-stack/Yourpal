@@ -91,12 +91,12 @@ function BreakCard() {
   );
 }
 
-function AttendanceCard({ awaiting }: { awaiting: boolean }) {
+function AttendanceCard() {
   const { c } = useTheme();
   const cells = Array.from({ length: 30 }, (_, j) => VISITS[j + 1]);
   return (
-    <PCard onPress={() => router.push('/gym/attendance')} label={`Attendance, 18 visits this month${awaiting ? ', 1 session to confirm' : ''}`} style={{ gap: 12 }}>
-      <CardTitle title="Attendance" right={awaiting ? <Tag label="1 session to confirm" bg={c.accent} fg={fixed.white} /> : undefined} />
+    <PCard onPress={() => router.push('/gym/attendance')} label="Attendance, 18 visits this month" style={{ gap: 12 }}>
+      <CardTitle title="Attendance" />
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
         <Row style={{ alignItems: 'baseline', gap: 8 }}>
           <Txt style={{ fontFamily: font.display, fontSize: 37, lineHeight: 44 }}>18</Txt>
@@ -248,9 +248,7 @@ function PTCard({ isPT }: { isPT: boolean }) {
 export default function Gym() {
   const { d } = useDomain();
   const { state } = useStore();
-  const g = gymStore.use();
   const isPT = state.sc.member === 'PT member';
-  const awaiting = isPT && g.awaiting === 'Yes' && g.sessionState === 'awaiting';
   useGymScenarios('Gym');
   return (
     <TabScreen title="Gym" header={<GymHeader />} compactTitle={false}>
@@ -258,7 +256,7 @@ export default function Gym() {
       <FadeIn i={1}><PTCard isPT={isPT} /></FadeIn>
       <FadeIn i={2}><GymMembership /></FadeIn>
       {d.onBreak && <BreakCard />}
-      <FadeIn i={3}><AttendanceCard awaiting={awaiting} /></FadeIn>
+      <FadeIn i={3}><AttendanceCard /></FadeIn>
       <FadeIn i={4}><AssessCard /></FadeIn>
     </TabScreen>
   );

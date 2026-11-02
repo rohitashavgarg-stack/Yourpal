@@ -13,7 +13,7 @@ import { ListCard, SubPage } from '@/features/progress/parts';
 import { LineRow, ListCard as CardList } from '@/features/shell/parts';
 import { PT_STATS, PT_TOTAL } from '@/features/gym/data';
 import { useGoalV2 } from '@/features/goalv2/model';
-import { useGymScenarios } from '@/features/gym/state';
+import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { CalendarCheck, ClipboardCheck, Dumbbell, MessageCircle, Salad, Target, TrendingUp } from '@/lib/icons';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
@@ -34,6 +34,8 @@ export default function PersonalTraining() {
   const { d } = useDomain();
   const { state } = useStore();
   const isPT = state.sc.member === 'PT member';
+  const gs = gymStore.use();
+  const awaiting = isPT && gs.awaiting === 'Yes' && gs.sessionState === 'awaiting';
   const g = useGoalV2();
   useGymScenarios('Gym · Personal training');
 
@@ -76,6 +78,31 @@ export default function PersonalTraining() {
       </View>
 
       {isPT && <ListCard rows={[{ l: 'Sessions left', v: `${d.ptLeft} of ${PT_TOTAL}` }, { l: 'Next session', v: 'Thu 25, 6 pm' }, { l: 'Package renews', v: '30 Oct' }]} />}
+
+      {awaiting && (
+        // Coach Vikram marked a session as done: the member confirms it and rates it
+        <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14, borderWidth: 1.5, borderColor: c.accent }}>
+          <Row style={{ gap: 12 }}>
+            <PersonAvatar who="coach" size={44} />
+            <View style={{ flex: 1, gap: 1 }}>
+              <Txt style={{ fontFamily: font.semibold }}>Confirm your session</Txt>
+              <Txt v="caption">Tue 23, 6 to 7 pm with Coach Vikram</Txt>
+            </View>
+          </Row>
+          <Button label="Confirm and rate" onPress={() => router.push('/gym/confirm')} />
+        </View>
+      )}
+
+      {isPT && (
+        <>
+          <Txt v="label" style={{ paddingHorizontal: 4 }}>YOUR SESSIONS</Txt>
+          <CardList>
+            {[{ t: 'Mon 22', s: 'Coach Vikram, you rated it 5 stars' }, { t: 'Tue 16', s: 'Coach Vikram, you rated it 4 stars' }].map((x, i, all) => (
+              <LineRow key={x.t} title={x.t} sub={x.s} minH={64} last={i === all.length - 1} icon={<CalendarCheck size={18} strokeWidth={1.9} color={c.ink} />} />
+            ))}
+          </CardList>
+        </>
+      )}
 
       <Txt v="label" style={{ paddingHorizontal: 4 }}>FOR YOU</Txt>
       <CardList>
