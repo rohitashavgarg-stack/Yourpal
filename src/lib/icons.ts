@@ -104,3 +104,5 @@ export { default as Download } from 'lucide-react-native/icons/download';
 export { default as FileText } from 'lucide-react-native/icons/file-text';
 export { default as ChevronUp } from 'lucide-react-native/icons/chevron-up';
 export { default as Building2 } from 'lucide-react-native/icons/building';
+export { default as Volume1 } from 'lucide-react-native/icons/volume-1';
+export { default as Volume2 } from 'lucide-react-native/icons/volume-2';

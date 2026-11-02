@@ -8,7 +8,7 @@ import { useGoalV2 } from '@/features/goalv2/model';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { router } from 'expo-router';
-import { Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Lock, LogOut, MessageCircle, Star, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
+import { Volume2, Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Lock, LogOut, MessageCircle, Star, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
 import { Chip, ChipTone } from '@/design-system/primitives/Chip';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Avatar } from '@/components/GymHeader';
@@ -118,6 +118,7 @@ export default function Profile() {
       ])}
       {group('PREFERENCES AND SETTINGS', [
         { l: 'Appearance', icon: <Sun size={18} color={c.ink} />, chip: { label: state.sc.theme }, go: go('/profile/appearance') },
+        { l: 'Sound', icon: <Volume2 size={18} color={c.ink} />, chip: state.profile.timer?.sound === false ? { label: 'Off' } : { label: `${Math.round((state.profile.timer?.volume ?? 1) * 100)}%` }, go: go('/profile/sound') },
         { l: 'Units & diet detail level', icon: <Ruler size={18} color={c.ink} />, go: go('/profile/units') },
         { l: 'Connected apps', icon: <Smartphone size={18} color={c.ink} />, chip: d.hc ? { label: 'Connected', tone: 'good' as ChipTone } : { label: 'Not connected' }, go: go('/profile/health') },
         { l: 'Quick trackers to show', icon: <Activity size={18} color={c.ink} />, chip: { label: trackerCount ? trackerCount + ' on' : 'None' }, go: go('/profile/trackers') },

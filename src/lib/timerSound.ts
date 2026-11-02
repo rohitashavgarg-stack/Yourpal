@@ -6,9 +6,10 @@ import { createAudioPlayer } from 'expo-audio';
 type Player = ReturnType<typeof createAudioPlayer>;
 let player: Player | null = null;
 
-export async function playTimerEnd() {
+export async function playTimerEnd(volume = 1) {
   try {
     if (!player) player = createAudioPlayer(require('../../assets/sounds/timer-end.wav'));
+    player.volume = Math.min(1, Math.max(0, volume));
     await player.seekTo(0);
     player.play();
   } catch {}

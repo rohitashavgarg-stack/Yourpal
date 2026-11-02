@@ -6,9 +6,9 @@ import { playTimerEnd } from '@/lib/timerSound';
 /** The cue for when a workout timer ends: the buzzer and the vibration, each one unless the member turned it off in Notifications. */
 export function useTimerEnd() {
   const { state } = useStore();
-  const { sound, vibrate } = state.profile.timer ?? {};
+  const { sound, vibrate, volume } = state.profile.timer ?? {};
   return useCallback(() => {
     if (vibrate !== false) haptic.success();
-    if (sound !== false) playTimerEnd();
-  }, [sound, vibrate]);
+    if (sound !== false) playTimerEnd(volume ?? 1);
+  }, [sound, vibrate, volume]);
 }
