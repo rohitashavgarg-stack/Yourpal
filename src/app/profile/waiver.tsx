@@ -45,7 +45,7 @@ export default function Waiver() {
   return (
     <SubPage title="Waiver" variant="progress" fallback="/profile"
       // A soft tint from the top of the screen, like the other pages.
-      backdrop={<LinearGradient pointerEvents="none" colors={[c.accentSoft, c.bg]} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 200 }} />}
+      backdrop={<LinearGradient pointerEvents="none" colors={[c.accent + '40', c.accent + '14', c.accent + '00']} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 260 }} />}
       // The tick and the Sign button stay together at the bottom of the screen while the points scroll behind them.
       footer={(
         <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
