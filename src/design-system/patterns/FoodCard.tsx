@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
-import { ArrowRightLeft, MoreHorizontal } from '@/lib/icons';
+import { ArrowRightLeft } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, fontSizes, radii } from '@/design-system/tokens';
@@ -12,7 +12,6 @@ import { haptic } from '@/lib/haptics';
 import type { FoodType } from '@/lib/data';
 import { CheckCircle } from '../primitives/CheckCircle';
 import { FoodMark } from '../primitives/FoodMark';
-import { IconButton } from '../primitives/Button';
 import { Tag } from '../primitives/Tag';
 
 /**
@@ -139,11 +138,7 @@ export function FoodCard({ state, pick, solid, name, type, amount, amountText, k
         {(macros || onMenu) ? (
           <Row style={{ justifyContent: 'space-between', backgroundColor: c.surface3, paddingLeft: 14, paddingRight: 8, paddingVertical: 8, minHeight: 52 }}>
             <Txt v="caption" style={{ flexShrink: 1 }}>{macros}</Txt>
-            {onMenu ? (
-              <IconButton label={`More for ${name}`} onPress={onMenu} size={36} radius={radii.pill} borderWidth={1.5} borderColor={c.chipLine} hitSlop={4}>
-                <MoreHorizontal size={18} color={c.ink} />
-              </IconButton>
-            ) : null}
+            {onMenu ? <CheckCircle on size={36} tone="good" label={`Mark as not eaten: ${name}`} onPress={onMenu} /> : null}
           </Row>
         ) : null}
       </Pressy>

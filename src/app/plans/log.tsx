@@ -5,12 +5,12 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useLeaveIfPaused } from '@/lib/logGate';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Ellipse } from 'react-native-svg';
-import { CameraOff, Check, PenLine, ScanLine, Search } from '@/lib/icons';
+import { CameraOff, Check, ChevronRight, PenLine, ScanLine, Search } from '@/lib/icons';
 import { Button, Card, Field, Pill, Pressy, Row, Segmented, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark, foodTypeLabel, PillBtn } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
 import { FoodType, MealId, MEALS } from '@/lib/data';
-import { Extra, useDomain } from '@/lib/domain';
+import { Extra, mealLog, useDomain } from '@/lib/domain';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
@@ -18,6 +18,7 @@ import { haptic } from '@/lib/haptics';
 import { FOOD, macroLine, RECENT, SCAN_PHOTO } from '@/features/plans/content';
 import { useDietActions } from '@/features/plans/dietActions';
 import { PageHeader } from '@/features/plans/parts';
+import { fmtClock, TimeSheet } from '@/features/plans/TimeSheet';
 import { allowedFor, dietItems, Food, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { ScanBracket } from '@/design-system/primitives/ScanBracket';
@@ -52,7 +53,7 @@ export default function LogFood() {
   const insets = useSafeAreaInsets();
   const { d, set } = useDomain();
   const { p } = usePlans();
-  const { toast } = useOverlay();
+  const { toast, openSheet } = useOverlay();
   const A = useDietActions();
   const prm = useLocalSearchParams<{ meal?: MealId; replace?: string; edit?: string }>();
   const forEdit = prm.edit === '1';
@@ -70,6 +71,7 @@ export default function LogFood() {
   const [wK, setWK] = useState('');
   const [wP, setWP] = useState('');
   const [wSave, setWSave] = useState(true);
+  const [ateAt, setAteAt] = useState<number | null>(null); // null until the member changes it: then the meal's own time, or now
   const [scan, setScan] = useState<ScanSt>('idle');
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -139,6 +141,7 @@ export default function LogFood() {
     }
     if (replaceIt) { A.applySwap(meal, replaceIt, items[0].item, false); router.back(); return; }
     items.forEach(({ item }) => A.addExtra(meal, item));
+    if (ateAt != null) A.setMealTime(meal, ateAt);
     setP({ seg: 'diet', openMeal: meal });
     router.back();
     toast(`Logged ${items.length > 1 ? what : cur.n}${saveMine ? '. Saved to your foods' : ''}`);
@@ -296,6 +299,20 @@ export default function LogFood() {
       </ScrollView>
       {/* the log button stays in view at the bottom while the list scrolls */}
       <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 16), backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>
+        {!!cur && !forEdit && !replaceIt && (() => {
+          const shown = ateAt ?? mealLog(d, meal).at ?? d.min;
+          return (
+            <Pressy accessibilityRole="button" accessibilityLabel={`Ate at ${fmtClock(shown)}. Change the time`} scaleTo={0.99}
+              onPress={() => openSheet(<TimeSheet title="When did you eat?" initial={shown} max={d.min} onSave={setAteAt} />, { label: 'Ate at' })}
+              style={{ minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+              <Txt muted>Ate at</Txt>
+              <Row style={{ gap: 6 }}>
+                <Txt style={{ fontFamily: font.semibold }}>{fmtClock(shown)}</Txt>
+                <ChevronRight size={18} color={c.muted} />
+              </Row>
+            </Pressy>
+          );
+        })()}
         <Button label={logL} disabled={!cur} onPress={log} />
       </View>
     </View>

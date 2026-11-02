@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/immutability, react-hooks/purity, react-hooks/refs -- reanimated shared values are written from gesture and animation callbacks; Date.now() is read inside event handlers, not during render; refs are read and written in gesture-handler callbacks, not during render */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLogGate, useLogsPaused } from '@/lib/logGate';
 import { View } from 'react-native';
 import Animated, { Easing, interpolateColor, useAnimatedProps, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -7,12 +7,12 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import Svg, { Circle } from 'react-native-svg';
 import { router } from 'expo-router';
-import { ArrowRightLeft, ChevronDown, Minus, MoreHorizontal, Plus } from '@/lib/icons';
+import { ArrowRightLeft, ChevronDown, Clock, Minus, MoreHorizontal, Plus } from '@/lib/icons';
 import { Button, Card, IconButton, Pressy, Row, Txt } from '@/components/ui';
-import { CheckCircle, FoodMark, Tag } from '@/components/bits';
+import { FoodMark, Tag } from '@/components/bits';
 import { useOverlay } from '@/components/Overlay';
 import { KCAL_TARGET, MACRO_TARGET, MealId, MEALS } from '@/lib/data';
-import { totals, useDomain } from '@/lib/domain';
+import { mealLog, totals, useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
@@ -23,6 +23,7 @@ import { dietOpenMeal } from './openers';
 import { QuickLogSheet } from '@/features/today/QuickLogSheet';
 import { ItemMenuSheet, SwapSheet } from './Sheets';
 import { QtySheet } from './QtySheet';
+import { fmtClock, TimeSheet } from './TimeSheet';
 import { fmtNum, fmtQty, Qty, splitFood, stepFor, unitLabel } from './qty';
 import { DItem, dietItems, dietTotals, setP, useCountUp, usePlans } from './store';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
@@ -130,7 +131,7 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
   const openFood = () => { haptic.medium(); router.push({ pathname: '/food', params: { mid, k: String(it.idx), extra: it.mine ? '1' : '0' } }); };
   const undo = () => openSheet(<UndoEatenSheet what={it.n} onConfirm={() => A.eat(mid, it, false)} />, { label: 'Mark as not eaten' });
   return (
-    <FoodCard solid state={it.st} name={food.name} type={it.type} tag={it.mine ? 'Yours' : undefined}
+    <FoodCard state={it.st} name={food.name} type={it.type} tag={it.mine ? 'Yours' : undefined}
       amount={food.qty ? <QtyControl mid={mid} it={it} qty={food.qty} locked={false} /> : undefined} amountText={amountText}
       kcal={`${kShown} kcal`} macros={macros} note="Skipped for today"
       onCheck={() => { pin(); A.eat(mid, it, true); }} onMenu={undo} onHold={openFood} onSwap={onSwap} onSkip={onSkip} skipLabel={it.mine ? 'Delete' : 'Skip'}
@@ -140,6 +141,7 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
 
 // ---------- Meal accordion card ----------
 function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
+  const { c } = useTheme();
   const { d } = useDomain();
   const { p } = usePlans();
   const A = useDietActions();
@@ -152,33 +154,30 @@ function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
   const all = items.length > 0 && eaten > 0 && items.every((i) => i.st === 'eaten' || i.st === 'skipped');
   let kc = 0, mp = 0; items.forEach((i) => { if (i.st !== 'skipped') { kc += i.k * i.por; mp += i.p * i.por; } });
   const sub = (all ? 'All eaten' : eaten ? `${eaten} of ${total} eaten` : `${items.length} items`) + (simple ? '' : ` · ~${Math.round(kc)} kcal · P ${Math.round(mp)} g`);
-  const last = useRef(0);
-  const tm = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  useEffect(() => () => clearTimeout(tm.current), []);
-  const tap = () => {
-    const now = Date.now();
-    if (!all && now - last.current < 320) { clearTimeout(tm.current); last.current = 0; A.mealAll(mid, items, m.n); return; }
-    last.current = now;
-    clearTimeout(tm.current);
-    tm.current = setTimeout(() => setP({ openMeal: open ? 'none' : mid }), 260);
-  };
   const paused = useLogsPaused();
   const addElse = () => router.push({ pathname: '/plans/log', params: { meal: mid } });
+  // The meal has no check of its own: foods are checked one by one. The time it was eaten shows once a food is checked, and can be changed.
+  const at = mealLog(d, mid).at;
+  const pickTime = () => openSheet(<TimeSheet title={`When did you eat ${m.n}?`} initial={at ?? d.min} max={d.min} onSave={(v) => A.setMealTime(mid, v)} />, { label: 'Ate at' });
 
   return (
     <Card style={{ padding: 6, borderRadius: radii.card }}>
       <Row style={{ gap: 6 }}>
-        <Pressy accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel={`${m.n}, ${sub}`} accessibilityHint="Double tap quickly to mark the whole meal eaten"
-          onPress={tap} scaleTo={0.985} haptics={false} style={{ flex: 1, minHeight: 56, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 10 }}>
+        <Pressy accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel={`${m.n}, ${sub}`}
+          onPress={() => setP({ openMeal: open ? 'none' : mid })} scaleTo={0.985} haptics={false} style={{ flex: 1, minHeight: 56, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 10 }}>
           <View style={{ flex: 1 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: 16 }}>{m.n}</Txt>
             <Txt muted style={{ fontSize: fontSizes.sm }}>{sub}</Txt>
           </View>
           <Chevron open={open} />
         </Pressy>
-        <View style={{ marginRight: 4 }}>
-          <CheckCircle on={all} size={40} tone="good" label={`${all ? 'Unmark' : 'Mark all of'} ${m.n} as eaten`} onPress={() => (all ? openSheet(<UndoEatenSheet what={`All of ${m.n}`} onConfirm={() => A.mealAll(mid, items, m.n)} />, { label: 'Mark as not eaten' }) : A.mealAll(mid, items, m.n))} />
-        </View>
+        {eaten > 0 && at != null && (
+          <Pressy accessibilityRole="button" accessibilityLabel={`Ate at ${fmtClock(at)}. Change the time`} onPress={pickTime} scaleTo={0.96}
+            style={{ height: 32, paddingHorizontal: 12, marginRight: 6, borderRadius: radii.pill, borderWidth: 1, borderColor: c.chipLine, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <Clock size={14} color={c.muted} />
+            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18 }}>{fmtClock(at)}</Txt>
+          </Pressy>
+        )}
       </Row>
       {open && (
         <FadeIn style={{ gap: 6, paddingHorizontal: 4, paddingTop: 4, paddingBottom: 6 }}>
