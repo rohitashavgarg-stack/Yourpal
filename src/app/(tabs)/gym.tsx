@@ -240,7 +240,7 @@ function PTCard({ isPT }: { isPT: boolean }) {
         <Txt accessibilityLabel={`${d.ptLeft} of ${PT_TOTAL} sessions left`} style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39, color: onDark.text }}>{d.ptLeft}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: onDark.muted }}> of {PT_TOTAL} sessions left</Txt></Txt>
         <GrowBar pct={Math.round((d.ptLeft / PT_TOTAL) * 100)} color={c.accent} track="rgba(255,255,255,0.14)" />
       </View>
-      <Button kind="white" label="View sessions" onPress={() => router.push('/gym/pt')} />
+      <Button kind="white" label="View sessions" onPress={() => router.push('/gym/sessions')} />
     </View>
   );
 }
