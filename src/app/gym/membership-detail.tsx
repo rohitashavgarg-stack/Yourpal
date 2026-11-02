@@ -28,9 +28,9 @@ import { radii, fontSizes } from '@/design-system/tokens';
 function Dots({ total, left, size = 10 }: { total: number; left: number; size?: number }) {
   const { c } = useTheme();
   return (
-    <Row style={{ gap: 6, flexWrap: 'wrap' }} accessibilityLabel={`${left} of ${total} left`}>
+    <View accessible accessibilityLabel={`${left} of ${total} left`} style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap' }}>
       {Array.from({ length: total }, (_, i) => <StatusDot key={i} size={size} color={i < total - left ? c.surface3 : c.accent} />)}
-    </Row>
+    </View>
   );
 }
 
