@@ -18,7 +18,7 @@ export function useNeedsEmergency() {
 
 export function EmergencyCard() {
   const { c } = useTheme();
-  const open = () => router.push('/profile/emergency' as any);
+  const open = () => router.push('/profile/details');
   return (
     <Pressy accessibilityRole="button" accessibilityLabel="Add an emergency contact. Your gym needs someone to call if you need help." onPress={open} scaleTo={0.98}
       style={{ alignSelf: 'stretch', borderRadius: radii.block, backgroundColor: c.warnSoft, paddingVertical: 12, paddingHorizontal: 14 }}>

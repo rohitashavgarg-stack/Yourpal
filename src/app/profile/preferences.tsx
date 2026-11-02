@@ -1,31 +1,22 @@
-import React, { useState } from 'react';
-import { Button, NoteField, Pill, Row } from '@/components/ui';
-import { useOverlay } from '@/components/Overlay';
+import React from 'react';
+import { NoteField, Pill, Row } from '@/components/ui';
 import { useStore } from '@/lib/store';
-import { haptic } from '@/lib/haptics';
 import { fadeOut } from '@/theme/motion';
-import { goBack, Label, SubPage } from '@/features/shell/parts';
+import { Label, SubPage } from '@/features/shell/parts';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { DIETS, TRAIN_DAYS } from '@/features/profile/PrefSheets';
 
-// Training days, diet and injuries. Tap to change; the Save button appears once something is different.
+// Training days, diet and injuries. Every change is saved as you make it.
 export default function Preferences() {
   const { state, setProfile } = useStore();
-  const { toast } = useOverlay();
   const p = state.profile;
-  const [days, setDays] = useState(p.days);
-  const [diet, setDiet] = useState(p.diet);
-  const [inj, setInj] = useState<'No' | 'Yes'>(p.injury);
-  const [note, setNote] = useState(p.injuryNote);
-  const dirty = days !== p.days || diet !== p.diet || inj !== p.injury || (inj === 'Yes' && note !== p.injuryNote);
-  const save = () => {
-    setProfile({ days, diet, injury: inj, injuryNote: inj === 'Yes' ? note : '' });
-    haptic.success();
-    goBack('/profile');
-    toast('Saved. Coach Vikram sees the update');
-  };
+  const days = p.days, diet = p.diet, inj = p.injury, note = p.injuryNote;
+  const setDays = (n: number) => setProfile({ days: n });
+  const setDiet = (x: string) => setProfile({ diet: x });
+  const setInj = (v: 'No' | 'Yes') => setProfile({ injury: v, ...(v === 'No' ? { injuryNote: '' } : {}) });
+  const setNote = (t: string) => setProfile({ injuryNote: t });
   return (
-    <SubPage title="Preferences" fallback="/profile" footer={dirty ? <Button kind="accent" label="Save" onPress={save} /> : undefined}>
+    <SubPage title="Preferences" fallback="/profile">
       <Label>Days you can train</Label>
       <Row style={{ gap: 6, marginTop: -4 }}>
         {TRAIN_DAYS.map((n) => <Pill key={n} label={String(n)} on={days === n} onPress={() => setDays(n)} style={{ flex: 1, paddingHorizontal: 0 }} />)}

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ageFrom, defaultDob, fmtDob } from '@/lib/dob';
 import { PersonAvatar } from '@/components/Brand';
 import { View } from 'react-native';
-import { Button, Field, Row, Txt } from '@/components/ui';
+import { Button, Field, Pill, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { haptic } from '@/lib/haptics';
 import { font } from '@/theme/tokens';
@@ -18,7 +18,7 @@ import { Pressy } from '@/components/ui';
 import { useScenarios, useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fadeOut } from '@/theme/motion';
-import { goBack, Label, Note, SubPage, useShake } from '@/features/shell/parts';
+import { Label, SubPage, useShake } from '@/features/shell/parts';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
@@ -112,6 +112,17 @@ export default function MyDetails() {
   const { d } = useDomain();
   const { s: shell } = useShell();
   const [name, setName] = useState(p.name);
+  const ec = p.emergency;
+  const [ecName, setEcName] = useState(ec?.name ?? '');
+  const [ecPhone, setEcPhone] = useState(ec?.phone ?? '');
+  const [ecRel, setEcRel] = useState(ec?.relation ?? '');
+  const ecBad = { name: ecName.trim().length < 2, phone: ecPhone.length !== 10 || ecPhone === state.phone, rel: !ecRel };
+  const ecValid = !ecBad.name && !ecBad.phone && !ecBad.rel;
+  useEffect(() => {
+    if (!ecValid) return;
+    if (ec && ec.name === ecName.trim() && ec.phone === ecPhone && ec.relation === ecRel) return;
+    setProfile({ emergency: { name: ecName.trim(), phone: ecPhone, relation: ecRel } });
+  }, [ecValid, ecName, ecPhone, ecRel]); // eslint-disable-line react-hooks/exhaustive-deps
   const [err, setErr] = useState(0);
   const [photo, setPhoto] = useState<string | null | undefined>(undefined); // undefined = unchanged, null = removed
   const shake = useShake(err);
@@ -121,7 +132,6 @@ export default function MyDetails() {
     rows: [
       { label: 'Name', options: ['Filled', 'Empty'], value: name.trim() ? 'Filled' : 'Empty', onPick: (v) => { setName(v === 'Empty' ? '' : p.name || 'Rohitashav Garg'); setErr(0); } },
     ],
-    actions: [{ label: 'Try saving', run: () => save() }],
   }, [name]);
 
   const pickPhoto = async (src: 'library' | 'camera') => {
@@ -130,34 +140,24 @@ export default function MyDetails() {
       if (!perm.granted && Platform.OS !== 'web') { toast(src === 'camera' ? 'Camera is off. Allow it in Settings.' : 'Photos are off. Allow access in Settings.'); return; }
       const opts: ImagePicker.ImagePickerOptions = { mediaTypes: ['images'], allowsEditing: true, aspect: [1, 1], quality: 0.8 };
       const r = src === 'camera' ? await ImagePicker.launchCameraAsync(opts) : await ImagePicker.launchImageLibraryAsync(opts);
-      if (!r.canceled && r.assets?.[0]?.uri) { setPhoto(r.assets[0].uri); haptic.mark(); }
+      if (!r.canceled && r.assets?.[0]?.uri) { setPhoto(r.assets[0].uri); setProfile({ photo: r.assets[0].uri }); haptic.mark(); }
     } catch { toast(src === 'camera' ? 'Camera is not available here' : 'Could not open your photos'); }
   };
   const hasCustom = photo === undefined ? !!p.photo : !!photo;
-  const dirty = name !== p.name || photo !== undefined;
-  const save = () => {
-    if (!name.trim()) { setErr((n) => n + 1); return; }
-    setProfile({ name: name.trim(), ...(photo !== undefined ? { photo: photo ?? undefined } : {}) });
-    goBack('/profile');
-    toast('Saved. Coach Vikram sees the update');
-  };
 
   return (
-    <SubPage title="My details" fallback="/profile" footer={dirty ? <>
-      <Note center>Changes are shared with your trainer so your plan stays safe.</Note>
-      <Button kind="accent" label="Save" onPress={save} />
-    </> : undefined}>
+    <SubPage title="My details" fallback="/profile">
       <View style={{ alignItems: 'center', paddingVertical: 4, gap: 8 }}>
-        <Pressy accessibilityRole="button" accessibilityLabel="Change profile photo" onPress={() => openSheet(<PhotoSheet hasCustom={hasCustom} onPick={pickPhoto} onRemove={() => setPhoto(null)} />, { label: 'Profile photo' })} scaleTo={0.96}>
+        <Pressy accessibilityRole="button" accessibilityLabel="Change profile photo" onPress={() => openSheet(<PhotoSheet hasCustom={hasCustom} onPick={pickPhoto} onRemove={() => { setPhoto(null); setProfile({ photo: undefined }); }} />, { label: 'Profile photo' })} scaleTo={0.96}>
           <PersonAvatar who="me" size={96} photo={photo} />
         </Pressy>
-        <Pressy accessibilityRole="button" onPress={() => openSheet(<PhotoSheet hasCustom={hasCustom} onPick={pickPhoto} onRemove={() => setPhoto(null)} />, { label: 'Profile photo' })} scaleTo={0.96} style={{ minHeight: 32, justifyContent: 'center' }}>
+        <Pressy accessibilityRole="button" onPress={() => openSheet(<PhotoSheet hasCustom={hasCustom} onPick={pickPhoto} onRemove={() => { setPhoto(null); setProfile({ photo: undefined }); }} />, { label: 'Profile photo' })} scaleTo={0.96} style={{ minHeight: 32, justifyContent: 'center' }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.accentText }}>Change photo</Txt>
         </Pressy>
       </View>
       <Label style={{ marginTop: 16 }}>Name</Label>
       <View style={{ marginTop: -6 }}>
-        <Field value={name} onChangeText={(t) => { setName(t); if (err) setErr(0); }} error={!!err} accessibilityLabel="Name" autoCapitalize="words" returnKeyType="done" />
+        <Field value={name} onChangeText={(t) => { setName(t); if (t.trim()) setProfile({ name: t.trim() }); setErr((n) => (t.trim() ? 0 : n + 1)); }} error={!!err} accessibilityLabel="Name" autoCapitalize="words" returnKeyType="done" />
       </View>
       {!!err && (
         <FadeIn exiting={fadeOut()} style={shake}>
@@ -184,6 +184,17 @@ export default function MyDetails() {
         <BodyRow label="Weight" last value={shell.unitsW === 'lb' ? `${(d.weight * 2.20462).toFixed(1)} lb` : `${d.weight.toFixed(1)} kg`} onPress={() => router.push('/log-weight')} />
       </View>
 
+
+      <Label style={{ marginTop: 16 }}>Emergency contact</Label>
+      <View style={{ marginTop: -6 }}>
+        <Field value={ecName} onChangeText={setEcName} accessibilityLabel="Emergency contact name" autoCapitalize="words" placeholder="Full name" returnKeyType="next" />
+      </View>
+      <Field value={ecPhone} onChangeText={(t) => setEcPhone(t.replace(/[^0-9]/g, '').slice(0, 10))} keyboardType="number-pad" prefix="+91" placeholder="10-digit mobile number" accessibilityLabel="Emergency contact mobile number" error={ecPhone.length === 10 && ecPhone === state.phone} />
+      {ecPhone.length === 10 && ecPhone === state.phone && <Txt style={{ color: c.warn, fontSize: fontSizes.md, paddingHorizontal: 6 }}>Use a number other than your own.</Txt>}
+      <Row style={{ gap: 6, flexWrap: 'wrap' }}>
+        {['Parent', 'Spouse', 'Sibling', 'Friend', 'Other'].map((x) => <Pill key={x} label={x} on={ecRel === x} onPress={() => { setEcRel(x); haptic.tick(); }} />)}
+      </Row>
+      {!!ec && <Button kind="warn" small label="Remove contact" onPress={() => { setProfile({ emergency: undefined }); setEcName(''); setEcPhone(''); setEcRel(''); haptic.light(); toast('Emergency contact removed'); }} style={{ alignSelf: 'flex-start' }} />}
     </SubPage>
   );
 }
