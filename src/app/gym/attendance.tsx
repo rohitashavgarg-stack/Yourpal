@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { Check, ChevronLeft, ChevronRight, Clock, House, MapPin } from '@/lib/icons';
+import { Check, ChevronLeft, ChevronRight, Clock, FingerprintPattern, House, MapPin, Smartphone } from '@/lib/icons';
 import { fadeOut } from '@/theme/motion';
 import { Button, Pill, Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
@@ -67,7 +67,7 @@ export default function Attendance() {
       ? { key: 'm' + d, t: `${dayName(past, d)} · PT session`, s: 'Coach Vikram · you rated it 5★', tag: 'Confirmed', type: 'pt' as const, icon: 'pt' as const, tone: 'good' as const, ptOnly: true }
       : v === 'h'
         ? { key: 'm' + d, t: dayName(past, d), s: 'Workout, no check-in', tag: 'Home', type: 'c' as const, icon: 'home' as const }
-        : { key: 'm' + d, t: dayName(past, d), s: 'Workout logged', tag: 'Location', type: 'c' as const, icon: 'loc' as const };
+        : { key: 'm' + d, t: dayName(past, d), s: 'Workout logged', tag: d % 2 ? 'Location' : 'Front desk', type: 'c' as const, icon: 'loc' as const };
   }) : [];
 
   let rows: Att[] = [];
@@ -146,7 +146,14 @@ export default function Attendance() {
                 <Txt style={{ fontFamily: font.medium }}>{r.t}</Txt>
                 <Txt v="caption">{r.s}</Txt>
               </View>
-              <Tag label={r.tag} bg={t.tagBg} fg={t.tagFg} />
+              {r.tag === 'Location' || r.tag === 'Front desk'
+                ? (
+                  // how this visit was checked in: with the phone, or with the biometric device
+                  <View accessible accessibilityLabel={r.tag === 'Location' ? 'Checked in with the phone' : 'Checked in with biometric'} style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+                    {r.tag === 'Location' ? <Smartphone size={18} color={c.ink} /> : <FingerprintPattern size={18} color={c.ink} />}
+                  </View>
+                )
+                : <Tag label={r.tag} bg={t.tagBg} fg={t.tagFg} />}
             </FadeIn>
           );
         })}

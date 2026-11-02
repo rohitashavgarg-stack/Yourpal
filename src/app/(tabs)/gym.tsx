@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { router } from 'expo-router';
-import { FingerprintPattern, Smartphone, ChevronRight, ClipboardCheck, CreditCard, Dumbbell, MessageCircle } from '@/lib/icons';
+import { ChevronRight, ClipboardCheck, CreditCard, Dumbbell, MessageCircle } from '@/lib/icons';
 import { fadeOut } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -100,32 +100,18 @@ function AttendanceCard({ awaiting }: { awaiting: boolean }) {
     <PCard onPress={() => router.push('/gym/attendance')} label={`Attendance, 18 visits this month, ${lastMonth} last month${awaiting ? ', 1 session to confirm' : ''}`} style={{ gap: 12 }}>
       <CardTitle title="Attendance" right={awaiting ? <Tag label="1 session to confirm" bg={c.accent} fg={fixed.white} /> : undefined} />
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
-        <Row style={{ alignItems: 'flex-end', gap: 14 }}>
-          <View>
-            <Txt style={{ fontFamily: font.display, fontSize: 37, lineHeight: 44 }}>18</Txt>
+        <Row style={{ alignItems: 'flex-end', gap: 10 }}>
+          <Txt style={{ fontFamily: font.display, fontSize: 37, lineHeight: 44 }}>18</Txt>
+          <View style={{ paddingBottom: 6 }}>
             <Txt v="caption" style={{ fontSize: fontSizes.sm }}>visits this month</Txt>
-          </View>
-          {/* last month's visits, on the side of this month's */}
-          <View style={{ paddingBottom: 1 }}>
-            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2, lineHeight: 30, color: c.muted }}>{String(lastMonth)}</Txt>
-            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>last month</Txt>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`${lastMonth} last month`}</Txt>
           </View>
         </Row>
         <View importantForAccessibility="no-hide-descendants" style={{ width: 10 * 8 + 9 * 3, flexDirection: 'row', flexWrap: 'wrap', gap: 3 }}>
           {cells.map((v, i) => <StatusDot key={i} size={8} color={v && v !== 'x' ? (v === 'h' ? c.surface3 : c.accent) : c.surface2} />)}
         </View>
       </Row>
-      {/* the last visit: when, and how the member checked in. Check-in is with the biometric device or with the phone, so those two get their icons. */}
-      <Row style={{ gap: 10 }}>
-        <View style={{ flex: 1, gap: 1 }}>
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last visit</Txt>
-          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>Wed 24, 6:42 pm</Txt>
-        </View>
-        <View accessible accessibilityLabel="Checked in with the phone" style={{ flexDirection: 'row', gap: 6 }}>
-          <IconBadge size={32} radius={radii.sm} bg={c.surface2}><FingerprintPattern size={17} color={c.muted} /></IconBadge>
-          <IconBadge size={32} radius={radii.sm} bg={c.accentSoft}><Smartphone size={17} color={c.accentText} /></IconBadge>
-        </View>
-      </Row>
+      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last visit Wed 24, 6:42 pm</Txt>
     </PCard>
   );
 }
