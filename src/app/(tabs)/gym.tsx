@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { ClipboardCheck, Dumbbell, MessageCircle } from '@/lib/icons';
+import { ChevronRight, ClipboardCheck, Dumbbell, MessageCircle } from '@/lib/icons';
 import { fadeOut } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -16,6 +16,7 @@ import { font } from '@/theme/tokens';
 import { CardTitle, cardShadow, GrowBar, ListCard, PCard } from '@/features/progress/parts';
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { MembershipCard as MembershipStrip, useMembershipNotice } from '@/features/today/PaymentBanner';
+import { useMemberships } from '@/features/gym/memberships';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
@@ -23,8 +24,22 @@ import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { Chip } from '@/design-system/primitives/Chip';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
 
+// The main membership as a card. When there are more memberships, a quiet row under it says how many and opens the list.
 function GymMembership() {
-  return <MembershipStrip n={useMembershipNotice()} />;
+  const { c } = useTheme();
+  const n = useMemberships().filter((m) => m.id !== 'm1' && m.status !== 'Expired').length;
+  return (
+    <View style={{ gap: 8 }}>
+      <MembershipStrip n={useMembershipNotice()} />
+      {n > 0 && (
+        <Pressy accessibilityRole="button" accessibilityLabel={`${n} more membership${n > 1 ? 's' : ''}. See all`} onPress={() => router.push('/gym/membership')} scaleTo={0.985}
+          style={{ minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, borderRadius: radii.lg, backgroundColor: c.surface }}>
+          <Txt style={{ fontFamily: font.medium }}>{n} more membership{n > 1 ? 's' : ''}</Txt>
+          <ChevronRight size={18} color={c.muted} />
+        </Pressy>
+      )}
+    </View>
+  );
 }
 
 function BreakCard() {
@@ -164,7 +179,7 @@ export default function Gym() {
       <FadeIn i={4}><AssessCard /></FadeIn>
       <FadeIn i={5}>
         <ListCard rows={[
-          { l: 'Membership & payments', onPress: () => router.push('/gym/membership') },
+          { l: 'Memberships and payments', onPress: () => router.push('/gym/membership') },
           { l: 'Membership pauses', onPress: () => router.push('/gym/break') },
           { l: 'Help & support', onPress: () => toast("Help opens the gym's support chat and FAQs") },
         ]} />
