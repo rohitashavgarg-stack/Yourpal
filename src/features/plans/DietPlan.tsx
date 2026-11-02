@@ -24,6 +24,7 @@ import { QuickLogSheet } from '@/features/today/QuickLogSheet';
 import { ItemMenuSheet, SwapSheet } from './Sheets';
 import { QtySheet } from './QtySheet';
 import { fmtClock, TimeSheet } from './TimeSheet';
+import { FoodActionsSheet } from './FoodActionsSheet';
 import { isOffTime, suggestAt } from './mealTime';
 import { fmtNum, fmtQty, Qty, splitFood, stepFor, unitLabel } from './qty';
 import { DItem, dietItems, dietTotals, setP, useCountUp, usePlans } from './store';
@@ -131,7 +132,7 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
   const onSwap = logGate(() => { haptic.light(); openSheet(it.kind === 'plan' ? <QuickLogSheet mealId={mid} mode="sugg" replaceIdx={it.idx} /> : <SwapSheet mid={mid} itemKey={it.key} always={false} />, { label: 'Swap item' }); });
   const onSkip = () => { pin(); if (it.mine) A.deleteExtra(mid, it); else A.skipItem(mid, it); };
   const openFood = () => { haptic.medium(); router.push({ pathname: '/food', params: { mid, k: String(it.idx), extra: it.mine ? '1' : '0' } }); };
-  const undo = () => openSheet(<UndoEatenSheet what={it.n} onConfirm={() => A.eat(mid, it, false)} />, { label: 'Mark as not eaten' });
+  const more = () => openSheet(<FoodActionsSheet name={it.n} eaten={it.st === 'eaten'} planned={!it.mine} onReplace={onSwap} onDelete={onSkip} onNotConsumed={() => A.eat(mid, it, false)} />, { label: it.n });
   // Checking a food records the time it was eaten. On the first food of a meal, when that is far from the meal's own time, ask first.
   const meal = MEALS.find((q) => q.id === mid)!;
   const check = () => {
@@ -146,7 +147,7 @@ function ItemRow({ mid, it, simple }: { mid: MealId; it: DItem; simple: boolean 
     <FoodCard state={it.st} name={food.name} type={it.type} tag={it.mine ? 'Yours' : undefined}
       amount={food.qty ? <QtyControl mid={mid} it={it} qty={food.qty} locked={false} /> : undefined} amountText={amountText}
       kcal={`${kShown} kcal`} macros={macros} note="Skipped for today"
-      onCheck={check} onMenu={undo} onHold={openFood} onSwap={onSwap} onSkip={onSkip} skipLabel={it.mine ? 'Delete' : 'Skip'}
+      onPress={it.st === 'todo' ? check : undefined} onMore={more} onHold={openFood} onSwap={onSwap} onSkip={onSkip} skipLabel={it.mine ? 'Delete' : 'Skip'}
       checkLabel={`Mark eaten: ${it.n}`} label={`${food.name}${amountText ? `, ${amountText}` : ''}, ${it.st === 'skipped' ? 'skipped for today' : `${kShown} kcal`}. Hold for nutrition and recipe`} />
   );
 }

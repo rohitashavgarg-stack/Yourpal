@@ -4,12 +4,13 @@ import { View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
-import { ArrowRightLeft } from '@/lib/icons';
+import { ArrowRightLeft, Check, MoreHorizontal } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, fontSizes, radii } from '@/design-system/tokens';
 import { haptic } from '@/lib/haptics';
 import type { FoodType } from '@/lib/data';
+import { IconButton } from '../primitives/Button';
 import { CheckCircle } from '../primitives/CheckCircle';
 import { FoodMark } from '../primitives/FoodMark';
 import { Tag } from '../primitives/Tag';
@@ -52,6 +53,8 @@ export type FoodCardProps = {
   onCheck?: () => void;
   /** The three-dot button of an eaten card. */
   onMenu?: () => void;
+  /** A three-dot button on the right of a todo or eaten card, instead of the check. An eaten card also shows a "Logged" tag. Tapping the card is then how a food is logged (`onPress`). */
+  onMore?: () => void;
   /** Hold the card: the food page. */
   onHold?: () => void;
   onSwap?: () => void;
@@ -68,7 +71,7 @@ const SKIP_W = 64;
 const GAP = 8;
 const REVEAL = ACTION + SKIP_W + GAP * 3;
 
-export function FoodCard({ state, pick, solid, name, type, amount, amountText, kcal, macros, tag, note, onPress, onCheck, onMenu, onHold, onSwap, onSkip, skipLabel = 'Skip', checkLabel, label }: FoodCardProps) {
+export function FoodCard({ state, pick, solid, name, type, amount, amountText, kcal, macros, tag, note, onPress, onCheck, onMenu, onMore, onHold, onSwap, onSkip, skipLabel = 'Skip', checkLabel, label }: FoodCardProps) {
   const { c } = useTheme();
   const tx = useSharedValue(0);
   const base = useSharedValue(0);
@@ -127,7 +130,15 @@ export function FoodCard({ state, pick, solid, name, type, amount, amountText, k
     return (
       <Pressy {...common} style={{ borderRadius: radii.md, overflow: 'hidden', backgroundColor: c.surface2 }}>
         <View style={{ paddingHorizontal: 14, paddingTop: 14, paddingBottom: 12, gap: 10 }}>
-          {title}
+          {onMore ? (
+            <Row style={{ justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+              <View style={{ flex: 1, minWidth: 0 }}>{title}</View>
+              <View accessibilityLabel="Logged" style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 24, paddingHorizontal: 10, borderRadius: radii.pill, backgroundColor: c.goodSoft }}>
+                <Check size={13} color={c.good} strokeWidth={2.4} />
+                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, color: c.good }}>Logged</Txt>
+              </View>
+            </Row>
+          ) : title}
           {(amountText || kcal) ? (
             <Row style={{ justifyContent: 'space-between' }}>
               {amountText ? <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20 }}>{amountText}</Txt> : <View />}
@@ -135,10 +146,10 @@ export function FoodCard({ state, pick, solid, name, type, amount, amountText, k
             </Row>
           ) : null}
         </View>
-        {(macros || onMenu) ? (
+        {(macros || onMenu || onMore) ? (
           <Row style={{ justifyContent: 'space-between', backgroundColor: c.surface3, paddingLeft: 14, paddingRight: 8, paddingVertical: 8, minHeight: 52 }}>
             <Txt v="caption" style={{ flexShrink: 1 }}>{macros}</Txt>
-            {onMenu ? <CheckCircle on size={36} tone="good" label={`Mark as not eaten: ${name}`} onPress={onMenu} /> : null}
+            {onMore ? <IconButton label={`More for ${name}`} onPress={onMore} size={36} radius={radii.pill} borderWidth={1.5} borderColor={c.chipLine} hitSlop={4}><MoreHorizontal size={18} color={c.ink} /></IconButton> : onMenu ? <CheckCircle on size={36} tone="good" label={`Mark as not eaten: ${name}`} onPress={onMenu} /> : null}
           </Row>
         ) : null}
       </Pressy>
@@ -178,7 +189,7 @@ export function FoodCard({ state, pick, solid, name, type, amount, amountText, k
                 </>
               )}
             </View>
-            {onCheck ? <CheckCircle on={false} size={solid ? 40 : 34} tone="good" label={checkLabel ?? `Mark ${name}`} onPress={onCheck} /> : null}
+            {onMore ? <IconButton label={`More for ${name}`} onPress={onMore} size={36} radius={radii.pill} borderWidth={1.5} borderColor={c.chipLine} hitSlop={4}><MoreHorizontal size={18} color={c.ink} /></IconButton> : onCheck ? <CheckCircle on={false} size={solid ? 40 : 34} tone="good" label={checkLabel ?? `Mark ${name}`} onPress={onCheck} /> : null}
           </Pressy>
         </Animated.View>
       </GestureDetector>
