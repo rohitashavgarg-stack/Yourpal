@@ -34,7 +34,6 @@ export type Profile = {
   eat: string;
   injury: 'No' | 'Yes';
   injuryNote: string;
-  emergency?: { name: string; phone: string; relation: string }; // who the gym calls in an emergency
   photosPrivate: boolean;
   notifications: 'unset' | 'on' | 'off';
 };

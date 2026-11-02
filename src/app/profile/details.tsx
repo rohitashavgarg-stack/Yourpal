@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ageFrom, defaultDob, fmtDob } from '@/lib/dob';
 import { PersonAvatar } from '@/components/Brand';
 import { View } from 'react-native';
-import { Button, Field, Pill, Row, Txt } from '@/components/ui';
+import { Button, Field, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { haptic } from '@/lib/haptics';
 import { font } from '@/theme/tokens';
@@ -112,17 +112,6 @@ export default function MyDetails() {
   const { d } = useDomain();
   const { s: shell } = useShell();
   const [name, setName] = useState(p.name);
-  const ec = p.emergency;
-  const [ecName, setEcName] = useState(ec?.name ?? '');
-  const [ecPhone, setEcPhone] = useState(ec?.phone ?? '');
-  const [ecRel, setEcRel] = useState(ec?.relation ?? '');
-  const ecBad = { name: ecName.trim().length < 2, phone: ecPhone.length !== 10 || ecPhone === state.phone, rel: !ecRel };
-  const ecValid = !ecBad.name && !ecBad.phone && !ecBad.rel;
-  useEffect(() => {
-    if (!ecValid) return;
-    if (ec && ec.name === ecName.trim() && ec.phone === ecPhone && ec.relation === ecRel) return;
-    setProfile({ emergency: { name: ecName.trim(), phone: ecPhone, relation: ecRel } });
-  }, [ecValid, ecName, ecPhone, ecRel]); // eslint-disable-line react-hooks/exhaustive-deps
   const [err, setErr] = useState(0);
   const [photo, setPhoto] = useState<string | null | undefined>(undefined); // undefined = unchanged, null = removed
   const shake = useShake(err);
@@ -184,17 +173,6 @@ export default function MyDetails() {
         <BodyRow label="Weight" last value={shell.unitsW === 'lb' ? `${(d.weight * 2.20462).toFixed(1)} lb` : `${d.weight.toFixed(1)} kg`} onPress={() => router.push('/log-weight')} />
       </View>
 
-
-      <Label style={{ marginTop: 16 }}>Emergency contact</Label>
-      <View style={{ marginTop: -6 }}>
-        <Field value={ecName} onChangeText={setEcName} accessibilityLabel="Emergency contact name" autoCapitalize="words" placeholder="Full name" returnKeyType="next" />
-      </View>
-      <Field value={ecPhone} onChangeText={(t) => setEcPhone(t.replace(/[^0-9]/g, '').slice(0, 10))} keyboardType="number-pad" prefix="+91" placeholder="10-digit mobile number" accessibilityLabel="Emergency contact mobile number" error={ecPhone.length === 10 && ecPhone === state.phone} />
-      {ecPhone.length === 10 && ecPhone === state.phone && <Txt style={{ color: c.warn, fontSize: fontSizes.md, paddingHorizontal: 6 }}>Use a number other than your own.</Txt>}
-      <Row style={{ gap: 6, flexWrap: 'wrap' }}>
-        {['Parent', 'Spouse', 'Sibling', 'Friend', 'Other'].map((x) => <Pill key={x} label={x} on={ecRel === x} onPress={() => { setEcRel(x); haptic.tick(); }} />)}
-      </Row>
-      {!!ec && <Button kind="warn" small label="Remove contact" onPress={() => { setProfile({ emergency: undefined }); setEcName(''); setEcPhone(''); setEcRel(''); haptic.light(); toast('Emergency contact removed'); }} style={{ alignSelf: 'flex-start' }} />}
     </SubPage>
   );
 }
