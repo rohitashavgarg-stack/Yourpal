@@ -32,7 +32,9 @@ export default function WorkoutHistory() {
                 <Check size={16} strokeWidth={2.8} color={fixed.white} />
               </IconBadge>
               <View style={{ flex: 1 }}>
-                <Txt style={{ fontFamily: font.medium }}>{h.t}</Txt>
+                {/* the date small and above, the workout's name bigger */}
+                <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{h.t.split(' · ')[0]}</Txt>
+                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{h.t.split(' · ').slice(1).join(' · ') || h.t}</Txt>
                 <Txt v="caption">{h.s || 'Logged'}</Txt>
               </View>
               <Txt v="mono" muted>{h.m}</Txt>
