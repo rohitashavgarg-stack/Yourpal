@@ -11,6 +11,7 @@ import { Hint, SubPage } from '@/features/progress/parts';
 import { LineRow, ListCard as PayList } from '@/features/shell/parts';
 import { IconButton } from '@/design-system/primitives/Button';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { Chip } from '@/design-system/primitives/Chip';
 import { useMemberships } from '@/features/gym/memberships';
 import { PAUSE_HISTORY, PAUSE_TOTAL } from '@/features/gym/data';
@@ -31,27 +32,22 @@ const range = (from: string, to: string) => {
   return m1 === m2 ? `${d1} to ${d2} ${m2}` : `${from} to ${to}`;
 };
 
-type Slot = { kind: 'taken' | 'now' | 'free'; n: number; title?: string; days?: number; reason?: string; free?: number };
+type Slot = { kind: 'taken' | 'now'; n: number; title: string; days?: number; reason?: string };
 
-// One pause slot. Taken: the dates, how many days and why. Now: amber, until when. Free: an outlined tile that says Available.
+// One pause: the dates, how many days and why. The one on right now is amber and says until when.
 function PauseTile({ p }: { p: Slot }) {
   const { c } = useTheme();
-  const free = p.kind === 'free';
   const now = p.kind === 'now';
   return (
-    <View style={{ width: '48%', flexGrow: 1, minHeight: 104, borderRadius: radii.lg, padding: 14, gap: 4, justifyContent: 'space-between', backgroundColor: free ? 'transparent' : now ? c.warnSoft : c.surface, borderWidth: free ? 1.5 : 0, borderColor: c.chipLine }}>
+    <View style={{ width: '48%', flexGrow: 1, minHeight: 104, borderRadius: radii.lg, padding: 14, gap: 4, justifyContent: 'space-between', backgroundColor: now ? c.warnSoft : c.surface }}>
       <Row style={{ justifyContent: 'space-between' }}>
-        <Txt v="caption" style={{ fontSize: fontSizes.sm, color: now ? c.warn : c.muted }}>{free ? 'Not used' : `Pause ${p.n}`}</Txt>
+        <Txt v="caption" style={{ fontSize: fontSizes.sm, color: now ? c.warn : c.muted }}>{`Pause ${p.n}`}</Txt>
         {now && <PauseCircle size={16} color={c.warn} />}
       </Row>
-      {free ? (
-        <Txt muted style={{ fontFamily: font.medium }}>{`${p.free} available`}</Txt>
-      ) : (
-        <View style={{ gap: 2 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, color: now ? c.warn : c.ink }}>{p.title}</Txt>
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{now ? 'On right now' : `${p.days} days, ${p.reason}`}</Txt>
-        </View>
-      )}
+      <View style={{ gap: 2 }}>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, color: now ? c.warn : c.ink }}>{p.title}</Txt>
+        <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{now ? 'On right now' : `${p.days} days, ${p.reason}`}</Txt>
+      </View>
     </View>
   );
 }
@@ -82,18 +78,15 @@ export default function MembershipDetail() {
 
   // Pauses: the main plan reads the real count; the others have none in the sample.
   const used = m.id === 'm1' ? Math.min(g.pausesUsed, PAUSE_TOTAL) : 0;
-  const left = PAUSE_TOTAL - used;
   const history = PAUSE_HISTORY.slice(0, used);
   const showPauses = m.status !== 'Expired';
   const value = (t: string) => <Txt style={{ fontFamily: font.semibold }}>{t}</Txt>;
   const paused = m.id === 'm1' && d.onBreak;
-  // Newest first: the pause on right now, then the ones taken, then ONE tile for all the unused ones (so 4 or 5 pauses do not mean 4 or 5 empty tiles).
-  // Past four tiles the rest hide behind "See all".
-  const free = Math.max(0, PAUSE_TOTAL - history.length - (paused ? 1 : 0));
+  // Newest first: the pause on right now, then the ones taken. Past four tiles the rest hide behind "See all".
+  const usedCount = Math.min(PAUSE_TOTAL, history.length + (paused ? 1 : 0)); // pauses taken, counting the one on now
   const slots: Slot[] = [
     ...(paused ? [{ kind: 'now', n: history.length + 1, title: `Until ${dateLabel(g.breakUntil)}` } as Slot] : []),
     ...history.map((h, i): Slot => ({ kind: 'taken', n: i + 1, title: range(h.from, h.to), days: h.days, reason: h.reason })).reverse(),
-    ...(free > 0 ? [{ kind: 'free', n: 0, free } as Slot] : []),
   ];
   const shownSlots = allPauses ? slots : slots.slice(0, 4);
 
@@ -164,10 +157,19 @@ export default function MembershipDetail() {
       {showPauses && (
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>PAUSES</Txt>
-          {/* One tile for each pause the membership allows: a taken pause shows its dates, the one on right now is amber, an unused one says Available. */}
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-            {shownSlots.map((p, i) => <PauseTile key={i} p={p} />)}
+          {/* A progress bar for the pauses used (one segment for each pause the membership allows), then a tile for each pause taken. */}
+          <View style={{ gap: 8 }}>
+            <Row style={{ justifyContent: 'space-between' }}>
+              <Txt style={{ fontFamily: font.semibold }}>{`${usedCount} of ${PAUSE_TOTAL} used`}</Txt>
+              <Txt muted>{`${PAUSE_TOTAL - usedCount} left`}</Txt>
+            </Row>
+            <ProgressSegments height={8} gap={4} segments={Array.from({ length: PAUSE_TOTAL }, (_, i) => ({ color: i < usedCount ? c.accent : c.surface3, label: i < usedCount ? 'Pause used' : 'Pause left' }))} />
           </View>
+          {slots.length === 0 ? <Txt muted style={{ fontSize: fontSizes.md }}>No pauses taken yet.</Txt> : (
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+              {shownSlots.map((p, i) => <PauseTile key={i} p={p} />)}
+            </View>
+          )}
           {slots.length > 4 && (
             <Pressy accessibilityRole="button" onPress={() => setAllPauses((v) => !v)} scaleTo={0.98} style={{ minHeight: 44, alignItems: 'center', justifyContent: 'center' }}>
               <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>{allPauses ? 'Show fewer' : `See all ${slots.length}`}</Txt>
