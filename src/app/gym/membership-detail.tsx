@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { CreditCard, Download, PauseCircle } from '@/lib/icons';
-import { Row, Txt } from '@/components/ui';
+import { Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -31,21 +31,21 @@ const range = (from: string, to: string) => {
   return m1 === m2 ? `${d1} to ${d2} ${m2}` : `${from} to ${to}`;
 };
 
-type Slot = { kind: 'taken' | 'now' | 'free'; title?: string; days?: number; reason?: string };
+type Slot = { kind: 'taken' | 'now' | 'free'; n: number; title?: string; days?: number; reason?: string; free?: number };
 
 // One pause slot. Taken: the dates, how many days and why. Now: amber, until when. Free: an outlined tile that says Available.
-function PauseTile({ n, p }: { n: number; p: Slot }) {
+function PauseTile({ p }: { p: Slot }) {
   const { c } = useTheme();
   const free = p.kind === 'free';
   const now = p.kind === 'now';
   return (
     <View style={{ width: '48%', flexGrow: 1, minHeight: 104, borderRadius: radii.lg, padding: 14, gap: 4, justifyContent: 'space-between', backgroundColor: free ? 'transparent' : now ? c.warnSoft : c.surface, borderWidth: free ? 1.5 : 0, borderColor: c.chipLine }}>
       <Row style={{ justifyContent: 'space-between' }}>
-        <Txt v="caption" style={{ fontSize: fontSizes.sm, color: now ? c.warn : c.muted }}>{`Pause ${n}`}</Txt>
+        <Txt v="caption" style={{ fontSize: fontSizes.sm, color: now ? c.warn : c.muted }}>{free ? 'Not used' : `Pause ${p.n}`}</Txt>
         {now && <PauseCircle size={16} color={c.warn} />}
       </Row>
       {free ? (
-        <Txt muted style={{ fontFamily: font.medium }}>Available</Txt>
+        <Txt muted style={{ fontFamily: font.medium }}>{`${p.free} available`}</Txt>
       ) : (
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, color: now ? c.warn : c.ink }}>{p.title}</Txt>
@@ -67,6 +67,7 @@ export default function MembershipDetail() {
   const { d } = useDomain();
   const { toast } = useOverlay();
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [allPauses, setAllPauses] = useState(false);
   if (!m) return <SubPage title="Membership" fallback="/gym/membership"><Txt muted>This membership is not here any more.</Txt></SubPage>;
 
   const invoice = async (p: Payment) => {
@@ -86,11 +87,15 @@ export default function MembershipDetail() {
   const showPauses = m.status !== 'Expired';
   const value = (t: string) => <Txt style={{ fontFamily: font.semibold }}>{t}</Txt>;
   const paused = m.id === 'm1' && d.onBreak;
+  // Newest first: the pause on right now, then the ones taken, then ONE tile for all the unused ones (so 4 or 5 pauses do not mean 4 or 5 empty tiles).
+  // Past four tiles the rest hide behind "See all".
+  const free = Math.max(0, PAUSE_TOTAL - history.length - (paused ? 1 : 0));
   const slots: Slot[] = [
-    ...history.map((h): Slot => ({ kind: 'taken', title: range(h.from, h.to), days: h.days, reason: h.reason })),
-    ...(paused ? [{ kind: 'now', title: `Until ${dateLabel(g.breakUntil)}` } as Slot] : []),
+    ...(paused ? [{ kind: 'now', n: history.length + 1, title: `Until ${dateLabel(g.breakUntil)}` } as Slot] : []),
+    ...history.map((h, i): Slot => ({ kind: 'taken', n: i + 1, title: range(h.from, h.to), days: h.days, reason: h.reason })).reverse(),
+    ...(free > 0 ? [{ kind: 'free', n: 0, free } as Slot] : []),
   ];
-  while (slots.length < PAUSE_TOTAL) slots.push({ kind: 'free' });
+  const shownSlots = allPauses ? slots : slots.slice(0, 4);
 
   return (
     <SubPage title="Membership" fallback="/gym/membership">
@@ -161,8 +166,13 @@ export default function MembershipDetail() {
           <Txt v="label" style={{ paddingHorizontal: 6 }}>PAUSES</Txt>
           {/* One tile for each pause the membership allows: a taken pause shows its dates, the one on right now is amber, an unused one says Available. */}
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-            {slots.map((p, i) => <PauseTile key={i} n={i + 1} p={p} />)}
+            {shownSlots.map((p, i) => <PauseTile key={i} p={p} />)}
           </View>
+          {slots.length > 4 && (
+            <Pressy accessibilityRole="button" onPress={() => setAllPauses((v) => !v)} scaleTo={0.98} style={{ minHeight: 44, alignItems: 'center', justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>{allPauses ? 'Show fewer' : `See all ${slots.length}`}</Txt>
+            </Pressy>
+          )}
         </>
       )}
 
