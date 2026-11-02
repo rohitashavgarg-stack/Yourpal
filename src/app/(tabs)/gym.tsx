@@ -139,11 +139,15 @@ function AssessCard() {
           })}
         </View>
       </Row>
-      <View style={{ height: 1, backgroundColor: c.line }} />
-      <View style={{ gap: 2 }}>
-        <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last assessment</Txt>
-        <Txt style={{ fontSize: fontSizes.md }}>{`Assessment ${total}, ${fmtAt(last.at)}`}</Txt>
-      </View>
+      {/* the last assessment as a small card of its own: an icon, its name, and its date */}
+      <Row style={{ gap: 12, padding: 12, borderRadius: radii.lg, backgroundColor: c.surface2 }}>
+        <IconBadge size={40} radius={radii.md} bg={c.tNutri}><ClipboardCheck size={20} strokeWidth={1.9} color={c.cNutri} /></IconBadge>
+        <View style={{ flex: 1, gap: 1 }}>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last assessment</Txt>
+          <Txt style={{ fontFamily: font.semibold }}>{`Assessment ${total}`}</Txt>
+        </View>
+        <Chip label={fmtAt(last.at)} />
+      </Row>
       {due
         ? <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />
         : <Txt style={{ fontSize: fontSizes.sm, color: c.muted }}>{`Next assessment ${fmtAt(new Date(nextAt).toISOString())}`}</Txt>}
