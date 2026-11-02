@@ -95,8 +95,8 @@ export default function MembershipDetail() {
 
       <Txt v="label" style={{ paddingHorizontal: 6 }}>PAYMENTS</Txt>
       <PayList>
-        {m.payments.map((p, i) => (
-          <LineRow key={p.id} title={p.item} sub={p.date} last={i === m.payments.length - 1}
+        {m.payments.map((p) => (
+          <LineRow key={p.id} title={p.item} sub={p.date}
             right={(
               <Row style={{ gap: 10 }}>
                 {value(rupees(p.amount))}
@@ -104,6 +104,7 @@ export default function MembershipDetail() {
               </Row>
             )} />
         ))}
+        <LineRow title="Total price" right={<Txt style={{ fontFamily: font.bold, fontSize: fontSizes.lg }}>{rupees(m.payments.reduce((t, p) => t + p.amount, 0))}</Txt>} last />
       </PayList>
       <Hint>Pauses, renewals and plan changes happen at the front desk.</Hint>
     </SubPage>
