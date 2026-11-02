@@ -28,7 +28,7 @@ export function WaiverCard() {
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: c.ink }}>Sign your gym waiver</Txt>
           <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.ink, opacity: 0.8 }}>It takes a minute.</Txt>
         </View>
-        <Button small kind="secondary" label="Sign" accessibilityLabel="Sign waiver" onPress={open} />
+        <Button kind="primary" size="compact" label="Sign" accessibilityLabel="Sign waiver" onPress={open} />
       </Row>
     </Pressy>
   );

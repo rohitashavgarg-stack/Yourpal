@@ -34,7 +34,7 @@ export type Profile = {
   eat: string;
   injury: 'No' | 'Yes';
   injuryNote: string;
-  waiver?: { name: string; signedAt: string }; // the gym waiver, once signed
+  waiver?: { signedAt: string; path: string; w: number; h: number }; // the gym waiver, once signed: the date and the drawn signature (an SVG path and the size of the pad)
   photosPrivate: boolean;
   notifications: 'unset' | 'on' | 'off';
 };
