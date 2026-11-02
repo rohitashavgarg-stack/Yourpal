@@ -82,22 +82,34 @@ export default function MembershipDetail() {
             <Txt style={{ fontFamily: font.semibold }}>{m.end}</Txt>
           </View>
         </Row>
-        {/* the price on its own line below the dates, not squeezed between them */}
-        <Row style={{ justifyContent: 'space-between' }}>
-          <Txt muted>Price</Txt>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg }}>{rupees(m.price)}</Txt>
-        </Row>
         {m.status !== 'Active' && <Txt muted style={{ fontSize: fontSizes.md }}>{m.note}</Txt>}
       </View>
 
       <View style={{ height: 1, backgroundColor: c.line }} />
 
-      {(m.pt || showPauses) && (
-        <PayList>
-          {m.pt && <LineRow title="Personal training" sub={m.pt.trainer} right={value(`${m.pt.left} of ${m.pt.total} sessions left`)} last={!showPauses} />}
-          {showPauses && <LineRow title="Pauses" sub="Set by the front desk" right={value(`${left} of ${PAUSE_TOTAL} left`)} last={history.length === 0} />}
-          {history.map((h, i) => <LineRow key={h.from} title={`${h.from} – ${h.to}`} sub={h.reason} right={<Txt muted>{`${h.days} days`}</Txt>} minH={52} last={i === history.length - 1} />)}
-        </PayList>
+      {/* Each part has its own heading and its own list, like Payments. */}
+      <Txt v="label" style={{ paddingHorizontal: 6 }}>DETAILS</Txt>
+      <PayList>
+        <LineRow title="Price" right={value(rupees(m.price))} last />
+      </PayList>
+
+      {m.pt && (
+        <>
+          <Txt v="label" style={{ paddingHorizontal: 6 }}>PERSONAL TRAINING</Txt>
+          <PayList>
+            <LineRow title={m.pt.trainer} sub="Personal trainer" right={value(`${m.pt.left} of ${m.pt.total} sessions left`)} last />
+          </PayList>
+        </>
+      )}
+
+      {showPauses && (
+        <>
+          <Txt v="label" style={{ paddingHorizontal: 6 }}>PAUSES</Txt>
+          <PayList>
+            <LineRow title="Pauses left" sub="Set by the front desk" right={value(`${left} of ${PAUSE_TOTAL}`)} last={history.length === 0} />
+            {history.map((h, i) => <LineRow key={h.from} title={`${h.from} – ${h.to}`} sub={h.reason} right={<Txt muted>{`${h.days} days`}</Txt>} minH={52} last={i === history.length - 1} />)}
+          </PayList>
+        </>
       )}
 
       <Txt v="label" style={{ paddingHorizontal: 6 }}>PAYMENTS</Txt>
