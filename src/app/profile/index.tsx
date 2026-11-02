@@ -133,7 +133,7 @@ export default function Profile() {
         { l: 'Terms and conditions', icon: <ClipboardList size={18} color={c.ink} />, go: () => openLegal('terms', () => toast('Could not open the page. Try again in a moment')) },
       ])}
 
-      <Button kind="secondary" label="Log out" icon={<LogOut size={18} color={c.ink} />} onPress={() => openSheet(<LogoutSheet />, { label: 'Log out' })} />
+      <Button kind="warn" label="Log out" icon={<LogOut size={18} color={c.warn} />} onPress={() => openSheet(<LogoutSheet />, { label: 'Log out' })} />
       <BigFooter />
     </SubPage>
   );
