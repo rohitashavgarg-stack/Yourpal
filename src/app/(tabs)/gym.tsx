@@ -144,35 +144,34 @@ function AssessCard() {
       {/* the last assessment, straight on the card: its name and date, and a few of its numbers with the change since the one before */}
       <View style={{ gap: 12 }}>
         <Row style={{ gap: 12 }}>
-          <IconBadge size={40} radius={radii.md} bg={c.tNutri}><ClipboardCheck size={20} strokeWidth={1.9} color={c.cNutri} /></IconBadge>
+          <IconBadge size={32} radius={radii.sm} bg={c.tNutri}><ClipboardCheck size={16} strokeWidth={1.9} color={c.cNutri} /></IconBadge>
           <View style={{ flex: 1, gap: 1 }}>
             <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Last assessment</Txt>
-            <Txt style={{ fontFamily: font.semibold }}>{`Assessment ${total}`}</Txt>
+            <Txt style={{ fontFamily: font.medium }}>{`Assessment ${total}`}</Txt>
           </View>
           <Chip label={fmtAt(last.at)} />
         </Row>
         {stats.length > 0 && (
           <Row style={{ gap: 8 }}>
             {stats.map((r) => (
-              <View key={r.k} style={{ flex: 1, borderRadius: radii.md, backgroundColor: c.surface2, paddingVertical: 8, paddingHorizontal: 10, gap: 1 }}>
+              <View key={r.k} style={{ flex: 1, gap: 1 }}>
                 <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{r.n.label}</Txt>
-                <Txt style={{ fontFamily: font.semibold }}>{`${r.now} ${r.n.unit}`}</Txt>
+                <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md }}>{`${r.now} ${r.n.unit}`}</Txt>
                 {r.prev != null && <Txt style={{ fontSize: fontSizes.sm, color: r.good ? c.good : c.muted }}>{r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`}</Txt>}
               </View>
             ))}
           </Row>
         )}
       </View>
-      {/* the upcoming assessment in a container of its own, with its date as a little calendar tile (amber when it is due) */}
-      <Row style={{ gap: 12, padding: 12, borderRadius: radii.lg, backgroundColor: c.surface2 }}>
-        <View style={{ width: 48, height: 52, borderRadius: radii.md, backgroundColor: due ? c.warnSoft : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 24, color: due ? c.warn : c.accentText }}>{String(new Date(nextAt).getDate())}</Txt>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 16, color: due ? c.warn : c.accentText }}>{new Date(nextAt).toLocaleString('en-US', { month: 'short' }).toUpperCase()}</Txt>
+      {/* the upcoming assessment: the quietest level, one compact row in a container, with its date as a small calendar tile (amber when it is due) */}
+      <Row style={{ gap: 10, padding: 10, borderRadius: radii.md, backgroundColor: c.surface2 }}>
+        <View style={{ width: 38, height: 42, borderRadius: radii.sm, backgroundColor: due ? c.warnSoft : c.surface, alignItems: 'center', justifyContent: 'center' }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 18, color: due ? c.warn : c.ink }}>{String(new Date(nextAt).getDate())}</Txt>
+          <Txt style={{ fontSize: fontSizes.sm, lineHeight: 15, color: due ? c.warn : c.muted }}>{new Date(nextAt).toLocaleString('en-US', { month: 'short' })}</Txt>
         </View>
-        <View style={{ flex: 1, gap: 1 }}>
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Upcoming</Txt>
-          <Txt style={{ fontFamily: font.semibold }}>{`Assessment ${total + 1}`}</Txt>
-          <Txt style={{ fontSize: fontSizes.sm, color: due ? c.warn : c.muted }}>{daysLeft <= 0 ? 'Due now' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`}</Txt>
+        <View style={{ flex: 1 }}>
+          <Txt style={{ fontSize: fontSizes.sm, color: c.muted }}>Upcoming</Txt>
+          <Txt style={{ fontSize: fontSizes.md, color: due ? c.warn : c.ink }}>{`Assessment ${total + 1}, ${daysLeft <= 0 ? 'due now' : daysLeft === 1 ? 'tomorrow' : `in ${daysLeft} days`}`}</Txt>
         </View>
       </Row>
       {due && <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />}
