@@ -17,10 +17,8 @@ import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { WAIVER_TITLE, WAIVER_POINTS } from '@/features/profile/waiver';
 import { WaiverSigned } from '@/features/profile/WaiverSigned';
 import { WaiverDetails } from '@/features/profile/WaiverDetails';
-import { WaiverSheetBack1, WaiverSheetBack2, WaiverSheetFront, WAIVER_ART } from '@/features/profile/WaiverIllustration';
+import { WaiverSheetFront } from '@/features/profile/WaiverIllustration';
 import { SignSheet } from '@/features/profile/SignSheet';
-
-const ART_H = (200 * WAIVER_ART.h) / WAIVER_ART.w; // height of the paper at 200 wide
 
 // Read the waiver, tick that you agree, then sign on the sign pad. Once signed this page turns into the signed screen.
 export default function Waiver() {
@@ -63,24 +61,14 @@ export default function Waiver() {
           </View>
         </View>
       )}>
-      {/* The top of the page: a navy card with a blue glow and the waiver paper, the same look as the signed screen, ready for a signature. */}
-      <View style={{ borderRadius: radii.xl, overflow: 'hidden', backgroundColor: fixed.dark, alignItems: 'center', paddingTop: 24, paddingBottom: 20, gap: 16 }}>
-        <LinearGradient pointerEvents="none" colors={[c.accent + '8C', fixed.dark]} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 260 }} />
-        <View style={{ width: 200, height: ART_H }}>
-          <View style={{ position: 'absolute', left: 0, top: 0 }}><WaiverSheetBack1 width={200} /></View>
-          <View style={{ position: 'absolute', left: 0, top: 0 }}><WaiverSheetBack2 width={200} /></View>
-          <View style={{ position: 'absolute', left: 0, top: 0 }}><WaiverSheetFront width={200} /></View>
-        </View>
-        <View style={{ alignItems: 'center', gap: 8 }}>
-          <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27, color: fixed.white }}>{WAIVER_TITLE}</Txt>
-          <Row style={{ gap: 6 }}>
-            {[{ t: 'Pending', fg: c.warn, bg: c.warn + '2E' }, { t: `${WAIVER_POINTS.length} points`, fg: fixed.white, bg: fixed.white + '24' }].map((p) => (
-              <View key={p.t} style={{ height: 26, paddingHorizontal: 12, borderRadius: radii.pill, backgroundColor: p.bg, justifyContent: 'center' }}>
-                <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: p.fg }}>{p.t}</Txt>
-              </View>
-            ))}
-          </Row>
-        </View>
+      {/* The top of the page: the waiver paper straight on the page, then the title and what is left to do. */}
+      <View style={{ alignItems: 'center', gap: 12, paddingTop: 4 }}>
+        <WaiverSheetFront width={190} />
+        <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 27 }}>{WAIVER_TITLE}</Txt>
+        <Row style={{ gap: 6 }}>
+          <Chip label="Pending" tone="warn" />
+          <Chip label={`${WAIVER_POINTS.length} points`} />
+        </Row>
       </View>
       <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, overflow: 'hidden' }}>
         {WAIVER_POINTS.map((t, i) => (
