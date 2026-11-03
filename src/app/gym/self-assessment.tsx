@@ -148,8 +148,7 @@ export default function SelfAssessment() {
   // Saved just now: the completed screen. View results goes on to the results page, Done goes back to the Assessments page.
   if (celebrate && saved) {
     const prev = entries.find((x) => x.id !== saved.id && Date.parse(x.at) < Date.parse(saved.at));
-    const judged = compare(saved, prev).filter((r) => r.prev != null && r.n.dir !== 'none');
-    return <AssessmentDone n={entries.length} date={fmtAt(saved.at)} better={judged.filter((r) => r.good).length} judged={judged.length}
+    return <AssessmentDone n={entries.length} date={fmtAt(saved.at)} rows={compare(saved, prev)}
       onResults={() => setCelebrate(false)} onDone={() => goBack('/gym/assessments')} />;
   }
   return (
