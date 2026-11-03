@@ -7,7 +7,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
 import { useGymScenarios } from '@/features/gym/state';
-import { radii, fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { Chip } from '@/design-system/primitives/Chip';
 import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
@@ -53,21 +53,28 @@ export default function GymAssessments() {
   useGymScenarios('Gym · Assessments');
   const { entries, nextAt, daysLeft } = useSelfAssess();
   const total = entries.length;
+  const over = daysLeft <= 0; // due today or past its date: the card turns yellow and the button is the big one
   return (
     <SubPage title="Assessments" fallback="/gym">
       <Txt v="label" style={{ paddingHorizontal: 6 }}>UPCOMING</Txt>
-      <Card style={{ padding: 16, gap: 14 }}>
+      <Card style={{ padding: 16, gap: 14, ...(over ? { backgroundColor: c.warnSoft } : null) }}>
         <Row style={{ gap: 12 }}>
-          <IconBadge size={48} radius={radii.md} bg={c.accentSoft}><ClipboardCheck size={24} strokeWidth={1.9} color={c.accentText} /></IconBadge>
+          <IconBadge size={48} radius={radii.md} bg={over ? c.warn + '33' : c.accentSoft}><ClipboardCheck size={24} strokeWidth={1.9} color={over ? c.warn : c.accentText} /></IconBadge>
           <View style={{ flex: 1, gap: 1 }}>
             <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{`Assessment ${total + 1}`}</Txt>
-            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{daysLeft <= 0 ? 'Due now' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`}</Txt>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm, ...(over ? { color: c.warn, fontFamily: font.semibold } : null) }}>{daysLeft < 0 ? `Overdue by ${-daysLeft} ${daysLeft === -1 ? 'day' : 'days'}` : daysLeft === 0 ? 'Due today' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`}</Txt>
           </View>
           <Chip label={fmtAt(new Date(nextAt).toISOString())} tone={daysLeft <= 0 ? 'warn' : 'default'} />
         </Row>
         {/* Start shows up on the day of the assessment (and after it, until it is done) */}
         {daysLeft <= 0
-          ? <Button kind="accent" label="Start" onPress={() => router.push('/gym/self-assessment')} />
+          // the big yellow button (the Button kinds have no yellow one)
+          ? (
+            <Pressy accessibilityRole="button" onPress={() => router.push('/gym/self-assessment')} scaleTo={0.98}
+              style={{ height: 56, borderRadius: radii.xl, backgroundColor: c.warn, alignItems: 'center', justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.basePlus, color: fixed.dark }}>Start assessment</Txt>
+            </Pressy>
+          )
           : <Txt muted style={{ fontSize: fontSizes.md }}>{`You can start it on ${fmtAt(new Date(nextAt).toISOString())}.`}</Txt>}
       </Card>
 

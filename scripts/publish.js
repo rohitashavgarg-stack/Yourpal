@@ -5,7 +5,10 @@
  *   node scripts/publish.js check                    typecheck, lint, new hard-coded values. Changes nothing.
  *   node scripts/publish.js handoff [--yes]          checks, audits, screen map, skill catalogue, Storybook build, numbers in HANDOFF-STATUS.md, zip.
  *                                                    With --yes: also commits the refreshed docs, deploys Storybook and pushes the branch design-system-handoff.
- *   node scripts/publish.js web [--yes]              checks, then merges this work into main with a real merge commit and waits for the Vercel Production build.
+ *   node scripts/publish.js staging [--yes]         checks, then merges this work into the staging branch (a Vercel Preview). Work goes here first. Production is not touched.
+ *   node scripts/publish.js promote --yes            merges staging into main with a real merge commit and waits for the Vercel Production build. Only when the designer says so.
+ *   node scripts/publish.js web [--yes] [--direct]   without --direct it does the staging flow; with --direct it merges this work straight into main (the old way).
+ *   (old description of web:)              checks, then merges this work into main with a real merge commit and waits for the Vercel Production build.
  *                                                    Without --yes it only shows what it would do. Production: only with --yes.
  *   node scripts/publish.js mobile                   builds the iPhone, Android and web bundles (the check that Expo Go will open it). Changes nothing.
  *   node scripts/publish.js all [--yes]              check, handoff, web, mobile in that order.
@@ -135,6 +138,26 @@ const handoff = () => {
   });
 };
 
+const waitProduction = (before) => {
+  step('wait for the Vercel Production build', () => {
+    // GitHub's status lookup is limited when nobody is logged in (and gh is not installed): then it answers with a message and no state. In that case the live page itself is the proof:
+    // the build is done when the page points at a new entry script.
+    const entry = () => { const r = run(`curl -s ${SITE}`); const m = r.out.match(/entry-[0-9a-f]+\.js/); return m ? m[0] : ''; };
+    const deadline = Date.now() + 15 * 60 * 1000;
+    const poll = () => { const r = run(`curl -s https://api.github.com/repos/${REPO}/commits/${metrics.mainSha}/status`); try { const j = JSON.parse(r.out); return j.state || 'unknown'; } catch { return 'unknown'; } };
+    let st = 'pending'; let limited = false;
+    while (Date.now() < deadline) {
+      st = poll();
+      if (st === 'success' || st === 'failure' || st === 'error') break;
+      if (st === 'unknown') { limited = true; const now = entry(); if (now && before && now !== before) { st = 'success'; break; } }
+      run('node -e "setTimeout(()=>{},8000)"');
+    }
+    if (st === 'success') return { ok: true, note: `live at ${SITE}` };
+    if (limited && st === 'unknown') return { ok: true, note: `pushed; GitHub would not say whether the build finished (rate limit) and the page did not change within 15 minutes: check ${SITE}` };
+    return { ok: false, note: `Vercel says: ${st}` };
+  });
+};
+
 const web = () => {
   if (dirty()) { if (!YES) { say('There are uncommitted changes. They would be committed first (--message needed).'); } else commitIfDirty(); }
   if (!YES) { say(`\nWould merge ${branch()} (${sha().slice(0, 7)}) into main with a merge commit, push it, and wait for the Vercel Production build of ${SITE}. Run again with --yes to do it.`); return; }
@@ -155,23 +178,70 @@ const web = () => {
     if (!r.ok) return { ok: false, note: r.out.split('\n').slice(-2).join(' / ') };
     metrics.mainSha = msha; return { ok: true, note: msha.slice(0, 7) };
   });
-  step('wait for the Vercel Production build', () => {
-    // GitHub's status lookup is limited when nobody is logged in (and gh is not installed): then it answers with a message and no state. In that case the live page itself is the proof:
-    // the build is done when the page points at a new entry script.
-    const entry = () => { const r = run(`curl -s ${SITE}`); const m = r.out.match(/entry-[0-9a-f]+\.js/); return m ? m[0] : ''; };
-    const deadline = Date.now() + 15 * 60 * 1000;
-    const poll = () => { const r = run(`curl -s https://api.github.com/repos/${REPO}/commits/${metrics.mainSha}/status`); try { const j = JSON.parse(r.out); return j.state || 'unknown'; } catch { return 'unknown'; } };
-    let st = 'pending'; let limited = false;
+  waitProduction(before);
+};
+
+// Work goes to the staging branch first (a Vercel Preview), and moves to main only on the designer's say-so (promote).
+const STAGING = 'staging';
+const previewUrl = (sha) => {
+  const r = run(`curl -s https://api.github.com/repos/${REPO}/commits/${sha}/status`);
+  try { const j = JSON.parse(r.out); return { state: j.state || 'unknown', url: ((j.statuses || []).find((x) => /vercel/i.test(x.context || '') && x.target_url) || {}).target_url || '' }; } catch { return { state: 'unknown', url: '' }; }
+};
+const staging = () => {
+  if (dirty()) { if (!YES) { say('There are uncommitted changes. They would be committed first (--message needed).'); } else commitIfDirty(); }
+  if (!YES) { say(`\nWould merge ${branch()} (${sha().slice(0, 7)}) into ${STAGING} with a merge commit and push it. Vercel builds a Preview of it. Production (main) is not touched. Run again with --yes to do it.`); return; }
+  const head = sha();
+  let tmp;
+  step(`merge into ${STAGING} (real merge commit)`, () => {
+    run('git fetch origin');
+    tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'yp-staging-'));
+    const a = run(`git worktree add --detach "${tmp}" origin/${STAGING}`); if (!a.ok) return { ok: false, note: a.out.split('\n')[0] };
+    const m = run(`git merge --no-ff ${head} -m "Publish ${branch()} to staging" -m "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"`, { cwd: tmp });
+    if (!m.ok) { run('git merge --abort', { cwd: tmp }); run(`git worktree remove --force "${tmp}"`); return { ok: false, note: 'the merge has conflicts, nothing was pushed: ' + m.out.split('\n')[0] }; }
+    return { ok: true, note: run('git rev-parse --short HEAD', { cwd: tmp }).out };
+  });
+  step(`push ${STAGING}`, () => {
+    const msha = run('git rev-parse HEAD', { cwd: tmp }).out;
+    const r = run(`git push origin HEAD:${STAGING}`, { cwd: tmp }); run(`git worktree remove --force "${tmp}"`);
+    if (!r.ok) return { ok: false, note: r.out.split('\n').slice(-2).join(' / ') };
+    metrics.stagingSha = msha; return { ok: true, note: msha.slice(0, 7) };
+  });
+  step('wait for the Vercel Preview build of staging', () => {
+    const deadline = Date.now() + 12 * 60 * 1000; let p = { state: 'pending', url: '' }; let unknownSince = 0;
     while (Date.now() < deadline) {
-      st = poll();
-      if (st === 'success' || st === 'failure' || st === 'error') break;
-      if (st === 'unknown') { limited = true; const now = entry(); if (now && before && now !== before) { st = 'success'; break; } }
+      p = previewUrl(metrics.stagingSha);
+      if (p.state === 'success' || p.state === 'failure' || p.state === 'error') break;
+      if (p.state === 'unknown') { unknownSince = unknownSince || Date.now(); if (Date.now() - unknownSince > 3 * 60 * 1000) break; } else unknownSince = 0;
       run('node -e "setTimeout(()=>{},8000)"');
     }
-    if (st === 'success') return { ok: true, note: `live at ${SITE}` };
-    if (limited && st === 'unknown') return { ok: true, note: `pushed; GitHub would not say whether the build finished (rate limit) and the page did not change within 15 minutes: check ${SITE}` };
-    return { ok: false, note: `Vercel says: ${st}` };
+    if (p.state === 'success') return { ok: true, note: `preview ready${p.url ? ': ' + p.url : ''}. Production is unchanged` };
+    if (p.state === 'unknown') return { ok: true, note: 'pushed to staging; GitHub would not say whether the preview finished (rate limit). Open the staging deployment in Vercel. Production is unchanged' };
+    return { ok: false, note: `Vercel says: ${p.state}` };
   });
+};
+
+const promote = () => {
+  if (!YES) { say(`\nWould merge ${STAGING} into main with a merge commit, push it, and wait for the Vercel Production build of ${SITE}. Run again with --yes to do it.`); return; }
+  const before = (run(`curl -s ${SITE}`).out.match(/entry-[0-9a-f]+\.js/) || [''])[0];
+  let tmp;
+  step(`merge ${STAGING} into main (real merge commit)`, () => {
+    run('git fetch origin');
+    const ahead = run(`git rev-list --count origin/main..origin/${STAGING}`).out;
+    if (ahead === '0') return { skipped: true, note: 'staging has nothing that main lacks' };
+    tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'yp-main-'));
+    const a = run(`git worktree add --detach "${tmp}" origin/main`); if (!a.ok) return { ok: false, note: a.out.split('\n')[0] };
+    const m = run(`git merge --no-ff origin/${STAGING} -m "Promote ${STAGING} to production" -m "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"`, { cwd: tmp });
+    if (!m.ok) { run('git merge --abort', { cwd: tmp }); run(`git worktree remove --force "${tmp}"`); return { ok: false, note: 'the merge has conflicts, nothing was pushed: ' + m.out.split('\n')[0] }; }
+    return { ok: true, note: run('git rev-parse --short HEAD', { cwd: tmp }).out };
+  });
+  if (!tmp) return;
+  step('push main', () => {
+    const msha = run('git rev-parse HEAD', { cwd: tmp }).out;
+    const r = run('git push origin HEAD:main', { cwd: tmp }); run(`git worktree remove --force "${tmp}"`);
+    if (!r.ok) return { ok: false, note: r.out.split('\n').slice(-2).join(' / ') };
+    metrics.mainSha = msha; return { ok: true, note: msha.slice(0, 7) };
+  });
+  waitProduction(before);
 };
 
 const mobile = () => step('iPhone, Android and web bundles build (what Expo Go needs)', () => {
@@ -184,8 +254,10 @@ const mobile = () => step('iPhone, Android and web bundles build (what Expo Go n
 say(`publish ${mode}${YES ? ' --yes' : ''} on branch ${branch()}\n`);
 if (mode === 'check') check();
 else if (mode === 'handoff') { if (YES) commitIfDirty(); check(); handoff(); }
-else if (mode === 'web') { check(); web(); }
+else if (mode === 'staging') { check(); staging(); }
+else if (mode === 'promote') { promote(); }
+else if (mode === 'web') { check(); if (flag('direct')) web(); else { say('web now goes through staging first (add --direct to push straight to main).'); staging(); } }
 else if (mode === 'mobile') mobile();
-else if (mode === 'all') { if (YES) commitIfDirty(); check(); handoff(); web(); mobile(); }
-else { say('modes: check | handoff | web | mobile | all  (add --yes to commit, deploy and push)'); process.exit(2); }
+else if (mode === 'all') { if (YES) commitIfDirty(); check(); handoff(); if (flag('direct')) web(); else staging(); mobile(); }
+else { say('modes: check | handoff | staging | promote | web | mobile | all  (add --yes to commit, deploy and push)'); process.exit(2); }
 summary();

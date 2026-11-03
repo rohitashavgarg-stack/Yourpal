@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { ChevronRight, FileText, Phone } from '@/lib/icons';
-import { LineRow, ListCard } from '@/features/shell/parts';
-import { Button, Pressy, Row, Segmented, Txt } from '@/components/ui';
-import { useOverlay } from '@/components/Overlay';
+import { ChevronRight } from '@/lib/icons';
+import { Pressy, Row, Segmented, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { Hint, SubPage } from '@/features/progress/parts';
 import { useGymScenarios } from '@/features/gym/state';
 import { MTABS, MTab, Membership, tabOf, useMemberships } from '@/features/gym/memberships';
 import { radii, fontSizes } from '@/design-system/tokens';
-import { Callout } from '@/design-system/primitives/Callout';
 import { Chip } from '@/design-system/primitives/Chip';
 
 // A thin bar showing how much of the membership's time has gone.
@@ -49,7 +46,6 @@ function MembershipCard({ m }: { m: Membership }) {
 // All of the member's memberships: Active, Suspended and Past. A member can have several active at once.
 export default function Memberships() {
   const { c } = useTheme();
-  const { toast } = useOverlay();
   useGymScenarios('Gym · Membership');
   const all = useMemberships();
   const [tab, setTab] = useState<MTab>('Active');
@@ -62,14 +58,6 @@ export default function Memberships() {
           <Txt muted>{tab === 'Suspended' ? 'No suspended memberships.' : tab === 'Past' ? 'No past memberships yet.' : 'No active memberships.'}</Txt>
         </View>
       )}
-      <ListCard>
-        <LineRow title="All payments" icon={<FileText size={18} color={c.ink} />} last onPress={() => router.push('/gym/payments')} />
-      </ListCard>
-      <Callout size="lg" gap={10}>
-        <Txt style={{ fontFamily: font.semibold }}>Renewals and freezes happen at the front desk</Txt>
-        <Txt muted style={{ fontSize: fontSizes.md }}>The app shows your memberships but can’t renew or pause them. The front desk can renew, freeze or change your plan.</Txt>
-        <Button label="Call front desk" icon={<Phone size={18} color={c.bg} />} onPress={() => toast('Calling Wulf Fitness front desk…')} style={{ height: 48, borderRadius: radii.card }} />
-      </Callout>
       <Hint>When a membership ends, its history stays visible. Logging pauses only when none of your memberships is active.</Hint>
     </SubPage>
   );

@@ -9,6 +9,8 @@ Read this with `PHASE2_HANDOFF.md` (same folder), `../AGENTS.md` and the `yourpa
 - A paused membership and a comeback are never styled as failure. Amber for warnings, never red.
 
 ## Shipping
+- **Staging first (from 3 Nov 2026).** All work goes to the `staging` branch on GitHub first (Vercel builds it as a Preview) and moves to `main` only when the designer says so. `node scripts/publish.js staging --yes` merges the current branch into `staging`; `node scripts/publish.js promote --yes` merges `staging` into `main` (a real merge commit) and waits for the Production build. `web` without `--direct` also goes to staging. Never push straight to `main` unless he asks.
+- **Other sessions share this folder.** A second Claude session can edit files in the same working folder at the same time. Before a publish run `git status`; if files you did not touch are modified, do not commit them (the publish script commits every changed source file), push from a clean worktree instead.
 - `scripts/ship.sh "message"` typechecks, commits, merges into `main` with a real merge commit, pushes, waits for the Vercel Production build and screenshots the live site. Needs `gh` logged in. `scripts/ship.sh --status` shows what Production serves.
 - Why a merge commit: Vercel never builds the same commit twice. A branch push is built as a Preview, so a fast-forward of that commit into `main` gets no Production build.
 - `.claude/agents/ship.md` is an agent that runs the script.
