@@ -8,7 +8,7 @@ import { useGoalV2 } from '@/features/goalv2/model';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { router } from 'expo-router';
-import { Volume2, Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Lock, LogOut, MessageCircle, Star, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
+import { FileText, Volume2, Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Lock, LogOut, MessageCircle, Star, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
 import { Chip, ChipTone } from '@/design-system/primitives/Chip';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Avatar } from '@/components/GymHeader';
@@ -114,6 +114,7 @@ export default function Profile() {
       {group('ACCOUNT', [
         { l: 'My details', icon: <UserRound size={18} color={c.ink} />, go: go('/profile/details') },
         { l: 'Preferences', icon: <SlidersHorizontal size={18} color={c.ink} />, go: go('/profile/preferences') },
+        ...(d.hasGym ? [{ l: 'Payments and invoices', icon: <FileText size={18} color={c.ink} />, go: go('/gym/payments') }] : []),
         ...(d.hasGym ? [{ l: 'Waiver', icon: <PenLine size={18} color={c.ink} />, chip: p.waiver ? { label: 'Completed', tone: 'good' as ChipTone } : { label: 'Pending', tone: 'warn' as ChipTone }, go: go('/profile/waiver') }] : []),
       ])}
       {group('PREFERENCES AND SETTINGS', [
