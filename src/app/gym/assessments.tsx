@@ -7,7 +7,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
 import { useGymScenarios } from '@/features/gym/state';
-import { radii, fontSizes } from '@/design-system/tokens';
+import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { Chip } from '@/design-system/primitives/Chip';
 import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
@@ -68,7 +68,13 @@ export default function GymAssessments() {
         </Row>
         {/* Start shows up on the day of the assessment (and after it, until it is done) */}
         {daysLeft <= 0
-          ? <Button kind="warn" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />
+          // the big yellow button (the Button kinds have no yellow one)
+          ? (
+            <Pressy accessibilityRole="button" onPress={() => router.push('/gym/self-assessment')} scaleTo={0.98}
+              style={{ height: 56, borderRadius: radii.xl, backgroundColor: c.warn, alignItems: 'center', justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.basePlus, color: fixed.dark }}>Start assessment</Txt>
+            </Pressy>
+          )
           : <Txt muted style={{ fontSize: fontSizes.md }}>{`You can start it on ${fmtAt(new Date(nextAt).toISOString())}.`}</Txt>}
       </Card>
 
