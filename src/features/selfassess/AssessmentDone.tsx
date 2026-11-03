@@ -28,9 +28,9 @@ function Rise({ delay, from = 22, children, style }: { delay: number; from?: num
 // A number that counts up from 0 to its value.
 function CountUp({ to, delay = 0, style }: { to: number; delay?: number; style: object }) {
   const still = useReducedMotion();
-  const [n, setN] = useState(still ? to : 0);
+  const [n, setN] = useState(still || to === 0 ? to : 0);
   useEffect(() => {
-    if (still || to === 0) { setN(to); return; }
+    if (still || to === 0) return;
     let i = 0;
     const t0 = setTimeout(() => {
       const t = setInterval(() => { i += 1; setN(Math.min(to, i)); if (i >= to) clearInterval(t); }, Math.max(60, 700 / to));
