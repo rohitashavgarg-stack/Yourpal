@@ -260,7 +260,9 @@ export function HistSheet({ h }: { h: Hist }) {
   const { c } = useTheme();
   return (
     <>
-      <BigTitle>{h.t}</BigTitle>
+      {/* the date small and above, the workout's name bigger, like the history list */}
+      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{h.t.split(' · ')[0]}</Txt>
+      <BigTitle>{h.t.split(' · ').slice(1).join(' · ') || h.t}</BigTitle>
       <Txt muted style={{ marginTop: -6 }}>{h.s || 'Logged'} · {h.m}</Txt>
       <Callout gap={4}>
         {h.b.split('\n').map((l) => <Txt key={l} v="mono">{l}</Txt>)}
