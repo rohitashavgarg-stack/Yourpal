@@ -2,6 +2,58 @@
 
 Rules learned from the designer's corrections and from how the app was built. Read this with SKILL.md and catalog.md. The yourpal-design-learner agent adds to this file (see "How this skill improves itself" in SKILL.md). Each rule says where it comes from so it can be questioned.
 
+## 28 Oct to 4 Nov 2026
+
+**Assessments** (source: the Gym and assessments changes)
+- Assessments live only on the Gym tab. Progress has no assessments card or page (the card, its key and the route `/progress/assess` are deleted); links go to `/gym/assessments`. One fact, one place.
+- Names are **Assessment 1, 2, 3**. Never "Starting assessment" or "Reassessment".
+- The tests are **leg press and bench press** (strength) and **toe touch** (flexibility), with weight, waist, body fat and resting heart rate. Goals follow: the strength goal is "Bench press N kg", the flexibility goal is "Toe touch 15 cm" (a ruler, one mark per cm). Squat, push-ups, deep squat hold and sit-and-reach are not used for assessments.
+- **Never show a time the product does not have.** The gym has not scheduled the assessment with the coach, so say "Coach Vikram will confirm the day and time". A date chip appears only when there is a date.
+- **Next assessment card:** the title ("Assessment 3"), the date in a chip on the right ("Due this week" is amber), one quiet line ("In 34 days", "Book at the front desk"), then a full-width button at the bottom: "Remind me" (`primary`, which is white in dark mode) with a bell, "Reminder on" (`secondary`) with a check. No tip line and no "every 4 weeks" line.
+- **Built for many assessments (agreed, not built yet):** the hero compares the latest with the previous one; a "Comparing 10 vs 9, Change" line opens a sheet to pick any two; chips "vs previous" and "vs Assessment 1"; a small trend line on every test row; History shows the last 3 and "See all". Two fixed pills (Latest and Starting) do not scale past two assessments.
+
+**Progress data** (source: the Highest and Lowest and Diet requests)
+- Never a bare "Highest" and "Lowest". Name what it is and say when: "Most steps", "9,200", "Wed 22 Oct" underneath. Each metric has its own words (Heaviest and Lightest, Longest sleep and Shortest sleep, Most workouts and Fewest workouts, Most eaten and Least eaten).
+- **Diet is calories first**, not a percent that nobody can explain: "1,766 kcal avg. per day", target 1,800, bars with a dashed target line. A day within 10% of the target is green, the others are grey. **Never amber or red for eating more or less.** Stats: most eaten, least eaten, days on target, daily target.
+- A card on Progress has **one headline line**: the number big, its small unit beside it on the same line ("kcal avg. per day"), and only the change underneath ("↓67 kcal vs last week"). Do not put the target or another label beside the number.
+
+**Gym** (source: the chat request)
+- **Chat with the coach is the main feature**, so it is the first card on Gym: dark card (`onDark.card`), coach photo (opens the profile), the last coach message in quotes, and a white "Message Coach Vikram" button. The card is a plain View: a pressable inside a pressable breaks on web (nested buttons).
+
+**Plans, second round** (source: the 27 and 28 Oct Plans changes)
+- Day header: the name, "by Coach Vikram" small with the coach photo, then a facts row with icons (dumbbell, calendar-clock) for the planned time and the exercises. A dashed separator above Warm-up. No clock icon beside the name.
+- Week strip: compact, full width, grey. The **month heading sits above it and is a button** that opens a month calendar in a bottom sheet (only the weeks the page keeps can be picked). A small chip with a direction icon brings you back to today.
+- Section headings use `SectionLabel variant="section"` with an icon and **no coloured container**. Lists are titled `ListCard` with numbered rows and the check on the **right**. Warm-up has its own stretch icon. Planned and exercises are separate categories.
+- **Start workout** sits inline; when it scrolls out of view a blue glass Start floats (one main action over scrolling content). On a past day the same pattern is "Log this workout": a secondary button in the page, floating too. It is never primary and never glass in the page.
+- Logging a past workout: every set can be ticked, with weight and reps (or seconds). If only reps exist the row says "Set 1, Planned 8 reps" so it does not feel empty.
+- A logged day looks done: a green "Logged" tag, grey stat tiles with an icon and no zero values, no progress bar. Green only on checks and stat numbers, **never as a card fill**.
+- The **flame icon is only for the streak**. Calories and other things use other icons.
+
+**Login and first screens** (source: login and onboarding changes)
+- The country code is a tappable prefix (`Field` with `onPrefixPress`, a small arrow after the code) that opens a list sheet. India first and selected. The OTP text uses the chosen code.
+- **The first screen of a flow has no back arrow** (the Get started screen after the code). A back arrow only where something is behind it. The code step keeps its back arrow to fix a number.
+- Recommended and not built: first launch ever shows "Let's begin"; a logged-out member who reopens lands on login; a logged-in member lands on Today.
+- Do not show details the product does not have yet (an assessment time, a payment screen for a view-only membership).
+
+**Type and chrome** (source: the title, greeting and icon button changes)
+- Page titles and the Today greeting share one style: **28 px, line height 37, letter spacing -1.1**. A greeting that wraps onto three lines is too big.
+- Icon buttons on web and Android get a thin border and a soft grey glass gradient; iOS uses real glass. Use `IconButton`, never a hand-built round button.
+- The Today page ends with `PageEnd` (an illustration, a quiet two-line phrase, the YourPal mark); no quote above it.
+
+**Destructive actions** (source: code from other sessions, seen 4 Nov; not discussed with the designer in this session)
+- `Button kind="warn"` is a soft red tint (danger colour at 12%, danger text) for actions that end something: "Log out" on Profile, "Leave" in the self-assessment sheet. Frozen, paused and comeback states stay amber or neutral, never red; red is only for an action the member must confirm.
+
+**Menus** (source: the workout menu change)
+- The three dot menu on the exercise page offers swap, ask the coach, form tips and skip. There is no "options for the current set" row.
+- The Plans three dot menu (edit plan, create a workout, reset to the coach's version) stays as it is unless he asks.
+
+**How to work and ship** (source: this stretch)
+- When he says "show here first", draw a flat wireframe in chat (grey boxes, small lines for charts) and wait for "go". He answers with "do the changes" or a screenshot and one line.
+- **Work goes to the `staging` branch first**; `main` (the live site) changes only when he says so (`publish.js staging --yes`, then `promote --yes`). `staging` is for the member app only; the Admin Panel is a separate project and folder.
+- Other Claude sessions may edit the same folder at the same time. Run `git status` first and never commit files you did not touch.
+- "Do things on your own, do not ask me" means fewer questions on small steps. Still ask before downloads, deleting, and going live.
+- Day-by-day reports for his reporting sheet are written in UI and UX designer language (screens designed, flows defined, design system), without commit counts.
+
 ## 27 Oct 2026
 
 **Hierarchy on cards** (source: the designer's reference, the Streak page hero card)
