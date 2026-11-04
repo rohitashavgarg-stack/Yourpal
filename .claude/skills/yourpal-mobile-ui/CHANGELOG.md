@@ -1,5 +1,9 @@
 # Design changelog (generated)
 
+- 2026-11-04 `06d551c` Handoff refresh: design skill rules, screens record, docs and Storybook (docs)
+- 2026-11-04 `255e129` Waiver: one Agree and sign button instead of the checkbox row (screens)
+- 2026-11-04 `f1703e3` Plans: remove the month heading and the grey background behind the week strip (screens)
+
 - 2026-11-03 `c4d65d5` Gym tab Assessments card: earlier assessment circles in soft blue, the latest solid (screens)
 - 2026-11-03 `f264816` Assessment completed: a progress ring with the improved count, even stat tiles with icons and changes, confetti (features)
 - 2026-11-03 `679d3a0` Payments and invoices move to Profile; the front desk note is removed from Memberships (screens)
