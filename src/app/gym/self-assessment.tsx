@@ -19,6 +19,7 @@ import { goBack } from '@/features/shell/parts';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Chip } from '@/design-system/primitives/Chip';
 import { BODY_SIZES, INJURY_AREAS, NUMS, NumKey, STEPS, SelfEntry, compare, fmtAt, habitLabel } from '@/features/selfassess/data';
+import { AssessmentDone } from '@/features/selfassess/AssessmentDone';
 import { NUDGE_DAYS, useSelfAssess } from '@/features/selfassess/useSelfAssess';
 import { RulerStep } from '@/features/selfassess/RulerStep';
 import { SleepDial, sleepMinutes } from '@/features/selfassess/SleepDial';
@@ -62,6 +63,7 @@ export default function SelfAssessment() {
   const [today] = useState(() => Date.now()); // the day the assessment is done, for "scheduled for"
   const [sleepT, setSleepT] = useState({ bed: 22 * 60 + 50, wake: 7 * 60 + 50 }); // 10:50 pm to 7:50 am, as in the design
   const [saved, setSaved] = useState<SelfEntry | null>(null);
+  const [celebrate, setCelebrate] = useState(false); // right after saving: the completed screen, before the results
   const advance = useRef<ReturnType<typeof setTimeout> | null>(null);
   const entry = viewing ?? saved;
   const step = idx < total ? STEPS[idx] : null;
@@ -114,7 +116,7 @@ export default function SelfAssessment() {
     if (tests.height) setProfile({ heightCm: String(tests.height) });
     setSaved(e);
     setIdx(total);
-    haptic.success();
+    setCelebrate(true);
   };
 
   const noScroll = !!step; // the steps never scroll (only the result page, which has a long list)
@@ -143,6 +145,12 @@ export default function SelfAssessment() {
     </Pressy>
   ) : undefined;
 
+  // Saved just now: the completed screen. View results goes on to the results page, Done goes back to the Assessments page.
+  if (celebrate && saved) {
+    const prev = entries.find((x) => x.id !== saved.id && Date.parse(x.at) < Date.parse(saved.at));
+    return <AssessmentDone n={entries.length} date={fmtAt(saved.at)} rows={compare(saved, prev)}
+      onResults={() => setCelebrate(false)} onDone={() => goBack('/gym/assessments')} />;
+  }
   return (
     <SubPage title="Assessment" fallback="/gym/assessments" footer={footer} right={skipBtn} scroll={!noScroll} onBack={() => { if (step && idx > 0) { openSheet(<LeaveSheet />, { label: 'Leave the assessment' }); return true; } return false; }}>
       <View style={noScroll ? { flex: 1, paddingHorizontal: 16, paddingTop: 4, gap: 12 } : { gap: 12 }} pointerEvents="box-none">

@@ -38,7 +38,7 @@ function VolumeSlider({ value, onChange, disabled }: { value: number; onChange: 
     <Row style={{ gap: 12 }}>
       <Volume1 size={20} color={c.muted} />
       <View {...pan.panHandlers} onLayout={(e) => setW(e.nativeEvent.layout.width)} accessibilityRole="adjustable" accessibilityLabel="Volume" accessibilityValue={{ text: `${Math.round(value * 100)} percent` }}
-        style={{ flex: 1, height: 44, justifyContent: 'center', opacity: disabled ? 0.4 : 1 }}>
+        style={{ flex: 1, height: 44, marginHorizontal: 16, justifyContent: 'center', opacity: disabled ? 0.4 : 1 }}>
         <View pointerEvents="none" style={{ height: 8, borderRadius: radii.xs, backgroundColor: c.surface3 }}>
           <View style={{ width: `${value * 100}%`, height: 8, borderRadius: radii.xs, backgroundColor: c.accent }} />
         </View>

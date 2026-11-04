@@ -39,7 +39,7 @@ export default function AllPayments() {
 
   const amount = (n: number) => <Txt style={{ fontFamily: font.semibold }}>{rupees(n)}</Txt>;
   return (
-    <SubPage title="Payments" fallback="/gym/membership">
+    <SubPage title="Payments" fallback="/profile">
       {upcoming.length > 0 && (
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>UPCOMING</Txt>

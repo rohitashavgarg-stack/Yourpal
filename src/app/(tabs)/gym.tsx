@@ -177,9 +177,11 @@ function AssessCard() {
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Upcoming assessment</Txt>
           <Txt style={{ fontFamily: font.semibold }}>{`Assessment ${total + 1}`}</Txt>
         </View>
-        <Tag label={daysLeft <= 0 ? 'Due now' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`} bg={due ? c.warnSoft : c.surface} fg={due ? c.warn : c.muted} style={{ alignSelf: 'center' }} />
+        {/* when it is due the small Start button takes the chip's place, inside this container */}
+        {due
+          ? <Button kind="accent" size="compact" label="Start" accessibilityLabel="Start the assessment" onPress={() => router.push('/gym/self-assessment')} />
+          : <Tag label={daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`} bg={c.surface} fg={c.muted} style={{ alignSelf: 'center' }} />}
       </Row>
-      {due && <Button kind="accent" label="Start assessment" onPress={() => router.push('/gym/self-assessment')} />}
     </PCard>
   );
 }
