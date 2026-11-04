@@ -134,11 +134,12 @@ function AssessCard() {
           {Array.from({ length: shown + 1 }, (_, i) => {
             const n = total - shown + i + 1;
             const next = i === shown;
+            const latest = n === total; // the latest completed one is solid, the earlier ones soft
             return (
               <React.Fragment key={n}>
                 {i > 0 && <View style={{ width: 10, height: 2, backgroundColor: next ? c.accent + '55' : c.accent }} />}
-                <View style={{ width: 36, height: 36, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: next ? 'transparent' : c.accent, borderWidth: next ? 2 : 0, borderColor: c.accent + '80', borderStyle: 'dashed' }}>
-                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: next ? c.accentText : c.accentInk }}>{String(n)}</Txt>
+                <View style={{ width: 36, height: 36, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: next ? 'transparent' : latest ? c.accent : c.accentSoft, borderWidth: next ? 2 : 0, borderColor: c.accent + '80', borderStyle: 'dashed' }}>
+                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: next || !latest ? c.accentText : c.accentInk }}>{String(n)}</Txt>
                 </View>
               </React.Fragment>
             );

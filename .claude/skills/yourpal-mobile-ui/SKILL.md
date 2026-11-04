@@ -95,6 +95,7 @@ One goal model (`useGoalV2`, `src/features/goalv2/model.ts`) feeds every surface
 
 ## 11. Learned rules and how this skill improves itself
 
+- `screens.md` records how every screen is designed **now** (Today, Plans, Progress, Gym, Assessments, workout, login, onboarding, profile). Read it before changing a screen and update its entry after.
 - `learned.md` holds the rules learned from the designer's corrections (food cards, glass, Plans, separators, how he likes to work). **Read it before any UI work.** It overrides older text in this file when they disagree.
 - `catalog.md`, `CHANGELOG.md` and `pending-review.md` are written by `scripts/skill/learn.js`. It runs on every publish and on `/yourpal-learn` (an every-turn Stop hook is described in docs/AUTOMATION.md but is not installed). It needs no AI: it re-reads the code and records what changed.
 - When `pending-review.md` is not empty, new components, new Button kinds or new designer feedback have appeared. The `yourpal-design-learner` agent (run `/yourpal-learn`, or let the weekly schedule run it) reads the diffs and the feedback, writes the rules into `learned.md` and this file, and empties `pending-review.md`.
@@ -104,4 +105,5 @@ One goal model (`useGoalV2`, `src/features/goalv2/model.ts`) feeds every surface
 ## 12. Known outdated lines in sections 1 to 9
 
 - Section 4 "Never text · text": the rule stands, but do not bulk-replace the existing ones; the designer guides the fix screen by screen (see learned.md).
-- Section 5 (goal patterns) and section 6 (trackers) describe the Today cards as of 19 Oct; the Plans, diet and sheets patterns are in learned.md.
+- Section 5 (goal patterns) and section 6 (trackers) describe the Today cards as of 19 Oct. The current Today, the Plans, diet, Progress, Gym and assessments designs are in `screens.md`, and the reasons are in `learned.md` (newest section first).
+- Section 2 says the accent for status is colour coded; for calories the rule is different: on target is green, off target is grey, never amber or red (learned.md, 28 Oct to 4 Nov).
