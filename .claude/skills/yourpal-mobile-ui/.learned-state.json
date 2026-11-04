@@ -1,5 +1,5 @@
 {
- "lastCommit": "72c61af2eaaac5fa57e705d56e65783516a33a69",
+ "lastCommit": "c4d65d50f65f458f0d95f0c26b5484d1539abcb9",
  "components": [
   "AmountStepper",
   "Button, IconButton",
@@ -62,7 +62,8 @@
   "whiteLine",
   "surface",
   "glassAccent",
-  "glassPrimary"
+  "glassPrimary",
+  "warn"
  ],
- "memoryStamp": 1793012088153.538
+ "memoryStamp": 1793684950503.8074
 }
