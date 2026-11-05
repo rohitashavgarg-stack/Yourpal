@@ -165,6 +165,7 @@ function AssessCard() {
           </Row>
         )}
       </View>
+      <View style={{ height: 1, backgroundColor: c.line }} />
       {/* the upcoming assessment, plain (no container): its name on the left, its date and how soon on the right */}
       <Row style={{ gap: 12, alignItems: 'center' }}>
         <View style={{ flex: 1, gap: 1 }}>

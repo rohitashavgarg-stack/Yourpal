@@ -1,10 +1,12 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Activity, ClipboardList, Droplets, Dumbbell, Heart, Medal, PersonStanding, ShieldCheck } from '@/lib/icons';
 import { Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
+import { GlassBackdrop } from '@/components/Glass';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
@@ -38,6 +40,18 @@ function Glow({ color }: { color: string }) {
         </Defs>
         <Rect x="0" y="0" width="100%" height="100%" fill="url(#assessGlow)" />
       </Svg>
+    </View>
+  );
+}
+
+// A glass card: the frosted blur (real iOS glass where the phone has it), a soft sheen from the top left, and a thin light edge. It floats over the glow behind it.
+function GlassCard({ children }: { children: React.ReactNode }) {
+  const { c } = useTheme();
+  return (
+    <View style={{ alignSelf: 'stretch', borderRadius: radii.xl, borderWidth: 1, borderColor: c.glassEdge, overflow: 'hidden', paddingVertical: 22, paddingHorizontal: 16, alignItems: 'center', gap: 12 }}>
+      <GlassBackdrop radius={radii.xl} tint={c.glassTo} />
+      <LinearGradient pointerEvents="none" colors={[c.glassFrom, c.glassTo]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+      {children}
     </View>
   );
 }
@@ -81,6 +95,7 @@ export default function Assessment() {
     // No text in the header bar: the graph and the heading sit below it, centred, over a soft glow like the top of the Outcurve pages.
     <SubPage title="" fallback="/gym/assessments" backdrop={<Glow color={c.cNutri} />}>
       <View style={{ alignItems: 'center', gap: 12, paddingTop: 4 }}>
+        <GlassCard>
         {/* the number and what it counts, then the capsules, then what each colour is */}
         <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl6, lineHeight: 48, letterSpacing: -1.2 }}>{judged.length > 0 ? `${better} of ${judged.length}` : String(rows.length)}</Txt>
         <Txt v="caption" style={{ fontSize: fontSizes.sm, marginTop: -8 }}>{judged.length > 0 ? 'improved' : 'measurements'}</Txt>
@@ -95,6 +110,7 @@ export default function Assessment() {
             ))}
           </Row>
         )}
+        </GlassCard>
         <Txt accessibilityRole="header" v="title" style={{ textAlign: 'center', marginTop: 8 }}>{`Assessment ${n}`}</Txt>
         <View style={{ alignSelf: 'center' }}><Chip label={fmtAt(entry.at)} /></View>
       </View>
