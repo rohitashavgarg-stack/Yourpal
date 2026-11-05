@@ -6,7 +6,6 @@ import { fadeOut } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { PersonAvatar } from '@/components/Brand';
-import { Tag } from '@/components/bits';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
@@ -166,17 +165,16 @@ function AssessCard() {
           </Row>
         )}
       </View>
-      {/* the upcoming assessment in a container like the last one: its date as a quiet calendar tile, and when it is */}
-      <Row style={{ gap: 12, padding: 12, borderRadius: radii.lg, backgroundColor: c.surface2 }}>
-        <View style={{ width: 48, height: 52, borderRadius: radii.md, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 24, color: c.ink }}>{String(new Date(nextAt).getDate())}</Txt>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 16, color: c.muted }}>{new Date(nextAt).toLocaleString('en-US', { month: 'short' }).toUpperCase()}</Txt>
-        </View>
+      {/* the upcoming assessment, plain (no container): its name on the left, its date and how soon on the right */}
+      <Row style={{ gap: 12, alignItems: 'center' }}>
         <View style={{ flex: 1, gap: 1 }}>
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Upcoming assessment</Txt>
           <Txt style={{ fontFamily: font.semibold }}>{`Assessment ${total + 1}`}</Txt>
         </View>
-        <Tag label={daysLeft <= 0 ? 'Today' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`} bg={c.surface} fg={c.muted} style={{ alignSelf: 'center' }} />
+        <View style={{ alignItems: 'flex-end', gap: 1 }}>
+          <Txt style={{ fontFamily: font.semibold }}>{`${new Date(nextAt).getDate()} ${new Date(nextAt).toLocaleString('en-US', { month: 'short' })}`}</Txt>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{daysLeft <= 0 ? 'Today' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`}</Txt>
+        </View>
       </Row>
     </PCard>
   );
