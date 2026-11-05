@@ -17,7 +17,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { mealById, mealKcal } from './meals';
-import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed, plateArt } from '@/design-system/tokens';
 import { ScanBracket } from '@/design-system/primitives/ScanBracket';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { FoodCard } from '@/design-system/patterns/FoodCard';
@@ -112,7 +112,7 @@ export function QuickLogClassic({ mealId, mode: initial = 'scan', replaceIdx, ba
   return (
     <>
       <View style={{ gap: 2 }}>
-        <Txt style={{ fontFamily: font.regular, fontSize: 28, letterSpacing: -1.1 }}>{repl ? `Swap ${repl.n.toLowerCase()}` : `Add to ${meal.n.toLowerCase()}`}</Txt>
+        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl3Plus, letterSpacing: -1.1 }}>{repl ? `Swap ${repl.n.toLowerCase()}` : `Add to ${meal.n.toLowerCase()}`}</Txt>
         <Txt muted style={{ fontSize: fontSizes.sm }}>{repl ? `Planned: ${repl.q} · ${repl.k} kcal` : `Planned: ${planned} · ${mealKcal(meal)} kcal`}</Txt>
       </View>
       <Segmented<Mode> accessibilityLabel="How to log" value={mode} onChange={setMode}
@@ -156,9 +156,9 @@ export function QuickLogClassic({ mealId, mode: initial = 'scan', replaceIdx, ba
               : shot ? <Image source={{ uri: shot }} accessibilityIgnoresInvertColors resizeMode="cover" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
               : (
             <Svg width="100%" height="100%" viewBox="0 0 358 210" preserveAspectRatio="xMidYMid slice" style={{ position: 'absolute', opacity: scan === 'idle' ? 0.5 : 1 }}>
-              <Ellipse cx={179} cy={110} rx={112} ry={76} fill="#E9E4DA" /><Ellipse cx={179} cy={110} rx={90} ry={58} fill="#F7F3EC" />
-              <Circle cx={148} cy={100} r={28} fill="#8C3B2A" /><Circle cx={142} cy={93} r={4} fill="#B5543C" /><Circle cx={156} cy={106} r={3} fill="#B5543C" />
-              <Ellipse cx={210} cy={100} rx={32} ry={22} fill="#FFFDF6" /><Circle cx={186} cy={140} r={20} fill="#D9A45A" />
+              <Ellipse cx={179} cy={110} rx={112} ry={76} fill={plateArt.rim} /><Ellipse cx={179} cy={110} rx={90} ry={58} fill={plateArt.plate} />
+              <Circle cx={148} cy={100} r={28} fill={plateArt.curry} /><Circle cx={142} cy={93} r={4} fill={plateArt.curryLight} /><Circle cx={156} cy={106} r={3} fill={plateArt.curryLight} />
+              <Ellipse cx={210} cy={100} rx={32} ry={22} fill={plateArt.rice} /><Circle cx={186} cy={140} r={20} fill={plateArt.roti} />
             </Svg>)}
             <ScanBracket pos="tl" /><ScanBracket pos="tr" /><ScanBracket pos="bl" /><ScanBracket pos="br" />
             {scan === 'busy' && <ScanLine />}
@@ -199,7 +199,7 @@ export function QuickLogClassic({ mealId, mode: initial = 'scan', replaceIdx, ba
       )}
 
       {items.length > 0 && (
-        <FadeIn style={{ borderRadius: 20, backgroundColor: c.surface2, paddingVertical: 4, paddingHorizontal: 14 }}>
+        <FadeIn style={{ borderRadius: radii.block, backgroundColor: c.surface2, paddingVertical: 4, paddingHorizontal: 14 }}>
           {items.map((it, i) => (
             <Row key={i} style={{ gap: 8, minHeight: 44, borderBottomWidth: 1, borderBottomColor: c.line }}>
               <Txt style={{ flex: 1, fontFamily: font.medium }}>{it.n}</Txt>

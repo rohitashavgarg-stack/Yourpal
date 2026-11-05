@@ -159,3 +159,6 @@ export function semantic(p: Palette) {
 export type Semantic = ReturnType<typeof semantic>;
 export const lightSemantic = semantic(light);
 export const darkSemantic = semantic(dark);
+
+// The colours of the demo plate drawn in the food scan frame (an illustration, not UI): the plate, its rim, the curry, the rice and the roti.
+export const plateArt = { rim: '#E9E4DA', plate: '#F7F3EC', curry: '#8C3B2A', curryLight: '#B5543C', rice: '#FFFDF6', roti: '#D9A45A' } as const;
