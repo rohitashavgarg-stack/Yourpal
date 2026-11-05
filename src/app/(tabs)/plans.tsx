@@ -153,10 +153,10 @@ export default function Plans() {
     <View style={{ flex: 1 }}>
     <TabScreen title="Plans" scrollY={sy} header={<GymHeader />} compactTitle={false} bottomPad={canStart || canLog ? 190 : 130} titleRight={(
       <Row style={{ gap: 8 }}>
-        <Segmented iconOnly accessibilityLabel="Plan type" value={p.seg} onChange={(v) => setP({ seg: v })}
+        <Segmented iconOnly edge accessibilityLabel="Plan type" value={p.seg} onChange={(v) => setP({ seg: v })}
           options={[{ value: 'workout', label: 'Workout' }, { value: 'diet', label: 'Diet' }]}
           icons={{ workout: (col) => <Dumbbell size={20} color={col} />, diet: (col) => <UtensilsCrossed size={20} color={col} /> }} />
-        {!paused && <IconButton label={isW ? 'Plan menu' : 'Diet menu'} onPress={openMenu} size={52} radius={radii.xl} bg={c.surface} borderWidth={1} borderColor={c.line}>
+        {!paused && <IconButton label={isW ? 'Plan menu' : 'Diet menu'} onPress={openMenu} size={52} radius={radii.xl} bg={c.cardLift} edge>
           <MoreHorizontal size={22} color={c.ink} />
         </IconButton>}
       </Row>

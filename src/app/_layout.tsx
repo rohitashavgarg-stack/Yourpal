@@ -21,7 +21,7 @@ import { fixed } from '@/design-system/tokens';
 
 // Screens with an X (close) open from the bottom and close back down. Screens with a back arrow come in from the right and leave to the right.
 // On the phone the native stack does this (see the Stack.Screen options below). The web stack has no transitions, so this wrapper adds them there.
-const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
+const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'log-chat', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
 const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
 // Web only: the stack drops a popped screen at once, so the slide-out is played first, then the real back runs.
 // True for a moment after a back: a screen that mounts then is being revealed, not pushed, so it must not slide in.

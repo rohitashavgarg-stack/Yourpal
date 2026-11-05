@@ -1,4 +1,6 @@
 import React from 'react';
+import Svg, { Line } from 'react-native-svg';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { ChevronRight, ClipboardCheck, CreditCard, Dumbbell, MessageCircle } from '@/lib/icons';
@@ -39,6 +41,7 @@ function GymMembership() {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`Memberships. ${active.length} active${soon ? ', one ending soon' : ''}. See all`} onPress={() => router.push('/gym/membership')} scaleTo={0.985}
       style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
+      <CardEdge radius={radii.lg} />
       <Row style={{ gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: radii.md, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><CreditCard size={22} color={c.accentText} /></View>
         <View style={{ flex: 1, gap: 2 }}>
@@ -165,9 +168,9 @@ function AssessCard() {
           </Row>
         )}
       </View>
-      <View style={{ height: 1, backgroundColor: c.line }} />
+      <Svg width="100%" height={2} style={{ marginTop: 10 }}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.4} strokeWidth={1} strokeDasharray="3 3" /></Svg>
       {/* the upcoming assessment, plain (no container): its name on the left, its date and how soon on the right */}
-      <Row style={{ gap: 12, alignItems: 'center' }}>
+      <Row style={{ gap: 12, alignItems: 'center', paddingTop: 6, paddingBottom: 8 }}>
         <View style={{ flex: 1, gap: 1 }}>
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Upcoming assessment</Txt>
           <Txt style={{ fontFamily: font.semibold }}>{`Assessment ${total + 1}`}</Txt>
@@ -187,6 +190,7 @@ function ChatCard() {
   const last = [...d.chat].reverse().find((m) => !m.me);
   return (
     <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 14 }}>
+      <CardEdge radius={radii.xl} />
       <Row style={{ gap: 14 }}>
         {/* Photo and name open the coach's profile. */}
         <Pressy accessibilityRole="button" accessibilityLabel="Coach Vikram. View profile" onPress={() => router.push('/coach')} scaleTo={0.97} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 14 }}>
@@ -229,6 +233,7 @@ function PTCard({ isPT }: { isPT: boolean }) {
   if (!isPT) {
     return (
       <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+      <CardEdge radius={radii.xl} />
         {head('Personal training', 'Workout and diet from a coach')}
         <Button kind="white" label="See how it works" onPress={() => router.push('/gym/pt')} />
       </View>
@@ -236,6 +241,7 @@ function PTCard({ isPT }: { isPT: boolean }) {
   }
   return (
     <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+      <CardEdge radius={radii.xl} />
       {head('Your PT package', 'With Coach Vikram', <Chip label="Renews 30 Oct" onDark />)}
       <View style={{ gap: 10 }}>
         <Txt accessibilityLabel={`${d.ptLeft} of ${PT_TOTAL} sessions left`} style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39, color: onDark.text }}>{d.ptLeft}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: onDark.muted }}> of {PT_TOTAL} sessions left</Txt></Txt>

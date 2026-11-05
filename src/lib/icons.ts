@@ -77,7 +77,9 @@ export { default as TrendingUp } from 'lucide-react-native/icons/trending-up';
 export { default as Trophy } from 'lucide-react-native/icons/trophy';
 export { default as UtensilsCrossed } from 'lucide-react-native/icons/utensils-crossed';
 export { default as WifiOff } from 'lucide-react-native/icons/wifi-off';
-export { default as X } from 'lucide-react-native/icons/x';
+export { default as X } from 'lucide-react-native/icons/x';
+export { default as Library } from 'lucide-react-native/icons/library';
+export { default as Images } from 'lucide-react-native/icons/images';
 export { default as ChartNoAxesColumn } from 'lucide-react-native/icons/chart-no-axes-column';
 export { default as Activity } from 'lucide-react-native/icons/activity';
 export { default as Ruler } from 'lucide-react-native/icons/ruler';

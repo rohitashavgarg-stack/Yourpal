@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { LayoutChangeEvent, Pressable, PressableProps, StyleProp, StyleSheet, Text, TextInput, TextInputProps, TextProps, TextStyle, View, ViewStyle } from 'react-native';
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -27,7 +28,7 @@ export { Card } from '@/design-system/primitives/Card';
 // ---------- Outline chip (reference style) ----------
 // ---------- Selectable pill (filter / option) ----------
 // ---------- Segmented control with sliding thumb ----------
-export function Segmented<T extends string>({ options, value, onChange, icons, accessibilityLabel, iconOnly }: { options: { value: T; label: string }[]; value: T; onChange: (v: T) => void; icons?: Partial<Record<T, (color: string) => React.ReactNode>>; accessibilityLabel?: string; iconOnly?: boolean }) {
+export function Segmented<T extends string>({ options, value, onChange, icons, accessibilityLabel, iconOnly, edge }: { edge?: boolean; options: { value: T; label: string }[]; value: T; onChange: (v: T) => void; icons?: Partial<Record<T, (color: string) => React.ReactNode>>; accessibilityLabel?: string; iconOnly?: boolean }) {
   const { c } = useTheme();
   const [w, setW] = React.useState(0);
   const idx = Math.max(0, options.findIndex((o) => o.value === value));
@@ -36,7 +37,7 @@ export function Segmented<T extends string>({ options, value, onChange, icons, a
   useEffect(() => { x.value = withSpring(idx * seg, spring.snappy); }, [idx, seg]);
   const thumb = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   return (
-    <View accessibilityRole="tablist" accessibilityLabel={accessibilityLabel} onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)} style={{ flexDirection: 'row', padding: 4, borderRadius: radii.xl, backgroundColor: c.surface2, ...(iconOnly ? { width: options.length * 52 + 8 } : null) }}>
+    <View accessibilityRole="tablist" accessibilityLabel={accessibilityLabel} onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)} style={{ flexDirection: 'row', padding: 4, borderRadius: radii.xl, backgroundColor: edge ? c.cardLift : c.surface2, ...(iconOnly ? { width: options.length * 52 + 8 } : null) }}>
       {seg > 0 && <Animated.View style={[{ position: 'absolute', top: 4, left: 4, width: seg, height: 44, borderRadius: radii.lg, backgroundColor: c.ink, shadowColor: fixed.shadow, shadowOpacity: 0.18, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }, thumb]} />}
       {options.map((o) => {
         const on = o.value === value;
@@ -48,6 +49,7 @@ export function Segmented<T extends string>({ options, value, onChange, icons, a
           </Pressable>
         );
       })}
+      {edge ? <CardEdge radius={radii.xl} /> : null}
     </View>
   );
 }

@@ -153,7 +153,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 160
             {/* top: the membership strip, then the updates; on a comeback day the comeback card comes first and the updates after the goal */}
             {comebackNew && <FadeIn step={50} i={0}><ComebackGreeting /></FadeIn>}
             {!!payNotice && <FadeIn step={50} i={0}><View style={{ marginTop: 14, marginBottom: comebackNew ? -12 : 6 }} onLayout={(e) => setStripY(e.nativeEvent.layout.y)}><PaymentBanner /></View></FadeIn>}
-            {needWaiver && <FadeIn step={50} i={0}><WaiverCard /></FadeIn>}
+            {needWaiver && <FadeIn step={50} i={0}><View style={{ marginTop: payNotice ? 0 : 14 }}><WaiverCard /></View></FadeIn>}
             {askFeedback && <FadeIn step={50} i={0}><FeedbackCard /></FadeIn>}
             {comebackNew && <FadeIn step={50} i={0}><WorkoutCard restart /></FadeIn>}
             {!comebackNew && <FadeIn step={50} i={0}><TodayGreeting /></FadeIn>}
@@ -168,7 +168,7 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 160
           <>
             {/* account banner and the other things that need an answer come first; on a comeback day the comeback card (the workout) comes right before the goal */}
             {!!payNotice && <FadeIn step={50} i={0}><PaymentBanner /></FadeIn>}
-            {needWaiver && <FadeIn step={50} i={0}><WaiverCard /></FadeIn>}
+            {needWaiver && <FadeIn step={50} i={0}><View style={{ marginTop: payNotice ? 0 : 14 }}><WaiverCard /></View></FadeIn>}
             {askFeedback && <FadeIn step={50} i={0}><FeedbackCard /></FadeIn>}
             {ptPending && d.hasGym && <FadeIn step={50} i={0}><PtConfirmCard /></FadeIn>}
             {d.todayVariant === 'With updates' && <FadeIn step={50} i={0}><UpdatesCard /></FadeIn>}

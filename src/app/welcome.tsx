@@ -13,9 +13,11 @@ import { font } from '@/theme/tokens';
 import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
 import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { useOwnGlow } from '@/design-system/primitives/PageGlow';
 
 // One soft blue glow bleeding in from the top-right corner. Radial gradient, so it is blurred with no filter (works on web and native).
 function WelcomeGlow({ width, height }: { width: number; height: number }) {
+  useOwnGlow();
   if (!width || !height) return null;
   const r = width * 1.25;
   return (

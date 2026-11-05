@@ -10,6 +10,8 @@ import { useOverlay } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
 import { Hint, SubPage } from '@/features/progress/parts';
+import { TopGlow } from '@/design-system/primitives/TopGlow';
+import { useLook } from '@/features/progress/look';
 import { progressStore } from '@/features/progress/store';
 import { AFTER_PHOTO, BEFORE_PHOTO, photoFor } from '@/features/progress/photoAssets';
 import { useProgressScenarios } from '@/features/progress/scenarios';
@@ -86,8 +88,9 @@ export default function Photos() {
   const rows: { d: string; i: number }[][] = [];
   ps.photos.forEach((p, i) => { if (i % 2 === 0) rows.push([]); rows[rows.length - 1].push({ d: p.d, i }); });
 
+  const look = useLook('photos'); // the purple of the Photos card
   return (
-    <SubPage title="Photos" fallback="/progress" onBack={() => { if (comparing) { setComparing(false); return true; } return false; }}
+    <SubPage title="Photos" fallback="/progress" backdrop={<TopGlow color={look.tint} />} onBack={() => { if (comparing) { setComparing(false); return true; } return false; }}
       right={<View style={{ width: 64, alignItems: 'flex-end' }}><Tag label="Private" bg={c.surface2} fg={c.muted} /></View>}>
       <Row style={{ gap: 6, paddingHorizontal: 6 }}><Lock size={14} color={c.muted} /><Txt muted style={{ fontSize: fontSizes.md, flex: 1 }}>Only you can see these. Your trainer can’t.</Txt></Row>
       {!comparing ? (

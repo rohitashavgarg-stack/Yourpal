@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { LogPastWorkoutSheet } from './LogPastWorkoutSheet';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { Button, Field, Pill, Row, Txt } from '@/components/ui';
@@ -40,7 +41,7 @@ export function PlanMenuSheet() {
         <ListRow label="Ask Coach to change the plan" onPress={() => go(() => router.push({ pathname: '/plans/ask', params: { kind: 'workout' } }))} />
         <ListRow label="Reset to Coach's version" onPress={() => openSheet(<ResetSheet kind="workout" />, { label: 'Reset plan' })} />
         <ListRow label="Exercise library" onPress={() => openSheet(<LibrarySheet mode="browse" />, { label: 'Exercise library' })} />
-        <ListRow label="Workout history" onPress={() => go(() => router.push('/plans/history'))} />
+        <ListRow label="Edit workout entries" onPress={() => { if (plan?.done) openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Edit workout entries' }); else go(() => toast('Nothing is logged for this day yet')); }} />
         <ListRow label="Download workout plan (PDF)" chevron={false} last onPress={() => go(() => { toast('Making your PDF'); downloadWorkoutPlan(d, p, state.profile.name || 'Member').catch(() => toast('Could not make the PDF. Try again')); })} />
       </View>
     </>
