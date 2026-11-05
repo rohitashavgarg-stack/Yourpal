@@ -2,6 +2,14 @@
 
 Rules learned from the designer's corrections and from how the app was built. Read this with SKILL.md and catalog.md. The yourpal-design-learner agent adds to this file (see "How this skill improves itself" in SKILL.md). Each rule says where it comes from so it can be questioned.
 
+## 5 Nov 2026
+
+**Assessments are the trainer's work, view only** (source: the designer, on the Start button)
+- The trainer does the assessment at the gym and records it. The app only shows the result. **No self-assessment exists**: no Start button, no questions or measurements for the member to enter, no monthly nudge on Today, no "assessment saved" screen. If code like that comes back (for example from another session), remove it.
+- The upcoming assessment is **quiet**: a neutral date tile (no amber, no blue), "In 6 days" as plain muted text, and one line saying Coach Vikram does it at the gym and the result shows here afterwards. A due or overdue assessment does not turn yellow and does not become a big button.
+- A finished assessment opens a view-only page (`/gym/assessment?id=`): how many improved, the measurements in three groups with a change tag on each row, and what the trainer noted. The data is in `src/features/gym/assessmentData.ts` (sample entries; the real ones come from the gym).
+- This was a bigger removal than the button: the Gym card and the assessments page had been built on the member's own entries, so they were moved to the trainer's records.
+
 ## 28 Oct to 4 Nov 2026
 
 **Assessments** (source: the Gym and assessments changes)
@@ -41,7 +49,7 @@ Rules learned from the designer's corrections and from how the app was built. Re
 - The Today page ends with `PageEnd` (an illustration, a quiet two-line phrase, the YourPal mark); no quote above it.
 
 **Destructive actions** (source: code from other sessions, seen 4 Nov; not discussed with the designer in this session)
-- `Button kind="warn"` is a soft red tint (danger colour at 12%, danger text) for actions that end something: "Log out" on Profile, "Leave" in the self-assessment sheet. Frozen, paused and comeback states stay amber or neutral, never red; red is only for an action the member must confirm.
+- `Button kind="warn"` is a soft red tint (danger colour at 12%, danger text) for actions that end something: "Log out" on Profile. Frozen, paused and comeback states stay amber or neutral, never red; red is only for an action the member must confirm.
 
 **Menus** (source: the workout menu change)
 - The three dot menu on the exercise page offers swap, ask the coach, form tips and skip. There is no "options for the current set" row.

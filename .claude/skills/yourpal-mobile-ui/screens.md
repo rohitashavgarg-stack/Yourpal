@@ -26,8 +26,11 @@ One page per area, current state only. The rules behind each choice are in `lear
 - Order: **Chat with Coach Vikram** (dark card, last message, white button), membership card, break card if paused, Attendance, Assessments, PT (or PT package), then Membership and payments, Membership pauses, Help.
 - The Assessments card shows "6 of 7 improved" and "Assessment 2 vs Assessment 1", with the next one underneath.
 
-## Assessments (`src/app/gym/assessments.tsx`)
-- Hero (blue gradient) with the latest result, the two pills to switch between assessments, grouped results (Body, Strength, Mobility and fitness) with a change tag on each row, the coach's note, History, and the next assessment card (title, date chip, one line, Remind me).
+## Assessments (`src/app/gym/assessments.tsx`, `src/app/gym/assessment.tsx`)
+- Done by the trainer at the gym, view only for the member (see `learned.md`, 5 Nov). Nothing to start.
+- The list page: UPCOMING (one quiet card: a neutral icon, "Assessment 2", "In 6 days", the date in a chip, and a line saying Coach Vikram does it at the gym), then COMPLETED (one card per finished assessment: number, date, "6 of 7 improved", three key numbers). A card opens the view-only page.
+- The view-only page: the date with Coach Vikram, "X of Y improved", the measurements in Body, Strength and fitness, and Health with a change tag on each row, and what the trainer noted.
+- On the Gym tab the Assessments card shows how many are completed with a numbered trail, the last assessment with three numbers, and the upcoming one in a quiet container (neutral date tile, "In 6 days").
 - To be built: the many-assessments layout described in `learned.md` (28 Oct to 4 Nov).
 
 ## Workout session (`src/app/workout.tsx`, `src/features/workout/`)

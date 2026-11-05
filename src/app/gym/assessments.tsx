@@ -2,26 +2,25 @@ import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { ChevronRight, ClipboardCheck } from '@/lib/icons';
-import { Button, Card, Pressy, Row, Txt } from '@/components/ui';
+import { Card, Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
 import { useGymScenarios } from '@/features/gym/state';
-import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes } from '@/design-system/tokens';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { Chip } from '@/design-system/primitives/Chip';
-import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
-import { NUMS, NumKey, SelfEntry, compare, fmtAt } from '@/features/selfassess/data';
+import { AssessEntry, NUMS, NumKey, compare, fmtAt, useAssessments } from '@/features/gym/assessmentData';
 
 // A finished assessment: its number and date, how it went compared with the one before, and the numbers that matter most.
-function DoneCard({ n, e, prev }: { n: number; e: SelfEntry; prev: SelfEntry | undefined }) {
+function DoneCard({ n, e, prev }: { n: number; e: AssessEntry; prev: AssessEntry | undefined }) {
   const { c } = useTheme();
   const judged = compare(e, prev).filter((r) => r.prev != null && r.n.dir !== 'none');
   const better = judged.filter((r) => r.good).length;
   const headline = !prev ? 'Your baseline' : judged.length ? `${better} of ${judged.length} improved` : 'Saved';
   const stats = (['weight', 'waist', 'pulse', 'bench'] as NumKey[]).filter((k) => e.tests[k] != null).slice(0, 3);
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={`Assessment ${n}, ${fmtAt(e.at)}. ${headline}`} onPress={() => router.push({ pathname: '/gym/self-assessment', params: { id: e.id } })} scaleTo={0.985}
+    <Pressy accessibilityRole="button" accessibilityLabel={`Assessment ${n}, ${fmtAt(e.at)}. ${headline}`} onPress={() => router.push({ pathname: '/gym/assessment', params: { id: e.id } })} scaleTo={0.985}
       style={{ borderRadius: radii.xl, backgroundColor: c.surface, padding: 16, gap: 14 }}>
       <Row style={{ gap: 12 }}>
         <IconBadge size={44} radius={radii.md} bg={c.tNutri}><ClipboardCheck size={22} strokeWidth={1.9} color={c.cNutri} /></IconBadge>
@@ -46,36 +45,27 @@ function DoneCard({ n, e, prev }: { n: number; e: SelfEntry; prev: SelfEntry | u
   );
 }
 
-// Assessments: the next one coming up (just one) with a Start button, and the completed ones below.
-// An assessment is the same thing whether the member did it or the coach did.
+// Assessments: the next one booked (just one, quiet) and the completed ones below. The trainer does an assessment at the gym and records it;
+// the member only sees it here, so there is nothing to start.
 export default function GymAssessments() {
   const { c } = useTheme();
   useGymScenarios('Gym · Assessments');
-  const { entries, nextAt, daysLeft } = useSelfAssess();
+  const { entries, nextAt, daysLeft } = useAssessments();
   const total = entries.length;
-  const over = daysLeft <= 0; // due today or past its date: the card turns yellow and the button is the big one
+  const when = daysLeft <= 0 ? 'Today' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`;
   return (
     <SubPage title="Assessments" fallback="/gym">
       <Txt v="label" style={{ paddingHorizontal: 6 }}>UPCOMING</Txt>
-      <Card style={{ padding: 16, gap: 14, ...(over ? { backgroundColor: c.warnSoft } : null) }}>
+      <Card style={{ padding: 16, gap: 12 }}>
         <Row style={{ gap: 12 }}>
-          <IconBadge size={48} radius={radii.md} bg={over ? c.warn + '33' : c.accentSoft}><ClipboardCheck size={24} strokeWidth={1.9} color={over ? c.warn : c.accentText} /></IconBadge>
+          <IconBadge size={48} radius={radii.md} bg={c.surface2}><ClipboardCheck size={24} strokeWidth={1.9} color={c.muted} /></IconBadge>
           <View style={{ flex: 1, gap: 1 }}>
             <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{`Assessment ${total + 1}`}</Txt>
-            <Txt v="caption" style={{ fontSize: fontSizes.sm, ...(over ? { color: c.warn, fontFamily: font.semibold } : null) }}>{daysLeft < 0 ? `Overdue by ${-daysLeft} ${daysLeft === -1 ? 'day' : 'days'}` : daysLeft === 0 ? 'Due today' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`}</Txt>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{when}</Txt>
           </View>
-          <Chip label={fmtAt(new Date(nextAt).toISOString())} tone={daysLeft <= 0 ? 'warn' : 'default'} />
+          <Chip label={fmtAt(new Date(nextAt).toISOString())} />
         </Row>
-        {/* Start shows up on the day of the assessment (and after it, until it is done) */}
-        {daysLeft <= 0
-          // the big yellow button (the Button kinds have no yellow one)
-          ? (
-            <Pressy accessibilityRole="button" onPress={() => router.push('/gym/self-assessment')} scaleTo={0.98}
-              style={{ height: 56, borderRadius: radii.xl, backgroundColor: c.warn, alignItems: 'center', justifyContent: 'center' }}>
-              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.basePlus, color: fixed.dark }}>Start assessment</Txt>
-            </Pressy>
-          )
-          : <Txt muted style={{ fontSize: fontSizes.md }}>{`You can start it on ${fmtAt(new Date(nextAt).toISOString())}.`}</Txt>}
+        <Txt muted style={{ fontSize: fontSizes.md }}>Coach Vikram does it at the gym. The result shows here afterwards.</Txt>
       </Card>
 
       <Txt v="label" style={{ paddingHorizontal: 6 }}>COMPLETED</Txt>

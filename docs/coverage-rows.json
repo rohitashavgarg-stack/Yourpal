@@ -14,7 +14,7 @@
   "screen": "Today",
   "group": "Routes",
   "status": "not started",
-  "hand": 9,
+  "hand": 7,
   "files": [
    "app/(tabs)/index.tsx",
    "features/today/WorkoutCard.tsx",
@@ -31,7 +31,6 @@
    "features/reminders/PushBanner.tsx",
    "features/profile/WaiverCard.tsx",
    "features/feedback/FeedbackCard.tsx",
-   "features/selfassess/SelfAssessCard.tsx",
    "features/today/GoalCards.tsx",
    "features/today/LogMealsSheet.tsx",
    "features/reminders/push.ts"
@@ -128,11 +127,21 @@
   ]
  },
  {
+  "id": "route:/gym/assessment",
+  "screen": "/gym/assessment",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "app/gym/assessment.tsx"
+  ]
+ },
+ {
   "id": "route:/gym/assessments",
   "screen": "Assessments",
   "group": "Routes",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "app/gym/assessments.tsx"
   ]
@@ -210,21 +219,6 @@
   "hand": 1,
   "files": [
    "app/gym/pt.tsx"
-  ]
- },
- {
-  "id": "route:/gym/self-assessment",
-  "screen": "/gym/self-assessment",
-  "group": "Routes",
-  "status": "not started",
-  "hand": 33,
-  "files": [
-   "app/gym/self-assessment.tsx",
-   "features/selfassess/AssessmentDone.tsx",
-   "features/selfassess/RulerStep.tsx",
-   "features/selfassess/SleepDial.tsx",
-   "features/selfassess/BreathTimer.tsx",
-   "features/selfassess/Pickers.tsx"
   ]
  },
  {
@@ -805,16 +799,6 @@
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/Steps.tsx"
-  ]
- },
- {
-  "id": "sheet:LeaveSheet",
-  "screen": "LeaveSheet",
-  "group": "Bottom sheets",
-  "status": "not started",
-  "hand": 0,
-  "files": [
-   "app/gym/self-assessment.tsx"
   ]
  },
  {

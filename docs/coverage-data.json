@@ -11,7 +11,7 @@
      "kind": "icon badge",
      "sig": "icon tile 44 px, radius radii.md",
      "fn": "GymMembership",
-     "line": 46,
+     "line": 44,
      "tag": "View",
      "text": "<View style={{ width: 44, height: 44, borderRadius: radii.md, backgroundColor: c.accentSoft, alignItems: 'cent",
      "file": "app/(tabs)/gym.tsx"
@@ -20,7 +20,7 @@
      "kind": "card",
      "sig": "card radius radii.md, fill c.surface2, padding 12",
      "fn": "GymMembership",
-     "line": 56,
+     "line": 54,
      "tag": "View",
      "text": "<View key={m.id} style={{ flex: 1, borderRadius: radii.md, backgroundColor: c.surface2, padding: 12, gap: 8 }}",
      "file": "app/(tabs)/gym.tsx"
@@ -29,7 +29,7 @@
      "kind": "icon badge",
      "sig": "icon tile 36 px, radius radii.pill",
      "fn": "AssessCard",
-     "line": 141,
+     "line": 139,
      "tag": "View",
      "text": "<View style={{ width: 36, height: 36, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center'",
      "file": "app/(tabs)/gym.tsx"
@@ -38,7 +38,7 @@
      "kind": "card",
      "sig": "card radius radii.lg, fill c.surface2, padding 12",
      "fn": "AssessCard",
-     "line": 150,
+     "line": 148,
      "tag": "View",
      "text": "<View style={{ gap: 12, padding: 12, borderRadius: radii.lg, backgroundColor: c.surface2 }}>",
      "file": "app/(tabs)/gym.tsx"
@@ -47,7 +47,7 @@
      "kind": "card",
      "sig": "card radius radii.md, fill c.surface",
      "fn": "AssessCard",
-     "line": 162,
+     "line": 160,
      "tag": "View",
      "text": "<View key={r.k} style={{ flex: 1, borderRadius: radii.md, backgroundColor: c.surface, paddingVertical: 8, padd",
      "file": "app/(tabs)/gym.tsx"
@@ -56,7 +56,7 @@
      "kind": "card",
      "sig": "card radius radii.xl, fill onDark.card, padding 18",
      "fn": "ChatCard",
-     "line": 195,
+     "line": 190,
      "tag": "View",
      "text": "<View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 14 }}>",
      "file": "app/(tabs)/gym.tsx"
@@ -65,7 +65,7 @@
      "kind": "card",
      "sig": "card radius radii.lg, fill 'rgba(255, padding 14",
      "fn": "ChatCard",
-     "line": 208,
+     "line": 203,
      "tag": "View",
      "text": "<View accessible accessibilityLabel={`Last message: ${last.t}. ${last.meta}`} style={{ gap: 6, padding: 14, bo",
      "file": "app/(tabs)/gym.tsx"
@@ -74,7 +74,7 @@
      "kind": "card",
      "sig": "card radius radii.xl, fill onDark.card, padding 18",
      "fn": "PTCard",
-     "line": 237,
+     "line": 232,
      "tag": "View",
      "text": "<View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>",
      "file": "app/(tabs)/gym.tsx"
@@ -83,7 +83,7 @@
      "kind": "card",
      "sig": "card radius radii.xl, fill onDark.card, padding 18",
      "fn": "PTCard",
-     "line": 244,
+     "line": 239,
      "tag": "View",
      "text": "<View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>",
      "file": "app/(tabs)/gym.tsx"
@@ -97,7 +97,7 @@
     "FadeIn": 6,
     "IconBadge": 2,
     "Chip": 2,
-    "Button": 4
+    "Button": 3
    },
    "sheets": [],
    "scenarios": [],
@@ -124,7 +124,6 @@
     "features/reminders/PushBanner.tsx",
     "features/profile/WaiverCard.tsx",
     "features/feedback/FeedbackCard.tsx",
-    "features/selfassess/SelfAssessCard.tsx",
     "features/today/GoalCards.tsx",
     "features/today/LogMealsSheet.tsx",
     "features/reminders/push.ts"
@@ -219,37 +218,19 @@
      "tag": "View",
      "text": "<View style={{ width: 36, height: 36, borderRadius: radii.sm, backgroundColor: c.accent + '2E', alignItems: 'c",
      "file": "features/feedback/FeedbackCard.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button auto px high, radius radii.block",
-     "fn": "SelfAssessCard",
-     "line": 15,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Your next assessment is due\" onPress={open} scaleTo={0.",
-     "file": "features/selfassess/SelfAssessCard.tsx"
-    },
-    {
-     "kind": "icon badge",
-     "sig": "icon tile 36 px, radius radii.sm",
-     "fn": "SelfAssessCard",
-     "line": 18,
-     "tag": "View",
-     "text": "<View style={{ width: 36, height: 36, borderRadius: radii.sm, backgroundColor: c.accent + '2E', alignItems: 'c",
-     "file": "features/selfassess/SelfAssessCard.tsx"
     }
    ],
    "ds": {
-    "FadeIn": 25,
+    "FadeIn": 23,
     "PageEnd": 2,
     "WorkoutCardPattern": 1,
     "WeekCardPattern": 1,
-    "Txt": 32,
-    "Row": 11,
-    "Button": 10,
+    "Txt": 30,
+    "Row": 10,
+    "Button": 9,
     "Card": 2,
     "IconBadge": 5,
-    "Pressy": 8,
+    "Pressy": 7,
     "Banner": 2,
     "BudgetCard": 1,
     "FoodCard": 2,
@@ -656,7 +637,6 @@
    "scenarios": [],
    "reachedFrom": [
     "app/goal-detail.tsx",
-    "app/gym/self-assessment.tsx",
     "features/today/WeekCard.tsx"
    ]
   },
@@ -942,6 +922,52 @@
    ]
   },
   {
+   "route": "/gym/assessment",
+   "file": "app/gym/assessment.tsx",
+   "files": [
+    "app/gym/assessment.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "sig": "card radius radii.xl, fill c.surface",
+     "fn": "Assessment",
+     "line": 47,
+     "tag": "View",
+     "text": "<View key={grp.g} style={{ backgroundColor: c.surface, borderRadius: radii.xl, paddingTop: 14, paddingHorizont",
+     "file": "app/gym/assessment.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "sig": "dot 8 px",
+     "fn": "Assessment",
+     "line": 48,
+     "tag": "View",
+     "text": "<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone] }} />",
+     "file": "app/gym/assessment.tsx"
+    },
+    {
+     "kind": "card",
+     "sig": "card radius radii.xl, fill c.surface, padding 16",
+     "fn": "Assessment",
+     "line": 64,
+     "tag": "View",
+     "text": "<View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 16, gap: 10 }}>",
+     "file": "app/gym/assessment.tsx"
+    }
+   ],
+   "ds": {
+    "Chip": 2,
+    "Txt": 6,
+    "Row": 3
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/gym/assessments.tsx"
+   ]
+  },
+  {
    "route": "/gym/assessments",
    "file": "app/gym/assessments.tsx",
    "files": [
@@ -952,26 +978,17 @@
      "kind": "card",
      "sig": "card radius radii.md, fill c.surface2",
      "fn": "DoneCard",
-     "line": 38,
+     "line": 37,
      "tag": "View",
      "text": "<View key={k} style={{ flex: 1, borderRadius: radii.md, backgroundColor: c.surface2, paddingVertical: 10, padd",
-     "file": "app/gym/assessments.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 56 px high, radius radii.xl",
-     "fn": "GymAssessments",
-     "line": 73,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" onPress={() => router.push('/gym/self-assessment')} scaleTo={0.98} style={{",
      "file": "app/gym/assessments.tsx"
     }
    ],
    "ds": {
-    "Pressy": 2,
+    "Pressy": 1,
     "Row": 3,
     "IconBadge": 2,
-    "Txt": 11,
+    "Txt": 10,
     "Card": 1,
     "Chip": 1
    },
@@ -1308,352 +1325,6 @@
    "scenarios": [],
    "reachedFrom": [
     "app/(tabs)/gym.tsx"
-   ]
-  },
-  {
-   "route": "/gym/self-assessment",
-   "file": "app/gym/self-assessment.tsx",
-   "files": [
-    "app/gym/self-assessment.tsx",
-    "features/selfassess/AssessmentDone.tsx",
-    "features/selfassess/RulerStep.tsx",
-    "features/selfassess/SleepDial.tsx",
-    "features/selfassess/BreathTimer.tsx",
-    "features/selfassess/Pickers.tsx"
-   ],
-   "hand": [
-    {
-     "kind": "bar",
-     "sig": "bar 6 px high, radius 3",
-     "fn": "SelfAssessment",
-     "line": 162,
-     "tag": "View",
-     "text": "<View accessibilityRole=\"progressbar\" accessibilityValue={{ min: 0, max: total, now: idx + 1 }} style={{ heigh",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 6 px high, radius 3",
-     "fn": "SelfAssessment",
-     "line": 163,
-     "tag": "View",
-     "text": "<View style={{ width: `${((idx + 1) / total) * 100}%`, height: 6, borderRadius: 3, backgroundColor: c.accent }",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 140 px high, radius radii.lg",
-     "fn": "SelfAssessment",
-     "line": 192,
-     "tag": "Pressy",
-     "text": "<Pressy key={o.v} accessibilityRole=\"button\" accessibilityState={{ selected: on }} onPress={() => pick(step.ke",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "kind": "icon badge",
-     "sig": "icon tile 48 px, radius radii.md",
-     "fn": "SelfAssessment",
-     "line": 194,
-     "tag": "View",
-     "text": "<View style={{ width: 48, height: 48, borderRadius: radii.md, backgroundColor: on ? c.accent : c.surface2, ali",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 56 px high, radius radii.lg",
-     "fn": "SelfAssessment",
-     "line": 207,
-     "tag": "Pressy",
-     "text": "<Pressy key={o.v} accessibilityRole=\"button\" accessibilityState={{ selected: on }} onPress={() => pick(step.ke",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "kind": "icon badge",
-     "sig": "icon tile 52 px, radius radii.md",
-     "fn": "SelfAssessment",
-     "line": 226,
-     "tag": "View",
-     "text": "<View style={{ width: 52, height: 52, borderRadius: radii.md, backgroundColor: c.accentSoft, alignItems: 'cent",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 52 px high, radius radii.pill",
-     "fn": "SelfAssessment",
-     "line": 265,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" onPress={() => { setAreas([]); setConditions(''); haptic.tick(); next(); }}",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 40 px high, radius radii.pill",
-     "fn": "How",
-     "line": 288,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"How to perform\" onPress={() => openSheet( <View style={",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "kind": "icon badge",
-     "sig": "icon tile 28 px, radius radii.pill",
-     "fn": "How",
-     "line": 293,
-     "tag": "View",
-     "text": "<View style={{ width: 28, height: 28, borderRadius: radii.pill, backgroundColor: c.accentSoft, alignItems: 'ce",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "kind": "card",
-     "sig": "card radius radii.xl, fill c.surface",
-     "fn": "Result",
-     "line": 338,
-     "tag": "View",
-     "text": "<View key={grp.g} style={{ backgroundColor: c.surface, borderRadius: radii.xl, paddingTop: 14, paddingHorizont",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "kind": "icon badge",
-     "sig": "dot 8 px",
-     "fn": "Result",
-     "line": 339,
-     "tag": "View",
-     "text": "<View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: dot[grp.tone] }} />",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "kind": "card",
-     "sig": "card radius radii.xl, fill c.surface, padding 16",
-     "fn": "Result",
-     "line": 355,
-     "tag": "View",
-     "text": "<View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 16, gap: 10 }}>",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "kind": "card",
-     "sig": "card radius radii.xl, fill c.surface, padding 14",
-     "fn": "Stat",
-     "line": 144,
-     "tag": "View",
-     "text": "<View accessible accessibilityLabel={`${r.n.label} ${r.now} ${r.n.unit}, ${change.l}`} style={{ flex: 1, minHe",
-     "file": "features/selfassess/AssessmentDone.tsx"
-    },
-    {
-     "kind": "card",
-     "sig": "card radius radii.lg, fill c.surface, padding 14",
-     "fn": "SleepDial",
-     "line": 81,
-     "tag": "View",
-     "text": "<View key={x.l} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, padding: 14, borderRadi",
-     "file": "features/selfassess/SleepDial.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 64 px high, radius radii.lg",
-     "fn": "FreqPicker",
-     "line": 92,
-     "tag": "Pressy",
-     "text": "<Pressy key={o.v} accessibilityRole=\"button\" accessibilityLabel={`${o.v} ${o.sub ?? ''}`} accessibilityState={",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 60 px high, radius radii.lg",
-     "fn": "FreqPicker",
-     "line": 104,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityState={{ selected: none }} onPress={() => onPick(\"I don't work",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 10 px high, radius radii.xs",
-     "fn": "WaterSlider",
-     "line": 171,
-     "tag": "View",
-     "text": "<View pointerEvents=\"none\" style={{ height: 10, borderRadius: radii.xs, backgroundColor: c.surface3 }}>",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 10 px high, radius radii.xs",
-     "fn": "WaterSlider",
-     "line": 172,
-     "tag": "View",
-     "text": "<View style={{ width: `${(idx / (WATER.length - 1)) * 100}%`, height: 10, borderRadius: radii.xs, backgroundCo",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "icon badge",
-     "sig": "dot 8 px",
-     "fn": "WaterSlider",
-     "line": 174,
-     "tag": "View",
-     "text": "<View key={i} pointerEvents=\"none\" style={{ position: 'absolute', left: w ? (i / (WATER.length - 1)) * w - 4 :",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "icon badge",
-     "sig": "icon tile 34 px, radius radii.pill",
-     "fn": "WaterSlider",
-     "line": 175,
-     "tag": "View",
-     "text": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: w ? (idx / (WATER.length - 1)) * w - 17 : 0, t",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 96 px high, radius radii.lg",
-     "fn": "LevelCards",
-     "line": 206,
-     "tag": "Pressy",
-     "text": "<Pressy key={o.v} accessibilityRole=\"button\" accessibilityState={{ selected: on }} onPress={() => onPick(o.v)}",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 10 px high, radius radii.xs",
-     "fn": "BarbellVisual",
-     "line": 250,
-     "tag": "View",
-     "text": "<View style={{ width: 96, height: 10, borderRadius: radii.xs, backgroundColor: c.muted }} />",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 4 px high, radius radii.xs",
-     "fn": "PinStack",
-     "line": 309,
-     "tag": "View",
-     "text": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: -14, right: -14, top: (count - k) * rowH + (ro",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "chip",
-     "sig": "chip 32 px high, radius radii.pill",
-     "fn": "GlucoseGauge",
-     "line": 365,
-     "tag": "View",
-     "text": "<View style={{ height: 32, paddingHorizontal: 14, borderRadius: radii.pill, backgroundColor: zoneColor + '2E',",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 44 px high, radius radii.pill",
-     "fn": "StepperStep",
-     "line": 389,
-     "tag": "Pressy",
-     "text": "<Pressy key={j} accessibilityRole=\"button\" accessibilityLabel={`${j > 0 ? 'Add' : 'Take off'} ${Math.abs(j)} $",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "bar",
-     "sig": "bar 8 px high, radius radii.xs",
-     "fn": "PlateStack",
-     "line": 421,
-     "tag": "View",
-     "text": "<View key={i} style={{ width: 116, height: 8, borderRadius: radii.xs, marginTop: 2, backgroundColor: i % 2 ? c",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button auto px high, radius radii.md",
-     "fn": "BpStep",
-     "line": 454,
-     "tag": "Pressy",
-     "text": "<Pressy key={k} accessibilityRole=\"button\" accessibilityState={{ selected: on }} accessibilityLabel={`${label}",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "card",
-     "sig": "card radius radii.xl, fill LCD",
-     "fn": "BpStep",
-     "line": 466,
-     "tag": "View",
-     "text": "<View style={{ borderRadius: radii.xl, backgroundColor: LCD, paddingVertical: 18, paddingHorizontal: 14, align",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "chip",
-     "sig": "chip 32 px high, radius radii.pill",
-     "fn": "BpStep",
-     "line": 473,
-     "tag": "View",
-     "text": "<View style={{ alignSelf: 'center', height: 32, paddingHorizontal: 14, borderRadius: radii.pill, backgroundCol",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 46 px high, radius radii.md",
-     "fn": "DayTiles",
-     "line": 494,
-     "tag": "Pressy",
-     "text": "<Pressy key={n} accessibilityRole=\"button\" accessibilityLabel={`${n} days`} accessibilityState={{ selected: on",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "card",
-     "sig": "card radius radii.lg, fill own ? c.accentSoft : c.s, padding 14",
-     "fn": "DayTiles",
-     "line": 501,
-     "tag": "View",
-     "text": "<View style={{ gap: 8, padding: 14, borderRadius: radii.lg, backgroundColor: own ? c.accentSoft : c.surface, b",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 44 px high, radius radii.md",
-     "fn": "DayTiles",
-     "line": 505,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"A week less\" onPress={() => set(days - 7)} scaleTo={0.9",
-     "file": "features/selfassess/Pickers.tsx"
-    },
-    {
-     "kind": "button or pill",
-     "sig": "button 44 px high, radius radii.md",
-     "fn": "DayTiles",
-     "line": 514,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"A week more\" onPress={() => set(days + 7)} scaleTo={0.9",
-     "file": "features/selfassess/Pickers.tsx"
-    }
-   ],
-   "ds": {
-    "Txt": 81,
-    "Button": 9,
-    "Row": 31,
-    "IconButton": 1,
-    "Pressy": 18,
-    "Field": 1,
-    "Pill": 1,
-    "NoteField": 1,
-    "Chip": 4,
-    "IconBadge": 1,
-    "Ruler": 3
-   },
-   "sheets": [
-    {
-     "comp": "LeaveSheet",
-     "label": "Leave the assessment",
-     "line": 155,
-     "in": "SelfAssessment",
-     "file": "app/gym/self-assessment.tsx"
-    },
-    {
-     "comp": "View",
-     "label": "How to perform",
-     "line": 288,
-     "in": "How",
-     "file": "app/gym/self-assessment.tsx"
-    }
-   ],
-   "scenarios": [],
-   "reachedFrom": [
-    "app/(tabs)/gym.tsx",
-    "app/gym/assessments.tsx",
-    "features/selfassess/SelfAssessCard.tsx"
    ]
   },
   {
