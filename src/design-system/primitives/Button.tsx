@@ -140,8 +140,8 @@ export type IconButtonProps = {
 /** A rounded square (44 px by default) with one icon or sign in it: close, back, minus, plus, play. `width` makes it a pill. */
 export function IconButton({ label, onPress, children, bg, style, glass, scaleTo, size = 44, width, radius = radii.lg, borderColor, borderWidth, disabled, hitSlop }: IconButtonProps) {
   const { c, isDark } = useTheme();
-  // On web and Android an icon button gets a thin border and a soft grey gradient that echo the iOS glass (iPhone draws the real glass). Coloured buttons are left alone.
-  const mimic = Platform.OS !== 'ios' && (glass || !bg || bg === c.surface || bg === c.surface2 || bg === c.surface3);
+  // On web and Android a glass button (the back and close button at the top of a page) gets a thin border and a soft grey gradient that echo the iOS glass (iPhone draws the real glass). Every other icon button is plain.
+  const mimic = Platform.OS !== 'ios' && !!glass;
   // Glass buttons get a soft shadow so they still read on a plain page.
   const rim = glass ? { shadowColor: fixed.shadow, shadowOpacity: isDark ? 0.35 : 0.1, shadowRadius: 10, shadowOffset: { width: 0, height: 3 }, elevation: 3 } : null;
   return (

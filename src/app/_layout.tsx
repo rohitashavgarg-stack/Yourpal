@@ -14,6 +14,7 @@ import { ScenarioRegistryProvider, StoreProvider } from '@/lib/store';
 import { DomainProvider } from '@/lib/domain';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 import { OverlayProvider } from '@/components/Overlay';
+import { PageGlow } from '@/design-system/primitives/PageGlow';
 import { EdgeTab, WebFrame, useIsWideWeb } from '@/web/WebFrame';
 import { CheckInEngine } from '@/features/checkin/CheckInEngine';
 import { fixed } from '@/design-system/tokens';
@@ -178,6 +179,8 @@ function AppShell() {
               <Stack.Screen key={n} name={n} options={{ presentation: 'transparentModal', animation: 'none', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
             ))}
           </Stack>
+          {/* a very faint blue light in the top left corner, over every page and under sheets and toasts */}
+          <PageGlow />
           <CheckInEngine />
           {!wide && <EdgeTab />}
         </OverlayProvider>

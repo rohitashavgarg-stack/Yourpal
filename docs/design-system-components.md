@@ -55,6 +55,7 @@ Every component in `src/design-system/`, with its variants and states. Each has 
 | [WeekCard](../src/design-system/docs/WeekCard.md) | `patterns/WeekCard.tsx` | This week: two stat tiles, seven days, legend | day today, past, future; workout done, rest, open ring, dashed ring; meals 0 to 4 dots on plan |
 | [FoodCard](../src/design-system/docs/FoodCard.md) | `patterns/FoodCard.tsx` | One food as its own card: dashed when not eaten, solid when eaten | state todo, eaten, skipped; swipe left for Swap and Skip (44 px); hold for the food page; amount stepper or locked text; tag "Yours" |
 | [PageEnd](../src/design-system/docs/PageEnd.md) | `patterns/PageEnd.tsx` | The end of a long page: an illustration, a big quiet line and the YourPal mark. Nothing to tap | one state; `line` text. Used at the bottom of Today |
+| [PageGlow](../src/design-system/docs/PageGlow.md) | `primitives/PageGlow.tsx` | A very faint blue light in the top left corner of every page, mounted once over the whole app. Nothing to tap | one state; light and dark strength. In `src/app/_layout.tsx` |
 | [WorkoutCard](../src/design-system/docs/WorkoutCard.md) | `patterns/WorkoutCard.tsx` | Today's workout | upcoming, due, live, missed, moved, skipped, done, rest, paused, comeback (small grey "Easy session" card: 20 min, "4 exercises", "Half your usual load", "Start easy session" and "Not today"); burned row with a watch |
 
 ## Copy rules for every component

@@ -1,12 +1,11 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Activity, ClipboardList, Droplets, Dumbbell, Heart, Medal, PersonStanding, ShieldCheck } from '@/lib/icons';
 import { Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
-import { GlassBackdrop } from '@/components/Glass';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
@@ -26,33 +25,17 @@ const KEY_STATS: NumKey[] = ['weight', 'waist', 'pulse']; // the three numbers s
 // The trainer's notes: each one has its own icon (all in the same colour).
 const HABIT_ICON: Record<string, typeof Activity> = { activity: Activity, freq: Dumbbell, water: Droplets, level: Medal, flex: PersonStanding, injuries: ShieldCheck };
 
-// A soft round glow from the top of the page that fades out completely (no band, no hard edge).
-function Glow({ color }: { color: string }) {
-  return (
-    <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 380 }}>
-      <Svg width="100%" height="100%">
-        <Defs>
-          <RadialGradient id="assessGlow" cx="50%" cy="22%" r="78%">
-            <Stop offset="0" stopColor={color} stopOpacity="0.34" />
-            <Stop offset="0.5" stopColor={color} stopOpacity="0.12" />
-            <Stop offset="1" stopColor={color} stopOpacity="0" />
-          </RadialGradient>
-        </Defs>
-        <Rect x="0" y="0" width="100%" height="100%" fill="url(#assessGlow)" />
-      </Svg>
-    </View>
-  );
-}
-
-// A glass card: the frosted blur (real iOS glass where the phone has it), a soft sheen from the top left, and a thin light edge. It floats over the glow behind it.
-function GlassCard({ children }: { children: React.ReactNode }) {
+// A gradient card with a gradient green stroke: the stroke is a gradient of its own (bright green at the top left, fading out towards the bottom right),
+// and the card is filled with a green tint that fades into the card colour.
+function GradientCard({ children }: { children: React.ReactNode }) {
   const { c } = useTheme();
+  const stroke = 1.5;
   return (
-    <View style={{ alignSelf: 'stretch', borderRadius: radii.xl, borderWidth: 1, borderColor: c.glassEdge, overflow: 'hidden', paddingVertical: 22, paddingHorizontal: 16, alignItems: 'center', gap: 12 }}>
-      <GlassBackdrop radius={radii.xl} tint={c.glassTo} />
-      <LinearGradient pointerEvents="none" colors={[c.glassFrom, c.glassTo]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
-      {children}
-    </View>
+    <LinearGradient colors={[c.cNutri, c.cNutri + '14']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ alignSelf: 'stretch', borderRadius: radii.xl, padding: stroke }}>
+      <LinearGradient colors={[c.cNutri + '38', c.surface]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: radii.xl - stroke, paddingVertical: 22, paddingHorizontal: 16, alignItems: 'center', gap: 12 }}>
+        {children}
+      </LinearGradient>
+    </LinearGradient>
   );
 }
 
@@ -92,13 +75,27 @@ export default function Assessment() {
     .filter((r) => grp.keys.includes(r.k) && (judged.length === 0 || (r.prev != null && r.n.dir !== 'none')))
     .map((r, j) => ({ color: judged.length === 0 ? tone[k] : r.good ? c.good : '', start: j === 0 })));
   return (
-    // No text in the header bar: the graph and the heading sit below it, centred, over a soft glow like the top of the Outcurve pages.
-    <SubPage title="" fallback="/gym/assessments" backdrop={<Glow color={c.cNutri} />}>
-      <View style={{ alignItems: 'center', gap: 12, paddingTop: 4 }}>
-        <GlassCard>
+    // No text in the header bar: the heading and the card sit below it, centred.
+    <SubPage title="" fallback="/gym/assessments">
+      <View style={{ alignItems: 'center', gap: 12, paddingTop: 12 }}>
+        <Txt accessibilityRole="header" v="title" style={{ textAlign: 'center', marginTop: 0 }}>{`Assessment ${n}`}</Txt>
+        <View style={{ alignSelf: 'center' }}><Chip label={fmtAt(entry.at)} /></View>
+        <GradientCard>
         {/* the number and what it counts, then the capsules, then what each colour is */}
         <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl6, lineHeight: 48, letterSpacing: -1.2 }}>{judged.length > 0 ? `${better} of ${judged.length}` : String(rows.length)}</Txt>
         <Txt v="caption" style={{ fontSize: fontSizes.sm, marginTop: -8 }}>{judged.length > 0 ? 'improved' : 'measurements'}</Txt>
+        {/* the key numbers, big, with the change since the assessment before */}
+        {keyRows.length > 0 && (
+          <Row style={{ alignItems: 'flex-start', alignSelf: 'stretch', paddingTop: 10 }}>
+            {keyRows.map((r) => (
+              <View key={r.k} style={{ flex: 1, alignItems: 'center', gap: 2 }}>
+                <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 36, letterSpacing: -0.8 }}>{String(r.now)}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.md, color: c.muted }}>{` ${r.n.unit}`}</Txt></Txt>
+                <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{r.n.label}</Txt>
+                {r.prev != null && <Tag label={r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`} bg={r.good ? c.goodSoft : c.surface2} fg={r.good ? c.good : c.muted} style={{ marginTop: 4 }} />}
+              </View>
+            ))}
+          </Row>
+        )}
         <CapsuleBar empty={c.surface2} segs={capsules} />
         {judged.length === 0 && (
           <Row style={{ gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -110,27 +107,13 @@ export default function Assessment() {
             ))}
           </Row>
         )}
-        </GlassCard>
-        <Txt accessibilityRole="header" v="title" style={{ textAlign: 'center', marginTop: 8 }}>{`Assessment ${n}`}</Txt>
-        <View style={{ alignSelf: 'center' }}><Chip label={fmtAt(entry.at)} /></View>
+        </GradientCard>
       </View>
-
-      {/* the key numbers, big, with the change since the assessment before */}
-      {keyRows.length > 0 && (
-        <Row style={{ alignItems: 'flex-start', paddingVertical: 12 }}>
-          {keyRows.map((r) => (
-            <View key={r.k} style={{ flex: 1, alignItems: 'center', gap: 2 }}>
-              <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 36, letterSpacing: -0.8 }}>{String(r.now)}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.md, color: c.muted }}>{` ${r.n.unit}`}</Txt></Txt>
-              <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{r.n.label}</Txt>
-              {r.prev != null && <Tag label={r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`} bg={r.good ? c.goodSoft : c.surface2} fg={r.good ? c.good : c.muted} style={{ marginTop: 4 }} />}
-            </View>
-          ))}
-        </Row>
-      )}
 
       {GROUPS.map((grp) => {
         const list = rows.filter((r) => grp.keys.includes(r.k));
         if (!list.length) return null;
+        const unitW = Math.max(...list.map((r) => NUMS[r.k].unit.length)) * 8 + 2; // as wide as the longest unit in this card, so the right edge is as tight as the left
         return (
           <View key={grp.g} style={{ gap: 10, marginTop: 14 }}>
             <SectionLabel variant="section" icon={<grp.Icon size={20} color={c.ink} />}>{grp.g}</SectionLabel>
@@ -140,7 +123,7 @@ export default function Assessment() {
                   <Txt style={{ flex: 1, fontFamily: font.medium }} numberOfLines={1}>{r.n.label}</Txt>
                   {/* the number, its unit and (only when there is an earlier assessment) the change each have a column of their own */}
                   <View style={{ width: compared ? 96 : 56, alignItems: 'flex-end' }}><Txt v="mono" numberOfLines={1}>{r.prev != null ? `${r.prev} → ${r.now}` : String(r.now)}</Txt></View>
-                  <View style={{ width: 52 }}><Txt v="caption" numberOfLines={1} style={{ fontSize: fontSizes.sm }}>{NUMS[r.k].unit}</Txt></View>
+                  <View style={{ width: unitW }}><Txt v="caption" numberOfLines={1} style={{ fontSize: fontSizes.sm }}>{NUMS[r.k].unit}</Txt></View>
                   {compared && (
                     <View style={{ width: 62, alignItems: 'flex-end' }}>
                       {r.prev != null && <Tag label={r.diff === 0 ? 'Same' : `${r.diff > 0 ? '+' : '−'}${Math.abs(r.diff)}`} bg={r.good ? c.goodSoft : c.surface2} fg={r.good ? c.good : c.muted} style={{ minWidth: 58, alignItems: 'center' }} />}
