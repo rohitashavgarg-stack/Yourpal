@@ -1,5 +1,8 @@
-import React from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
+import { CardRect, takeCardOrigin } from '@/lib/cardGrow';
+import { KeyboardAvoidingView, Platform, ScrollView, View, type ViewInstance } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft, X } from '@/lib/icons';
@@ -52,15 +55,47 @@ export type SubPageProps = {
 
 function ToastLift({ value }: { value: number }) { useToastLift(value); return null; }
 
+// A page opened from a card grows out of that card (about a third of a second, no bounce) and shrinks back into it when you go back.
+// Pages opened any other way do not animate. The card's position comes from setCardOrigin (src/lib/cardGrow.ts).
+type GrowHandle = { leave: (go: () => void) => void };
+function GrowFrame({ children, handle }: { children: React.ReactNode; handle: React.Ref<GrowHandle> }) {
+  const [origin] = useState(() => takeCardOrigin());
+  const root = useRef<ViewInstance>(null);
+  const [box, setBox] = useState<CardRect | null>(null);
+  const p = useSharedValue(origin ? 0 : 1);
+  useEffect(() => { if (origin && box) p.value = withTiming(1, { duration: 320, easing: Easing.out(Easing.cubic) }); }, [origin, box, p]);
+  // go back: shrink into the card first, then leave
+  useImperativeHandle(handle, () => ({
+    leave: (go) => {
+      if (!origin || !box) { go(); return; }
+      p.value = withTiming(0, { duration: 260, easing: Easing.in(Easing.cubic) }, (done) => { if (done) scheduleOnRN(go); });
+    },
+  }), [origin, box, p]);
+  const style = useAnimatedStyle(() => {
+    if (!origin) return {};
+    if (!box) return { opacity: 0 };
+    const t = p.value;
+    const sc = origin.w / box.w;
+    return {
+      opacity: Math.min(1, t * 3),
+      borderRadius: 28 * (1 - t),
+      transform: [{ translateX: (origin.x + origin.w / 2 - (box.x + box.w / 2)) * (1 - t) }, { translateY: (origin.y + origin.h / 2 - (box.y + box.h / 2)) * (1 - t) }, { scale: sc + (1 - sc) * t }],
+    };
+  }, [origin, box]);
+  const measure = () => { root.current?.measureInWindow((x, y, w, h) => { if (w > 0 && h > 0) setBox((bx) => bx ?? { x, y, w, h }); }); };
+  return <Animated.View ref={root as never} collapsable={false} onLayout={measure} style={[{ flex: 1, overflow: 'hidden' }, style]}>{children}</Animated.View>;
+}
+
 export function SubPage({ title, children, right, footer, fallback, variant = 'shell', close, gap = 12, titleIcon, onTitlePress, scroll = true, toastLift = 24, onBack, backdrop }: SubPageProps) {
   useOwnGlow(!!backdrop);
+  const frame = useRef<GrowHandle>(null);
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { scrolled, onScroll } = useScrolled();
   const shell = variant === 'shell';
   const headH = insets.top + 12 + 44 + 8;
   const useScroll = shell ? true : scroll;
-  const back = () => { if (!shell && onBack?.()) return; goBack(fallback); };
+  const back = () => { if (!shell && onBack?.()) return; { const go = () => goBack(fallback); if (frame.current) frame.current.leave(go); else go(); } };
   const header = (
     <Row style={[{ paddingTop: insets.top + 12, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }, useScroll && { position: 'absolute', top: 0, left: 0, right: 0 }]}>
       <RoundBtn label={close ? 'Close' : 'Back'} onPress={back} glass>
@@ -76,6 +111,7 @@ export function SubPage({ title, children, right, footer, fallback, variant = 's
     </Row>
   );
   return (
+    <GrowFrame handle={frame}>
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
       {!shell && <ToastLift value={insets.bottom + toastLift} />}
       {useScroll ? (
@@ -99,5 +135,6 @@ export function SubPage({ title, children, right, footer, fallback, variant = 's
         ? <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 16) + 6, gap: 8, backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>{footer}</View>
         : footer) : null}
     </KeyboardAvoidingView>
+    </GrowFrame>
   );
 }

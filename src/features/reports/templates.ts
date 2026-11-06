@@ -49,6 +49,26 @@ export function invoiceHtml(i: InvoiceData) {
   `);
 }
 
+export type StatementRow = { no: string; date: string; item: string; amount: string; method: string };
+export type StatementData = { gym: string; member: string; title: string; made: string; rows: StatementRow[]; total: string };
+
+// All the payments of a membership (or of every membership) on one page, with the total.
+export function statementHtml(s: StatementData) {
+  return page(`
+    <div class="top">
+      <div><div class="brand">${esc(s.gym)}</div><div class="muted">Payments</div></div>
+      <div style="text-align:right"><h1>${esc(s.member)}</h1><div class="muted">${esc(s.title)}</div><div class="muted">Made on ${esc(s.made)}</div></div>
+    </div>
+    <h2>Payments</h2>
+    <table>
+      <tr><th>Date</th><th>Item</th><th>Paid via</th><th class="r">Amount</th></tr>
+      ${s.rows.map((x) => `<tr><td>${esc(x.date)}</td><td>${esc(x.item)}<div class="muted">${esc(x.no)}</div></td><td>${esc(x.method)}</td><td class="r">${esc(x.amount)}</td></tr>`).join('')}
+      <tr class="total"><td colspan="3">Total paid</td><td class="r">${esc(s.total)}</td></tr>
+    </table>
+    <div class="foot">This is a computer generated statement and needs no signature.</div>
+  `);
+}
+
 export type ReportData = {
   member: string; gym: string; period: string; made: string;
   goal: string; goalBy: string;
