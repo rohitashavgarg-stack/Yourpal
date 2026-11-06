@@ -110,7 +110,7 @@ export default function MembershipDetail() {
         {m.status === 'Active' && <TimeBar pct={m.pct} warn={m.warn} />}
         <Row style={{ justifyContent: 'space-between' }}>
           <View style={{ gap: 1 }}>
-            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Started</Txt>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{m.status === 'Upcoming' ? 'Starts' : 'Started'}</Txt>
             <Txt style={{ fontFamily: font.semibold }}>{m.start}</Txt>
           </View>
           <View style={{ gap: 1, alignItems: 'flex-end' }}>

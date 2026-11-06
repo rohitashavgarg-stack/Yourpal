@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -55,7 +56,8 @@ export default function Waiver() {
           <Chip label={`${WAIVER_POINTS.length} points`} />
         </Row>
       </View>
-      <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, overflow: 'hidden' }}>
+      <View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, overflow: 'hidden' }}>
+        <CardEdge radius={radii.lg} />
         {WAIVER_POINTS.map((t, i) => (
           <Row key={i} style={{ gap: 12, alignItems: 'flex-start', padding: 16, borderBottomWidth: i === WAIVER_POINTS.length - 1 ? 0 : 1, borderBottomColor: c.line }}>
             <View style={{ width: 28, height: 28, borderRadius: radii.pill, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}>

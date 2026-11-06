@@ -35,11 +35,12 @@ function GymMembership() {
   const ms = useMemberships();
   const active = ms.filter((m) => m.status === 'Active').sort((x, y) => y.pct - x.pct); // the one ending first on top
   const soon = active.some((m) => m.warn);
+  const upcoming = ms.find((m) => m.status === 'Upcoming');
   const shown = active.slice(0, 2);
   const more = active.length - shown.length;
   // One line under the title says it all: how many are active and what needs a look. It turns amber when something does.
   const attention = d.onBreak || soon || active.length === 0;
-  const line = d.onBreak ? 'Paused for now' : active.length === 0 ? 'Nothing active right now' : soon ? `${active.length} active, one ends soon` : `${active.length} active, next ends on ${active[0].end}`;
+  const line = d.onBreak ? 'Paused for now' : active.length === 0 ? 'Nothing active right now' : soon ? `${active.length} active, one ends soon` : upcoming ? `${active.length} active, next plan starts ${upcoming.start}` : `${active.length} active, next ends on ${active[0].end}`;
   const grow = useGrowOpen();
   return (
     <View ref={grow.ref} collapsable={false}>

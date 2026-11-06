@@ -111,3 +111,8 @@ export { default as Volume2 } from 'lucide-react-native/icons/volume-2';
 export { default as UserCheck } from 'lucide-react-native/icons/user-check';
 export { default as Eye } from 'lucide-react-native/icons/eye';
 export { default as HandHeart } from 'lucide-react-native/icons/hand-heart';
+export { default as Percent } from 'lucide-react-native/icons/percent';
+export { default as Wind } from 'lucide-react-native/icons/wind';
+export { default as HeartPulse } from 'lucide-react-native/icons/heart-pulse';
+export { default as Gauge } from 'lucide-react-native/icons/gauge';
+export { default as Timer } from 'lucide-react-native/icons/timer';

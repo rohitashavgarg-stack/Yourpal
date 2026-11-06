@@ -1,4 +1,5 @@
 import React from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { YourPalLogo } from '@/components/YourPalLogo';
 import { STEPS_CARD, StepsPreview } from '@/features/today/StepsCards';
 import { WaterCard } from '@/features/today/Trackers';
@@ -100,7 +101,8 @@ export default function Profile() {
           <GoalSummaryTile title="Water" value="3 L" onPress={() => router.push({ pathname: '/progress/metric', params: { k: 'water' } })} />
         </Row>
         <Pressy accessibilityRole="button" accessibilityLabel={`Goal: ${g2.name}. Change goal`} onPress={go('/goal')} scaleTo={0.985}
-          style={{ minHeight: 64, borderRadius: radii.lg, backgroundColor: c.surface, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          style={{ minHeight: 64, borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <CardEdge radius={radii.lg} />
           <View style={{ flex: 1 }}>
             <Txt v="caption" style={{ fontSize: fontSizes.xs }}>Main goal</Txt>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{g2.name}</Txt>
@@ -147,7 +149,8 @@ function GoalSummaryTile({ title, value, onPress }: { title: string; value: stri
   const { c } = useTheme();
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`${title} goal ${value}. Edit`} onPress={onPress} scaleTo={0.97}
-      style={{ flex: 1, minHeight: 84, borderRadius: radii.lg, backgroundColor: c.surface, padding: 14, justifyContent: 'space-between' }}>
+      style={{ flex: 1, minHeight: 84, borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 14, justifyContent: 'space-between' }}>
+      <CardEdge radius={radii.lg} />
       <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 30, letterSpacing: -0.5 }}>{value}</Txt>
       <Row style={{ justifyContent: 'space-between' }}>
         <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{title}</Txt>

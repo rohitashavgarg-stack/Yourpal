@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { ageFrom, defaultDob, fmtDob } from '@/lib/dob';
 import { PersonAvatar } from '@/components/Brand';
 import { View } from 'react-native';
@@ -155,19 +156,22 @@ export default function MyDetails() {
       )}
 
       <Label style={{ marginTop: 16 }}>Mobile number</Label>
-      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.surface }}>
+      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.cardLift }}>
+        <CardEdge radius={radii.lg} />
         <Txt v="mono" style={{ flex: 1 }}>{maskNum(state.phone)}</Txt>
         <Button small kind="secondary" label="Change" accessibilityLabel="Change mobile number" onPress={() => openSheet(<ChangePhoneSheet />, { label: 'Change mobile number' })} />
       </Row>
 
       <Label style={{ marginTop: 16 }}>Gender</Label>
-      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.surface }}>
+      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.cardLift }}>
+        <CardEdge radius={radii.lg} />
         <Txt style={{ flex: 1, fontFamily: font.semibold }}>{p.gender || 'Not set'}</Txt>
         <Button small kind="secondary" label="Change" accessibilityLabel="Change gender" onPress={() => openSheet(<GenderSheet />, { label: 'Gender' })} />
       </Row>
 
       <Label style={{ marginTop: 16 }}>Body details</Label>
-      <View style={{ marginTop: -6, borderRadius: radii.lg, backgroundColor: c.surface, overflow: 'hidden' }}>
+      <View style={{ marginTop: -6, borderRadius: radii.lg, backgroundColor: c.cardLift, overflow: 'hidden' }}>
+        <CardEdge radius={radii.lg} />
         <BodyRow label="Date of birth" value={p.dob ? `${fmtDob(p.dob)} · ${ageFrom(p.dob)} yrs` : p.age ? `${p.age} years` : 'Add'} onPress={() => openSheet(<DobSheet />, { label: 'Date of birth' })} />
         <BodyRow label="Height" value={p.heightCm ? `${p.heightCm} cm` : 'Add'} onPress={() => router.push('/log-height')} />
         <BodyRow label="Weight" last value={shell.unitsW === 'lb' ? `${(d.weight * 2.20462).toFixed(1)} lb` : `${d.weight.toFixed(1)} kg`} onPress={() => router.push('/log-weight')} />

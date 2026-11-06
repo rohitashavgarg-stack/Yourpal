@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { SectionLabel } from '@/design-system/primitives/SectionLabel';
+import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { ChevronRight } from '@/lib/icons';
@@ -43,7 +45,7 @@ function MembershipCard({ m }: { m: Membership }) {
   );
 }
 
-// All of the member's memberships: Active, Suspended and Past. A member can have several active at once.
+// All of the member's memberships: Active (with the ones that start next), Suspended and Past. A member can have several active at once.
 export default function Memberships() {
   const { c } = useTheme();
   useGymScenarios('Gym · Membership');
@@ -51,9 +53,16 @@ export default function Memberships() {
   const [tab, setTab] = useState<MTab>('Active');
   const list = all.filter((m) => tabOf(m) === tab);
   return (
-    <SubPage title="Memberships" fallback="/gym">
+    <SubPage title="Memberships" fallback="/gym" backdrop={<TopGlow color={c.accent} />}>
       <Segmented accessibilityLabel="Memberships" value={tab} onChange={setTab} options={MTABS.map((t) => ({ value: t, label: t }))} />
-      {list.length ? list.map((m) => <MembershipCard key={m.id} m={m} />) : (
+      {list.filter((m) => m.status !== 'Upcoming').map((m) => <MembershipCard key={m.id} m={m} />)}
+      {list.some((m) => m.status === 'Upcoming') && (
+        <View style={{ gap: 10, marginTop: 6 }}>
+          <SectionLabel>Starts next</SectionLabel>
+          {list.filter((m) => m.status === 'Upcoming').map((m) => <MembershipCard key={m.id} m={m} />)}
+        </View>
+      )}
+      {!list.length && (
         <View style={{ padding: 24, borderRadius: radii.lg, backgroundColor: c.surface, alignItems: 'center' }}>
           <Txt muted>{tab === 'Suspended' ? 'No suspended memberships.' : tab === 'Past' ? 'No past memberships yet.' : 'No active memberships.'}</Txt>
         </View>

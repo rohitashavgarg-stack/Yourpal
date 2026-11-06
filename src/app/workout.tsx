@@ -71,6 +71,9 @@ export default function Workout() {
   const [draft, setDraftS] = useState<Draft>({ k: 0, r: 0, t: 0 });
   const [noteFor, setNoteFor] = useState<number | null>(null);
   const [fb, setFb] = useState<0 | 1 | 2 | null>(null);
+  // The page opens first and the session is set a moment after (so the Today card does not change before the page appears): wait briefly before sending a missing session home.
+  const [grace, setGrace] = useState(true);
+  useEffect(() => { const t = setTimeout(() => setGrace(false), 700); return () => clearTimeout(t); }, []);
   const resting = !!s?.rest;
   useEffect(() => { if (!resting) setFb(null); }, [resting]);
   const [noteDraft, setNoteDraft] = useState('');
@@ -152,7 +155,7 @@ export default function Workout() {
       router.canGoBack() ? router.back() : router.replace('/(tabs)');
     }} />;
   }
-  if (!s || !e) return <Redirect href="/(tabs)" />;
+  if (!s || !e) return grace && !s ? null : <Redirect href="/(tabs)" />;
 
   function logSet(i: number, vals: { r: number; k: number; t: number } | null) {
     A.logSet(s!.exIdx, i, vals);
