@@ -136,7 +136,8 @@ export default function Assessment() {
                     <Txt style={{ flex: 1, fontFamily: font.medium }}>{r.n.label}</Txt>
                     {/* the number with its unit, right aligned, then (only when there is an assessment before) the change in a column of its own */}
                     <Row style={{ gap: 5, alignItems: 'baseline', justifyContent: 'flex-end' }}>
-                      <Txt v="mono">{r.prev != null ? `${r.prev} → ${r.now}` : String(r.now)}</Txt>
+                      {r.prev != null && <Txt v="mono" muted>{`${r.prev} →`}</Txt>}
+                      <Txt v="mono" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>{String(r.now)}</Txt>
                       <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{NUMS[r.k].unit}</Txt>
                     </Row>
                     {compared && <View style={{ width: 60, alignItems: 'flex-end' }}>{r.prev != null && <Change diff={r.diff} good={r.good} />}</View>}
