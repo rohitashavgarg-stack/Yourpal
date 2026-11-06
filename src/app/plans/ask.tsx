@@ -50,7 +50,7 @@ export default function AskCoach() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title="Ask Coach Vikram" icon="close" />
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: insets.bottom + 28, gap: 14 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: insets.bottom + 28, gap: 14 }}>
         <Row style={{ gap: 10, paddingHorizontal: 4 }}>
           <PersonAvatar who="coach" size={44} />
           <View><Txt v="headline">Coach Vikram</Txt><Txt v="caption">Your trainer</Txt></View>

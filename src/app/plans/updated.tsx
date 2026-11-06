@@ -41,7 +41,7 @@ export default function WhatChanged() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title="What changed" />
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: insets.bottom + 28, gap: 12 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: insets.bottom + 28, gap: 12 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 4 }}><PersonAvatar who="coach" size={28} /><Txt v="label">Coach Vikram · today</Txt></View>
         <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
           {COACH_CHANGES.map((ch, i) => {

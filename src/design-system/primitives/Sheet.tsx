@@ -116,7 +116,7 @@ export function Sheet({ children, label, glow, fixed, onClosed, registerClose }:
             <FooterCtx.Provider value={setFooter}>{children}</FooterCtx.Provider>
           </View>
         ) : (
-          <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 8, gap: 12 }} keyboardShouldPersistTaps="handled">
+          <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 8, gap: 12 }} keyboardShouldPersistTaps="handled">
             <FooterCtx.Provider value={setFooter}>{children}</FooterCtx.Provider>
           </ScrollView>
         )}

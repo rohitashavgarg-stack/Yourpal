@@ -63,12 +63,12 @@ export default function ExerciseSearch() {
 
       <View style={{ paddingHorizontal: 16, gap: 12, paddingBottom: 8 }}>
         <Field value={q} onChangeText={setQ} autoFocus placeholder="Search exercises or muscles" accessibilityLabel="Search exercises" returnKeyType="search" autoCapitalize="none" />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ gap: 8 }}>
+        <ScrollView showsVerticalScrollIndicator={false} horizontal showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ gap: 8 }}>
           {GROUPS.map((g) => <Pill key={g} label={g} on={group === g} onPress={() => setGroup(g)} />)}
         </ScrollView>
       </View>
 
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 120, gap: 8 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 120, gap: 8 }}>
         {list.map((x) => (
           <Pressy key={x.n} accessibilityRole="button" accessibilityLabel={`${x.n}, ${x.g}. Swap`} onPress={() => pick(x.n)} scaleTo={0.985}
             style={{ minHeight: 68, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 12, borderRadius: 20, backgroundColor: c.surface }}>

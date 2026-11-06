@@ -43,7 +43,7 @@ function EmojiPanel({ onPick }: { onPick: (e: string) => void }) {
           </IconButton>
         ))}
       </View>
-      <ScrollView contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, paddingVertical: 6 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, paddingVertical: 6 }}>
         {EMOJI_GROUPS[g].list.map((e) => (
           <Pressy key={e} accessibilityRole="button" accessibilityLabel={e} onPress={() => { haptic.tick(); onPick(e); }} scaleTo={0.8}
             style={{ width: '12.5%', height: 44, alignItems: 'center', justifyContent: 'center' }}>

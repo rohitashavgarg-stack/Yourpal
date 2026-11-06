@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values are mutated from gesture and animation callbacks */
-import React, { useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
-import { usePathname } from 'expo-router';
+import { useFocusEffect, usePathname } from 'expo-router';
 import { CardRect, isCardPage, takeCardOrigin } from '@/lib/cardGrow';
-import { KeyboardAvoidingView, Platform, ScrollView, View, useWindowDimensions, type ViewInstance } from 'react-native';
+import { haptic } from '@/lib/haptics';
+import { BackHandler, KeyboardAvoidingView, Platform, ScrollView, View, useWindowDimensions, type ViewInstance } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft, X } from '@/lib/icons';
@@ -61,9 +62,9 @@ function ToastLift({ value }: { value: number }) { useToastLift(value); return n
 // A page opened from a card grows out of that card (about 0.4 s, a long smooth ease-out, no bounce). It has no back button: a small grabber at the top drags it away.
 // Drag down and the whole page follows your finger and scales down, with the page underneath showing; let go past the middle (or with a flick) and it carries on down and
 // away, let go early and it eases back. Pages opened any other way do not animate. The card's position comes from setCardOrigin (src/lib/cardGrow.ts).
-type GrowHandle = { leave: (go: () => void) => void };
+export type GrowHandle = { leave: (go: () => void) => void };
 const SMOOTH = Easing.bezier(0.22, 1, 0.36, 1);
-function GrowFrame({ children, handle, onClose, origin }: { children: React.ReactNode; handle: React.Ref<GrowHandle>; onClose: () => void; origin: CardRect | null }) {
+export function GrowFrame({ children, handle, onClose, origin }: { children: React.ReactNode; handle: React.Ref<GrowHandle>; onClose: () => void; origin: CardRect | null }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const root = useRef<ViewInstance>(null);
@@ -73,6 +74,7 @@ function GrowFrame({ children, handle, onClose, origin }: { children: React.Reac
   const [late, setLate] = useState(false); // the measure took too long: show the page without the grow rather than leave it hidden
   const p = useSharedValue(origin ? 0 : 1);
   const dy = useSharedValue(0); // how far the page has been dragged down
+  const dx = useSharedValue(0); // how far the page has been swiped to the right from the left edge (the back gesture)
   useEffect(() => { if (origin && box) p.value = withTiming(1, { duration: 420, easing: SMOOTH }); }, [origin, box, p]);
   useEffect(() => {
     if (!origin || box) return;
@@ -96,8 +98,26 @@ function GrowFrame({ children, handle, onClose, origin }: { children: React.Reac
     if (!origin || !box) { go(); return; }
     dy.value = withTiming(box.h * 1.05, { duration: 260, easing: Easing.out(Easing.cubic) }, (done) => { if (done) scheduleOnRN(go); });
   };
+  // Every way of going back gives the same tap the back button gives, and plays the same closing animation.
+  const dismiss = () => { haptic.tap(); leave(onClose); };
+  const dismissNow = () => { haptic.tap(); leave(onClose); };
+  // The phone's back (a swipe from the left edge, the Android back button) plays this page's own closing animation, the same one the page has everywhere else: the page
+  // carries on down and away over the page beneath, then the real back runs. Pages that were not opened from a card keep the stack's own back (slide to the right).
+  const edge = Gesture.Pan()
+    .activeOffsetX([10, 1000]).failOffsetY([-16, 16])
+    .onUpdate((e) => { dx.value = Math.max(0, e.translationX) * 0.25; })
+    .onEnd((e) => {
+      dx.value = withTiming(0, { duration: 200, easing: SMOOTH });
+      if (e.translationX > 110 || e.velocityX > 800) scheduleOnRN(dismissNow);
+    });
   useImperativeHandle(handle, () => ({ leave }));
-  const dismiss = () => leave(onClose);
+  // Android back button and gesture
+  useFocusEffect(useCallback(() => {
+    if (!origin) return undefined;
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => { haptic.tap(); leave(onClose); return true; });
+    return () => sub.remove();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [origin, box]));
   const drag = Gesture.Pan()
     .onUpdate((e) => { dy.value = Math.max(0, e.translationY); })
     .onEnd((e) => {
@@ -105,7 +125,7 @@ function GrowFrame({ children, handle, onClose, origin }: { children: React.Reac
       else dy.value = withTiming(0, { duration: 320, easing: SMOOTH });
     });
   const style = useAnimatedStyle(() => {
-    if (!origin || late) return {};
+    if (!origin || late) return dx.value > 0 ? { borderRadius: 28 * Math.min(1, dx.value / 40), transform: [{ translateX: dx.value }] } : {};
     if (!box) return { opacity: 0 };
     const t = p.value;
     const pull = Math.min(1, dy.value / 320);
@@ -114,7 +134,7 @@ function GrowFrame({ children, handle, onClose, origin }: { children: React.Reac
       opacity: Math.min(1, t * 3),
       borderRadius: 28 * Math.max(1 - t, Math.min(1, dy.value / 40)),
       transform: [
-        { translateX: (origin.x + origin.w / 2 - (box.x + box.w / 2)) * (1 - t) },
+        { translateX: (origin.x + origin.w / 2 - (box.x + box.w / 2)) * (1 - t) + dx.value },
         { translateY: (origin.y + origin.h / 2 - (box.y + box.h / 2)) * (1 - t) + dy.value * 0.9 },
         { scale: (sc + (1 - sc) * t) * (1 - 0.14 * pull) },
       ],
@@ -124,6 +144,12 @@ function GrowFrame({ children, handle, onClose, origin }: { children: React.Reac
   return (
     <Animated.View ref={root as never} collapsable={false} onLayout={measure} style={[{ flex: 1, overflow: 'hidden' }, style]}>
       {children}
+      {/* the back gesture: a thin strip at the left edge (card pages) */}
+      {origin ? (
+        <GestureDetector gesture={edge}>
+          <View collapsable={false} style={{ position: 'absolute', left: 0, top: insets.top + 56, bottom: 0, width: 22, zIndex: 40 }} />
+        </GestureDetector>
+      ) : null}
       {origin ? (
         <GestureDetector gesture={drag}>
           <View accessible accessibilityLabel="Drag down to close" style={{ position: 'absolute', top: Math.max(insets.top - 4, 0), alignSelf: 'center', width: 140, height: 28, alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
@@ -170,7 +196,7 @@ export function SubPage({ title, children, right, footer, fallback, variant = 's
       {!shell && <ToastLift value={insets.bottom + toastLift} />}
       {useScroll ? (
         <>
-          <ScrollView onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled"
+          <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled"
             contentContainerStyle={shell ? { paddingHorizontal: 16, paddingTop: headH + 4, paddingBottom: footer ? 24 : 40 + insets.bottom, gap } : { paddingHorizontal: 16, paddingTop: insets.top + 12 + 44 + 8 + 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
             {backdrop}
             {shell ? <View style={{ gap }}>{children}</View> : children}

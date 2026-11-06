@@ -117,7 +117,7 @@ export default function EditPlan() {
             <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>Save</Txt>
           </Pressy>
         } />
-      <ScrollView scrollEnabled={!dragging} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} scrollEnabled={!dragging} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
         <Txt muted style={{ fontSize: fontSizes.sm, paddingHorizontal: 4 }}>Hold ≡ and drag to reorder · tap a row to change it</Txt>
         <DragList<PEx | DietRow>
           items={dr.rows as (PEx | DietRow)[]} keyOf={keyOf} labelOf={nameOf} onMove={move} onDragging={setDragging}

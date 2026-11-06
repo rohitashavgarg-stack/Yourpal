@@ -64,7 +64,7 @@ export function TabScreen({ title, header, children, compactTitle = true, bottom
           {pinned}
         </Animated.View>
       )}
-      <Animated.ScrollView onScroll={onScroll} scrollEventThrottle={16} refreshControl={refreshControl} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: top + 56, paddingBottom: bottomPad, gap: 12 }}>
+      <Animated.ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} onScroll={onScroll} scrollEventThrottle={16} refreshControl={refreshControl} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: top + 56, paddingBottom: bottomPad, gap: 12 }}>
         {!!title && titleRight ? (
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginTop: 14, marginBottom: 8, marginHorizontal: 4 }}>
             <Animated.Text accessibilityRole="header" style={[{ flexShrink: 1, fontFamily: font.regular, fontSize: fontSizes.xl3Plus, lineHeight: 37, letterSpacing: -1.1, color: c.ink, transformOrigin: 'left' as any }, large]}>{title}</Animated.Text>

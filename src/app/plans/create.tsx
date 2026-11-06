@@ -51,7 +51,7 @@ export default function CreateWorkout() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title="New workout" icon="close" />
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 14 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 14 }}>
         <View style={{ gap: 6 }}>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>Name</Txt>
           <Field accessibilityLabel="Workout name" value={p.cName} error={nameErr} onChangeText={(t) => setP({ cName: t, cErr: '' })} placeholder="e.g. Arms + core" returnKeyType="done" />

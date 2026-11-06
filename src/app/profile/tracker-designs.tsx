@@ -41,7 +41,7 @@ export default function TrackerDesigns() {
             return (
               <View key={t.key} style={{ gap: 8 }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: c.muted, paddingHorizontal: 4 }}>{t.title}</Txt>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: -16 }} contentContainerStyle={{ gap: 6, paddingHorizontal: 13, paddingVertical: 2 }}>
+                <ScrollView showsVerticalScrollIndicator={false} horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: -16 }} contentContainerStyle={{ gap: 6, paddingHorizontal: 13, paddingVertical: 2 }}>
                   {t.designs.map((dsg) => (
                     <Option key={dsg} tracker={t.key} design={dsg} on={current === dsg}
                       onPick={() => { haptic.tap(); if (t.key === 'steps') stepsStore.set({ design: dsg as StepsDesign }); else designStore.set({ [t.key]: dsg } as any); }} />

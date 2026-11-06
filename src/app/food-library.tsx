@@ -49,7 +49,7 @@ export default function FoodLibrary() {
         <View style={{ flex: 1 }}><Field accessibilityLabel="Search the food library" value={q} onChangeText={setQ} placeholder="Search poha, dal, curd…" autoFocus /></View>
         <IconButton label="Close" onPress={() => router.back()} glass><X size={20} color={c.ink} /></IconButton>
       </Row>
-      <ScrollView contentContainerStyle={{ padding: 16, gap: 8, paddingBottom: 24 }} keyboardShouldPersistTaps="handled">
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ padding: 16, gap: 8, paddingBottom: 24 }} keyboardShouldPersistTaps="handled">
         {res.map((f) => {
           const on = sel.includes(f.n);
           const tog = () => setSel((l) => (on ? l.filter((x) => x !== f.n) : [...l, f.n]));

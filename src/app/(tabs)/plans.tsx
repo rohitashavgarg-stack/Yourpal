@@ -52,7 +52,7 @@ function DayStrip() {
     <View style={{ marginBottom: 12 }}>
       <View style={{ paddingVertical: 4 }}>
       <View onLayout={(e) => setW(e.nativeEvent.layout.width)}>
-        <ScrollView ref={ref} horizontal pagingEnabled showsHorizontalScrollIndicator={false} accessibilityLabel="Weeks, swipe for earlier or later weeks" scrollEventThrottle={16}
+        <ScrollView showsVerticalScrollIndicator={false} ref={ref} horizontal pagingEnabled showsHorizontalScrollIndicator={false} accessibilityLabel="Weeks, swipe for earlier or later weeks" scrollEventThrottle={16}
           onScroll={(e) => { const k = Math.round(e.nativeEvent.contentOffset.x / (w || 1)); if (k !== page && k >= 0 && k < WEEKS.length) { setPage(k); haptic.tick(); } }}
           contentOffset={{ x: THIS * (w || 0), y: 0 }}>
           {WEEKS.map((wk) => (

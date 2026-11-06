@@ -46,7 +46,7 @@ export function Wheel({ value, onChange, min, max, unit, accessibilityLabel, fmt
       accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
       onAccessibilityAction={(e) => onChange(Math.min(max, Math.max(min, value + (e.nativeEvent.actionName === 'increment' ? 1 : -1))))}
       style={{ height: H, alignSelf: 'stretch', flex: fmt ? 1 : undefined }}>
-      <Animated.ScrollView ref={ref} onScroll={onScroll} scrollEventThrottle={16} showsVerticalScrollIndicator={false} snapToInterval={ITEM} decelerationRate="fast"
+      <Animated.ScrollView showsHorizontalScrollIndicator={false} ref={ref} onScroll={onScroll} scrollEventThrottle={16} showsVerticalScrollIndicator={false} snapToInterval={ITEM} decelerationRate="fast"
         contentContainerStyle={{ paddingVertical: (H - ITEM) / 2, alignItems: 'center' }}>
         {items.map((n, i) => <WheelItem key={n} n={n} i={i} y={y} fmt={fmt} size={size} />)}
       </Animated.ScrollView>

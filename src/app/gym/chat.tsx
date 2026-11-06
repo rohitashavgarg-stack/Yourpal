@@ -139,7 +139,7 @@ export default function CoachChat() {
           <RoundBtn label="Chat options" glass style={cardShadow(isDark)} onPress={() => openSheet(<ChatOptionsSheet />, { label: 'Chat options' })}><Ellipsis size={20} color={c.ink} /></RoundBtn>
         </View>
       </View>
-      <ScrollView ref={scroll} style={{ flex: 1 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1, paddingTop: 8, paddingHorizontal: 16, paddingBottom: 12, gap: 8 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} ref={scroll} style={{ flex: 1 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1, paddingTop: 8, paddingHorizontal: 16, paddingBottom: 12, gap: 8 }}>
         {coach.away && (
           <Callout tone="warn" size="sm" accessibilityRole="alert">
             <Txt style={{ fontSize: fontSizes.sm, color: c.warn }}>Coach Vikram is away until Mon 10:00 am, so replies will be slower. Something urgent? Ask the front desk.</Txt>
