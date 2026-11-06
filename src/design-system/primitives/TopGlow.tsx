@@ -13,8 +13,8 @@ export function TopGlow({ color, from = 'top' }: { color: string; from?: 'top' |
       <Svg width="100%" height="100%">
         <Defs>
           <RadialGradient id={id} cx="50%" cy={from === 'top' ? '0%' : '100%'} r="80%">
-            <Stop offset="0" stopColor={color} stopOpacity="0.3" />
-            <Stop offset="0.5" stopColor={color} stopOpacity="0.1" />
+            <Stop offset="0" stopColor={color} stopOpacity="0.22" />
+            <Stop offset="0.5" stopColor={color} stopOpacity="0.07" />
             <Stop offset="1" stopColor={color} stopOpacity="0" />
           </RadialGradient>
         </Defs>

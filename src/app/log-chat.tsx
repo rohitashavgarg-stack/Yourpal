@@ -7,6 +7,7 @@ import { ArrowUp, Camera, Library, Mic, X } from '@/lib/icons';
 import { Field, Pressy, Row, Txt } from '@/components/ui';
 import { Button, IconButton } from '@/design-system/primitives/Button';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { FoodCard } from '@/design-system/patterns/FoodCard';
 import { useOverlay } from '@/components/Overlay';
 import { KCAL_TARGET, MealId, parseFood, Parsed, SCAN_RESULT } from '@/lib/data';
 import { mealLog, totals, useDomain } from '@/lib/domain';
@@ -109,25 +110,24 @@ export default function LogChat() {
       </Row>
       <ScrollView ref={scroll} contentContainerStyle={{ padding: 16, gap: 10, flexGrow: 1, justifyContent: 'flex-end' }} keyboardShouldPersistTaps="handled">
         {msgs.map((m) => (
-          <FadeIn key={m.id} style={{ alignSelf: m.from === 'me' ? 'flex-end' : 'flex-start', maxWidth: m.from === 'me' ? '80%' : '90%' }}>
+          <FadeIn key={m.id} style={{ alignSelf: m.from === 'me' ? 'flex-end' : 'flex-start', maxWidth: m.from === 'me' ? '80%' : 'logged' in m ? '100%' : '90%' }}>
             {m.from === 'me' ? (
               <View style={{ backgroundColor: c.accent, borderRadius: radii.lg, borderBottomRightRadius: radii.xs, padding: m.photo ? 4 : 12, paddingHorizontal: m.photo ? 4 : 14 }}>
                 {m.photo ? <Image source={{ uri: m.photo }} accessibilityIgnoresInvertColors style={{ width: 200, height: 150, borderRadius: radii.md }} /> : <Txt style={{ color: c.accentInk }}>{m.text}</Txt>}
               </View>
             ) : 'logged' in m ? (
-              <View style={{ backgroundColor: c.cardLift, borderRadius: radii.lg, borderBottomLeftRadius: radii.xs, padding: 14, gap: 10, opacity: m.logged.undone ? 0.6 : 1 }}>
-                <Txt style={{ fontFamily: font.semibold }}>{m.logged.undone ? 'Undone. Nothing was added.' : `Logged to ${m.logged.meal}, ${m.logged.kcal} kcal`}</Txt>
-                <View style={{ backgroundColor: c.surface2, borderRadius: radii.md, paddingHorizontal: 12 }}>
-                  {m.logged.items.map((it, i) => (
-                    <Row key={i} style={{ justifyContent: 'space-between', minHeight: 44, borderBottomWidth: i < m.logged.items.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-                      <Txt style={{ flex: 1, fontFamily: font.medium }}>{it.n}</Txt>
-                      <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{`${it.k} kcal${it.est ? ', estimated' : ''}`}</Txt>
-                    </Row>
-                  ))}
+              // the reply: one line that says what happened, then each food as the same FoodCard the diet page uses, then what is left and Undo
+              <View style={{ gap: 8, width: '100%' }}>
+                <View style={{ backgroundColor: c.cardLift, borderRadius: radii.lg, borderBottomLeftRadius: radii.xs, padding: 12, paddingHorizontal: 14, alignSelf: 'flex-start' }}>
+                  <Txt style={{ fontFamily: font.semibold }}>{m.logged.undone ? 'Undone. Nothing was added.' : `Logged to ${m.logged.meal}, ${m.logged.kcal} kcal`}</Txt>
                 </View>
+                {!m.logged.undone && m.logged.items.map((it, i) => {
+                  const [nm, ...rest] = it.n.split(', ');
+                  return <FoodCard key={i} state="eaten" name={nm} amountText={rest.join(', ') || undefined} kcal={`${it.k} kcal${it.est ? ', estimated' : ''}`} macros={`P ${it.p} g`} label={`${it.n}, ${it.k} kcal, ${it.p} grams protein`} />;
+                })}
                 {!m.logged.undone && (
-                  <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19, flex: 1 }}>{`You have ${m.logged.left} kcal left today. Coach Vikram sees what changed.`}</Txt>
+                  <Row style={{ justifyContent: 'space-between', alignItems: 'center', gap: 12, paddingHorizontal: 4 }}>
+                    <Txt muted style={{ flex: 1, fontSize: fontSizes.sm, lineHeight: 19 }}>{`${m.logged.left} kcal left today. Coach Vikram sees what changed.`}</Txt>
                     <Button kind="secondary" small label="Undo" onPress={() => undo(m.id)} />
                   </Row>
                 )}
@@ -140,15 +140,19 @@ export default function LogChat() {
           </FadeIn>
         ))}
       </ScrollView>
-      {/* the library on the left; the camera and the mic sit inside the typing box, with no container of their own */}
+      {/* the library on the left; the camera and the mic are small and sit inside the typing box, on the right, with no container of their own */}
       <Row style={{ gap: 8, paddingHorizontal: 16, paddingTop: 8, paddingBottom: Math.max(insets.bottom, 12) }}>
         <IconButton label="Open the food library" onPress={library} size={56} radius={round(56)} bg={c.cardLift} edge><Library size={22} color={c.ink} /></IconButton>
         <View style={{ flex: 1 }}>
           <Field accessibilityLabel="Describe what to log" value={text} onChangeText={setText} placeholder="Anything else?" returnKeyType="send" autoFocus onSubmitEditing={() => send(text)}
-            leading={<Pressy accessibilityRole="button" accessibilityLabel="Choose a photo" onPress={pickPhoto} hitSlop={8}><Camera size={22} color={c.muted} /></Pressy>}
-            trailing={text.trim()
-              ? <Pressy accessibilityRole="button" accessibilityLabel="Send" onPress={() => send(text)} hitSlop={8} style={{ width: 34, height: 34, borderRadius: round(34), backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><ArrowUp size={18} color={fixed.white} /></Pressy>
-              : <Pressy accessibilityRole="button" accessibilityLabel="Dictate" onPress={() => toast('Tap the microphone on your keyboard to speak')} hitSlop={8}><Mic size={22} color={c.muted} /></Pressy>} />
+            trailing={(
+              <Row style={{ gap: 14 }}>
+                <Pressy accessibilityRole="button" accessibilityLabel="Choose a photo" onPress={pickPhoto} hitSlop={10}><Camera size={21} color={c.muted} /></Pressy>
+                {text.trim()
+                  ? <Pressy accessibilityRole="button" accessibilityLabel="Send" onPress={() => send(text)} hitSlop={8} style={{ width: 30, height: 30, borderRadius: round(30), backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><ArrowUp size={16} color={fixed.white} /></Pressy>
+                  : <Pressy accessibilityRole="button" accessibilityLabel="Dictate" onPress={() => toast('Tap the microphone on your keyboard to speak')} hitSlop={10}><Mic size={21} color={c.muted} /></Pressy>}
+              </Row>
+            )} />
         </View>
       </Row>
     </KeyboardAvoidingView>

@@ -108,3 +108,6 @@ export { default as ChevronUp } from 'lucide-react-native/icons/chevron-up';
 export { default as Building2 } from 'lucide-react-native/icons/building';
 export { default as Volume1 } from 'lucide-react-native/icons/volume-1';
 export { default as Volume2 } from 'lucide-react-native/icons/volume-2';
+export { default as UserCheck } from 'lucide-react-native/icons/user-check';
+export { default as Eye } from 'lucide-react-native/icons/eye';
+export { default as HandHeart } from 'lucide-react-native/icons/hand-heart';

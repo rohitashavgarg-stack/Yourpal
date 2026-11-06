@@ -495,10 +495,10 @@ function ConsentStep({ isPT }: { isPT: boolean }) {
       <StepTitle t="Your privacy" s="What Wulf Fitness can see. You can change this any time in Settings." />
       <Card style={{ padding: 6 }}>
         {rows.map((r) => (
-          <Row key={r.l} style={{ gap: 14, minHeight: 68, paddingHorizontal: 14, borderBottomWidth: 1, borderBottomColor: c.line }}>
+          <Row key={r.l} style={{ gap: 14, minHeight: 68, paddingHorizontal: 14 }}>
             <ShieldCheck size={20} color={c.good} />
             <View style={{ flex: 1, paddingVertical: 10 }}><Txt style={{ fontFamily: font.semibold }}>{r.l}</Txt><Txt v="caption">{r.s}</Txt></View>
-            <Chip label="Shared" tone="good" style={{ alignSelf: 'center' }} />
+            <Chip label="Shared" tone="good" filled style={{ alignSelf: 'center' }} />
           </Row>
         ))}
         <Row style={{ gap: 14, minHeight: 68, paddingHorizontal: 14 }}>

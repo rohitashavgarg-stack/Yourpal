@@ -1,4 +1,5 @@
 import React from 'react';
+import { useGrowOpen } from '@/lib/cardGrow';
 import Svg, { Line } from 'react-native-svg';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
@@ -38,8 +39,11 @@ function GymMembership() {
   // One line under the title says it all: how many are active and what needs a look. It turns amber when something does.
   const attention = d.onBreak || soon || active.length === 0;
   const line = d.onBreak ? 'Paused for now' : active.length === 0 ? 'Nothing active right now' : soon ? `${active.length} active, one ends soon` : `${active.length} active, next ends on ${active[0].end}`;
+  const grow = useGrowOpen();
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={`Memberships. ${active.length} active${soon ? ', one ending soon' : ''}. See all`} onPress={() => router.push('/gym/membership')} scaleTo={0.985}
+    // eslint-disable-next-line react-hooks/refs -- the ref is only read when the card is tapped
+    <View ref={grow.ref} collapsable={false}>
+    <Pressy accessibilityRole="button" accessibilityLabel={`Memberships. ${active.length} active${soon ? ', one ending soon' : ''}. See all`} onPress={() => grow.open(() => router.push('/gym/membership'))} scaleTo={0.985}
       style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
       <CardEdge radius={radii.lg} />
       <Row style={{ gap: 12 }}>
@@ -76,6 +80,7 @@ function GymMembership() {
         <Txt muted style={{ fontSize: fontSizes.md }}>No active membership. Renew at the front desk to log again.</Txt>
       )}
     </Pressy>
+    </View>
   );
 }
 
@@ -220,6 +225,7 @@ function ChatCard() {
 function PTCard({ isPT }: { isPT: boolean }) {
   const { c } = useTheme();
   const { d } = useDomain();
+  const grow = useGrowOpen();
   const head = (title: string, sub: string, right?: React.ReactNode) => (
     <Row style={{ gap: 14 }}>
       <IconBadge size={48} radius={radii.md} bg={c.accentSoft}><Dumbbell size={24} strokeWidth={1.9} color={c.accentText} /></IconBadge>
@@ -232,10 +238,11 @@ function PTCard({ isPT }: { isPT: boolean }) {
   );
   if (!isPT) {
     return (
-      <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+      // eslint-disable-next-line react-hooks/refs -- the ref is only read when the card is tapped
+      <View ref={grow.ref} collapsable={false} style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
       <CardEdge radius={radii.xl} />
         {head('Personal training', 'Workout and diet from a coach')}
-        <Button kind="white" label="See how it works" onPress={() => router.push('/gym/pt')} />
+        <Button kind="white" label="See how it works" onPress={() => grow.open(() => router.push('/gym/pt'))} />
       </View>
     );
   }
