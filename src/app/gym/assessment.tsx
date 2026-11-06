@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Activity, ClipboardList, Droplets, Dumbbell, Heart, Medal, PersonStanding, ShieldCheck } from '@/lib/icons';
 import { Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
@@ -27,17 +26,14 @@ const KEY_STATS: NumKey[] = ['weight', 'waist', 'pulse']; // the three numbers s
 // The trainer's notes: each one has its own icon (all in the same colour).
 const HABIT_ICON: Record<string, typeof Activity> = { activity: Activity, freq: Dumbbell, water: Droplets, level: Medal, flex: PersonStanding, injuries: ShieldCheck };
 
-// A gradient card with a gradient green stroke: the stroke is a gradient of its own (bright green at the top left, fading out towards the bottom right),
-// and the card is filled with a green tint that fades into the card colour.
+// The stat card: the same dark card as every other card (no green fill at all), with only the faintest green in its thin gradient stroke.
 function GradientCard({ children }: { children: React.ReactNode }) {
   const { c } = useTheme();
-  const stroke = 1.5;
   return (
-    <LinearGradient colors={[c.cNutri + '40', c.cNutri + '08']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ alignSelf: 'stretch', borderRadius: radii.xl, padding: stroke }}>
-      <LinearGradient colors={[c.cNutri + '07', c.surface]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: radii.xl - stroke, paddingVertical: 28, paddingHorizontal: 20, alignItems: 'center', gap: 12 }}>
-        {children}
-      </LinearGradient>
-    </LinearGradient>
+    <View style={{ alignSelf: 'stretch', borderRadius: radii.xl, backgroundColor: c.cardLift, paddingVertical: 28, paddingHorizontal: 20, alignItems: 'center', gap: 12 }}>
+      <CardEdge radius={radii.xl} from={c.cNutri + '1F'} to={c.cNutri + '05'} />
+      {children}
+    </View>
   );
 }
 

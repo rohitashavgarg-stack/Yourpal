@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PersonAvatar } from '@/components/Brand';
 import { Button, Row, Txt } from '@/components/ui';
@@ -16,6 +15,7 @@ import { useGoalV2 } from '@/features/goalv2/model';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { CalendarCheck, CalendarClock, Dumbbell, Eye, HandHeart, Target, TrendingUp, UserCheck } from '@/lib/icons';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 // What only personal training gives a member: an icon, a short title and one short line each. Nothing a regular member already has (the plans, the progress checks,
@@ -51,7 +51,7 @@ export default function PersonalTraining() {
       title=""
       fallback="/gym"
       // A soft tint from the top of the screen that fades into the page and scrolls away with the content.
-      backdrop={<LinearGradient pointerEvents="none" colors={[c.accentSoft, c.bg]} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 380 }} />}
+      backdrop={<TopGlow color={c.accent} />}
       // The one button floats over the page near the bottom and stays there while the page scrolls.
       footer={(
         <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>

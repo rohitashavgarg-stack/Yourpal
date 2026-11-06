@@ -75,7 +75,7 @@ export function LoggedExercises({ ex }: { ex: PEx[] }) {
             <ExTile name={e.name} num={String(i + 1)} />
             <View style={{ flex: 1, minWidth: 0 }}>
               <Txt style={{ fontFamily: font.semibold }}>{e.name}</Txt>
-              <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17, color: skipped ? c.warn : undefined }}>{skipped ? 'Not logged' : e.res === 'swap' ? `${e.sets} sets of ${e.reps}, swapped from ${e.from}` : `${e.sets} sets, ${e.sets * e.reps * e.kg} kg total`}</Txt>
+              <Txt muted style={[{ fontSize: fontSizes.xs, lineHeight: 17 }, skipped && { color: c.warn }]}>{skipped ? 'Not logged' : e.res === 'swap' ? `${e.sets} sets of ${e.reps}, swapped from ${e.from}` : `${e.sets} sets, ${e.sets * e.reps * e.kg} kg total`}</Txt>
             </View>
             <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17, color: skipped ? c.warn : c.accentText }}>{skipped ? right : e.res === 'swap' ? right : `${e.kg} kg`}</Txt>
           </Row>

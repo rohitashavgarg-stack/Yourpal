@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values and refs are mutated from gesture / animation callbacks */
 import React, { useEffect, useRef } from 'react';
+import { CARD_PAGES } from '@/lib/cardGrow';
 import { Platform, View } from 'react-native';
 import Animated, { Easing, runOnJS, useAnimatedReaction, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Stack, router, useNavigation } from 'expo-router';
@@ -23,8 +24,10 @@ import { fixed } from '@/design-system/tokens';
 // On the phone the native stack does this (see the Stack.Screen options below). The web stack has no transitions, so this wrapper adds them there.
 const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'log-chat', 'food-library', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
 const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
+// Pages opened from inside a card page (one membership, one assessment...). They are normal pages: a back arrow, and they slide in from the right and leave to the right,
+// whatever the screen under them is. They are drawn over it (a transparent presentation), so the page under a detail page never goes blank or looks like it is closing.
+const DETAIL_PAGES = ['gym/membership-detail', 'gym/assessment', 'gym/payments', 'gym/sessions'];
 // The pages a Progress card opens. They grow out of the card (and drag away) on their own, drawn over the page underneath, so the stack adds no slide and no background.
-const CARD_PAGES = ['progress/streaks', 'progress/metric', 'progress/lift', 'progress/photos', 'progress/muscles', 'gym/attendance', 'gym/assessments', 'gym/membership', 'gym/pt'];
 // Web only: the stack drops a popped screen at once, so the slide-out is played first, then the real back runs.
 // True for a moment after a back: a screen that mounts then is being revealed, not pushed, so it must not slide in.
 let popping = false;
@@ -176,6 +179,9 @@ function AppShell() {
             <Stack.Screen name="login" options={{ animationTypeForReplace: 'pop' } as any} />
             {/* The first screen has nothing behind it, so no back swipe. */}
             <Stack.Screen name="welcome" options={{ animationTypeForReplace: 'pop', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
+            {DETAIL_PAGES.map((n) => (
+              <Stack.Screen key={n} name={n} options={{ presentation: 'transparentModal', animation: 'slide_from_right', contentStyle: { backgroundColor: 'transparent' }, gestureEnabled: true, fullScreenGestureEnabled: true } as any} />
+            ))}
             {/* Pages opened from a Progress card sit over the page underneath, with no background of their own, so it shows while they are dragged away. */}
             {CARD_PAGES.map((n) => (
               <Stack.Screen key={n} name={n} options={{ presentation: 'transparentModal', animation: 'none', contentStyle: { backgroundColor: 'transparent' }, gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
