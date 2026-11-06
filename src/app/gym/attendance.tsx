@@ -57,7 +57,7 @@ export default function Attendance() {
   ];
 
   return (
-    <SubPage title="Attendance" fallback="/gym" backdrop={<TopGlow color={c.cAct} />}>
+    <SubPage title="Attendance" fallback="/gym" backdrop={<TopGlow color={c.accent} />}>
       <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 16 }, cardShadow(isDark)]}>
         <Row style={{ justifyContent: 'space-between', marginBottom: 10, gap: 8 }}>
           <Pressy accessibilityRole="button" accessibilityLabel="Earlier month" onPress={() => setBack((n) => Math.min(6, n + 1))} disabled={back >= 6} scaleTo={0.92} style={{ width: 40, height: 40, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center', opacity: back >= 6 ? 0.4 : 1 }}><ChevronLeft size={20} color={c.ink} /></Pressy>
