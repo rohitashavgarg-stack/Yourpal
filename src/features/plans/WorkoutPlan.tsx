@@ -22,7 +22,7 @@ import { useStartWorkout } from '@/features/workout/StartSheet';
 import { COACH_BANNER } from './content';
 import { startCreate } from './openers';
 import { ExTile, Highlight, Moon } from './parts';
-import { DAYL, dateOf, dayPlan, exSub, relDay, usePlans } from './store';
+import { DAYL, dateOf, dayPlan, exSub, monthOf, relDay, usePlans } from './store';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
@@ -32,6 +32,7 @@ import { ListCard } from '@/design-system/primitives/ListCard';
 import StretchIcon from '@/lib/StretchIcon';
 import { LogPastWorkoutSheet } from './LogPastWorkoutSheet';
 import { SectionLabel } from '@/design-system/primitives/SectionLabel';
+import { LoggedExercises, LoggedFeel, LoggedHeader, LoggedMuscles, LoggedNumbers } from './LoggedDay';
 
 
 // Expired membership: the plan stays on the page, behind a strong blur (it cannot be tapped), with a lock and the reason on top.
@@ -131,108 +132,91 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
 
       {plan ? (
         <LockedPlan day={DAYL[p.day]} locked={paused && !plan.done}>
-          <FadeIn i={1}>
-            <Row style={{ alignItems: 'flex-end', gap: 10, paddingTop: 4, paddingHorizontal: 4 }}>
-              <View style={{ flex: 1, gap: 2 }}>
-                <Row style={{ gap: 8 }}>
-                  <Txt v="label">{DAYL[p.day]} {dateOf(p.day, p.week)}</Txt>
-                  {isToday && <Tag label="Today" bg={c.surface2} fg={c.ink} />}
-                  {!!plan.done && <Tag label="Logged" bg={c.goodSoft} fg={c.good} />}
-                  {!plan.done && rel < 0 && <Tag label="Not logged" bg={c.warnSoft} fg={c.warn} />}
-                </Row>
-                {/* the name with who made the plan beside it, small, with their photo; under it how many exercises, a thin divider and when it is planned */}
-                <Row style={{ alignItems: 'flex-end', columnGap: 10, flexWrap: 'wrap' }}>
-                  <Txt accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.regular, fontSize: fontSizes.xl5Plus, lineHeight: 49, letterSpacing: -1.5 }}>{plan.name}</Txt>
-                  <Row style={{ gap: 6, paddingBottom: 9 }}>
-                    <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 16 }}>by</Txt>
-                    <PersonAvatar who={plan.created ? 'me' : 'coach'} size={18} />
-                    <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 16 }}>{plan.created ? 'you' : 'Coach Vikram'}</Txt>
+          {plan.done ? (
+            <FadeIn i={1}><LoggedHeader name={plan.name} sets={plan.ex.filter((e) => e.res !== 'skip').reduce((n, e) => n + e.sets, 0)} byYou={!!plan.created} date={`${DAYL[p.day]} ${dateOf(p.day, p.week)} ${monthOf(p.day, p.week)}`} span={doneParts(plan).span} /></FadeIn>
+          ) : (
+            <FadeIn i={1}>
+              <Row style={{ alignItems: 'flex-end', gap: 10, paddingTop: 4, paddingHorizontal: 4 }}>
+                <View style={{ flex: 1, gap: 2 }}>
+                  <Row style={{ gap: 8 }}>
+                    <Txt v="label">{DAYL[p.day]} {dateOf(p.day, p.week)}</Txt>
+                    {isToday && <Tag label="Today" bg={c.surface2} fg={c.ink} />}
+                    {!!plan.done && <Tag label="Logged" bg={c.goodSoft} fg={c.good} />}
+                    {!plan.done && rel < 0 && <Tag label="Not logged" bg={c.warnSoft} fg={c.warn} />}
                   </Row>
-                </Row>
-                <Row style={{ marginTop: 4, gap: 12 }}>
-                  <Row style={{ gap: 6 }}><Dumbbell size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt style={{ fontFamily: font.bold, fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.ex.length}</Txt> exercises</Txt></Row>
-                  {!!plan.done && !!doneParts(plan).span && (
-                    <>
-                      <View accessibilityElementsHidden style={{ width: 1, height: 16, backgroundColor: c.line }} />
-                      <View accessible accessibilityLabel={`Logged ${doneParts(plan).span}`}><Row style={{ gap: 6 }}><Check size={16} color={c.good} strokeWidth={2.6} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.good }}>{doneParts(plan).span} logged</Txt></Row></View>
-                    </>
-                  )}
-                  {!!plan.time && !plan.done && (
-                    <>
-                      <View accessibilityElementsHidden style={{ width: 1, height: 16, backgroundColor: c.line }} />
-                      <View accessible accessibilityLabel={`Planned ${plan.time}`}><Row style={{ gap: 6 }}><CalendarClock size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.time} planned</Txt></Row></View>
-                    </>
-                  )}
-                </Row>
-                {canStart && <InlineStart innerRef={startRef} />}
-              </View>
-            </Row>
-            {!plan.done && rel < 0 && !paused && (
-              <View ref={startRef} collapsable={false} style={{ paddingHorizontal: 4, marginTop: 14 }}>
-                <Button kind="secondary" label="Log this workout" icon={<Dumbbell size={18} color={c.ink} />} onPress={() => openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Log workout' })} />
-              </View>
-            )}
-          </FadeIn>
-          {!!plan.done && (() => {
-            const skipped = plan.ex.filter((e) => e.res === 'skip').length;
-            const swapped = plan.ex.filter((e) => e.res === 'swap').length;
-            const logged = plan.ex.length - skipped;
-            const prs = doneParts(plan).prs;
-            // each stat is its own container with an icon; only what happened is shown (no zeros), and no progress bar
-            const tiles = [
-              { key: 'logged', icon: <Check size={18} color={c.muted} strokeWidth={2.4} />, n: String(logged), of: `of ${plan.ex.length}`, label: 'Logged' },
-              ...(swapped > 0 ? [{ key: 'swapped', icon: <ArrowRightLeft size={18} color={c.muted} />, n: String(swapped), of: '', label: 'Swapped' }] : []),
-              ...(prs > 0 ? [{ key: 'prs', icon: <Trophy size={18} color={c.muted} />, n: String(prs), of: '', label: prs === 1 ? 'PR' : 'PRs' }] : []),
-            ];
-            return (
-              <FadeIn i={2}>
-                <Row style={{ gap: 8, alignItems: 'stretch' }}>
-                  {tiles.map((t) => (
-                    <View key={t.key} accessible accessibilityLabel={`${t.n} ${t.of} ${t.label}`} style={{ flex: 1, gap: 10, padding: 14, borderRadius: radii.card, backgroundColor: c.surface2 }}>
-                      {t.icon}
-                      <View>
-                        <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xl2, lineHeight: 29 }}>{t.n}{!!t.of && <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{` ${t.of}`}</Txt>}</Txt>
-                        <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17 }}>{t.label}</Txt>
-                      </View>
-                    </View>
-                  ))}
-                </Row>
-              </FadeIn>
-            );
-          })()}
-          {!!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ marginTop: 4 }}><Svg width="100%" height={2}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg></View><ListCard icon={<StretchIcon size={22} color={c.ink} />} title="Warm-up" rows={plan.wu} done={!!plan.done} /></FadeIn>}
-          {/* a heading stays close to its own card (8 px); the sections are 24 px apart */}
-          <FadeIn i={3} style={{ gap: 8 }}>
-            <SectionLabel variant="section" icon={<Dumbbell size={20} color={c.ink} />}>Main workout</SectionLabel>
-            <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
-              {plan.ex.map((e, i) => {
-                const tag = e.by === 'you' ? 'Edited by you' : e.by === 'created' ? 'Created by you' : e.hl ? 'New from Coach' : '';
-                return (
-                  <Highlight key={e.id} on={!!e.hl} delay={i * 80}>
-                    <Pressy accessibilityRole="button" accessibilityLabel={`${i + 1}. ${e.name}, ${exSub(e)}${tag ? `, ${tag}` : ''}. Open form video and tips`} scaleTo={0.985}
-                      onPress={() => router.push({ pathname: '/plans/exercise', params: { name: e.name, sub: exSub(e) } })}
-                      style={{ minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 8, paddingHorizontal: 4, borderBottomWidth: i < plan.ex.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-                      <ExTile name={e.name} num={String(i + 1)} />
-                      <View style={{ flex: 1, minWidth: 0 }}>
-                        <Txt style={{ fontFamily: font.medium }}>{e.name}</Txt>
-                        <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{exSub(e)}</Txt>
-                        {!!plan.done && e.res === 'swap' && <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17 }}>{`Swapped from ${e.from}`}</Txt>}
-                        {!!plan.done && e.res === 'skip' && <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: c.warn }}>Not logged</Txt>}
-                      </View>
-                      {!!tag && <Tag label={tag} bg={e.hl && !e.by ? c.accentSoft : c.surface2} fg={e.hl && !e.by ? c.accentText : c.muted} style={{ alignSelf: 'center' }} />}
-                      {plan.done ? (e.res === 'skip'
-                        ? <View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.muted }} />
-                        : <View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={14} color={c.bg} strokeWidth={3} /></View>)
-                        : <ChevronRight size={16} color={c.muted} />}
-                    </Pressy>
-                  </Highlight>
-                );
-              })}
-            </Card>
-          </FadeIn>
-          {!!plan.cd?.length && <FadeIn i={4}><ListCard icon={<Snowflake size={20} color={c.ink} />} title="Cool-down" rows={plan.cd} done={!!plan.done} /></FadeIn>}
+                  {/* the name with who made the plan beside it, small, with their photo; under it how many exercises, a thin divider and when it is planned */}
+                  <Row style={{ alignItems: 'flex-end', columnGap: 10, flexWrap: 'wrap' }}>
+                    <Txt accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, fontFamily: font.regular, fontSize: fontSizes.xl5Plus, lineHeight: 49, letterSpacing: -1.5 }}>{plan.name}</Txt>
+                    <Row style={{ gap: 6, paddingBottom: 9 }}>
+                      <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 16 }}>by</Txt>
+                      <PersonAvatar who={plan.created ? 'me' : 'coach'} size={18} />
+                      <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 16 }}>{plan.created ? 'you' : 'Coach Vikram'}</Txt>
+                    </Row>
+                  </Row>
+                  <Row style={{ marginTop: 4, gap: 12 }}>
+                    <Row style={{ gap: 6 }}><Dumbbell size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt style={{ fontFamily: font.bold, fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.ex.length}</Txt> exercises</Txt></Row>
+                    {!!plan.done && !!doneParts(plan).span && (
+                      <>
+                        <View accessibilityElementsHidden style={{ width: 1, height: 16, backgroundColor: c.line }} />
+                        <View accessible accessibilityLabel={`Logged ${doneParts(plan).span}`}><Row style={{ gap: 6 }}><Check size={16} color={c.good} strokeWidth={2.6} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.good }}>{doneParts(plan).span} logged</Txt></Row></View>
+                      </>
+                    )}
+                    {!!plan.time && !plan.done && (
+                      <>
+                        <View accessibilityElementsHidden style={{ width: 1, height: 16, backgroundColor: c.line }} />
+                        <View accessible accessibilityLabel={`Planned ${plan.time}`}><Row style={{ gap: 6 }}><CalendarClock size={16} color={c.muted} /><Txt style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{plan.time} planned</Txt></Row></View>
+                      </>
+                    )}
+                  </Row>
+                  {canStart && <InlineStart innerRef={startRef} />}
+                </View>
+              </Row>
+              {!plan.done && rel < 0 && !paused && (
+                <View ref={startRef} collapsable={false} style={{ paddingHorizontal: 4, marginTop: 14 }}>
+                  <Button kind="secondary" label="Log this workout" icon={<Dumbbell size={18} color={c.ink} />} onPress={() => openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Log workout' })} />
+                </View>
+              )}
+            </FadeIn>
+          )}
+          {!!plan.done && <FadeIn i={2} style={{ gap: 18 }}><LoggedFeel /><LoggedNumbers ex={plan.ex} /></FadeIn>}
+          {!plan.done && !!plan.wu?.length && <FadeIn i={2} style={{ gap: 14 }}><View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ marginTop: 4 }}><Svg width="100%" height={2}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.5} strokeWidth={1} strokeDasharray="3 3" /></Svg></View><ListCard icon={<StretchIcon size={22} color={c.ink} />} title="Warm-up" rows={plan.wu} done={!!plan.done} /></FadeIn>}
+          {plan.done ? <FadeIn i={3}><LoggedExercises ex={plan.ex} /></FadeIn> : (
+          <>
+            {/* a heading stays close to its own card (8 px); the sections are 24 px apart */}
+            <FadeIn i={3} style={{ gap: 8 }}>
+              <SectionLabel variant="section" icon={<Dumbbell size={20} color={c.ink} />}>Main workout</SectionLabel>
+              <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
+                {plan.ex.map((e, i) => {
+                  const tag = e.by === 'you' ? 'Edited by you' : e.by === 'created' ? 'Created by you' : e.hl ? 'New from Coach' : '';
+                  return (
+                    <Highlight key={e.id} on={!!e.hl} delay={i * 80}>
+                      <Pressy accessibilityRole="button" accessibilityLabel={`${i + 1}. ${e.name}, ${exSub(e)}${tag ? `, ${tag}` : ''}. Open form video and tips`} scaleTo={0.985}
+                        onPress={() => router.push({ pathname: '/plans/exercise', params: { name: e.name, sub: exSub(e) } })}
+                        style={{ minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 8, paddingHorizontal: 4, borderBottomWidth: i < plan.ex.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
+                        <ExTile name={e.name} num={String(i + 1)} />
+                        <View style={{ flex: 1, minWidth: 0 }}>
+                          <Txt style={{ fontFamily: font.medium }}>{e.name}</Txt>
+                          <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{exSub(e)}</Txt>
+                          {!!plan.done && e.res === 'swap' && <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17 }}>{`Swapped from ${e.from}`}</Txt>}
+                          {!!plan.done && e.res === 'skip' && <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: c.warn }}>Not logged</Txt>}
+                        </View>
+                        {!!tag && <Tag label={tag} bg={e.hl && !e.by ? c.accentSoft : c.surface2} fg={e.hl && !e.by ? c.accentText : c.muted} style={{ alignSelf: 'center' }} />}
+                        {plan.done ? (e.res === 'skip'
+                          ? <View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.muted }} />
+                          : <View accessibilityElementsHidden style={{ width: 24, height: 24, borderRadius: radii.sm, backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}><Check size={14} color={c.bg} strokeWidth={3} /></View>)
+                          : <ChevronRight size={16} color={c.muted} />}
+                      </Pressy>
+                    </Highlight>
+                  );
+                })}
+              </Card>
+            </FadeIn>
+          </>
+          )}
+          {!!plan.done && <FadeIn i={4}><LoggedMuscles ex={plan.ex} /></FadeIn>}
+          {!!plan.done && !paused && <View style={{ marginTop: 40 }}><Button kind="secondary" label="Edit logged workout" icon={<Dumbbell size={18} color={c.ink} />} onPress={() => openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Edit logged workout' })} /></View>}
+          {!plan.done && !!plan.cd?.length && <FadeIn i={4}><ListCard icon={<Snowflake size={20} color={c.ink} />} title="Cool-down" rows={plan.cd} done={!!plan.done} /></FadeIn>}
           {rel > 0 && <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.sm }}>You can start this on {DAYL[p.day]}. Plans open on today by default.</Txt>}
-          {!!plan.done && <Button kind="secondary" small label="View in workout history" onPress={() => router.push('/plans/history')} />}
         </LockedPlan>
       ) : (
         <FadeIn i={1}>

@@ -15,6 +15,9 @@ export const light = {
   muted: '#5C6370',
   line: '#E4E8EE',
   chipLine: '#D5DAE1',
+  cardLift: '#FFFFFF',                 // a card fill, a touch lighter than the page surface
+  cardEdgeFrom: 'rgba(15,23,42,0.10)', // the 1 px gradient stroke of a card, top left
+  cardEdgeTo: 'rgba(15,23,42,0.02)',   // and bottom right
   glassEdge: 'rgba(15,23,42,0.10)',   // the thin border of an icon button on web and Android
   glassFrom: 'rgba(255,255,255,0.90)', // top left of its grey gradient
   glassTo: 'rgba(205,212,224,0.55)',   // bottom right
@@ -54,6 +57,9 @@ export const dark: Palette = {
   muted: '#9AA3B2',
   line: '#262C37',
   chipLine: 'rgba(255,255,255,0.18)',
+  cardLift: '#1C212A',
+  cardEdgeFrom: 'rgba(255,255,255,0.16)',
+  cardEdgeTo: 'rgba(255,255,255,0.02)',
   glassEdge: 'rgba(255,255,255,0.16)',
   glassFrom: 'rgba(255,255,255,0.16)',
   glassTo: 'rgba(255,255,255,0.04)',
@@ -121,6 +127,7 @@ export const onDark = {
   ripple: '#7FB4FF',     // the ripple when water reaches the target
   heart: '#FF6B7A',      // the heart icon on the Connect tile
   ember: '#F0692C',      // streak days done, the flame on the goal page
+  goldLight: '#FFD76A',  // the light end of the premium crown badge gradient
   gold: '#F5B301',       // the premium (personal training) crown badge
   flame: '#FF8A3D',      // the streak flame and its bars on the welcome screen
   stageInk: '#F4F4F6',   // the current segment of the workout progress bar on a dark stage
@@ -152,3 +159,6 @@ export function semantic(p: Palette) {
 export type Semantic = ReturnType<typeof semantic>;
 export const lightSemantic = semantic(light);
 export const darkSemantic = semantic(dark);
+
+// The colours of the demo plate drawn in the food scan frame (an illustration, not UI): the plate, its rim, the curry, the rice and the roti.
+export const plateArt = { rim: '#E9E4DA', plate: '#F7F3EC', curry: '#8C3B2A', curryLight: '#B5543C', rice: '#FFFDF6', roti: '#D9A45A' } as const;

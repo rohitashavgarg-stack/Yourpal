@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Image, ImageResizeMode, ImageSourcePropType, ImageStyle, StyleProp, Text, View } from 'react-native';
-import Svg, { Circle, Path } from 'react-native-svg';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Crown } from '@/lib/icons';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { fixed, onDark } from '@/design-system/tokens';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 
 // Drop your real files into assets/brand/ (same names) and they replace the fallbacks below:
 //   wulf-logo.jpg (gym) · trainer.jpg (Coach Vikram). The member shows a silhouette unless they add their own photo in My details.
@@ -33,13 +33,28 @@ export function GymLogoMark({ size = 40 }: { size?: number }) {
   );
 }
 
-// Gold "PT" crown for members with a personal trainer.
+// Gold "PT" crown for members with a personal trainer: a soft gold gradient disc, a ring in the page colour, a thin light edge and a fine outline crown.
 export function PremiumBadge({ size = 18 }: { size?: number }) {
   const { c } = useTheme();
   return (
-    <IconBadge accessibilityLabel="Premium, personal training member" size={size} bg={onDark.gold} borderWidth={2} borderColor={c.bg}>
-      <Crown size={Math.round(size * 0.55)} color={onDark.goldInk} strokeWidth={2.4} />
-    </IconBadge>
+    <View accessibilityLabel="Premium, personal training member" accessible style={{ width: size, height: size, borderRadius: size / 2, borderWidth: 1.5, borderColor: c.bg, overflow: 'hidden' }}>
+      <LinearGradient colors={[onDark.goldLight, onDark.gold]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Crown size={Math.round(size * 0.5)} color={onDark.goldInk} strokeWidth={2} />
+      </LinearGradient>
+      <CardEdge radius={size / 2} from={fixed.white} to={onDark.gold} />
+    </View>
+  );
+}
+
+// The member with no photo: their initials in white on a soft blue gradient, with a thin light ring.
+function Initials({ name, size, box, border }: { name: string; size: number; box: object; border: object | null }) {
+  const { c } = useTheme();
+  const letters = name.trim().split(/\s+/).slice(0, 2).map((w) => w.charAt(0).toUpperCase()).join('') || 'Y';
+  return (
+    <LinearGradient accessibilityLabel="You" colors={[c.heroFrom, c.heroTo]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[box, { alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }, border]}>
+      <Text style={{ fontFamily: font.semibold, fontSize: Math.round(size * 0.38), lineHeight: Math.round(size * 0.5), letterSpacing: 0.5, color: fixed.white }}>{letters}</Text>
+      <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: size / 2, borderWidth: 1, borderColor: fixed.white, opacity: 0.28 }} />
+    </LinearGradient>
   );
 }
 
@@ -50,18 +65,13 @@ export function PersonAvatar({ who = 'me', size = 44, ring, square, photo }: { w
   const box = { width: size, height: size, borderRadius: square ? Math.round(size * 0.28) : size / 2, flexShrink: 0 } as const;
   const border = ring ? { borderWidth: 2, borderColor: c.surface } : null;
   const premium = who === 'me' && state.sc.member === 'PT member' && size >= 36;
-  // The member with no photo gets a head-and-shoulders silhouette on a soft tint. The coach keeps the letter V.
+  // The member with no photo gets their initials on a soft blue gradient. The coach keeps the letter V.
   const fallback = who === 'coach' ? (
     <View accessibilityLabel="Coach Vikram" style={[box, { backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }, border]}>
       <Text style={{ fontFamily: font.semibold, fontSize: Math.round(size * 0.4), lineHeight: Math.round(size * 0.5), color: c.accentText }}>V</Text>
     </View>
   ) : (
-    <View accessibilityLabel="You" style={[box, { backgroundColor: c.accentSoft, overflow: 'hidden' }, border]}>
-      <Svg width={size} height={size} viewBox="0 0 84 84">
-        <Circle cx={42} cy={34} r={14} fill={c.accentText} opacity={0.85} />
-        <Path d="M14 84c0-18 12-30 28-30s28 12 28 30z" fill={c.accentText} opacity={0.85} />
-      </Svg>
-    </View>
+    <Initials name={state.profile.name} size={size} box={box} border={border} />
   );
   const custom = who === 'me' ? (photo !== undefined ? photo : state.profile.photo) : undefined;
   const face = custom

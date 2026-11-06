@@ -9,6 +9,7 @@ import { ProgressiveBlur, useScrolled } from '@/components/Glass';
 import { useToastLift } from '@/components/Overlay';
 import { font, fontSizes } from '@/design-system/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
+import { useOwnGlow } from '@/design-system/primitives/PageGlow';
 
 /** Back to the previous screen, or replace with `fallback` when there is nothing to go back to. */
 export const goBack = (fallback: string = '/(tabs)') => (router.canGoBack() ? router.back() : router.replace(fallback as any));
@@ -52,6 +53,7 @@ export type SubPageProps = {
 function ToastLift({ value }: { value: number }) { useToastLift(value); return null; }
 
 export function SubPage({ title, children, right, footer, fallback, variant = 'shell', close, gap = 12, titleIcon, onTitlePress, scroll = true, toastLift = 24, onBack, backdrop }: SubPageProps) {
+  useOwnGlow(!!backdrop);
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { scrolled, onScroll } = useScrolled();

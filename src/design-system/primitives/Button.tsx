@@ -3,6 +3,7 @@ import { Platform, StyleProp, Text, View, ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GlassBackdrop } from '@/components/Glass';
 import { useTheme } from '@/theme/ThemeProvider';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { font, fontSizes, fixed, radii } from '@/design-system/tokens';
 import { Pressy } from './Pressy';
 
@@ -132,13 +133,15 @@ export type IconButtonProps = {
   borderWidth?: number;
   /** Not pressable, and announced as disabled. Dim it with `style` (opacity). */
   disabled?: boolean;
+  /** The card look: a slightly lighter fill with the thin gradient stroke, to sit beside a control that has the same (the Plans switch). */
+  edge?: boolean;
   /** Extra tap area around a small button, so it still reaches 44 px. */
   hitSlop?: number | { top?: number; bottom?: number; left?: number; right?: number };
   style?: StyleProp<ViewStyle>;
 };
 
 /** A rounded square (44 px by default) with one icon or sign in it: close, back, minus, plus, play. `width` makes it a pill. */
-export function IconButton({ label, onPress, children, bg, style, glass, scaleTo, size = 44, width, radius = radii.lg, borderColor, borderWidth, disabled, hitSlop }: IconButtonProps) {
+export function IconButton({ label, onPress, children, bg, style, glass, scaleTo, size = 44, width, radius = radii.lg, borderColor, borderWidth, disabled, hitSlop, edge }: IconButtonProps) {
   const { c, isDark } = useTheme();
   // On web and Android a glass button (the back and close button at the top of a page) gets a thin border and a soft grey gradient that echo the iOS glass (iPhone draws the real glass). Every other icon button is plain.
   const mimic = Platform.OS !== 'ios' && !!glass;
@@ -146,13 +149,14 @@ export function IconButton({ label, onPress, children, bg, style, glass, scaleTo
   const rim = glass ? { shadowColor: fixed.shadow, shadowOpacity: isDark ? 0.35 : 0.1, shadowRadius: 10, shadowOffset: { width: 0, height: 3 }, elevation: 3 } : null;
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: !!disabled }} onPress={onPress} scaleTo={scaleTo} disabled={disabled} hitSlop={hitSlop}
-      style={[{ width: width ?? size, height: size, borderRadius: radius, ...(width ? { flexDirection: 'row' as const } : null), backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center', ...(borderWidth ? { borderWidth, borderColor } : mimic ? { borderWidth: 1, borderColor: c.glassEdge } : null) }, rim, style]}>
-      {mimic ? <LinearGradient pointerEvents="none" colors={[c.glassFrom, c.glassTo]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius }} /> : null}
+      style={[{ width: width ?? size, height: size, borderRadius: radius, ...(width ? { flexDirection: 'row' as const } : null), backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center', ...(borderWidth ? { borderWidth, borderColor } : null) }, rim, style]}>
       {glass ? (
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radii.lg, overflow: 'hidden' }}>
-          <GlassBackdrop radius={22} tint={Platform.OS === 'web' ? (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.82)') : undefined} />
+          <GlassBackdrop radius={22} tint={Platform.OS === 'web' ? (isDark ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.5)') : undefined} />
         </View>
       ) : null}
+      {mimic ? <LinearGradient pointerEvents="none" colors={[c.glassFrom, c.glassTo]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius }} /> : null}
+      {mimic || edge ? <CardEdge radius={radius} /> : null}
       {glass ? <View style={{ zIndex: 2 }}>{children}</View> : children}
     </Pressy>
   );

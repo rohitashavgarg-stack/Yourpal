@@ -7,6 +7,7 @@ import { Pressy, Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { SubPage as DSSubPage, SubPageProps } from '@/design-system/primitives/SubPage';
 import { IconButton } from '@/design-system/primitives/Button';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
@@ -23,6 +24,7 @@ export function PCard({ onPress, label, children, style }: { onPress?: () => voi
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} scaleTo={0.98}
       style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 10 }, cardShadow(isDark), style]}>
       {children}
+      <CardEdge radius={radii.xl} />
     </Pressy>
   );
 }

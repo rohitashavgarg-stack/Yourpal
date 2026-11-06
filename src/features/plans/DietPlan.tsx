@@ -168,7 +168,7 @@ function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
   let kc = 0, mp = 0; items.forEach((i) => { if (i.st !== 'skipped') { kc += i.k * i.por; mp += i.p * i.por; } });
   const sub = (all ? 'All eaten' : eaten ? `${eaten} of ${total} eaten` : `${items.length} items`) + (simple ? '' : ` · ~${Math.round(kc)} kcal · P ${Math.round(mp)} g`);
   const paused = useLogsPaused();
-  const addElse = () => router.push({ pathname: '/plans/log', params: { meal: mid } });
+  const addElse = () => openSheet(<QuickLogSheet mealId={mid} mode="scan" />, { label: 'Ate something else' });
   // The meal has no check of its own: foods are checked one by one. The time it was eaten shows once a food is checked, and can be changed.
   const at = mealLog(d, mid).at;
   const pickTime = () => openSheet(<TimeSheet title={`When did you eat ${m.n}?`} initial={at ?? d.min} max={d.min} onSave={(v) => A.setMealTime(mid, v)} />, { label: 'Ate at' });

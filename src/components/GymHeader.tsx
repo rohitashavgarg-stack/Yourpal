@@ -17,25 +17,13 @@ import { useDomain } from '@/lib/domain';
 import { haptic } from '@/lib/haptics';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
-import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed, round } from '@/design-system/tokens';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 
 export const Avatar = ({ size = 44 }: { size?: number }) => <PersonAvatar who="me" size={size} />;
 export const GymLogo = GymLogoMark;
 
 const lift = { shadowColor: fixed.shadow, shadowOpacity: 0.08, shadowRadius: 12, shadowOffset: { width: 0, height: 3 }, elevation: 3 } as const;
-
-// A rounded glass container; children sit above the blur.
-function GlassShell({ radius, style, children }: { radius: number; style: any; children: React.ReactNode }) {
-  // Only the glass is clipped to the rounded shape; the content (like the Premium crown on the photo) may reach past the edge.
-  return (
-    <View style={[{ borderRadius: radius }, style]}>
-      <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius, overflow: 'hidden' }}>
-        <GlassBackdrop radius={radius} />
-      </View>
-      {React.Children.map(children, (ch) => (ch == null || ch === false ? ch : <View style={{ zIndex: 2, flexShrink: 1 }}>{ch}</View>))}
-    </View>
-  );
-}
 
 export function GymHeader() {
   const { c } = useTheme();
@@ -63,14 +51,15 @@ export function GymHeader() {
       </Pressy>
       )}
       <View style={{ flex: 1 }} />
-      {/* The bell has its own round glass button; the profile photo stands on its own beside it. */}
+      {/* The bell is the same size as the profile photo: a round button with the card fill and the thin gradient stroke. */}
       <View style={[{ width: 44, height: 44, borderRadius: radii.lg }, lift]}>
-        <GlassShell radius={22} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ width: 44, height: 44, borderRadius: round(44), backgroundColor: c.cardLift, alignItems: 'center', justifyContent: 'center' }}>
+          <CardEdge radius={round(44)} />
           <Pressy accessibilityRole="button" accessibilityLabel={unread ? `Notifications, ${unread} unread` : 'Notifications'} onPress={() => router.push('/notifications')} style={{ width: 44, height: 44, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center' }}>
             <Bell size={19} color={c.ink} />
             {unread > 0 && <StatusDot size={10} color={c.danger} style={{ position: 'absolute', top: 9, right: 10 }} />}
           </Pressy>
-        </GlassShell>
+        </View>
       </View>
       <Pressy accessibilityRole="button" accessibilityLabel="Profile" onPress={() => router.push('/profile')} style={[{ width: 44, height: 44, borderRadius: radii.lg }, lift]} hitSlop={4}>
         <Avatar size={44} />
