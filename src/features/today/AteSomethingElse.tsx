@@ -79,7 +79,7 @@ export function AteSomethingElse({ mealId, backTo }: { mealId: MealId; backTo?: 
         <View style={{ flex: 1 }}>
           <Field accessibilityLabel="Describe what to log" value={text} onChangeText={setText} placeholder="Describe what to log" returnKeyType="send"
             onFocus={() => toChat({})} onSubmitEditing={() => text.trim() && toChat({ text: text.trim() })}
-            trailing={<Pressy accessibilityRole="button" accessibilityLabel="Dictate" onPress={() => toChat({})} hitSlop={8}><Mic size={22} color={c.muted} /></Pressy>} />
+            trailing={<Pressy accessibilityRole="button" accessibilityLabel="Dictate" onPress={() => toChat({})} hitSlop={8}><Mic size={21} color={c.muted} /></Pressy>} />
         </View>
       </Row>
     </>

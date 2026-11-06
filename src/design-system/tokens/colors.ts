@@ -16,8 +16,8 @@ export const light = {
   line: '#E4E8EE',
   chipLine: '#D5DAE1',
   cardLift: '#FFFFFF',                 // a card fill, a touch lighter than the page surface
-  cardEdgeFrom: 'rgba(15,23,42,0.10)', // the 1 px gradient stroke of a card, top left
-  cardEdgeTo: 'rgba(15,23,42,0.02)',   // and bottom right
+  cardEdgeFrom: 'rgba(15,23,42,0.07)', // the thin gradient stroke of a card, top left
+  cardEdgeTo: 'rgba(15,23,42,0.015)',   // and bottom right
   glassEdge: 'rgba(15,23,42,0.10)',   // the thin border of an icon button on web and Android
   glassFrom: 'rgba(255,255,255,0.90)', // top left of its grey gradient
   glassTo: 'rgba(205,212,224,0.55)',   // bottom right
@@ -58,8 +58,8 @@ export const dark: Palette = {
   line: '#262C37',
   chipLine: 'rgba(255,255,255,0.18)',
   cardLift: '#1C212A',
-  cardEdgeFrom: 'rgba(255,255,255,0.16)',
-  cardEdgeTo: 'rgba(255,255,255,0.02)',
+  cardEdgeFrom: 'rgba(255,255,255,0.09)',
+  cardEdgeTo: 'rgba(255,255,255,0.015)',
   glassEdge: 'rgba(255,255,255,0.16)',
   glassFrom: 'rgba(255,255,255,0.16)',
   glassTo: 'rgba(255,255,255,0.04)',

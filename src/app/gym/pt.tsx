@@ -14,18 +14,18 @@ import { LineRow, ListCard as CardList } from '@/features/shell/parts';
 import { PT_STATS, PT_TOTAL } from '@/features/gym/data';
 import { useGoalV2 } from '@/features/goalv2/model';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
-import { CalendarCheck, ClipboardCheck, Dumbbell, MessageCircle, Salad, Target, TrendingUp } from '@/lib/icons';
+import { CalendarCheck, CalendarClock, Dumbbell, Eye, HandHeart, Target, TrendingUp, UserCheck } from '@/lib/icons';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
-// What personal training gives a member: an icon, a short title and one short line each.
+// What only personal training gives a member: an icon, a short title and one short line each. Nothing a regular member already has (the plans, the progress checks,
+// the chat with the coach) is listed here.
 const BENEFITS = [
-  { Icon: Dumbbell, t: 'Workout plan for you', s: 'Built around your goal' },
-  { Icon: Salad, t: 'Diet plan for you', s: 'Fits your food and your day' },
-  { Icon: TrendingUp, t: 'Adjusts as you log', s: 'Changes when your progress does' },
-  { Icon: ClipboardCheck, t: 'Progress checks', s: 'Assessments that show how you improve' },
-  { Icon: CalendarCheck, t: 'Regular sessions', s: 'Time with your coach' },
-  { Icon: MessageCircle, t: 'Ask your coach', s: 'Chat about form, your plan or food' },
+  { Icon: UserCheck, t: 'One-on-one sessions', s: 'Your coach works only with you' },
+  { Icon: Eye, t: 'Form checked in person', s: 'Fix a lift while you do it' },
+  { Icon: CalendarClock, t: 'Sessions at fixed times', s: 'Slots that fit your week' },
+  { Icon: HandHeart, t: 'A coach who knows you', s: 'Your goal, habits and past sessions' },
+  { Icon: TrendingUp, t: 'A plan that adjusts as you log', s: 'Coach Vikram changes it as your progress does' },
 ] as const;
 
 export default function PersonalTraining() {

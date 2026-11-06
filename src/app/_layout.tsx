@@ -23,6 +23,8 @@ import { fixed } from '@/design-system/tokens';
 // On the phone the native stack does this (see the Stack.Screen options below). The web stack has no transitions, so this wrapper adds them there.
 const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'log-chat', 'food-library', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
 const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
+// The pages a Progress card opens. They grow out of the card (and drag away) on their own, drawn over the page underneath, so the stack adds no slide and no background.
+const CARD_PAGES = ['progress/streaks', 'progress/metric', 'progress/lift', 'progress/photos', 'progress/muscles', 'gym/attendance', 'gym/assessments', 'gym/membership', 'gym/pt'];
 // Web only: the stack drops a popped screen at once, so the slide-out is played first, then the real back runs.
 // True for a moment after a back: a screen that mounts then is being revealed, not pushed, so it must not slide in.
 let popping = false;
@@ -48,7 +50,7 @@ if (Platform.OS === 'web' && typeof document !== 'undefined' && !document.getEle
   document.head.appendChild(st);
 }
 function Transition({ name, children }: { name: string; children: React.ReactNode }) {
-  if (NO_TRANSITION.includes(name)) return <>{children}</>;
+  if (NO_TRANSITION.includes(name) || CARD_PAGES.includes(name)) return <>{children}</>;
   const bottom = FROM_BOTTOM.includes(name);
   if (Platform.OS !== 'web' && !bottom) return <>{children}</>; // phone: back screens use the native push
   return <Slide name={name} bottom={bottom}>{children}</Slide>;
@@ -174,6 +176,10 @@ function AppShell() {
             <Stack.Screen name="login" options={{ animationTypeForReplace: 'pop' } as any} />
             {/* The first screen has nothing behind it, so no back swipe. */}
             <Stack.Screen name="welcome" options={{ animationTypeForReplace: 'pop', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
+            {/* Pages opened from a Progress card sit over the page underneath, with no background of their own, so it shows while they are dragged away. */}
+            {CARD_PAGES.map((n) => (
+              <Stack.Screen key={n} name={n} options={{ presentation: 'transparentModal', animation: 'none', contentStyle: { backgroundColor: 'transparent' }, gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
+            ))}
             {/* Close-button (X) screens open from the bottom. */}
             {FROM_BOTTOM.map((n) => (
               <Stack.Screen key={n} name={n} options={{ presentation: 'transparentModal', animation: 'none', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />

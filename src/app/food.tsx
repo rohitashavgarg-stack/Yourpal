@@ -150,9 +150,9 @@ export default function FoodDetail() {
               <Txt style={{ fontFamily: font.semibold, paddingHorizontal: 4, paddingTop: 6 }}>Ingredients</Txt>
               <Card style={{ paddingVertical: 4, paddingHorizontal: 16 }}>
                 {db.ing.map(([n, q, kc], i) => (
-                  <Row key={n} style={{ gap: 10, minHeight: 58, borderBottomWidth: i < db.ing.length - 1 ? 1 : 0, borderBottomColor: c.line, borderStyle: 'dashed' }}>
+                  <Row key={n} style={{ gap: 10, minHeight: 76, borderBottomWidth: i < db.ing.length - 1 ? 1 : 0, borderBottomColor: c.line, borderStyle: 'dashed' }}>
                     <View style={{ flex: 1 }}><Txt style={{ fontFamily: font.medium }}>{n}</Txt><Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{kc} kcal</Txt></View>
-                    <Chip label={q} />
+                    <Chip label={q} size="lg" filled outlined style={{ alignSelf: 'center' }} />
                   </Row>
                 ))}
               </Card>
