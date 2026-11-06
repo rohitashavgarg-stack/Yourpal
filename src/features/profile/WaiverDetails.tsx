@@ -1,4 +1,5 @@
 import React from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FileText } from '@/lib/icons';
@@ -30,14 +31,16 @@ export function WaiverDetails({ sig }: { sig: Sig }) {
           <Chip label={fmtSigned(sig.signedAt)} />
         </Row>
       </View>
-      <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 8 }}>
+      <View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 8 }}>
+        <CardEdge radius={radii.lg} />
         <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Your signature</Txt>
         <View style={{ width: 220 }}><Signature d={sig.path} w={sig.w} h={sig.h} color={c.ink} /></View>
         <View style={{ height: 1.5, backgroundColor: c.chipLine }} />
       </View>
       <View style={{ gap: 8 }}>
         <Txt v="label" style={{ paddingHorizontal: 4 }}>WHAT YOU AGREED TO</Txt>
-        <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, overflow: 'hidden' }}>
+        <View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, overflow: 'hidden' }}>
+          <CardEdge radius={radii.lg} />
           {WAIVER_POINTS.map((t, i) => (
             <Row key={i} style={{ gap: 12, alignItems: 'flex-start', padding: 16, borderBottomWidth: i === WAIVER_POINTS.length - 1 ? 0 : 1, borderBottomColor: c.line }}>
               <View style={{ width: 28, height: 28, borderRadius: radii.pill, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}>

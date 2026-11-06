@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/refs -- the slider's touch handler reads the latest value through a ref */
 import React, { useMemo, useRef, useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { PanResponder, View } from 'react-native';
 import { Volume1, Volume2 } from '@/lib/icons';
 import { Button, Row, Txt } from '@/components/ui';
@@ -60,7 +61,8 @@ export default function SoundSettings() {
   const save = (p: Partial<NonNullable<typeof t>>) => setProfile({ timer: { ...t, ...p } });
   return (
     <SubPage title="Sound" fallback="/profile">
-      <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14 }}>
+      <View style={{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 18, gap: 14 }}>
+        <CardEdge radius={radii.xl} />
         <Row style={{ justifyContent: 'space-between' }}>
           <View style={{ flex: 1, gap: 1 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>Timer buzzer</Txt>

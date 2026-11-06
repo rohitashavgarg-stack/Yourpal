@@ -8,7 +8,8 @@ export function useStartWorkout() {
   const { set } = useDomain();
   return () => {
     haptic.medium();
-    set({ session: newSession() });
+    // open the page first; the session is set right after, so the Today card does not flip to its live state before the page shows
     router.push('/workout');
+    setTimeout(() => set({ session: newSession() }), 60);
   };
 }

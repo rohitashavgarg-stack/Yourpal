@@ -1,4 +1,5 @@
 import React from 'react';
+import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { ChevronRight, ClipboardCheck } from '@/lib/icons';
@@ -54,7 +55,7 @@ export default function GymAssessments() {
   const total = entries.length;
   const when = daysLeft <= 0 ? 'Today' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`;
   return (
-    <SubPage title="Assessments" fallback="/gym">
+    <SubPage title="Assessments" fallback="/gym" backdrop={<TopGlow color={c.accent} />}>
       <Txt v="label" style={{ paddingHorizontal: 6 }}>UPCOMING</Txt>
       <Card style={{ padding: 16, gap: 12 }}>
         <Row style={{ gap: 12 }}>

@@ -5,8 +5,8 @@ import type { Payment } from '@/features/reports/payments';
 
 // A member can hold several gym memberships at the same time (for example an annual plan and a quarterly plan),
 // and keeps the old ones as history. These are sample memberships; the real list comes from the gym.
-export type MStatus = 'Active' | 'Suspended' | 'Expired';
-export type MTab = 'Active' | 'Suspended' | 'Past';
+export type MStatus = 'Active' | 'Upcoming' | 'Suspended' | 'Expired';
+export type MTab = 'Active' | 'Suspended' | 'Past'; // an Upcoming membership has no tab of its own: it shows on Active, under a "Starts next" heading
 export type Membership = {
   id: string; name: string; start: string; end: string; status: MStatus;
   pct: number;       // how much of the time has gone, 0 to 100
@@ -23,7 +23,7 @@ export type Membership = {
 export const fromAdmin = (s: 'Active' | 'Frozen' | 'Suspended' | 'Expired' | 'Transferred'): MStatus =>
   s === 'Suspended' ? 'Suspended' : s === 'Expired' || s === 'Transferred' ? 'Expired' : 'Active';
 
-export const tabOf = (m: Membership): MTab => (m.status === 'Active' ? 'Active' : m.status === 'Suspended' ? 'Suspended' : 'Past');
+export const tabOf = (m: Membership): MTab => (m.status === 'Active' || m.status === 'Upcoming' ? 'Active' : m.status === 'Suspended' ? 'Suspended' : 'Past');
 export const MTABS: MTab[] = ['Active', 'Suspended', 'Past'];
 
 const pay = (id: string, no: string, item: string, date: string, amount: number, method: string): Payment => ({ id, no, item, date, amount, method });
@@ -47,9 +47,15 @@ export function useMemberships(): Membership[] {
   const second: Membership = d.membership === 'Active'
     ? { id: 'm2', name: 'Quarterly plan', price: 4500, next: { item: 'Quarterly membership renewal', due: '31 Oct 2026', amount: 4500 }, start: '1 Aug 2026', end: '31 Oct 2026', status: 'Active', pct: 70, note: 'Ends in 37 days', left: { n: '37', unit: 'days left' }, payments: [pay('p3', 'INV-2026-0189', 'Quarterly membership', '1 Aug 2026', 4500, 'UPI')] }
     : { id: 'm2', name: 'Quarterly plan', price: 4500, start: '1 Aug 2026', end: '20 Sep 2026', status: 'Expired', pct: 100, note: 'Ended on 20 Sep 2026', left: { n: '0', unit: 'days left' }, payments: [pay('p3', 'INV-2026-0189', 'Quarterly membership', '1 Aug 2026', 4500, 'UPI')] };
+  // A plan the member has already bought that starts when the current one ends. Nothing runs on it yet, so it has no bar; it starts the day after the main plan.
+  const upcoming: Membership = {
+    id: 'm6', name: 'Annual plan', price: 12000, start: d.membership === 'Active' ? '15 Oct 2027' : d.membership === 'Expiring' ? '7 Oct 2026' : '22 Sep 2026', end: d.membership === 'Active' ? '14 Oct 2028' : d.membership === 'Expiring' ? '6 Oct 2027' : '21 Sep 2027',
+    status: 'Upcoming', pct: 0, note: d.membership === 'Active' ? 'Starts on 15 Oct 2027, when your current plan ends' : d.membership === 'Expiring' ? 'Starts on 7 Oct 2026, when your current plan ends' : 'Starts on 22 Sep 2026', left: { n: '12', unit: 'months' }, payments: [pay('p7', 'INV-2026-0388', 'Annual membership', '30 Oct 2026', 12000, 'front desk')],
+  };
   return [
     main,
     second,
+    upcoming,
     { id: 'm3', name: 'Student plan', price: 3000, start: '1 Jan 2026', end: '31 Mar 2027', status: 'Suspended', pct: 55, note: 'Suspended by the gym. Ask at the front desk.', left: { n: '—', unit: 'suspended' }, payments: [pay('p4', 'INV-2026-0007', 'Student membership', '1 Jan 2026', 3000, 'cash')] },
     { id: 'm4', name: 'Monthly plan', price: 1500, start: '1 Jun 2025', end: '30 Jun 2025', status: 'Expired', pct: 100, note: 'Ended on 30 Jun 2025', left: { n: '0', unit: 'days left' }, payments: [pay('p5', 'INV-2025-0201', 'Monthly membership', '1 Jun 2025', 1500, 'cash')] },
     { id: 'm5', name: 'Joining offer', price: 3600, start: '1 Mar 2025', end: '31 May 2025', status: 'Expired', pct: 100, note: 'Ended on 31 May 2025', left: { n: '0', unit: 'days left' }, payments: [pay('p6', 'INV-2025-0102', 'Joining offer', '1 Mar 2025', 3600, 'UPI')] },
