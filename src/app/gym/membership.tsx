@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { View } from 'react-native';
@@ -31,7 +32,8 @@ function MembershipCard({ m }: { m: Membership }) {
   const { c } = useTheme();
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`${m.name}, ${m.status}. ${m.note}`} onPress={() => router.push({ pathname: '/gym/membership-detail', params: { id: m.id } })} scaleTo={0.985}
-      style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 10 }}>
+      style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 10 }}>
+      <CardEdge radius={radii.lg} />
       <Row style={{ justifyContent: 'space-between' }}>
         <Txt style={{ flex: 1, fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{m.name}</Txt>
         <StatusChip m={m} />

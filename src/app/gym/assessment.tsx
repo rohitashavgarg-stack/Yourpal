@@ -1,10 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { Activity, ClipboardList, Droplet, Droplets, Dumbbell, Footprints, Gauge, Heart, HeartPulse, Medal, Moon, Percent, PersonStanding, Ruler, Scale, ShieldCheck, Wind, Zap } from '@/lib/icons';
+import { Activity, ClipboardCheck, ClipboardList, Droplet, Droplets, Dumbbell, Footprints, Gauge, Heart, HeartPulse, Medal, Moon, Percent, PersonStanding, Ruler, Scale, ShieldCheck, Wind, Zap } from '@/lib/icons';
 import { Row, Txt } from '@/components/ui';
 import { Tag } from '@/components/bits';
 import { PersonAvatar } from '@/components/Brand';
+import { TopGlow } from '@/design-system/primitives/TopGlow';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
@@ -30,6 +32,8 @@ const NUM_ICON: Record<NumKey, typeof Ruler> = {
 
 // The trainer's notes: each one has its own icon.
 const HABIT_ICON: Record<string, typeof Activity> = { activity: Activity, freq: Dumbbell, water: Droplets, level: Medal, flex: PersonStanding, injuries: ShieldCheck };
+
+const HABIT_TONE = (k: string, c: ReturnType<typeof useTheme>['c']) => ({ activity: c.cAct, freq: c.cAct, water: c.cWater, level: c.accent, flex: c.cSleep, injuries: c.cHeart } as Record<string, string>)[k] ?? c.accent;
 
 // A change since the assessment before: green when it is better, quiet grey when it is the same or not better. Never red.
 function Change({ diff, good }: { diff: number; good: boolean }) {
@@ -79,8 +83,9 @@ export default function Assessment() {
     .map((r, j) => ({ color: judged.length === 0 ? tone[k] : r.good ? c.good : '', start: j === 0 })));
   return (
     // No text in the header bar: the heading and the pills sit below it, centred.
-    <SubPage title="" fallback="/gym/assessments">
+    <SubPage title="" fallback="/gym/assessments" backdrop={<TopGlow color={c.good} />}>
       <View style={{ alignItems: 'center', gap: 12, paddingTop: 12 }}>
+        <IconBadge size={64} radius={radii.xl} bg={c.goodSoft}><ClipboardCheck size={32} strokeWidth={1.9} color={c.good} /></IconBadge>
         <Txt accessibilityRole="header" v="title" style={{ textAlign: 'center' }}>{`Assessment ${n}`}</Txt>
         <Row style={{ gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
           <Chip filled outlined size="lg" label={fmtAt(entry.at)} />
@@ -92,7 +97,7 @@ export default function Assessment() {
             <Row style={{ alignItems: 'flex-start', alignSelf: 'stretch' }}>
               {keyRows.map((r) => (
                 <View key={r.k} accessible accessibilityLabel={`${r.n.label} ${r.now} ${r.n.unit}`} style={{ flex: 1, alignItems: 'center', gap: 4 }}>
-                  <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 38, letterSpacing: -0.8 }}>{String(r.now)}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.md, color: c.muted }}>{` ${r.n.unit}`}</Txt></Txt>
+                  <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl6, lineHeight: 52, letterSpacing: -1.4 }}>{String(r.now)}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.base, color: c.muted }}>{` ${r.n.unit}`}</Txt></Txt>
                   <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{r.n.label}</Txt>
                   {r.prev != null ? <Change diff={r.diff} good={r.good} /> : null}
                 </View>
@@ -127,7 +132,7 @@ export default function Assessment() {
                 const I = NUM_ICON[r.k];
                 return (
                   <Row key={r.k} style={{ minHeight: 60, gap: 12, alignItems: 'center' }}>
-                    <View style={{ width: 36, height: 36, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><I size={18} color={c.ink} /></View>
+                    <View style={{ width: 38, height: 38, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><CardEdge radius={radii.md} /><I size={19} strokeWidth={1.9} color={c.ink} /></View>
                     <Txt style={{ flex: 1, fontFamily: font.medium }}>{r.n.label}</Txt>
                     {/* the number with its unit, right aligned, then (only when there is an assessment before) the change in a column of its own */}
                     <Row style={{ gap: 5, alignItems: 'baseline', justifyContent: 'flex-end' }}>
@@ -151,7 +156,7 @@ export default function Assessment() {
             <Row style={{ gap: 8, flexWrap: 'wrap' }}>
               {habits.map(([k, v]) => {
                 const I = HABIT_ICON[k] ?? ClipboardList;
-                return <Chip key={k} filled size="lg" label={`${habitLabel[k]}: ${v}`} icon={<I size={18} color={c.ink} />} />;
+                return <Chip key={k} filled outlined edge size="lg" label={`${habitLabel[k]}: ${v}`} icon={<I size={18} color={HABIT_TONE(k, c)} />} />;
               })}
             </Row>
           </View>
