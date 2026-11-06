@@ -329,7 +329,7 @@ function SidePanel({ height, phoneW }: { height: number; phoneW: number }) {
   const width = Math.min(room, 310);
   return (
     <View style={{ width, maxHeight: Math.max(height, win.height - 48), flexGrow: 0, flexShrink: 0 }}>
-      <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: 20, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 8 }}><PanelBody /></ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: radii.block, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 8 }}><PanelBody /></ScrollView>
     </View>
   );
 }

@@ -8,6 +8,9 @@ import { Field, Pressy, Row, Txt } from '@/components/ui';
 import { Button, IconButton } from '@/design-system/primitives/Button';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { FoodCard } from '@/design-system/patterns/FoodCard';
+import { ChatBar } from '@/design-system/patterns/ChatBar';
+import { GrowFrame, type GrowHandle } from '@/design-system/primitives/SubPage';
+import { takeCardOrigin } from '@/lib/cardGrow';
 import { useOverlay } from '@/components/Overlay';
 import { KCAL_TARGET, MealId, parseFood, Parsed, SCAN_RESULT } from '@/lib/data';
 import { mealLog, totals, useDomain } from '@/lib/domain';
@@ -37,6 +40,9 @@ export default function LogChat() {
   const [msgs, setMsgs] = useState<Msg[]>([{ id: 0, from: 'bot', text: 'Tell me what you ate. Type it, or send a photo of your plate.' }]);
   const [text, setText] = useState('');
   const scroll = useRef<ScrollViewInstance>(null);
+  const frame = useRef<GrowHandle>(null);
+  // when the sheet "Ate something else" opened this page, the page grows out of the sheet
+  const [origin] = useState(() => takeCardOrigin());
   const idRef = useRef(1);
   const started = useRef(false);
   const dRef = useRef(d);
@@ -103,12 +109,13 @@ export default function LogChat() {
   const library = () => router.push({ pathname: '/food-library', params: { mealId } });
 
   return (
+    <GrowFrame handle={frame} onClose={() => router.back()} origin={origin}>
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
       {/* no heading: only the cross, top right */}
       <Row style={{ justifyContent: 'flex-end', paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 4 }}>
         <IconButton label="Close" onPress={() => router.back()} glass><X size={20} color={c.ink} /></IconButton>
       </Row>
-      <ScrollView ref={scroll} contentContainerStyle={{ padding: 16, gap: 10, flexGrow: 1, justifyContent: 'flex-end' }} keyboardShouldPersistTaps="handled">
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} ref={scroll} contentContainerStyle={{ padding: 16, gap: 10, flexGrow: 1, justifyContent: 'flex-end' }} keyboardShouldPersistTaps="handled">
         {msgs.map((m) => (
           <FadeIn key={m.id} style={{ alignSelf: m.from === 'me' ? 'flex-end' : 'flex-start', maxWidth: m.from === 'me' ? '80%' : 'logged' in m ? '100%' : '90%' }}>
             {m.from === 'me' ? (
@@ -140,21 +147,11 @@ export default function LogChat() {
           </FadeIn>
         ))}
       </ScrollView>
-      {/* the library on the left; the camera and the mic are small and sit inside the typing box, on the right, with no container of their own */}
-      <Row style={{ gap: 8, paddingHorizontal: 16, paddingTop: 8, paddingBottom: Math.max(insets.bottom, 12) }}>
-        <IconButton label="Open the food library" onPress={library} size={56} radius={round(56)} bg={c.cardLift} edge><Library size={22} color={c.ink} /></IconButton>
-        <View style={{ flex: 1 }}>
-          <Field accessibilityLabel="Describe what to log" value={text} onChangeText={setText} placeholder="Anything else?" returnKeyType="send" autoFocus onSubmitEditing={() => send(text)}
-            trailing={(
-              <Row style={{ gap: 14 }}>
-                <Pressy accessibilityRole="button" accessibilityLabel="Choose a photo" onPress={pickPhoto} hitSlop={10}><Camera size={21} color={c.muted} /></Pressy>
-                {text.trim()
-                  ? <Pressy accessibilityRole="button" accessibilityLabel="Send" onPress={() => send(text)} hitSlop={8} style={{ width: 30, height: 30, borderRadius: round(30), backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><ArrowUp size={16} color={fixed.white} /></Pressy>
-                  : <Pressy accessibilityRole="button" accessibilityLabel="Dictate" onPress={() => toast('Tap the microphone on your keyboard to speak')} hitSlop={10}><Mic size={21} color={c.muted} /></Pressy>}
-              </Row>
-            )} />
-        </View>
-      </Row>
+      {/* the same glass message bar as the Coach Vikram chat: the food library on the left, the camera and the mic inside the pill */}
+      <ChatBar value={text} onChangeText={setText} placeholder="Anything else?" autoFocus
+        leftIcon={<Library size={22} color={c.ink} />} leftLabel="Open the food library" onLeft={library}
+        onCamera={pickPhoto} onMic={() => toast('Tap the microphone on your keyboard to speak')} onSend={() => send(text)} bottomInset={insets.bottom} />
     </KeyboardAvoidingView>
+    </GrowFrame>
   );
 }

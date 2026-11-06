@@ -85,7 +85,7 @@ export default function FoodDetail() {
 
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 120 + insets.bottom }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 + insets.bottom }}>
         <LinearGradient colors={[c.tNutri, c.bg]} style={{ paddingTop: insets.top + 12, paddingHorizontal: 16, paddingBottom: 22 }}>
           <RoundBtn label="Close" onPress={close} glass><X size={20} color={c.ink} /></RoundBtn>
           <View style={[{ marginTop: 14, marginBottom: 12, width: 96, height: 96, borderRadius: 48, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' },

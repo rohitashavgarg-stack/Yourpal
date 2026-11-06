@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { setCardOrigin } from '@/lib/cardGrow';
+import { View, type ViewInstance } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import { Camera, Images, Library, Mic, X } from '@/lib/icons';
 import { Button, Field, Pressy, Row, Txt } from '@/components/ui';
+import { ChatBar } from '@/design-system/patterns/ChatBar';
 import { IconButton } from '@/design-system/primitives/Button';
 import { useOverlay } from '@/components/Overlay';
 import type { MealId } from '@/lib/data';
@@ -19,13 +21,18 @@ import { fixed, fontSizes, radii, round } from '@/design-system/tokens';
  */
 export function AteSomethingElse({ mealId, backTo }: { mealId: MealId; backTo?: () => void }) {
   const { c } = useTheme();
-  const { closeSheet, toast } = useOverlay();
+  const { closeSheet, closeSheetNow, toast } = useOverlay();
+  const box = useRef<ViewInstance>(null);
   const [perm, askPerm] = useCameraPermissions();
   const [cam, setCam] = useState<CameraView | null>(null);
   const [text, setText] = useState('');
 
   // go to the full page: the chat takes over from the sheet
-  const toChat = (params: Record<string, string>) => closeSheet(() => router.push({ pathname: '/log-chat', params: { mealId, ...params } }));
+  const toChat = (params: Record<string, string>) => {
+    const go = () => { router.push({ pathname: '/log-chat', params: { mealId, ...params } }); setTimeout(closeSheetNow, 70); };
+    if (box.current) box.current.measureInWindow((x, y, w, h) => { if (w > 0 && h > 0) setCardOrigin({ x, y, w, h }); go(); });
+    else go();
+  };
 
   const shoot = async () => {
     if (!perm?.granted) { const r = await askPerm(); if (!r.granted) haptic.error(); return; }
@@ -44,10 +51,11 @@ export function AteSomethingElse({ mealId, backTo }: { mealId: MealId; backTo?: 
   const library = () => closeSheet(() => router.push({ pathname: '/food-library', params: { mealId } }));
 
   return (
-    <>
-      {/* no heading: just a cross at the top right */}
+    // eslint-disable-next-line react-hooks/refs -- the ref is only read when the box is tapped
+    <View ref={box} collapsable={false}>
+      {/* no heading: just a glass cross at the top right, the same glass button as the back and close buttons everywhere */}
       <Row style={{ justifyContent: 'flex-end' }}>
-        <IconButton label="Close" onPress={() => closeSheet()} size={40} radius={round(40)} bg={c.surface2}><X size={18} color={c.ink} /></IconButton>
+        <IconButton label="Close" onPress={() => closeSheet()} glass size={44} radius={round(44)}><X size={20} color={c.ink} /></IconButton>
       </Row>
       <Row style={{ gap: 10, alignItems: 'stretch' }}>
         {/* the camera: the shutter takes the photo and opens the chat, which reads the plate */}
@@ -72,16 +80,12 @@ export function AteSomethingElse({ mealId, backTo }: { mealId: MealId; backTo?: 
         </Pressy>
       </Row>
       {/* the typing box and the library button beside it: typing opens the chat */}
-      <Row style={{ gap: 8 }}>
-        <IconButton label="Open the food library" onPress={library} size={56} radius={round(56)} bg={c.cardLift} edge>
-          <Library size={22} color={c.ink} />
-        </IconButton>
-        <View style={{ flex: 1 }}>
-          <Field accessibilityLabel="Describe what to log" value={text} onChangeText={setText} placeholder="Describe what to log" returnKeyType="send"
-            onFocus={() => toChat({})} onSubmitEditing={() => text.trim() && toChat({ text: text.trim() })}
-            trailing={<Pressy accessibilityRole="button" accessibilityLabel="Dictate" onPress={() => toChat({})} hitSlop={8}><Mic size={21} color={c.muted} /></Pressy>} />
-        </View>
-      </Row>
-    </>
+      {/* the same glass message bar as the chats: the library on the left, the mic in the pill. Tapping it opens the chat page, which grows out of this sheet. */}
+      <View style={{ marginHorizontal: -12, marginBottom: -10 }}>
+        <ChatBar onSheet value={text} onChangeText={setText} placeholder="Describe what to log" onFocus={() => toChat({})}
+          leftIcon={<Library size={22} color={c.ink} />} leftLabel="Open the food library" onLeft={library}
+          onMic={() => toChat({})} onSend={() => text.trim() && toChat({ text: text.trim() })} />
+      </View>
+    </View>
   );
 }

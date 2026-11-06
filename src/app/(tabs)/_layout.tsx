@@ -15,7 +15,9 @@ export default function TabsLayout() {
     <NavHideProvider>
       <Tabs
         tabBar={(props: any) => <FloatingTabBar {...props} />}
-        screenOptions={{ headerShown: false, sceneStyle: { backgroundColor: c.bg } } as any}
+        // All four tabs are built when the app opens (lazy: false) so a tab opens at once the first time, and a tab you are not on is frozen (freezeOnBlur) so a change
+        // elsewhere does not re-draw it in the background. Switching tabs is then only a show and hide.
+        screenOptions={{ headerShown: false, sceneStyle: { backgroundColor: c.bg }, lazy: false, freezeOnBlur: true } as any}
       >
         <Tabs.Screen name="index" options={{ title: 'Today' }} />
         <Tabs.Screen name="plans" options={{ title: 'Plans' }} />

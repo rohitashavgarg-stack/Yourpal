@@ -31,7 +31,7 @@ export type TrackerRowProps = {
 export function TrackerRow({ connected, wearable, weight, steps, connect, water, health }: TrackerRowProps) {
   return (
     <View style={{ marginHorizontal: -16, gap: 6 }}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} decelerationRate="fast" accessibilityLabel="Quick trackers, swipe for more"
+      <ScrollView showsVerticalScrollIndicator={false} horizontal showsHorizontalScrollIndicator={false} decelerationRate="fast" accessibilityLabel="Quick trackers, swipe for more"
         contentContainerStyle={{ gap: 12, paddingHorizontal: 16, paddingVertical: 2 }}>
         {/* the three default trackers first: weight, steps (or connect Health), water; then the watch ones */}
         {weight}

@@ -18,9 +18,11 @@ type Ctx = {
   setToastLift: (px: number) => void;
   openSheet: (content: React.ReactNode, opts?: SheetOpts) => void;
   closeSheet: (after?: () => void) => void;
+  /** Remove the sheet at once, with no slide down: used when a page grows out of the sheet and takes its place. */
+  closeSheetNow: () => void;
   toast: (msg: string, opts?: ToastOpts) => void;
 };
-const OverlayCtx = createContext<Ctx>({ setToastLift: () => {}, openSheet: () => {}, closeSheet: () => {}, toast: () => {} });
+const OverlayCtx = createContext<Ctx>({ setToastLift: () => {}, openSheet: () => {}, closeSheet: () => {}, closeSheetNow: () => {}, toast: () => {} });
 export const useOverlay = () => useContext(OverlayCtx);
 
 // Raise toasts above screen chrome (check-in bar, rest panel) while mounted.
@@ -44,8 +46,9 @@ export function OverlayProvider({ children }: { children: React.ReactNode }) {
     if (closer.current) closer.current(after);
     else { setSheet(null); after?.(); }
   }, []);
+  const closeSheetNow = useCallback(() => { closer.current = null; setSheet(null); }, []);
   const toast = useCallback((msg: string, opts: ToastOpts = {}) => setToastMsg({ msg, undo: opts.undo, key: `toast-${++seq.current}` }), []);
-  const value = useMemo(() => ({ setToastLift, openSheet, closeSheet, toast }), [openSheet, closeSheet, toast]);
+  const value = useMemo(() => ({ setToastLift, openSheet, closeSheet, closeSheetNow, toast }), [openSheet, closeSheet, closeSheetNow, toast]);
 
   return (
     <OverlayCtx.Provider value={value}>

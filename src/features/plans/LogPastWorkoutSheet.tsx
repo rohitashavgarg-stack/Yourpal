@@ -70,7 +70,7 @@ export function LogPastWorkoutSheet({ day, week }: { day: number; week: number }
 
       <View style={{ gap: 8 }}>
         <Txt v="label">What you did</Txt>
-        <ScrollView style={{ maxHeight: 360 }} contentContainerStyle={{ gap: 6 }} nestedScrollEnabled showsVerticalScrollIndicator={false}>
+        <ScrollView showsHorizontalScrollIndicator={false} style={{ maxHeight: 360 }} contentContainerStyle={{ gap: 6 }} nestedScrollEnabled showsVerticalScrollIndicator={false}>
           {plan.ex.map((e) => {
             const sets = logged[e.id];
             const anyDone = sets.some((s) => s.done);

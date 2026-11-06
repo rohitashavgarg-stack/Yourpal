@@ -33,5 +33,5 @@ export function useGrowOpen() {
 
 // The pages a card opens with the grow animation. Only these take the card's position: a detail page opened from inside one of them (a membership, an assessment)
 // is a normal page with a back button and slides in as before.
-export const CARD_PAGES = ['progress/streaks', 'progress/metric', 'progress/lift', 'progress/photos', 'progress/muscles', 'gym/attendance', 'gym/assessments', 'gym/membership', 'gym/pt'];
+export const CARD_PAGES = ['progress/streaks', 'progress/metric', 'progress/lift', 'progress/photos', 'progress/muscles', 'gym/attendance', 'gym/assessments', 'gym/membership', 'gym/pt', 'log-chat'];
 export const isCardPage = (path: string) => CARD_PAGES.includes(path.startsWith('/') ? path.slice(1) : path);

@@ -61,7 +61,7 @@ export default function Notifications() {
       </Pressy>
     }>
       {filters.length > 2 && (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6 }} style={{ marginHorizontal: -16 }}>
+        <ScrollView showsVerticalScrollIndicator={false} horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6 }} style={{ marginHorizontal: -16 }}>
           <View style={{ width: 10 }} />
           {filters.map((f) => <Pill key={f.id} label={f.l} on={filter === f.id} onPress={() => setFilter(f.id)} />)}
           <View style={{ width: 10 }} />

@@ -22,7 +22,7 @@ import { fixed } from '@/design-system/tokens';
 
 // Screens with an X (close) open from the bottom and close back down. Screens with a back arrow come in from the right and leave to the right.
 // On the phone the native stack does this (see the Stack.Screen options below). The web stack has no transitions, so this wrapper adds them there.
-const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'log-chat', 'food-library', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
+const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'food-library', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
 const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
 // Pages opened from inside a card page (one membership, one assessment...). They are normal pages: a back arrow, and they slide in from the right and leave to the right,
 // whatever the screen under them is. They are drawn over it (a transparent presentation), so the page under a detail page never goes blank or looks like it is closing.
@@ -50,6 +50,13 @@ if (Platform.OS === 'web' && typeof document !== 'undefined' && !document.getEle
   const st = document.createElement('style');
   st.id = 'yp-icons-above-glass';
   st.textContent = 'svg.lucide{position:relative}';
+  document.head.appendChild(st);
+}
+// Web: no scroll bars anywhere (the pages still scroll). The phone does the same through showsVerticalScrollIndicator and showsHorizontalScrollIndicator on every ScrollView.
+if (Platform.OS === 'web' && typeof document !== 'undefined' && !document.getElementById('yp-no-scrollbars')) {
+  const st = document.createElement('style');
+  st.id = 'yp-no-scrollbars';
+  st.textContent = '*{scrollbar-width:none;-ms-overflow-style:none}*::-webkit-scrollbar{display:none;width:0;height:0}';
   document.head.appendChild(st);
 }
 function Transition({ name, children }: { name: string; children: React.ReactNode }) {
