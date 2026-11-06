@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values are mutated from gesture and animation callbacks */
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
-import { CardRect, takeCardOrigin } from '@/lib/cardGrow';
-import { KeyboardAvoidingView, Platform, ScrollView, View, type ViewInstance } from 'react-native';
+import { usePathname } from 'expo-router';
+import { CardRect, isCardPage, takeCardOrigin } from '@/lib/cardGrow';
+import { KeyboardAvoidingView, Platform, ScrollView, View, useWindowDimensions, type ViewInstance } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft, X } from '@/lib/icons';
@@ -66,12 +67,21 @@ function GrowFrame({ children, handle, onClose, origin }: { children: React.Reac
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const root = useRef<ViewInstance>(null);
-  const [box, setBox] = useState<CardRect | null>(null);
+  const win = useWindowDimensions();
+  // on a phone the page is the whole screen, so there is nothing to measure; on the web it sits inside the phone frame and is measured
+  const [box, setBox] = useState<CardRect | null>(Platform.OS === 'web' ? null : { x: 0, y: 0, w: win.width, h: win.height });
+  const [late, setLate] = useState(false); // the measure took too long: show the page without the grow rather than leave it hidden
   const p = useSharedValue(origin ? 0 : 1);
   const dy = useSharedValue(0); // how far the page has been dragged down
   useEffect(() => { if (origin && box) p.value = withTiming(1, { duration: 420, easing: SMOOTH }); }, [origin, box, p]);
-  // On the web the stack hides the page underneath: show it again while this page is over it.
   useEffect(() => {
+    if (!origin || box) return;
+    const t = setTimeout(() => { setLate(true); p.value = 1; }, 250);
+    return () => clearTimeout(t);
+  }, [origin, box, p]);
+  // On the web the stack hides the page underneath: show it again while this page is over it. A layout effect, so it happens before the first paint
+  // and the page underneath never flashes blank when this one opens.
+  useLayoutEffect(() => {
     if (!origin || Platform.OS !== 'web') return;
     const el = root.current as unknown as HTMLElement | null;
     let n: HTMLElement | null = el;
@@ -95,7 +105,7 @@ function GrowFrame({ children, handle, onClose, origin }: { children: React.Reac
       else dy.value = withTiming(0, { duration: 320, easing: SMOOTH });
     });
   const style = useAnimatedStyle(() => {
-    if (!origin) return {};
+    if (!origin || late) return {};
     if (!box) return { opacity: 0 };
     const t = p.value;
     const pull = Math.min(1, dy.value / 320);
@@ -109,7 +119,7 @@ function GrowFrame({ children, handle, onClose, origin }: { children: React.Reac
         { scale: (sc + (1 - sc) * t) * (1 - 0.14 * pull) },
       ],
     };
-  }, [origin, box]);
+  }, [origin, box, late]);
   const measure = () => { root.current?.measureInWindow((x, y, w, h) => { if (w > 0 && h > 0) setBox((bx) => bx ?? { x, y, w, h }); }); };
   return (
     <Animated.View ref={root as never} collapsable={false} onLayout={measure} style={[{ flex: 1, overflow: 'hidden' }, style]}>
@@ -128,7 +138,9 @@ function GrowFrame({ children, handle, onClose, origin }: { children: React.Reac
 export function SubPage({ title, children, right, footer, fallback, variant = 'shell', close, gap = 12, titleIcon, onTitlePress, scroll = true, toastLift = 24, onBack, backdrop }: SubPageProps) {
   useOwnGlow(!!backdrop);
   const frame = useRef<GrowHandle>(null);
-  const [origin] = useState(() => takeCardOrigin()); // set when a Progress card opened this page
+  const path = usePathname();
+  // set when a card opened this page; a page that is not one of the card pages still clears it, so it never goes stale
+  const [origin] = useState(() => { const o = takeCardOrigin(); return o && isCardPage(path) ? o : null; });
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { scrolled, onScroll } = useScrolled();

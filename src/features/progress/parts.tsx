@@ -8,7 +8,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
-import { setCardOrigin } from '@/lib/cardGrow';
+import { rememberCard } from '@/lib/cardGrow';
 import { SubPage as DSSubPage, SubPageProps } from '@/design-system/primitives/SubPage';
 import { IconButton } from '@/design-system/primitives/Button';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
@@ -23,10 +23,10 @@ export function PCard({ onPress, label, children, style }: { onPress?: () => voi
   const { c, isDark } = useTheme();
   // the page this card opens grows out of the card: remember where the card is just before going
   const box = React.useRef<ViewInstance>(null);
-  const press = onPress ? () => { if (box.current) box.current.measureInWindow((x, y, w, h) => { setCardOrigin({ x, y, w, h }); onPress(); }); else onPress(); } : undefined;
+  const prime = () => rememberCard(box.current);
   return (
     <View ref={box} collapsable={false}>
-    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={press} scaleTo={0.98}
+    <Pressy accessibilityRole="button" accessibilityLabel={label} onPressIn={prime} onPress={onPress} scaleTo={0.98}
       style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 10 }, cardShadow(isDark), style]}>
       {children}
       <CardEdge radius={radii.xl} />

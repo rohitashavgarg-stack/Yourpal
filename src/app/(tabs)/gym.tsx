@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs -- the cards read a ref only when they are tapped (to remember where they are for the grow animation) */
 import React from 'react';
 import { useGrowOpen } from '@/lib/cardGrow';
 import Svg, { Line } from 'react-native-svg';
@@ -41,9 +42,8 @@ function GymMembership() {
   const line = d.onBreak ? 'Paused for now' : active.length === 0 ? 'Nothing active right now' : soon ? `${active.length} active, one ends soon` : `${active.length} active, next ends on ${active[0].end}`;
   const grow = useGrowOpen();
   return (
-    // eslint-disable-next-line react-hooks/refs -- the ref is only read when the card is tapped
     <View ref={grow.ref} collapsable={false}>
-    <Pressy accessibilityRole="button" accessibilityLabel={`Memberships. ${active.length} active${soon ? ', one ending soon' : ''}. See all`} onPress={() => grow.open(() => router.push('/gym/membership'))} scaleTo={0.985}
+    <Pressy accessibilityRole="button" accessibilityLabel={`Memberships. ${active.length} active${soon ? ', one ending soon' : ''}. See all`} onPressIn={grow.prime} onPress={() => router.push('/gym/membership')} scaleTo={0.985}
       style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
       <CardEdge radius={radii.lg} />
       <Row style={{ gap: 12 }}>
@@ -238,11 +238,10 @@ function PTCard({ isPT }: { isPT: boolean }) {
   );
   if (!isPT) {
     return (
-      // eslint-disable-next-line react-hooks/refs -- the ref is only read when the card is tapped
-      <View ref={grow.ref} collapsable={false} style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+      <View ref={grow.ref} collapsable={false} onTouchStart={grow.prime} onPointerDown={grow.prime} style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
       <CardEdge radius={radii.xl} />
         {head('Personal training', 'Workout and diet from a coach')}
-        <Button kind="white" label="See how it works" onPress={() => grow.open(() => router.push('/gym/pt'))} />
+        <Button kind="white" label="See how it works" onPress={() => router.push('/gym/pt')} />
       </View>
     );
   }
