@@ -15,6 +15,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { CardKey, NEW_EMPTY, ORDER } from '@/features/progress/data';
+import { MusclesCard } from '@/features/progress/MusclesCard';
 import { MetricKey, trend } from '@/features/progress/trends';
 import { MiniBars, RangeBar, RangeBarSlim } from '@/features/progress/TrendUI';
 import { CardTitle, CornerGlow, PCard, Spark } from '@/features/progress/parts';
@@ -168,7 +169,8 @@ function StreakEntry() {
   const { c } = useTheme();
   const st = useStreak();
   return (
-    <PCard onPress={() => router.push('/progress/streaks')} label={`Streaks and badges. ${st.weeks} week streak. Open`} style={{ gap: 20 }}>
+    <PCard onPress={() => router.push('/progress/streaks')} label={`Streaks and badges. ${st.weeks} week streak. Open`} style={{ gap: 20, overflow: 'hidden' }}>
+      <CornerGlow color={FLAME} />
       <Row style={{ gap: 14 }}>
         <IconBadge size={48} radius={radii.card} bg="rgba(255,138,61,0.16)">
           <Flame size={26} color={FLAME} fill={st.weeks > 0 ? FLAME : 'transparent'} strokeWidth={2} />
@@ -179,9 +181,9 @@ function StreakEntry() {
         </View>
         <ChevronRight size={18} color={c.muted} />
       </Row>
-      <Callout size="compact" gap={8}>
+      <Callout size="xl" gap={12}>
         <ProgressSegments height={6} gap={4} segments={Array.from({ length: st.target }, (_, i) => ({ color: i < st.weekDone ? FLAME : c.surface3, label: i < st.weekDone ? 'Session done' : 'Session to do' }))} />
-        <Txt v="caption"><Txt v="caption" style={{ fontFamily: font.bold, color: c.ink }}>{st.weekDone}</Txt> of {st.target} sessions this week</Txt>
+        <Txt v="caption" style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt v="caption" style={{ fontFamily: font.bold, color: c.ink, fontSize: fontSizes.sm, lineHeight: 19 }}>{st.weekDone}</Txt> of {st.target} sessions this week</Txt>
       </Callout>
     </PCard>
   );
@@ -222,6 +224,7 @@ export default function ProgressScreen() {
       ) : (
         <>
           {!v2 && <FadeIn delay={40}><StreakEntry /></FadeIn>}
+          <FadeIn delay={60}><MusclesCard /></FadeIn>
           {cards.map((k, i) => (
             <FadeIn key={k} delay={Math.min(i, 6) * 40}><ProgressCard k={k} /></FadeIn>
           ))}

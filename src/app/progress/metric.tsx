@@ -1,6 +1,7 @@
 import React from 'react';
 import { HEALTH_NAME } from '@/lib/health';
 import { View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Button, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
@@ -29,6 +30,13 @@ import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { useMembershipState } from '@/features/gym/memberships';
 
 const TIP_UNIT: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: ' steps', water: ' L', hr: ' bpm', sleep: '', diet: ' kcal', cons: ' workouts' };
+
+// A bar under the scrolling page that holds the page's main button.
+function StickyAction({ children }: { children: React.ReactNode }) {
+  const { c } = useTheme();
+  const insets = useSafeAreaInsets();
+  return <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 16) + 6, backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>{children}</View>;
+}
 
 export default function MetricDetail() {
   const { c, isDark } = useTheme();
@@ -62,8 +70,16 @@ export default function MetricDetail() {
     : k === 'weight' ? [{ l: 'Started', v: '74.5 kg · 2 Sep' }] : [];
   const rows = [...t.stats, ...extra];
 
+  // The main action sticks to the bottom of the page, so it is always in reach however far the chart and numbers scroll.
+  const action = k === 'steps' ? <Button label="Add steps" onPress={() => openSheet(<StepsSheet />, { label: 'Add steps' })} />
+    : k === 'water' ? <Button label="Log water" onPress={() => openSheet(<WaterSheet />, { label: 'Water' })} />
+    : k === 'diet' ? <Button label="Log a meal" onPress={() => openSheet(<QuickLogSheet mealId={nextMeal(d) ?? 'sn'} mode="write" />, { label: 'Log a meal' })} />
+    : (k === 'hr' || k === 'sleep' || k === 'meas' || k === 'cons') ? <Button label={LOG_SHEETS[k].button} onPress={() => openSheet(<ManualLogSheet {...LOG_SHEETS[k].props} />, { label: LOG_SHEETS[k].props.title })} />
+    : k === 'weight' && !paused ? <Button label="Log weight" onPress={() => router.push('/log-weight')} />
+    : null;
+
   return (
-    <SubPage title={METRIC_TITLES[k]} fallback="/progress">
+    <SubPage title={METRIC_TITLES[k]} fallback="/progress" footer={action ? <StickyAction>{action}</StickyAction> : undefined}>
       <RangeBar />
       <Card variant="roomy" clip gap={8}>
         <CornerGlow color={look.tint} size={320} />
@@ -77,20 +93,13 @@ export default function MetricDetail() {
         <TrendChart t={t} unit={TIP_UNIT[k]} height={190} onSwipe={swipe} color={look.tint} />
       </Card>
       {rows.length > 0 && <ListCard rows={rows} />}
-      {k === 'steps' && <Button label="Add steps" onPress={() => openSheet(<StepsSheet />, { label: 'Add steps' })} />}
-      {k === 'water' && <Button label="Log water" onPress={() => openSheet(<WaterSheet />, { label: 'Water' })} />}
-      {k === 'diet' && <Button label="Log a meal" onPress={() => openSheet(<QuickLogSheet mealId={nextMeal(d) ?? 'sn'} mode="write" />, { label: 'Log a meal' })} />}
-      {(k === 'hr' || k === 'sleep' || k === 'meas' || k === 'cons') && <Button label={LOG_SHEETS[k].button} onPress={() => openSheet(<ManualLogSheet {...LOG_SHEETS[k].props} />, { label: LOG_SHEETS[k].props.title })} />}
       {k === 'weight' && (paused ? (
         <Callout size="lg" gap={4}>
           <Txt style={{ fontFamily: font.semibold }}>Logging paused</Txt>
           <Txt muted style={{ fontSize: fontSizes.md }}>Your membership has expired. History stays here; renew at the front desk to log again.</Txt>
         </Callout>
       ) : (
-        <>
-          <Button label="Log weight" onPress={() => router.push('/log-weight')} />
-          <Hint>Weight is shared with the Today tracker.</Hint>
-        </>
+        <Hint>Weight is shared with the Today tracker.</Hint>
       ))}
     </SubPage>
   );

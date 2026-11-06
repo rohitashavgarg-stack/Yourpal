@@ -1,13 +1,13 @@
 import React from 'react';
+import Svg, { Line } from 'react-native-svg';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
-import Svg, { Circle } from 'react-native-svg';
 import { router } from 'expo-router';
 import { ChevronRight, ClipboardCheck, CreditCard, Dumbbell, MessageCircle } from '@/lib/icons';
 import { fadeOut } from '@/theme/motion';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
 import { PersonAvatar } from '@/components/Brand';
-import { PillBtn, Tag } from '@/components/bits';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
@@ -16,8 +16,7 @@ import { font } from '@/theme/tokens';
 import { CardTitle, cardShadow, GrowBar, PCard } from '@/features/progress/parts';
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
 import { useMemberships } from '@/features/gym/memberships';
-import { useSelfAssess } from '@/features/selfassess/useSelfAssess';
-import { NumKey, compare, fmtAt, headlineOf } from '@/features/selfassess/data';
+import { NumKey, compare, fmtAt, useAssessments } from '@/features/gym/assessmentData';
 import { TimeBar } from '@/app/gym/membership';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
 import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
@@ -42,6 +41,7 @@ function GymMembership() {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`Memberships. ${active.length} active${soon ? ', one ending soon' : ''}. See all`} onPress={() => router.push('/gym/membership')} scaleTo={0.985}
       style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
+      <CardEdge radius={radii.lg} />
       <Row style={{ gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: radii.md, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><CreditCard size={22} color={c.accentText} /></View>
         <View style={{ flex: 1, gap: 2 }}>
@@ -112,10 +112,10 @@ function AttendanceCard() {
 }
 
 // The Assessments card, in three levels of weight. First and biggest: how many assessments are completed, with a numbered circle for each.
-// Then, quieter: the last assessment and its date. Quietest: the next assessment (or a Start button when it is due).
+// Then, quieter: the last assessment and its date. Quietest: the next assessment and its date. The trainer does the assessments at the gym, so there is nothing to start.
 function AssessCard() {
   const { c } = useTheme();
-  const { entries, nextAt, daysLeft, due } = useSelfAssess();
+  const { entries, nextAt, daysLeft } = useAssessments();
   const total = entries.length;
   const last = entries[0];
   const shown = Math.min(total, 4); // the trail shows the latest four, then the next one
@@ -123,7 +123,7 @@ function AssessCard() {
   const stats = (['weight', 'waist', 'pulse', 'bench', 'sleep'] as NumKey[]).map((k) => rows.find((r) => r.k === k)).filter((r) => !!r).slice(0, 3) as ReturnType<typeof compare>;
   return (
     <PCard onPress={() => router.push('/gym/assessments')} label={`Assessments. ${total} completed. Last: Assessment ${total}, ${fmtAt(last.at)}`} style={{ gap: 14 }}>
-      <CardTitle title="Assessments" right={due ? <Tag label="Due now" bg={c.warnSoft} fg={c.warn} /> : <Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>View ›</Txt>} />
+      <CardTitle title="Assessments" right={<Txt style={{ fontSize: fontSizes.sm, fontFamily: font.semibold, color: c.accentText }}>View ›</Txt>} />
       <Row style={{ alignItems: 'center', justifyContent: 'space-between', gap: 14 }}>
         <View>
           <Txt style={{ fontFamily: font.displayBold, fontSize: 56, lineHeight: 62, letterSpacing: -1.5 }}>{String(total)}</Txt>
@@ -168,20 +168,17 @@ function AssessCard() {
           </Row>
         )}
       </View>
-      {/* the upcoming assessment in a container like the last one: its date as a little calendar tile (amber when it is due), and when it is */}
-      <Row style={{ gap: 12, padding: 12, borderRadius: radii.lg, backgroundColor: c.surface2 }}>
-        <View style={{ width: 48, height: 52, borderRadius: radii.md, backgroundColor: due ? c.warnSoft : c.accentSoft, alignItems: 'center', justifyContent: 'center' }}>
-          <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 24, color: due ? c.warn : c.accentText }}>{String(new Date(nextAt).getDate())}</Txt>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 16, color: due ? c.warn : c.accentText }}>{new Date(nextAt).toLocaleString('en-US', { month: 'short' }).toUpperCase()}</Txt>
-        </View>
+      <Svg width="100%" height={2} style={{ marginTop: 10 }}><Line x1="0" y1="1" x2="100%" y2="1" stroke={c.muted} strokeOpacity={0.4} strokeWidth={1} strokeDasharray="3 3" /></Svg>
+      {/* the upcoming assessment, plain (no container): its name on the left, its date and how soon on the right */}
+      <Row style={{ gap: 12, alignItems: 'center', paddingTop: 6, paddingBottom: 8 }}>
         <View style={{ flex: 1, gap: 1 }}>
           <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Upcoming assessment</Txt>
           <Txt style={{ fontFamily: font.semibold }}>{`Assessment ${total + 1}`}</Txt>
         </View>
-        {/* when it is due the small Start button takes the chip's place, inside this container */}
-        {due
-          ? <Button kind="accent" size="compact" label="Start" accessibilityLabel="Start the assessment" onPress={() => router.push('/gym/self-assessment')} />
-          : <Tag label={daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`} bg={c.surface} fg={c.muted} style={{ alignSelf: 'center' }} />}
+        <View style={{ alignItems: 'flex-end', gap: 1 }}>
+          <Txt style={{ fontFamily: font.semibold }}>{`${new Date(nextAt).getDate()} ${new Date(nextAt).toLocaleString('en-US', { month: 'short' })}`}</Txt>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{daysLeft <= 0 ? 'Today' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`}</Txt>
+        </View>
       </Row>
     </PCard>
   );
@@ -193,6 +190,7 @@ function ChatCard() {
   const last = [...d.chat].reverse().find((m) => !m.me);
   return (
     <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 14 }}>
+      <CardEdge radius={radii.xl} />
       <Row style={{ gap: 14 }}>
         {/* Photo and name open the coach's profile. */}
         <Pressy accessibilityRole="button" accessibilityLabel="Coach Vikram. View profile" onPress={() => router.push('/coach')} scaleTo={0.97} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 14 }}>
@@ -235,6 +233,7 @@ function PTCard({ isPT }: { isPT: boolean }) {
   if (!isPT) {
     return (
       <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+      <CardEdge radius={radii.xl} />
         {head('Personal training', 'Workout and diet from a coach')}
         <Button kind="white" label="See how it works" onPress={() => router.push('/gym/pt')} />
       </View>
@@ -242,6 +241,7 @@ function PTCard({ isPT }: { isPT: boolean }) {
   }
   return (
     <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+      <CardEdge radius={radii.xl} />
       {head('Your PT package', 'With Coach Vikram', <Chip label="Renews 30 Oct" onDark />)}
       <View style={{ gap: 10 }}>
         <Txt accessibilityLabel={`${d.ptLeft} of ${PT_TOTAL} sessions left`} style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39, color: onDark.text }}>{d.ptLeft}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: onDark.muted }}> of {PT_TOTAL} sessions left</Txt></Txt>

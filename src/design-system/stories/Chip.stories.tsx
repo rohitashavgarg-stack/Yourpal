@@ -16,6 +16,8 @@ export default meta;
 type S = StoryObj<typeof meta>;
 export const Default: S = {};
 export const WithIcon: S = { args: { label: '~50 min', icon: <Clock size={14} /> } };
+export const FilledLarge: S = { args: { label: 'Activity: Moderately active', filled: true, size: 'lg', icon: <Zap size={18} /> } };
+export const FilledEdge: S = { args: { label: 'Mon 22 Sep', filled: true, edge: true, size: 'lg' } };
 export const Good: S = { args: { tone: 'good', label: 'On plan' } };
 export const Warn: S = { args: { tone: 'warn', label: 'Needs a weigh-in' } };
 export const Live: S = { args: { tone: 'live', label: 'Now', icon: <Zap size={14} /> } };

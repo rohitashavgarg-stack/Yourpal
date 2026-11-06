@@ -19,6 +19,9 @@ An outline chip for information: 28 px high, 14 px corner, 1 px line. A chip is 
 | `icon` | node | none | Before the text, 6 px gap |
 | `tone` | `'default' \| 'good' \| 'warn' \| 'live'` | `default` | Text and line colour |
 | `onDark` | boolean | false | White text and a white 28% line, for dark cards (default tone only) |
+| `filled` | boolean | false | A soft fill (`c.surface2`; `c.goodSoft` and `c.warnSoft` for those tones) instead of the 1 px line |
+| `edge` | boolean | false | With `filled`: adds the thin gradient stroke the cards have (bright at the top left, fading to the bottom right) |
+| `size` | `'md' \| 'lg'` | `md` | `lg` is 36 px high with 13 px text and a 14 px side padding, for chips that carry an icon on a card (the icon is 18 px) |
 | `style` | ViewStyle | none | Merged last |
 
 ## States

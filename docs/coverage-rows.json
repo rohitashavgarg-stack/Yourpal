@@ -14,7 +14,7 @@
   "screen": "Today",
   "group": "Routes",
   "status": "not started",
-  "hand": 9,
+  "hand": 6,
   "files": [
    "app/(tabs)/index.tsx",
    "features/today/WorkoutCard.tsx",
@@ -31,7 +31,6 @@
    "features/reminders/PushBanner.tsx",
    "features/profile/WaiverCard.tsx",
    "features/feedback/FeedbackCard.tsx",
-   "features/selfassess/SelfAssessCard.tsx",
    "features/today/GoalCards.tsx",
    "features/today/LogMealsSheet.tsx",
    "features/reminders/push.ts"
@@ -47,7 +46,7 @@
    "app/(tabs)/plans.tsx",
    "features/plans/WorkoutPlan.tsx",
    "features/plans/DietPlan.tsx",
-   "features/plans/LogPastWorkoutSheet.tsx",
+   "features/plans/LoggedDay.tsx",
    "features/plans/QtySheet.tsx",
    "features/plans/FoodActionsSheet.tsx",
    "features/plans/mealTime.ts"
@@ -61,6 +60,7 @@
   "hand": 4,
   "files": [
    "app/(tabs)/progress.tsx",
+   "features/progress/MusclesCard.tsx",
    "features/reports/ProgressMenuSheet.tsx",
    "features/reports/DownloadRow.tsx",
    "features/reports/ReportSheet.tsx"
@@ -128,11 +128,21 @@
   ]
  },
  {
+  "id": "route:/gym/assessment",
+  "screen": "/gym/assessment",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "app/gym/assessment.tsx"
+  ]
+ },
+ {
   "id": "route:/gym/assessments",
   "screen": "Assessments",
   "group": "Routes",
   "status": "not started",
-  "hand": 2,
+  "hand": 1,
   "files": [
    "app/gym/assessments.tsx"
   ]
@@ -213,21 +223,6 @@
   ]
  },
  {
-  "id": "route:/gym/self-assessment",
-  "screen": "/gym/self-assessment",
-  "group": "Routes",
-  "status": "not started",
-  "hand": 33,
-  "files": [
-   "app/gym/self-assessment.tsx",
-   "features/selfassess/AssessmentDone.tsx",
-   "features/selfassess/RulerStep.tsx",
-   "features/selfassess/SleepDial.tsx",
-   "features/selfassess/BreathTimer.tsx",
-   "features/selfassess/Pickers.tsx"
-  ]
- },
- {
   "id": "route:/gym/session",
   "screen": "/gym/session",
   "group": "Routes",
@@ -255,6 +250,16 @@
   "hand": 0,
   "files": [
    "app/index.tsx"
+  ]
+ },
+ {
+  "id": "route:/log-chat",
+  "screen": "/log-chat",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 4,
+  "files": [
+   "app/log-chat.tsx"
   ]
  },
  {
@@ -585,6 +590,17 @@
   ]
  },
  {
+  "id": "route:/progress/muscles",
+  "screen": "/progress/muscles",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/progress/muscles.tsx",
+   "features/progress/MuscleRow.tsx"
+  ]
+ },
+ {
   "id": "route:/progress/photos",
   "screen": "Photos",
   "group": "Routes",
@@ -805,16 +821,6 @@
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/Steps.tsx"
-  ]
- },
- {
-  "id": "sheet:LeaveSheet",
-  "screen": "LeaveSheet",
-  "group": "Bottom sheets",
-  "status": "not started",
-  "hand": 0,
-  "files": [
-   "app/gym/self-assessment.tsx"
   ]
  },
  {
@@ -1192,7 +1198,7 @@
   "screen": "QuickLogSheet",
   "group": "Bottom sheets",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "features/today/QuickLogSheet.tsx"
   ]
@@ -1522,19 +1528,9 @@
   "screen": "components/GymHeader.tsx",
   "group": "Shared components and features",
   "status": "not started",
-  "hand": 0,
-  "files": [
-   "components/GymHeader.tsx"
-  ]
- },
- {
-  "id": "shared:components/bits.tsx",
-  "screen": "components/bits.tsx",
-  "group": "Shared components and features",
-  "status": "not started",
   "hand": 1,
   "files": [
-   "components/bits.tsx"
+   "components/GymHeader.tsx"
   ]
  },
  {
@@ -1575,6 +1571,16 @@
   "hand": 3,
   "files": [
    "features/shell/parts.tsx"
+  ]
+ },
+ {
+  "id": "shared:components/bits.tsx",
+  "screen": "components/bits.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "components/bits.tsx"
   ]
  },
  {
@@ -1638,13 +1644,13 @@
   ]
  },
  {
-  "id": "shared:features/today/QuickLogSheet.tsx",
-  "screen": "features/today/QuickLogSheet.tsx",
+  "id": "shared:features/plans/LogPastWorkoutSheet.tsx",
+  "screen": "features/plans/LogPastWorkoutSheet.tsx",
   "group": "Shared components and features",
   "status": "not started",
   "hand": 0,
   "files": [
-   "features/today/QuickLogSheet.tsx"
+   "features/plans/LogPastWorkoutSheet.tsx"
   ]
  },
  {
@@ -1655,6 +1661,26 @@
   "hand": 2,
   "files": [
    "features/progress/TrendUI.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/today/AteSomethingElse.tsx",
+  "screen": "features/today/AteSomethingElse.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "features/today/AteSomethingElse.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/today/QuickLogClassic.tsx",
+  "screen": "features/today/QuickLogClassic.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/today/QuickLogClassic.tsx"
   ]
  },
  {

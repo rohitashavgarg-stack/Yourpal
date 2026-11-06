@@ -34,6 +34,10 @@ Every component in `src/design-system/`, with its variants and states. Each has 
 | [CheckCircle](../src/design-system/docs/CheckCircle.md) | `primitives/CheckCircle.tsx` | A round check with a drawn tick | on, off; tone accent, good; `size`, `hit` |
 | [Tag](../src/design-system/docs/Tag.md) | `primitives/Tag.tsx` | A small filled pill with a short label | any `bg` and `fg` |
 | [Ring](../src/design-system/docs/Ring.md) | `primitives/Ring.tsx` | A thin progress ring that animates to its value | `size`, `r`, `stroke`, `pct`, `delay` |
+| [MuscleRings](../src/design-system/docs/MuscleRings.md) | `primitives/MuscleRings.tsx` | Concentric rings, one segment per muscle group, names curved around the outside | `groups`, `size` |
+| [MuscleBody](../src/design-system/docs/MuscleBody.md) | `primitives/MuscleBody.tsx` | A plain dark front or back view of the body with muscle groups lit in the accent blue | `side`, `lit`, `width` |
+| [MuscleThumb](../src/design-system/docs/MuscleThumb.md) | `primitives/MuscleThumb.tsx` | A small dark square with the part of the body for one muscle group lit, at the start of a muscle row | `muscle`, `size` |
+| [EffortSlider](../src/design-system/docs/EffortSlider.md) | `primitives/EffortSlider.tsx` | A drag slider from easy (blue) to max (red) with ticks and a round white handle | `value`, `onChange`, `label` |
 | [Beat](../src/design-system/docs/Beat.md) | `primitives/Beat.tsx` | A heartbeat pulse for a live value | children: any icon |
 | [HeartIcon](../src/design-system/docs/HeartIcon.md) | `primitives/HeartIcon.tsx` | A solid heart icon | `size`, `color` |
 | [Brand](../src/design-system/docs/Brand.md) | `primitives/Brand.tsx` | The gym logo mark, the premium badge and the person avatar | GymLogoMark `size`; PremiumBadge `size`; PersonAvatar who me, coach; `ring`, `square`, `photo` |
@@ -55,6 +59,8 @@ Every component in `src/design-system/`, with its variants and states. Each has 
 | [WeekCard](../src/design-system/docs/WeekCard.md) | `patterns/WeekCard.tsx` | This week: two stat tiles, seven days, legend | day today, past, future; workout done, rest, open ring, dashed ring; meals 0 to 4 dots on plan |
 | [FoodCard](../src/design-system/docs/FoodCard.md) | `patterns/FoodCard.tsx` | One food as its own card: dashed when not eaten, solid when eaten | state todo, eaten, skipped; swipe left for Swap and Skip (44 px); hold for the food page; amount stepper or locked text; tag "Yours" |
 | [PageEnd](../src/design-system/docs/PageEnd.md) | `patterns/PageEnd.tsx` | The end of a long page: an illustration, a big quiet line and the YourPal mark. Nothing to tap | one state; `line` text. Used at the bottom of Today |
+| [PageGlow](../src/design-system/docs/PageGlow.md) | `primitives/PageGlow.tsx` | A very faint blue light in the top left corner of every page, mounted once over the whole app. Nothing to tap | one state; light and dark strength. In `src/app/_layout.tsx` |
+| [TopGlow](../src/design-system/docs/TopGlow.md) | `primitives/TopGlow.tsx` | A soft round glow from the top of an inner page, in the colour of its topic. A SubPage backdrop | `color` |
 | [WorkoutCard](../src/design-system/docs/WorkoutCard.md) | `patterns/WorkoutCard.tsx` | Today's workout | upcoming, due, live, missed, moved, skipped, done, rest, paused, comeback (small grey "Easy session" card: 20 min, "4 exercises", "Half your usual load", "Start easy session" and "Not today"); burned row with a watch |
 
 ## Copy rules for every component

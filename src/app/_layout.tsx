@@ -14,13 +14,14 @@ import { ScenarioRegistryProvider, StoreProvider } from '@/lib/store';
 import { DomainProvider } from '@/lib/domain';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 import { OverlayProvider } from '@/components/Overlay';
+import { PageGlow } from '@/design-system/primitives/PageGlow';
 import { EdgeTab, WebFrame, useIsWideWeb } from '@/web/WebFrame';
 import { CheckInEngine } from '@/features/checkin/CheckInEngine';
 import { fixed } from '@/design-system/tokens';
 
 // Screens with an X (close) open from the bottom and close back down. Screens with a back arrow come in from the right and leave to the right.
 // On the phone the native stack does this (see the Stack.Screen options below). The web stack has no transitions, so this wrapper adds them there.
-const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
+const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'log-chat', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'exercise-search', 'profile/join'];
 const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
 // Web only: the stack drops a popped screen at once, so the slide-out is played first, then the real back runs.
 // True for a moment after a back: a screen that mounts then is being revealed, not pushed, so it must not slide in.
@@ -178,6 +179,8 @@ function AppShell() {
               <Stack.Screen key={n} name={n} options={{ presentation: 'transparentModal', animation: 'none', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
             ))}
           </Stack>
+          {/* a very faint blue light in the top left corner, over every page and under sheets and toasts */}
+          <PageGlow />
           <CheckInEngine />
           {!wide && <EdgeTab />}
         </OverlayProvider>

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleProp, ViewProps, ViewStyle } from 'react-native';
 import { fixed, radii, shadows } from '@/design-system/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 
 /**
  * Card variants. Each one is a look that already existed in the app; none is new.
@@ -34,6 +35,8 @@ export type CardProps = Omit<ViewProps, 'style'> & {
   dark?: boolean;
   /** The fill: the surface (default), soft blue or soft amber, or none: no fill at all, for a card that is only an outline (give it `border`). */
   tone?: CardTone;
+  /** The plain look: the surface fill and no gradient stroke (a card where the lighter fill and the thin stroke are not wanted, for example the welcome list). */
+  plain?: boolean;
   /** No shadow, also in light mode (a card on a sheet or inside another surface). */
   flat?: boolean;
   /** A line around the card: colour, and width (default 1). For example the selected plan on the break page. */
@@ -47,7 +50,7 @@ export type CardProps = Omit<ViewProps, 'style'> & {
   children?: React.ReactNode;
 };
 
-export function Card({ variant, dark, gap, tone = 'surface', flat, border, clip, padding, style, children, ...rest }: CardProps) {
+export function Card({ variant, dark, gap, tone = 'surface', plain, flat, border, clip, padding, style, children, ...rest }: CardProps) {
   const { c, isDark } = useTheme();
   const v: CardVariant = variant ?? (dark ? 'dark' : 'default');
   const s = SPEC[v];
@@ -57,13 +60,14 @@ export function Card({ variant, dark, gap, tone = 'surface', flat, border, clip,
     : { padding: s.padding };
   return (
     <View {...rest} style={[{
-      backgroundColor: v === 'dark' ? c.dark : tone === 'none' ? 'transparent' : tone === 'accent' ? c.accentSoft : tone === 'warn' ? c.warnSoft : c.surface, borderRadius: s.radius, ...pad,
+      backgroundColor: v === 'dark' ? c.dark : tone === 'none' ? 'transparent' : tone === 'accent' ? c.accentSoft : tone === 'warn' ? c.warnSoft : plain ? c.surface : c.cardLift, borderRadius: s.radius, ...pad,
       ...(g !== undefined ? { gap: g } : null),
       ...(border ? { borderWidth: border.width ?? 1, borderColor: border.color } : null),
       ...(clip ? { overflow: 'hidden' as const } : null),
       ...(isDark || v === 'dark' || flat ? null : { ...shadows.card, shadowColor: fixed.shadow }),
     }, style]}>
       {children}
+      {v !== 'dark' && tone === 'surface' && !border && !plain && <CardEdge radius={s.radius} />}
     </View>
   );
 }
