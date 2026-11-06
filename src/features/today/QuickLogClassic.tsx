@@ -115,9 +115,13 @@ export function QuickLogClassic({ mealId, mode: initial = 'scan', replaceIdx, ba
         <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl3Plus, letterSpacing: -1.1 }}>{repl ? `Swap ${repl.n.toLowerCase()}` : `Add to ${meal.n.toLowerCase()}`}</Txt>
         <Txt muted style={{ fontSize: fontSizes.sm }}>{repl ? `Planned: ${repl.q} · ${repl.k} kcal` : `Planned: ${planned} · ${mealKcal(meal)} kcal`}</Txt>
       </View>
-      <Segmented<Mode> accessibilityLabel="How to log" value={mode} onChange={setMode}
-        options={[...(repl ? [{ value: 'sugg' as Mode, label: 'Suggested' }] : []), { value: 'scan', label: 'Scan' }, { value: 'write', label: 'Write' }, { value: 'cat', label: 'Library' }]}
-        icons={{ scan: (col) => <Camera size={16} color={col} />, write: (col) => <PenLine size={16} color={col} />, cat: (col) => <Search size={16} color={col} /> }} />
+      {/* opened for the library only: no Scan or Write tabs */}
+      {initial !== 'cat' && (
+        <Segmented<Mode> accessibilityLabel="How to log" value={mode} onChange={setMode}
+          options={[...(repl ? [{ value: 'sugg' as Mode, label: 'Suggested' }] : []), { value: 'scan', label: 'Scan' }, { value: 'write', label: 'Write' }, { value: 'cat', label: 'Library' }]}
+          icons={{ scan: (col) => <Camera size={16} color={col} />, write: (col) => <PenLine size={16} color={col} />, cat: (col) => <Search size={16} color={col} /> }} />
+
+      )}
 
       {mode === 'sugg' && (
         <View style={{ gap: 8 }}>
