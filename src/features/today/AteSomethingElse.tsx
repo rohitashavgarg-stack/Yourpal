@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
-import { Camera, Images, Library, X } from '@/lib/icons';
+import { Camera, Images, Library, Mic, X } from '@/lib/icons';
 import { Button, Field, Pressy, Row, Txt } from '@/components/ui';
 import { IconButton } from '@/design-system/primitives/Button';
 import { useOverlay } from '@/components/Overlay';
@@ -12,7 +12,6 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fixed, fontSizes, radii, round } from '@/design-system/tokens';
-import { QuickLogClassic } from './QuickLogClassic';
 
 /**
  * "Ate something else", the small first step: the camera, a photo from the phone, a box to type in and a button for the food library. Typing, or sending a photo,
@@ -20,7 +19,7 @@ import { QuickLogClassic } from './QuickLogClassic';
  */
 export function AteSomethingElse({ mealId, backTo }: { mealId: MealId; backTo?: () => void }) {
   const { c } = useTheme();
-  const { closeSheet, openSheet, toast } = useOverlay();
+  const { closeSheet, toast } = useOverlay();
   const [perm, askPerm] = useCameraPermissions();
   const [cam, setCam] = useState<CameraView | null>(null);
   const [text, setText] = useState('');
@@ -42,7 +41,7 @@ export function AteSomethingElse({ mealId, backTo }: { mealId: MealId; backTo?: 
       if (!r.canceled && r.assets?.[0]?.uri) toChat({ photo: r.assets[0].uri });
     } catch { toast('Could not open your photos'); }
   };
-  const library = () => closeSheet(() => openSheet(<QuickLogClassic mealId={mealId} mode="cat" backTo={backTo} />, { label: 'Food library' }));
+  const library = () => closeSheet(() => router.push({ pathname: '/food-library', params: { mealId } }));
 
   return (
     <>
@@ -74,13 +73,14 @@ export function AteSomethingElse({ mealId, backTo }: { mealId: MealId; backTo?: 
       </Row>
       {/* the typing box and the library button beside it: typing opens the chat */}
       <Row style={{ gap: 8 }}>
-        <View style={{ flex: 1 }}>
-          <Field accessibilityLabel="Describe what to log" value={text} onChangeText={setText} placeholder="Describe what to log" returnKeyType="send"
-            onFocus={() => toChat({})} onSubmitEditing={() => text.trim() && toChat({ text: text.trim() })} />
-        </View>
         <IconButton label="Open the food library" onPress={library} size={56} radius={round(56)} bg={c.cardLift} edge>
           <Library size={22} color={c.ink} />
         </IconButton>
+        <View style={{ flex: 1 }}>
+          <Field accessibilityLabel="Describe what to log" value={text} onChangeText={setText} placeholder="Describe what to log" returnKeyType="send"
+            onFocus={() => toChat({})} onSubmitEditing={() => text.trim() && toChat({ text: text.trim() })}
+            trailing={<Pressy accessibilityRole="button" accessibilityLabel="Dictate" onPress={() => toChat({})} hitSlop={8}><Mic size={22} color={c.muted} /></Pressy>} />
+        </View>
       </Row>
     </>
   );

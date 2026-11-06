@@ -3,8 +3,8 @@ import { Image, KeyboardAvoidingView, Platform, ScrollView, View, type ScrollVie
 import * as ImagePicker from 'expo-image-picker';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowUp, Camera, Library, X } from '@/lib/icons';
-import { Field, Row, Txt } from '@/components/ui';
+import { ArrowUp, Camera, Library, Mic, X } from '@/lib/icons';
+import { Field, Pressy, Row, Txt } from '@/components/ui';
 import { Button, IconButton } from '@/design-system/primitives/Button';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { useOverlay } from '@/components/Overlay';
@@ -16,7 +16,6 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fixed, fontSizes, radii, round } from '@/design-system/tokens';
 import { mealById } from '@/features/today/meals';
-import { QuickLogClassic } from '@/features/today/QuickLogClassic';
 
 type NewMsg =
   | { from: 'me'; text?: string; photo?: string }
@@ -29,7 +28,7 @@ export default function LogChat() {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { d, set } = useDomain();
-  const { openSheet, toast } = useOverlay();
+  const { toast } = useOverlay();
   useLeaveIfPaused();
   const p = useLocalSearchParams<{ mealId?: MealId; text?: string; photo?: string }>();
   const mealId = (p.mealId ?? 'sn') as MealId;
@@ -100,7 +99,7 @@ export default function LogChat() {
       if (!r.canceled && r.assets?.[0]?.uri) sendPhoto(r.assets[0].uri);
     } catch { toast('Could not open your photos'); }
   };
-  const library = () => openSheet(<QuickLogClassic mealId={mealId} mode="cat" backTo={() => router.back()} />, { label: 'Food library' });
+  const library = () => router.push({ pathname: '/food-library', params: { mealId } });
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
@@ -141,16 +140,16 @@ export default function LogChat() {
           </FadeIn>
         ))}
       </ScrollView>
+      {/* the library on the left; the camera and the mic sit inside the typing box, with no container of their own */}
       <Row style={{ gap: 8, paddingHorizontal: 16, paddingTop: 8, paddingBottom: Math.max(insets.bottom, 12) }}>
-        <IconButton label="Choose a photo" onPress={pickPhoto} size={56} radius={round(56)} bg={c.cardLift} edge><Camera size={22} color={c.ink} /></IconButton>
+        <IconButton label="Open the food library" onPress={library} size={56} radius={round(56)} bg={c.cardLift} edge><Library size={22} color={c.ink} /></IconButton>
         <View style={{ flex: 1 }}>
-          <Field accessibilityLabel="Describe what to log" value={text} onChangeText={setText} placeholder="Anything else?" returnKeyType="send" autoFocus onSubmitEditing={() => send(text)} />
+          <Field accessibilityLabel="Describe what to log" value={text} onChangeText={setText} placeholder="Anything else?" returnKeyType="send" autoFocus onSubmitEditing={() => send(text)}
+            leading={<Pressy accessibilityRole="button" accessibilityLabel="Choose a photo" onPress={pickPhoto} hitSlop={8}><Camera size={22} color={c.muted} /></Pressy>}
+            trailing={text.trim()
+              ? <Pressy accessibilityRole="button" accessibilityLabel="Send" onPress={() => send(text)} hitSlop={8} style={{ width: 34, height: 34, borderRadius: round(34), backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><ArrowUp size={18} color={fixed.white} /></Pressy>
+              : <Pressy accessibilityRole="button" accessibilityLabel="Dictate" onPress={() => toast('Tap the microphone on your keyboard to speak')} hitSlop={8}><Mic size={22} color={c.muted} /></Pressy>} />
         </View>
-        {text.trim() ? (
-          <IconButton label="Send" onPress={() => send(text)} size={56} radius={round(56)} bg={c.accent}><ArrowUp size={22} color={fixed.white} /></IconButton>
-        ) : (
-          <IconButton label="Open the food library" onPress={library} size={56} radius={round(56)} bg={c.cardLift} edge><Library size={22} color={c.ink} /></IconButton>
-        )}
       </Row>
     </KeyboardAvoidingView>
   );
