@@ -52,8 +52,9 @@ function KcalRing({ k }: { k: number }) {
         <ACircle cx={60} cy={60} r={48} fill="none" stroke={c.cAct} strokeWidth={10} strokeLinecap="round" strokeDasharray={`${C}`} animatedProps={props} transform="rotate(-90 60 60)" />
       </Svg>
       <View style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
-        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34 }}>{inr(shown)}</Txt>
-        <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: c.muted, marginTop: 2 }}>of {inr(KCAL_TARGET)} kcal</Txt>
+        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 32 }}>{inr(shown)}</Txt>
+        <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: c.muted, marginTop: 2, textAlign: 'center' }}>{`of ${inr(KCAL_TARGET)}`}</Txt>
+        <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: c.muted, textAlign: 'center' }}>kcal</Txt>
       </View>
     </View>
   );

@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { CreditCard, Download, PauseCircle } from '@/lib/icons';
-import { Pressy, Row, Txt } from '@/components/ui';
+import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { Hint, SubPage } from '@/features/progress/parts';
 import { LineRow, ListCard as PayList } from '@/features/shell/parts';
-import { IconButton } from '@/design-system/primitives/Button';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { Chip } from '@/design-system/primitives/Chip';
@@ -19,10 +18,8 @@ import { dateLabel, gymStore } from '@/features/gym/state';
 import { useDomain } from '@/lib/domain';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { StatusChip, TimeBar } from '@/app/gym/membership';
-import { sharePdf } from '@/features/reports/pdf';
-import { invoiceHtml } from '@/features/reports/templates';
+import { shareStatement } from '@/features/reports/invoice';
 import { rupees } from '@/features/reports/payments';
-import type { Payment } from '@/features/reports/payments';
 import { radii, fontSizes } from '@/design-system/tokens';
 
 // "14 to 27 Jul" when both dates are in one month.
@@ -66,13 +63,13 @@ export default function MembershipDetail() {
   const [allPauses, setAllPauses] = useState(false);
   if (!m) return <SubPage title="Membership" fallback="/gym/membership"><Txt muted>This membership is not here any more.</Txt></SubPage>;
 
-  const invoice = async (p: Payment) => {
-    setBusyId(p.id);
+  // one download for all of this membership's payments, not one for each
+  const download = async () => {
+    setBusyId('all');
     try {
-      const html = invoiceHtml({ no: p.no, date: p.date, gym: 'Wulf Fitness', member: state.profile.name || 'Member', item: p.item, amount: rupees(p.amount), method: p.method });
-      const ok = await sharePdf(html, 'Invoice ' + p.no);
+      const ok = await shareStatement(m.payments, state.profile.name || 'Member', m.name);
       if (!ok) toast('Saving a file is not available on this phone');
-    } catch { toast('Could not make the invoice. Try again'); }
+    } catch { toast('Could not make the PDF. Try again'); }
     setBusyId(null);
   };
 
@@ -188,14 +185,10 @@ export default function MembershipDetail() {
         )}
         {m.payments.map((p, i) => (
           <LineRow key={p.id} title={p.item} sub={p.date} last={i === m.payments.length - 1}
-            right={(
-              <Row style={{ gap: 10 }}>
-                {value(rupees(p.amount))}
-                <IconButton label={'Download invoice for ' + p.item} onPress={() => invoice(p)} size={36} disabled={busyId === p.id}><Download size={18} color={c.ink} /></IconButton>
-              </Row>
-            )} />
+            right={value(rupees(p.amount))} />
         ))}
       </PayList>
+      {m.payments.length > 0 && <Button kind="secondary" small label={busyId === 'all' ? 'Making your PDF' : 'Download all payments'} icon={<Download size={17} color={c.ink} />} disabled={busyId === 'all'} onPress={download} />}
       <Hint>Pauses, renewals and plan changes happen at the front desk.</Hint>
     </SubPage>
   );

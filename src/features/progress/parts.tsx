@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
+import { StyleProp, TextStyle, View, ViewStyle, type ViewInstance } from 'react-native';
 import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import Svg, { Circle, Defs, Polyline, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { ChevronRight } from '@/lib/icons';
@@ -8,6 +8,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
+import { setCardOrigin } from '@/lib/cardGrow';
 import { SubPage as DSSubPage, SubPageProps } from '@/design-system/primitives/SubPage';
 import { IconButton } from '@/design-system/primitives/Button';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
@@ -20,12 +21,17 @@ export function cardShadow(isDark: boolean): ViewStyle {
 }
 export function PCard({ onPress, label, children, style }: { onPress?: () => void; label?: string; children: React.ReactNode; style?: StyleProp<ViewStyle> }) {
   const { c, isDark } = useTheme();
+  // the page this card opens grows out of the card: remember where the card is just before going
+  const box = React.useRef<ViewInstance>(null);
+  const press = onPress ? () => { if (box.current) box.current.measureInWindow((x, y, w, h) => { setCardOrigin({ x, y, w, h }); onPress(); }); else onPress(); } : undefined;
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={onPress} scaleTo={0.98}
+    <View ref={box} collapsable={false}>
+    <Pressy accessibilityRole="button" accessibilityLabel={label} onPress={press} scaleTo={0.98}
       style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 10 }, cardShadow(isDark), style]}>
       {children}
       <CardEdge radius={radii.xl} />
     </Pressy>
+    </View>
   );
 }
 
