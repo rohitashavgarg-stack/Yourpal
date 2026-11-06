@@ -39,21 +39,21 @@ const ACircle = Animated.createAnimatedComponent(Circle);
 
 // ---------- Summary: kcal ring + macro bars ----------
 function KcalRing({ k }: { k: number }) {
-  const C = 2 * Math.PI * 44;
+  const C = 2 * Math.PI * 48;
   const v = useSharedValue(0);
   useEffect(() => { v.value = withTiming(Math.min(1, k / KCAL_TARGET), { duration: 900, easing: Easing.out(Easing.cubic) }); }, [k]);
   const props = useAnimatedProps(() => ({ strokeDashoffset: C * (1 - v.value) }));
   const shown = useCountUp(Math.round(k), 700);
   const { c } = useTheme();
   return (
-    <View accessible accessibilityLabel={`Eaten ${Math.round(k)} of ${KCAL_TARGET} kcal`} style={{ width: 108, height: 108 }}>
-      <Svg width={108} height={108} viewBox="0 0 108 108">
-        <Circle cx={54} cy={54} r={44} fill="none" stroke={c.surface2} strokeWidth={10} />
-        <ACircle cx={54} cy={54} r={44} fill="none" stroke={c.cAct} strokeWidth={10} strokeLinecap="round" strokeDasharray={`${C}`} animatedProps={props} transform="rotate(-90 54 54)" />
+    <View accessible accessibilityLabel={`Eaten ${Math.round(k)} of ${KCAL_TARGET} kcal`} style={{ width: 120, height: 120 }}>
+      <Svg width={120} height={120} viewBox="0 0 120 120">
+        <Circle cx={60} cy={60} r={48} fill="none" stroke={c.surface2} strokeWidth={10} />
+        <ACircle cx={60} cy={60} r={48} fill="none" stroke={c.cAct} strokeWidth={10} strokeLinecap="round" strokeDasharray={`${C}`} animatedProps={props} transform="rotate(-90 60 60)" />
       </Svg>
       <View style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
-        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3 }}>{inr(shown)}</Txt>
-        <Txt style={{ fontSize: fontSizes.xs2, color: c.muted, marginTop: -4 }}>of {inr(KCAL_TARGET)} kcal</Txt>
+        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34 }}>{inr(shown)}</Txt>
+        <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: c.muted, marginTop: 2 }}>of {inr(KCAL_TARGET)} kcal</Txt>
       </View>
     </View>
   );
