@@ -90,15 +90,19 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
   const { toast } = useOverlay();
   const [effort, setEffort] = useState(0.55); // 0 is easy, 1 is max
   const feel = effortWord(effort);
+  const [screenH, setScreenH] = useState(700);
   const { d } = useDomain();
   const [note, setNote] = useState('');
   const [run, setRun] = useState(1);
   useEffect(() => { haptic.success(); }, []);
   return (
     // The same page as the signed waiver: black with a blue glow at the top. Nothing sits in a card; the numbers are on the page.
-    <View style={{ flex: 1, backgroundColor: fixed.dark }}>
-      <WaiverBackdrop stars={false} />
+    <View onLayout={(e) => setScreenH(e.nativeEvent.layout.height)} style={{ flex: 1, backgroundColor: fixed.dark }}>
       <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingTop: insets.top + 40, paddingHorizontal: 22, paddingBottom: insets.bottom + 130, gap: 28 }}>
+        {/* the glow and lines are part of the page: they scroll up and away with it */}
+        <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: screenH }}>
+          <WaiverBackdrop stars={false} />
+        </View>
         <FadeIn style={{ gap: 10 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 19, letterSpacing: 1, color: onDark.soft }}>WORKOUT DONE, LEG DAY</Txt>
           {/* two deliberate lines: the praise, then the name in a softer tone, so the heading never wraps by accident */}
@@ -120,7 +124,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
         </FadeIn>
 
         <View>
-          <FadeIn delay={350} style={{ gap: 14, backgroundColor: onDark.card, borderRadius: radii.xl, padding: 16 }}>
+          <FadeIn delay={350} style={{ gap: 14, backgroundColor: onDark.card + 'B3', ...({ backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' } as object), borderRadius: radii.xl, padding: 16 }}>
             <CardEdge radius={radii.xl} />
             <Row style={{ gap: 14 }}>
             <IconButton label="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }} size={56} radius={radii.xl} bg={c.accent}>
@@ -145,7 +149,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
           </Row>
         )}
 
-        <FadeIn delay={900} style={{ gap: 14, backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18 }}>
+        <FadeIn delay={900} style={{ gap: 14, backgroundColor: onDark.card + 'B3', ...({ backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' } as object), borderRadius: radii.xl, padding: 18 }}>
           <CardEdge radius={radii.xl} />
           <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
             <View style={{ flex: 1, gap: 2 }}>
