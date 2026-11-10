@@ -161,7 +161,7 @@ export default function LogChat() {
       </ScrollView>
       {/* one tap foods while nothing has been sent yet */}
       {msgs.length === 1 && (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={{ flexGrow: 0 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingBottom: 4 }}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={{ flexGrow: 0, flexShrink: 0, height: 46 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingBottom: 6, alignItems: 'flex-start' }}>
           {QUICK.map((q) => (
             <Option key={q} selected={false} role="button" accessibilityLabel={`Log ${q}`} offLine={c.line} radius={round(36)} height={36} padX={14} onPress={() => { haptic.light(); send(q); }}>
               <Txt style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{q}</Txt>
