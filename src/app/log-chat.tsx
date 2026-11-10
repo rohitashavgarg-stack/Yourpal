@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowUp, Camera, Library, Mic, X } from '@/lib/icons';
 import { Field, Pressy, Row, Txt } from '@/components/ui';
 import { Button, IconButton } from '@/design-system/primitives/Button';
+import { Option } from '@/design-system/primitives/Option';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { FoodCard } from '@/design-system/patterns/FoodCard';
 import { ChatBar } from '@/design-system/patterns/ChatBar';
@@ -26,6 +27,8 @@ type NewMsg =
   | { from: 'bot'; text: string }
   | { from: 'bot'; logged: { items: Parsed[]; kcal: number; meal: string; undone: boolean; prev: unknown; left: number } };
 type Msg = NewMsg & { id: number };
+
+const QUICK = ['2 roti', '1 banana', '1 cup dal', '1 glass milk', '2 boiled eggs', '1 cup rice'];
 
 // "Ate something else" as a full page that works like a chat: the member types or sends a photo, and the reply says what was logged.
 export default function LogChat() {
@@ -126,15 +129,15 @@ export default function LogChat() {
               // the reply: one line that says what happened, then each food as the same FoodCard the diet page uses, then what is left and Undo
               <View style={{ gap: 8, width: '100%' }}>
                 <View style={{ backgroundColor: c.cardLift, borderRadius: radii.lg, borderBottomLeftRadius: radii.xs, padding: 12, paddingHorizontal: 14, alignSelf: 'flex-start' }}>
-                  <Txt style={{ fontFamily: font.semibold }}>{m.logged.undone ? 'Undone. Nothing was added.' : `Logged to ${m.logged.meal}, ${m.logged.kcal} kcal`}</Txt>
+                  <Txt style={{ fontFamily: font.semibold }}>{m.logged.undone ? 'Undone. Nothing was added.' : `Added to ${m.logged.meal}`}</Txt>
                 </View>
                 {!m.logged.undone && m.logged.items.map((it, i) => {
                   const [nm, ...rest] = it.n.split(', ');
-                  return <FoodCard key={i} state="eaten" name={nm} amountText={rest.join(', ') || undefined} kcal={`${it.k} kcal${it.est ? ', estimated' : ''}`} macros={`P ${it.p} g`} label={`${it.n}, ${it.k} kcal, ${it.p} grams protein`} />;
+                  return <FoodCard key={i} state="eaten" name={nm} amountText={rest.join(', ') || undefined} kcal={`${it.k} kcal${it.est ? ', estimated' : ''}`} macros={`${it.p} g protein`} label={`${it.n}, ${it.k} kcal, ${it.p} grams protein`} />;
                 })}
                 {!m.logged.undone && (
                   <Row style={{ justifyContent: 'space-between', alignItems: 'center', gap: 12, paddingHorizontal: 4 }}>
-                    <Txt muted style={{ flex: 1, fontSize: fontSizes.sm, lineHeight: 19 }}>{`${m.logged.left} kcal left today. Coach Vikram sees what changed.`}</Txt>
+                    <Txt muted style={{ flex: 1, fontSize: fontSizes.sm, lineHeight: 19 }}>{`${m.logged.items.length > 1 ? `Total ${m.logged.kcal} kcal. ` : ''}${m.logged.left} kcal left today. Coach Vikram sees what changed.`}</Txt>
                     <Button kind="secondary" small label="Undo" onPress={() => undo(m.id)} />
                   </Row>
                 )}
@@ -147,6 +150,16 @@ export default function LogChat() {
           </FadeIn>
         ))}
       </ScrollView>
+      {/* one tap foods while nothing has been sent yet */}
+      {msgs.length === 1 && (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={{ flexGrow: 0 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingBottom: 4 }}>
+          {QUICK.map((q) => (
+            <Option key={q} selected={false} role="button" accessibilityLabel={`Log ${q}`} offLine={c.line} radius={round(36)} height={36} padX={14} onPress={() => { haptic.light(); send(q); }}>
+              <Txt style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{q}</Txt>
+            </Option>
+          ))}
+        </ScrollView>
+      )}
       {/* the same glass message bar as the Coach Vikram chat: the food library on the left, the camera and the mic inside the pill */}
       <ChatBar value={text} onChangeText={setText} placeholder="Anything else?" autoFocus
         leftIcon={<Library size={22} color={c.ink} />} leftLabel="Open the food library" onLeft={library}
