@@ -214,7 +214,6 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
           </>
           )}
           {!!plan.done && <FadeIn i={4}><LoggedMuscles ex={plan.ex} /></FadeIn>}
-          {!!plan.done && !paused && <View style={{ marginTop: 40 }}><Button kind="secondary" label="Edit logged workout" icon={<Dumbbell size={18} color={c.ink} />} onPress={() => openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Edit logged workout' })} /></View>}
           {!plan.done && !!plan.cd?.length && <FadeIn i={4}><ListCard icon={<Snowflake size={20} color={c.ink} />} title="Cool-down" rows={plan.cd} done={!!plan.done} /></FadeIn>}
           {rel > 0 && <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.sm }}>You can start this on {DAYL[p.day]}. Plans open on today by default.</Txt>}
         </LockedPlan>
@@ -262,6 +261,31 @@ export function useCanLog() {
   if (p.noPlan || p.seg !== 'workout') return false;
   const plan = dayPlan(d, p, p.day);
   return !!plan && relDay(p) < 0 && !plan.done;
+}
+
+// Whether this day has a logged workout that can be edited (drives the floating Edit button and the scroll padding).
+export function useCanEdit() {
+  const { d } = useDomain();
+  const { p } = usePlans();
+  if (p.noPlan || p.seg !== 'workout') return false;
+  const plan = dayPlan(d, p, p.day);
+  return !!plan && !!plan.done;
+}
+
+// A logged day: "Edit logged workout" floats above the tab bar the whole time. It is a secondary action, so it is the white glass, not the blue main one.
+export function StickyEdit() {
+  const { c } = useTheme();
+  const { p } = usePlans();
+  const { openSheet } = useOverlay();
+  const insets = useSafeAreaInsets();
+  const hidden = useNavHidden();
+  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 88 }] }));
+  const bottom = Math.max(insets.bottom - 6, 14) + 84;
+  return (
+    <FadeIn pointerEvents="box-none" style={[{ position: 'absolute', left: 16, right: 16, bottom }, lift]}>
+      <Button kind="glassPrimary" label="Edit logged workout" icon={<Dumbbell size={18} color={c.bg} />} onPress={() => openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Edit logged workout' })} />
+    </FadeIn>
+  );
 }
 
 // The same floating button for a past day: "Log this workout". It is not the blue main action, so it is the white glass.
