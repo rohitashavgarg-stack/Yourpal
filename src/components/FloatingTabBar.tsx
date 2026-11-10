@@ -44,6 +44,8 @@ export function useHideOnScroll() {
   });
 }
 
+// How far the round tabs drop when the bar shrinks, and how far a floating button follows it down.
+export const NAV_DROP = 10;
 const ICONS: Record<string, any> = { index: Sun, plans: ClipboardList, progress: ChartLine, gym: Dumbbell };
 const LABELS: Record<string, string> = { index: 'Today', plans: 'Plans', progress: 'Progress', gym: 'Gym' };
 
@@ -52,7 +54,8 @@ function CircleNav({ state, emitter, navigateToTab, linked }: any) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
-  const bar = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 110 }] }));
+  // Scrolling down shrinks the bar instead of hiding it.
+  const bar = useAnimatedStyle(() => { const t = hidden?.value ?? 0; return { transform: [{ translateY: t * NAV_DROP }, { scale: 1 - 0.2 * t }] }; });
   const bottom = Math.max(insets.bottom - 6, 14);
   return (
     <Animated.View accessibilityRole="tablist" pointerEvents="box-none" style={[{ position: 'absolute', left: 0, right: 0, bottom, alignItems: 'center' }, bar]}>
@@ -74,7 +77,7 @@ function CircleNav({ state, emitter, navigateToTab, linked }: any) {
                 if (hidden) hidden.value = withTiming(0);
               }}
               style={{ width: size, height: size, borderRadius: size / 2, marginLeft: linked && i ? -10 : 0, zIndex: on ? 3 : 1, overflow: 'hidden', alignItems: 'center', justifyContent: 'center',
-                borderWidth: linked ? 3 : hasLiquidGlass ? 0 : 1, borderColor: linked ? c.bg : c.navLine,
+                borderWidth: on ? 0 : linked ? 3 : hasLiquidGlass ? 0 : 1, borderColor: linked ? c.bg : c.navLine, // the selected tab has no outline: the blue fill is its edge
                 shadowColor: fixed.shadow, shadowOpacity: 0.16, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: on ? 12 : 8 }}
             >
               {on ? <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: `${c.accent}E6` }} /> : <GlassBackdrop radius={size / 2} />}
@@ -117,7 +120,8 @@ function MergedNav({ state, emitter, navigateToTab }: any) {
   const reduce = useReduce(); // Reduce Motion: no spring, the value just jumps
   useEffect(() => { x.value = springTo(state.index * STEP, spring.nav, reduce); }, [state.index]);
   const bubble = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
-  const bar = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 110 }] }));
+  // Scrolling down shrinks the bar instead of hiding it.
+  const bar = useAnimatedStyle(() => { const t = hidden?.value ?? 0; return { transform: [{ translateY: t * NAV_DROP }, { scale: 1 - 0.2 * t }] }; });
   const bottom = Math.max(insets.bottom - 6, 14);
   const line = isDark ? 'rgba(255,255,255,0.16)' : 'rgba(18,21,28,0.13)';
   const web = Platform.OS === 'web';
@@ -221,8 +225,11 @@ function PillBar({ state, emitter, navigateToTab }: any) {
   const x = useSharedValue(0);
   const reduce = useReduce(); // Reduce Motion: no spring, the value just jumps
   useEffect(() => { x.value = springTo(state.index * seg, spring.nav, reduce); }, [state.index, seg]);
-  const hl = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
-  const bar = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 110 }] }));
+  const hl = useAnimatedStyle(() => { const t = hidden?.value ?? 0; return { transform: [{ translateX: x.value }], top: 6 - 3 * t, height: 50 - 12 * t, borderRadius: (50 - 12 * t) / 2 }; });
+  // Scrolling down shrinks the bar instead of hiding it: shorter, closer to the edge, the names gone and less padding.
+  const bar = useAnimatedStyle(() => { const t = hidden?.value ?? 0; return { height: 64 - 18 * t, borderRadius: (64 - 18 * t) / 2, bottom: Math.max(insets.bottom - 6, 14) - 6 * t }; });
+  const pad = useAnimatedStyle(() => ({ padding: 6 - 3 * (hidden?.value ?? 0) }));
+  const lab = useAnimatedStyle(() => { const t = hidden?.value ?? 0; return { opacity: 1 - t, height: 14 * (1 - t), marginTop: -3 * t }; });
   const bottom = Math.max(insets.bottom - 6, 14);
 
   return (
@@ -234,7 +241,7 @@ function PillBar({ state, emitter, navigateToTab }: any) {
     >
       <GlassBackdrop radius={32} frost={70} />
       {seg > 0 && <Animated.View style={[{ position: 'absolute', top: 6, left: 6, width: seg, height: 50, borderRadius: 25, backgroundColor: `${c.accent}D6`, shadowColor: c.accent, shadowOpacity: 0.3, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }, hl]} />}
-      <View style={{ flex: 1, flexDirection: 'row', padding: 6 }}>
+      <Animated.View style={[{ flex: 1, flexDirection: 'row' }, pad]}>
         {state.routes.map((r: any, i: number) => {
           const on = state.index === i;
           const Icon = ICONS[r.name] ?? Sun;
@@ -254,11 +261,11 @@ function PillBar({ state, emitter, navigateToTab }: any) {
               style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 3 }}
             >
               <Icon size={22} strokeWidth={on ? 2.3 : 1.9} color={col} />
-              <Text style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 14, color: col }}>{LABELS[r.name] ?? r.name}</Text>
+              <Animated.Text numberOfLines={1} style={[{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 14, color: col, overflow: 'hidden' }, lab]}>{LABELS[r.name] ?? r.name}</Animated.Text>
             </Pressable>
           );
         })}
-      </View>
+      </Animated.View>
     </Animated.View>
   );
 }

@@ -43,14 +43,14 @@ export default function Waiver() {
         <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
           <LinearGradient pointerEvents="none" colors={[c.bg + '00', c.bg]} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
           <View pointerEvents="box-none" style={{ paddingHorizontal: 16, paddingTop: 28, paddingBottom: bottom, gap: 10 }}>
-            <Button kind="accent" label="Agree and sign" accessibilityLabel="I have read the waiver. Agree and sign" icon={<PenLine size={18} color={c.accentInk} />} onPress={sign}
+            <Button kind="primary" label="Agree and sign" accessibilityLabel="I have read the waiver. Agree and sign" icon={<PenLine size={18} color={c.bg} />} onPress={sign}
               style={{ shadowColor: fixed.black, shadowOpacity: 0.28, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: 10 }} />
           </View>
         </View>
       )}>
       {/* The form icon first, then the big heading: the gym. The page title above already says "Waiver". */}
       <View style={{ gap: 12, paddingTop: 4 }}>
-        <IconBadge size={64} radius={radii.lg} bg={c.surface} borderWidth={1} borderColor={c.line}><FileText size={32} strokeWidth={1.9} color={c.accentText} /></IconBadge>
+        <IconBadge size={64} radius={radii.lg} bg={c.surface} borderWidth={1} borderColor={c.line}><FileText size={32} strokeWidth={1.9} color={c.ink} /></IconBadge>
         <Txt accessibilityRole="header" v="display">{WAIVER_GYM}</Txt>
         <Row style={{ gap: 6 }}>
           <Chip label="Pending" tone="warn" />
@@ -61,8 +61,8 @@ export default function Waiver() {
         <CardEdge radius={radii.lg} />
         {WAIVER_POINTS.map((t, i) => (
           <Row key={i} style={{ gap: 12, alignItems: 'flex-start', padding: 16, borderBottomWidth: i === WAIVER_POINTS.length - 1 ? 0 : 1, borderBottomColor: c.line }}>
-            <View style={{ width: 28, height: 28, borderRadius: radii.pill, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}>
-              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.accentText }}>{i + 1}</Txt>
+            <View style={{ width: 28, height: 28, borderRadius: radii.pill, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 18, color: c.ink }}>{i + 1}</Txt>
             </View>
             <Txt style={{ flex: 1, fontSize: fontSizes.md, lineHeight: 22 }}>{t}</Txt>
           </Row>

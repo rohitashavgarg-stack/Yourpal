@@ -37,7 +37,7 @@ function Floating({ children }: { children: React.ReactNode }) {
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
   const navBottom = Math.max(insets.bottom - 6, 14);
-  const a = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 74 }] }));
+  const a = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 20 }] }));
   return (
     <FadeIn style={[{ position: 'absolute', left: 16, right: 16, bottom: navBottom + 74, zIndex: 4 }, a]}>
       {children}
