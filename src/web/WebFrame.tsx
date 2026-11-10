@@ -181,6 +181,8 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     { label: 'Greeting line', options: GREETING_STATES as unknown as string[], value: greet.state, onPick: (v: string) => greetStore.set({ state: v as GreetingState }) },
     // Plans: assigned by the coach, or not assigned (the member only tracks weight, water and Health or wearable data).
     { label: 'Plans', options: ['Assigned', 'Not assigned'], value: plan.assigned ? 'Assigned' : 'Not assigned', onPick: (v: string) => { planStore.set({ assigned: v === 'Assigned' }); setPlans({ noPlan: v !== 'Assigned' }); } },
+    // The gym waiver: signed (the card is gone from Today) or not signed (the Sign your gym waiver card shows).
+    { label: 'Waiver', options: ['Signed', 'Not signed'], value: state.profile.waiver ? 'Signed' : 'Not signed', onPick: (v: string) => setProfile({ waiver: v === 'Signed' ? { signedAt: '10 Nov 2026', path: 'M8 38 C 22 4, 40 66, 56 30 S 88 12, 112 36', w: 120, h: 60 } : undefined }) },
     // Comeback: how long the member has been away.
     { label: 'Days away (Comeback)', options: ['2 days', '4 days', '8 days', '15 days'], value: d.todayVariant === 'Comeback' ? `${d.awayDays} days` : '', onPick: (v: string) => { sit.pick('Comeback'); set({ awayDays: parseInt(v, 10) }); } },
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },
@@ -260,6 +262,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       {dd('Membership')}
       {dd('Goal type')}
       {dd('Plans')}
+      {d.hasGym && dd('Waiver')}
       {dd('Meals today')}
       {dd('Greeting line')}
       {dd('Workout time')}
