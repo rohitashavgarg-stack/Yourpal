@@ -195,3 +195,33 @@ Everything below is on `main` (last publish `50a8a8b`, live at https://yourpal-p
 7. Nothing was checked on a physical phone (Expo Go). Restart Metro with `npx expo start --clear` there. The Android glass look is only seen through web.
 8. The finish-screen "Time" stat on the workout was left unchanged (he only pointed at the Today card).
 9. About 238 " · " separators remain in copy; he picks which to change.
+
+
+---
+
+## From: Design consistency, motion and workout polish (10 to 11 Nov 2026)
+
+Everything below is on `main` (last publish `395fc84`, live at https://yourpal-psi.vercel.app). Nothing was checked on a phone; the browser pane only paints frames while the Claude window shows it, so animation timing could not be measured by eye.
+
+### Rules the designer repeated
+- No hard-coded headers or footers: a page header floats with the progressive blur (`ProgressiveBlur` from `@/components/Glass`) and a bottom button floats (no bar, no line). Plans pages use `PageHeader` (absolute, `PAGE_HEADER_BODY`, `PAGE_HEADER_CLEAR`); `SubPage` has `floatingFooter`.
+- Strokes: plain standalone cards use `c.cardLift` plus `CardEdge`; a plain icon button gets the same look by default. Do not stroke nested items twice. Food cards keep their dotted outline.
+- Only the trainer creates or edits a workout plan. The Plans menu has Ask Coach, Exercise library, Edit logged workout (a full page, `/plans/entries`) and Download.
+- Motion: pages with a back button slide in from the right and out to the right; pages with a cross come from the bottom and leave downward; sheets slide down on the phone curve. `useReduce()` in `src/lib/motionSafe.ts` follows Reduce Motion on a phone only; on web animations always play. Rules and gaps are in `docs/ANIMATION_PATTERNS.md`.
+- Icon buttons swell when pressed (`Pressy grow`). The designer's reference video could not be opened, so this is an interpretation.
+
+### Built
+- Slide-out on web had been dead since the router started swapping `router.back` after first render: `installSlideBack()` in `src/app/_layout.tsx` now wraps it from an effect. The slide-in starts on mount, not only from `onLayout`.
+- Upcoming membership shows on the Active tab under "Starts next" (no fourth tab); a Frozen membership has a snowflake chip, a cool tint and a grey time bar (`status: 'Frozen'`, sample plan `m7`).
+- Workout finish: plain page, count-up numbers, staggered fade-ins, draggable "How hard was it?" (`EffortSlider`), floating Done. The logged workout in Plans shows effort as a word and a number only.
+- Waiver pages are white and grey with an amber top glow; the signed screen keeps a blue top glow and a black bottom.
+- Nav bar shrinks on scroll (narrower, no names, even padding) instead of hiding; floating buttons follow it down by 20 px.
+- Onboarding: header floats with the blur, all buttons float, swipe to start included.
+- Food library: shelves (Most eaten first when logging, Suggested first when swapping); Swap opens the same sheet as "Ate something else".
+
+### Open
+- Payments from Profile "opens from the bottom" could not be reproduced on web.
+- Shrunk nav padding: adjusted twice, never seen on screen.
+- Reduce Motion is untested on a phone. Expo Go has still not been run on a phone (Expo was started in a terminal tab for it).
+- About 238 dot separators remain in copy.
+- Sessions are slow because of length and long checks (tsc, lint, Vercel wait): publish in batches.
