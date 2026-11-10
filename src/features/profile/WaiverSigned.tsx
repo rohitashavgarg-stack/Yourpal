@@ -87,9 +87,6 @@ export function WaiverSigned({ sig }: { sig: Sig }) {
   return (
     <View style={{ flex: 1, backgroundColor: fixed.dark }}>
       <WaiverBackdrop />
-      <View style={{ paddingTop: insets.top + 12, paddingHorizontal: 16, alignItems: 'flex-start' }}>
-        <RoundBtn label="Back" onPress={() => goBack('/profile')} glass><ChevronLeft size={22} color={fixed.white} /></RoundBtn>
-      </View>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 }}>
         <View style={{ alignItems: 'center', gap: 12, transform: [{ translateY: -32 }] }}>
           <View style={{ width: BADGE, height: BADGE, alignItems: 'center', justifyContent: 'center' }}>
