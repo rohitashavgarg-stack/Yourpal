@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -36,7 +37,7 @@ export default function Waiver() {
   return (
     <SubPage title="Waiver" variant="progress" fallback="/profile"
       // A soft tint from the top of the screen, like the other pages.
-      backdrop={<LinearGradient pointerEvents="none" colors={[c.accent + '40', c.accent + '14', c.accent + '00']} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 260 }} />}
+      backdrop={<TopGlow color={c.warn} />}
       // The Agree and sign button stays at the bottom of the screen while the points scroll behind it.
       footer={(
         <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>

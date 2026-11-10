@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { EffortSlider } from '@/design-system/primitives/EffortSlider';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
@@ -57,14 +58,37 @@ function StreakLine({ done }: { done: number }) {
   );
 }
 
-export type Feel = 'Hard' | 'Just right' | 'Easy';
+// How hard it was, from the slider: the same five words the logged workout shows.
+export type Feel = 'Easy' | 'Moderate' | 'Hard' | 'Very hard' | 'Max';
+const effortWord = (v: number): Feel => (v < 0.2 ? 'Easy' : v < 0.45 ? 'Moderate' : v < 0.7 ? 'Hard' : v < 0.9 ? 'Very hard' : 'Max');
+
+// A number that counts up to its value when the screen opens (it just shows the value with Reduce Motion on).
+function CountUp({ to, delay = 250, ms = 900 }: { to: number; delay?: number; ms?: number }) {
+  const reduce = useReduce();
+  const [n, setN] = useState(reduce ? to : 0);
+  useEffect(() => {
+    if (reduce) return undefined;
+    let raf: ReturnType<typeof setInterval> | undefined;
+    const t0 = Date.now() + delay;
+    const start = setTimeout(() => {
+      raf = setInterval(() => {
+        const k = Math.min(1, (Date.now() - t0) / ms);
+        setN(Math.round(to * (1 - Math.pow(1 - k, 3)))); // slows down as it arrives
+        if (k >= 1 && raf) clearInterval(raf);
+      }, 30);
+    }, delay);
+    return () => { clearTimeout(start); if (raf) clearInterval(raf); };
+  }, [to, delay, ms, reduce]);
+  return <>{n}</>;
+}
 export type FinishStats = { mins: number; sets: number; exercises: number; totalEx: number; kcal: number; pr: { name: string; kg: number } | null; hc: boolean; weekDone: number };
 
 export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Feel, note: string) => void }) {
   const { c, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const { toast } = useOverlay();
-  const [feel, setFeel] = useState<Feel>('Just right');
+  const [effort, setEffort] = useState(0.55); // 0 is easy, 1 is max
+  const feel = effortWord(effort);
   const { d } = useDomain();
   const [note, setNote] = useState('');
   const [run, setRun] = useState(1);
@@ -86,14 +110,16 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.muted }}>Workout done · Leg day</Txt>
             <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 38, lineHeight: 36 }}>Nice work, Rohitashav</Txt>
           </View>
+          <FadeIn delay={120}>
           <Row style={{ backgroundColor: c.tile, borderRadius: 20, paddingVertical: 12, paddingHorizontal: 4 }}>
             {[[String(s.mins), ' min', 'Time'], [String(s.sets), '', s.sets === 1 ? 'Set done' : 'Sets done'], [s.exercises > s.totalEx ? String(s.exercises) : `${s.exercises}/${s.totalEx}`, '', 'Exercises']].map(([v, u, l], i) => (
               <View key={l} style={{ flex: 1, alignItems: 'center', borderLeftWidth: i ? 1 : 0, borderLeftColor: c.line }}>
-                <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 36 }}>{v}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.lg }}>{u}</Txt></Txt>
+                <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 36 }}>{/^\d+$/.test(v) ? <CountUp to={Number(v)} delay={300 + i * 120} /> : v}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.lg }}>{u}</Txt></Txt>
                 <Txt v="caption">{l}</Txt>
               </View>
             ))}
           </Row>
+          </FadeIn>
           <View>
             <FadeIn delay={350} style={{ backgroundColor: c.cardLift, borderRadius: radii.lg, padding: 14, gap: 10 }}>
 <CardEdge radius={radii.lg} />
@@ -118,22 +144,28 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
               <Tag label={`${s.kcal} kcal · from watch`} bg={c.tile} fg={c.ink} style={{ paddingVertical: 6, paddingHorizontal: 12 }} />
             </Row>
           )}
+          <FadeIn delay={650}>
           <Row style={{ gap: 12, paddingHorizontal: 4 }}>
             <Txt style={{ flex: 1, fontFamily: font.semibold }}>This week · {s.weekDone} of 4 workouts</Txt>
             <Row style={{ gap: 6 }}>{Array.from({ length: s.weekDone }, (_, i) => <PopCheck key={i} delay={700 + i * 120} />)}</Row>
           </Row>
+          </FadeIn>
           <StreakLine done={s.weekDone} />
-          <View style={{ gap: 8 }}>
-            <Txt style={{ fontFamily: font.semibold, paddingHorizontal: 4 }}>How did you feel?</Txt>
-            <View accessibilityRole="radiogroup" accessibilityLabel="How did you feel" style={{ flexDirection: 'row', gap: 8 }}>
-              {(['Hard', 'Just right', 'Easy'] as Feel[]).map((n) => (
-                <Pressy key={n} accessibilityRole="radio" accessibilityState={{ selected: feel === n }} onPress={() => setFeel(n)}
-                  style={{ flex: 1, height: 50, borderRadius: 25, borderWidth: 1, borderColor: feel === n ? c.ink : c.line, backgroundColor: feel === n ? c.ink : c.tile, alignItems: 'center', justifyContent: 'center' }}>
-                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: feel === n ? c.bg : c.ink }}>{n}</Txt>
-                </Pressy>
-              ))}
-            </View>
-          </View>
+          <FadeIn delay={900} style={{ backgroundColor: c.cardLift, borderRadius: radii.lg, padding: 16, gap: 12 }}>
+            <CardEdge radius={radii.lg} />
+            <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
+              <View style={{ flex: 1, gap: 2 }}>
+                <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25 }}>How hard was it?</Txt>
+                <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Drag to show how it felt</Txt>
+              </View>
+              <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.4 }}>{feel}</Txt>
+            </Row>
+            <EffortSlider value={effort} onChange={setEffort} label="How hard was the workout" />
+            <Row style={{ justifyContent: 'space-between' }}>
+              <Txt muted style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6 }}>EASY</Txt>
+              <Txt muted style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6 }}>MAX</Txt>
+            </Row>
+          </FadeIn>
           {d.hasGym && <Field value={note} onChangeText={setNote} placeholder="Note for Coach Vikram" accessibilityLabel="Note for Coach Vikram" returnKeyType="done" />}
           <Button label={note.trim() ? 'Send to Coach and finish' : 'Done'} onPress={() => onDone(feel, note)} />
         </View>
