@@ -37,8 +37,9 @@ function Half({ icon, label, unit, value, of, pct, color }: { icon: React.ReactN
     <View accessible accessibilityLabel={`${label}, ${value} of ${of} ${unit}`} style={{ flex: 1, gap: 6 }}>
       <Row style={{ gap: 7 }}>
         {icon}
-        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: SOFT }}>{label}</Txt>
-              </Row>
+        <Txt style={{ flex: 1, fontFamily: font.regular, fontSize: fontSizes.md, lineHeight: 20, color: SOFT }}>{label}</Txt>
+        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.sm, lineHeight: 19, color: MUTED }}>{unit}</Txt>
+      </Row>
       <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 38, letterSpacing: -0.8, color: WHITE }}>{value}<Txt style={{ fontFamily: font.regular, fontSize: fontSizes.base, lineHeight: 20, color: MUTED, letterSpacing: 0 }}>{` / ${of}`}</Txt></Txt>
       <View style={{ height: 5, borderRadius: radii.xs, backgroundColor: 'rgba(255,255,255,0.18)', overflow: 'hidden' }}>
         <View style={{ width: `${Math.max(0, Math.min(100, pct * 100))}%`, height: '100%', borderRadius: radii.xs, backgroundColor: color }} />

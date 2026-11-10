@@ -79,11 +79,12 @@ export default function MembershipDetail() {
   const history = PAUSE_HISTORY.slice(0, used);
   const showPauses = m.status !== 'Expired';
   const value = (t: string) => <Txt style={{ fontFamily: font.semibold }}>{t}</Txt>;
-  const paused = m.id === 'm1' && d.onBreak;
+  // a pause on right now counts as one used: the member's own break on the main plan, or a membership the gym has paused
+  const paused = (m.id === 'm1' && d.onBreak) || m.status === 'Paused';
   // Newest first: the pause on right now, then the ones taken. Past four tiles the rest hide behind "See all".
   const usedCount = Math.min(PAUSE_TOTAL, history.length + (paused ? 1 : 0)); // pauses taken, counting the one on now
   const slots: Slot[] = [
-    ...(paused ? [{ kind: 'now', n: history.length + 1, title: `Until ${dateLabel(g.breakUntil)}` } as Slot] : []),
+    ...(paused ? [{ kind: 'now', n: history.length + 1, title: `Until ${m.paused ? m.paused.until : dateLabel(g.breakUntil)}` } as Slot] : []),
     ...history.map((h, i): Slot => ({ kind: 'taken', n: i + 1, title: range(h.from, h.to), days: h.days, reason: h.reason })).reverse(),
   ];
   const shownSlots = allPauses ? slots : slots.slice(0, 4);
