@@ -1,5 +1,4 @@
 import React from 'react';
-import { EffortSlider } from '@/design-system/primitives/EffortSlider';
 import { View } from 'react-native';
 import { Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -106,12 +105,6 @@ export function LoggedFeel() {
             <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.4 }}>{effortWord(LOGGED_EFFORT)}</Txt>
           </View>
           <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 19, color: c.ink }}>{Math.round(LOGGED_EFFORT * 10)}</Txt> / 10</Txt>
-        </Row>
-        {/* the slider the member used after the workout, showing what they logged (it cannot be dragged here) */}
-        <EffortSlider value={LOGGED_EFFORT} readOnly label={`Your effort: ${effortWord(LOGGED_EFFORT)}`} />
-        <Row style={{ justifyContent: 'space-between' }}>
-          <Txt muted style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6 }}>EASY</Txt>
-          <Txt muted style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6 }}>MAX</Txt>
         </Row>
       </View>
     </View>
