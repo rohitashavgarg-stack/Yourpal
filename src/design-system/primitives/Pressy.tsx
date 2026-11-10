@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values and refs are mutated from gesture / animation callbacks */
 import React from 'react';
 import { Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withTiming } from 'react-native-reanimated';
 import { haptic } from '@/lib/haptics';
 
 /**
@@ -11,7 +11,8 @@ import { haptic } from '@/lib/haptics';
 const APressable = Animated.createAnimatedComponent(Pressable);
 export function Pressy({ style, children, haptics = true, scaleTo = 0.97, onPress, ...rest }: PressableProps & { style?: StyleProp<ViewStyle>; haptics?: boolean; scaleTo?: number; children?: React.ReactNode }) {
   const s = useSharedValue(1);
-  const target = Math.min(scaleTo, 0.97);
+  const reduce = useReducedMotion(); // Reduce Motion on: no press shrink, the haptic still tells you it registered
+  const target = reduce ? 1 : Math.min(scaleTo, 0.97);
   const a = useAnimatedStyle(() => ({ transform: [{ scale: s.value }] }));
   return (
     <APressable
