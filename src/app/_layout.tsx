@@ -230,7 +230,7 @@ function AppShell() {
             ))}
             {/* Close-button (X) screens open from the bottom. */}
             {FROM_BOTTOM.map((n) => (
-              <Stack.Screen key={n} name={n} options={{ presentation: 'transparentModal', animation: 'none', gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
+              <Stack.Screen key={n} name={n} options={{ presentation: 'transparentModal', animation: 'none', contentStyle: { backgroundColor: 'transparent' }, gestureEnabled: false, fullScreenGestureEnabled: false } as any} />
             ))}
           </Stack>
           {/* a very faint blue light in the top left corner, over every page and under sheets and toasts */}

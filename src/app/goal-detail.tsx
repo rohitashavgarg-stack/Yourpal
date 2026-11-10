@@ -1,4 +1,5 @@
 import React from 'react';
+import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import Svg, { Circle, Line, Path } from 'react-native-svg';
@@ -196,8 +197,8 @@ export default function GoalDetail() {
 
   return (
     <SubPage title="Your goal" fallback="/progress" backdrop={
-      // a soft blue wash at the top, fading into the page, like the food page
-      <LinearGradient pointerEvents="none" colors={[c.accentSoft, c.bg]} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 200 }} />
+      // the top glow, like the other pages
+      <TopGlow color={c.accent} />
     } right={
       <Pressy accessibilityRole="button" accessibilityLabel="Change goal" onPress={() => router.push('/goal')} style={{ height: 44, paddingHorizontal: 14, justifyContent: 'center' }}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.accentText }}>Change</Txt>
