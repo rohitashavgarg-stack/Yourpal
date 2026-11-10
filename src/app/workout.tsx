@@ -281,7 +281,7 @@ export default function Workout() {
       </Row>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} ref={scroll} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + 76, paddingBottom: isList ? 28 + insets.bottom : dockH + 20, gap: 12 }} keyboardShouldPersistTaps="handled">
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} ref={scroll} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + 100, paddingBottom: isList ? 28 + insets.bottom : dockH + 20, gap: 12 }} keyboardShouldPersistTaps="handled">
         {isList ? (
           <FadeIn key={s.phase} style={{ gap: 12 }}>
             <View style={{ minHeight: 180, borderRadius: radii.xl, overflow: 'hidden', padding: 16, justifyContent: 'flex-end', gap: 4 }}>

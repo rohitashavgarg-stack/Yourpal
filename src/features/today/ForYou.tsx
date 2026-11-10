@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import Animated, { Easing, interpolate, LinearTransition, SharedValue, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -195,7 +196,8 @@ export function ComebackPlan() {
   const { c, isDark } = useTheme();
   const start = useStartWorkout();
   return (
-    <FadeIn style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <FadeIn style={[{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 18, gap: 14, overflow: 'hidden' }, cardShadow(isDark)]}>
+<CardEdge radius={radii.xl} />
       <CornerGlow color={FLAME} size={520} />
       <Row style={{ gap: 12 }}>
         <IconBadge size={44} radius={radii.lg} bg="rgba(255,138,61,0.16)"><Flame size={22} color={FLAME} fill={FLAME} /></IconBadge>

@@ -5,7 +5,7 @@ import type { Payment } from '@/features/reports/payments';
 
 // A member can hold several gym memberships at the same time (for example an annual plan and a quarterly plan),
 // and keeps the old ones as history. These are sample memberships; the real list comes from the gym.
-export type MStatus = 'Active' | 'Upcoming' | 'Suspended' | 'Expired';
+export type MStatus = 'Active' | 'Frozen' | 'Upcoming' | 'Suspended' | 'Expired';
 export type MTab = 'Active' | 'Suspended' | 'Past'; // an Upcoming membership has no tab of its own: it shows on Active, under a "Starts next" heading
 export type Membership = {
   id: string; name: string; start: string; end: string; status: MStatus;
@@ -15,15 +15,16 @@ export type Membership = {
   left: { n: string; unit: string }; // time left in big numbers for the small cards: 37 days left, 13 months left
   pt?: { trainer: string; total: number; left: number }; // personal training sessions that come with this membership
   price: number;     // what the membership costs
+  frozen?: { from: string; until: string; days: number }; // a frozen membership: the gym paused it for these dates, its end date moves by the days
   next?: { item: string; due: string; amount: number }; // the next payment that is coming up
   payments: Payment[];
 };
 
 // How the admin's statuses show in the app. Frozen is still an Active membership (the pause shows on it); Transferred is a Past one.
 export const fromAdmin = (s: 'Active' | 'Frozen' | 'Suspended' | 'Expired' | 'Transferred'): MStatus =>
-  s === 'Suspended' ? 'Suspended' : s === 'Expired' || s === 'Transferred' ? 'Expired' : 'Active';
+  s === 'Suspended' ? 'Suspended' : s === 'Frozen' ? 'Frozen' : s === 'Expired' || s === 'Transferred' ? 'Expired' : 'Active';
 
-export const tabOf = (m: Membership): MTab => (m.status === 'Active' || m.status === 'Upcoming' ? 'Active' : m.status === 'Suspended' ? 'Suspended' : 'Past');
+export const tabOf = (m: Membership): MTab => (m.status === 'Active' || m.status === 'Frozen' || m.status === 'Upcoming' ? 'Active' : m.status === 'Suspended' ? 'Suspended' : 'Past');
 export const MTABS: MTab[] = ['Active', 'Suspended', 'Past'];
 
 const pay = (id: string, no: string, item: string, date: string, amount: number, method: string): Payment => ({ id, no, item, date, amount, method });
@@ -52,9 +53,16 @@ export function useMemberships(): Membership[] {
     id: 'm6', name: 'Annual plan', price: 12000, start: d.membership === 'Active' ? '15 Oct 2027' : d.membership === 'Expiring' ? '7 Oct 2026' : '22 Sep 2026', end: d.membership === 'Active' ? '14 Oct 2028' : d.membership === 'Expiring' ? '6 Oct 2027' : '21 Sep 2027',
     status: 'Upcoming', pct: 0, note: d.membership === 'Active' ? 'Starts on 15 Oct 2027, when your current plan ends' : d.membership === 'Expiring' ? 'Starts on 7 Oct 2026, when your current plan ends' : 'Starts on 22 Sep 2026', left: { n: '12', unit: 'months' }, payments: [pay('p7', 'INV-2026-0388', 'Annual membership', '30 Oct 2026', 12000, 'front desk')],
   };
+  // A frozen plan: the gym paused it, so the time stops running. It stays on the Active tab, marked as frozen.
+  const frozen: Membership = {
+    id: 'm7', name: 'Couple plan', price: 9000, start: '1 Jul 2026', end: '30 Jun 2027', status: 'Frozen', pct: 38,
+    note: 'Frozen until 30 Nov 2026. Your end date moves by the 28 days you are away', left: { n: '28', unit: 'days frozen' },
+    frozen: { from: '2 Nov 2026', until: '30 Nov 2026', days: 28 }, payments: [pay('p8', 'INV-2026-0341', 'Couple membership', '1 Jul 2026', 9000, 'front desk')],
+  };
   return [
     main,
     second,
+    frozen,
     upcoming,
     { id: 'm3', name: 'Student plan', price: 3000, start: '1 Jan 2026', end: '31 Mar 2027', status: 'Suspended', pct: 55, note: 'Suspended by the gym. Ask at the front desk.', left: { n: '—', unit: 'suspended' }, payments: [pay('p4', 'INV-2026-0007', 'Student membership', '1 Jan 2026', 3000, 'cash')] },
     { id: 'm4', name: 'Monthly plan', price: 1500, start: '1 Jun 2025', end: '30 Jun 2025', status: 'Expired', pct: 100, note: 'Ended on 30 Jun 2025', left: { n: '0', unit: 'days left' }, payments: [pay('p5', 'INV-2025-0201', 'Monthly membership', '1 Jun 2025', 1500, 'cash')] },

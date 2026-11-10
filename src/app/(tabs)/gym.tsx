@@ -36,16 +36,18 @@ function GymMembership() {
   const active = ms.filter((m) => m.status === 'Active').sort((x, y) => y.pct - x.pct); // the one ending first on top
   const soon = active.some((m) => m.warn);
   const upcoming = ms.find((m) => m.status === 'Upcoming');
+  const frozen = ms.find((m) => m.status === 'Frozen');
   const shown = active.slice(0, 2);
   const more = active.length - shown.length;
   // One line under the title says it all: how many are active and what needs a look. It turns amber when something does.
   const attention = d.onBreak || soon || active.length === 0;
-  const line = d.onBreak ? 'Paused for now' : active.length === 0 ? 'Nothing active right now' : soon ? `${active.length} active, one ends soon` : upcoming ? `${active.length} active, next plan starts ${upcoming.start}` : `${active.length} active, next ends on ${active[0].end}`;
+  const line = d.onBreak ? 'Paused for now' : active.length === 0 ? 'Nothing active right now' : soon ? `${active.length} active, one ends soon` : frozen?.frozen ? `${active.length} active, 1 frozen until ${frozen.frozen.until}` : upcoming ? `${active.length} active, next plan starts ${upcoming.start}` : `${active.length} active, next ends on ${active[0].end}`;
   const grow = useGrowOpen();
   return (
     <View ref={grow.ref} collapsable={false}>
     <Pressy accessibilityRole="button" accessibilityLabel={`Memberships. ${active.length} active${soon ? ', one ending soon' : ''}. See all`} onPressIn={grow.prime} onPress={() => router.push('/gym/membership')} scaleTo={0.985}
-      style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
+      style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 14 }}>
+<CardEdge radius={radii.lg} />
       <CardEdge radius={radii.lg} />
       <Row style={{ gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: radii.md, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><CreditCard size={22} color={c.accentText} /></View>

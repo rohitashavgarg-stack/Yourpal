@@ -1,4 +1,5 @@
 import React from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -74,7 +75,8 @@ export default function SessionDetail() {
       )}
 
       {s.status === 'upcoming' ? (
-        <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 4 }}>
+        <View style={{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 18, gap: 4 }}>
+<CardEdge radius={radii.xl} />
           <Txt style={{ fontFamily: font.semibold }}>{s.focus}</Txt>
           <Txt muted>Your coach shares the plan for this session before it starts.</Txt>
         </View>
@@ -92,7 +94,8 @@ export default function SessionDetail() {
           {s.remarks ? (
             <>
               <Txt v="label" style={{ paddingHorizontal: 4 }}>YOUR REMARKS</Txt>
-              <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18 }}>
+              <View style={{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 18 }}>
+<CardEdge radius={radii.xl} />
                 <Txt style={{ fontSize: fontSizes.base, lineHeight: 22 }}>{s.remarks}</Txt>
               </View>
             </>
@@ -100,7 +103,8 @@ export default function SessionDetail() {
           {s.note ? (
             <>
               <Txt v="label" style={{ paddingHorizontal: 4 }}>NOTE FROM COACH VIKRAM</Txt>
-              <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18 }}>
+              <View style={{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 18 }}>
+<CardEdge radius={radii.xl} />
                 <Txt style={{ fontSize: fontSizes.base, lineHeight: 22 }}>{s.note}</Txt>
               </View>
             </>

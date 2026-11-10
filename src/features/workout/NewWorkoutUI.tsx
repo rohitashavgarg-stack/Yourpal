@@ -51,7 +51,7 @@ function MoveThumb({ id, onOpen }: { id: string; onOpen?: () => void }) {
   const key = LIST_THUMB[id];
   const still = key ? THUMBS[key] : undefined;
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel="Watch the clip" disabled={!key} onPress={onOpen} scaleTo={0.94} style={{ width: 64, height: 64, borderRadius: radii.sm, overflow: 'hidden', backgroundColor: still ? fixed.white : c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
+    <Pressy accessibilityRole="button" accessibilityLabel="Watch the clip" disabled={!key} onPress={onOpen} scaleTo={0.94} style={{ width: 64, height: 64, borderRadius: radii.md, overflow: 'hidden', backgroundColor: still ? fixed.white : c.surface2, borderWidth: 1, borderColor: c.line, alignItems: 'center', justifyContent: 'center' }}>
       {still ? <Image source={still} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} /> : null}
       <IconBadge size={26} bg="rgba(11,14,20,0.72)">
         <Play size={12} color={fixed.white} fill={fixed.white} style={{ marginLeft: 1 }} />
@@ -155,7 +155,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
       </View>
       </View>
 
-      <ScrollView showsHorizontalScrollIndicator={false} style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + 84, paddingBottom: dockH + 28, gap: 16 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+      <ScrollView showsHorizontalScrollIndicator={false} style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + 108, paddingBottom: dockH + 28, gap: 16 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <Row style={{ gap: 8, alignItems: 'flex-start' }}>
           <Txt accessibilityRole="header" style={{ flex: 1, fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 40, letterSpacing: -0.8 }}>{e.name}</Txt>
           <IconButton label="Exercise options: swap, ask coach, form tips, skip" onPress={onMenu} scaleTo={0.92} style={{ marginTop: 2 }}>
@@ -214,7 +214,7 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
           <RoundBtn label="Minimise workout" onPress={onMinimise} glass><X size={20} color={c.ink} /></RoundBtn>
         </Row>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, paddingTop: insets.top + 70, paddingBottom: 270, gap: 16 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, paddingTop: insets.top + 96, paddingBottom: 270, gap: 16 }}>
         <View style={{ gap: 4 }}>
           <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 48, lineHeight: 56, letterSpacing: -1.6 }}>{cool ? 'Cool-down' : 'Warm-up'}</Txt>
           <Txt muted style={{ fontSize: 16, lineHeight: 23 }}>{list.length} {cool ? 'stretches' : 'moves'} · {cool ? 'slow and easy' : 'no weights'}</Txt>

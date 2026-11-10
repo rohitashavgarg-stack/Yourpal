@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { Image, ScrollView, View } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import Animated, { cancelAnimation, Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
@@ -16,7 +17,7 @@ import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { histFor, tipFor } from '@/features/plans/content';
-import { ExTile, PageHeader, PAGE_HEADER_BODY } from '@/features/plans/parts';
+import { ExTile, PageHeader, PAGE_HEADER_CLEAR } from '@/features/plans/parts';
 import { artIdFor, ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { CLIPS, THUMBS, clipIdFor } from '@/features/workout/clips';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
@@ -66,7 +67,7 @@ export default function ExerciseDetail() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title={name} />
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_BODY + 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_CLEAR + 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
         <View style={{ height: artId || clipId ? 250 : 210, borderRadius: radii.xl, overflow: 'hidden', backgroundColor: clipId ? fixed.white : artId ? lightBg : undefined }}>
           {clipId ? <PlanClip source={CLIPS[clipId]} thumb={THUMBS[clipId]} playing={playing} /> : artId ? (
             <View pointerEvents="none" style={{ position: 'absolute', top: 44, left: 12, right: 12, bottom: 18 }}>
@@ -96,7 +97,8 @@ export default function ExerciseDetail() {
             <View style={{ flex: 1 }}><Txt v="label">Your plan</Txt><Txt v="mono" style={{ fontSize: fontSizes.md }}>{sub}</Txt></View>
           </Row>
         ) : null}
-        <View style={{ height: 96, borderRadius: radii.lg, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 16 }}>
+        <View style={{ height: 96, borderRadius: radii.lg, backgroundColor: c.cardLift, flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 16 }}>
+<CardEdge radius={radii.lg} />
           <Svg width={64} height={64} viewBox="0 0 64 64">
             <Rect x={4} y={4} width={56} height={56} rx={16} fill={c.surface2} />
             <Path d="M18 46V18h6v10h16V18h6v28h-6V34H24v12z" fill={c.muted} />

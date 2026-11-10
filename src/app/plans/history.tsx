@@ -9,7 +9,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { HIST } from '@/features/plans/content';
 import { HistSheet } from '@/features/plans/Sheets';
-import { PageHeader, PAGE_HEADER_BODY } from '@/features/plans/parts';
+import { PageHeader, PAGE_HEADER_CLEAR } from '@/features/plans/parts';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
@@ -23,7 +23,7 @@ export default function WorkoutHistory() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title="History" />
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_BODY + 12, paddingBottom: insets.bottom + 32, gap: 16 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_CLEAR + 12, paddingBottom: insets.bottom + 32, gap: 16 }}>
         <Card style={{ paddingVertical: 8, paddingHorizontal: 18 }}>
           {HIST.map((h, i) => (
             <Pressy key={h.t} accessibilityRole="button" accessibilityLabel={`${h.t}, ${h.s || 'Logged'}, ${h.m}. Open summary`} onPress={() => open(i)} scaleTo={0.985}

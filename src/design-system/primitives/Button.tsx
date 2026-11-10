@@ -145,18 +145,20 @@ export function IconButton({ label, onPress, children, bg, style, glass, scaleTo
   const { c, isDark } = useTheme();
   // On web and Android a glass button (the back and close button at the top of a page) gets a thin border and a soft grey gradient that echo the iOS glass (iPhone draws the real glass). Every other icon button is plain.
   const mimic = Platform.OS !== 'ios' && !!glass;
+  // A plain icon button (no fill of its own, no glass, no outline) is the card look: a slightly lighter fill with the thin gradient stroke, so every icon button in the app matches.
+  const cardLook = !!edge || (!glass && !bg && !borderWidth);
   // Glass buttons get a soft shadow so they still read on a plain page.
   const rim = glass ? { shadowColor: fixed.shadow, shadowOpacity: isDark ? 0.35 : 0.1, shadowRadius: 10, shadowOffset: { width: 0, height: 3 }, elevation: 3 } : null;
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: !!disabled }} onPress={onPress} scaleTo={scaleTo} disabled={disabled} hitSlop={hitSlop}
-      style={[{ width: width ?? size, height: size, borderRadius: radius, ...(width ? { flexDirection: 'row' as const } : null), backgroundColor: glass ? 'transparent' : bg ?? c.surface2, alignItems: 'center', justifyContent: 'center', ...(borderWidth ? { borderWidth, borderColor } : null) }, rim, style]}>
+    <Pressy accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: !!disabled }} onPress={onPress} scaleTo={scaleTo} grow disabled={disabled} hitSlop={hitSlop}
+      style={[{ width: width ?? size, height: size, borderRadius: radius, ...(width ? { flexDirection: 'row' as const } : null), backgroundColor: glass ? 'transparent' : bg ?? (cardLook ? c.cardLift : c.surface2), alignItems: 'center', justifyContent: 'center', ...(borderWidth ? { borderWidth, borderColor } : null) }, rim, style]}>
       {glass ? (
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radii.lg, overflow: 'hidden' }}>
           <GlassBackdrop radius={22} tint={Platform.OS === 'web' ? (isDark ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.5)') : undefined} />
         </View>
       ) : null}
       {mimic ? <LinearGradient pointerEvents="none" colors={[c.glassFrom, c.glassTo]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius }} /> : null}
-      {mimic || edge ? <CardEdge radius={radius} /> : null}
+      {mimic || cardLook ? <CardEdge radius={radius} /> : null}
       {glass ? <View style={{ zIndex: 2 }}>{children}</View> : children}
     </Pressy>
   );

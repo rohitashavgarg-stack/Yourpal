@@ -1,4 +1,5 @@
 import React from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -66,7 +67,8 @@ export default function PersonalTraining() {
       </View>
 
       {/* How many people are in personal training here, how many reached a goal, and how long a package is. */}
-      <View style={{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18 }}>
+      <View style={{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 18 }}>
+<CardEdge radius={radii.xl} />
         <Row style={{ gap: 0, alignItems: 'flex-start' }}>
           {stats.map((x, i) => (
             <View key={x.l} accessible accessibilityLabel={`${x.n} ${x.l}`} style={{ flex: 1, gap: 2, paddingLeft: i ? 14 : 0, marginLeft: i ? 14 : 0, borderLeftWidth: i ? 1 : 0, borderLeftColor: c.line }}>

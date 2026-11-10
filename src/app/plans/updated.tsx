@@ -12,7 +12,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { applyCoachUpdate, COACH_CHANGES, COACH_HL } from '@/features/plans/content';
-import { Highlight, InfoBox, PageHeader, PAGE_HEADER_BODY } from '@/features/plans/parts';
+import { Highlight, InfoBox, PageHeader, PAGE_HEADER_CLEAR } from '@/features/plans/parts';
 import { setP, usePlans } from '@/features/plans/store';
 import { fontSizes } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
@@ -41,7 +41,7 @@ export default function WhatChanged() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title="What changed" />
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_BODY + 8, paddingBottom: insets.bottom + 28, gap: 12 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_CLEAR + 8, paddingBottom: insets.bottom + 28, gap: 12 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 4 }}><PersonAvatar who="coach" size={28} /><Txt v="label">Coach Vikram · today</Txt></View>
         <Card style={{ paddingVertical: 6, paddingHorizontal: 14 }}>
           {COACH_CHANGES.map((ch, i) => {
