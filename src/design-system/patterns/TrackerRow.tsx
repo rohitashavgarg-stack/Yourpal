@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { ScrollView, View } from 'react-native';
-import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withTiming, useReducedMotion } from 'react-native-reanimated';
+import { springTo } from '@/lib/motionSafe';
 import Svg, { Circle, ClipPath, Defs, G, LinearGradient as SvgGradient, Path, Polyline, Rect, Stop } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GlassWater, Plus } from '@/lib/icons';
@@ -89,7 +90,8 @@ const ARect = Animated.createAnimatedComponent(Rect);
 export function BottleFigma({ litres, id, w = 32, onLight = false }: { litres: number; id: string; w?: number; onLight?: boolean }) {
   const pct = Math.min(1, litres / TARGET);
   const top = useSharedValue(95 - pct * 65);
-  useEffect(() => { top.value = withSpring(95 - pct * 65, { damping: 14, stiffness: 90 }); }, [pct]);
+  const reduce = useReducedMotion(); // Reduce Motion: no spring, the value just jumps
+  useEffect(() => { top.value = springTo(95 - pct * 65, { damping: 14, stiffness: 90 }, reduce); }, [pct]);
   const water = useAnimatedProps(() => ({ y: top.value, height: 95 - top.value }));
   return (
     <Svg width={w} height={(w * 95) / 32} viewBox="0 0 32 95">

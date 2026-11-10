@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, View } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
-import Animated, { cancelAnimation, Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import Animated, { cancelAnimation, Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming, useReducedMotion } from 'react-native-reanimated';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -34,7 +34,8 @@ function PlanClip({ source, thumb, playing }: { source: number; thumb?: number; 
 
 function PlayBar({ dark }: { dark?: boolean }) {
   const w = useSharedValue(0);
-  useEffect(() => { w.value = withRepeat(withTiming(1, { duration: 6000, easing: Easing.linear }), -1, false); return () => cancelAnimation(w); }, []);
+  const reduce = useReducedMotion(); // Reduce Motion: the loop does not run
+  useEffect(() => { if (reduce) return; w.value = withRepeat(withTiming(1, { duration: 6000, easing: Easing.linear }), -1, false); return () => cancelAnimation(w); }, []);
   const a = useAnimatedStyle(() => ({ width: `${w.value * 100}%` }));
   return (
     <View style={{ position: 'absolute', left: 14, right: 14, bottom: 12, height: 4, borderRadius: radii.xs, backgroundColor: dark ? 'rgba(11,11,13,0.15)' : 'rgba(255,255,255,0.25)', overflow: 'hidden' }}>

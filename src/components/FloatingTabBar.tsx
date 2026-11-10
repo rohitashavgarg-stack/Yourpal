@@ -3,7 +3,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useDomain } from '@/lib/domain';
 import { LayoutChangeEvent, Platform, Pressable, Text, View } from 'react-native';
 import { BlurView } from 'expo-blur';
-import Animated, { SharedValue, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { SharedValue, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming, useReducedMotion } from 'react-native-reanimated';
+import { springTo } from '@/lib/motionSafe';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Defs, G, LinearGradient as SvgGradient, Mask, Path, Rect, Stop } from 'react-native-svg';
 import { GlassContainer, GlassView } from 'expo-glass-effect';
@@ -113,7 +114,8 @@ function MergedNav({ state, emitter, navigateToTab }: any) {
   const D = 58, R = D / 2, STEP = 66;
   const W = STEP * (N - 1) + D;
   const x = useSharedValue(state.index * STEP);
-  useEffect(() => { x.value = withSpring(state.index * STEP, spring.nav); }, [state.index]);
+  const reduce = useReducedMotion(); // Reduce Motion: no spring, the value just jumps
+  useEffect(() => { x.value = springTo(state.index * STEP, spring.nav, reduce); }, [state.index]);
   const bubble = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   const bar = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 110 }] }));
   const bottom = Math.max(insets.bottom - 6, 14);
@@ -217,7 +219,8 @@ function PillBar({ state, emitter, navigateToTab }: any) {
   const count = state.routes.length;
   const seg = w > 0 ? (w - 12) / count : 0;
   const x = useSharedValue(0);
-  useEffect(() => { x.value = withSpring(state.index * seg, spring.nav); }, [state.index, seg]);
+  const reduce = useReducedMotion(); // Reduce Motion: no spring, the value just jumps
+  useEffect(() => { x.value = springTo(state.index * seg, spring.nav, reduce); }, [state.index, seg]);
   const hl = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   const bar = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 110 }] }));
   const bottom = Math.max(insets.bottom - 6, 14);

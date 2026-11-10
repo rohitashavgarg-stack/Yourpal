@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
 import { BlurView } from 'expo-blur';
@@ -27,7 +27,8 @@ const PARTS = Array.from({ length: 34 }, (_, i) => {
 
 function Particle({ p, run }: { p: (typeof PARTS)[number]; run: number }) {
   const t = useSharedValue(0);
-  useEffect(() => { t.value = 0; t.value = withDelay(p.delay, withTiming(1, { duration: 1300, easing: Easing.bezier(0.12, 0.75, 0.3, 1) })); }, [run]);
+  const reduce = useReducedMotion(); // Reduce Motion: no confetti
+  useEffect(() => { t.value = 0; if (reduce) return; t.value = withDelay(p.delay, withTiming(1, { duration: 1300, easing: Easing.bezier(0.12, 0.75, 0.3, 1) })); }, [run]);
   const a = useAnimatedStyle(() => ({ opacity: t.value === 0 ? 0 : t.value < 0.75 ? 1 : 1 - (t.value - 0.75) * 4, transform: [{ translateX: p.dx * t.value }, { translateY: p.dy * t.value }, { scale: 0.5 + 0.5 * t.value }] }));
   return <Animated.View style={[{ position: 'absolute', left: '50%', top: '50%', width: p.w, height: p.w, marginLeft: -p.w / 2, marginTop: -p.w / 2, borderRadius: p.w, backgroundColor: p.col }, a]} />;
 }

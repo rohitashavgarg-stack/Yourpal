@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView, TextInput, View } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming, useReducedMotion } from 'react-native-reanimated';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useLeaveIfPaused } from '@/lib/logGate';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -32,7 +32,8 @@ type ScanSt = 'idle' | 'busy' | 'done' | 'fail';
 
 function ScanBeam() {
   const y = useSharedValue(0);
-  useEffect(() => { y.value = withRepeat(withTiming(1, { duration: 800, easing: Easing.inOut(Easing.quad) }), -1, true); }, []);
+  const reduce = useReducedMotion(); // Reduce Motion: the loop does not run
+  useEffect(() => { if (reduce) return; y.value = withRepeat(withTiming(1, { duration: 800, easing: Easing.inOut(Easing.quad) }), -1, true); }, []);
   const a = useAnimatedStyle(() => ({ top: `${8 + y.value * 80}%` }));
   return <Animated.View style={[{ position: 'absolute', left: '12%', right: '12%', height: 2, backgroundColor: '#5CC2E6', shadowColor: '#5CC2E6', shadowOpacity: 1, shadowRadius: 8, shadowOffset: { width: 0, height: 0 } }, a]} />;
 }

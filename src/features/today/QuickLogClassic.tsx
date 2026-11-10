@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Image, View } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming, useReducedMotion } from 'react-native-reanimated';
 import Svg, { Circle, Ellipse } from 'react-native-svg';
 import { Camera, PenLine, Search } from '@/lib/icons';
 import { SheetFooter } from '@/design-system/primitives/Sheet';
@@ -27,7 +27,8 @@ const SUGG = ['2 roti', '1 cup milk', '1 katori dal', '1 banana', '100 g paneer'
 
 function ScanLine() {
   const y = useSharedValue(0);
-  useEffect(() => { y.value = withRepeat(withTiming(1, { duration: 800, easing: Easing.inOut(Easing.quad) }), -1, true); }, []);
+  const reduce = useReducedMotion(); // Reduce Motion: the loop does not run
+  useEffect(() => { if (reduce) return; y.value = withRepeat(withTiming(1, { duration: 800, easing: Easing.inOut(Easing.quad) }), -1, true); }, []);
   const a = useAnimatedStyle(() => ({ top: `${8 + y.value * 80}%` }));
   return <Animated.View style={[{ position: 'absolute', left: '12%', right: '12%', height: 2, backgroundColor: fixed.live, shadowColor: fixed.live, shadowOpacity: 1, shadowRadius: 8, shadowOffset: { width: 0, height: 0 } }, a]} />;
 }

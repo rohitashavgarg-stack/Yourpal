@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import { CARD_PAGES } from '@/lib/cardGrow';
 import { Platform, View } from 'react-native';
-import Animated, { Easing, runOnJS, useAnimatedReaction, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, runOnJS, useAnimatedReaction, useAnimatedStyle, useSharedValue, withTiming, useReducedMotion } from 'react-native-reanimated';
 import { Stack, router, useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -93,11 +93,14 @@ function underlay(el: any) {
 }
 type Under = NonNullable<ReturnType<typeof underlay>>;
 // Same feel as the bottom sheets: 260 ms, ease out in, ease in out. No spring.
-const IN = { duration: 260, easing: Easing.out(Easing.cubic) };
-const OUT = { duration: 260, easing: Easing.in(Easing.cubic) };
+const IN0 = { duration: 260, easing: Easing.out(Easing.cubic) };
+const OUT0 = { duration: 260, easing: Easing.in(Easing.cubic) };
 const DIM = 0.45;
 function Slide({ name, bottom, children }: { name: string; bottom: boolean; children: React.ReactNode }) {
   const { c } = useTheme();
+  const reduce = useReducedMotion(); // Reduce Motion: the page just appears and goes, no slide
+  const IN = reduce ? { duration: 0 } : IN0;
+  const OUT = reduce ? { duration: 0 } : OUT0;
   const nav = useNavigation();
   const isWeb = Platform.OS === 'web';
   // Driven by shared values, not a reanimated "entering" layout animation: that one is a CSS animation on web and replays
