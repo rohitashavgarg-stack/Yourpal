@@ -225,3 +225,11 @@ Everything below is on `main` (last publish `395fc84`, live at https://yourpal-p
 - Reduce Motion is untested on a phone. Expo Go has still not been run on a phone (Expo was started in a terminal tab for it).
 - About 238 dot separators remain in copy.
 - Sessions are slow because of length and long checks (tsc, lint, Vercel wait): publish in batches.
+
+### Later on 11 Nov 2026 (commits up to `63d665d`, and the next publish)
+- Payments is a cross page (`FROM_BOTTOM` in `src/app/_layout.tsx`, `SubPage close`): it comes up from the bottom and slides down to close, on web and on the phone. Its close was not checked on a phone (Expo Go): the slide-out runs through `router.back`, which `installSlideBack()` wraps after the first render; Android's hardware back now goes through the same slide (`BackHandler` in `Slide`).
+- A paused membership (admin "Frozen" is shown as Paused) counts its current pause as one used in the pause list.
+- Card pages (`CARD_PAGES`) never show a back button: the drag handle at the top closes them, even when no card opened them (`GrowFrame grabber`).
+- Change goal: Save goal stays disabled until something on the page differs from how it opened.
+- Workout finish page: signed-waiver background without the dots (`WaiverBackdrop stars={false}`), numbers on the page, logged sets and "How was it?" in cards, Share at the bottom of its card, coach note bigger, no streak and no week row.
+- Open: on web, mid-close the Payments page showed black where Profile should be (the page under a closing X page); not fixed.
