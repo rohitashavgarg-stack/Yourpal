@@ -38,38 +38,6 @@ function Particle({ p, run }: { p: (typeof PARTS)[number]; run: number }) {
   return <Animated.View style={[{ position: 'absolute', left: '50%', top: '50%', width: p.w, height: p.w, marginLeft: -p.w / 2, marginTop: -p.w / 2, borderRadius: p.w, backgroundColor: p.col }, a]} />;
 }
 
-// The completion ring: it fills to the share of the planned exercises done, the dumbbell inside pops in and then breathes softly. Tap it to play it again (and the confetti).
-const ARing = Animated.createAnimatedComponent(Circle);
-function DoneRing({ pct, tick, onPress }: { pct: number; tick: number; onPress: () => void }) {
-  const { c } = useTheme();
-  const reduce = useReduce();
-  const SIZE = 104, R = 42, W = 7, C2 = 2 * Math.PI * R;
-  const shown = Math.max(0.08, Math.min(1, pct)); // never empty: a finished workout always shows a ring
-  const fill = useSharedValue(reduce ? shown : 0);
-  const pop = useSharedValue(reduce ? 1 : 0.4);
-  const breathe = useSharedValue(1);
-  useEffect(() => {
-    if (reduce) { fill.value = shown; pop.value = 1; return; }
-    fill.value = 0; pop.value = 0.4;
-    fill.value = withDelay(350, withTiming(shown, { duration: 1200, easing: Easing.bezier(0.32, 0.72, 0, 1) }));
-    pop.value = withDelay(500, withSpring(1, spring.bouncy));
-    breathe.value = withDelay(1800, withRepeat(withSequence(withTiming(1.07, { duration: 1400, easing: Easing.inOut(Easing.sin) }), withTiming(1, { duration: 1400, easing: Easing.inOut(Easing.sin) })), -1));
-  }, [tick, shown, reduce]); // eslint-disable-line react-hooks/exhaustive-deps
-  const ring = useAnimatedProps(() => ({ strokeDashoffset: C2 * (1 - fill.value) }));
-  const icon = useAnimatedStyle(() => ({ transform: [{ scale: pop.value * breathe.value }] }));
-  return (
-    <Pressy accessibilityRole="button" accessibilityLabel="Workout complete. Tap to play the celebration again" onPress={onPress} scaleTo={0.94} style={{ width: SIZE, height: SIZE, alignItems: 'center', justifyContent: 'center' }}>
-      <Svg width={SIZE} height={SIZE} style={{ position: 'absolute', transform: [{ rotate: '-90deg' }] }}>
-        <Circle cx={SIZE / 2} cy={SIZE / 2} r={R} stroke={onDark.text + '26'} strokeWidth={W} fill="none" />
-        <ARing cx={SIZE / 2} cy={SIZE / 2} r={R} stroke={onDark.mint} strokeWidth={W} strokeLinecap="round" fill="none" strokeDasharray={C2} animatedProps={ring} />
-      </Svg>
-      <Animated.View style={[{ width: 56, height: 56, borderRadius: round(56), backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }, icon]}>
-        <Dumbbell size={28} strokeWidth={2} color={fixed.white} />
-      </Animated.View>
-    </Pressy>
-  );
-}
-
 function PopCheck({ delay }: { delay: number }) {
   const { c } = useTheme();
   const s = useSharedValue(0);
@@ -145,7 +113,6 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
             <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl5, lineHeight: 42, letterSpacing: -1, color: onDark.soft }}>Rohitashav</Txt>
           </View>
          </View>
-         <DoneRing pct={s.totalEx > 0 ? s.exercises / s.totalEx : 1} tick={run} onPress={() => { haptic.success(); setRun((x) => x + 1); }} />
         </FadeIn>
 
         <FadeIn delay={120}>
@@ -212,7 +179,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
       <ProgressiveBlur edge="bottom" height={insets.bottom + 120} />
       <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
         <Button kind="white" label={note.trim() ? 'Send to Coach and finish' : 'Done'} onPress={() => onDone(feel, note)}
-          style={{ shadowColor: c.accent, shadowOpacity: 0.7, shadowRadius: 26, shadowOffset: { width: 0, height: 0 }, elevation: 14 }} />
+          style={{ shadowColor: fixed.white, shadowOpacity: 0.55, shadowRadius: 26, shadowOffset: { width: 0, height: 0 }, elevation: 14 }} />
       </View>
     </View>
   );
