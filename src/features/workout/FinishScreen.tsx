@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { TextInput } from 'react-native';
+import { WaiverBackdrop } from '@/features/profile/WaiverBackdrop';
 import { ProgressiveBlur } from '@/components/Glass';
 import { EffortSlider } from '@/design-system/primitives/EffortSlider';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
@@ -18,7 +20,7 @@ import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { useDomain } from '@/lib/domain';
 import { fmt1 } from '@/lib/useNow';
-import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const COLORS = ['#3A36C9', '#B9B6FF', fixed.white, '#F2B544', '#1F6E63'];
@@ -93,75 +95,83 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
   const [run, setRun] = useState(1);
   useEffect(() => { haptic.success(); }, []);
   return (
-    <View style={{ flex: 1, backgroundColor: c.bg }}>
-        {/* The page itself, no card and no blue circle: the numbers sit straight on the page, and Done floats at the bottom. */}
-        <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingTop: insets.top + 28, paddingHorizontal: 20, paddingBottom: insets.bottom + 120, gap: 18 }}>
-          <View style={{ gap: 4 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.muted }}>Workout done · Leg day</Txt>
-            <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 38, lineHeight: 36 }}>Nice work, Rohitashav</Txt>
-          </View>
-          <FadeIn delay={120}>
-          <Row style={{ backgroundColor: c.tile, borderRadius: 20, paddingVertical: 12, paddingHorizontal: 4 }}>
+    // The same page as the signed waiver: black with a blue glow at the top. Nothing sits in a card; the numbers are on the page.
+    <View style={{ flex: 1, backgroundColor: fixed.dark }}>
+      <WaiverBackdrop />
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingTop: insets.top + 40, paddingHorizontal: 22, paddingBottom: insets.bottom + 130, gap: 28 }}>
+        <FadeIn style={{ gap: 6 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: onDark.soft }}>Workout done, Leg day</Txt>
+          <Txt accessibilityRole="header" style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl6, lineHeight: 50, letterSpacing: -1.2, color: onDark.text }}>Nice work, Rohitashav</Txt>
+        </FadeIn>
+
+        <FadeIn delay={120}>
+          <Row style={{ alignItems: 'flex-start' }}>
             {[[String(s.mins), ' min', 'Time'], [String(s.sets), '', s.sets === 1 ? 'Set done' : 'Sets done'], [s.exercises > s.totalEx ? String(s.exercises) : `${s.exercises}/${s.totalEx}`, '', 'Exercises']].map(([v, u, l], i) => (
-              <View key={l} style={{ flex: 1, alignItems: 'center', borderLeftWidth: i ? 1 : 0, borderLeftColor: c.line }}>
-                <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 36 }}>{/^\d+$/.test(v) ? <CountUp to={Number(v)} delay={300 + i * 120} /> : v}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.lg }}>{u}</Txt></Txt>
-                <Txt v="caption">{l}</Txt>
+              <View key={l} style={{ flex: 1, gap: 2 }}>
+                <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl6, lineHeight: 50, letterSpacing: -1.2, color: onDark.text }}>{/^\d+$/.test(v) ? <CountUp to={Number(v)} delay={300 + i * 120} /> : v}<Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.lg, color: onDark.muted }}>{u}</Txt></Txt>
+                <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: onDark.muted }}>{l}</Txt>
               </View>
             ))}
           </Row>
-          </FadeIn>
-          <View>
-            <FadeIn delay={350} style={{ backgroundColor: c.cardLift, borderRadius: radii.lg, padding: 14, gap: 10 }}>
-<CardEdge radius={radii.lg} />
-              <Row style={{ gap: 12 }}>
-                <IconButton label="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }} size={52} radius={radii.xl} bg={c.accent}>
-                  <Trophy size={24} strokeWidth={1.9} color={fixed.white} />
-                </IconButton>
-                <View style={{ flex: 1 }}>
-                  <Txt style={{ fontFamily: font.bold, fontSize: fontSizes.xs, letterSpacing: 0.5, color: c.accent }}>{s.pr ? 'New PR' : 'Logged'}</Txt>
-                  <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 28 }}>{s.pr ? `${s.pr.name} ${fmt1(s.pr.kg)} kg` : `${s.sets} ${s.sets === 1 ? "set" : "sets"} done`}</Txt>
-                </View>
-              </Row>
-              <Button kind="outline" small label="Share" icon={<Share size={16} color={c.ink} />} onPress={() => toast('Sharing opens the system share sheet')} />
-            </FadeIn>
-            <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
-              {PARTS.map((p, i) => <Particle key={i} p={p} run={run} />)}
+        </FadeIn>
+
+        <View>
+          <FadeIn delay={350} style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+            <IconButton label="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }} size={56} radius={radii.xl} bg={c.accent}>
+              <Trophy size={26} strokeWidth={1.9} color={fixed.white} />
+            </IconButton>
+            <View style={{ flex: 1 }}>
+              <Txt style={{ fontFamily: font.bold, fontSize: fontSizes.xs, letterSpacing: 0.6, color: onDark.soft }}>{s.pr ? 'NEW PERSONAL BEST' : 'LOGGED'}</Txt>
+              <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, color: onDark.text }}>{s.pr ? `${s.pr.name} ${fmt1(s.pr.kg)} kg` : `${s.sets} ${s.sets === 1 ? 'set' : 'sets'} done`}</Txt>
             </View>
+            <Button kind="white" small label="Share" icon={<Share size={16} color={fixed.dark} />} onPress={() => toast('Sharing opens the system share sheet')} />
+          </FadeIn>
+          <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+            {PARTS.map((p, i) => <Particle key={i} p={p} run={run} />)}
           </View>
-          {s.hc && (
-            <Row style={{ gap: 8 }}>
-              <Tag label="♥ Avg 124 · max 158 bpm" bg="rgba(255,107,122,0.16)" fg="#FF8A96" style={{ paddingVertical: 6, paddingHorizontal: 12 }} />
-              <Tag label={`${s.kcal} kcal · from watch`} bg={c.tile} fg={c.ink} style={{ paddingVertical: 6, paddingHorizontal: 12 }} />
-            </Row>
-          )}
-          <FadeIn delay={650}>
-          <Row style={{ gap: 12, paddingHorizontal: 4 }}>
-            <Txt style={{ flex: 1, fontFamily: font.semibold }}>This week · {s.weekDone} of 4 workouts</Txt>
+        </View>
+
+        {s.hc && (
+          <Row style={{ gap: 18 }}>
+            <Txt style={{ fontSize: fontSizes.base, lineHeight: 21, color: onDark.text }}>Avg 124, max 158 bpm</Txt>
+            <Txt style={{ fontSize: fontSizes.base, lineHeight: 21, color: onDark.muted }}>{`${s.kcal} kcal from your watch`}</Txt>
+          </Row>
+        )}
+
+        <FadeIn delay={650}>
+          <Row style={{ gap: 12 }}>
+            <Txt style={{ flex: 1, fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: onDark.text }}>{`This week, ${s.weekDone} of 4 workouts`}</Txt>
             <Row style={{ gap: 6 }}>{Array.from({ length: s.weekDone }, (_, i) => <PopCheck key={i} delay={700 + i * 120} />)}</Row>
           </Row>
+        </FadeIn>
+
+        <FadeIn delay={900} style={{ gap: 14 }}>
+          <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
+            <View style={{ flex: 1, gap: 2 }}>
+              <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, color: onDark.text }}>How hard was it?</Txt>
+              <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: onDark.muted }}>Drag to show how it felt</Txt>
+            </View>
+            <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.4, color: onDark.text }}>{feel}</Txt>
+          </Row>
+          <EffortSlider value={effort} onChange={setEffort} label="How hard was the workout" />
+          <Row style={{ justifyContent: 'space-between' }}>
+            <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6, color: onDark.muted }}>EASY</Txt>
+            <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6, color: onDark.muted }}>MAX</Txt>
+          </Row>
+        </FadeIn>
+
+        {d.hasGym && (
+          <FadeIn delay={1100} style={{ gap: 10 }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, color: onDark.text }}>Note for Coach Vikram</Txt>
+            <TextInput value={note} onChangeText={setNote} multiline placeholder="How did it go? Anything he should know for next time" placeholderTextColor={onDark.muted} accessibilityLabel="Note for Coach Vikram"
+              style={{ minHeight: 120, borderRadius: radii.lg, borderWidth: 1, borderColor: onDark.text + '33', backgroundColor: onDark.text + '14', paddingHorizontal: 16, paddingTop: 14, paddingBottom: 14, fontFamily: font.regular, fontSize: fontSizes.basePlus, lineHeight: 24, color: onDark.text, textAlignVertical: 'top', outlineStyle: 'none' } as never} />
           </FadeIn>
-          <StreakLine done={s.weekDone} />
-          <FadeIn delay={900} style={{ backgroundColor: c.cardLift, borderRadius: radii.lg, padding: 16, gap: 12 }}>
-            <CardEdge radius={radii.lg} />
-            <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
-              <View style={{ flex: 1, gap: 2 }}>
-                <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25 }}>How hard was it?</Txt>
-                <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Drag to show how it felt</Txt>
-              </View>
-              <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.4 }}>{feel}</Txt>
-            </Row>
-            <EffortSlider value={effort} onChange={setEffort} label="How hard was the workout" />
-            <Row style={{ justifyContent: 'space-between' }}>
-              <Txt muted style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6 }}>EASY</Txt>
-              <Txt muted style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6 }}>MAX</Txt>
-            </Row>
-          </FadeIn>
-          {d.hasGym && <Field value={note} onChangeText={setNote} placeholder="Note for Coach Vikram" accessibilityLabel="Note for Coach Vikram" returnKeyType="done" />}
-        </ScrollView>
-        <ProgressiveBlur edge="bottom" height={insets.bottom + 120} />
-        <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
-          <Button kind="accent" label={note.trim() ? 'Send to Coach and finish' : 'Done'} onPress={() => onDone(feel, note)} />
-        </View>
+        )}
+      </ScrollView>
+      <ProgressiveBlur edge="bottom" height={insets.bottom + 120} />
+      <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
+        <Button kind="white" label={note.trim() ? 'Send to Coach and finish' : 'Done'} onPress={() => onDone(feel, note)} />
+      </View>
     </View>
   );
 }

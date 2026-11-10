@@ -67,7 +67,7 @@ function ToastLift({ value }: { value: number }) { useToastLift(value); return n
 // away, let go early and it eases back. Pages opened any other way do not animate. The card's position comes from setCardOrigin (src/lib/cardGrow.ts).
 export type GrowHandle = { leave: (go: () => void) => void };
 const SMOOTH = Easing.bezier(0.22, 1, 0.36, 1);
-export function GrowFrame({ children, handle, onClose, origin }: { children: React.ReactNode; handle: React.Ref<GrowHandle>; onClose: () => void; origin: CardRect | null }) {
+export function GrowFrame({ children, handle, onClose, origin, grabber }: { children: React.ReactNode; handle: React.Ref<GrowHandle>; onClose: () => void; origin: CardRect | null; /** Show the drag handle at the top even when no card opened the page (it is opened some other way): dragging it down closes the page. */ grabber?: boolean }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const root = useRef<ViewInstance>(null);
@@ -99,7 +99,13 @@ export function GrowFrame({ children, handle, onClose, origin }: { children: Rea
   }, [origin]);
   // leave: the page carries on down and away (the way a drag does), then the real back runs
   const leave = (go: () => void) => {
-    if (!origin || !box) { go(); return; }
+    if (!origin) {
+      // not opened from a card: the page still follows the drag down and leaves downward
+      if (!grabber) { go(); return; }
+      dy.value = withTiming(win.height * 1.05, { duration: reduce ? 0 : 260, easing: Easing.out(Easing.cubic) }, (done) => { if (done) scheduleOnRN(go); });
+      return;
+    }
+    if (!box) { go(); return; }
     dy.value = withTiming(box.h * 1.05, { duration: reduce ? 0 : 260, easing: Easing.out(Easing.cubic) }, (done) => { if (done) scheduleOnRN(go); });
   };
   // Every way of going back gives the same tap the back button gives, and plays the same closing animation.
@@ -129,6 +135,7 @@ export function GrowFrame({ children, handle, onClose, origin }: { children: Rea
       else dy.value = withTiming(0, { duration: 320, easing: SMOOTH });
     });
   const style = useAnimatedStyle(() => {
+    if (!origin && grabber) return { transform: [{ translateY: dy.value }, { translateX: dx.value }], borderRadius: 28 * Math.min(1, dy.value / 40) };
     if (!origin || late) return dx.value > 0 ? { borderRadius: 28 * Math.min(1, dx.value / 40), transform: [{ translateX: dx.value }] } : {};
     if (!box) return { opacity: 0 };
     const t = p.value;
@@ -143,7 +150,7 @@ export function GrowFrame({ children, handle, onClose, origin }: { children: Rea
         { scale: (sc + (1 - sc) * t) * (1 - 0.14 * pull) },
       ],
     };
-  }, [origin, box, late]);
+  }, [origin, box, late, grabber]);
   const measure = () => { root.current?.measureInWindow((x, y, w, h) => { if (w > 0 && h > 0) setBox((bx) => bx ?? { x, y, w, h }); }); };
   return (
     <Animated.View ref={root as never} collapsable={false} onLayout={measure} style={[{ flex: 1, overflow: 'hidden' }, style]}>
@@ -154,7 +161,7 @@ export function GrowFrame({ children, handle, onClose, origin }: { children: Rea
           <View collapsable={false} style={{ position: 'absolute', left: 0, top: insets.top + 56, bottom: 0, width: 22, zIndex: 40 }} />
         </GestureDetector>
       ) : null}
-      {origin ? (
+      {origin || grabber ? (
         <GestureDetector gesture={drag}>
           <View accessible accessibilityLabel="Drag down to close" style={{ position: 'absolute', top: Math.max(insets.top - 4, 0), alignSelf: 'center', width: 140, height: 28, alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
             <View style={{ width: 40, height: 5, borderRadius: radii.pill, backgroundColor: c.muted, opacity: 0.55 }} />
@@ -195,7 +202,7 @@ export function SubPage({ title, children, right, footer, floatingFooter, fallba
     </Row>
   );
   return (
-    <GrowFrame handle={frame} onClose={() => goBack(fallback)} origin={origin}>
+    <GrowFrame handle={frame} onClose={() => goBack(fallback)} origin={origin} grabber={isCardPage(path)}>
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
       {!shell && <ToastLift value={insets.bottom + toastLift} />}
       {useScroll ? (
