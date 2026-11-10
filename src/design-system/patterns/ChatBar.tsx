@@ -37,13 +37,13 @@ export function ChatBar({
           <GlassBackdrop radius={23} />
           <View style={{ zIndex: 2 }}>{leftIcon}</View>
         </Pressy>
-        <View style={[{ flex: 1, borderRadius: radii.card, overflow: 'hidden' }, lift]}>
+        <View style={[{ flex: 1, minWidth: 0, borderRadius: radii.card, overflow: 'hidden' }, lift]}>
           <GlassBackdrop radius={24} />
           <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 2, paddingLeft: 16, paddingRight: 4, zIndex: 2 }}>
             <TextInput
               {...props}
               editable={!readOnlyField}
-              style={{ flex: 1, minHeight: 46, paddingTop: Platform.OS === 'ios' ? 12 : 11, paddingBottom: 11, paddingHorizontal: 4, fontFamily: font.medium, fontSize: fontSizes.basePlus, lineHeight: 22, color: c.ink, outlineStyle: 'none' } as never}
+              style={{ flex: 1, minWidth: 0, minHeight: 46, paddingTop: Platform.OS === 'ios' ? 12 : 11, paddingBottom: 11, paddingHorizontal: 4, fontFamily: font.medium, fontSize: fontSizes.basePlus, lineHeight: 22, color: c.ink, outlineStyle: 'none' } as never}
             />
             {onCamera ? (
               <Pressy accessibilityRole="button" accessibilityLabel="Choose a photo" onPress={onCamera} scaleTo={0.9} style={inner}>
