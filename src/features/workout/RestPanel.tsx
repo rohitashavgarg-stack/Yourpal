@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/immutability -- reanimated shared values are written from gesture and animation callbacks */
 import React, { useEffect, useRef } from 'react';
 import { View } from 'react-native';
-import Animated, { cancelAnimation, Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withSpring, withTiming, useReducedMotion } from 'react-native-reanimated';
-import { springTo } from '@/lib/motionSafe';
+import Animated, { cancelAnimation, Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import { springTo, useReduce } from '@/lib/motionSafe';
 import { fadeOut } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
@@ -36,7 +36,7 @@ export function RestPanel({ rest, now, onAdd30, onSkip, onDone, docked }: { rest
     p.value = withTiming(1, { duration: l, easing: Easing.linear });
   }, [rest.endAt, rest.total]);
   const last5 = left <= 5 && !finished;
-  const reduce = useReducedMotion(); // Reduce Motion: the loop does not run
+  const reduce = useReduce(); // Reduce Motion: the loop does not run
   useEffect(() => {
     if (last5 && !reduce) beat.value = withRepeat(withSequence(withTiming(1.08, { duration: 500 }), withTiming(1, { duration: 500 })), -1, false);
     else if (!finished) { cancelAnimation(beat); beat.value = withTiming(1); }

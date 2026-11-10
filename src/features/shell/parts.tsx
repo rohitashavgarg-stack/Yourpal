@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Text, View, ViewStyle } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming, interpolateColor, useReducedMotion } from 'react-native-reanimated';
-import { springTo } from '@/lib/motionSafe';
+import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming, interpolateColor } from 'react-native-reanimated';
+import { springTo, useReduce } from '@/lib/motionSafe';
 import { router } from 'expo-router';
 import { ChevronRight } from '@/lib/icons';
 import { Pressy, Txt } from '@/components/ui';
@@ -36,7 +36,7 @@ export function Switch({ on, onChange, label, locked }: { on: boolean; onChange?
   const p = useSharedValue(on ? 1 : 0);
   useEffect(() => { p.value = withTiming(on ? 1 : 0, { duration: 220 }); }, [on]);
   const x = useSharedValue(on ? 20 : 0);
-  const reduce = useReducedMotion(); // Reduce Motion: no spring, the value just jumps
+  const reduce = useReduce(); // Reduce Motion: no spring, the value just jumps
   useEffect(() => { x.value = springTo(on ? 20 : 0, spring.snappy, reduce); }, [on]);
   const track = useAnimatedStyle(() => ({ backgroundColor: interpolateColor(p.value, [0, 1], [c.surface3, c.good]) }));
   const knob = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));

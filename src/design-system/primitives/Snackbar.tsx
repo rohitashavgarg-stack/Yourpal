@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Pressable, Text } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming, useReducedMotion } from 'react-native-reanimated';
-import { springTo } from '@/lib/motionSafe';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { springTo, useReduce } from '@/lib/motionSafe';
 import { scheduleOnRN } from 'react-native-worklets';
 import { useTheme } from '@/theme/ThemeProvider';
 import { haptic } from '@/lib/haptics';
@@ -23,7 +23,7 @@ export function Snackbar({ msg, undo, onGone, raised, lift }: SnackbarProps) {
   const { c } = useTheme();
   const y = useSharedValue(40);
   const o = useSharedValue(0);
-  const reduce = useReducedMotion(); // Reduce Motion: no spring, the value just jumps
+  const reduce = useReduce(); // Reduce Motion: no spring, the value just jumps
   useEffect(() => {
     y.value = springTo(0, spring.bouncy, reduce);
     o.value = withTiming(1, { duration: 200 });

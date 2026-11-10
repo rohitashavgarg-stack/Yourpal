@@ -11,7 +11,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { mmss } from '@/lib/useNow';
 import { RestPanel } from './RestPanel';
-import { GlassBackdrop } from '@/components/Glass';
+import { GlassBackdrop, ProgressiveBlur } from '@/components/Glass';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { CLIPS, THUMBS } from './clips';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
@@ -127,6 +127,7 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const [pop, setPop] = useState(false);
+  const [dockH, setDockH] = useState(160); // the floating buttons at the bottom: the page keeps room for them
   const [shown, setShown] = useState<boolean | null>(null); // null = follow the sets: the clip is there until a set is ticked, then it shrinks
   const source = CLIPS[e.id];
   const done = e.sets.filter((x) => x.st === 'done').length;
@@ -139,6 +140,9 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       {pop && source != null && <ClipPopup source={source} onClose={() => setPop(false)} />}
+      {/* the header floats over the page with the progressive blur, no colour behind it */}
+      <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+      <ProgressiveBlur height={insets.top + 76 + 36} />
       <View style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, gap: 12, paddingBottom: 8 }}>
         <ProgressSegments height={4} gap={4} segments={Array.from({ length: n }, (_, i) => ({ color: i <= pos ? c.accent : c.surface3 }))} />
         <Row style={{ gap: 10 }}>
@@ -149,8 +153,9 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
           <FinishPill onPress={onFinish} />
         </Row>
       </View>
+      </View>
 
-      <ScrollView showsHorizontalScrollIndicator={false} style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 16 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+      <ScrollView showsHorizontalScrollIndicator={false} style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + 84, paddingBottom: dockH + 28, gap: 16 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <Row style={{ gap: 8, alignItems: 'flex-start' }}>
           <Txt accessibilityRole="header" style={{ flex: 1, fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 40, letterSpacing: -0.8 }}>{e.name}</Txt>
           <IconButton label="Exercise options: swap, ask coach, form tips, skip" onPress={onMenu} scaleTo={0.92} style={{ marginTop: 2 }}>
@@ -170,7 +175,8 @@ export function NewExercise({ s, e, cur, elapsed, now, onMinimise, onFinish, onM
         {note}
       </ScrollView>
 
-      <View style={{ paddingHorizontal: 12, paddingTop: 8, paddingBottom: Math.max(insets.bottom, 12) + 4, gap: 8, borderTopWidth: 1, borderTopColor: c.line, backgroundColor: c.bg }}>
+      <ProgressiveBlur edge="bottom" height={dockH + 28} />
+      <View onLayout={(ev) => setDockH(ev.nativeEvent.layout.height)} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 12, paddingTop: 8, paddingBottom: Math.max(insets.bottom, 12) + 4, gap: 8 }}>
         {s.rest && <RestPanel docked rest={s.rest} now={now} onAdd30={onAdd30} onSkip={onSkipRest} onDone={onSkipRest} />}
         {cur >= 0 && marked && <Txt v="caption" style={{ textAlign: 'center' }}>{left} set{left === 1 ? '' : 's'} not done · you can come back to them</Txt>}
         <Row style={{ gap: 10 }}>
@@ -202,10 +208,13 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       {clip != null && <ClipPopup source={clip} onClose={() => setClip(null)} />}
-      <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 10, justifyContent: 'flex-start' }}>
-        <RoundBtn label="Minimise workout" onPress={onMinimise} glass><X size={20} color={c.ink} /></RoundBtn>
-      </Row>
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 10, paddingBottom: 270, gap: 16 }}>
+      <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+        <ProgressiveBlur height={insets.top + 60 + 36} />
+        <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 10, justifyContent: 'flex-start' }}>
+          <RoundBtn label="Minimise workout" onPress={onMinimise} glass><X size={20} color={c.ink} /></RoundBtn>
+        </Row>
+      </View>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, paddingTop: insets.top + 70, paddingBottom: 270, gap: 16 }}>
         <View style={{ gap: 4 }}>
           <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 48, lineHeight: 56, letterSpacing: -1.6 }}>{cool ? 'Cool-down' : 'Warm-up'}</Txt>
           <Txt muted style={{ fontSize: 16, lineHeight: 23 }}>{list.length} {cool ? 'stretches' : 'moves'} · {cool ? 'slow and easy' : 'no weights'}</Txt>
@@ -226,11 +235,12 @@ export function NewList({ s, list, now, cool, onToggle, onMain, onFinishNow, onM
           })}
         </Card>
       </ScrollView>
-      <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: c.bg }}>
+      <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
+        <ProgressiveBlur edge="bottom" height={270} />
         <Row style={{ justifyContent: 'center', gap: 8, paddingVertical: 8 }}>
           <Txt accessibilityLabel={`Total time left ${mmss(left)}`} style={{ fontFamily: font.monoBold, fontSize: 34, lineHeight: 44 }}>{mmss(left).padStart(5, '0')}</Txt>
         </Row>
-      <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12) + 4, gap: 4, borderTopWidth: 1, borderTopColor: c.line }}>
+      <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12) + 4, gap: 4 }}>
         <Button kind={allDone || cool ? 'accent' : 'primary'} label={cool ? 'Finish workout' : 'Start main workout'} onPress={cool ? onFinishNow : onMain} />
         {!cool && (
           <Pressy accessibilityRole="button" onPress={onMain} scaleTo={0.96} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}>

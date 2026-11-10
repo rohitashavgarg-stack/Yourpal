@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values are written from gesture and animation callbacks; refs are read and written in gesture-handler callbacks, not during render */
 import React, { useEffect, useRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSequence, withTiming, useReducedMotion } from 'react-native-reanimated';
-import { springTo } from '@/lib/motionSafe';
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
+import { springTo, useReduce } from '@/lib/motionSafe';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Check, Play, Square } from '@/lib/icons';
 import { Pressy, Txt } from '@/components/ui';
@@ -38,7 +38,7 @@ export function SetRow(p: Props) {
   const lbl = setLabel(p.e, p.i);
   const done = x.st === 'done', skipped = x.st === 'skipped';
 
-  const reduce = useReducedMotion(); // Reduce Motion: no spring, the value just jumps
+  const reduce = useReduce(); // Reduce Motion: no spring, the value just jumps
   useEffect(() => { tx.value = springTo(p.revealed ? -150 : 0, spring.snappy, reduce); }, [p.revealed]);
   useEffect(() => { if (p.justDone) wash.value = withSequence(withTiming(1, { duration: 1 }), withTiming(0, { duration: 1100 })); }, [p.justDone]);
   useEffect(() => { if (p.back) { tx.value = -40; tx.value = withTiming(0, { duration: 180 }); } }, [p.back]);

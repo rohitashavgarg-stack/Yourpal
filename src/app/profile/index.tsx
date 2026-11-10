@@ -1,4 +1,5 @@
 import React from 'react';
+import { useGrowOpen } from '@/lib/cardGrow';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { YourPalLogo } from '@/components/YourPalLogo';
 import { STEPS_CARD, StepsPreview } from '@/features/today/StepsCards';
@@ -147,16 +148,21 @@ export default function Profile() {
 
 function GoalSummaryTile({ title, value, onPress }: { title: string; value: string; onPress: () => void }) {
   const { c } = useTheme();
+  const grow = useGrowOpen(); // the page opens out of this tile and closes back into it
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={`${title} goal ${value}. Edit`} onPress={onPress} scaleTo={0.97}
-      style={{ flex: 1, minHeight: 84, borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 14, justifyContent: 'space-between' }}>
-      <CardEdge radius={radii.lg} />
-      <Txt style={{ fontFamily: font.display, fontSize: 24, lineHeight: 30, letterSpacing: -0.5 }}>{value}</Txt>
-      <Row style={{ justifyContent: 'space-between' }}>
-        <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{title}</Txt>
-        <ChevronRight size={16} color={c.muted} />
-      </Row>
-    </Pressy>
+    // eslint-disable-next-line react-hooks/refs -- the ref is only read when the tile is pressed
+    <View ref={grow.ref} collapsable={false} style={{ flex: 1 }}>
+      {/* eslint-disable-next-line react-hooks/refs -- prime reads the ref only when the tile is pressed */}
+      <Pressy accessibilityRole="button" accessibilityLabel={`${title} goal ${value}. Edit`} onPressIn={grow.prime} onPress={onPress} scaleTo={0.97}
+        style={{ minHeight: 84, borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 14, justifyContent: 'space-between' }}>
+        <CardEdge radius={radii.lg} />
+        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.5 }}>{value}</Txt>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{title}</Txt>
+          <ChevronRight size={16} color={c.muted} />
+        </Row>
+      </Pressy>
+    </View>
   );
 }
 
