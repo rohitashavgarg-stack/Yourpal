@@ -34,15 +34,21 @@ let popping = false;
 // Screens that play their own slide (web: all of them; phone: only the X screens, which are drawn over the page underneath).
 type Closer = { name: string; focused: () => boolean; el?: HTMLElement | null; close: (done: () => void) => void };
 const closers: Closer[] = [];
-if (!(router as any).__slideBack) {
-  const rb = router.back.bind(router);
+// Play the screen's own slide-out before the real back runs. The router's methods only work once the first render has finished (before that they throw, and the
+// router swaps them for the real ones when it starts), so this wraps `router.back` from an effect, never at load. It is safe to call again: it only wraps when the
+// router has handed out a new `back`.
+let ourBack: (() => void) | null = null;
+function installSlideBack() {
+  const cur = (router as any).back;
+  if (cur === ourBack) return;
+  const rb = cur.bind(router);
   const realBack = () => { popping = true; setTimeout(() => { popping = false; }, 600); rb(); };
-  (router as any).__slideBack = true;
-  (router as any).back = () => {
+  ourBack = () => {
     // the screen that is on top and has its own slide plays it, then the real back runs
     const top = [...closers].reverse().find((c) => c.focused());
     if (top && router.canGoBack()) top.close(realBack); else realBack();
   };
+  (router as any).back = ourBack;
 }
 // Web only: icons are inline SVGs, which are not positioned, so any glass / blur layer (position: absolute) drawn earlier in the same button paints over them.
 // Making every icon positioned puts it back above the glass layer, wherever one is used.
@@ -122,6 +128,7 @@ function Slide({ name, bottom, children }: { name: string; bottom: boolean; chil
     off.value = withTiming(bottom ? dims.current.h : dims.current.w, OUT, (fin) => { if (fin) runOnJS(done)(); });
   };
   useEffect(() => {
+    installSlideBack();
     const e: Closer = { name, focused: () => nav.isFocused(), close };
     entry.current = e;
     closers.push(e);
@@ -174,6 +181,7 @@ function Slide({ name, bottom, children }: { name: string; bottom: boolean; chil
 
 function AppShell() {
   const { c, isDark } = useTheme();
+  useEffect(() => { installSlideBack(); }, []);
   const wide = useIsWideWeb();
   return (
     <WebFrame>
