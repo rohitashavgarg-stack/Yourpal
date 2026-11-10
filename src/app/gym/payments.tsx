@@ -5,7 +5,8 @@ import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { Hint, SubPage } from '@/features/progress/parts';
+import { Hint } from '@/features/progress/parts';
+import { SubPage } from '@/design-system/primitives/SubPage';
 import { LineRow, ListCard } from '@/features/shell/parts';
 import { Chip } from '@/design-system/primitives/Chip';
 import { useMemberships } from '@/features/gym/memberships';
@@ -38,7 +39,7 @@ export default function AllPayments() {
 
   const amount = (n: number) => <Txt style={{ fontFamily: font.semibold }}>{rupees(n)}</Txt>;
   return (
-    <SubPage title="Payments" fallback="/profile">
+    <SubPage title="Payments" fallback="/profile" close>
       {upcoming.length > 0 && (
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>UPCOMING</Txt>
