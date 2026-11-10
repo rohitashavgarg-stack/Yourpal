@@ -5,10 +5,11 @@ import { ProgressiveBlur } from '@/components/Glass';
 import { EffortSlider } from '@/design-system/primitives/EffortSlider';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { ScrollView, View } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import Svg, { Circle } from 'react-native-svg';
 import { useReduce } from '@/lib/motionSafe';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Check, Flame, Share, Trophy } from '@/lib/icons';
+import { Check, Dumbbell, Flame, Share, Trophy } from '@/lib/icons';
 import { FLAME } from '@/features/streak/StreakChip';
 import { useStreak } from '@/features/streak/useStreak';
 import { Button, Field, Pressy, Row, Txt } from '@/components/ui';
@@ -20,7 +21,7 @@ import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { useDomain } from '@/lib/domain';
 import { fmt1 } from '@/lib/useNow';
-import { radii, fontSizes, fixed, onDark } from '@/design-system/tokens';
+import { radii, fontSizes, fixed, round, onDark } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const COLORS = ['#3A36C9', '#B9B6FF', fixed.white, '#F2B544', '#1F6E63'];
@@ -35,6 +36,38 @@ function Particle({ p, run }: { p: (typeof PARTS)[number]; run: number }) {
   useEffect(() => { t.value = 0; if (reduce) return; t.value = withDelay(p.delay, withTiming(1, { duration: 1300, easing: Easing.bezier(0.12, 0.75, 0.3, 1) })); }, [run]);
   const a = useAnimatedStyle(() => ({ opacity: t.value === 0 ? 0 : t.value < 0.75 ? 1 : 1 - (t.value - 0.75) * 4, transform: [{ translateX: p.dx * t.value }, { translateY: p.dy * t.value }, { scale: 0.5 + 0.5 * t.value }] }));
   return <Animated.View style={[{ position: 'absolute', left: '50%', top: '50%', width: p.w, height: p.w, marginLeft: -p.w / 2, marginTop: -p.w / 2, borderRadius: p.w, backgroundColor: p.col }, a]} />;
+}
+
+// The completion ring: it fills to the share of the planned exercises done, the dumbbell inside pops in and then breathes softly. Tap it to play it again (and the confetti).
+const ARing = Animated.createAnimatedComponent(Circle);
+function DoneRing({ pct, tick, onPress }: { pct: number; tick: number; onPress: () => void }) {
+  const { c } = useTheme();
+  const reduce = useReduce();
+  const SIZE = 104, R = 42, W = 7, C2 = 2 * Math.PI * R;
+  const shown = Math.max(0.08, Math.min(1, pct)); // never empty: a finished workout always shows a ring
+  const fill = useSharedValue(reduce ? shown : 0);
+  const pop = useSharedValue(reduce ? 1 : 0.4);
+  const breathe = useSharedValue(1);
+  useEffect(() => {
+    if (reduce) { fill.value = shown; pop.value = 1; return; }
+    fill.value = 0; pop.value = 0.4;
+    fill.value = withDelay(350, withTiming(shown, { duration: 1200, easing: Easing.bezier(0.32, 0.72, 0, 1) }));
+    pop.value = withDelay(500, withSpring(1, spring.bouncy));
+    breathe.value = withDelay(1800, withRepeat(withSequence(withTiming(1.07, { duration: 1400, easing: Easing.inOut(Easing.sin) }), withTiming(1, { duration: 1400, easing: Easing.inOut(Easing.sin) })), -1));
+  }, [tick, shown, reduce]); // eslint-disable-line react-hooks/exhaustive-deps
+  const ring = useAnimatedProps(() => ({ strokeDashoffset: C2 * (1 - fill.value) }));
+  const icon = useAnimatedStyle(() => ({ transform: [{ scale: pop.value * breathe.value }] }));
+  return (
+    <Pressy accessibilityRole="button" accessibilityLabel="Workout complete. Tap to play the celebration again" onPress={onPress} scaleTo={0.94} style={{ width: SIZE, height: SIZE, alignItems: 'center', justifyContent: 'center' }}>
+      <Svg width={SIZE} height={SIZE} style={{ position: 'absolute', transform: [{ rotate: '-90deg' }] }}>
+        <Circle cx={SIZE / 2} cy={SIZE / 2} r={R} stroke={onDark.text + '26'} strokeWidth={W} fill="none" />
+        <ARing cx={SIZE / 2} cy={SIZE / 2} r={R} stroke={onDark.mint} strokeWidth={W} strokeLinecap="round" fill="none" strokeDasharray={C2} animatedProps={ring} />
+      </Svg>
+      <Animated.View style={[{ width: 56, height: 56, borderRadius: round(56), backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }, icon]}>
+        <Dumbbell size={28} strokeWidth={2} color={fixed.white} />
+      </Animated.View>
+    </Pressy>
+  );
 }
 
 function PopCheck({ delay }: { delay: number }) {
@@ -103,13 +136,16 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: screenH }}>
           <WaiverBackdrop stars={false} />
         </View>
-        <FadeIn style={{ gap: 10 }}>
+        <FadeIn style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+         <View style={{ flex: 1, gap: 10 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 19, letterSpacing: 1, color: onDark.soft }}>WORKOUT DONE, LEG DAY</Txt>
           {/* two deliberate lines: the praise, then the name in a softer tone, so the heading never wraps by accident */}
           <View accessible accessibilityRole="header" accessibilityLabel="Nice work, Rohitashav">
             <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl5, lineHeight: 42, letterSpacing: -1, color: onDark.text }}>Nice work,</Txt>
             <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl5, lineHeight: 42, letterSpacing: -1, color: onDark.soft }}>Rohitashav</Txt>
           </View>
+         </View>
+         <DoneRing pct={s.totalEx > 0 ? s.exercises / s.totalEx : 1} tick={run} onPress={() => { haptic.success(); setRun((x) => x + 1); }} />
         </FadeIn>
 
         <FadeIn delay={120}>
@@ -175,7 +211,8 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
       </ScrollView>
       <ProgressiveBlur edge="bottom" height={insets.bottom + 120} />
       <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
-        <Button kind="white" label={note.trim() ? 'Send to Coach and finish' : 'Done'} onPress={() => onDone(feel, note)} />
+        <Button kind="white" label={note.trim() ? 'Send to Coach and finish' : 'Done'} onPress={() => onDone(feel, note)}
+          style={{ shadowColor: c.accent, shadowOpacity: 0.7, shadowRadius: 26, shadowOffset: { width: 0, height: 0 }, elevation: 14 }} />
       </View>
     </View>
   );
