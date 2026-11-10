@@ -187,7 +187,7 @@ export function SubPage({ title, children, right, footer, floatingFooter, fallba
   const back = () => { if (!shell && onBack?.()) return; { const go = () => goBack(fallback); if (frame.current) frame.current.leave(go); else go(); } };
   const header = (
     <Row style={[{ paddingTop: insets.top + 12, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }, useScroll && { position: 'absolute', top: 0, left: 0, right: 0 }]}>
-      {origin ? <View style={{ width: 44, height: 44 }} /> : (
+      {origin || isCardPage(path) ? <View style={{ width: 44, height: 44 }} /> : (
         <RoundBtn label={close ? 'Close' : 'Back'} onPress={back} glass>
           {close ? <X size={20} color={c.ink} /> : <ChevronLeft size={shell ? 22 : 20} color={c.ink} />}
         </RoundBtn>
@@ -208,7 +208,7 @@ export function SubPage({ title, children, right, footer, floatingFooter, fallba
       {useScroll ? (
         <>
           <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled"
-            contentContainerStyle={shell ? { paddingHorizontal: 16, paddingTop: headH + 4, paddingBottom: footer ? 24 : 40 + insets.bottom, gap } : { paddingHorizontal: 16, paddingTop: insets.top + 12 + 44 + 8 + 4, paddingBottom: insets.bottom + (footer && floatingFooter ? 104 : 28), gap: 12 }}>
+            contentContainerStyle={shell ? { paddingHorizontal: 16, paddingTop: headH + 4, paddingBottom: footer ? (floatingFooter ? 110 + insets.bottom : 24) : 40 + insets.bottom, gap } : { paddingHorizontal: 16, paddingTop: insets.top + 12 + 44 + 8 + 4, paddingBottom: insets.bottom + (footer && floatingFooter ? 104 : 28), gap: 12 }}>
             {backdrop}
             {shell ? <View style={{ gap }}>{children}</View> : children}
           </ScrollView>

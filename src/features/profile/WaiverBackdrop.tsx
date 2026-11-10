@@ -41,7 +41,7 @@ const STARS = [
 ];
 
 // The page behind the signed screen: a black page with a blue glow at the top (the bottom half stays black), the vertical lines at the top, and a few stars that twinkle.
-export function WaiverBackdrop() {
+export function WaiverBackdrop({ stars = true }: { /** The twinkling dots. Off on the workout finish page. */ stars?: boolean }) {
   const { c } = useTheme();
   const { width, height } = useWindowDimensions();
   return (
@@ -61,7 +61,7 @@ export function WaiverBackdrop() {
         <Circle cx={width * 1.02} cy={height * 0.28} r={width * 0.5} fill="url(#wsSide)" />
       </Svg>
       <Stripes width={width} />
-      {STARS.map((s, i) => <Twinkle key={i} x={s.x * width} y={s.y * height} size={s.s} delay={s.d} color="#CFCBFF" />)}
+      {stars && STARS.map((s, i) => <Twinkle key={i} x={s.x * width} y={s.y * height} size={s.s} delay={s.d} color={fixed.white} />)}
     </View>
   );
 }
