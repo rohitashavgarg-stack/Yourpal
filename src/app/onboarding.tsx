@@ -14,7 +14,7 @@ import { fadeOut } from '@/theme/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GymLogoMark } from '@/components/Brand';
 import { LinearGradient } from 'expo-linear-gradient';
-import { GlassBackdrop, WebLiquidGlass, hasLiquidGlass } from '@/components/Glass';
+import { GlassBackdrop, WebLiquidGlass, hasLiquidGlass, ProgressiveBlur } from '@/components/Glass';
 import { router } from 'expo-router';
 import { Activity, Bell, CalendarCheck, Check, ChevronLeft, ChevronRight, ChevronsRight, Compass, Dumbbell, Flame, Lock, PersonStanding, Scale, Zap, ShieldCheck, Trophy } from '@/lib/icons';
 import { Button, Card, Chip, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
@@ -148,6 +148,9 @@ export default function Onboarding() {
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
       {step === 'welcome' && <LinearGradient pointerEvents="none" colors={isDark ? ['rgba(224,128,48,0.30)', 'rgba(224,128,48,0.09)', 'rgba(224,128,48,0)'] : ['rgba(224,128,48,0.42)', 'rgba(224,128,48,0.13)', 'rgba(224,128,48,0)']} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 460 }} />}
+      {/* the header floats over the page with the progressive blur, no colour behind it */}
+      <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+      <ProgressiveBlur height={insets.top + 58 + 30} />
       <View style={{ paddingTop: insets.top + 6, paddingHorizontal: 16, height: insets.top + 58, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
         {step !== 'ready' && step !== 'welcome' && (
           <RoundBtn label="Back" onPress={back} glass>
@@ -162,8 +165,9 @@ export default function Onboarding() {
           </Pressy>
         )}
       </View>
+      </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 24, paddingTop: 8, gap: 14, flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: insets.bottom + 150, paddingTop: insets.top + 58 + 20, gap: 14, flexGrow: 1 }} keyboardShouldPersistTaps="handled">
         <FadeIn key={step} exiting={fadeOut()} style={[{ gap: 14 }, step === 'building' && { flex: 1, justifyContent: 'center' }]}>
           {step === 'welcome' && <WelcomeStep isPT={isPT} assess={sc.assess} hasGym={dom.hasGym} />}
           {step === 'facility' && <FacilityStep />}
@@ -183,7 +187,8 @@ export default function Onboarding() {
         </FadeIn>
       </ScrollView>
 
-      <View style={{ paddingHorizontal: 20, paddingBottom: insets.bottom + 12, paddingTop: 8, gap: 6, backgroundColor: c.bg }}>
+      <ProgressiveBlur edge="bottom" height={insets.bottom + 150} />
+      <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 20, paddingBottom: insets.bottom + 12, paddingTop: 8, gap: 6 }}>
         {sc.net === 'Offline' && showChrome && <Txt v="caption" style={{ textAlign: 'center' }}>You&apos;re offline. Answers are saved on this phone and sync later.</Txt>}
         {step === 'ready' ? (
           <SwipeToStart onDone={() => { finishGoal(); set({ onboarded: true }); haptic.success(); router.replace('/(tabs)'); toast("You're all set. Your plan fills in after the assessment"); }} />
