@@ -31,12 +31,12 @@ What each kind of screen and control does when it moves, and where the app does 
 ## Reduce Motion
 
 With the system setting on:
-- Fade-ins (), presses (), the card-to-page growth (), the web page slides () and sheets () show the end state at once, with no movement.
-- Springs go through  in : the toast, tab pill, segmented thumbs, switches, chevrons, row swipes, the water levels and the rest timer beat jump to where they were going.
+- Fade-ins (`FadeIn`), presses (`Pressy`), the card-to-page growth (`GrowFrame`), the web page slides (`Slide`) and sheets (`Sheet`) show the end state at once, with no movement.
+- Springs go through `springTo()` in `src/lib/motionSafe.ts`: the toast, tab pill, segmented thumbs, switches, chevrons, row swipes, the water levels and the rest timer beat jump to where they were going.
 - Loops do not run: the water wave, the rest timer beat, the heart beat, loading shimmer, typing dots, the scan lines, the live glow and the chat pulse. The plans highlight still shows once, steady, because it marks where to look.
 - The confetti on the finish screen is not drawn.
 
-Not tested on a device: it was checked by reading the code and by the type and lint checks. Turn on Reduce Motion on a phone and go through Today, Plans, a workout and a sheet to confirm. New animation must use  or .
+Not tested on a device: it was checked by reading the code and by the type and lint checks. Turn on Reduce Motion on a phone and go through Today, Plans, a workout and a sheet to confirm. New animation must use `useReducedMotion()` or `springTo()`.
 
 ## Other things the audit found
 
