@@ -179,7 +179,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
       <ProgressiveBlur edge="bottom" height={insets.bottom + 120} />
       <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
         <Button kind="white" label={note.trim() ? 'Send to Coach and finish' : 'Done'} onPress={() => onDone(feel, note)}
-          style={{ shadowColor: fixed.white, shadowOpacity: 0.55, shadowRadius: 26, shadowOffset: { width: 0, height: 0 }, elevation: 14 }} />
+          style={{ shadowColor: fixed.white, shadowOpacity: 0.2, shadowRadius: 14, shadowOffset: { width: 0, height: 0 }, elevation: 14 }} />
       </View>
     </View>
   );
