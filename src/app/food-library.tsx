@@ -70,7 +70,7 @@ export default function FoodLibrary() {
       </Row>
       {/* the shelves: Suggested (for this meal) first, then the rest. Typing in the search box looks through all of them. */}
       {!qq && (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={{ flexGrow: 0 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingBottom: 4 }}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={{ flexGrow: 0, flexShrink: 0, height: 46 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingBottom: 6, alignItems: 'flex-start' }}>
           {shelves.map((k) => (
             <Option key={k} selected={cat === k} role="tab" accessibilityLabel={k === 'Suggested' ? `Suggested for ${meal.n.toLowerCase()}` : k} offLine={c.line} radius={round(36)} height={36} padX={14} onPress={() => { haptic.tick(); setCat(k); }}>
               <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: cat === k ? c.bg : c.ink }}>{k}</Txt>
