@@ -116,8 +116,9 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
         </FadeIn>
 
         <View>
-          <FadeIn delay={350} style={{ flexDirection: 'row', alignItems: 'center', gap: 14, backgroundColor: onDark.card, borderRadius: radii.xl, padding: 16 }}>
+          <FadeIn delay={350} style={{ gap: 14, backgroundColor: onDark.card, borderRadius: radii.xl, padding: 16 }}>
             <CardEdge radius={radii.xl} />
+            <Row style={{ gap: 14 }}>
             <IconButton label="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }} size={56} radius={radii.xl} bg={c.accent}>
               <Trophy size={26} strokeWidth={1.9} color={fixed.white} />
             </IconButton>
@@ -125,7 +126,8 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
               <Txt style={{ fontFamily: font.bold, fontSize: fontSizes.xs, letterSpacing: 0.6, color: onDark.soft }}>{s.pr ? 'NEW PERSONAL BEST' : 'LOGGED'}</Txt>
               <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, color: onDark.text }}>{s.pr ? `${s.pr.name} ${fmt1(s.pr.kg)} kg` : `${s.sets} ${s.sets === 1 ? 'set' : 'sets'} done`}</Txt>
             </View>
-            <Button kind="white" small label="Share" icon={<Share size={16} color={fixed.dark} />} onPress={() => toast('Sharing opens the system share sheet')} />
+            </Row>
+            <Button kind="white" label="Share" icon={<Share size={16} color={fixed.dark} />} onPress={() => toast('Sharing opens the system share sheet')} />
           </FadeIn>
           <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
             {PARTS.map((p, i) => <Particle key={i} p={p} run={run} />)}
