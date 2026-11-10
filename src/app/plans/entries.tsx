@@ -63,14 +63,8 @@ export default function EditLoggedEntries() {
 
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
-      <PageHeader title={`Edit ${plan.name.toLowerCase()}`} icon="close" onClose={() => router.back()}
-        right={(
-          <Pressy accessibilityRole="button" accessibilityLabel="Save" accessibilityState={{ disabled: !canSave }} disabled={!canSave} onPress={save}
-            style={{ height: 44, paddingHorizontal: 12, borderRadius: radii.lg, justifyContent: 'center', opacity: canSave ? 1 : 0.4 }}>
-            <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>Save</Txt>
-          </Pressy>
-        )} />
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_BODY + 4, paddingBottom: insets.bottom + 32, gap: 10 }}>
+      <PageHeader title={`Edit ${plan.name.toLowerCase()}`} icon="close" onClose={() => router.back()} />
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_BODY + 4, paddingBottom: insets.bottom + 110, gap: 10 }}>
         <Txt muted style={{ fontSize: fontSizes.sm, paddingHorizontal: 4 }}>{label}</Txt>
 
         {/* when and how long */}
@@ -146,8 +140,11 @@ export default function EditLoggedEntries() {
         })}
 
         <InfoBox>Coach Vikram will be notified of these changes.</InfoBox>
-        <Button label="Save changes" disabled={!canSave} onPress={save} />
       </ScrollView>
+      {/* the one Save: a floating button over the page, not a button in the header */}
+      <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
+        <Button kind="glassAccent" label="Save changes" disabled={!canSave} onPress={save} />
+      </View>
     </View>
   );
 }
