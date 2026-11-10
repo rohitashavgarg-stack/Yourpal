@@ -19,7 +19,7 @@ import { fixed, fontSizes, radii, round } from '@/design-system/tokens';
  * "Ate something else", the small first step: the camera, a photo from the phone, a box to type in and a button for the food library. Typing, or sending a photo,
  * opens the full page (`/log-chat`) where the log works like a chat. The library opens the food catalogue.
  */
-export function AteSomethingElse({ mealId, backTo }: { mealId: MealId; backTo?: () => void }) {
+export function AteSomethingElse({ mealId, replaceIdx, backTo }: { mealId: MealId; /** Swapping this planned item: the chat and the library replace it instead of adding. */ replaceIdx?: number; backTo?: () => void }) {
   const { c } = useTheme();
   const { closeSheet, closeSheetNow, toast } = useOverlay();
   const box = useRef<ViewInstance>(null);
@@ -29,7 +29,7 @@ export function AteSomethingElse({ mealId, backTo }: { mealId: MealId; backTo?: 
 
   // go to the full page: the chat takes over from the sheet
   const toChat = (params: Record<string, string>) => {
-    const go = () => { router.push({ pathname: '/log-chat', params: { mealId, ...params } }); setTimeout(closeSheetNow, 70); };
+    const go = () => { router.push({ pathname: '/log-chat', params: { mealId, ...(replaceIdx != null ? { replaceIdx: String(replaceIdx) } : null), ...params } }); setTimeout(closeSheetNow, 70); };
     if (box.current) box.current.measureInWindow((x, y, w, h) => { if (w > 0 && h > 0) setCardOrigin({ x, y, w, h }); go(); });
     else go();
   };
@@ -48,7 +48,7 @@ export function AteSomethingElse({ mealId, backTo }: { mealId: MealId; backTo?: 
       if (!r.canceled && r.assets?.[0]?.uri) toChat({ photo: r.assets[0].uri });
     } catch { toast('Could not open your photos'); }
   };
-  const library = () => closeSheet(() => router.push({ pathname: '/food-library', params: { mealId } }));
+  const library = () => closeSheet(() => router.push({ pathname: '/food-library', params: { mealId, ...(replaceIdx != null ? { replaceIdx: String(replaceIdx) } : null) } }));
 
   return (
     // eslint-disable-next-line react-hooks/refs -- the ref is only read when the box is tapped
@@ -82,7 +82,7 @@ export function AteSomethingElse({ mealId, backTo }: { mealId: MealId; backTo?: 
       {/* the typing box and the library button beside it: typing opens the chat */}
       {/* the same glass message bar as the chats: the library on the left, the mic in the pill. Tapping it opens the chat page, which grows out of this sheet. */}
       <View style={{ marginHorizontal: -12, marginBottom: -10 }}>
-        <ChatBar onSheet value={text} onChangeText={setText} placeholder="Describe what to log" onFocus={() => toChat({})}
+        <ChatBar onSheet value={text} onChangeText={setText} placeholder={replaceIdx != null ? 'What did you eat instead?' : 'Describe what to log'} onFocus={() => toChat({})}
           leftIcon={<Library size={22} color={c.ink} />} leftLabel="Open the food library" onLeft={library}
           onMic={() => toChat({})} onSend={() => text.trim() && toChat({ text: text.trim() })} />
       </View>
