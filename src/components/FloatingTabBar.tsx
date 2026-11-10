@@ -224,23 +224,24 @@ function PillBar({ state, emitter, navigateToTab }: any) {
   const idx = useSharedValue(state.index);
   const reduce = useReduce(); // Reduce Motion: no spring, the value just jumps
   useEffect(() => { idx.value = springTo(state.index, spring.nav, reduce); }, [state.index]);
-  const compactW = count * 52 + 6; // while scrolling the bar is only as wide as its icons
+  const compactW = count * 56 + 8; // while scrolling the bar is only as wide as its icons (a 56 px slot each and 4 px round them)
   const baseBottom = Math.max(insets.bottom - 6, 14);
   // Scrolling down shrinks the bar instead of hiding it: narrower (as wide as the icons), shorter, closer to the edge, the names gone and less padding. It stays a pill.
-  const wrap = useAnimatedStyle(() => ({ bottom: baseBottom - 6 * (hidden?.value ?? 0) }));
+  const wrap = useAnimatedStyle(() => ({ bottom: baseBottom - 4 * (hidden?.value ?? 0) }));
   const bar = useAnimatedStyle(() => {
     const t = hidden?.value ?? 0;
-    const h = 64 - 18 * t;
+    const h = 64 - 16 * t;
     return { width: fullW.value > 0 ? fullW.value - t * (fullW.value - compactW) : undefined, height: h, borderRadius: h / 2 };
   });
   const hl = useAnimatedStyle(() => {
     const t = hidden?.value ?? 0;
-    const pad = 6 - 3 * t;
+    const pad = 6 - 2 * t;
     const width = fullW.value - t * (fullW.value - compactW);
     const seg = Math.max(0, (width - 2 * pad) / count);
-    return { left: pad, width: seg, transform: [{ translateX: idx.value * seg }], top: 6 - 3 * t, height: 50 - 12 * t, borderRadius: (50 - 12 * t) / 2 };
+    const hh = 64 - 16 * t - 2 * pad; // the same gap above, below and at the sides
+    return { left: pad, width: seg, transform: [{ translateX: idx.value * seg }], top: pad, height: hh, borderRadius: hh / 2 };
   });
-  const pad = useAnimatedStyle(() => ({ padding: 6 - 3 * (hidden?.value ?? 0) }));
+  const pad = useAnimatedStyle(() => ({ padding: 6 - 2 * (hidden?.value ?? 0) }));
   const lab = useAnimatedStyle(() => { const t = hidden?.value ?? 0; return { opacity: 1 - t, height: 14 * (1 - t), marginTop: -3 * t }; });
 
   return (
