@@ -97,7 +97,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
   return (
     // The same page as the signed waiver: black with a blue glow at the top. Nothing sits in a card; the numbers are on the page.
     <View style={{ flex: 1, backgroundColor: fixed.dark }}>
-      <WaiverBackdrop />
+      <WaiverBackdrop stars={false} />
       <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingTop: insets.top + 40, paddingHorizontal: 22, paddingBottom: insets.bottom + 130, gap: 28 }}>
         <FadeIn style={{ gap: 6 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: onDark.soft }}>Workout done, Leg day</Txt>
@@ -116,7 +116,8 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
         </FadeIn>
 
         <View>
-          <FadeIn delay={350} style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+          <FadeIn delay={350} style={{ flexDirection: 'row', alignItems: 'center', gap: 14, backgroundColor: onDark.card, borderRadius: radii.xl, padding: 16 }}>
+            <CardEdge radius={radii.xl} />
             <IconButton label="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }} size={56} radius={radii.xl} bg={c.accent}>
               <Trophy size={26} strokeWidth={1.9} color={fixed.white} />
             </IconButton>
@@ -138,17 +139,11 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
           </Row>
         )}
 
-        <FadeIn delay={650}>
-          <Row style={{ gap: 12 }}>
-            <Txt style={{ flex: 1, fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: onDark.text }}>{`This week, ${s.weekDone} of 4 workouts`}</Txt>
-            <Row style={{ gap: 6 }}>{Array.from({ length: s.weekDone }, (_, i) => <PopCheck key={i} delay={700 + i * 120} />)}</Row>
-          </Row>
-        </FadeIn>
-
-        <FadeIn delay={900} style={{ gap: 14 }}>
+        <FadeIn delay={900} style={{ gap: 14, backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18 }}>
+          <CardEdge radius={radii.xl} />
           <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
             <View style={{ flex: 1, gap: 2 }}>
-              <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, color: onDark.text }}>How hard was it?</Txt>
+              <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, color: onDark.text }}>How was it?</Txt>
               <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: onDark.muted }}>Drag to show how it felt</Txt>
             </View>
             <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.4, color: onDark.text }}>{feel}</Txt>

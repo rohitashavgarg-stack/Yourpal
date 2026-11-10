@@ -32,6 +32,8 @@ export default function Goal() {
   const defBy = fmtDay(addDays(TODAY, 84)); // 12 weeks
   const needsDate = (t: string) => v2 && kindOf(t) !== 'consistency';
   const [g, setG] = useState<Draft>(() => { const x = { ...d.goal, g2: state.profile.goal2 || 'None' }; return needsDate(x.type) && !parseBy(x.by) ? { ...x, by: defBy } : x; });
+  const [start] = useState(() => JSON.stringify(g)); // what the page opened with: Save goal stays off until something differs
+  const changed = JSON.stringify(g) !== start;
   const patch = (p: Partial<Draft>) => setG((x) => ({ ...x, ...p }));
   const pickType = (t: string) => patch({ type: t, target: GDEF[t] ?? 0, g2: g.g2 === t ? 'None' : g.g2, ...(needsDate(t) && !parseBy(g.by) ? { by: defBy } : {}) });
   const num = isNumeric(g.type);
@@ -63,7 +65,7 @@ export default function Goal() {
   };
 
   return (
-    <SubPage title="Change goal" fallback="/profile" gap={18} floatingFooter footer={<Button kind="accent" label="Save goal" onPress={save} />}>
+    <SubPage title="Change goal" fallback="/profile" gap={18} floatingFooter footer={<Button kind="accent" label="Save goal" disabled={!changed} onPress={save} />}>
       <Card style={{ padding: 20, gap: 14, borderRadius: radii.xl }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>What do you want to achieve?</Txt>
