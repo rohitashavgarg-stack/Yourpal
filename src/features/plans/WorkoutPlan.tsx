@@ -281,7 +281,7 @@ export function StickyEdit() {
   const { openSheet } = useOverlay();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
-  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 88 }] }));
+  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 20 }] }));
   const bottom = Math.max(insets.bottom - 6, 14) + 84;
   return (
     <FadeIn pointerEvents="box-none" style={[{ position: 'absolute', left: 16, right: 16, bottom }, lift]}>
@@ -297,7 +297,7 @@ export function StickyLog() {
   const { openSheet } = useOverlay();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
-  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 88 }] }));
+  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 20 }] }));
   const bottom = Math.max(insets.bottom - 6, 14) + 84;
   return (
     <FadeIn pointerEvents="box-none" style={[{ position: 'absolute', left: 16, right: 16, bottom }, lift]}>
@@ -314,7 +314,7 @@ export function StickyStart() {
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
   const live = !!d.session;
-  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 88 }] }));
+  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 20 }] }));
   const bottom = Math.max(insets.bottom - 6, 14) + 84;
   return (
     <FadeIn pointerEvents="box-none" style={[{ position: 'absolute', left: 16, right: 16, bottom }, lift]}>

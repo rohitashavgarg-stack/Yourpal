@@ -40,7 +40,7 @@ const STARS = [
   { x: 0.06, y: 0.7, s: 4, d: 1300 }, { x: 0.8, y: 0.66, s: 4, d: 700 }, { x: 0.5, y: 0.07, s: 3, d: 1100 }, { x: 0.34, y: 0.3, s: 3, d: 1700 },
 ];
 
-// The page behind the signed screen: a navy page with soft blue glows, the vertical lines at the top, and a few stars that twinkle.
+// The page behind the signed screen: a black page with a blue glow at the top (the bottom half stays black), the vertical lines at the top, and a few stars that twinkle.
 export function WaiverBackdrop() {
   const { c } = useTheme();
   const { width, height } = useWindowDimensions();
@@ -52,17 +52,12 @@ export function WaiverBackdrop() {
             <Stop offset="0" stopColor={c.accent} stopOpacity={0.62} />
             <Stop offset="1" stopColor={c.accent} stopOpacity={0} />
           </RadialGradient>
-          <RadialGradient id="wsLow" cx="50%" cy="50%" r="50%">
-            <Stop offset="0" stopColor="#6D5CF0" stopOpacity={0.32} />
-            <Stop offset="1" stopColor="#6D5CF0" stopOpacity={0} />
-          </RadialGradient>
           <RadialGradient id="wsSide" cx="50%" cy="50%" r="50%">
             <Stop offset="0" stopColor={c.accent} stopOpacity={0.28} />
             <Stop offset="1" stopColor={c.accent} stopOpacity={0} />
           </RadialGradient>
         </Defs>
         <Circle cx={width * 0.45} cy={-20} r={width * 0.95} fill="url(#wsTop)" />
-        <Circle cx={width * 0.5} cy={height * 0.72} r={width * 0.8} fill="url(#wsLow)" />
         <Circle cx={width * 1.02} cy={height * 0.28} r={width * 0.5} fill="url(#wsSide)" />
       </Svg>
       <Stripes width={width} />

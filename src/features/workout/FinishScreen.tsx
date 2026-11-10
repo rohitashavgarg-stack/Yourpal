@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { EffortSlider } from '@/design-system/primitives/EffortSlider';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
-import { View } from 'react-native';
+import { ScrollView, useWindowDimensions, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
 import { useReduce } from '@/lib/motionSafe';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -86,6 +86,7 @@ export type FinishStats = { mins: number; sets: number; exercises: number; total
 export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Feel, note: string) => void }) {
   const { c, isDark } = useTheme();
   const insets = useSafeAreaInsets();
+  const winH = useWindowDimensions().height;
   const { toast } = useOverlay();
   const [effort, setEffort] = useState(0.55); // 0 is easy, 1 is max
   const feel = effortWord(effort);
@@ -100,12 +101,13 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
         <Circle cx={114} cy={156} r={150} fill="none" stroke={c.moonRing} strokeWidth={1.5} opacity={0.5} />
       </Svg>
 
-      <FadeIn style={{ position: 'absolute', left: 12, right: 12, bottom: Math.max(insets.bottom, 14), borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: c.glassLine,
+      <FadeIn style={{ position: 'absolute', left: 12, right: 12, bottom: Math.max(insets.bottom, 14), maxHeight: winH - insets.top - 16, borderRadius: radii.sheet, overflow: 'hidden', borderWidth: 1, borderColor: c.glassLine,
         shadowColor: '#0F0E3C', shadowOpacity: 0.28, shadowRadius: 60, shadowOffset: { width: 0, height: 24 } }}>
         {/* own radius: on the web a backdrop blur is not clipped by the parent's rounded corners, which left a square showing behind the card */}
-        <BlurView intensity={40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: 32 }} />
-        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: c.glass, borderRadius: 32 }} />
-        <View style={{ paddingTop: 22, paddingHorizontal: 18, paddingBottom: 18, gap: 14 }}>
+        <BlurView intensity={40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radii.sheet }} />
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: c.glass, borderRadius: radii.sheet }} />
+        {/* the card never grows past the screen: on a short phone its content scrolls */}
+        <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} bounces={false} contentContainerStyle={{ paddingTop: 22, paddingHorizontal: 18, paddingBottom: 18, gap: 14 }}>
           <View style={{ gap: 4 }}>
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.muted }}>Workout done · Leg day</Txt>
             <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 38, lineHeight: 36 }}>Nice work, Rohitashav</Txt>
@@ -168,7 +170,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
           </FadeIn>
           {d.hasGym && <Field value={note} onChangeText={setNote} placeholder="Note for Coach Vikram" accessibilityLabel="Note for Coach Vikram" returnKeyType="done" />}
           <Button label={note.trim() ? 'Send to Coach and finish' : 'Done'} onPress={() => onDone(feel, note)} />
-        </View>
+        </ScrollView>
       </FadeIn>
     </View>
   );

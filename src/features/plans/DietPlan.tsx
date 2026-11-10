@@ -175,8 +175,8 @@ function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
   const pickTime = () => openSheet(<TimeSheet title={`When did you eat ${m.n}?`} initial={at ?? d.min} max={d.min} onSave={(v) => A.setMealTime(mid, v)} />, { label: 'Ate at' });
 
   return (
-    // the meal is a plain card (no stroke of its own): the food cards inside it have their own dotted outline, so a second line round them would double it
-    <Card plain style={{ padding: 6, borderRadius: radii.card }}>
+    // the meal is a standard card: lighter fill and the thin gradient stroke; the food cards inside keep their dotted outline
+    <Card style={{ padding: 6, borderRadius: radii.card }}>
       <Row style={{ gap: 6 }}>
         <Pressy accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel={`${m.n}, ${sub}`}
           onPress={() => setP({ openMeal: open ? 'none' : mid })} scaleTo={0.985} haptics={false} style={{ flex: 1, minHeight: 56, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 10 }}>
