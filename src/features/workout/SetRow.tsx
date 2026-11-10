@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values are written from gesture and animation callbacks; refs are read and written in gesture-handler callbacks, not during render */
 import React, { useEffect, useRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSequence, withTiming, useReducedMotion } from 'react-native-reanimated';
+import { springTo } from '@/lib/motionSafe';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Check, Play, Square } from '@/lib/icons';
 import { Pressy, Txt } from '@/components/ui';
@@ -37,7 +38,8 @@ export function SetRow(p: Props) {
   const lbl = setLabel(p.e, p.i);
   const done = x.st === 'done', skipped = x.st === 'skipped';
 
-  useEffect(() => { tx.value = withSpring(p.revealed ? -150 : 0, spring.snappy); }, [p.revealed]);
+  const reduce = useReducedMotion(); // Reduce Motion: no spring, the value just jumps
+  useEffect(() => { tx.value = springTo(p.revealed ? -150 : 0, spring.snappy, reduce); }, [p.revealed]);
   useEffect(() => { if (p.justDone) wash.value = withSequence(withTiming(1, { duration: 1 }), withTiming(0, { duration: 1100 })); }, [p.justDone]);
   useEffect(() => { if (p.back) { tx.value = -40; tx.value = withTiming(0, { duration: 180 }); } }, [p.back]);
 
@@ -57,10 +59,10 @@ export function SetRow(p: Props) {
     })
     .onEnd((ev) => {
       const raw = base.current + ev.translationX;
-      if (raw > 90 && !done) { tx.value = withSpring(0, spring.bouncy); p.onReveal(false); p.onCheck(); }
+      if (raw > 90 && !done) { tx.value = springTo(0, spring.bouncy, reduce); p.onReveal(false); p.onCheck(); }
       else if (raw < -250 && !skipped) skipOut();
-      else if (raw < -60) { tx.value = withSpring(-150, spring.snappy); p.onReveal(true); haptic.light(); }
-      else { tx.value = withSpring(0, spring.bouncy); p.onReveal(false); }
+      else if (raw < -60) { tx.value = springTo(-150, spring.snappy, reduce); p.onReveal(true); haptic.light(); }
+      else { tx.value = springTo(0, spring.bouncy, reduce); p.onReveal(false); }
     });
 
   const fg = useAnimatedStyle(() => ({ transform: [{ translateX: tx.value }], backgroundColor: interpolateColor(wash.value, [0, 1], [c.surface, c.accentSoft]) }));

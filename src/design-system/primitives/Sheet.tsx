@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values and refs are mutated from gesture / animation callbacks */
 import React, { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Dimensions, Keyboard, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withSpring, withTiming, useReducedMotion } from 'react-native-reanimated';
+import { springTo } from '@/lib/motionSafe';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -68,8 +69,9 @@ export function Sheet({ children, label, glow, fixed, onClosed, registerClose }:
     y.value = withTiming(h + 40, { duration: 260, easing: Easing.in(Easing.cubic) }, (done) => { if (done) scheduleOnRN(finish); });
   }, [h, finish]);
   useEffect(() => { registerClose(close); }, [close]);
+  const reduce = useReducedMotion(); // Reduce Motion: no spring, the value just jumps
   useEffect(() => {
-    y.value = withSpring(0, spring.soft);
+    y.value = springTo(0, spring.soft, reduce);
     back.value = withTiming(1, { duration: 260 });
   }, []);
 

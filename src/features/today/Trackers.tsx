@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import Animated, { cancelAnimation, Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withRepeat, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { cancelAnimation, Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withRepeat, withTiming, useReducedMotion } from 'react-native-reanimated';
+import { springTo } from '@/lib/motionSafe';
 import Svg, { Circle, ClipPath, Defs, G, Line, LinearGradient as SvgGradient, Path, Polyline, Rect, Stop } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { TrendsButton } from '@/components/TrendsButton';
@@ -37,8 +38,9 @@ export function Bottle({ litres, w, h, id, glass, wave, stroke, strokeW }: { lit
   const pct = Math.min(1, litres / TARGET);
   const lvl = useSharedValue(24 + (1 - pct) * 47 - 4);
   const off = useSharedValue(0);
-  useEffect(() => { lvl.value = withSpring(24 + (1 - pct) * 47 - 4, { damping: 9, stiffness: 90 }); }, [pct]);
-  useEffect(() => { off.value = withRepeat(withTiming(24, { duration: 2600, easing: Easing.linear }), -1, false); }, []);
+  const reduce = useReducedMotion(); // Reduce Motion: no spring, the value just jumps
+  useEffect(() => { lvl.value = springTo(24 + (1 - pct) * 47 - 4, { damping: 9, stiffness: 90 }, reduce); }, [pct]);
+  useEffect(() => { if (!reduce) off.value = withRepeat(withTiming(24, { duration: 2600, easing: Easing.linear }), -1, false); }, []);
   const props = useAnimatedProps(() => {
     const o = off.value, L = lvl.value;
     let d = `M${-48 + o} ${L + 4} Q${-42 + o} ${L + 1} ${-36 + o} ${L + 4}`;
@@ -82,9 +84,10 @@ export function BottleArt({ litres, w, h, id = 'bottleBody', onLight, live = fal
   const pct = Math.min(1, litres / TARGET);
   const lvl = useSharedValue(144 - pct * 114);
   const off = useSharedValue(0);
-  useEffect(() => { lvl.value = withSpring(144 - pct * 114, { damping: 11, stiffness: 90 }); }, [pct]);
+  const reduce = useReducedMotion();
+  useEffect(() => { lvl.value = springTo(144 - pct * 114, { damping: 11, stiffness: 90 }, reduce); }, [pct]);
   useEffect(() => {
-    if (live) off.value = withRepeat(withTiming(24, { duration: 2600, easing: Easing.linear }), -1, false);
+    if (live && !reduce) off.value = withRepeat(withTiming(24, { duration: 2600, easing: Easing.linear }), -1, false);
     return () => cancelAnimation(off);
   }, [live]);
   const props = useAnimatedProps(() => {
