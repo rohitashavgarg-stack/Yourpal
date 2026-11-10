@@ -12,7 +12,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { REASONS } from '@/features/plans/content';
-import { BigTitle, InfoBox, PageHeader, ShakeText } from '@/features/plans/parts';
+import { BigTitle, InfoBox, PageHeader, PAGE_HEADER_BODY, ShakeText } from '@/features/plans/parts';
 import { setP } from '@/features/plans/store';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
@@ -50,7 +50,7 @@ export default function AskCoach() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title="Ask Coach Vikram" icon="close" />
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: insets.bottom + 28, gap: 14 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_BODY + 8, paddingBottom: insets.bottom + 28, gap: 14 }}>
         <Row style={{ gap: 10, paddingHorizontal: 4 }}>
           <PersonAvatar who="coach" size={44} />
           <View><Txt v="headline">Coach Vikram</Txt><Txt v="caption">Your trainer</Txt></View>

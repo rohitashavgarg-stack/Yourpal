@@ -17,7 +17,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { FOOD, macroLine, RECENT, SCAN_PHOTO } from '@/features/plans/content';
 import { useDietActions } from '@/features/plans/dietActions';
-import { PageHeader } from '@/features/plans/parts';
+import { PageHeader, PAGE_HEADER_BODY } from '@/features/plans/parts';
 import { fmtClock, TimeSheet } from '@/features/plans/TimeSheet';
 import { allowedFor, dietItems, Food, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
@@ -169,7 +169,7 @@ export default function LogFood() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title={replaceIt ? `Swap ${replaceIt.n.toLowerCase()}` : 'What did you eat?'} icon="close" />
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: 16, gap: 12 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_BODY + 4, paddingBottom: 16, gap: 12 }}>
         {!replaceIt && !forEdit && (
           <ScrollView showsVerticalScrollIndicator={false} horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6 }}>
             {MEALS.map((m) => <Pill key={m.id} label={m.n} on={meal === m.id} onPress={() => setMeal(m.id)} />)}

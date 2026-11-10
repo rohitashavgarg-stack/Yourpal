@@ -13,7 +13,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { DragList, ROW_H } from '@/features/plans/DragList';
 import { DiscardSheet, EditItemSheet, LibrarySheet } from '@/features/plans/Sheets';
-import { InfoBox, PageHeader } from '@/features/plans/parts';
+import { InfoBox, PageHeader, PAGE_HEADER_BODY } from '@/features/plans/parts';
 import { mealName } from '@/features/plans/openers';
 import { dayPlan, DietRow, exSub, getP, PEx, pk, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes } from '@/design-system/tokens';
@@ -117,7 +117,7 @@ export default function EditPlan() {
             <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>Save</Txt>
           </Pressy>
         } />
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} scrollEnabled={!dragging} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} scrollEnabled={!dragging} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_BODY + 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
         <Txt muted style={{ fontSize: fontSizes.sm, paddingHorizontal: 4 }}>Hold ≡ and drag to reorder · tap a row to change it</Txt>
         <DragList<PEx | DietRow>
           items={dr.rows as (PEx | DietRow)[]} keyOf={keyOf} labelOf={nameOf} onMove={move} onDragging={setDragging}

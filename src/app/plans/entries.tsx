@@ -14,7 +14,7 @@ import { font } from '@/theme/tokens';
 import { fontSizes, radii } from '@/design-system/tokens';
 import { AmountStepper } from '@/design-system/primitives/AmountStepper';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
-import { InfoBox, PageHeader } from '@/features/plans/parts';
+import { InfoBox, PageHeader, PAGE_HEADER_BODY } from '@/features/plans/parts';
 import { DAYL, dateOf, dayPlan, PEx, usePlans } from '@/features/plans/store';
 import { asPlanned, kgStep, LoggedSet, minutesOf, round, summary } from '@/features/plans/LogPastWorkoutSheet';
 
@@ -70,7 +70,7 @@ export default function EditLoggedEntries() {
             <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>Save</Txt>
           </Pressy>
         )} />
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 32, gap: 10 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_BODY + 4, paddingBottom: insets.bottom + 32, gap: 10 }}>
         <Txt muted style={{ fontSize: fontSizes.sm, paddingHorizontal: 4 }}>{label}</Txt>
 
         {/* when and how long */}
