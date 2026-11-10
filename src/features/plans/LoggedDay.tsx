@@ -1,4 +1,5 @@
 import React from 'react';
+import { EffortSlider } from '@/design-system/primitives/EffortSlider';
 import { View } from 'react-native';
 import { Row, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -94,7 +95,7 @@ export function LoggedFeel() {
   return (
     <View style={{ gap: 8 }}>
       <View style={{ gap: 2, paddingHorizontal: 4 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25 }}>How did it feel?</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25 }}>How hard was it?</Txt>
         <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Coach Vikram uses this to plan your next session</Txt>
       </View>
       <View accessible accessibilityLabel={`Your effort: ${effortWord(LOGGED_EFFORT)}, ${Math.round(LOGGED_EFFORT * 10)} out of 10`} style={{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 20, gap: 14 }}>
@@ -106,11 +107,8 @@ export function LoggedFeel() {
           </View>
           <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 19, color: c.ink }}>{Math.round(LOGGED_EFFORT * 10)}</Txt> / 10</Txt>
         </Row>
-        {/* the track shows the effort that was logged: the colours run up to it and the rest is dimmed (a record, not something to drag) */}
-        <View style={{ height: 10, borderRadius: radii.pill, overflow: 'hidden' }}>
-          <LinearGradient colors={[c.cWater, c.cNutri, c.cFat, c.cAct, c.danger]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ flex: 1 }} />
-          <View style={{ position: 'absolute', top: 0, bottom: 0, left: `${pct}%`, right: 0, backgroundColor: c.surface3, opacity: 0.92 }} />
-        </View>
+        {/* the slider the member used after the workout, showing what they logged (it cannot be dragged here) */}
+        <EffortSlider value={LOGGED_EFFORT} readOnly label={`Your effort: ${effortWord(LOGGED_EFFORT)}`} />
         <Row style={{ justifyContent: 'space-between' }}>
           <Txt muted style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6 }}>EASY</Txt>
           <Txt muted style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6 }}>MAX</Txt>
