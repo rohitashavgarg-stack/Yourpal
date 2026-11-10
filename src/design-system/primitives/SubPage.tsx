@@ -42,6 +42,8 @@ export type SubPageProps = {
   children: React.ReactNode;
   right?: React.ReactNode;
   footer?: React.ReactNode;
+  /** The footer floats over the page: no bar behind it and no line above it, only the button. The page keeps room for it at the end. */
+  floatingFooter?: boolean;
   fallback?: string;
   variant?: 'shell' | 'progress';
   // shell
@@ -162,7 +164,7 @@ export function GrowFrame({ children, handle, onClose, origin }: { children: Rea
   );
 }
 
-export function SubPage({ title, children, right, footer, fallback, variant = 'shell', close, gap = 12, titleIcon, onTitlePress, scroll = true, toastLift = 24, onBack, backdrop }: SubPageProps) {
+export function SubPage({ title, children, right, footer, floatingFooter, fallback, variant = 'shell', close, gap = 12, titleIcon, onTitlePress, scroll = true, toastLift = 24, onBack, backdrop }: SubPageProps) {
   useOwnGlow(!!backdrop);
   const frame = useRef<GrowHandle>(null);
   const path = usePathname();
@@ -198,7 +200,7 @@ export function SubPage({ title, children, right, footer, fallback, variant = 's
       {useScroll ? (
         <>
           <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled"
-            contentContainerStyle={shell ? { paddingHorizontal: 16, paddingTop: headH + 4, paddingBottom: footer ? 24 : 40 + insets.bottom, gap } : { paddingHorizontal: 16, paddingTop: insets.top + 12 + 44 + 8 + 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
+            contentContainerStyle={shell ? { paddingHorizontal: 16, paddingTop: headH + 4, paddingBottom: footer ? 24 : 40 + insets.bottom, gap } : { paddingHorizontal: 16, paddingTop: insets.top + 12 + 44 + 8 + 4, paddingBottom: insets.bottom + (footer && floatingFooter ? 104 : 28), gap: 12 }}>
             {backdrop}
             {shell ? <View style={{ gap }}>{children}</View> : children}
           </ScrollView>
@@ -212,7 +214,7 @@ export function SubPage({ title, children, right, footer, fallback, variant = 's
           {children}
         </>
       )}
-      {footer ? (shell
+      {footer && floatingFooter ? <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>{footer}</View> : footer ? (shell
         ? <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 16) + 6, gap: 8, backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>{footer}</View>
         : footer) : null}
     </KeyboardAvoidingView>
