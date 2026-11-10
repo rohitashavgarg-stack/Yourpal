@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values and refs are mutated from gesture / animation callbacks */
 import React, { useEffect, useRef } from 'react';
 import { CARD_PAGES } from '@/lib/cardGrow';
-import { Platform, View } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 import Animated, { Easing, runOnJS, useAnimatedReaction, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useReduce } from '@/lib/motionSafe';
 import { Stack, router, useNavigation } from 'expo-router';
@@ -23,11 +23,11 @@ import { fixed } from '@/design-system/tokens';
 
 // Screens with an X (close) open from the bottom and close back down. Screens with a back arrow come in from the right and leave to the right.
 // On the phone the native stack does this (see the Stack.Screen options below). The web stack has no transitions, so this wrapper adds them there.
-const FROM_BOTTOM = ['log-weight', 'log-height', 'food', 'food-library', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'plans/entries', 'exercise-search', 'profile/join'];
+const FROM_BOTTOM = ['gym/payments', 'log-weight', 'log-height', 'food', 'food-library', 'checkin', 'workout', 'plans/log', 'plans/ask', 'plans/create', 'plans/edit', 'plans/entries', 'exercise-search', 'profile/join'];
 const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
 // Pages opened from inside a card page (one membership, one assessment...). They are normal pages: a back arrow, and they slide in from the right and leave to the right,
 // whatever the screen under them is. They are drawn over it (a transparent presentation), so the page under a detail page never goes blank or looks like it is closing.
-const DETAIL_PAGES = ['gym/membership-detail', 'gym/assessment', 'gym/payments', 'gym/sessions'];
+const DETAIL_PAGES = ['gym/membership-detail', 'gym/assessment', 'gym/sessions'];
 // The pages a Progress card opens. They grow out of the card (and drag away) on their own, drawn over the page underneath, so the stack adds no slide and no background.
 // Web only: the stack drops a popped screen at once, so the slide-out is played first, then the real back runs.
 // True for a moment after a back: a screen that mounts then is being revealed, not pushed, so it must not slide in.
@@ -129,6 +129,10 @@ function Slide({ name, bottom, children }: { name: string; bottom: boolean; chil
     busy.current = true;
     if (isWeb) under.current = underlay(box.current);
     p.value = withTiming(0, OUT);
+    if (dims.current.w === 0 || dims.current.h === 0) {
+      const rect = isWeb ? box.current?.getBoundingClientRect?.() : null;
+      dims.current = { w: rect?.width || Dimensions.get('window').width, h: rect?.height || Dimensions.get('window').height };
+    }
     off.value = withTiming(bottom ? dims.current.h : dims.current.w, OUT, (fin) => { if (fin) runOnJS(done)(); });
   };
   useEffect(() => {
