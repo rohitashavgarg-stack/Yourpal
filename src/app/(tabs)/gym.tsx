@@ -36,12 +36,12 @@ function GymMembership() {
   const active = ms.filter((m) => m.status === 'Active').sort((x, y) => y.pct - x.pct); // the one ending first on top
   const soon = active.some((m) => m.warn);
   const upcoming = ms.find((m) => m.status === 'Upcoming');
-  const frozen = ms.find((m) => m.status === 'Frozen');
+  const paused = ms.find((m) => m.status === 'Paused');
   const shown = active.slice(0, 2);
   const more = active.length - shown.length;
   // One line under the title says it all: how many are active and what needs a look. It turns amber when something does.
   const attention = d.onBreak || soon || active.length === 0;
-  const line = d.onBreak ? 'Paused for now' : active.length === 0 ? 'Nothing active right now' : soon ? `${active.length} active, one ends soon` : frozen?.frozen ? `${active.length} active, 1 frozen until ${frozen.frozen.until}` : upcoming ? `${active.length} active, next plan starts ${upcoming.start}` : `${active.length} active, next ends on ${active[0].end}`;
+  const line = d.onBreak ? 'Paused for now' : active.length === 0 ? 'Nothing active right now' : soon ? `${active.length} active, one ends soon` : paused?.paused ? `${active.length} active, 1 paused until ${paused.paused.until}` : upcoming ? `${active.length} active, next plan starts ${upcoming.start}` : `${active.length} active, next ends on ${active[0].end}`;
   const grow = useGrowOpen();
   return (
     <View ref={grow.ref} collapsable={false}>
@@ -94,7 +94,7 @@ function BreakCard() {
     <FadeIn exiting={fadeOut()}
       style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 16, paddingHorizontal: 18, gap: 2, borderWidth: 1.5, borderColor: c.accent }, cardShadow(isDark)]}>
       <Txt style={{ fontFamily: font.semibold }}>Membership paused until {dateLabel(g.breakUntil)}</Txt>
-      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Set by the front desk · streak frozen · reminders paused</Txt>
+      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Set by the front desk · streak paused · reminders paused</Txt>
     </FadeIn>
   );
 }

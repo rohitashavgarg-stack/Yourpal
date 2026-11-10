@@ -102,10 +102,10 @@ export default function MembershipDetail() {
 
       {/* Time left in big numbers, the bar, and the two dates under it. Straight on the page, no card. */}
       <View style={{ gap: 14 }}>
-        {m.status === 'Frozen' && m.frozen && (
+        {m.status === 'Paused' && m.paused && (
           <View style={{ gap: 4 }}>
-            <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl6, lineHeight: 52, letterSpacing: -1.2 }}>Frozen</Txt>
-            <Txt muted>{`${m.frozen.from} to ${m.frozen.until}`}</Txt>
+            <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl6, lineHeight: 52, letterSpacing: -1.2 }}>Paused</Txt>
+            <Txt muted>{`${m.paused.from} to ${m.paused.until}`}</Txt>
           </View>
         )}
         {m.status === 'Active' && (
@@ -114,7 +114,7 @@ export default function MembershipDetail() {
             <Txt muted>{m.left.unit}</Txt>
           </Row>
         )}
-        {(m.status === 'Active' || m.status === 'Frozen') && <TimeBar pct={m.pct} warn={m.warn} frozen={m.status === 'Frozen'} />}
+        {(m.status === 'Active' || m.status === 'Paused') && <TimeBar pct={m.pct} warn={m.warn} paused={m.status === 'Paused'} />}
         <Row style={{ justifyContent: 'space-between' }}>
           <View style={{ gap: 1 }}>
             <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{m.status === 'Upcoming' ? 'Starts' : 'Started'}</Txt>
