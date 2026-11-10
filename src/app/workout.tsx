@@ -6,7 +6,7 @@ import { ScrollView, TextInput, View, type ScrollViewInstance } from 'react-nati
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, Path } from 'react-native-svg';
-import { Redirect, router } from 'expo-router';
+import { Redirect, router, useLocalSearchParams } from 'expo-router';
 import { ChevronLeft, ChevronRight, Ellipsis, Play, Plus, X } from '@/lib/icons';
 import { Button, Card, Field, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { Beat, CheckCircle, HeartIcon, PillBtn, RoundBtn, Tag } from '@/components/bits';
@@ -19,7 +19,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fmt1, mmss, useNow } from '@/lib/useNow';
 import { useSessionActions } from '@/features/workout/actions';
-import { COL_LABEL, firstTodo, openSets, setLabel, stats } from '@/features/workout/session';
+import { COL_LABEL, firstTodo, newSession, openSets, setLabel, stats } from '@/features/workout/session';
 import { Draft, SetRow } from '@/features/workout/SetRow';
 import { RestPanel } from '@/features/workout/RestPanel';
 import { useTimerEnd } from '@/lib/useTimerEnd';
@@ -63,7 +63,16 @@ export default function Workout() {
   const { d, set } = useDomain();
   const A = useSessionActions();
   const { openSheet, closeSheet, toast } = useOverlay();
-  const s = d.session;
+  // Opened by Start: the page makes the new session itself, so it shows the workout from its first frame, and gives it to the app once the page covers Today.
+  const startParam = useLocalSearchParams<{ start?: string }>().start;
+  const [pending, setPending] = useState(() => (!d.session && startParam === '1' ? newSession() : null));
+  useEffect(() => {
+    if (!pending) return undefined;
+    const t = setTimeout(() => { set({ session: pending }); setPending(null); }, 340);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const s = d.session ?? pending;
   const now = useNow(!!s, 500);
   const [activeRow, setActiveRow] = useState<number | null>(null);
   const [reveal, setReveal] = useState<number | null>(null);
@@ -72,9 +81,6 @@ export default function Workout() {
   const [draft, setDraftS] = useState<Draft>({ k: 0, r: 0, t: 0 });
   const [noteFor, setNoteFor] = useState<number | null>(null);
   const [fb, setFb] = useState<0 | 1 | 2 | null>(null);
-  // The page opens first and the session is set a moment after (so the Today card does not change before the page appears): wait briefly before sending a missing session home.
-  const [grace, setGrace] = useState(true);
-  useEffect(() => { const t = setTimeout(() => setGrace(false), 700); return () => clearTimeout(t); }, []);
   const resting = !!s?.rest;
   useEffect(() => { if (!resting) setFb(null); }, [resting]);
   const [noteDraft, setNoteDraft] = useState('');
@@ -156,7 +162,7 @@ export default function Workout() {
       router.canGoBack() ? router.back() : router.replace('/(tabs)');
     }} />;
   }
-  if (!s || !e) return grace && !s ? null : <Redirect href="/(tabs)" />;
+  if (!s || !e) return <Redirect href="/(tabs)" />;
 
   function logSet(i: number, vals: { r: number; k: number; t: number } | null) {
     A.logSet(s!.exIdx, i, vals);

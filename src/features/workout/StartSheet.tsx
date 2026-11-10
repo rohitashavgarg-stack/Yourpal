@@ -1,15 +1,12 @@
 import { router } from 'expo-router';
-import { useDomain } from '@/lib/domain';
 import { haptic } from '@/lib/haptics';
-import { newSession } from './session';
 
 // One workout, one tap: Start goes straight into the workout. (No sheet, no Full / Quick / Low energy versions.)
 export function useStartWorkout() {
-  const { set } = useDomain();
   return () => {
     haptic.medium();
-    // open the page first; the session is set right after, so the Today card does not flip to its live state before the page shows
-    router.push('/workout');
-    setTimeout(() => set({ session: newSession() }), 60);
+    // The page opens with its own new session and shows the workout at once (no empty page first). It hands the session to the app a moment later,
+    // when it already covers Today, so the Today card never flips to its live state in view.
+    router.push({ pathname: '/workout', params: { start: '1' } });
   };
 }
