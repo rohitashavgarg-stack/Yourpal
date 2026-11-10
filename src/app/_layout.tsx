@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values and refs are mutated from gesture / animation callbacks */
 import React, { useEffect, useRef } from 'react';
 import { CARD_PAGES } from '@/lib/cardGrow';
-import { Dimensions, Platform, View } from 'react-native';
+import { BackHandler, Dimensions, Platform, View } from 'react-native';
 import Animated, { Easing, runOnJS, useAnimatedReaction, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useReduce } from '@/lib/motionSafe';
 import { Stack, router, useNavigation } from 'expo-router';
@@ -143,6 +143,13 @@ function Slide({ name, bottom, children }: { name: string; bottom: boolean; chil
     return () => { const i = closers.indexOf(e); if (i >= 0) closers.splice(i, 1); under.current?.done(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, bottom]);
+  // Android: the phone's own back button plays this page's slide too (down for a cross page, to the right for a back page), then goes back
+  useEffect(() => {
+    if (Platform.OS !== 'android') return undefined;
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => { if (!nav.isFocused() || !router.canGoBack()) return false; router.back(); return true; });
+    return () => sub.remove();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const closeFromDrag = () => { const top = entry.current; if (top && router.canGoBack()) (router as any).back(); };
   // The workout screen is left out: its own sheet is dragged up and down, and it has its own minimise button.
   // Drag down from the top of an X screen to close it: it follows the finger and leaves with the same plain ease.
