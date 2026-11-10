@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { LayoutChangeEvent, Pressable, PressableProps, StyleProp, StyleSheet, Text, TextInput, TextInputProps, TextProps, TextStyle, View, ViewStyle } from 'react-native';
-import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming, useReducedMotion } from 'react-native-reanimated';
-import { springTo } from '@/lib/motionSafe';
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { springTo, useReduce } from '@/lib/motionSafe';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, radius, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
@@ -35,7 +35,7 @@ export function Segmented<T extends string>({ options, value, onChange, icons, a
   const idx = Math.max(0, options.findIndex((o) => o.value === value));
   const x = useSharedValue(0);
   const seg = w > 0 ? (w - 8) / options.length : 0;
-  const reduce = useReducedMotion(); // Reduce Motion: no spring, the value just jumps
+  const reduce = useReduce(); // Reduce Motion: no spring, the value just jumps
   useEffect(() => { x.value = springTo(idx * seg, spring.snappy, reduce); }, [idx, seg]);
   const thumb = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   return (

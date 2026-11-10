@@ -63,7 +63,7 @@ export default function Goal() {
   };
 
   return (
-    <SubPage title="Change goal" fallback="/profile" gap={18} footer={<Button kind="accent" label="Save goal" onPress={save} />}>
+    <SubPage title="Change goal" fallback="/profile" gap={18} floatingFooter footer={<Button kind="accent" label="Save goal" onPress={save} />}>
       <Card style={{ padding: 20, gap: 14, borderRadius: radii.xl }}>
         <View style={{ gap: 2 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>What do you want to achieve?</Txt>

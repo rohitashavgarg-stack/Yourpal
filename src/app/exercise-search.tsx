@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { ProgressiveBlur } from '@/components/Glass';
 import { useLeaveIfPaused } from '@/lib/logGate';
 import { ScrollView, View } from 'react-native';
 import { Redirect, router } from 'expo-router';
@@ -90,7 +91,8 @@ export default function ExerciseSearch() {
         )}
       </ScrollView>
 
-      <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12) + 6, gap: 8, backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>
+      <ProgressiveBlur edge="bottom" height={Math.max(insets.bottom, 12) + 120} />
+      <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12) + 6, gap: 8 }}>
         <Row style={{ gap: 8 }}>
           <Pill label="Today only" on={!plan} onPress={() => setPlan(false)} style={{ flex: 1 }} />
           <Pill label="Also update my plan" on={plan} onPress={() => setPlan(true)} style={{ flex: 1 }} />

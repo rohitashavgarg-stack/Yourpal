@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowRight, ChevronLeft } from '@/lib/icons';
 import { Button, Txt } from '@/components/ui';
@@ -20,7 +21,7 @@ type Sig = { signedAt: string; path: string; w: number; h: number };
 
 // Fades in while sliding up. Things on this page arrive one after another.
 function Rise({ delay, from = 22, children }: { delay: number; from?: number; children: React.ReactNode }) {
-  const still = useReducedMotion();
+  const still = useReduce();
   const p = useSharedValue(still ? 1 : 0);
   useEffect(() => { if (!still) p.value = withDelay(delay, withTiming(1, { duration: 520, easing: Easing.out(Easing.cubic) })); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const st = useAnimatedStyle(() => ({ opacity: p.value, transform: [{ translateY: (1 - p.value) * from }] }));
@@ -29,7 +30,7 @@ function Rise({ delay, from = 22, children }: { delay: number; from?: number; ch
 
 // One small spark that flies out from the badge and fades.
 function Spark({ angle, dist, size, color, delay }: { angle: number; dist: number; size: number; color: string; delay: number }) {
-  const still = useReducedMotion();
+  const still = useReduce();
   const p = useSharedValue(0);
   useEffect(() => { if (!still) p.value = withDelay(delay, withTiming(1, { duration: 1100, easing: Easing.out(Easing.cubic) })); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const st = useAnimatedStyle(() => ({
@@ -45,7 +46,7 @@ const SPARK_COLORS = ['#CFCBFF', '#8FB2FF', '#FFFFFF', '#B9A8FF'];
 // The tilted sheets. They arrive stacked: the front sheet rises into place with the back two hidden behind it, then the back two fan out to
 // their places. The member's own signature sits on the line of the front sheet. When it has settled the stack floats gently.
 function Paper({ sig, width }: { sig: Sig; width: number }) {
-  const still = useReducedMotion();
+  const still = useReduce();
   const rise = useSharedValue(still ? 1 : 0);
   const fan = useSharedValue(still ? 1 : 0);
   const float = useSharedValue(0);

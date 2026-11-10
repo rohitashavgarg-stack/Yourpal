@@ -30,7 +30,9 @@ What each kind of screen and control does when it moves, and where the app does 
 
 ## Reduce Motion
 
-With the system setting on:
+All checks go through `useReduce()` in `src/lib/motionSafe.ts`. On a phone it follows the system setting. On the web (the prototype the designer reviews in a browser, where the setting is often on without anyone choosing it) the animations always play, so pages, sheets and cards can be judged. Page slides use the phone's own curve (`Easing.bezier(0.32, 0.72, 0, 1)`, 340 ms in, 300 ms out), the same in and out.
+
+On a phone with the system setting on:
 - Fade-ins (`FadeIn`), presses (`Pressy`), the card-to-page growth (`GrowFrame`), the web page slides (`Slide`) and sheets (`Sheet`) show the end state at once, with no movement.
 - Springs go through `springTo()` in `src/lib/motionSafe.ts`: the toast, tab pill, segmented thumbs, switches, chevrons, row swipes, the water levels and the rest timer beat jump to where they were going.
 - Loops do not run: the water wave, the rest timer beat, the heart beat, loading shimmer, typing dots, the scan lines, the live glow and the chat pulse. The plans highlight still shows once, steady, because it marks where to look.

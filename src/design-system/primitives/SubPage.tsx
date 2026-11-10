@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/immutability, react-hooks/refs -- reanimated shared values are mutated from gesture and animation callbacks */
 import React, { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
-import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import { useFocusEffect, usePathname } from 'expo-router';
@@ -77,7 +78,7 @@ export function GrowFrame({ children, handle, onClose, origin }: { children: Rea
   const p = useSharedValue(origin ? 0 : 1);
   const dy = useSharedValue(0); // how far the page has been dragged down
   const dx = useSharedValue(0); // how far the page has been swiped to the right from the left edge (the back gesture)
-  const reduce = useReducedMotion(); // the system's Reduce Motion setting: the page is simply there, it does not grow out of the card
+  const reduce = useReduce(); // the system's Reduce Motion setting: the page is simply there, it does not grow out of the card
   useEffect(() => { if (origin && box) p.value = reduce ? 1 : withTiming(1, { duration: 420, easing: SMOOTH }); }, [origin, box, p, reduce]);
   useEffect(() => {
     if (!origin || box) return;

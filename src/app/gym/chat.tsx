@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Keyboard, Platform, ScrollView, View, type ScrollViewInstance } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming, useReducedMotion } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft, ChevronRight, Ellipsis, X } from '@/lib/icons';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -33,7 +34,7 @@ const REPLY_PHOTO = 'Got the photo. I will have a look and tell you what I see.'
 function TypingDot({ i }: { i: number }) {
   const { c } = useTheme();
   const o = useSharedValue(0.3);
-  const reduce = useReducedMotion(); // Reduce Motion: the loop does not run
+  const reduce = useReduce(); // Reduce Motion: the loop does not run
   useEffect(() => { if (reduce) return; o.value = withDelay(i * 150, withRepeat(withSequence(withTiming(1, { duration: 350 }), withTiming(0.3, { duration: 650 })), -1, false)); }, []);
   const a = useAnimatedStyle(() => ({ opacity: o.value }));
   return <Animated.View style={[{ width: 6, height: 6, borderRadius: radii.xs, backgroundColor: c.muted, marginHorizontal: 2 }, a]} />;

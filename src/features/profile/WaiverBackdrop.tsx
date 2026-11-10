@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import Svg, { Circle, Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
-import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 import { fixed } from '@/design-system/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -24,7 +25,7 @@ function Stripes({ width }: { width: number }) {
 
 // A tiny star that fades in and out.
 function Twinkle({ x, y, size, delay, color }: { x: number; y: number; size: number; delay: number; color: string }) {
-  const still = useReducedMotion();
+  const still = useReduce();
   const p = useSharedValue(0);
   useEffect(() => {
     if (still) { p.value = 0.5; return; }

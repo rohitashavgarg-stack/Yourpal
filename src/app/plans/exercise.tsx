@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, View } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
-import Animated, { cancelAnimation, Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming, useReducedMotion } from 'react-native-reanimated';
+import Animated, { cancelAnimation, Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -34,7 +35,7 @@ function PlanClip({ source, thumb, playing }: { source: number; thumb?: number; 
 
 function PlayBar({ dark }: { dark?: boolean }) {
   const w = useSharedValue(0);
-  const reduce = useReducedMotion(); // Reduce Motion: the loop does not run
+  const reduce = useReduce(); // Reduce Motion: the loop does not run
   useEffect(() => { if (reduce) return; w.value = withRepeat(withTiming(1, { duration: 6000, easing: Easing.linear }), -1, false); return () => cancelAnimation(w); }, []);
   const a = useAnimatedStyle(() => ({ width: `${w.value * 100}%` }));
   return (

@@ -78,7 +78,7 @@ export default function FoodLibrary() {
           ))}
         </ScrollView>
       )}
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ padding: 16, gap: 8, paddingBottom: 24 }} keyboardShouldPersistTaps="handled">
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ padding: 16, gap: 8, paddingBottom: insets.bottom + 100 }} keyboardShouldPersistTaps="handled">
         {res.map((f) => {
           const on = sel.includes(f.n);
           const tog = () => setSel((l) => (on ? l.filter((x) => x !== f.n) : [...l, f.n]));
@@ -86,8 +86,9 @@ export default function FoodLibrary() {
         })}
         {res.length === 0 && <Txt muted style={{ fontSize: fontSizes.md, paddingVertical: 16 }}>{qq ? 'Nothing in the library matches that. Go back and type it instead.' : 'Nothing here yet.'}</Txt>}
       </ScrollView>
-      <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 16), backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>
-        <Button kind="primary" label={picked.length ? repl ? `Swap for ${total} kcal` : `Add ${total} kcal to ${meal.n.toLowerCase()}` : repl ? 'Pick a swap' : 'Pick what you ate'} disabled={!picked.length} onPress={add} />
+      {/* a floating button over the list: no bar behind it and no line above it */}
+      <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
+        <Button kind="glassAccent" label={picked.length ? repl ? `Swap for ${total} kcal` : `Add ${total} kcal to ${meal.n.toLowerCase()}` : repl ? 'Pick a swap' : 'Pick what you ate'} disabled={!picked.length} onPress={add} />
       </View>
     </KeyboardAvoidingView>
   );

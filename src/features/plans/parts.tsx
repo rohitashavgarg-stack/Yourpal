@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { ProgressiveBlur } from '@/components/Glass';
 import { Image, StyleProp, View, ViewStyle } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming, useReducedMotion } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { router } from 'expo-router';
@@ -114,7 +115,7 @@ export function ExTile({ name, num, size = 56 }: { name: string; num?: string; s
 export function Highlight({ on, delay = 0, style, children }: { on: boolean; delay?: number; style?: StyleProp<ViewStyle>; children: React.ReactNode }) {
   const { c } = useTheme();
   const o = useSharedValue(0);
-  const reduce = useReducedMotion(); // Reduce Motion: the loop does not run
+  const reduce = useReduce(); // Reduce Motion: the loop does not run
   useEffect(() => {
     if (!on) { o.value = 0; return; }
     // Reduce Motion: the highlight shows once, steady, then goes (it marks where to look, so it still shows)

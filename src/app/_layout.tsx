@@ -2,7 +2,8 @@
 import React, { useEffect, useRef } from 'react';
 import { CARD_PAGES } from '@/lib/cardGrow';
 import { Platform, View } from 'react-native';
-import Animated, { Easing, runOnJS, useAnimatedReaction, useAnimatedStyle, useSharedValue, withTiming, useReducedMotion } from 'react-native-reanimated';
+import Animated, { Easing, runOnJS, useAnimatedReaction, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 import { Stack, router, useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -99,12 +100,15 @@ function underlay(el: any) {
 }
 type Under = NonNullable<ReturnType<typeof underlay>>;
 // Same feel as the bottom sheets: 260 ms, ease out in, ease in out. No spring.
-const IN0 = { duration: 260, easing: Easing.out(Easing.cubic) };
-const OUT0 = { duration: 260, easing: Easing.in(Easing.cubic) };
+// The phone's own push and pop curve: it starts fast and settles softly, in and out the same. (An ease-in on the way out starts slow and then rushes, which reads as a jerk.)
+const PUSH = Easing.bezier(0.32, 0.72, 0, 1);
+const IN0 = { duration: 340, easing: PUSH };
+const OUT0 = { duration: 300, easing: PUSH };
 const DIM = 0.45;
 function Slide({ name, bottom, children }: { name: string; bottom: boolean; children: React.ReactNode }) {
   const { c } = useTheme();
-  const reduce = useReducedMotion(); // Reduce Motion: the page just appears and goes, no slide
+  // The page slide is the app's navigation, so on the web (the prototype) it always plays. On a phone, Reduce Motion turns it into a plain appear and go.
+  const reduce = useReduce();
   const IN = reduce ? { duration: 0 } : IN0;
   const OUT = reduce ? { duration: 0 } : OUT0;
   const nav = useNavigation();
@@ -152,23 +156,32 @@ function Slide({ name, bottom, children }: { name: string; bottom: boolean; chil
   const style = useAnimatedStyle(() => ({ transform: [bottom ? { translateY: off.value } : { translateX: off.value }] }));
   const dim = useAnimatedStyle(() => ({ opacity: p.value * DIM }));
   const opened = () => { const u = under.current; if (u) { u.prev.style.display = ''; u.done(); under.current = null; } };
+  // The first time the screen has a size: slide it in. The size comes from onLayout, and on the web also straight from the node when the screen mounts, because the
+  // browser only reports a size through its resize observer once it has painted a frame (it can be late, or never in a background tab), and the slide must not wait for that.
+  const laid = (width: number, height: number, target: any) => {
+    box.current = target; // the DOM node on web
+    const first = dims.current.w === 0;
+    dims.current = { w: width, h: height };
+    if (first && entry.current) entry.current.el = isWeb ? screenOf(box.current) : null;
+    if (first && !popping) {
+      /* eslint-disable react-hooks/immutability -- reanimated shared values */
+      off.value = bottom ? height : width;
+      if (isWeb) under.current = underlay(box.current);
+      p.value = withTiming(1, IN);
+      off.value = withTiming(0, IN, (fin) => { if (fin && isWeb) runOnJS(opened)(); });
+      /* eslint-enable react-hooks/immutability */
+    } else if (first) p.value = 1; // eslint-disable-line react-hooks/immutability
+  };
+  const root = useRef<any>(null);
+  useEffect(() => {
+    if (!isWeb || !root.current || dims.current.w > 0) return;
+    const r = root.current.getBoundingClientRect?.();
+    if (r && r.width > 0 && r.height > 0) laid(r.width, r.height, root.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
-    <View style={{ flex: 1 }}
-      onLayout={(e) => {
-        const { width, height } = e.nativeEvent.layout;
-        box.current = (e.nativeEvent as any).target; // the DOM node on web
-        const first = dims.current.w === 0;
-        dims.current = { w: width, h: height };
-        if (first && entry.current) entry.current.el = isWeb ? screenOf(box.current) : null;
-        if (first && !popping) {
-          /* eslint-disable react-hooks/immutability -- reanimated shared values */
-          off.value = bottom ? height : width;
-          if (isWeb) under.current = underlay(box.current);
-          p.value = withTiming(1, IN);
-          off.value = withTiming(0, IN, (fin) => { if (fin && isWeb) runOnJS(opened)(); });
-          /* eslint-enable react-hooks/immutability */
-        } else if (first) p.value = 1; // eslint-disable-line react-hooks/immutability
-      }}>
+    <View ref={root} style={{ flex: 1 }}
+      onLayout={(e) => laid(e.nativeEvent.layout.width, e.nativeEvent.layout.height, (e.nativeEvent as any).target)}>
       {/* On the phone the X screens are drawn over the page underneath (transparent modal), so the dim is drawn here. */}
       {!isWeb && <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: fixed.black }, dim]} />}
       <GestureDetector gesture={pan}>
