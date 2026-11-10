@@ -219,52 +219,64 @@ function PillBar({ state, emitter, navigateToTab }: any) {
   const { c, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
-  const [w, setW] = useState(0);
   const count = state.routes.length;
-  const seg = w > 0 ? (w - 12) / count : 0;
-  const x = useSharedValue(0);
+  const fullW = useSharedValue(0); // the width the bar has at rest (measured once from the wrapper, which never shrinks)
+  const idx = useSharedValue(state.index);
   const reduce = useReduce(); // Reduce Motion: no spring, the value just jumps
-  useEffect(() => { x.value = springTo(state.index * seg, spring.nav, reduce); }, [state.index, seg]);
-  const hl = useAnimatedStyle(() => { const t = hidden?.value ?? 0; return { transform: [{ translateX: x.value }], top: 6 - 3 * t, height: 50 - 12 * t, borderRadius: (50 - 12 * t) / 2 }; });
-  // Scrolling down shrinks the bar instead of hiding it: shorter, closer to the edge, the names gone and less padding.
-  const bar = useAnimatedStyle(() => { const t = hidden?.value ?? 0; return { height: 64 - 18 * t, borderRadius: (64 - 18 * t) / 2, bottom: Math.max(insets.bottom - 6, 14) - 6 * t }; });
+  useEffect(() => { idx.value = springTo(state.index, spring.nav, reduce); }, [state.index]);
+  const compactW = count * 52 + 6; // while scrolling the bar is only as wide as its icons
+  const baseBottom = Math.max(insets.bottom - 6, 14);
+  // Scrolling down shrinks the bar instead of hiding it: narrower (as wide as the icons), shorter, closer to the edge, the names gone and less padding. It stays a pill.
+  const wrap = useAnimatedStyle(() => ({ bottom: baseBottom - 6 * (hidden?.value ?? 0) }));
+  const bar = useAnimatedStyle(() => {
+    const t = hidden?.value ?? 0;
+    const h = 64 - 18 * t;
+    return { width: fullW.value > 0 ? fullW.value - t * (fullW.value - compactW) : undefined, height: h, borderRadius: h / 2 };
+  });
+  const hl = useAnimatedStyle(() => {
+    const t = hidden?.value ?? 0;
+    const pad = 6 - 3 * t;
+    const width = fullW.value - t * (fullW.value - compactW);
+    const seg = Math.max(0, (width - 2 * pad) / count);
+    return { left: pad, width: seg, transform: [{ translateX: idx.value * seg }], top: 6 - 3 * t, height: 50 - 12 * t, borderRadius: (50 - 12 * t) / 2 };
+  });
   const pad = useAnimatedStyle(() => ({ padding: 6 - 3 * (hidden?.value ?? 0) }));
   const lab = useAnimatedStyle(() => { const t = hidden?.value ?? 0; return { opacity: 1 - t, height: 14 * (1 - t), marginTop: -3 * t }; });
-  const bottom = Math.max(insets.bottom - 6, 14);
 
   return (
-    <Animated.View
-      accessibilityRole="tablist"
-      onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)}
-      style={[{ position: 'absolute', left: 16, right: 16, bottom, height: 64, borderRadius: 32, overflow: 'hidden', borderWidth: hasLiquidGlass ? 0 : 1, borderColor: c.navLine,
-        shadowColor: fixed.shadow, shadowOpacity: 0.16, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 12 }, bar]}
-    >
-      <GlassBackdrop radius={32} frost={70} />
-      {seg > 0 && <Animated.View style={[{ position: 'absolute', top: 6, left: 6, width: seg, height: 50, borderRadius: 25, backgroundColor: `${c.accent}D6`, shadowColor: c.accent, shadowOpacity: 0.3, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }, hl]} />}
-      <Animated.View style={[{ flex: 1, flexDirection: 'row' }, pad]}>
-        {state.routes.map((r: any, i: number) => {
-          const on = state.index === i;
-          const Icon = ICONS[r.name] ?? Sun;
-          const col = on ? fixed.white : isDark ? 'rgba(243,244,246,0.86)' : c.muted; // dark mode: the tabs that are not selected are near-white, so they read clearly
-          return (
-            <Pressable
-              key={r.key}
-              accessibilityRole="tab"
-              accessibilityState={{ selected: on }}
-              accessibilityLabel={LABELS[r.name] ?? r.name}
-              onPress={() => {
-                haptic.tap();
-                const ev = emitter.emit({ type: 'tabPress', target: r.key, canPreventDefault: true }); // SDK 58: the tab bar gets `emitter` and `navigateToTab`, not `navigation`
-                if (!on && !ev.defaultPrevented) navigateToTab(r.key);
-                if (hidden) hidden.value = withTiming(0);
-              }}
-              style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 3 }}
-            >
-              <Icon size={22} strokeWidth={on ? 2.3 : 1.9} color={col} />
-              <Animated.Text numberOfLines={1} style={[{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 14, color: col, overflow: 'hidden' }, lab]}>{LABELS[r.name] ?? r.name}</Animated.Text>
-            </Pressable>
-          );
-        })}
+    <Animated.View pointerEvents="box-none" onLayout={(e: LayoutChangeEvent) => { fullW.value = e.nativeEvent.layout.width; }}
+      style={[{ position: 'absolute', left: 16, right: 16, alignItems: 'center' }, wrap]}>
+      <Animated.View accessibilityRole="tablist"
+        style={[{ overflow: 'hidden', borderWidth: hasLiquidGlass ? 0 : 1, borderColor: c.navLine,
+          shadowColor: fixed.shadow, shadowOpacity: 0.16, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 12 }, bar]}
+      >
+        <GlassBackdrop radius={32} frost={70} />
+        <Animated.View style={[{ position: 'absolute', backgroundColor: `${c.accent}D6`, shadowColor: c.accent, shadowOpacity: 0.3, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }, hl]} />
+        <Animated.View style={[{ flex: 1, flexDirection: 'row' }, pad]}>
+          {state.routes.map((r: any, i: number) => {
+            const on = state.index === i;
+            const Icon = ICONS[r.name] ?? Sun;
+            const col = on ? fixed.white : isDark ? 'rgba(243,244,246,0.86)' : c.muted; // dark mode: the tabs that are not selected are near-white, so they read clearly
+            return (
+              <Pressable
+                key={r.key}
+                accessibilityRole="tab"
+                accessibilityState={{ selected: on }}
+                accessibilityLabel={LABELS[r.name] ?? r.name}
+                onPress={() => {
+                  haptic.tap();
+                  const ev = emitter.emit({ type: 'tabPress', target: r.key, canPreventDefault: true }); // SDK 58: the tab bar gets `emitter` and `navigateToTab`, not `navigation`
+                  if (!on && !ev.defaultPrevented) navigateToTab(r.key);
+                  if (hidden) hidden.value = withTiming(0);
+                }}
+                style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 3 }}
+              >
+                <Icon size={22} strokeWidth={on ? 2.3 : 1.9} color={col} />
+                <Animated.Text numberOfLines={1} style={[{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 14, color: col, overflow: 'hidden' }, lab]}>{LABELS[r.name] ?? r.name}</Animated.Text>
+              </Pressable>
+            );
+          })}
+        </Animated.View>
       </Animated.View>
     </Animated.View>
   );
