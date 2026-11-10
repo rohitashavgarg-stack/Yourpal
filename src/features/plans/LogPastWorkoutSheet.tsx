@@ -17,17 +17,17 @@ import { DAYL, dateOf, dayPlan, PEx, usePlans } from './store';
 // Sample data: it is kept in the app's state. Every set starts as planned and ticked, so only what was different needs a change.
 export type LoggedSet = { kg: number; reps: number; sec: number; done: boolean };
 
-const minutesOf = (t?: string) => {
+export const minutesOf = (t?: string) => {
   const m = (t ?? '6:30 pm').match(/(\d+):(\d+)\s*(am|pm)/i);
   if (!m) return 18 * 60 + 30;
   return (Number(m[1]) % 12 + (m[3].toLowerCase() === 'pm' ? 12 : 0)) * 60 + Number(m[2]);
 };
-const asPlanned = (e: PEx): LoggedSet[] => Array.from({ length: e.sets }, () => ({ kg: e.kg, reps: e.reps, sec: e.t ?? 0, done: true }));
-const kgStep = (kg: number) => (kg >= 40 ? 2.5 : kg >= 10 ? 1 : 0.5);
-const round = (n: number) => Math.round(n * 10) / 10;
+export const asPlanned = (e: PEx): LoggedSet[] => Array.from({ length: e.sets }, () => ({ kg: e.kg, reps: e.reps, sec: e.t ?? 0, done: true }));
+export const kgStep = (kg: number) => (kg >= 40 ? 2.5 : kg >= 10 ? 1 : 0.5);
+export const round = (n: number) => Math.round(n * 10) / 10;
 
 // the amount shown on the row: what was done, for example "3 sets, 8 reps, 50 kg"
-function summary(e: PEx, sets: LoggedSet[]) {
+export function summary(e: PEx, sets: LoggedSet[]) {
   const done = sets.filter((s) => s.done);
   if (!done.length) return 'Not done';
   const top = done.reduce((a, b) => (b.kg > a.kg || (b.kg === a.kg && b.reps > a.reps) ? b : a));

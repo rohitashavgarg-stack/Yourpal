@@ -20,7 +20,6 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { COACH_BANNER } from './content';
-import { startCreate } from './openers';
 import { ExTile, Highlight, Moon } from './parts';
 import { DAYL, dateOf, dayPlan, exSub, monthOf, relDay, usePlans } from './store';
 import { radii, fontSizes } from '@/design-system/tokens';
@@ -223,7 +222,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
             <Moon />
             <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2 }}>Rest day</Txt>
             <Txt muted style={{ textAlign: 'center', maxWidth: 280 }}>Recovery is part of the plan. A walk or a stretch still counts toward your week.</Txt>
-            {!paused && <Button kind="secondary" small label={`Create a workout for ${DAYL[p.day]}`} onPress={() => startCreate(d)} style={{ marginTop: 6 }} />}
+            {!paused && <Button kind="secondary" small label="Ask Coach Vikram for a workout" onPress={() => router.push({ pathname: '/plans/ask', params: { kind: 'workout' } })} style={{ marginTop: 6 }} />}
           </Card>
         </FadeIn>
       )}
@@ -283,7 +282,7 @@ export function StickyEdit() {
   const bottom = Math.max(insets.bottom - 6, 14) + 84;
   return (
     <FadeIn pointerEvents="box-none" style={[{ position: 'absolute', left: 16, right: 16, bottom }, lift]}>
-      <Button kind="glassPrimary" label="Edit logged workout" icon={<Dumbbell size={18} color={c.bg} />} onPress={() => openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Edit logged workout' })} />
+      <Button kind="glassPrimary" label="Edit logged workout" icon={<Dumbbell size={18} color={c.bg} />} onPress={() => router.push({ pathname: '/plans/entries', params: { day: String(p.day), week: String(p.week) } })} />
     </FadeIn>
   );
 }
