@@ -1,4 +1,5 @@
 import React from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { Pressy, Row, Txt } from '@/components/ui';
@@ -34,7 +35,8 @@ function Stop({ s, first, last }: { s: Session; first: boolean; last: boolean })
         <View style={{ width: 2, flex: 1, backgroundColor: last ? 'transparent' : c.line }} />
       </View>
       <Pressy accessibilityRole="button" accessibilityLabel={`${s.focus}, ${s.long}`} onPress={() => router.push({ pathname: '/gym/session', params: { id: s.id } })}
-        style={{ flex: 1, backgroundColor: c.surface, borderRadius: radii.card, padding: 14, gap: 8, marginBottom: last ? 0 : 10 }}>
+        style={{ flex: 1, backgroundColor: c.cardLift, borderRadius: radii.card, padding: 14, gap: 8, marginBottom: last ? 0 : 10 }}>
+<CardEdge radius={radii.card} />
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <View style={{ flex: 1, gap: 1 }}>
             <Txt style={{ fontFamily: font.semibold }}>{s.focus}</Txt>

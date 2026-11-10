@@ -24,6 +24,8 @@ export const goBackToPlans = () => (router.canGoBack() ? router.back() : router.
 // Header for pushed Plans pages: 44 px round close / back, centred title, optional right action.
 /** The height of the header row under the top inset: 8 above, the 44 px buttons, 8 below. */
 export const PAGE_HEADER_BODY = 60;
+/** Where a page's first content starts under the header: past the blur, so nothing is soft at first look. */
+export const PAGE_HEADER_CLEAR = 84;
 export function PageHeader({ title, icon = 'back', onClose, right }: { title: string; icon?: 'back' | 'close'; onClose?: () => void; right?: React.ReactNode }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();

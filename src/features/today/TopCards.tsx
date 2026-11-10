@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { fade } from '@/theme/motion';
@@ -116,7 +117,8 @@ export function PtConfirmCard() {
   const { c, isDark } = useTheme();
   const { openSheet } = useOverlay();
   return (
-    <FadeIn style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <FadeIn style={[{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 18, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
+<CardEdge radius={radii.xl} />
       <CornerGlow color={c.accent} size={420} />
       <Row style={{ gap: 12 }}>
         <PersonAvatar who="coach" size={44} />
@@ -162,7 +164,8 @@ export function ComebackCard() {
   const pause = useAnimatedStyle(() => ({ opacity: 1 - a.value, transform: [{ scale: 1 - 0.4 * a.value }] }));
   const flame = useAnimatedStyle(() => ({ opacity: a.value, transform: [{ scale: 0.5 + 0.5 * a.value }] }));
   return (
-    <FadeIn style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 20, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <FadeIn style={[{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 20, gap: 12, overflow: 'hidden' }, cardShadow(isDark)]}>
+<CardEdge radius={radii.xl} />
       <CornerGlow color={FLAME} size={520} />
       <Row style={{ gap: 12 }}>
         <IconBadge size={44} radius={radii.lg} bg="rgba(255,138,61,0.16)">

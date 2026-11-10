@@ -14,7 +14,7 @@ import { font } from '@/theme/tokens';
 import { fontSizes, radii } from '@/design-system/tokens';
 import { AmountStepper } from '@/design-system/primitives/AmountStepper';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
-import { InfoBox, PageHeader, PAGE_HEADER_BODY } from '@/features/plans/parts';
+import { InfoBox, PageHeader, PAGE_HEADER_CLEAR } from '@/features/plans/parts';
 import { DAYL, dateOf, dayPlan, PEx, usePlans } from '@/features/plans/store';
 import { asPlanned, kgStep, LoggedSet, minutesOf, round, summary } from '@/features/plans/LogPastWorkoutSheet';
 
@@ -64,7 +64,7 @@ export default function EditLoggedEntries() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title={`Edit ${plan.name.toLowerCase()}`} icon="close" onClose={() => router.back()} />
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_BODY + 4, paddingBottom: insets.bottom + 110, gap: 10 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_CLEAR + 4, paddingBottom: insets.bottom + 110, gap: 10 }}>
         <Txt muted style={{ fontSize: fontSizes.sm, paddingHorizontal: 4 }}>{label}</Txt>
 
         {/* when and how long */}

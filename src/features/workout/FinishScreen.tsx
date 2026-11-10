@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
 import { useReduce } from '@/lib/motionSafe';
@@ -94,7 +95,8 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
             ))}
           </Row>
           <View>
-            <FadeIn delay={350} style={{ backgroundColor: c.surface, borderRadius: radii.lg, padding: 14, gap: 10 }}>
+            <FadeIn delay={350} style={{ backgroundColor: c.cardLift, borderRadius: radii.lg, padding: 14, gap: 10 }}>
+<CardEdge radius={radii.lg} />
               <Row style={{ gap: 12 }}>
                 <IconButton label="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }} size={52} radius={radii.xl} bg={c.accent}>
                   <Trophy size={24} strokeWidth={1.9} color={fixed.white} />

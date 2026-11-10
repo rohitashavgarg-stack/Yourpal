@@ -27,7 +27,8 @@ export function PCard({ onPress, label, children, style }: { onPress?: () => voi
   return (
     <View ref={box} collapsable={false}>
     <Pressy accessibilityRole="button" accessibilityLabel={label} onPressIn={prime} onPress={onPress} scaleTo={0.98}
-      style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 10 }, cardShadow(isDark), style]}>
+      style={[{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 18, gap: 10 }, cardShadow(isDark), style]}>
+<CardEdge radius={radii.xl} />
       {children}
       <CardEdge radius={radii.xl} />
     </Pressy>

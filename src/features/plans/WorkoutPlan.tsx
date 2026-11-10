@@ -1,4 +1,5 @@
 import React from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import type { ViewInstance } from 'react-native';
 import { useLogsPaused } from '@/lib/logGate';
 import { StyleSheet, View } from 'react-native';
@@ -98,7 +99,8 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
       {showUpdated && (
         <FadeIn i={0}>
           <Pressy accessibilityRole="button" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See what changed`} onPress={openUpdated} scaleTo={0.98}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 16, paddingHorizontal: 18, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1.5, borderColor: c.accent }}>
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 16, paddingHorizontal: 18, borderRadius: radii.xl, backgroundColor: c.cardLift, borderWidth: 1.5, borderColor: c.accent }}>
+<CardEdge radius={radii.xl} />
             <StatusDot size={10} color={c.accent} />
             <View style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.semibold }}>Coach Vikram updated your plan</Txt>
@@ -120,7 +122,8 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
       {d.planReq === 'ready' && (
         <FadeIn i={0}>
           <Pressy accessibilityRole="button" accessibilityLabel="Your new plan is ready. View" onPress={openUpdated} scaleTo={0.98}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, paddingHorizontal: 18, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1.5, borderColor: c.good }}>
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, paddingHorizontal: 18, borderRadius: radii.xl, backgroundColor: c.cardLift, borderWidth: 1.5, borderColor: c.good }}>
+<CardEdge radius={radii.xl} />
             <Check size={20} strokeWidth={2.4} color={c.good} />
             <Txt style={{ flex: 1, fontFamily: font.semibold }}>Your new plan is ready</Txt>
             <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>View</Txt>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { CreditCard, Download, PauseCircle } from '@/lib/icons';
@@ -101,13 +102,19 @@ export default function MembershipDetail() {
 
       {/* Time left in big numbers, the bar, and the two dates under it. Straight on the page, no card. */}
       <View style={{ gap: 14 }}>
+        {m.status === 'Frozen' && m.frozen && (
+          <View style={{ gap: 4 }}>
+            <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl6, lineHeight: 52, letterSpacing: -1.2 }}>Frozen</Txt>
+            <Txt muted>{`${m.frozen.from} to ${m.frozen.until}`}</Txt>
+          </View>
+        )}
         {m.status === 'Active' && (
           <Row style={{ alignItems: 'baseline', gap: 6 }}>
             <Txt style={{ fontFamily: font.displayBold, fontSize: 40, lineHeight: 52, letterSpacing: -1.2, color: m.warn ? c.warn : c.ink }}>{m.left.n}</Txt>
             <Txt muted>{m.left.unit}</Txt>
           </Row>
         )}
-        {m.status === 'Active' && <TimeBar pct={m.pct} warn={m.warn} />}
+        {(m.status === 'Active' || m.status === 'Frozen') && <TimeBar pct={m.pct} warn={m.warn} frozen={m.status === 'Frozen'} />}
         <Row style={{ justifyContent: 'space-between' }}>
           <View style={{ gap: 1 }}>
             <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{m.status === 'Upcoming' ? 'Starts' : 'Started'}</Txt>
@@ -132,7 +139,8 @@ export default function MembershipDetail() {
       {m.pt && (
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>PERSONAL TRAINING</Txt>
-          <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
+          <View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 14 }}>
+<CardEdge radius={radii.lg} />
             <View style={{ gap: 1 }}>
               <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base }}>{m.pt.trainer}</Txt>
               <Txt v="caption">Personal trainer</Txt>
@@ -155,7 +163,8 @@ export default function MembershipDetail() {
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>PAUSES</Txt>
           {/* One container: a progress bar for the pauses used (one segment for each pause the membership allows), then a tile for each pause taken. */}
-          <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
+          <View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 14 }}>
+<CardEdge radius={radii.lg} />
           <View style={{ gap: 8 }}>
             <Row style={{ justifyContent: 'space-between' }}>
               <Txt style={{ fontFamily: font.semibold }}>{`${usedCount} of ${PAUSE_TOTAL} used`}</Txt>
