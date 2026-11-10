@@ -25,7 +25,7 @@ import { mealById } from '@/features/today/meals';
 type NewMsg =
   | { from: 'me'; text?: string; photo?: string }
   | { from: 'bot'; text: string }
-  | { from: 'bot'; logged: { items: Parsed[]; kcal: number; meal: string; undone: boolean; prev: unknown; left: number } };
+  | { from: 'bot'; logged: { items: Parsed[]; kcal: number; meal: string; undone: boolean; prev: unknown; left: number; swapFrom?: string } };
 type Msg = NewMsg & { id: number };
 
 const QUICK = ['2 roti', '1 banana', '1 cup dal', '1 glass milk', '2 boiled eggs', '1 cup rice'];
@@ -37,9 +37,11 @@ export default function LogChat() {
   const { d, set } = useDomain();
   const { toast } = useOverlay();
   useLeaveIfPaused();
-  const p = useLocalSearchParams<{ mealId?: MealId; text?: string; photo?: string }>();
+  const p = useLocalSearchParams<{ mealId?: MealId; text?: string; photo?: string; replaceIdx?: string }>();
   const mealId = (p.mealId ?? 'sn') as MealId;
   const meal = mealById(mealId);
+  const replaceIdx = p.replaceIdx != null ? Number(p.replaceIdx) : null; // swapping a planned item: what is sent replaces it
+  const repl = replaceIdx != null ? meal.items[replaceIdx] : null;
   const [msgs, setMsgs] = useState<Msg[]>([{ id: 0, from: 'bot', text: 'Tell me what you ate. Type it, or send a photo of your plate.' }]);
   const [text, setText] = useState('');
   const scroll = useRef<ScrollViewInstance>(null);
@@ -58,6 +60,13 @@ export default function LogChat() {
     const prev = cur.meals;
     const log = mealLog(cur, mealId);
     const at = log.at ?? cur.min;
+    if (replaceIdx != null && repl) {
+      const label = items.map((x) => x.n).join(' + ');
+      set({ meals: { ...cur.meals, [mealId]: { ...log, repl: { ...log.repl, [replaceIdx]: { n: label, k: items.reduce((a, x) => a + x.k, 0), p: items.reduce((a, x) => a + x.p, 0), est: items.some((x) => x.est), type: 'veg' as const } }, skip: false } }, openMeal: mealId });
+      haptic.success();
+      add({ from: 'bot', logged: { items, kcal: items.reduce((a, x) => a + x.k, 0), meal: meal.n.toLowerCase(), undone: false, prev, left: Math.max(0, KCAL_TARGET - totals(cur).k), swapFrom: repl.n } });
+      return;
+    }
     set({ meals: { ...cur.meals, [mealId]: { ...log, extra: [...log.extra, ...items.map((x) => ({ n: x.n, k: x.k, p: x.p, est: x.est, type: 'veg' as const }))], at, skip: false } }, openMeal: mealId });
     const kcal = items.reduce((a, x) => a + x.k, 0);
     haptic.success();
@@ -109,7 +118,7 @@ export default function LogChat() {
       if (!r.canceled && r.assets?.[0]?.uri) sendPhoto(r.assets[0].uri);
     } catch { toast('Could not open your photos'); }
   };
-  const library = () => router.push({ pathname: '/food-library', params: { mealId } });
+  const library = () => router.push({ pathname: '/food-library', params: { mealId, ...(replaceIdx != null ? { replaceIdx: String(replaceIdx) } : null) } });
 
   return (
     <GrowFrame handle={frame} onClose={() => router.back()} origin={origin}>
@@ -129,7 +138,7 @@ export default function LogChat() {
               // the reply: one line that says what happened, then each food as the same FoodCard the diet page uses, then what is left and Undo
               <View style={{ gap: 8, width: '100%' }}>
                 <View style={{ backgroundColor: c.cardLift, borderRadius: radii.lg, borderBottomLeftRadius: radii.xs, padding: 12, paddingHorizontal: 14, alignSelf: 'flex-start' }}>
-                  <Txt style={{ fontFamily: font.semibold }}>{m.logged.undone ? 'Undone. Nothing was added.' : `Added to ${m.logged.meal}`}</Txt>
+                  <Txt style={{ fontFamily: font.semibold }}>{m.logged.undone ? 'Undone. Nothing was added.' : m.logged.swapFrom ? `Swapped ${m.logged.swapFrom.toLowerCase()}` : `Added to ${m.logged.meal}`}</Txt>
                 </View>
                 {!m.logged.undone && m.logged.items.map((it, i) => {
                   const [nm, ...rest] = it.n.split(', ');
@@ -161,7 +170,7 @@ export default function LogChat() {
         </ScrollView>
       )}
       {/* the same glass message bar as the Coach Vikram chat: the food library on the left, the camera and the mic inside the pill */}
-      <ChatBar value={text} onChangeText={setText} placeholder="Anything else?" autoFocus
+      <ChatBar value={text} onChangeText={setText} placeholder={replaceIdx != null ? 'What did you eat instead?' : 'Anything else?'} autoFocus
         leftIcon={<Library size={22} color={c.ink} />} leftLabel="Open the food library" onLeft={library}
         onCamera={pickPhoto} onMic={() => toast('Tap the microphone on your keyboard to speak')} onSend={() => send(text)} bottomInset={insets.bottom} />
     </KeyboardAvoidingView>
