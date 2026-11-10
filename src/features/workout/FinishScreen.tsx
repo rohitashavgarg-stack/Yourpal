@@ -99,9 +99,13 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
     <View style={{ flex: 1, backgroundColor: fixed.dark }}>
       <WaiverBackdrop stars={false} />
       <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingTop: insets.top + 40, paddingHorizontal: 22, paddingBottom: insets.bottom + 130, gap: 28 }}>
-        <FadeIn style={{ gap: 6 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: onDark.soft }}>Workout done, Leg day</Txt>
-          <Txt accessibilityRole="header" style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl6, lineHeight: 50, letterSpacing: -1.2, color: onDark.text }}>Nice work, Rohitashav</Txt>
+        <FadeIn style={{ gap: 10 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 19, letterSpacing: 1, color: onDark.soft }}>WORKOUT DONE, LEG DAY</Txt>
+          {/* two deliberate lines: the praise, then the name in a softer tone, so the heading never wraps by accident */}
+          <View accessible accessibilityRole="header" accessibilityLabel="Nice work, Rohitashav">
+            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl5, lineHeight: 42, letterSpacing: -1, color: onDark.text }}>Nice work,</Txt>
+            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl5, lineHeight: 42, letterSpacing: -1, color: onDark.soft }}>Rohitashav</Txt>
+          </View>
         </FadeIn>
 
         <FadeIn delay={120}>
