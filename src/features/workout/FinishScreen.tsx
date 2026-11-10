@@ -97,7 +97,7 @@ export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Fee
   return (
     // The same page as the signed waiver: black with a blue glow at the top. Nothing sits in a card; the numbers are on the page.
     <View style={{ flex: 1, backgroundColor: fixed.dark }}>
-      <WaiverBackdrop stars={false} />
+      <WaiverBackdrop />
       <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingTop: insets.top + 40, paddingHorizontal: 22, paddingBottom: insets.bottom + 130, gap: 28 }}>
         <FadeIn style={{ gap: 6 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: onDark.soft }}>Workout done, Leg day</Txt>
