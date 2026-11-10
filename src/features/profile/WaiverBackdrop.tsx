@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import Svg, { Circle, Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { useReduce } from '@/lib/motionSafe';
@@ -43,9 +43,12 @@ const STARS = [
 // The page behind the signed screen: a black page with a blue glow at the top (the bottom half stays black), the vertical lines at the top, and a few stars that twinkle.
 export function WaiverBackdrop({ stars = true }: { /** The twinkling dots. Off on the workout finish page. */ stars?: boolean }) {
   const { c } = useTheme();
-  const { width, height } = useWindowDimensions();
+  // The size of the screen it sits on, not of the browser window: on the web the phone is a frame inside a wide window, and a glow sized to the window floods the whole phone blue.
+  const [box, setBox] = useState<{ w: number; h: number } | null>(null);
+  const width = box?.w ?? 0;
+  const height = box?.h ?? 0;
   return (
-    <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: fixed.dark }}>
+    <View pointerEvents="none" onLayout={(e) => setBox({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height })} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: fixed.dark }}>
       <Svg width={width} height={height} style={{ position: 'absolute', top: 0, left: 0 }}>
         <Defs>
           <RadialGradient id="wsTop" cx="50%" cy="50%" r="50%">
