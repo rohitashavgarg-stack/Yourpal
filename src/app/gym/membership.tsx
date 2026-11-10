@@ -5,7 +5,7 @@ import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { ChevronRight, Snowflake } from '@/lib/icons';
+import { ChevronRight, Pause } from '@/lib/icons';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
@@ -16,18 +16,18 @@ import { radii, fontSizes } from '@/design-system/tokens';
 import { Chip } from '@/design-system/primitives/Chip';
 
 // A thin bar showing how much of the membership's time has gone.
-export function TimeBar({ pct, warn, frozen }: { pct: number; warn?: boolean; frozen?: boolean }) {
+export function TimeBar({ pct, warn, paused }: { pct: number; warn?: boolean; paused?: boolean }) {
   const { c } = useTheme();
   return (
     <View accessibilityRole="progressbar" accessibilityValue={{ min: 0, max: 100, now: pct }} style={{ height: 6, borderRadius: 3, backgroundColor: c.surface3, overflow: 'hidden' }}>
-      <View style={{ width: `${pct}%`, height: 6, borderRadius: radii.xs, backgroundColor: warn ? c.warn : frozen ? c.muted : c.accent }} />
+      <View style={{ width: `${pct}%`, height: 6, borderRadius: radii.xs, backgroundColor: warn ? c.warn : paused ? c.muted : c.accent }} />
     </View>
   );
 }
 
 export function StatusChip({ m }: { m: Membership }) {
   const { c } = useTheme();
-  if (m.status === 'Frozen') return <Chip label="Frozen" filled outlined icon={<Snowflake size={14} color={c.accentText} />} />;
+  if (m.status === 'Paused') return <Chip label="Paused" filled outlined icon={<Pause size={14} color={c.accentText} />} />;
   return <Chip label={m.status === 'Expired' ? 'Past' : m.status} tone={m.status === 'Active' ? 'good' : m.status === 'Suspended' ? 'warn' : 'default'} />;
 }
 
@@ -36,13 +36,13 @@ function MembershipCard({ m }: { m: Membership }) {
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`${m.name}, ${m.status}. ${m.note}`} onPress={() => router.push({ pathname: '/gym/membership-detail', params: { id: m.id } })} scaleTo={0.985}
       style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 10, overflow: 'hidden' }}>
-      {m.status === 'Frozen' && <LinearGradient pointerEvents="none" colors={[c.accentSoft, c.cardLift]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />}
+      {m.status === 'Paused' && <LinearGradient pointerEvents="none" colors={[c.accentSoft, c.cardLift]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />}
       <CardEdge radius={radii.lg} />
       <Row style={{ justifyContent: 'space-between' }}>
         <Txt style={{ flex: 1, fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{m.name}</Txt>
         <StatusChip m={m} />
       </Row>
-      {(m.status === 'Active' || m.status === 'Frozen') && <TimeBar pct={m.pct} warn={m.warn} frozen={m.status === 'Frozen'} />}
+      {(m.status === 'Active' || m.status === 'Paused') && <TimeBar pct={m.pct} warn={m.warn} paused={m.status === 'Paused'} />}
       <Row style={{ justifyContent: 'space-between' }}>
         <Txt style={{ flex: 1, fontSize: fontSizes.md, color: m.warn ? c.warn : c.muted }}>{m.note}</Txt>
         <ChevronRight size={18} color={c.muted} />
