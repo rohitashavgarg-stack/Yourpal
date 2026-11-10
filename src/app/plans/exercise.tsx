@@ -15,7 +15,7 @@ import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { histFor, tipFor } from '@/features/plans/content';
-import { ExTile, PageHeader } from '@/features/plans/parts';
+import { ExTile, PageHeader, PAGE_HEADER_BODY } from '@/features/plans/parts';
 import { artIdFor, ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { CLIPS, THUMBS, clipIdFor } from '@/features/workout/clips';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
@@ -65,7 +65,7 @@ export default function ExerciseDetail() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title={name} />
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_BODY + 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
         <View style={{ height: artId || clipId ? 250 : 210, borderRadius: radii.xl, overflow: 'hidden', backgroundColor: clipId ? fixed.white : artId ? lightBg : undefined }}>
           {clipId ? <PlanClip source={CLIPS[clipId]} thumb={THUMBS[clipId]} playing={playing} /> : artId ? (
             <View pointerEvents="none" style={{ position: 'absolute', top: 44, left: 12, right: 12, bottom: 18 }}>

@@ -59,17 +59,19 @@ export function Sheet({ children, label, glow, fixed, onClosed, registerClose }:
   const [h, setH] = useState(700);
   const y = useSharedValue(900);
   const back = useSharedValue(0);
+  const reduce = useReducedMotion(); // Reduce Motion: no spring, the value just jumps
   const afterRef = useRef<(() => void) | undefined>(undefined);
   const [footer, setFooter] = useState<React.ReactNode>(null);
 
   const finish = useCallback(() => { onClosed(); afterRef.current?.(); }, [onClosed]);
   const close = useCallback((after?: () => void) => {
     afterRef.current = after;
-    back.value = withTiming(0, { duration: 220 });
-    y.value = withTiming(h + 40, { duration: 260, easing: Easing.in(Easing.cubic) }, (done) => { if (done) scheduleOnRN(finish); });
-  }, [h, finish]);
+    // The sheet leaves downward along the same curve the phone uses, and the dim fades over the same time, so it reads as the sheet sliding away, not as a fade.
+    const out = { duration: reduce ? 0 : 320, easing: Easing.bezier(0.32, 0.72, 0, 1) };
+    back.value = withTiming(0, out);
+    y.value = withTiming(h + 40, out, (done) => { if (done) scheduleOnRN(finish); });
+  }, [h, finish, reduce]);
   useEffect(() => { registerClose(close); }, [close]);
-  const reduce = useReducedMotion(); // Reduce Motion: no spring, the value just jumps
   useEffect(() => {
     y.value = springTo(0, spring.soft, reduce);
     back.value = withTiming(1, { duration: 260 });

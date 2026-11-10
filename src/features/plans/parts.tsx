@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { ProgressiveBlur } from '@/components/Glass';
 import { Image, StyleProp, View, ViewStyle } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming, useReducedMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -20,17 +21,24 @@ import { Stepper as DSStepper, StepperProps } from '@/design-system/primitives/S
 export const goBackToPlans = () => (router.canGoBack() ? router.back() : router.replace('/plans'));
 
 // Header for pushed Plans pages: 44 px round close / back, centred title, optional right action.
+/** The height of the header row under the top inset: 8 above, the 44 px buttons, 8 below. */
+export const PAGE_HEADER_BODY = 60;
 export function PageHeader({ title, icon = 'back', onClose, right }: { title: string; icon?: 'back' | 'close'; onClose?: () => void; right?: React.ReactNode }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   return (
-    <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 8, backgroundColor: c.bg }}>
+    // The header floats over the page: no colour behind it, only the progressive blur (the same as the Today header), so the page scrolls under it. The page adds
+    // `insets.top + PAGE_HEADER_BODY` to the top of its scrolling content.
+    <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+    <ProgressiveBlur height={insets.top + PAGE_HEADER_BODY + 36} />
+    <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }}>
       <RoundBtn label={icon === 'close' ? 'Close' : 'Back'} onPress={onClose ?? goBackToPlans} glass>
         {icon === 'close' ? <X size={20} color={c.ink} /> : <ChevronLeft size={22} color={c.ink} />}
       </RoundBtn>
       <Txt v="headline" numberOfLines={1} accessibilityRole="header" style={{ flex: 1, textAlign: 'center' }}>{title}</Txt>
       {right ?? <View style={{ width: 44 }} />}
     </Row>
+    </View>
   );
 }
 

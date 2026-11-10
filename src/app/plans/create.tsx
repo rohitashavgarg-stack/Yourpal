@@ -12,7 +12,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { newEx } from '@/features/plans/content';
 import { LibrarySheet } from '@/features/plans/Sheets';
-import { PageHeader, ShakeText } from '@/features/plans/parts';
+import { PageHeader, PAGE_HEADER_BODY, ShakeText } from '@/features/plans/parts';
 import { DAYL, dayPlan, exSub, PEx, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes } from '@/design-system/tokens';
 
@@ -51,7 +51,7 @@ export default function CreateWorkout() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title="New workout" icon="close" />
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 14 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_BODY + 4, paddingBottom: insets.bottom + 28, gap: 14 }}>
         <View style={{ gap: 6 }}>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>Name</Txt>
           <Field accessibilityLabel="Workout name" value={p.cName} error={nameErr} onChangeText={(t) => setP({ cName: t, cErr: '' })} placeholder="e.g. Arms + core" returnKeyType="done" />
