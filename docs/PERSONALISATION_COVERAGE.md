@@ -55,3 +55,13 @@ Not in the app and not planned here: the rule store, the CEL conditions, events 
 5. Fast logging: "Repeat last meal" and "Log as planned" in the log sheet and on Today.
 6. Day count in the greeting ("Day 12 of 90") once a goal has a length.
 7. Sponsored card (gym ads) and challenges with opt-in leaderboards.
+
+## Decisions (11 Nov 2026, from the wireframes)
+
+- Daily content: plain text at the bottom of Today (a quick tip, a suggested workout or a recipe), no card, no button, no "Tomorrow" line. One per day.
+- Profile step: a card inside the updates stack (For you), not a separate card on Today.
+- Connect Health: tapping Connect on the Trackers card opens a bottom sheet (steps and active energy, read only, Continue and Not now), not a full page.
+- Sponsored card: later.
+- Supplements, challenges and leaderboards: later. Membership stays view only.
+- Protein is low counts protein from meals only until supplements exist.
+- Build order: Protein is low and Day done, fast logging, greeting with the day count, profile step, daily tip, Health consent sheet, fallback card.
