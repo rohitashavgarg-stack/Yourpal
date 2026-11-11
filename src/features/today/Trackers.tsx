@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { personalStore } from './personalise';
+import { HealthConsentSheet } from './PersonalCards';
 import { ScrollView, View } from 'react-native';
 import Animated, { cancelAnimation, Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { springTo, useReduce } from '@/lib/motionSafe';
@@ -155,8 +157,10 @@ export function HealthCards({ only }: { only?: HK } = {}) {
 
 export function ConnectCard() {
   const { set } = useDomain();
-  const { toast } = useOverlay();
-  return <ConnectTile name={HEALTH_NAME} onPress={() => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. Steps, heart rate and sleep sync automatically`); }} />;
+  const { toast, openSheet } = useOverlay();
+  const sheet = personalStore.use().healthSheet;
+  // with the consent sheet on, Connect first says what is read and asks; off, it connects at once
+  return <ConnectTile name={HEALTH_NAME} onPress={() => { if (sheet) { openSheet(<HealthConsentSheet />, { label: 'Connect Health' }); return; } set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. Steps, heart rate and sleep sync automatically`); }} />;
 }
 
 // One tracker in one design. interactive: false is for the designs page and the Profile card (looks only, no taps).
