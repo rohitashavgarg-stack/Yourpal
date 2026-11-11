@@ -60,7 +60,7 @@ export default function NotificationSettings() {
       {/* the heading and its line sit together, indented the same, with room above them and a small gap below */}
       <View style={{ gap: 4, marginTop: 12, marginBottom: 2 }}>
         <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, paddingHorizontal: 6 }}>Reminders</Txt>
-        <Note style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Small nudges when something is missing. They show in the app and, if you allow it, on your phone.</Note>
+        <Note style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Small nudges when something is missing.</Note>
       </View>
       <ListCard>
         {REMINDER_KEYS.map((k, i) => (
