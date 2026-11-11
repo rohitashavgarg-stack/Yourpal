@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { MealLoggedSheet } from './MealLoggedSheet';
 import { useProteinNote } from './PersonalCards';
 import { router } from 'expo-router';
 import { useOverlay } from '@/components/Overlay';
@@ -57,6 +58,18 @@ export function TodayMealNowCard() {
 
   const openLog = (id: MealId) => gate(() => openSheet(<LogMealsSheet mealId={id} />, { label: 'Log meal' }));
 
+  // Once the meal on screen is logged (or skipped), the card moves on to the next meal that still needs logging, by itself.
+  const doneNow = v.any || !!x.skip;
+  const prevDone = useRef<{ id: MealId; done: boolean }>({ id: shown, done: doneNow });
+  useEffect(() => {
+    const was = prevDone.current;
+    prevDone.current = { id: shown, done: doneNow };
+    if (was.id !== shown || was.done || !doneNow) return;
+    const i = MEALS.findIndex((q) => q.id === shown);
+    const order = [...MEALS.slice(i + 1), ...MEALS.slice(0, i)];
+    const next = order.find((q) => { const xl = mealLog(d, q.id); return !xl.skip && xl.eaten.length === 0 && xl.extra.length === 0; });
+    if (next) set({ openMeal: next.id });
+  }, [doneNow, shown]); // eslint-disable-line react-hooks/exhaustive-deps
   const state: MealsCardState = paused ? 'paused' : t.done === MEALS.length && !picked ? 'complete' : 'now';
   // protein of what was eaten, or of the plan when nothing is logged yet (the same basis as the calories)
   const protein = v.any
@@ -85,7 +98,7 @@ export function TodayMealNowCard() {
       pausedLine={`${inr(t.k)} of ${inr(KCAL_TARGET)} kcal, ${t.done} of 4 meals logged`}
       completeLine={`All ${MEALS.length} meals logged today. Protein is at ${t.p} of ${MACRO_TARGET.p} g.`}
       rows={MEALS.map((q) => { const xl = mealLog(d, q.id); const mv = mealView(d, q); return { id: q.id, name: q.n, skipped: !!xl.skip, sub: xl.skip ? 'Skipped' : `${mv.kcal} kcal${xl.at != null ? ', ' + fmtT(xl.at).full : ''}` }; })}
-      onOpenMeal={(id) => set({ openMeal: id as MealId })}
+      onOpenMeal={(id) => openSheet(<MealLoggedSheet mealId={id as MealId} />, { label: `${mealById(id as MealId).n} logged` })}
       meal={shownMeal}
       ask={askMeal ? { name: askMeal.n, planned: fmtT(askMeal.t).full, more: missed.length - 1 } : undefined}
       onAskLog={() => ask && openLog(ask)()}
