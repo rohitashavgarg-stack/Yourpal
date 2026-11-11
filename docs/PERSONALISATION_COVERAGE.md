@@ -65,3 +65,5 @@ Not in the app and not planned here: the rule store, the CEL conditions, events 
 - Supplements, challenges and leaderboards: later. Membership stays view only.
 - Protein is low counts protein from meals only until supplements exist.
 - Build order: Protein is low and Day done, fast logging, greeting with the day count, profile step, daily tip, Health consent sheet, fallback card.
+- Every new feature gets an on and off switch in the web demo side panel (Profile step, Daily tip, Protein is low, Day done, Fast logging, Greeting day count, Health consent sheet, Fallback and offline strip), so each can be shown with and without it.
+- Fast logging on the Meals card: states are not yet due (hidden), window open (Log as planned and Repeat last meal), partly logged (Log the rest as planned), logged (gone), skipped (Log it after all), missed (both, amber tag, Skip meal), first time (no Repeat), no plan (no Log as planned), membership paused (hidden), offline (works, saved on phone), all logged (none).
