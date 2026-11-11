@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
-import { Beef, Check, ChevronRight, Clock, Lock, Plus, Salad, UtensilsCrossed, X, Zap } from '@/lib/icons';
+import { Beef, Check, ChevronRight, Clock, Lock, Plus, Salad, TrendingDown, UtensilsCrossed, X, Zap } from '@/lib/icons';
 import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { FoodType } from '@/lib/data';
@@ -237,11 +237,11 @@ export function MealsCard(p: MealsCardProps) {
       </View>
       <MealItems meal={meal} onLogMeal={p.onLogMeal} />
       {p.proteinNote && (
-        <View accessible accessibilityLabel={`Protein is low, ${p.proteinNote.have} of ${p.proteinNote.target} grams`} style={{ flexDirection: 'row', gap: 10, alignItems: 'flex-start', backgroundColor: c.surface2, borderRadius: radii.md, padding: 12 }}>
-          <Beef size={18} color={c.warn} />
+        <View accessible accessibilityLabel={`Protein is low today, ${p.proteinNote.have} grams of ${p.proteinNote.target}`} style={{ flexDirection: 'row', gap: 12, alignItems: 'center', backgroundColor: c.warnSoft, borderRadius: radii.md, padding: 12 }}>
+          <IconBadge size={36} radius={radii.sm} bg={c.surface2}><TrendingDown size={18} color={c.warn} /></IconBadge>
           <View style={{ flex: 1, gap: 1 }}>
             <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20 }}>Protein is low today</Txt>
-            <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{`${p.proteinNote.have} of ${p.proteinNote.target} g so far. Dal, paneer, curd or eggs would help.`}</Txt>
+            <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.basePlus, lineHeight: 22, color: c.warn }}>{`${p.proteinNote.have} g`}</Txt>{` of ${p.proteinNote.target} g`}</Txt>
           </View>
         </View>
       )}

@@ -116,3 +116,5 @@ export { default as Wind } from 'lucide-react-native/icons/wind';
 export { default as HeartPulse } from 'lucide-react-native/icons/heart-pulse';
 export { default as Gauge } from 'lucide-react-native/icons/gauge';
 export { default as Timer } from 'lucide-react-native/icons/timer';
+export { default as Lightbulb } from 'lucide-react-native/icons/lightbulb';
+export { default as TrendingDown } from 'lucide-react-native/icons/trending-down';
