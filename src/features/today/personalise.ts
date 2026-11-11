@@ -4,7 +4,6 @@ import { createStore } from '@/lib/createStore';
 export const personalStore = createStore(() => ({
   dayCount: true,    // "Day 12 of 90" in the greeting
   healthSheet: true, // Connect Health opens a bottom sheet first
-  dayDone: true,     // the Day done card at the end of the day
   proteinNote: true, // a quiet "protein is low" note at the bottom of the Meals card in the evening
   profileStep: true, // one small profile question in the updates stack
   quickTip: true,    // a tip, recipe or workout idea at the bottom of Today
@@ -13,7 +12,6 @@ export type PersonalKey = keyof ReturnType<typeof personalStore.get>;
 export const PERSONAL_LABELS: [PersonalKey, string][] = [
   ['dayCount', 'Day count'],
   ['healthSheet', 'Health sheet'],
-  ['dayDone', 'Day done'],
   ['proteinNote', 'Protein note'],
   ['profileStep', 'Profile step'],
   ['quickTip', 'Quick tip'],

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { Check, Footprints, Flame, Lightbulb } from '@/lib/icons';
+import { Footprints, Flame, Lightbulb } from '@/lib/icons';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Card } from '@/design-system/primitives/Card';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
@@ -31,55 +31,6 @@ export function useProteinNote() {
   const target = MACRO_TARGET.p;
   if (have >= target * PROTEIN_LOW_SHARE) return undefined;
   return { have, target, left: target - have };
-}
-
-// ---------- Day done ----------
-// The main card at the end of the day, once the workout and every meal are logged: what was done and a look at tomorrow.
-export function useDayDone() {
-  const { d } = useDomain();
-  const on = personalStore.use().dayDone;
-  const paused = useLogsPaused();
-  if (!on || paused) return false;
-  return workoutState(d) === 'done' && nextMeal(d) === null;
-}
-
-export function DayDoneCard() {
-  const { c } = useTheme();
-  const { d } = useDomain();
-  const { p } = usePlans();
-  const logged = MEALS.filter((m) => !mealLog(d, m.id).skip).length;
-  const kcal = Math.round(totals(d).k);
-  const tomorrow = dayPlan(d, { ...p, week: 0 }, TODAY_IDX + 1);
-  const stat = (v: string, l: string) => (
-    <View style={{ flex: 1, gap: 2 }}>
-      <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.4 }}>{v}</Txt>
-      <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{l}</Txt>
-    </View>
-  );
-  return (
-    <Card variant="tight" style={{ gap: 14 }}>
-      <Row style={{ gap: 12 }}>
-        <IconBadge size={44} radius={radii.md} bg={c.goodSoft}><Check size={22} strokeWidth={2.4} color={c.good} /></IconBadge>
-        <View style={{ flex: 1 }}>
-          <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25 }}>Day done</Txt>
-          <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>Everything for today is logged</Txt>
-        </View>
-      </Row>
-      <Row style={{ alignItems: 'flex-start' }}>
-        {stat('1', 'Workout')}
-        {stat(`${logged} of ${MEALS.length}`, 'Meals')}
-        {stat(kcal.toLocaleString('en-IN'), 'kcal')}
-      </Row>
-      <View style={{ height: 1, backgroundColor: c.line }} />
-      <Row style={{ justifyContent: 'space-between', gap: 12 }}>
-        <View style={{ flex: 1 }}>
-          <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Tomorrow</Txt>
-          <Txt style={{ fontFamily: font.medium }}>{tomorrow ? `${tomorrow.name}${tomorrow.time ? `, ${tomorrow.time}` : ''}` : 'Rest day'}</Txt>
-        </View>
-      </Row>
-      <Button kind="primary" label="See tomorrow" onPress={() => router.navigate({ pathname: '/plans', params: { day: String(TODAY_IDX + 1) } })} />
-    </Card>
-  );
 }
 
 // ---------- Quick tip ----------
