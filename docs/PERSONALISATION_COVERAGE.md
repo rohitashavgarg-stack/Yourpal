@@ -48,11 +48,10 @@ Not in the app and not planned here: the rule store, the CEL conditions, events 
 
 ## Plan: things to add later
 
-1. **Log protein, creatine and other supplements** (decided 11 Nov 2026: later, keep it in the plan). Today the app logs meals, water, weight and workouts only. Idea: a "Supplements" shelf in the food library and the log chat (protein powder, creatine, others), one tap to log a scoop, counted into the day's protein, feeding the "Protein is low" card. The designer wrote "keratin"; this probably means creatine (confirm before building).
+1. **Log protein, creatine and other supplements** (decided 11 Nov 2026: later, keep it in the plan). Today the app logs meals, water, weight and workouts only. Idea: a "Supplements" shelf in the food library and the log chat (protein powder, creatine, others), one tap to log a scoop, counted into the day's protein, feeding the "Protein is low" card. The designer confirmed it is creatine (written "keratin" at first).
 2. Protein is low card and push (needs supplement logging so the number is right).
 3. Profile step: one small question a day as a card, never a push.
 4. Daily content: tip, quick workout or recipe, one a day.
 5. Fast logging: "Repeat last meal" and "Log as planned" in the log sheet and on Today.
 6. Day count in the greeting ("Day 12 of 90") once a goal has a length.
-7. Usual times and real pushes (needs a backend and a dev build).
-8. Sponsored card (gym ads) and challenges with opt-in leaderboards.
+7. Sponsored card (gym ads) and challenges with opt-in leaderboards.
