@@ -6,7 +6,7 @@ import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Card } from '@/design-system/primitives/Card';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { useOverlay } from '@/components/Overlay';
-import { MEALS, TODAY_IDX } from '@/lib/data';
+import { MACRO_TARGET, MEALS, TODAY_IDX } from '@/lib/data';
 import { LinearGradient } from 'expo-linear-gradient';
 import { mealLog, totals, useDomain, workoutState } from '@/lib/domain';
 import { useLogsPaused } from '@/lib/logGate';
@@ -17,7 +17,21 @@ import { font } from '@/theme/tokens';
 import { fontSizes, radii } from '@/design-system/tokens';
 import { dayPlan, usePlans } from '@/features/plans/store';
 import { nextMeal } from './meals';
-import { TIP_LABEL, personalStore, tipOfDay } from './personalise';
+import { PROTEIN_LOW_SHARE, PROTEIN_WINDOW, TIP_LABEL, personalStore, tipOfDay } from './personalise';
+
+// ---------- Protein is low: a note in the Meals card ----------
+// Not a card of its own: a quiet line at the bottom of the Meals card in the evening, while protein from meals is under 60% of the day's target.
+export function useProteinNote() {
+  const { d } = useDomain();
+  const on = personalStore.use().proteinNote;
+  const paused = useLogsPaused();
+  if (!on || paused) return undefined;
+  if (d.min < PROTEIN_WINDOW.from || d.min >= PROTEIN_WINDOW.to) return undefined;
+  const have = Math.round(totals(d).p);
+  const target = MACRO_TARGET.p;
+  if (have >= target * PROTEIN_LOW_SHARE) return undefined;
+  return { have, target, left: target - have };
+}
 
 // ---------- Day done ----------
 // The main card at the end of the day, once the workout and every meal are logged: what was done and a look at tomorrow.

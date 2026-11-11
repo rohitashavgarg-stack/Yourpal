@@ -7,7 +7,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 import { router } from 'expo-router';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { Clock, Flame, Footprints, GlassWater, Scale, UserRound, X } from '@/lib/icons';
-import { HEIGHT_OPTIONS, personalStore } from './personalise';
+import { personalStore } from './personalise';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { useOverlay } from '@/components/Overlay';
@@ -40,7 +40,6 @@ type Item = {
   key: string; title: string; body: string; critical?: boolean; tone: 'accent' | 'warn' | 'good' | 'muted';
   who?: boolean; icon?: any; btn?: string; act?: () => void; two?: boolean;
   chips?: string[]; full?: boolean; // small chips instead of a sentence, and a full-width button
-  options?: string[]; onPick?: (v: string) => void; // answers to tap (the profile step)
 };
 
 export function useForYou(): Item[] {
@@ -52,7 +51,7 @@ export function useForYou(): Item[] {
   const reminders = logsPaused ? [] : allReminders; // nothing to log while logging is paused
   const ptPending = usePtPending();
   const { live } = useUpdates();
-  const { state, setProfile } = useStore();
+  const { state } = useStore();
   const profileStepOn = personalStore.use().profileStep;
   const first = (state.profile.name || '').trim().split(' ')[0];
   const out: Item[] = [];
@@ -71,8 +70,8 @@ export function useForYou(): Item[] {
     else if (r.key === 'steps') out.push({ key: 'rem-steps', ...updateCopy.steps(first), tone: 'accent', icon: Footprints });
   });
   // One small profile question a day, at the back of the stack. Skip (the cross) hides it until tomorrow; an answer saves and tells the coach.
-  if (profileStepOn && !logsPaused) out.push({ key: 'profile-step', title: 'What is your height in cm?', body: 'Your coach uses this to size your plan.', tone: 'accent', icon: UserRound, options: HEIGHT_OPTIONS,
-    onPick: (v) => { setProfile({ heightCm: v }); set((x) => ({ dismissed: { ...x.dismissed, 'profile-step': true } })); haptic.success(); toast('Saved. Coach Vikram can see it'); } });
+  if (profileStepOn && !logsPaused) out.push({ key: 'profile-step', title: 'Add your height', body: 'Your coach uses it to size your plan. It takes a few seconds.', tone: 'accent', icon: UserRound, btn: 'Add height',
+    act: () => { set((x) => ({ dismissed: { ...x.dismissed, 'profile-step': true } })); router.push('/log-height'); } });
   return out.filter((i) => i.critical || !d.dismissed[i.key]);
 }
 
@@ -123,15 +122,6 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
               <Row style={{ gap: 10 }}>
                 <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => openSheet(<FlagSheet />, { label: 'Flag session' })} /></View>
                 <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} /></View>
-              </Row>
-            ) : it.options ? (
-              <Row style={{ gap: 8, flexWrap: 'wrap' }}>
-                {it.options.map((o) => (
-                  <Pressy key={o} accessibilityRole="button" accessibilityLabel={`${o} centimetres`} onPress={() => it.onPick?.(o)} scaleTo={0.95}
-                    style={{ height: 44, minWidth: 64, paddingHorizontal: 18, borderRadius: round(44), borderWidth: 1, borderColor: c.chipLine, alignItems: 'center', justifyContent: 'center' }}>
-                    <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 21 }}>{o}</Txt>
-                  </Pressy>
-                ))}
               </Row>
             ) : it.btn ? (
               <Row style={{ justifyContent: 'flex-end' }}><Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, minWidth: 132, paddingHorizontal: 24, borderRadius: 20, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.bg }}>{it.btn}</Txt></Pressy></Row>
