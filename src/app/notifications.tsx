@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 import { BellRing } from '@/lib/icons';
-import { Pill, Pressy, Txt } from '@/components/ui';
+import { Pill, Pressy, Row, Txt } from '@/components/ui';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { useOverlay } from '@/components/Overlay';
 import { useDomain } from '@/lib/domain';
 import { useScenarios } from '@/lib/store';
@@ -16,6 +17,10 @@ import { useVisibleNotifs } from '@/features/shell/notifs';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+
+const GROUPS = ['Today', 'Yesterday', 'Earlier'];
+// the age text on a notification (2h, 5h, 1d, 2d) decides its day group
+const bucket = (when: string) => (/[hm]$/.test(when) ? 'Today' : when === '1d' ? 'Yesterday' : 'Earlier');
 
 export default function Notifications() {
   const { c } = useTheme();
@@ -67,36 +72,45 @@ export default function Notifications() {
           <View style={{ width: 10 }} />
         </ScrollView>
       )}
-      <ListCard style={{ paddingHorizontal: 14 }}>
-        {list.map((n, i) => {
-          const p = byId[n.p];
-          return (
-            <FadeIn key={n.id} exiting={fadeOut()}>
-              <Pressy accessibilityRole="button" accessibilityLabel={`${n.unread ? 'Unread. ' : ''}${p.short}: ${n.t}. ${n.s}. ${n.when} ago`} onPress={() => open(n)} scaleTo={0.985}
-                style={{ minHeight: 68, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: i === list.length - 1 ? 0 : 1, borderBottomColor: c.line }}>
-                <ProgLogo p={p} size={40} />
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  {/* which programme it is from: every notification says it, whichever programme is open */}
-                  <Txt v="caption" numberOfLines={1} style={{ fontSize: fontSizes.xs, lineHeight: 16 }}>{p.name}</Txt>
-                  <Txt style={{ fontFamily: n.unread ? font.semibold : font.medium }}>{n.t}</Txt>
-                  <Txt muted style={{ fontSize: fontSizes.sm }} numberOfLines={1}>{n.s}</Txt>
-                </View>
-                <View style={{ alignItems: 'flex-end', gap: 6 }}>
-                  <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{n.when}</Txt>
-                  {n.unread && <View style={{ width: 8, height: 8, borderRadius: radii.xs, backgroundColor: c.accent }} />}
-                </View>
-              </Pressy>
-            </FadeIn>
-          );
-        })}
-        {list.length === 0 && (
-          <FadeIn style={{ paddingVertical: 36, paddingHorizontal: 10, alignItems: 'center', gap: 10 }}>
-            <IconBadge size={52} radius={radii.xl} bg={c.accentSoft}><BellRing size={22} color={c.accentText} /></IconBadge>
-            <Txt muted style={{ textAlign: 'center' }}>You&apos;re all caught up. New updates from your programmes show up here.</Txt>
-          </FadeIn>
-        )}
-      </ListCard>
-      {progs.length > 1 && <Note center>One inbox for every programme · tapping one from another programme switches to it</Note>}
+      {/* grouped by day; every notification is its own card with its programme's logo and name */}
+      {GROUPS.map((g) => {
+        const rows = list.filter((n) => bucket(n.when) === g);
+        if (!rows.length) return null;
+        return (
+          <View key={g} style={{ gap: 8 }}>
+            <Txt v="label" style={{ paddingHorizontal: 6 }}>{g.toUpperCase()}</Txt>
+            {rows.map((n) => {
+              const p = byId[n.p];
+              return (
+                <FadeIn key={n.id} exiting={fadeOut()}>
+                  <Pressy accessibilityRole="button" accessibilityLabel={`${n.unread ? 'Unread. ' : ''}${p.name}: ${n.t}. ${n.s}. ${n.when} ago`} onPress={() => open(n)} scaleTo={0.985}
+                    style={{ borderRadius: radii.lg, backgroundColor: n.unread ? c.accentSoft : c.cardLift, padding: 14, flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
+                    <CardEdge radius={radii.lg} />
+                    <ProgLogo p={p} size={44} />
+                    <View style={{ flex: 1, minWidth: 0, gap: 3 }}>
+                      <Row style={{ gap: 8 }}>
+                        <Txt numberOfLines={1} style={{ flex: 1, fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16, letterSpacing: 0.6, color: p.color }}>{p.name.toUpperCase()}</Txt>
+                        <Txt v="mono" muted style={{ fontSize: fontSizes.xs }}>{n.when}</Txt>
+                      </Row>
+                      <Txt style={{ fontFamily: n.unread ? font.semibold : font.medium, fontSize: fontSizes.basePlus, lineHeight: 22 }}>{n.t}</Txt>
+                      <Txt muted numberOfLines={2} style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{n.s}</Txt>
+                    </View>
+                    {n.unread && <View accessibilityElementsHidden style={{ width: 9, height: 9, marginTop: 4, borderRadius: radii.pill, backgroundColor: c.accent }} />}
+                  </Pressy>
+                </FadeIn>
+              );
+            })}
+          </View>
+        );
+      })}
+      {list.length === 0 && (
+        <FadeIn style={{ paddingVertical: 48, paddingHorizontal: 10, alignItems: 'center', gap: 12 }}>
+          <IconBadge size={56} radius={radii.xl} bg={c.accentSoft}><BellRing size={24} color={c.accentText} /></IconBadge>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25 }}>You&apos;re all caught up</Txt>
+          <Txt muted style={{ textAlign: 'center' }}>New updates from your programmes show up here.</Txt>
+        </FadeIn>
+      )}
+      {progs.length > 1 && <Note center>One inbox for every programme. Tapping one from another programme switches to it.</Note>}
     </SubPage>
   );
 }
