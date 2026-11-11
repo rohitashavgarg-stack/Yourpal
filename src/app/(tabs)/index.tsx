@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { DayDoneCard, ProteinLowCard, QuickTipCard, useDayDone, useProteinLow } from '@/features/today/PersonalCards';
+import { personalStore } from '@/features/today/personalise';
 import { RefreshControl, View } from 'react-native';
 import { TabScreen } from '@/components/TabScreen';
 import { GymHeader } from '@/components/GymHeader';
@@ -64,6 +66,9 @@ export default function Today() {
   const ptPending = usePtPending();
   // cards that would render nothing get no slot at all, so an empty slot never adds an extra gap
   const forYou = useForYou();
+  const proteinLow = useProteinLow();
+  const dayDone = useDayDone();
+  const personal = personalStore.use();
   const [stripY, setStripY] = useState(0); // where the membership strip sits in the page: it docks under the header once scrolled to
   const payNotice = usePaymentNotice();
   const needWaiver = useNeedsWaiver();
@@ -161,7 +166,11 @@ Rohitashav`} header={<GymHeader />} compactTitle={false} bottomPad={anyBar ? 160
             {/* today's calories stay at the top, right under the updates; the cards below follow the time of day (the workout at workout time, the meals at meal time, the week at the end of the day) */}
             <FadeIn step={50} i={1}>{!assigned ? <NoPlanCard /> : topMode === 'Today card' ? <TodayBudgetCard /> : <GoalTickCard />}</FadeIn>
             {comebackNew && forYou.length > 0 && <FadeIn step={50} i={1}><ForYouStack /></FadeIn>}
+            {/* the card of the moment under the Today card: Day done at the end of the day, Protein is low in the evening */}
+            {assigned && dayDone && <FadeIn step={50} i={1}><DayDoneCard /></FadeIn>}
+            {assigned && !dayDone && !!proteinLow && <FadeIn step={50} i={1}><ProteinLowCard info={proteinLow} /></FadeIn>}
             {order.map((k, i) => <FadeIn step={50} key={k} i={2 + i}>{slots[k]}</FadeIn>)}
+            {assigned && personal.quickTip && <FadeIn step={50} i={7}><QuickTipCard /></FadeIn>}
             <FadeIn step={50} i={7}><PageEnd /></FadeIn>
           </>
         ) : (

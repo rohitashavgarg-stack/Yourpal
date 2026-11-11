@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/refs -- the panel passes its handlers (which use a ref for the note timer) straight to its buttons */
 import React, { useEffect, useState , useRef} from 'react';
+import { PERSONAL_LABELS, personalStore } from '@/features/today/personalise';
 import { useShell } from '@/features/shell/state';
 import { router } from 'expo-router';
 import { workoutUiStore } from '@/features/workout/ui';
@@ -273,6 +274,15 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       </View>
     </PanelCard>
   );
+  // Personal Today features: each one can be switched on and off, to show Today with and without it.
+  const pers = personalStore.use();
+  const personalCard = (
+    <PanelCard icon={Flag} title="Personalise" pill={{ label: `${PERSONAL_LABELS.filter(([k]) => pers[k]).length} of ${PERSONAL_LABELS.length} on` }}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
+        {PERSONAL_LABELS.map(([k, l]) => <SwitchChip key={k} label={l} on={pers[k]} onPress={() => personalStore.set({ [k]: !pers[k] })} />)}
+      </View>
+    </PanelCard>
+  );
   // Reminders: how long ago the last glass and the last weigh-in were, and a preview of the phone notification for what is due now.
   const rem = useReminders();
   const rs = reminderStore.use();
@@ -302,7 +312,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     </PanelCard>
   );
   // One column of four short cards (it was three columns of long ones).
-  const columnsOf: React.ReactNode[][] = [[timeCard, situationCard, memberCard, reminderCard, goCard]];
+  const columnsOf: React.ReactNode[][] = [[timeCard, situationCard, memberCard, personalCard, reminderCard, goCard]];
   return (
     <View style={{ gap: 8 }}>
       <View style={{ backgroundColor: fixed.white, borderRadius: radii.md, borderWidth: 1, borderColor: P.line, paddingVertical: 8, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>

@@ -13,6 +13,7 @@ export type TodayCtx = {
   noPlan?: boolean;                              // no workout or diet plan assigned: tracking only
   day: number;                                   // day of month, rotates the variants
   clock: (min: number) => string;                // "6:30 pm"
+  dayCount?: { day: number; of: number };       // day 12 of a 90 day goal: when set, the second line starts with it
 };
 
 // The top of Today is two lines in one quiet grey: a greeting with the name ("Hey! Rohitashav"), then a line whose key phrase is brighter
@@ -26,6 +27,15 @@ const timeGreet = (c: TodayCtx) => [c.min < 12 * 60 ? 'Good morning, {n}' : c.mi
 const withName = (line: string, first: string) => (first ? line.replace('{n}', first) : line.replace(/! ?\{n\}/, '!').trim());
 
 export function greeting(c: TodayCtx, first: string): Greeting {
+  const g0 = greetingBase(c, first);
+  // "Day 12 of 90", then one fact: a streak first, otherwise what today holds. (Not on the quiet states: paused, no plan.)
+  if (!c.dayCount || c.paused || c.noPlan) return g0;
+  const plan = `${g0.lead ? g0.lead + ' ' : ''}${g0.hl}${g0.tail ?? ''}`.trim();
+  const fact = c.weeks >= 2 && c.workout !== 'live' ? `week ${c.weeks} in a row` : plan.charAt(0).toLowerCase() + plan.slice(1);
+  return { top: g0.top, lead: '', hl: `Day ${c.dayCount.day} of ${c.dayCount.of}`, tail: `, ${fact}` };
+}
+
+function greetingBase(c: TodayCtx, first: string): Greeting {
   const g = (list: string[], key: number, lead: string, hl: string): Greeting => ({ top: withName(pick(c.day, key, list), first), lead, hl });
   if (c.paused) return g(timeGreet(c), 0, '', 'History is safe');
   if (c.noPlan) return g(timeGreet(c), 7, 'Your plan is', 'on the way');
