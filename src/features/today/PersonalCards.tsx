@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { Check, ChefHat, Dumbbell, Footprints, Flame, Zap } from '@/lib/icons';
+import { Check, Footprints, Flame, Lightbulb } from '@/lib/icons';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Card } from '@/design-system/primitives/Card';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
@@ -89,8 +89,9 @@ export function QuickTipCard() {
   const on = personalStore.use().quickTip;
   if (!on) return null;
   const t = tipOfDay(new Date().getDate());
-  const Icon = t.kind === 'recipe' ? ChefHat : t.kind === 'workout' ? Dumbbell : Zap;
-  const tone = t.kind === 'recipe' ? { bg: c.tNutri, fg: c.cNutri } : t.kind === 'workout' ? { bg: c.tAct, fg: c.cAct } : { bg: c.tSleep, fg: c.cSleep };
+  // one look for every kind (a tip, a recipe or a workout): the tip bulb, in a violet that no other card on Today uses
+  const Icon = Lightbulb;
+  const tone = { bg: c.tSleep, fg: c.cSleep };
   return (
     <Card variant="tight" clip style={{ gap: 8, paddingVertical: 20 }}>
       <LinearGradient pointerEvents="none" colors={[tone.bg, c.cardLift]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
