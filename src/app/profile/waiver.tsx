@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { router } from 'expo-router';
 import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FileText, PenLine } from '@/lib/icons';
-import { Button, Row, Txt } from '@/components/ui';
+import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -45,6 +46,10 @@ export default function Waiver() {
           <View pointerEvents="box-none" style={{ paddingHorizontal: 16, paddingTop: 28, paddingBottom: bottom, gap: 10 }}>
             <Button kind="primary" label="Agree and sign" accessibilityLabel="I have read the waiver. Agree and sign" icon={<PenLine size={18} color={c.bg} />} onPress={sign}
               style={{ shadowColor: fixed.black, shadowOpacity: 0.28, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: 10 }} />
+            {/* not now: the waiver stays pending (the card stays on Today) */}
+            <Pressy accessibilityRole="button" onPress={() => (router.canGoBack() ? router.back() : router.replace('/(tabs)'))} scaleTo={0.96} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}>
+              <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 21, color: c.ink, opacity: 0.7 }}>Skip for now</Txt>
+            </Pressy>
           </View>
         </View>
       )}>

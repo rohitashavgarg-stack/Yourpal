@@ -76,6 +76,8 @@ export default function Notifications() {
                 style={{ minHeight: 68, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: i === list.length - 1 ? 0 : 1, borderBottomColor: c.line }}>
                 <ProgLogo p={p} size={40} />
                 <View style={{ flex: 1, minWidth: 0 }}>
+                  {/* which programme it is from: every notification says it, whichever programme is open */}
+                  <Txt v="caption" numberOfLines={1} style={{ fontSize: fontSizes.xs, lineHeight: 16 }}>{p.name}</Txt>
                   <Txt style={{ fontFamily: n.unread ? font.semibold : font.medium }}>{n.t}</Txt>
                   <Txt muted style={{ fontSize: fontSizes.sm }} numberOfLines={1}>{n.s}</Txt>
                 </View>
