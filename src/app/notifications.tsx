@@ -84,7 +84,7 @@ export default function Notifications() {
               return (
                 <FadeIn key={n.id} exiting={fadeOut()}>
                   <Pressy accessibilityRole="button" accessibilityLabel={`${n.unread ? 'Unread. ' : ''}${p.name}: ${n.t}. ${n.s}. ${n.when} ago`} onPress={() => open(n)} scaleTo={0.985}
-                    style={{ borderRadius: radii.lg, backgroundColor: n.unread ? c.accentSoft : c.cardLift, padding: 14, flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
+                    style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 14, flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
                     <CardEdge radius={radii.lg} />
                     <ProgLogo p={p} size={44} />
                     <View style={{ flex: 1, minWidth: 0, gap: 3 }}>
