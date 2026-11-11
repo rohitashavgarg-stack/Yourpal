@@ -5,7 +5,6 @@ export const personalStore = createStore(() => ({
   dayCount: true,    // "Day 12 of 90" in the greeting
   healthSheet: true, // Connect Health opens a bottom sheet first
   dayDone: true,     // the Day done card at the end of the day
-  proteinLow: true,  // the Protein is low card in the evening
   profileStep: true, // one small profile question in the updates stack
   quickTip: true,    // a tip, recipe or workout idea at the bottom of Today
 }));
@@ -14,7 +13,6 @@ export const PERSONAL_LABELS: [PersonalKey, string][] = [
   ['dayCount', 'Day count'],
   ['healthSheet', 'Health sheet'],
   ['dayDone', 'Day done'],
-  ['proteinLow', 'Protein low'],
   ['profileStep', 'Profile step'],
   ['quickTip', 'Quick tip'],
 ];
@@ -22,10 +20,6 @@ export const PERSONAL_LABELS: [PersonalKey, string][] = [
 // A demo goal length for the greeting until a goal carries its own: day 12 of 90.
 export const GOAL_DAY = 12;
 export const GOAL_DAYS = 90;
-
-// The protein card shows in the evening (6:00 to 8:30 pm) while the day's protein is under this share of the target.
-export const PROTEIN_WINDOW = { from: 18 * 60, to: 20 * 60 + 30 };
-export const PROTEIN_LOW_SHARE = 0.6;
 
 // The bottom of Today: one idea a day (by the date, the same all day). A tip, a recipe or a workout to try. Plain, no emoji, no hype.
 export type Tip = { kind: 'tip' | 'recipe' | 'workout'; title: string; body: string };

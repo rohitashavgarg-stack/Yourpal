@@ -6,7 +6,8 @@ import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Card } from '@/design-system/primitives/Card';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { useOverlay } from '@/components/Overlay';
-import { MACRO_TARGET, MEALS, MealId, TODAY_IDX } from '@/lib/data';
+import { MEALS, TODAY_IDX } from '@/lib/data';
+import { LinearGradient } from 'expo-linear-gradient';
 import { mealLog, totals, useDomain, workoutState } from '@/lib/domain';
 import { useLogsPaused } from '@/lib/logGate';
 import { haptic } from '@/lib/haptics';
@@ -15,44 +16,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { fontSizes, radii } from '@/design-system/tokens';
 import { dayPlan, usePlans } from '@/features/plans/store';
-import { nextMeal, mealById } from './meals';
-import { QuickLogSheet } from './QuickLogSheet';
-import { PROTEIN_LOW_SHARE, PROTEIN_WINDOW, TIP_LABEL, personalStore, tipOfDay } from './personalise';
-
-// ---------- Protein is low ----------
-// The evening card under the Today card: protein from meals is under 60% of the day's target. It leaves when protein is logged or the window ends.
-export function useProteinLow() {
-  const { d } = useDomain();
-  const on = personalStore.use().proteinLow;
-  const paused = useLogsPaused();
-  if (!on || paused) return null;
-  if (d.min < PROTEIN_WINDOW.from || d.min >= PROTEIN_WINDOW.to) return null;
-  const have = Math.round(totals(d).p);
-  const target = MACRO_TARGET.p;
-  if (have >= target * PROTEIN_LOW_SHARE) return null;
-  return { have, target, left: target - have, meal: nextMeal(d) };
-}
-
-export function ProteinLowCard({ info }: { info: NonNullable<ReturnType<typeof useProteinLow>> }) {
-  const { c } = useTheme();
-  const { openSheet } = useOverlay();
-  const mealId: MealId = info.meal ?? 'dn';
-  const meal = mealById(mealId).n.toLowerCase();
-  return (
-    <Card variant="tight" style={{ gap: 12 }}>
-      <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.8, color: c.warn }}>PROTEIN IS LOW</Txt>
-      <Row style={{ alignItems: 'baseline', gap: 6 }}>
-        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 38, letterSpacing: -0.8 }}>{info.have}</Txt>
-        <Txt muted style={{ fontSize: fontSizes.base }}>{`of ${info.target} g today`}</Txt>
-      </Row>
-      <View accessibilityRole="progressbar" accessibilityValue={{ min: 0, max: info.target, now: info.have }} style={{ height: 6, borderRadius: radii.xs, backgroundColor: c.surface3, overflow: 'hidden' }}>
-        <View style={{ width: `${Math.min(100, (info.have / info.target) * 100)}%`, height: 6, borderRadius: radii.xs, backgroundColor: c.warn }} />
-      </View>
-      <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{`${info.left} g to go. ${info.meal ? `${meal.charAt(0).toUpperCase()}${meal.slice(1)} can cover it.` : 'A snack can cover it.'}`}</Txt>
-      <Button kind="primary" label={info.meal ? `Log ${meal}` : 'Log what you ate'} onPress={() => openSheet(<QuickLogSheet mealId={mealId} mode="scan" />, { label: 'Log a meal' })} />
-    </Card>
-  );
-}
+import { nextMeal } from './meals';
+import { TIP_LABEL, personalStore, tipOfDay } from './personalise';
 
 // ---------- Day done ----------
 // The main card at the end of the day, once the workout and every meal are logged: what was done and a look at tomorrow.
@@ -104,23 +69,24 @@ export function DayDoneCard() {
 }
 
 // ---------- Quick tip ----------
-// The last thing on Today: one idea a day, a tip, a recipe or a workout to try. Text only, no button.
+// The last thing on Today: one idea a day, a tip, a recipe or a workout to try. A tinted card (a colour for each kind) with a big soft icon behind the words. Text only, no button.
 export function QuickTipCard() {
   const { c } = useTheme();
   const on = personalStore.use().quickTip;
   if (!on) return null;
   const t = tipOfDay(new Date().getDate());
   const Icon = t.kind === 'recipe' ? ChefHat : t.kind === 'workout' ? Dumbbell : Zap;
+  const tone = t.kind === 'recipe' ? { bg: c.tNutri, fg: c.cNutri } : t.kind === 'workout' ? { bg: c.tAct, fg: c.cAct } : { bg: c.tSleep, fg: c.cSleep };
   return (
-    <Card variant="tight" style={{ gap: 12 }}>
-      <Row style={{ gap: 12, alignItems: 'flex-start' }}>
-        <IconBadge size={40} radius={radii.sm} bg={c.accentSoft}><Icon size={19} color={c.accentText} /></IconBadge>
-        <View style={{ flex: 1, gap: 3 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.8, color: c.accentText }}>{TIP_LABEL[t.kind]}</Txt>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.basePlus, lineHeight: 23 }}>{t.title}</Txt>
-          <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{t.body}</Txt>
-        </View>
+    <Card variant="tight" clip style={{ gap: 8, paddingVertical: 20 }}>
+      <LinearGradient pointerEvents="none" colors={[tone.bg, c.cardLift]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      <View pointerEvents="none" style={{ position: 'absolute', right: -14, bottom: -18, opacity: 0.14 }}><Icon size={132} strokeWidth={1.4} color={tone.fg} /></View>
+      <Row style={{ gap: 8 }}>
+        <Icon size={16} color={tone.fg} />
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.8, color: tone.fg }}>{TIP_LABEL[t.kind]}</Txt>
       </Row>
+      <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.5, maxWidth: '88%' }}>{t.title}</Txt>
+      <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23, maxWidth: '88%' }}>{t.body}</Txt>
     </Card>
   );
 }
