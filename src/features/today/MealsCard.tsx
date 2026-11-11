@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { MealLoggedSheet } from './MealLoggedSheet';
-import { useProteinNote } from './PersonalCards';
 import { router } from 'expo-router';
 import { useOverlay } from '@/components/Overlay';
 import { fmtT, KCAL_TARGET, MACRO_TARGET, MealId, MEALS } from '@/lib/data';
@@ -38,7 +37,6 @@ export function TodayMealNowCard() {
   const { openSheet, toast } = useOverlay();
   const { gate, paused } = useLogGate();
   const t = totals(d);
-  const proteinNote = useProteinNote();
   const now = currentMealId(d.min);
   // tapping another meal in the strip shows it here; tapping the current one (or a fresh day) goes back to "now"
   const picked = !!d.openMeal && d.openMeal !== 'none' && MEALS.some((q) => q.id === d.openMeal);
@@ -102,8 +100,7 @@ export function TodayMealNowCard() {
       meal={shownMeal}
       ask={askMeal ? { name: askMeal.n, planned: fmtT(askMeal.t).full, more: missed.length - 1 } : undefined}
       onAskLog={() => ask && openLog(ask)()}
-      onLogMeal={openLog(shown)}
-      proteinNote={state === 'now' ? proteinNote : undefined} />
+      onLogMeal={openLog(shown)} />
   );
 }
 export { TodayMealNowCard as MealNowCard }; // the old name, so existing imports keep working
