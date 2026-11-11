@@ -18,21 +18,21 @@ import { nextMeal } from './meals';
 import { TIP_LABEL, personalStore, tipOfDay } from './personalise';
 
 // ---------- Quick tip ----------
-// The last thing on Today: one idea a day, a tip, a recipe or a workout to try. Plain text on the page with a thin line above it: no card, no fill, no button.
+// The last thing on Today: one idea a day, a tip, a recipe or a workout to try. A plain card: the bulb and the label, the title, a short body. No button.
 export function QuickTipCard() {
   const { c } = useTheme();
   const on = personalStore.use().quickTip;
   if (!on) return null;
   const t = tipOfDay(new Date().getDate());
   return (
-    <View style={{ gap: 8, paddingHorizontal: 6, paddingTop: 18, borderTopWidth: 1, borderTopColor: c.line }}>
-      <Row style={{ gap: 8 }}>
-        <Lightbulb size={16} color={c.cSleep} />
+    <Card variant="tight" style={{ gap: 8 }}>
+      <Row style={{ gap: 10 }}>
+        <IconBadge size={32} radius={radii.sm} bg={c.tSleep}><Lightbulb size={17} color={c.cSleep} /></IconBadge>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.8, color: c.cSleep }}>{TIP_LABEL[t.kind]}</Txt>
       </Row>
       <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.5 }}>{t.title}</Txt>
       <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23 }}>{t.body}</Txt>
-    </View>
+    </Card>
   );
 }
 
