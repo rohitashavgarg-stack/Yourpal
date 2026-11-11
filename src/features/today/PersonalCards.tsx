@@ -1,4 +1,5 @@
 import React from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { Footprints, Flame, Lightbulb } from '@/lib/icons';
@@ -18,20 +19,23 @@ import { nextMeal } from './meals';
 import { TIP_LABEL, personalStore, tipOfDay } from './personalise';
 
 // ---------- Quick tip ----------
-// The last thing on Today: one idea a day, a tip, a recipe or a workout to try. A plain card: the bulb and the label, the title, a short body. No button.
+// The last thing on Today: one idea a day, a tip, a recipe or a workout to try. A violet tinted card with a big soft bulb behind the words. Text only, no button.
 export function QuickTipCard() {
   const { c } = useTheme();
   const on = personalStore.use().quickTip;
   if (!on) return null;
   const t = tipOfDay(new Date().getDate());
+  const tone = { bg: c.tSleep, fg: c.cSleep };
   return (
-    <Card variant="tight" style={{ gap: 8 }}>
-      <Row style={{ gap: 10 }}>
-        <IconBadge size={32} radius={radii.sm} bg={c.tSleep}><Lightbulb size={17} color={c.cSleep} /></IconBadge>
-        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.8, color: c.cSleep }}>{TIP_LABEL[t.kind]}</Txt>
+    <Card variant="tight" clip style={{ gap: 8, paddingVertical: 20 }}>
+      <LinearGradient pointerEvents="none" colors={[tone.bg, c.cardLift]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      <View pointerEvents="none" style={{ position: 'absolute', right: -14, bottom: -18, opacity: 0.14 }}><Lightbulb size={132} strokeWidth={1.4} color={tone.fg} /></View>
+      <Row style={{ gap: 8 }}>
+        <Lightbulb size={16} color={tone.fg} />
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.8, color: tone.fg }}>{TIP_LABEL[t.kind]}</Txt>
       </Row>
-      <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.5 }}>{t.title}</Txt>
-      <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23 }}>{t.body}</Txt>
+      <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.5, maxWidth: '88%' }}>{t.title}</Txt>
+      <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23, maxWidth: '88%' }}>{t.body}</Txt>
     </Card>
   );
 }
