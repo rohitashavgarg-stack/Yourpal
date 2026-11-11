@@ -6,8 +6,6 @@ import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Card } from '@/design-system/primitives/Card';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { useOverlay } from '@/components/Overlay';
-import { MACRO_TARGET, MEALS, TODAY_IDX } from '@/lib/data';
-import { LinearGradient } from 'expo-linear-gradient';
 import { mealLog, totals, useDomain, workoutState } from '@/lib/domain';
 import { useLogsPaused } from '@/lib/logGate';
 import { haptic } from '@/lib/haptics';
@@ -17,48 +15,29 @@ import { font } from '@/theme/tokens';
 import { fontSizes, radii } from '@/design-system/tokens';
 import { dayPlan, usePlans } from '@/features/plans/store';
 import { nextMeal } from './meals';
-import { PROTEIN_LOW_SHARE, PROTEIN_WINDOW, TIP_LABEL, personalStore, tipOfDay } from './personalise';
-
-// ---------- Protein is low: a note in the Meals card ----------
-// Not a card of its own: a quiet line at the bottom of the Meals card in the evening, while protein from meals is under 60% of the day's target.
-export function useProteinNote() {
-  const { d } = useDomain();
-  const on = personalStore.use().proteinNote;
-  const paused = useLogsPaused();
-  if (!on || paused) return undefined;
-  if (d.min < PROTEIN_WINDOW.from || d.min >= PROTEIN_WINDOW.to) return undefined;
-  const have = Math.round(totals(d).p);
-  const target = MACRO_TARGET.p;
-  if (have >= target * PROTEIN_LOW_SHARE) return undefined;
-  return { have, target, left: target - have };
-}
+import { TIP_LABEL, personalStore, tipOfDay } from './personalise';
 
 // ---------- Quick tip ----------
-// The last thing on Today: one idea a day, a tip, a recipe or a workout to try. A tinted card (a colour for each kind) with a big soft icon behind the words. Text only, no button.
+// The last thing on Today: one idea a day, a tip, a recipe or a workout to try. Plain text on the page with a thin line above it: no card, no fill, no button.
 export function QuickTipCard() {
   const { c } = useTheme();
   const on = personalStore.use().quickTip;
   if (!on) return null;
   const t = tipOfDay(new Date().getDate());
-  // one look for every kind (a tip, a recipe or a workout): the tip bulb, in a violet that no other card on Today uses
-  const Icon = Lightbulb;
-  const tone = { bg: c.tSleep, fg: c.cSleep };
   return (
-    <Card variant="tight" clip style={{ gap: 8, paddingVertical: 20 }}>
-      <LinearGradient pointerEvents="none" colors={[tone.bg, c.cardLift]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
-      <View pointerEvents="none" style={{ position: 'absolute', right: -14, bottom: -18, opacity: 0.14 }}><Icon size={132} strokeWidth={1.4} color={tone.fg} /></View>
+    <View style={{ gap: 8, paddingHorizontal: 6, paddingTop: 18, borderTopWidth: 1, borderTopColor: c.line }}>
       <Row style={{ gap: 8 }}>
-        <Icon size={16} color={tone.fg} />
-        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.8, color: tone.fg }}>{TIP_LABEL[t.kind]}</Txt>
+        <Lightbulb size={16} color={c.cSleep} />
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.8, color: c.cSleep }}>{TIP_LABEL[t.kind]}</Txt>
       </Row>
-      <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.5, maxWidth: '88%' }}>{t.title}</Txt>
-      <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23, maxWidth: '88%' }}>{t.body}</Txt>
-    </Card>
+      <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.5 }}>{t.title}</Txt>
+      <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23 }}>{t.body}</Txt>
+    </View>
   );
 }
 
 // ---------- Connect Health: the sheet ----------
-// Tapping Connect Health in Trackers opens this first: what is read, that it is read only, then Continue or Not now.
+// Tapping Connect Health in Trackers opens this: connect the health app to bring in steps and active energy.
 export function HealthConsentSheet() {
   const { c } = useTheme();
   const { set } = useDomain();
@@ -74,11 +53,13 @@ export function HealthConsentSheet() {
   );
   return (
     <View style={{ gap: 16, paddingBottom: 8 }}>
-      <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.4 }}>Bring in your steps and energy</Txt>
+      <View style={{ gap: 4 }}>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.4 }}>{`Connect ${HEALTH_NAME}`}</Txt>
+        <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>Bring your steps and energy into YourPal. They sync on their own.</Txt>
+      </View>
       {row(<IconBadge size={40} radius={radii.sm} bg={c.goodSoft}><Footprints size={19} color={c.good} /></IconBadge>, 'Steps', 'Counted on Today')}
       {row(<IconBadge size={40} radius={radii.sm} bg={c.warnSoft}><Flame size={19} color={c.warn} /></IconBadge>, 'Active energy', 'Fills your Burn today')}
-      <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{`Read only from ${HEALTH_NAME}. You can disconnect any time in Profile.`}</Txt>
-      <Button kind="primary" label="Continue" onPress={() => closeSheet(() => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. Steps and energy sync automatically`); })} />
+      <Button kind="primary" label={`Connect ${HEALTH_NAME}`} onPress={() => closeSheet(() => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. Steps and energy sync automatically`); })} />
       <Pressy accessibilityRole="button" onPress={() => closeSheet()} scaleTo={0.96} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}>
         <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 21, color: c.muted }}>Not now</Txt>
       </Pressy>

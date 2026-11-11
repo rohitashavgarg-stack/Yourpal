@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
-import { Beef, Check, ChevronRight, Clock, Lock, Plus, Salad, TrendingDown, UtensilsCrossed, X, Zap } from '@/lib/icons';
+import { Beef, Check, ChevronRight, Clock, Lock, Plus, Salad, UtensilsCrossed, X, Zap } from '@/lib/icons';
 import { Button, Card, Chip, Pressy, Row, Txt } from '@/components/ui';
 import { CheckCircle, FoodMark } from '@/components/bits';
 import { FoodType } from '@/lib/data';
@@ -58,8 +58,6 @@ export type MealsCardProps = {
   onLogMeal?: () => void;
   /** The same button on the "Did you have lunch?" prompt, for the missed meal. */
   onAskLog?: () => void;
-  /** now: a quiet note at the bottom of the card when protein is low, for example { have: 38, target: 90 }. No button. */
-  proteinNote?: { have: number; target: number };
 };
 
 // Behind the meals card: a soft orange wash from the top right corner. It is one big round fade (centred past the corner) that reaches zero opacity
@@ -236,15 +234,6 @@ export function MealsCard(p: MealsCardProps) {
         ]} />
       </View>
       <MealItems meal={meal} onLogMeal={p.onLogMeal} />
-      {p.proteinNote && (
-        <View accessible accessibilityLabel={`Protein is low today, ${p.proteinNote.have} grams of ${p.proteinNote.target}`} style={{ flexDirection: 'row', gap: 12, alignItems: 'center', backgroundColor: c.warnSoft, borderRadius: radii.md, padding: 12 }}>
-          <IconBadge size={36} radius={radii.sm} bg={c.surface2}><TrendingDown size={18} color={c.warn} /></IconBadge>
-          <View style={{ flex: 1, gap: 1 }}>
-            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20 }}>Protein is low today</Txt>
-            <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: c.muted }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.basePlus, lineHeight: 22, color: c.warn }}>{`${p.proteinNote.have} g`}</Txt>{` of ${p.proteinNote.target} g`}</Txt>
-          </View>
-        </View>
-      )}
     </Card>
   );
 }
