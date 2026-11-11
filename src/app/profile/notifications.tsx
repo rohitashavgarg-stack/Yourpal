@@ -69,7 +69,7 @@ export default function NotificationSettings() {
         ))}
       </ListCard>
       <ListCard>
-        <LineRow title="Quiet hours" sub="No reminders in the app or on your phone" last right={<Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.accentText }}>{QUIET_PRESETS[quiet].label}</Txt>}
+        <LineRow title="Quiet hours" sub="Reminders stay quiet" last right={<View style={{ backgroundColor: c.accentSoft, borderRadius: radii.pill, paddingHorizontal: 14, height: 34, justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.accentText }}>{QUIET_PRESETS[quiet].label}</Txt></View>}
           onPress={() => reminderStore.set({ quiet: (quiet + 1) % QUIET_PRESETS.length })} />
       </ListCard>
     </SubPage>
