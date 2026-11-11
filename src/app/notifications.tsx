@@ -11,7 +11,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fadeOut } from '@/theme/motion';
-import { goHome, ListCard, Note, ProgLogo, SubPage } from '@/features/shell/parts';
+import { goHome, ProgLogo, SubPage } from '@/features/shell/parts';
 import { switchProgramme, useShell } from '@/features/shell/state';
 import { useVisibleNotifs } from '@/features/shell/notifs';
 import { radii, fontSizes } from '@/design-system/tokens';
@@ -110,7 +110,6 @@ export default function Notifications() {
           <Txt muted style={{ textAlign: 'center' }}>New updates from your programmes show up here.</Txt>
         </FadeIn>
       )}
-      {progs.length > 1 && <Note center>One inbox for every programme. Tapping one from another programme switches to it.</Note>}
     </SubPage>
   );
 }
