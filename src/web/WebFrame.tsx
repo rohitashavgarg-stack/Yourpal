@@ -279,7 +279,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
   const personalCard = (
     <PanelCard icon={Flag} title="Personalise" pill={{ label: `${PERSONAL_LABELS.filter(([k]) => pers[k]).length} of ${PERSONAL_LABELS.length} on` }}>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
-        {PERSONAL_LABELS.map(([k, l]) => <SwitchChip key={k} label={l} on={pers[k]} onPress={() => personalStore.set({ [k]: !pers[k] })} />)}
+        {PERSONAL_LABELS.map(([k, l]) => <View key={k} style={{ width: '48.5%' }}><SwitchChip label={l} on={pers[k]} onPress={() => personalStore.set({ [k]: !pers[k] })} /></View>)}
       </View>
     </PanelCard>
   );

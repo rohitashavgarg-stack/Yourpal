@@ -58,6 +58,8 @@ export type MealsCardProps = {
   onLogMeal?: () => void;
   /** The same button on the "Did you have lunch?" prompt, for the missed meal. */
   onAskLog?: () => void;
+  /** now: a quiet note at the bottom of the card when protein is low, for example { have: 38, target: 90 }. No button. */
+  proteinNote?: { have: number; target: number };
 };
 
 // Behind the meals card: a soft orange wash from the top right corner. It is one big round fade (centred past the corner) that reaches zero opacity
@@ -234,6 +236,15 @@ export function MealsCard(p: MealsCardProps) {
         ]} />
       </View>
       <MealItems meal={meal} onLogMeal={p.onLogMeal} />
+      {p.proteinNote && (
+        <View accessible accessibilityLabel={`Protein is low, ${p.proteinNote.have} of ${p.proteinNote.target} grams`} style={{ flexDirection: 'row', gap: 10, alignItems: 'flex-start', backgroundColor: c.surface2, borderRadius: radii.md, padding: 12 }}>
+          <Beef size={18} color={c.warn} />
+          <View style={{ flex: 1, gap: 1 }}>
+            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20 }}>Protein is low today</Txt>
+            <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{`${p.proteinNote.have} of ${p.proteinNote.target} g so far. Dal, paneer, curd or eggs would help.`}</Txt>
+          </View>
+        </View>
+      )}
     </Card>
   );
 }
