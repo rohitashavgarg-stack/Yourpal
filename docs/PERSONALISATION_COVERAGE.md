@@ -67,3 +67,16 @@ Not in the app and not planned here: the rule store, the CEL conditions, events 
 - Build order: Protein is low and Day done, fast logging, greeting with the day count, profile step, daily tip, Health consent sheet, fallback card.
 - Every new feature gets an on and off switch in the web demo side panel (Profile step, Daily tip, Protein is low, Day done, Fast logging, Greeting day count, Health consent sheet, Fallback and offline strip), so each can be shown with and without it.
 - Fast logging on the Meals card: states are not yet due (hidden), window open (Log as planned and Repeat last meal), partly logged (Log the rest as planned), logged (gone), skipped (Log it after all), missed (both, amber tag, Skip meal), first time (no Repeat), no plan (no Log as planned), membership paused (hidden), offline (works, saved on phone), all logged (none).
+
+## Final scope for this round (11 Nov 2026)
+
+1. Protein is low: evening main card under the Today card, protein from meals only.
+2. Day done: night main card once the workout and all meals are logged.
+3. Repeat last meal: a button on the Meals card at meal time, plus recent foods. No "Log as planned" in this version.
+4. Greeting with the day count and one fact in a set order.
+5. Profile step: a card in the updates stack.
+6. Daily tip: plain text at the bottom of Today, no card, no button.
+7. Connect Health: opens a bottom sheet from the Trackers card.
+8. Fallback card and the offline strip.
+
+Each has an on and off switch in the web demo side panel. Later: supplements, the sponsored card, Log as planned, challenges and leaderboards. Membership stays view only.
