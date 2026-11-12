@@ -44,3 +44,11 @@ One page per area, current state only. The rules behind each choice are in `lear
 ## Profile and others
 - Profile: a header with member since and the streak, goals, appearance (light, dark, system), grouped settings, Connected apps, notifications and reminders, payments and invoices (view only).
 - Coach page: reply time, away state, no unread dot on the photo. Check-in: location only, full-page map, goes straight into the workout.
+
+## Updates, 12 Nov 2026
+
+- **Workout finish** (`src/features/workout/FinishScreen.tsx`): signed-waiver background (`WaiverBackdrop stars={false}`, scrolls with the page), heading in two lines, three numbers (count up) with no container, logged sets card with Share at its bottom, "How was it?" card with the draggable slider, a note for Coach Vikram, floating Done with a white glow.
+- **Notifications** (`src/app/notifications.tsx`): grouped Today, Yesterday, Earlier; one card per notification with the programme logo, the programme name as a small coloured label above a larger title, an unread dot (no tint), no footer note.
+- **Memberships** (`src/app/gym/membership.tsx`): tabs Active, Suspended, Past; an upcoming plan under "Starts next" on Active; a paused plan with a pause chip and a grey bar.
+- **Today additions** (`src/features/today/PersonalCards.tsx`, `personalise.ts`): day count in the greeting, Connect Health bottom sheet, profile step in the updates stack, quick tip card last. Each has a switch in the demo panel (Personalise).
+- **Meals card:** advances to the next meal after logging; the arrows in the "all logged" summary open `MealLoggedSheet`.
