@@ -27,9 +27,11 @@ export type TrackerRowProps = {
   connect: React.ReactNode;
   water: React.ReactNode;
   health: React.ReactNode;
+  /** Health is connected but no watch is: a tile that says heart rate and sleep need one. */
+  watchHint?: React.ReactNode;
 };
 
-export function TrackerRow({ connected, wearable, weight, steps, connect, water, health }: TrackerRowProps) {
+export function TrackerRow({ connected, wearable, weight, steps, connect, water, health, watchHint }: TrackerRowProps) {
   return (
     <View style={{ marginHorizontal: -16, gap: 6 }}>
       <ScrollView showsVerticalScrollIndicator={false} horizontal showsHorizontalScrollIndicator={false} decelerationRate="fast" accessibilityLabel="Quick trackers, swipe for more"
@@ -39,6 +41,7 @@ export function TrackerRow({ connected, wearable, weight, steps, connect, water,
         {!connected ? connect : steps}
         {water}
         {connected && wearable && health}
+        {connected && !wearable && watchHint}
       </ScrollView>
     </View>
   );
@@ -233,16 +236,16 @@ export function HealthTile({ kind, onPress }: HealthTileProps) {
 }
 
 // ---------- Connect Health ----------
-export type ConnectTileProps = { /** "Apple Health" or "Health Connect". */ name: string; onPress: () => void };
+export type ConnectTileProps = { /** "Apple Health" or "Health Connect". */ name: string; onPress: () => void; /** Variant: Health is connected, a watch is not. Says heart rate and sleep need a watch. */ watch?: boolean };
 
-export function ConnectTile({ name, onPress }: ConnectTileProps) {
+export function ConnectTile({ name, onPress, watch }: ConnectTileProps) {
   const { c, isDark } = useTheme();
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={`Connect ${name} for steps, heart rate, sleep and energy`} onPress={onPress}
+    <Pressy accessibilityRole="button" accessibilityLabel={watch ? 'Connect a watch for heart rate, sleep and energy' : `Connect ${name} for steps, heart rate, sleep and energy`} onPress={onPress}
       style={[SQ, { padding: 12, justifyContent: 'space-between', borderWidth: 1, borderStyle: 'dashed', borderColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface3, backgroundColor: isDark ? fixed.dark : c.surface }]}>
       <View style={{ width: 32, height: 32, borderRadius: radii.block, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface2, alignItems: 'center', justifyContent: 'center' }}><HeartIcon size={20} color={onDark.heart} /></View>
-      <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 28, color: c.ink }}>{`Connect ${name}`}</Txt>
-      <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: c.muted }}>Steps, heart rate, sleep and energy</Txt>
+      <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 28, color: c.ink }}>{watch ? 'Connect a watch' : `Connect ${name}`}</Txt>
+      <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: c.muted }}>{watch ? 'Heart rate and sleep need a watch' : 'Steps, heart rate, sleep and energy'}</Txt>
     </Pressy>
   );
 }
