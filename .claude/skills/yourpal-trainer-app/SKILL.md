@@ -5,13 +5,13 @@ description: Build the YourPal trainer app (Coach Vikram's side of the member ap
 
 # YourPal trainer app
 
-Read the `yourpal-mobile-ui` skill and its catalog first; the trainer app uses the same design system, tokens, motion and copy rules.
+Read the `yourpal-mobile-app-ui` skill first, then the generated catalog at `.claude/skills/yourpal-mobile-ui/catalog.md`; the trainer app uses the same design system, tokens, motion and copy rules.
 
 For Claude Cowork. Written 12 Nov 2026 from the member app work. Everything marked "inferred" comes from what the member app expects of a trainer; confirm scope with the designer (Rohitashav) before building.
 
 ## What exists
 - **YourPal member app** (a gym programme member and Coach Vikram): Expo SDK 58, React Native 0.88, Expo Router (`src/app`), TypeScript, Reanimated, react-native-web. It runs as a web prototype in a phone frame with a demo panel at https://yourpal-psi.vercel.app (the `main` branch). Data is sample data in local stores (`src/lib/domain.tsx`, `src/lib/data.ts`); there is no backend.
-- **Design system** in `src/design-system/` (tokens, primitives, patterns) with docs in `src/design-system/docs/` and an index in `docs/design-system-components.md`. Read `AGENTS.md`, `CLAUDE.md`, `docs/SESSION_HANDOFF.md` and `.claude/skills/yourpal-mobile-ui/SKILL.md` first.
+- **Design system** in `src/design-system/` (tokens, primitives, patterns) with docs in `src/design-system/docs/` and an index in `docs/design-system-components.md`. Read `AGENTS.md`, `CLAUDE.md`, `docs/SESSION_HANDOFF.md` and `.claude/skills/yourpal-mobile-app-ui/SKILL.md` first.
 - The designer has no code background. He sends screenshots with a one-line correction and wants each one folded in at once. When he says "show here first", draw a wireframe in chat and wait.
 
 ## What the member app already expects from the trainer (inferred)
