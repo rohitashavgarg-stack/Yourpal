@@ -16,7 +16,7 @@ export default function Preferences() {
   const setInj = (v: 'No' | 'Yes') => setProfile({ injury: v, ...(v === 'No' ? { injuryNote: '' } : {}) });
   const setNote = (t: string) => setProfile({ injuryNote: t });
   return (
-    <SubPage title="Preferences" fallback="/profile">
+    <SubPage title="Training and diet" fallback="/profile">
       <Label>Days you can train</Label>
       <Row style={{ gap: 6, marginTop: -4 }}>
         {TRAIN_DAYS.map((n) => <Pill key={n} label={String(n)} on={days === n} onPress={() => setDays(n)} style={{ flex: 1, paddingHorizontal: 0 }} />)}
