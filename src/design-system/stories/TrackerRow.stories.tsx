@@ -29,3 +29,4 @@ export const HeartRate: S = { render: () => <HealthTile kind="hr" onPress={() =>
 export const Sleep: S = { render: () => <HealthTile kind="sleep" onPress={() => {}} /> };
 export const ActiveEnergy: S = { render: () => <HealthTile kind="kcal" onPress={() => {}} /> };
 export const Connect: S = { render: () => <ConnectTile name="Apple Health" onPress={() => {}} /> };
+export const ConnectWatch: S = { render: () => <ConnectTile name="Apple Health" watch onPress={() => {}} /> };

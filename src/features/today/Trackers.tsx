@@ -204,7 +204,7 @@ export function Trackers() {
       {trk.energy && <HealthCards only="kcal" />}
     </>
   );
-  return <TrackerRow connected={d.hc} wearable={d.wearable} weight={trk.weight ? <WeightCard /> : null} steps={trk.steps ? <StepsTile /> : null} connect={<ConnectCard />} water={trk.water ? <WaterCard /> : null} health={health} />;
+  return <TrackerRow connected={d.hc} wearable={d.wearable} weight={trk.weight ? <WeightCard /> : null} steps={trk.steps ? <StepsTile /> : null} connect={<ConnectCard />} water={trk.water ? <WaterCard /> : null} health={health} watchHint={<ConnectTile name={HEALTH_NAME} watch onPress={() => router.push('/profile/health')} />} />;
 }
 
 // ---------- sheets ----------
