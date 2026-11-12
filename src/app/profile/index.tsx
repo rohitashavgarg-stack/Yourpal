@@ -115,7 +115,7 @@ export default function Profile() {
 
       {group('ACCOUNT', [
         { l: 'My details', icon: <UserRound size={18} color={c.ink} />, go: go('/profile/details') },
-        { l: 'Preferences', icon: <SlidersHorizontal size={18} color={c.ink} />, go: go('/profile/preferences') },
+        { l: 'Training and diet', icon: <SlidersHorizontal size={18} color={c.ink} />, go: go('/profile/preferences') },
         ...(d.hasGym ? [{ l: 'Payments and invoices', icon: <FileText size={18} color={c.ink} />, go: go('/gym/payments') }] : []),
         ...(d.hasGym ? [{ l: 'Waiver', icon: <PenLine size={18} color={c.ink} />, chip: p.waiver ? { label: 'Signed', tone: 'good' as ChipTone } : { label: 'Pending', tone: 'warn' as ChipTone }, go: go('/profile/waiver') }] : []),
       ])}
