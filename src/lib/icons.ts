@@ -13,6 +13,7 @@ export { default as Camera } from 'lucide-react-native/icons/camera';
 export { default as CameraOff } from 'lucide-react-native/icons/camera-off';
 export { default as ChartLine } from 'lucide-react-native/icons/chart-line';
 export { default as Check } from 'lucide-react-native/icons/check';
+export { default as Languages } from 'lucide-react-native/icons/languages';
 export { default as ChefHat } from 'lucide-react-native/icons/chef-hat';
 export { default as ChevronDown } from 'lucide-react-native/icons/chevron-down';
 export { default as ChevronLeft } from 'lucide-react-native/icons/chevron-left';
@@ -77,7 +78,7 @@ export { default as TrendingUp } from 'lucide-react-native/icons/trending-up';
 export { default as Trophy } from 'lucide-react-native/icons/trophy';
 export { default as UtensilsCrossed } from 'lucide-react-native/icons/utensils-crossed';
 export { default as WifiOff } from 'lucide-react-native/icons/wifi-off';
-export { default as X } from 'lucide-react-native/icons/x';
+export { default as X } from 'lucide-react-native/icons/x';
 export { default as Library } from 'lucide-react-native/icons/library';
 export { default as Images } from 'lucide-react-native/icons/images';
 export { default as ChartNoAxesColumn } from 'lucide-react-native/icons/chart-no-axes-column';

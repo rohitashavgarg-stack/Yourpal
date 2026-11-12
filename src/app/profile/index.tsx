@@ -10,7 +10,7 @@ import { useGoalV2 } from '@/features/goalv2/model';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { router } from 'expo-router';
-import { FileText, Volume2, Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Lock, LogOut, MessageCircle, Star, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
+import { FileText, Volume2, Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Languages, Lock, LogOut, MessageCircle, Star, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
 import { Chip, ChipTone } from '@/design-system/primitives/Chip';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Avatar } from '@/components/GymHeader';
@@ -120,6 +120,7 @@ export default function Profile() {
         ...(d.hasGym ? [{ l: 'Waiver', icon: <PenLine size={18} color={c.ink} />, chip: p.waiver ? { label: 'Signed', tone: 'good' as ChipTone } : { label: 'Pending', tone: 'warn' as ChipTone }, go: go('/profile/waiver') }] : []),
       ])}
       {group('PREFERENCES AND SETTINGS', [
+        { l: 'Language', icon: <Languages size={18} color={c.ink} />, chip: { label: state.profile.language || 'English' }, go: go('/profile/language') },
         { l: 'Appearance', icon: <Sun size={18} color={c.ink} />, chip: { label: state.sc.theme }, go: go('/profile/appearance') },
         { l: 'Sound', icon: <Volume2 size={18} color={c.ink} />, chip: state.profile.timer?.sound === false ? { label: 'Off' } : { label: `${Math.round((state.profile.timer?.volume ?? 1) * 100)}%` }, go: go('/profile/sound') },
         { l: 'Units & diet detail level', icon: <Ruler size={18} color={c.ink} />, go: go('/profile/units') },
