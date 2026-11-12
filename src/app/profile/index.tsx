@@ -83,7 +83,6 @@ export default function Profile() {
             <Txt v="mono" muted>{maskPhone(state.phone)}</Txt>
             {state.sc.member === 'PT member' && <View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, borderRadius: radii.sm, backgroundColor: '#F5B301', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 18, color: '#3A2A00' }}>Premium · PT</Txt></View>}
           </View>
-          <Button kind="surface" size="small" label="Edit" accessibilityLabel="Edit name and number" onPress={go('/profile/details')} scaleTo={0.94} />
         </Row>
       </View>
 
