@@ -56,7 +56,7 @@ export default function Profile() {
     ],
   }, [state.sc.member, state.sc.theme, s.sc.progs, s.deleting]);
 
-  const trackerCount = (['water', 'weight', 'steps'] as const).filter((k) => s.trk[k]).length;
+  const trackerCount = (['water', 'weight', 'steps', 'hr', 'sleep', 'energy'] as const).filter((k) => s.trk[k]).length;
   const go = (path: string) => () => router.push(path as any);
   const g2 = useGoalV2();
   // Each row has an icon on the left and, only when it carries a real state, a chip on the right. No sub lines.

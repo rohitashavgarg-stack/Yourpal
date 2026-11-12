@@ -24,7 +24,7 @@ export type ShellState = {
   sc: { progs: 'Three' | 'Only one'; notifs: 'Some' | 'None'; pick: 'Shown' | 'Hidden' }; // pick: the "choose a programme" screen after the login code
   priv: Record<'gold_summary' | 'mehta_photos' | 'mehta_routine', boolean>;
   notif: Record<'plan' | 'msgs' | 'remind' | 'water' | 'weight' | 'meals' | 'steps' | 'member', boolean>;
-  trk: Record<'water' | 'weight' | 'steps', boolean>;
+  trk: Record<'water' | 'weight' | 'steps' | 'hr' | 'sleep' | 'energy', boolean>;
   unitsW: 'kg' | 'lb';
   unitsL: 'cm' | 'in';
   detail: 'Simple' | 'Detailed';
@@ -43,7 +43,7 @@ const fresh = (): ShellState => ({
   sc: { progs: 'Three', notifs: 'Some', pick: 'Hidden' },
   priv: { gold_summary: true, mehta_photos: false, mehta_routine: true },
   notif: { plan: true, msgs: true, remind: false, water: true, weight: true, meals: true, steps: true, member: true },
-  trk: { water: true, weight: true, steps: true },
+  trk: { water: true, weight: true, steps: true, hr: true, sleep: true, energy: true },
   unitsW: 'kg', unitsL: 'cm', detail: 'Detailed',
   expPhotos: false, deleting: false, pendingJoin: null,
 });

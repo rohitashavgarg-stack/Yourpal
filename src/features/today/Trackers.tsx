@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { personalStore } from './personalise';
+import { useShell } from '@/features/shell/state';
 import { HealthConsentSheet } from './PersonalCards';
 import { ScrollView, View } from 'react-native';
 import Animated, { cancelAnimation, Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
@@ -195,7 +196,15 @@ export function TileFor({ tracker, design, interactive = true }: { tracker: Trac
 
 export function Trackers() {
   const { d } = useDomain();
-  return <TrackerRow connected={d.hc} wearable={d.wearable} weight={<WeightCard />} steps={<StepsTile />} connect={<ConnectCard />} water={<WaterCard />} health={<HealthCards />} />;
+  const { trk } = useShell().s; // Profile, Quick trackers: which ones to show
+  const health = (
+    <>
+      {trk.hr && <HealthCards only="hr" />}
+      {trk.sleep && <HealthCards only="sleep" />}
+      {trk.energy && <HealthCards only="kcal" />}
+    </>
+  );
+  return <TrackerRow connected={d.hc} wearable={d.wearable} weight={trk.weight ? <WeightCard /> : null} steps={trk.steps ? <StepsTile /> : null} connect={<ConnectCard />} water={trk.water ? <WaterCard /> : null} health={health} />;
 }
 
 // ---------- sheets ----------
