@@ -3,7 +3,6 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useDomain } from '@/lib/domain';
 import { LayoutChangeEvent, Platform, Pressable, Text, View } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { SharedValue, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { springTo, useReduce } from '@/lib/motionSafe';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -253,9 +252,6 @@ function PillBar({ state, emitter, navigateToTab }: any) {
           shadowColor: fixed.shadow, shadowOpacity: 0.16, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 12 }, bar]}
       >
         <GlassBackdrop radius={32} frost={70} />
-        {/* a very light white glow inside the bar, from the top and the bottom edge (the bar clips it to its pill shape) */}
-        <LinearGradient pointerEvents="none" colors={[fixed.white + '38', fixed.white + '00']} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 22 }} />
-        <LinearGradient pointerEvents="none" colors={[fixed.white + '00', fixed.white + '38']} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 22 }} />
         <Animated.View style={[{ position: 'absolute', backgroundColor: `${c.accent}D6`, shadowColor: c.accent, shadowOpacity: 0.3, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }, hl]} />
         <Animated.View style={[{ flex: 1, flexDirection: 'row' }, pad]}>
           {state.routes.map((r: any, i: number) => {
