@@ -9,6 +9,7 @@ import { radii } from '@/design-system/tokens';
  *
  *   tone  warn    soft amber, for something to know (away, locked, deleting). Text on it uses the warn colour.
  *         accent  soft blue, for a tip or a summary. Text on it uses the accent text colour.
+ *         raised  a lighter grey panel (`surface3`) that stands out on a card, for a panel inside a card (the week count on the Streaks card).
  *         plain   the quiet surface, for a panel or a note. Text on it uses the normal or muted colour.
  *   size  compact  padding 10, radius 14 (the message under the chat composer)
  *         sm       padding 12, radius 18 (a stat tile, a short notice)
@@ -16,7 +17,7 @@ import { radii } from '@/design-system/tokens';
  *         lg       padding 16, radius 22 (a notice with a title and a sentence)
  *         xl       padding 18, radius 24 (a notice that is a whole card, for example delete account)
  */
-export type CalloutTone = 'warn' | 'accent' | 'plain';
+export type CalloutTone = 'warn' | 'accent' | 'plain' | 'raised';
 export type CalloutSize = 'compact' | 'sm' | 'md' | 'lg' | 'xl';
 
 const SIZE: Record<CalloutSize, { v: number; h: number; r: number }> = {
@@ -45,7 +46,7 @@ export function calloutInk(tone: CalloutTone, c: { warn: string; accentText: str
 export function Callout({ tone = 'plain', size = 'md', gap, style, children, ...rest }: CalloutProps) {
   const { c } = useTheme();
   const s = SIZE[size];
-  const bg = tone === 'warn' ? c.warnSoft : tone === 'accent' ? c.accentSoft : c.surface2;
+  const bg = tone === 'warn' ? c.warnSoft : tone === 'accent' ? c.accentSoft : tone === 'raised' ? c.surface3 : c.surface2;
   return (
     <View {...rest} style={[{ paddingVertical: s.v, paddingHorizontal: s.h, borderRadius: s.r, backgroundColor: bg, ...(gap !== undefined ? { gap } : null) }, style]}>
       {children}
