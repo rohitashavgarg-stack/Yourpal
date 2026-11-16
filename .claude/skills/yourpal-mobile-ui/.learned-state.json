@@ -1,5 +1,5 @@
 {
- "lastCommit": "06d551c5ac95a3d2b3e66f3007f545c3f5fa0ee3",
+ "lastCommit": "b331bb0f4d29ae05eaf2b63245cb9e70b92bb7c3",
  "components": [
   "AmountStepper",
   "Button, IconButton",
@@ -29,6 +29,11 @@
   "CheckCircle",
   "Tag",
   "Ring",
+  "MuscleRings",
+  "MuscleBody",
+  "MuscleThumb",
+  "EffortSlider",
+  "ChatBar",
   "Beat",
   "HeartIcon",
   "Brand",
@@ -45,6 +50,8 @@
   "WeekCard",
   "FoodCard",
   "PageEnd",
+  "PageGlow",
+  "TopGlow",
   "WorkoutCard"
  ],
  "buttonKinds": [
@@ -61,6 +68,7 @@
   "soft",
   "whiteLine",
   "surface",
+  "grey",
   "glassAccent",
   "glassPrimary",
   "warn"
