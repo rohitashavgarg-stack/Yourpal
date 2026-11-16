@@ -20,7 +20,7 @@ const meta = {
   title: 'Primitives/Callout',
   component: Callout,
   args: { tone: 'plain', size: 'md' },
-  argTypes: { tone: { control: 'select', options: ['warn', 'accent', 'plain'] }, size: { control: 'select', options: ['compact', 'sm', 'md', 'lg', 'xl'] }, gap: { control: 'number' }, children: { control: false } },
+  argTypes: { tone: { control: 'select', options: ['warn', 'accent', 'plain', 'raised'] }, size: { control: 'select', options: ['compact', 'sm', 'md', 'lg', 'xl'] }, gap: { control: 'number' }, children: { control: false } },
   render: (a) => <Body {...a} />,
 } satisfies Meta<typeof Callout>;
 export default meta;
@@ -29,11 +29,13 @@ type S = StoryObj<typeof meta>;
 export const Plain: S = {};
 export const Warn: S = { args: { tone: 'warn' } };
 export const Accent: S = { args: { tone: 'accent' } };
+/** A lighter grey panel for inside a card (the week count on the Streaks card). */
+export const Raised: S = { args: { tone: 'raised' } };
 export const Compact: S = { args: { tone: 'warn', size: 'compact' } };
 export const Small: S = { args: { size: 'sm' } };
 export const Large: S = { args: { tone: 'warn', size: 'lg' } };
 export const ExtraLarge: S = { args: { tone: 'warn', size: 'xl' } };
 export const AllSizes: S = { render: () => <View style={{ gap: 10 }}>{(['compact', 'sm', 'md', 'lg', 'xl'] as const).map((z) => <Body key={z} size={z} tone="accent" />)}</View> };
-export const AllTones: S = { render: () => <View style={{ gap: 10 }}>{(['warn', 'accent', 'plain'] as const).map((t) => <Body key={t} tone={t} />)}</View> };
+export const AllTones: S = { render: () => <View style={{ gap: 10 }}>{(['warn', 'accent', 'plain', 'raised'] as const).map((t) => <Body key={t} tone={t} />)}</View> };
 /** A panel holding a stat instead of a sentence. */
 export const StatTile: S = { render: () => <Callout size="sm" style={{ width: 160 }}><Txt v="label">Sets</Txt><Txt v="title">12</Txt></Callout> };
