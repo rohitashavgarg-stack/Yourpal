@@ -12,7 +12,7 @@ import { Pressy } from './Pressy';
  * Every look here existed before; the old names (PillBtn, RoundBtn, StepBtn, and the two buttons on the workout card)
  * are now thin wrappers that pick a kind and a size.
  */
-export type ButtonKind = 'primary' | 'accent' | 'secondary' | 'ghost' | 'white' | 'outline' | 'glass' | 'dashed' | 'line' | 'quiet' | 'soft' | 'whiteLine' | 'surface' | 'glassAccent' | 'glassPrimary' | 'warn';
+export type ButtonKind = 'primary' | 'accent' | 'secondary' | 'ghost' | 'white' | 'outline' | 'glass' | 'dashed' | 'line' | 'quiet' | 'soft' | 'whiteLine' | 'surface' | 'grey' | 'glassAccent' | 'glassPrimary' | 'warn';
 export type ButtonSize = 'large' | 'medium' | 'small' | 'tight' | 'compact' | 'chip' | 'xs' | 'fill';
 
 export type ButtonProps = {
@@ -70,6 +70,8 @@ function kindSpec(kind: ButtonKind, c: ReturnType<typeof useTheme>['c']): KindSp
     case 'soft': return { bg: c.accentSoft, fg: c.accentText };
     case 'whiteLine': return { bg: fixed.white, fg: fixed.dark, line: fixed.lineOnWhite };
     case 'surface': return { bg: c.surface, fg: c.ink };
+    // a lighter grey than secondary, for a small button inside a card row (My details Change, Add)
+    case 'grey': return { bg: c.surface3, fg: c.ink };
     // red text on a soft red fill, for an action that ends or removes something (Log out, Remove contact)
     case 'warn': return { bg: c.danger + '1F', fg: c.danger };
     // blue glass: real iOS glass tinted with the accent (blurred glass with a blue tint elsewhere). For the one main action that floats over scrolling content.

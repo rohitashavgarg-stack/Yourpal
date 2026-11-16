@@ -198,21 +198,21 @@ export default function MyDetails() {
       <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.cardLift }}>
         <CardEdge radius={radii.lg} />
         <Txt v="mono" style={{ flex: 1 }}>{maskNum(state.phone)}</Txt>
-        <Button small kind="secondary" label="Change" accessibilityLabel="Change mobile number" onPress={() => openSheet(<ChangePhoneSheet />, { label: 'Change mobile number' })} />
+        <Button small kind="grey" label="Change" accessibilityLabel="Change mobile number" onPress={() => openSheet(<ChangePhoneSheet />, { label: 'Change mobile number' })} />
       </Row>
 
       <Label style={{ marginTop: 16 }}>Email</Label>
       <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.cardLift }}>
         <CardEdge radius={radii.lg} />
         <Txt style={{ flex: 1, fontFamily: font.semibold }} numberOfLines={1}>{p.email ? maskEmail(p.email) : 'Not set'}</Txt>
-        <Button small kind="secondary" label={p.email ? 'Change' : 'Add'} accessibilityLabel={p.email ? 'Change email' : 'Add email'} onPress={() => openSheet(<ChangeEmailSheet />, { label: 'Email' })} />
+        <Button small kind="grey" label={p.email ? 'Change' : 'Add'} accessibilityLabel={p.email ? 'Change email' : 'Add email'} onPress={() => openSheet(<ChangeEmailSheet />, { label: 'Email' })} />
       </Row>
 
       <Label style={{ marginTop: 16 }}>Gender</Label>
       <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.cardLift }}>
         <CardEdge radius={radii.lg} />
         <Txt style={{ flex: 1, fontFamily: font.semibold }}>{p.gender || 'Not set'}</Txt>
-        <Button small kind="secondary" label="Change" accessibilityLabel="Change gender" onPress={() => openSheet(<GenderSheet />, { label: 'Gender' })} />
+        <Button small kind="grey" label="Change" accessibilityLabel="Change gender" onPress={() => openSheet(<GenderSheet />, { label: 'Gender' })} />
       </Row>
 
       <Label style={{ marginTop: 16 }}>Body details</Label>

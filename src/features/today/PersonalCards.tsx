@@ -16,12 +16,13 @@ import { font } from '@/theme/tokens';
 import { fontSizes, radii } from '@/design-system/tokens';
 import { dayPlan, usePlans } from '@/features/plans/store';
 import { nextMeal } from './meals';
-import { TIP_LABEL, personalStore, tipOfDay } from './personalise';
+import { TIP_BUTTON, TIP_HEADS, TIP_LABEL, personalStore, tipOfDay, type Tip } from './personalise';
 
 // ---------- Quick tip ----------
-// The last thing on Today: one idea a day, a tip, a recipe or a workout to try. A violet tinted card with a big soft bulb behind the words. Text only, no button.
+// The last thing on Today: one idea a day, a tip, a recipe or a workout to try. A violet tinted card with a big soft bulb behind the words, and one button that opens the detail.
 export function QuickTipCard() {
   const { c } = useTheme();
+  const { openSheet } = useOverlay();
   const on = personalStore.use().quickTip;
   if (!on) return null;
   const t = tipOfDay(new Date().getDate());
@@ -36,7 +37,44 @@ export function QuickTipCard() {
       </Row>
       <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.5, maxWidth: '88%' }}>{t.title}</Txt>
       <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23, maxWidth: '88%' }}>{t.body}</Txt>
+      <View style={{ alignSelf: 'flex-start', marginTop: 6 }}>
+        <Button kind="secondary" small label={TIP_BUTTON[t.kind]} accessibilityLabel={`${TIP_BUTTON[t.kind]}: ${t.title}`} onPress={() => openSheet(<QuickTipSheet tip={t} />, { label: TIP_LABEL[t.kind] })} />
+      </View>
     </Card>
+  );
+}
+
+// The detail behind the card: what you need, then how. A recipe has ingredients and a method, a workout its moves and how to do them, a tip what to do and why it helps.
+export function QuickTipSheet({ tip }: { tip: Tip }) {
+  const { c } = useTheme();
+  const tone = { bg: c.tSleep, fg: c.cSleep };
+  const [first, second] = TIP_HEADS[tip.kind];
+  return (
+    <View style={{ gap: 16, paddingBottom: 8 }}>
+      <View style={{ gap: 6 }}>
+        <Row style={{ gap: 8 }}>
+          <Lightbulb size={16} color={tone.fg} />
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.8, color: tone.fg }}>{TIP_LABEL[tip.kind]}</Txt>
+        </Row>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.5 }}>{tip.title}</Txt>
+        {!!tip.facts && <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{tip.facts}</Txt>}
+      </View>
+      <View style={{ gap: 8 }}>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{first}</Txt>
+        {tip.list.map((x, i) => <Txt key={i} muted style={{ fontSize: fontSizes.md, lineHeight: 22 }}>{x}</Txt>)}
+      </View>
+      <View style={{ gap: 10 }}>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{second}</Txt>
+        {tip.steps.map((x, i) => (
+          <Row key={i} style={{ gap: 12, alignItems: 'flex-start' }}>
+            <View style={{ width: 24, height: 24, borderRadius: radii.pill, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 17 }}>{i + 1}</Txt>
+            </View>
+            <Txt style={{ flex: 1, fontSize: fontSizes.md, lineHeight: 22 }}>{x}</Txt>
+          </Row>
+        ))}
+      </View>
+    </View>
   );
 }
 
