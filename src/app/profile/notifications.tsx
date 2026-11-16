@@ -1,3 +1,4 @@
+import { View } from 'react-native';
 import React from 'react';
 import { BellOff } from '@/lib/icons';
 import { Button, Row, Txt } from '@/components/ui';
@@ -56,8 +57,11 @@ export default function NotificationSettings() {
             right={<Switch label={r.l} on={s.notif[r.k] !== false} onChange={flip(r.k)} />} />
         ))}
       </ListCard>
-      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, marginTop: 8 }}>Reminders</Txt>
-      <Note style={{ fontSize: fontSizes.sm }}>Small nudges when something is missing. They show in the app and, if you allow it, on your phone.</Note>
+      {/* the heading and its line sit together, indented the same, with room above them and a small gap below */}
+      <View style={{ gap: 4, marginTop: 12, marginBottom: 2 }}>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, paddingHorizontal: 6 }}>Reminders</Txt>
+        <Note style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Small nudges when something is missing.</Note>
+      </View>
       <ListCard>
         {REMINDER_KEYS.map((k, i) => (
           <LineRow key={k} title={REMINDER_LABEL[k].title} sub={REMINDER_LABEL[k].sub} last={i === REMINDER_KEYS.length - 1}
@@ -65,7 +69,7 @@ export default function NotificationSettings() {
         ))}
       </ListCard>
       <ListCard>
-        <LineRow title="Quiet hours" sub="No reminders in the app or on your phone" last right={<Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: c.accentText }}>{QUIET_PRESETS[quiet].label}</Txt>}
+        <LineRow title="Quiet hours" sub="Reminders stay quiet" last right={<View style={{ backgroundColor: c.accentSoft, borderRadius: radii.pill, paddingHorizontal: 14, height: 34, justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.accentText }}>{QUIET_PRESETS[quiet].label}</Txt></View>}
           onPress={() => reminderStore.set({ quiet: (quiet + 1) % QUIET_PRESETS.length })} />
       </ListCard>
     </SubPage>

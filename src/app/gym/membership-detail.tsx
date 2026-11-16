@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { CreditCard, Download, PauseCircle } from '@/lib/icons';
-import { Pressy, Row, Txt } from '@/components/ui';
+import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useStore } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { Hint, SubPage } from '@/features/progress/parts';
 import { LineRow, ListCard as PayList } from '@/features/shell/parts';
-import { IconButton } from '@/design-system/primitives/Button';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { ProgressSegments } from '@/design-system/primitives/ProgressBar';
 import { Chip } from '@/design-system/primitives/Chip';
@@ -19,10 +19,8 @@ import { dateLabel, gymStore } from '@/features/gym/state';
 import { useDomain } from '@/lib/domain';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { StatusChip, TimeBar } from '@/app/gym/membership';
-import { sharePdf } from '@/features/reports/pdf';
-import { invoiceHtml } from '@/features/reports/templates';
+import { shareStatement } from '@/features/reports/invoice';
 import { rupees } from '@/features/reports/payments';
-import type { Payment } from '@/features/reports/payments';
 import { radii, fontSizes } from '@/design-system/tokens';
 
 // "14 to 27 Jul" when both dates are in one month.
@@ -66,13 +64,13 @@ export default function MembershipDetail() {
   const [allPauses, setAllPauses] = useState(false);
   if (!m) return <SubPage title="Membership" fallback="/gym/membership"><Txt muted>This membership is not here any more.</Txt></SubPage>;
 
-  const invoice = async (p: Payment) => {
-    setBusyId(p.id);
+  // one download for all of this membership's payments, not one for each
+  const download = async () => {
+    setBusyId('all');
     try {
-      const html = invoiceHtml({ no: p.no, date: p.date, gym: 'Wulf Fitness', member: state.profile.name || 'Member', item: p.item, amount: rupees(p.amount), method: p.method });
-      const ok = await sharePdf(html, 'Invoice ' + p.no);
+      const ok = await shareStatement(m.payments, state.profile.name || 'Member', m.name);
       if (!ok) toast('Saving a file is not available on this phone');
-    } catch { toast('Could not make the invoice. Try again'); }
+    } catch { toast('Could not make the PDF. Try again'); }
     setBusyId(null);
   };
 
@@ -81,11 +79,12 @@ export default function MembershipDetail() {
   const history = PAUSE_HISTORY.slice(0, used);
   const showPauses = m.status !== 'Expired';
   const value = (t: string) => <Txt style={{ fontFamily: font.semibold }}>{t}</Txt>;
-  const paused = m.id === 'm1' && d.onBreak;
+  // a pause on right now counts as one used: the member's own break on the main plan, or a membership the gym has paused
+  const paused = (m.id === 'm1' && d.onBreak) || m.status === 'Paused';
   // Newest first: the pause on right now, then the ones taken. Past four tiles the rest hide behind "See all".
   const usedCount = Math.min(PAUSE_TOTAL, history.length + (paused ? 1 : 0)); // pauses taken, counting the one on now
   const slots: Slot[] = [
-    ...(paused ? [{ kind: 'now', n: history.length + 1, title: `Until ${dateLabel(g.breakUntil)}` } as Slot] : []),
+    ...(paused ? [{ kind: 'now', n: history.length + 1, title: `Until ${m.paused ? m.paused.until : dateLabel(g.breakUntil)}` } as Slot] : []),
     ...history.map((h, i): Slot => ({ kind: 'taken', n: i + 1, title: range(h.from, h.to), days: h.days, reason: h.reason })).reverse(),
   ];
   const shownSlots = allPauses ? slots : slots.slice(0, 4);
@@ -104,16 +103,22 @@ export default function MembershipDetail() {
 
       {/* Time left in big numbers, the bar, and the two dates under it. Straight on the page, no card. */}
       <View style={{ gap: 14 }}>
+        {m.status === 'Paused' && m.paused && (
+          <View style={{ gap: 4 }}>
+            <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl6, lineHeight: 52, letterSpacing: -1.2 }}>Paused</Txt>
+            <Txt muted>{`${m.paused.from} to ${m.paused.until}`}</Txt>
+          </View>
+        )}
         {m.status === 'Active' && (
           <Row style={{ alignItems: 'baseline', gap: 6 }}>
             <Txt style={{ fontFamily: font.displayBold, fontSize: 40, lineHeight: 52, letterSpacing: -1.2, color: m.warn ? c.warn : c.ink }}>{m.left.n}</Txt>
             <Txt muted>{m.left.unit}</Txt>
           </Row>
         )}
-        {m.status === 'Active' && <TimeBar pct={m.pct} warn={m.warn} />}
+        {(m.status === 'Active' || m.status === 'Paused') && <TimeBar pct={m.pct} warn={m.warn} paused={m.status === 'Paused'} />}
         <Row style={{ justifyContent: 'space-between' }}>
           <View style={{ gap: 1 }}>
-            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Started</Txt>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{m.status === 'Upcoming' ? 'Starts' : 'Started'}</Txt>
             <Txt style={{ fontFamily: font.semibold }}>{m.start}</Txt>
           </View>
           <View style={{ gap: 1, alignItems: 'flex-end' }}>
@@ -135,7 +140,8 @@ export default function MembershipDetail() {
       {m.pt && (
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>PERSONAL TRAINING</Txt>
-          <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
+          <View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 14 }}>
+<CardEdge radius={radii.lg} />
             <View style={{ gap: 1 }}>
               <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base }}>{m.pt.trainer}</Txt>
               <Txt v="caption">Personal trainer</Txt>
@@ -158,7 +164,8 @@ export default function MembershipDetail() {
         <>
           <Txt v="label" style={{ paddingHorizontal: 6 }}>PAUSES</Txt>
           {/* One container: a progress bar for the pauses used (one segment for each pause the membership allows), then a tile for each pause taken. */}
-          <View style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
+          <View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 14 }}>
+<CardEdge radius={radii.lg} />
           <View style={{ gap: 8 }}>
             <Row style={{ justifyContent: 'space-between' }}>
               <Txt style={{ fontFamily: font.semibold }}>{`${usedCount} of ${PAUSE_TOTAL} used`}</Txt>
@@ -188,14 +195,10 @@ export default function MembershipDetail() {
         )}
         {m.payments.map((p, i) => (
           <LineRow key={p.id} title={p.item} sub={p.date} last={i === m.payments.length - 1}
-            right={(
-              <Row style={{ gap: 10 }}>
-                {value(rupees(p.amount))}
-                <IconButton label={'Download invoice for ' + p.item} onPress={() => invoice(p)} size={36} disabled={busyId === p.id}><Download size={18} color={c.ink} /></IconButton>
-              </Row>
-            )} />
+            right={value(rupees(p.amount))} />
         ))}
       </PayList>
+      {m.payments.length > 0 && <Button kind="secondary" small label={busyId === 'all' ? 'Making your PDF' : 'Download all payments'} icon={<Download size={17} color={c.ink} />} disabled={busyId === 'all'} onPress={download} />}
       <Hint>Pauses, renewals and plan changes happen at the front desk.</Hint>
     </SubPage>
   );

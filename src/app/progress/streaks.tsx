@@ -1,4 +1,5 @@
 import React from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import { Award, ClipboardCheck, Droplets, Dumbbell, Flame, Footprints, Medal, Scale, Target, Trophy } from '@/lib/icons';
 import { Row, Txt } from '@/components/ui';
@@ -29,7 +30,8 @@ function BadgeCard({ b, weeks }: { b: Badge; weeks: number }) {
   const earned = !!b.earned;
   return (
     <View accessible accessibilityLabel={earned ? `${b.title}, earned ${b.earned}` : `${b.title}, locked. ${b.hint}${b.need ? `. ${have} of ${b.need}` : ''}`}
-      style={[{ width: '48%', backgroundColor: c.surface, borderRadius: radii.card, paddingHorizontal: 12, paddingVertical: 16, gap: 10, minHeight: 200, alignItems: 'center', overflow: 'hidden' }, cardShadow(isDark)]}>
+      style={[{ width: '48%', backgroundColor: c.cardLift, borderRadius: radii.card, paddingHorizontal: 12, paddingVertical: 16, gap: 10, minHeight: 200, alignItems: 'center', overflow: 'hidden' }, cardShadow(isDark)]}>
+<CardEdge radius={radii.card} />
       {earned && <CornerGlow color={BADGE_LOOK[b.id].b} size={240} />}
       <BadgeArt id={b.id} icon={Icon} earned={earned} />
       <View style={{ gap: 2, alignItems: 'center' }}>

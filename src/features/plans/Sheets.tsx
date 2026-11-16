@@ -14,7 +14,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { Hist, newEx } from './content';
 import { useDietActions } from './dietActions';
-import { startCreate, startDietEdit, startWorkoutEdit } from './openers';
+import { startDietEdit } from './openers';
 import { BigTitle, ListRow, Stepper } from './parts';
 import { allowedFor, dayPlan, dietItems, DietRow, PEx, setP, usePlans } from './store';
 import { Callout } from '@/design-system/primitives/Callout';
@@ -36,12 +36,9 @@ export function PlanMenuSheet() {
     <>
       <BigTitle>{plan ? plan.name : 'Rest day'}</BigTitle>
       <View>
-        <ListRow label="Edit plan" onPress={() => go(() => { if (!startWorkoutEdit(d)) toast('Rest day. Create a workout instead'); })} />
-        <ListRow label="Create a workout" onPress={() => go(() => startCreate(d))} />
         <ListRow label="Ask Coach to change the plan" onPress={() => go(() => router.push({ pathname: '/plans/ask', params: { kind: 'workout' } }))} />
-        <ListRow label="Reset to Coach's version" onPress={() => openSheet(<ResetSheet kind="workout" />, { label: 'Reset plan' })} />
         <ListRow label="Exercise library" onPress={() => openSheet(<LibrarySheet mode="browse" />, { label: 'Exercise library' })} />
-        <ListRow label="Edit workout entries" onPress={() => { if (plan?.done) openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Edit workout entries' }); else go(() => toast('Nothing is logged for this day yet')); }} />
+        <ListRow label="Edit logged workout" onPress={() => go(() => { if (plan?.done) router.push({ pathname: '/plans/entries', params: { day: String(p.day), week: String(p.week) } }); else toast('Nothing is logged for this day yet'); })} />
         <ListRow label="Download workout plan (PDF)" chevron={false} last onPress={() => go(() => { toast('Making your PDF'); downloadWorkoutPlan(d, p, state.profile.name || 'Member').catch(() => toast('Could not make the PDF. Try again')); })} />
       </View>
     </>

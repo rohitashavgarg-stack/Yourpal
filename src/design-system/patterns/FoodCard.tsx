@@ -171,9 +171,9 @@ export function FoodCard({ state, pick, solid, name, type, amount, amountText, k
         </View>
       )}
       <GestureDetector gesture={pan}>
-        <Animated.View collapsable={false} style={[{ borderRadius: radii.md, backgroundColor: c.surface }, slide]}>
+        <Animated.View collapsable={false} style={[{ borderRadius: radii.md }, slide]}>
           <Pressy {...common}
-            style={{ borderRadius: radii.md, borderWidth: 1.5, borderStyle: skipped || solid ? 'solid' : 'dashed', borderColor: skipped || solid ? 'transparent' : c.chipLine, backgroundColor: skipped || solid ? c.surface2 : 'transparent',
+            style={{ borderRadius: radii.md, borderWidth: 1.5, borderStyle: skipped || solid ? 'solid' : 'dashed', borderColor: skipped || solid ? 'transparent' : c.chipLine, backgroundColor: skipped || solid ? c.surface2 : c.surface, // the fill is on the card itself (not a layer behind it), so pressing it never shows a second edge
               paddingVertical: 12, paddingLeft: 14, paddingRight: 10, flexDirection: 'row', alignItems: 'center', gap: 10, opacity: skipped ? 0.55 : 1 }}>
             <View style={{ flex: 1, minWidth: 0, gap: 8 }}>
               {title}

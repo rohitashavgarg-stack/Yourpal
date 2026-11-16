@@ -31,13 +31,6 @@ import { useMembershipState } from '@/features/gym/memberships';
 
 const TIP_UNIT: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: ' steps', water: ' L', hr: ' bpm', sleep: '', diet: ' kcal', cons: ' workouts' };
 
-// A bar under the scrolling page that holds the page's main button.
-function StickyAction({ children }: { children: React.ReactNode }) {
-  const { c } = useTheme();
-  const insets = useSafeAreaInsets();
-  return <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 16) + 6, backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>{children}</View>;
-}
-
 export default function MetricDetail() {
   const { c, isDark } = useTheme();
   const { d, set } = useDomain();
@@ -79,7 +72,7 @@ export default function MetricDetail() {
     : null;
 
   return (
-    <SubPage title={METRIC_TITLES[k]} fallback="/progress" footer={action ? <StickyAction>{action}</StickyAction> : undefined}>
+    <SubPage title={METRIC_TITLES[k]} fallback="/progress" footer={action ?? undefined} floatingFooter>
       <RangeBar />
       <Card variant="roomy" clip gap={8}>
         <CornerGlow color={look.tint} size={320} />

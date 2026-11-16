@@ -2,6 +2,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Dimensions, Keyboard, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import { springTo, useReduce } from '@/lib/motionSafe';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -58,18 +59,21 @@ export function Sheet({ children, label, glow, fixed, onClosed, registerClose }:
   const [h, setH] = useState(700);
   const y = useSharedValue(900);
   const back = useSharedValue(0);
+  const reduce = useReduce(); // Reduce Motion: no spring, the value just jumps
   const afterRef = useRef<(() => void) | undefined>(undefined);
   const [footer, setFooter] = useState<React.ReactNode>(null);
 
   const finish = useCallback(() => { onClosed(); afterRef.current?.(); }, [onClosed]);
   const close = useCallback((after?: () => void) => {
     afterRef.current = after;
-    back.value = withTiming(0, { duration: 220 });
-    y.value = withTiming(h + 40, { duration: 260, easing: Easing.in(Easing.cubic) }, (done) => { if (done) scheduleOnRN(finish); });
-  }, [h, finish]);
+    // The sheet leaves downward along the same curve the phone uses, and the dim fades over the same time, so it reads as the sheet sliding away, not as a fade.
+    const out = { duration: reduce ? 0 : 320, easing: Easing.bezier(0.32, 0.72, 0, 1) };
+    back.value = withTiming(0, out);
+    y.value = withTiming(h + 40, out, (done) => { if (done) scheduleOnRN(finish); });
+  }, [h, finish, reduce]);
   useEffect(() => { registerClose(close); }, [close]);
   useEffect(() => {
-    y.value = withSpring(0, spring.soft);
+    y.value = springTo(0, spring.soft, reduce);
     back.value = withTiming(1, { duration: 260 });
   }, []);
 
@@ -116,7 +120,7 @@ export function Sheet({ children, label, glow, fixed, onClosed, registerClose }:
             <FooterCtx.Provider value={setFooter}>{children}</FooterCtx.Provider>
           </View>
         ) : (
-          <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 8, gap: 12 }} keyboardShouldPersistTaps="handled">
+          <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 8, gap: 12 }} keyboardShouldPersistTaps="handled">
             <FooterCtx.Provider value={setFooter}>{children}</FooterCtx.Provider>
           </ScrollView>
         )}

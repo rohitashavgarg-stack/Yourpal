@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TextInput } from 'react-native';
+import { WaiverBackdrop } from '@/features/profile/WaiverBackdrop';
+import { ProgressiveBlur } from '@/components/Glass';
+import { EffortSlider } from '@/design-system/primitives/EffortSlider';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
+import { ScrollView, View } from 'react-native';
+import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
-import { BlurView } from 'expo-blur';
-import { Check, Flame, Share, Trophy } from '@/lib/icons';
+import { useReduce } from '@/lib/motionSafe';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Check, Dumbbell, Flame, Share, Trophy } from '@/lib/icons';
 import { FLAME } from '@/features/streak/StreakChip';
 import { useStreak } from '@/features/streak/useStreak';
 import { Button, Field, Pressy, Row, Txt } from '@/components/ui';
@@ -16,7 +21,7 @@ import { font, spring } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { useDomain } from '@/lib/domain';
 import { fmt1 } from '@/lib/useNow';
-import { radii, fontSizes, fixed } from '@/design-system/tokens';
+import { radii, fontSizes, fixed, round, onDark } from '@/design-system/tokens';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 const COLORS = ['#3A36C9', '#B9B6FF', fixed.white, '#F2B544', '#1F6E63'];
@@ -27,7 +32,8 @@ const PARTS = Array.from({ length: 34 }, (_, i) => {
 
 function Particle({ p, run }: { p: (typeof PARTS)[number]; run: number }) {
   const t = useSharedValue(0);
-  useEffect(() => { t.value = 0; t.value = withDelay(p.delay, withTiming(1, { duration: 1300, easing: Easing.bezier(0.12, 0.75, 0.3, 1) })); }, [run]);
+  const reduce = useReduce(); // Reduce Motion: no confetti
+  useEffect(() => { t.value = 0; if (reduce) return; t.value = withDelay(p.delay, withTiming(1, { duration: 1300, easing: Easing.bezier(0.12, 0.75, 0.3, 1) })); }, [run]);
   const a = useAnimatedStyle(() => ({ opacity: t.value === 0 ? 0 : t.value < 0.75 ? 1 : 1 - (t.value - 0.75) * 4, transform: [{ translateX: p.dx * t.value }, { translateY: p.dy * t.value }, { scale: 0.5 + 0.5 * t.value }] }));
   return <Animated.View style={[{ position: 'absolute', left: '50%', top: '50%', width: p.w, height: p.w, marginLeft: -p.w / 2, marginTop: -p.w / 2, borderRadius: p.w, backgroundColor: p.col }, a]} />;
 }
@@ -54,86 +60,127 @@ function StreakLine({ done }: { done: number }) {
   );
 }
 
-export type Feel = 'Hard' | 'Just right' | 'Easy';
+// How hard it was, from the slider: the same five words the logged workout shows.
+export type Feel = 'Easy' | 'Moderate' | 'Hard' | 'Very hard' | 'Max';
+const effortWord = (v: number): Feel => (v < 0.2 ? 'Easy' : v < 0.45 ? 'Moderate' : v < 0.7 ? 'Hard' : v < 0.9 ? 'Very hard' : 'Max');
+
+// A number that counts up to its value when the screen opens (it just shows the value with Reduce Motion on).
+function CountUp({ to, delay = 250, ms = 900 }: { to: number; delay?: number; ms?: number }) {
+  const reduce = useReduce();
+  const [n, setN] = useState(reduce ? to : 0);
+  useEffect(() => {
+    if (reduce) return undefined;
+    let raf: ReturnType<typeof setInterval> | undefined;
+    const t0 = Date.now() + delay;
+    const start = setTimeout(() => {
+      raf = setInterval(() => {
+        const k = Math.min(1, (Date.now() - t0) / ms);
+        setN(Math.round(to * (1 - Math.pow(1 - k, 3)))); // slows down as it arrives
+        if (k >= 1 && raf) clearInterval(raf);
+      }, 30);
+    }, delay);
+    return () => { clearTimeout(start); if (raf) clearInterval(raf); };
+  }, [to, delay, ms, reduce]);
+  return <>{n}</>;
+}
 export type FinishStats = { mins: number; sets: number; exercises: number; totalEx: number; kcal: number; pr: { name: string; kg: number } | null; hc: boolean; weekDone: number };
 
 export function FinishScreen({ s, onDone }: { s: FinishStats; onDone: (feel: Feel, note: string) => void }) {
-  const { c, isDark } = useTheme();
+  const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { toast } = useOverlay();
-  const [feel, setFeel] = useState<Feel>('Just right');
+  const [effort, setEffort] = useState(0.55); // 0 is easy, 1 is max
+  const feel = effortWord(effort);
+  const [screenH, setScreenH] = useState(700);
   const { d } = useDomain();
   const [note, setNote] = useState('');
   const [run, setRun] = useState(1);
   useEffect(() => { haptic.success(); }, []);
   return (
-    <View style={{ flex: 1, backgroundColor: c.sky }}>
-      <Svg width="100%" height="100%" style={{ position: 'absolute' }}>
-        <Circle cx={96} cy={170} r={150} fill={c.moon} />
-        <Circle cx={114} cy={156} r={150} fill="none" stroke={c.moonRing} strokeWidth={1.5} opacity={0.5} />
-      </Svg>
-
-      <FadeIn style={{ position: 'absolute', left: 12, right: 12, bottom: Math.max(insets.bottom, 14), borderRadius: 32, overflow: 'hidden', borderWidth: 1, borderColor: c.glassLine,
-        shadowColor: '#0F0E3C', shadowOpacity: 0.28, shadowRadius: 60, shadowOffset: { width: 0, height: 24 } }}>
-        {/* own radius: on the web a backdrop blur is not clipped by the parent's rounded corners, which left a square showing behind the card */}
-        <BlurView intensity={40} tint={isDark ? 'dark' : 'light'} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: 32 }} />
-        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: c.glass, borderRadius: 32 }} />
-        <View style={{ paddingTop: 22, paddingHorizontal: 18, paddingBottom: 18, gap: 14 }}>
-          <View style={{ gap: 4 }}>
-            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: c.muted }}>Workout done · Leg day</Txt>
-            <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: 38, lineHeight: 36 }}>Nice work, Rohitashav</Txt>
+    // The same page as the signed waiver: black with a blue glow at the top. Nothing sits in a card; the numbers are on the page.
+    <View onLayout={(e) => setScreenH(e.nativeEvent.layout.height)} style={{ flex: 1, backgroundColor: fixed.dark }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingTop: insets.top + 40, paddingHorizontal: 22, paddingBottom: insets.bottom + 130, gap: 28 }}>
+        {/* the glow and lines are part of the page: they scroll up and away with it */}
+        <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: screenH }}>
+          <WaiverBackdrop stars={false} />
+        </View>
+        <FadeIn style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+         <View style={{ flex: 1, gap: 10 }}>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 19, letterSpacing: 1, color: onDark.soft }}>WORKOUT DONE, LEG DAY</Txt>
+          {/* two deliberate lines: the praise, then the name in a softer tone, so the heading never wraps by accident */}
+          <View accessible accessibilityRole="header" accessibilityLabel="Nice work, Rohitashav">
+            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl5, lineHeight: 42, letterSpacing: -1, color: onDark.text }}>Nice work,</Txt>
+            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl5, lineHeight: 42, letterSpacing: -1, color: onDark.soft }}>Rohitashav</Txt>
           </View>
-          <Row style={{ backgroundColor: c.tile, borderRadius: 20, paddingVertical: 12, paddingHorizontal: 4 }}>
+         </View>
+        </FadeIn>
+
+        <FadeIn delay={120}>
+          <Row style={{ alignItems: 'flex-start' }}>
             {[[String(s.mins), ' min', 'Time'], [String(s.sets), '', s.sets === 1 ? 'Set done' : 'Sets done'], [s.exercises > s.totalEx ? String(s.exercises) : `${s.exercises}/${s.totalEx}`, '', 'Exercises']].map(([v, u, l], i) => (
-              <View key={l} style={{ flex: 1, alignItems: 'center', borderLeftWidth: i ? 1 : 0, borderLeftColor: c.line }}>
-                <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 36 }}>{v}<Txt muted style={{ fontFamily: font.display, fontSize: fontSizes.lg }}>{u}</Txt></Txt>
-                <Txt v="caption">{l}</Txt>
+              <View key={l} style={{ flex: 1, gap: 2 }}>
+                <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl6, lineHeight: 50, letterSpacing: -1.2, color: onDark.text }}>{/^\d+$/.test(v) ? <CountUp to={Number(v)} delay={300 + i * 120} /> : v}<Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.lg, color: onDark.muted }}>{u}</Txt></Txt>
+                <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: onDark.muted }}>{l}</Txt>
               </View>
             ))}
           </Row>
-          <View>
-            <FadeIn delay={350} style={{ backgroundColor: c.surface, borderRadius: radii.lg, padding: 14, gap: 10 }}>
-              <Row style={{ gap: 12 }}>
-                <IconButton label="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }} size={52} radius={radii.xl} bg={c.accent}>
-                  <Trophy size={24} strokeWidth={1.9} color={fixed.white} />
-                </IconButton>
-                <View style={{ flex: 1 }}>
-                  <Txt style={{ fontFamily: font.bold, fontSize: fontSizes.xs, letterSpacing: 0.5, color: c.accent }}>{s.pr ? 'New PR' : 'Logged'}</Txt>
-                  <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 28 }}>{s.pr ? `${s.pr.name} ${fmt1(s.pr.kg)} kg` : `${s.sets} ${s.sets === 1 ? "set" : "sets"} done`}</Txt>
-                </View>
-              </Row>
-              <Button kind="outline" small label="Share" icon={<Share size={16} color={c.ink} />} onPress={() => toast('Sharing opens the system share sheet')} />
-            </FadeIn>
-            <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
-              {PARTS.map((p, i) => <Particle key={i} p={p} run={run} />)}
+        </FadeIn>
+
+        <View>
+          <FadeIn delay={350} style={{ gap: 14, backgroundColor: onDark.card + 'B3', ...({ backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' } as object), borderRadius: radii.xl, padding: 16 }}>
+            <CardEdge radius={radii.xl} />
+            <Row style={{ gap: 14 }}>
+            <IconButton label="Celebrate again" onPress={() => { haptic.success(); setRun((r) => r + 1); }} size={56} radius={radii.xl} bg={c.accent}>
+              <Trophy size={26} strokeWidth={1.9} color={fixed.white} />
+            </IconButton>
+            <View style={{ flex: 1 }}>
+              <Txt style={{ fontFamily: font.bold, fontSize: fontSizes.xs, letterSpacing: 0.6, color: onDark.soft }}>{s.pr ? 'NEW PERSONAL BEST' : 'LOGGED'}</Txt>
+              <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, color: onDark.text }}>{s.pr ? `${s.pr.name} ${fmt1(s.pr.kg)} kg` : `${s.sets} ${s.sets === 1 ? 'set' : 'sets'} done`}</Txt>
             </View>
-          </View>
-          {s.hc && (
-            <Row style={{ gap: 8 }}>
-              <Tag label="♥ Avg 124 · max 158 bpm" bg="rgba(255,107,122,0.16)" fg="#FF8A96" style={{ paddingVertical: 6, paddingHorizontal: 12 }} />
-              <Tag label={`${s.kcal} kcal · from watch`} bg={c.tile} fg={c.ink} style={{ paddingVertical: 6, paddingHorizontal: 12 }} />
             </Row>
-          )}
-          <Row style={{ gap: 12, paddingHorizontal: 4 }}>
-            <Txt style={{ flex: 1, fontFamily: font.semibold }}>This week · {s.weekDone} of 4 workouts</Txt>
-            <Row style={{ gap: 6 }}>{Array.from({ length: s.weekDone }, (_, i) => <PopCheck key={i} delay={700 + i * 120} />)}</Row>
-          </Row>
-          <StreakLine done={s.weekDone} />
-          <View style={{ gap: 8 }}>
-            <Txt style={{ fontFamily: font.semibold, paddingHorizontal: 4 }}>How did you feel?</Txt>
-            <View accessibilityRole="radiogroup" accessibilityLabel="How did you feel" style={{ flexDirection: 'row', gap: 8 }}>
-              {(['Hard', 'Just right', 'Easy'] as Feel[]).map((n) => (
-                <Pressy key={n} accessibilityRole="radio" accessibilityState={{ selected: feel === n }} onPress={() => setFeel(n)}
-                  style={{ flex: 1, height: 50, borderRadius: 25, borderWidth: 1, borderColor: feel === n ? c.ink : c.line, backgroundColor: feel === n ? c.ink : c.tile, alignItems: 'center', justifyContent: 'center' }}>
-                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: feel === n ? c.bg : c.ink }}>{n}</Txt>
-                </Pressy>
-              ))}
-            </View>
+            <Button kind="white" label="Share" icon={<Share size={16} color={fixed.dark} />} onPress={() => toast('Sharing opens the system share sheet')} />
+          </FadeIn>
+          <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+            {PARTS.map((p, i) => <Particle key={i} p={p} run={run} />)}
           </View>
-          {d.hasGym && <Field value={note} onChangeText={setNote} placeholder="Note for Coach Vikram" accessibilityLabel="Note for Coach Vikram" returnKeyType="done" />}
-          <Button label={note.trim() ? 'Send to Coach and finish' : 'Done'} onPress={() => onDone(feel, note)} />
         </View>
-      </FadeIn>
+
+        {s.hc && (
+          <Row style={{ gap: 18 }}>
+            <Txt style={{ fontSize: fontSizes.base, lineHeight: 21, color: onDark.text }}>Avg 124, max 158 bpm</Txt>
+            <Txt style={{ fontSize: fontSizes.base, lineHeight: 21, color: onDark.muted }}>{`${s.kcal} kcal from your watch`}</Txt>
+          </Row>
+        )}
+
+        <FadeIn delay={900} style={{ gap: 14, backgroundColor: onDark.card + 'B3', ...({ backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' } as object), borderRadius: radii.xl, padding: 18 }}>
+          <CardEdge radius={radii.xl} />
+          <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
+            <View style={{ flex: 1, gap: 2 }}>
+              <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, color: onDark.text }}>How was it?</Txt>
+              <Txt style={{ fontSize: fontSizes.sm, lineHeight: 19, color: onDark.muted }}>Drag to show how it felt</Txt>
+            </View>
+            <Txt accessibilityLiveRegion="polite" style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.4, color: onDark.text }}>{feel}</Txt>
+          </Row>
+          <EffortSlider value={effort} onChange={setEffort} label="How hard was the workout" />
+          <Row style={{ justifyContent: 'space-between' }}>
+            <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6, color: onDark.muted }}>EASY</Txt>
+            <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6, color: onDark.muted }}>MAX</Txt>
+          </Row>
+        </FadeIn>
+
+        {d.hasGym && (
+          <FadeIn delay={1100} style={{ gap: 10 }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, color: onDark.text }}>Note for Coach Vikram</Txt>
+            <TextInput value={note} onChangeText={setNote} multiline placeholder="How did it go? Anything he should know for next time" placeholderTextColor={onDark.muted} accessibilityLabel="Note for Coach Vikram"
+              style={{ minHeight: 120, borderRadius: radii.lg, borderWidth: 1, borderColor: onDark.text + '33', backgroundColor: onDark.text + '14', paddingHorizontal: 16, paddingTop: 14, paddingBottom: 14, fontFamily: font.regular, fontSize: fontSizes.basePlus, lineHeight: 24, color: onDark.text, textAlignVertical: 'top', outlineStyle: 'none' } as never} />
+          </FadeIn>
+        )}
+      </ScrollView>
+      <ProgressiveBlur edge="bottom" height={insets.bottom + 120} />
+      <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
+        <Button kind="white" label={note.trim() ? 'Send to Coach and finish' : 'Done'} onPress={() => onDone(feel, note)}
+          style={{ shadowColor: fixed.white, shadowOpacity: 0.2, shadowRadius: 14, shadowOffset: { width: 0, height: 0 }, elevation: 14 }} />
+      </View>
     </View>
   );
 }

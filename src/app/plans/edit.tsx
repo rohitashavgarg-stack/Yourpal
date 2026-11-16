@@ -13,7 +13,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { DragList, ROW_H } from '@/features/plans/DragList';
 import { DiscardSheet, EditItemSheet, LibrarySheet } from '@/features/plans/Sheets';
-import { InfoBox, PageHeader } from '@/features/plans/parts';
+import { InfoBox, PageHeader, PAGE_HEADER_CLEAR } from '@/features/plans/parts';
 import { mealName } from '@/features/plans/openers';
 import { dayPlan, DietRow, exSub, getP, PEx, pk, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes } from '@/design-system/tokens';
@@ -110,14 +110,8 @@ export default function EditPlan() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <Stack.Screen options={{ gestureEnabled: !dirty }} />
-      <PageHeader title={title} icon="close" onClose={close}
-        right={
-          <Pressy accessibilityRole="button" accessibilityLabel="Save" accessibilityState={{ disabled: !dirty }} disabled={!dirty} onPress={save}
-            style={{ height: 44, paddingHorizontal: 12, borderRadius: radii.lg, justifyContent: 'center', opacity: dirty ? 1 : 0.4 }}>
-            <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>Save</Txt>
-          </Pressy>
-        } />
-      <ScrollView scrollEnabled={!dragging} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
+      <PageHeader title={title} icon="close" onClose={close} />
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} scrollEnabled={!dragging} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_CLEAR + 4, paddingBottom: insets.bottom + 110, gap: 12 }}>
         <Txt muted style={{ fontSize: fontSizes.sm, paddingHorizontal: 4 }}>Hold ≡ and drag to reorder · tap a row to change it</Txt>
         <DragList<PEx | DietRow>
           items={dr.rows as (PEx | DietRow)[]} keyOf={keyOf} labelOf={nameOf} onMove={move} onDragging={setDragging}
@@ -148,9 +142,12 @@ export default function EditPlan() {
         {dr.rows.length === 0 && <Txt muted style={{ textAlign: 'center', padding: 12 }}>Nothing here yet. Add {isDiet ? 'an item' : 'an exercise'} to keep this {isDiet ? 'meal' : 'day'} in your plan.</Txt>}
         <Button kind="dashed" size="medium" label={`+ ${isDiet ? 'Add item' : 'Add exercise'}`} onPress={add} />
         <InfoBox>Coach Vikram will be notified of these changes.</InfoBox>
-        <Button label="Save changes" disabled={!dirty} onPress={save} />
         {isDiet && <Button kind="secondary" label="Ask for a diet change instead" onPress={() => router.push({ pathname: '/plans/ask', params: { kind: 'diet' } })} />}
       </ScrollView>
+      {/* the one Save: a floating button over the page, not a button in the header */}
+      <View pointerEvents="box-none" style={{ position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 16) + 6 }}>
+        <Button kind="glassAccent" label="Save changes" disabled={!dirty} onPress={save} />
+      </View>
     </View>
   );
 }

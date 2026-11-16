@@ -75,7 +75,7 @@ export function LoggedExercises({ ex }: { ex: PEx[] }) {
             <ExTile name={e.name} num={String(i + 1)} />
             <View style={{ flex: 1, minWidth: 0 }}>
               <Txt style={{ fontFamily: font.semibold }}>{e.name}</Txt>
-              <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17, color: skipped ? c.warn : undefined }}>{skipped ? 'Not logged' : e.res === 'swap' ? `${e.sets} sets of ${e.reps}, swapped from ${e.from}` : `${e.sets} sets, ${e.sets * e.reps * e.kg} kg total`}</Txt>
+              <Txt muted style={[{ fontSize: fontSizes.xs, lineHeight: 17 }, skipped && { color: c.warn }]}>{skipped ? 'Not logged' : e.res === 'swap' ? `${e.sets} sets of ${e.reps}, swapped from ${e.from}` : `${e.sets} sets, ${e.sets * e.reps * e.kg} kg total`}</Txt>
             </View>
             <Txt muted style={{ fontSize: fontSizes.xs, lineHeight: 17, color: skipped ? c.warn : c.accentText }}>{skipped ? right : e.res === 'swap' ? right : `${e.kg} kg`}</Txt>
           </Row>
@@ -94,7 +94,7 @@ export function LoggedFeel() {
   return (
     <View style={{ gap: 8 }}>
       <View style={{ gap: 2, paddingHorizontal: 4 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25 }}>How did it feel?</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25 }}>How hard was it?</Txt>
         <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Coach Vikram uses this to plan your next session</Txt>
       </View>
       <View accessible accessibilityLabel={`Your effort: ${effortWord(LOGGED_EFFORT)}, ${Math.round(LOGGED_EFFORT * 10)} out of 10`} style={{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 20, gap: 14 }}>
@@ -105,15 +105,6 @@ export function LoggedFeel() {
             <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.4 }}>{effortWord(LOGGED_EFFORT)}</Txt>
           </View>
           <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, lineHeight: 19, color: c.ink }}>{Math.round(LOGGED_EFFORT * 10)}</Txt> / 10</Txt>
-        </Row>
-        {/* the track shows the effort that was logged: the colours run up to it and the rest is dimmed (a record, not something to drag) */}
-        <View style={{ height: 10, borderRadius: radii.pill, overflow: 'hidden' }}>
-          <LinearGradient colors={[c.cWater, c.cNutri, c.cFat, c.cAct, c.danger]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ flex: 1 }} />
-          <View style={{ position: 'absolute', top: 0, bottom: 0, left: `${pct}%`, right: 0, backgroundColor: c.surface3, opacity: 0.92 }} />
-        </View>
-        <Row style={{ justifyContent: 'space-between' }}>
-          <Txt muted style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6 }}>EASY</Txt>
-          <Txt muted style={{ fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 0.6 }}>MAX</Txt>
         </Row>
       </View>
     </View>

@@ -1,4 +1,6 @@
 import React from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
+import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { ChevronRight, ClipboardCheck } from '@/lib/icons';
@@ -21,7 +23,8 @@ function DoneCard({ n, e, prev }: { n: number; e: AssessEntry; prev: AssessEntry
   const stats = (['weight', 'waist', 'pulse', 'bench'] as NumKey[]).filter((k) => e.tests[k] != null).slice(0, 3);
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`Assessment ${n}, ${fmtAt(e.at)}. ${headline}`} onPress={() => router.push({ pathname: '/gym/assessment', params: { id: e.id } })} scaleTo={0.985}
-      style={{ borderRadius: radii.xl, backgroundColor: c.surface, padding: 16, gap: 14 }}>
+      style={{ borderRadius: radii.xl, backgroundColor: c.cardLift, padding: 16, gap: 14 }}>
+      <CardEdge radius={radii.xl} />
       <Row style={{ gap: 12 }}>
         <IconBadge size={44} radius={radii.md} bg={c.tNutri}><ClipboardCheck size={22} strokeWidth={1.9} color={c.cNutri} /></IconBadge>
         <View style={{ flex: 1, gap: 1 }}>
@@ -54,7 +57,7 @@ export default function GymAssessments() {
   const total = entries.length;
   const when = daysLeft <= 0 ? 'Today' : daysLeft === 1 ? 'Tomorrow' : `In ${daysLeft} days`;
   return (
-    <SubPage title="Assessments" fallback="/gym">
+    <SubPage title="Assessments" fallback="/gym" backdrop={<TopGlow color={c.accent} />}>
       <Txt v="label" style={{ paddingHorizontal: 6 }}>UPCOMING</Txt>
       <Card style={{ padding: 16, gap: 12 }}>
         <Row style={{ gap: 12 }}>

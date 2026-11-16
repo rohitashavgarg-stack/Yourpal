@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
 import Animated, { Easing, interpolate, LinearTransition, SharedValue, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -6,6 +7,8 @@ import { scheduleOnRN } from 'react-native-worklets';
 import { router } from 'expo-router';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { Clock, Flame, Footprints, GlassWater, Scale, X } from '@/lib/icons';
+import Svg, { Circle } from 'react-native-svg';
+import { personalStore } from './personalise';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { useOverlay } from '@/components/Overlay';
@@ -36,7 +39,8 @@ export { GoalStrip } from '@/design-system/_archive/ForYouGoalStrip';
 // ---------- "For you": every note, request and reminder in one swipeable stack ----------
 type Item = {
   key: string; title: string; body: string; critical?: boolean; tone: 'accent' | 'warn' | 'good' | 'muted';
-  who?: boolean; icon?: any; btn?: string; act?: () => void; two?: boolean;
+  who?: boolean; icon?: any; ring?: number; // ring: a circular progress (0 to 1) in place of the icon
+  btn?: string; act?: () => void; two?: boolean;
   chips?: string[]; full?: boolean; // small chips instead of a sentence, and a full-width button
 };
 
@@ -50,6 +54,7 @@ export function useForYou(): Item[] {
   const ptPending = usePtPending();
   const { live } = useUpdates();
   const { state } = useStore();
+  const profileStepOn = personalStore.use().profileStep;
   const first = (state.profile.name || '').trim().split(' ')[0];
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
@@ -66,6 +71,9 @@ export function useForYou(): Item[] {
     else if (r.key === 'weight') out.push({ key: 'rem-weight', ...updateCopy.weight(first, goalCardStore.get().weighDays), tone: 'accent', icon: Scale, btn: r.action, act: () => router.push('/log-weight') });
     else if (r.key === 'steps') out.push({ key: 'rem-steps', ...updateCopy.steps(first), tone: 'accent', icon: Footprints });
   });
+  // One small profile question a day, at the back of the stack. Skip (the cross) hides it until tomorrow; an answer saves and tells the coach.
+  if (profileStepOn && !logsPaused) out.push({ key: 'profile-step', title: 'Your profile is 40% done', body: 'Next is your height. Your coach uses it to size your plan.', tone: 'accent', ring: 0.4, btn: 'Add height',
+    act: () => { set((x) => ({ dismissed: { ...x.dismissed, 'profile-step': true } })); router.push('/log-height'); } });
   return out.filter((i) => i.critical || !d.dismissed[i.key]);
 }
 
@@ -79,6 +87,21 @@ const wrapD = (i: number, p: number, n: number) => {
   if (n <= 1) return 0; // a single card is always the one in front
   return ((((i - p) + 1) % n) + n) % n - 1; // in [-1, n - 1)
 };
+
+// A circular progress with the share in the middle: it takes the place of the icon on the profile card.
+function ProgressRing({ pct }: { pct: number }) {
+  const { c } = useTheme();
+  const S = 48, W = 5, R = (S - W) / 2, C = 2 * Math.PI * R;
+  return (
+    <View accessible accessibilityLabel={`${Math.round(pct * 100)} percent complete`} style={{ width: S, height: S, alignItems: 'center', justifyContent: 'center' }}>
+      <Svg width={S} height={S} style={{ position: 'absolute', transform: [{ rotate: '-90deg' }] }}>
+        <Circle cx={S / 2} cy={S / 2} r={R} stroke={c.surface3} strokeWidth={W} fill="none" />
+        <Circle cx={S / 2} cy={S / 2} r={R} stroke={c.accent} strokeWidth={W} strokeLinecap="round" fill="none" strokeDasharray={C} strokeDashoffset={C * (1 - pct)} />
+      </Svg>
+      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 16 }}>{`${Math.round(pct * 100)}%`}</Txt>
+    </View>
+  );
+}
 
 const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDismiss }: { it: Item; i: number; n: number; prog: SharedValue<number>; inFlow: boolean; onDismiss: () => void }) {
   const { c, isDark } = useTheme();
@@ -106,7 +129,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
         <Animated.View style={content}>
           <View style={{ gap: 12 }}>
             <Row style={{ gap: 12, alignItems: 'flex-start', paddingRight: it.critical ? 0 : 28 }}>
-              {it.who ? <PersonAvatar who="coach" size={40} /> : <IconBadge size={40} radius={radii.sm} bg={bg}>{I ? <I size={19} color={fg} /> : null}</IconBadge>}
+              {it.ring != null ? <ProgressRing pct={it.ring} /> : it.who ? <PersonAvatar who="coach" size={40} /> : <IconBadge size={40} radius={radii.sm} bg={bg}>{I ? <I size={19} color={fg} /> : null}</IconBadge>}
               <View style={{ flex: 1, gap: 2 }}>
                 <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 22 }}>{it.title}</Txt>
                 {!!it.body && <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{it.body}</Txt>}
@@ -195,7 +218,8 @@ export function ComebackPlan() {
   const { c, isDark } = useTheme();
   const start = useStartWorkout();
   return (
-    <FadeIn style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 18, gap: 14, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <FadeIn style={[{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 18, gap: 14, overflow: 'hidden' }, cardShadow(isDark)]}>
+<CardEdge radius={radii.xl} />
       <CornerGlow color={FLAME} size={520} />
       <Row style={{ gap: 12 }}>
         <IconBadge size={44} radius={radii.lg} bg="rgba(255,138,61,0.16)"><Flame size={22} color={FLAME} fill={FLAME} /></IconBadge>

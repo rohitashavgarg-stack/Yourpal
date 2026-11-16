@@ -1,4 +1,5 @@
 import React from 'react';
+import { GOAL_DAY, GOAL_DAYS, personalStore } from './personalise';
 import { View } from 'react-native';
 import { Txt } from '@/components/ui';
 import { MEALS, fmtT } from '@/lib/data';
@@ -32,6 +33,7 @@ export function TodayGreeting() {
     nextMeal: nm ? MEALS.find((m) => m.id === nm)?.n ?? null : null,
     weeks: streak.weeks, weekDone: streak.weekDone, target: streak.target, paused,
     day: new Date().getDate(), clock: (m: number) => fmtT(m).full, noPlan: !planStore.use().assigned,
+    dayCount: personalStore.use().dayCount ? { day: GOAL_DAY, of: GOAL_DAYS } : undefined,
   };
   const ctx = forceCtx(base, g.state);
   const { top, lead, hl, tail } = greeting(ctx, first);

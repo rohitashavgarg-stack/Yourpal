@@ -3,10 +3,15 @@ import { Image, KeyboardAvoidingView, Platform, ScrollView, View, type ScrollVie
 import * as ImagePicker from 'expo-image-picker';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowUp, Camera, Library, X } from '@/lib/icons';
-import { Field, Row, Txt } from '@/components/ui';
+import { ArrowUp, Camera, Library, Mic, X } from '@/lib/icons';
+import { Field, Pressy, Row, Txt } from '@/components/ui';
 import { Button, IconButton } from '@/design-system/primitives/Button';
+import { Option } from '@/design-system/primitives/Option';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
+import { FoodCard } from '@/design-system/patterns/FoodCard';
+import { ChatBar } from '@/design-system/patterns/ChatBar';
+import { GrowFrame, type GrowHandle } from '@/design-system/primitives/SubPage';
+import { takeCardOrigin } from '@/lib/cardGrow';
 import { useOverlay } from '@/components/Overlay';
 import { KCAL_TARGET, MealId, parseFood, Parsed, SCAN_RESULT } from '@/lib/data';
 import { mealLog, totals, useDomain } from '@/lib/domain';
@@ -16,27 +21,33 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fixed, fontSizes, radii, round } from '@/design-system/tokens';
 import { mealById } from '@/features/today/meals';
-import { QuickLogClassic } from '@/features/today/QuickLogClassic';
 
 type NewMsg =
   | { from: 'me'; text?: string; photo?: string }
   | { from: 'bot'; text: string }
-  | { from: 'bot'; logged: { items: Parsed[]; kcal: number; meal: string; undone: boolean; prev: unknown; left: number } };
+  | { from: 'bot'; logged: { items: Parsed[]; kcal: number; meal: string; undone: boolean; prev: unknown; left: number; swapFrom?: string } };
 type Msg = NewMsg & { id: number };
+
+const QUICK = ['2 roti', '1 banana', '1 cup dal', '1 glass milk', '2 boiled eggs', '1 cup rice'];
 
 // "Ate something else" as a full page that works like a chat: the member types or sends a photo, and the reply says what was logged.
 export default function LogChat() {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const { d, set } = useDomain();
-  const { openSheet, toast } = useOverlay();
+  const { toast } = useOverlay();
   useLeaveIfPaused();
-  const p = useLocalSearchParams<{ mealId?: MealId; text?: string; photo?: string }>();
+  const p = useLocalSearchParams<{ mealId?: MealId; text?: string; photo?: string; replaceIdx?: string }>();
   const mealId = (p.mealId ?? 'sn') as MealId;
   const meal = mealById(mealId);
+  const replaceIdx = p.replaceIdx != null ? Number(p.replaceIdx) : null; // swapping a planned item: what is sent replaces it
+  const repl = replaceIdx != null ? meal.items[replaceIdx] : null;
   const [msgs, setMsgs] = useState<Msg[]>([{ id: 0, from: 'bot', text: 'Tell me what you ate. Type it, or send a photo of your plate.' }]);
   const [text, setText] = useState('');
   const scroll = useRef<ScrollViewInstance>(null);
+  const frame = useRef<GrowHandle>(null);
+  // when the sheet "Ate something else" opened this page, the page grows out of the sheet
+  const [origin] = useState(() => takeCardOrigin());
   const idRef = useRef(1);
   const started = useRef(false);
   const dRef = useRef(d);
@@ -49,6 +60,13 @@ export default function LogChat() {
     const prev = cur.meals;
     const log = mealLog(cur, mealId);
     const at = log.at ?? cur.min;
+    if (replaceIdx != null && repl) {
+      const label = items.map((x) => x.n).join(' + ');
+      set({ meals: { ...cur.meals, [mealId]: { ...log, repl: { ...log.repl, [replaceIdx]: { n: label, k: items.reduce((a, x) => a + x.k, 0), p: items.reduce((a, x) => a + x.p, 0), est: items.some((x) => x.est), type: 'veg' as const } }, skip: false } }, openMeal: mealId });
+      haptic.success();
+      add({ from: 'bot', logged: { items, kcal: items.reduce((a, x) => a + x.k, 0), meal: meal.n.toLowerCase(), undone: false, prev, left: Math.max(0, KCAL_TARGET - totals(cur).k), swapFrom: repl.n } });
+      return;
+    }
     set({ meals: { ...cur.meals, [mealId]: { ...log, extra: [...log.extra, ...items.map((x) => ({ n: x.n, k: x.k, p: x.p, est: x.est, type: 'veg' as const }))], at, skip: false } }, openMeal: mealId });
     const kcal = items.reduce((a, x) => a + x.k, 0);
     haptic.success();
@@ -100,35 +118,35 @@ export default function LogChat() {
       if (!r.canceled && r.assets?.[0]?.uri) sendPhoto(r.assets[0].uri);
     } catch { toast('Could not open your photos'); }
   };
-  const library = () => openSheet(<QuickLogClassic mealId={mealId} mode="cat" backTo={() => router.back()} />, { label: 'Food library' });
+  const library = () => router.push({ pathname: '/food-library', params: { mealId, ...(replaceIdx != null ? { replaceIdx: String(replaceIdx) } : null) } });
 
   return (
+    <GrowFrame handle={frame} onClose={() => router.back()} origin={origin}>
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
       {/* no heading: only the cross, top right */}
       <Row style={{ justifyContent: 'flex-end', paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 4 }}>
         <IconButton label="Close" onPress={() => router.back()} glass><X size={20} color={c.ink} /></IconButton>
       </Row>
-      <ScrollView ref={scroll} contentContainerStyle={{ padding: 16, gap: 10, flexGrow: 1, justifyContent: 'flex-end' }} keyboardShouldPersistTaps="handled">
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} ref={scroll} contentContainerStyle={{ padding: 16, gap: 10, flexGrow: 1, justifyContent: 'flex-end' }} keyboardShouldPersistTaps="handled">
         {msgs.map((m) => (
-          <FadeIn key={m.id} style={{ alignSelf: m.from === 'me' ? 'flex-end' : 'flex-start', maxWidth: m.from === 'me' ? '80%' : '90%' }}>
+          <FadeIn key={m.id} style={{ alignSelf: m.from === 'me' ? 'flex-end' : 'flex-start', maxWidth: m.from === 'me' ? '80%' : 'logged' in m ? '100%' : '90%' }}>
             {m.from === 'me' ? (
               <View style={{ backgroundColor: c.accent, borderRadius: radii.lg, borderBottomRightRadius: radii.xs, padding: m.photo ? 4 : 12, paddingHorizontal: m.photo ? 4 : 14 }}>
                 {m.photo ? <Image source={{ uri: m.photo }} accessibilityIgnoresInvertColors style={{ width: 200, height: 150, borderRadius: radii.md }} /> : <Txt style={{ color: c.accentInk }}>{m.text}</Txt>}
               </View>
             ) : 'logged' in m ? (
-              <View style={{ backgroundColor: c.cardLift, borderRadius: radii.lg, borderBottomLeftRadius: radii.xs, padding: 14, gap: 10, opacity: m.logged.undone ? 0.6 : 1 }}>
-                <Txt style={{ fontFamily: font.semibold }}>{m.logged.undone ? 'Undone. Nothing was added.' : `Logged to ${m.logged.meal}, ${m.logged.kcal} kcal`}</Txt>
-                <View style={{ backgroundColor: c.surface2, borderRadius: radii.md, paddingHorizontal: 12 }}>
-                  {m.logged.items.map((it, i) => (
-                    <Row key={i} style={{ justifyContent: 'space-between', minHeight: 44, borderBottomWidth: i < m.logged.items.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
-                      <Txt style={{ flex: 1, fontFamily: font.medium }}>{it.n}</Txt>
-                      <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{`${it.k} kcal${it.est ? ', estimated' : ''}`}</Txt>
-                    </Row>
-                  ))}
+              // the reply: one line that says what happened, then each food as the same FoodCard the diet page uses, then what is left and Undo
+              <View style={{ gap: 8, width: '100%' }}>
+                <View style={{ backgroundColor: c.cardLift, borderRadius: radii.lg, borderBottomLeftRadius: radii.xs, padding: 12, paddingHorizontal: 14, alignSelf: 'flex-start' }}>
+                  <Txt style={{ fontFamily: font.semibold }}>{m.logged.undone ? 'Undone. Nothing was added.' : m.logged.swapFrom ? `Swapped ${m.logged.swapFrom.toLowerCase()}` : `Added to ${m.logged.meal}`}</Txt>
                 </View>
+                {!m.logged.undone && m.logged.items.map((it, i) => {
+                  const [nm, ...rest] = it.n.split(', ');
+                  return <FoodCard key={i} state="eaten" name={nm} amountText={rest.join(', ') || undefined} kcal={`${it.k} kcal${it.est ? ', estimated' : ''}`} macros={`${it.p} g protein`} label={`${it.n}, ${it.k} kcal, ${it.p} grams protein`} />;
+                })}
                 {!m.logged.undone && (
-                  <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19, flex: 1 }}>{`You have ${m.logged.left} kcal left today. Coach Vikram sees what changed.`}</Txt>
+                  <Row style={{ justifyContent: 'space-between', alignItems: 'center', gap: 12, paddingHorizontal: 4 }}>
+                    <Txt muted style={{ flex: 1, fontSize: fontSizes.sm, lineHeight: 19 }}>{`${m.logged.items.length > 1 ? `Total ${m.logged.kcal} kcal. ` : ''}${m.logged.left} kcal left today. Coach Vikram sees what changed.`}</Txt>
                     <Button kind="secondary" small label="Undo" onPress={() => undo(m.id)} />
                   </Row>
                 )}
@@ -141,17 +159,21 @@ export default function LogChat() {
           </FadeIn>
         ))}
       </ScrollView>
-      <Row style={{ gap: 8, paddingHorizontal: 16, paddingTop: 8, paddingBottom: Math.max(insets.bottom, 12) }}>
-        <IconButton label="Choose a photo" onPress={pickPhoto} size={56} radius={round(56)} bg={c.cardLift} edge><Camera size={22} color={c.ink} /></IconButton>
-        <View style={{ flex: 1 }}>
-          <Field accessibilityLabel="Describe what to log" value={text} onChangeText={setText} placeholder="Anything else?" returnKeyType="send" autoFocus onSubmitEditing={() => send(text)} />
-        </View>
-        {text.trim() ? (
-          <IconButton label="Send" onPress={() => send(text)} size={56} radius={round(56)} bg={c.accent}><ArrowUp size={22} color={fixed.white} /></IconButton>
-        ) : (
-          <IconButton label="Open the food library" onPress={library} size={56} radius={round(56)} bg={c.cardLift} edge><Library size={22} color={c.ink} /></IconButton>
-        )}
-      </Row>
+      {/* one tap foods while nothing has been sent yet */}
+      {msgs.length === 1 && (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={{ flexGrow: 0, flexShrink: 0, height: 46 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingBottom: 6, alignItems: 'flex-start' }}>
+          {QUICK.map((q) => (
+            <Option key={q} selected={false} role="button" accessibilityLabel={`Log ${q}`} offLine={c.line} radius={round(36)} height={36} padX={14} onPress={() => { haptic.light(); send(q); }}>
+              <Txt style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{q}</Txt>
+            </Option>
+          ))}
+        </ScrollView>
+      )}
+      {/* the same glass message bar as the Coach Vikram chat: the food library on the left, the camera and the mic inside the pill */}
+      <ChatBar value={text} onChangeText={setText} placeholder={replaceIdx != null ? 'What did you eat instead?' : 'Anything else?'} autoFocus
+        leftIcon={<Library size={22} color={c.ink} />} leftLabel="Open the food library" onLeft={library}
+        onCamera={pickPhoto} onMic={() => toast('Tap the microphone on your keyboard to speak')} onSend={() => send(text)} bottomInset={insets.bottom} />
     </KeyboardAvoidingView>
+    </GrowFrame>
   );
 }

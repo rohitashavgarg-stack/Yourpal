@@ -31,6 +31,7 @@ Order: weight, then steps (connected) or the Connect tile, then water, then the 
 | HealthTile | `kind` | `'hr' \| 'sleep' \| 'kcal'` | required | Heart rate, sleep or active energy |
 | | `onPress` | () => void | required | |
 | ConnectTile | `name` | string | required | "Apple Health" or "Health Connect" |
+| ConnectTile | `watch` | boolean | false | Variant for Health connected but no watch: "Connect a watch", "Heart rate and sleep need a watch" |
 | | `onPress` | () => void | required | |
 | TrackerTile | `bg` | string | required | Tile fill |
 | | `label` | string | required | Top left label |
@@ -71,6 +72,7 @@ Baseline images in `docs/visual-baseline/cards/`: `trackers-default`, `trackers-
 - WaterTile: button "Water 1250 of 3,000 millilitres. Open details". The add pill is a separate button "Add a glass, 250 millilitres": 32 px with a 6 px hit slop (44 px), drawn above the tile so it only adds a glass.
 - HealthTile: "Heart rate 72 bpm, open details", "Sleep 7 hours 10 minutes, open details", "Active energy 320 of 450 kilocalories, open details".
 - ConnectTile: button "Connect <name> for steps, heart rate, sleep and energy".
+- ConnectTile watch: button "Connect a watch for heart rate, sleep and energy". TrackerRow shows it (prop watchHint) when connected without a wearable.
 - Tiles are 160 px, well over 44.
 
 ## Copy rules

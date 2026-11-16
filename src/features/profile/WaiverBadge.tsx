@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Path, RadialGradient, Stop } from 'react-native-svg';
-import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useReducedMotion, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 
 // Colours of this badge. It is an illustration (a glossy lavender ring around a navy disc), so they do not follow the theme.
 const RING = ['#F4F2FF', '#BDB6FB', '#7F73E9'];
@@ -14,7 +15,7 @@ const CHECK_LEN = 72;
 
 // The "signed" badge: pops in with a spring, draws its tick, sends out two soft rings and keeps a slow glow behind it.
 export function WaiverBadge({ size = 104 }: { size?: number }) {
-  const still = useReducedMotion();
+  const still = useReduce();
   const pop = useSharedValue(still ? 1 : 0.2);
   const draw = useSharedValue(still ? 1 : 0);
   const glow = useSharedValue(0);

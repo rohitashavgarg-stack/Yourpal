@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleProp, ViewProps, ViewStyle } from 'react-native';
+import { View, StyleProp, ViewProps, ViewStyle, StyleSheet } from 'react-native';
 import { fixed, radii, shadows } from '@/design-system/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
@@ -55,6 +55,9 @@ export function Card({ variant, dark, gap, tone = 'surface', plain, flat, border
   const v: CardVariant = variant ?? (dark ? 'dark' : 'default');
   const s = SPEC[v];
   const g = gap ?? s.gap;
+  // the stroke follows the card's real corner: when a screen sets its own borderRadius in style, the stroke uses that one, so the line and the fill always have the same curve
+  const own = StyleSheet.flatten(style)?.borderRadius;
+  const radius = typeof own === 'number' ? own : s.radius;
   const pad = padding
     ? { paddingTop: padding.top ?? 0, paddingBottom: padding.bottom ?? 0, paddingHorizontal: padding.horizontal ?? 0 }
     : { padding: s.padding };
@@ -67,7 +70,7 @@ export function Card({ variant, dark, gap, tone = 'surface', plain, flat, border
       ...(isDark || v === 'dark' || flat ? null : { ...shadows.card, shadowColor: fixed.shadow }),
     }, style]}>
       {children}
-      {v !== 'dark' && tone === 'surface' && !border && !plain && <CardEdge radius={s.radius} />}
+      {v !== 'dark' && tone === 'surface' && !border && !plain && <CardEdge radius={radius} />}
     </View>
   );
 }

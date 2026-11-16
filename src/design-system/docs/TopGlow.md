@@ -15,7 +15,7 @@ A soft round glow from the top of an inner page, in the colour of what the page 
 | Prop | Type | What it does |
 |---|---|---|
 | `from` | top or bottom | top | Which edge of the screen the glow comes from |
-| `color` | string | The glow colour. It is brightest at the very top edge (30%, centred) and fades down and fades to nothing |
+| `color` | string | The glow colour. It is brightest at the very top edge (22%, centred) and fades down and fades to nothing |
 
 ## Do and don't
 

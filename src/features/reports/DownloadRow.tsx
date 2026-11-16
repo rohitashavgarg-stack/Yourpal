@@ -23,16 +23,16 @@ export function DownloadRow({ title = 'Download as PDF', sub, run, onPress }: { 
   };
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`${title}. ${sub}`} accessibilityState={{ busy }} onPress={press} scaleTo={0.985}
-      style={{ minHeight: 72, borderRadius: radii.lg, backgroundColor: c.accentSoft, paddingHorizontal: 14 }}>
+      style={{ minHeight: 72 }}>
       <Row style={{ flex: 1, gap: 12 }}>
-        <View style={{ width: 44, height: 44, borderRadius: radii.md, backgroundColor: c.accent + '2E', alignItems: 'center', justifyContent: 'center' }}>
-          <FileText size={22} color={c.accentText} />
+        <View style={{ width: 44, height: 44, borderRadius: radii.md, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}>
+          <FileText size={22} color={c.ink} />
         </View>
         <View style={{ flex: 1, gap: 1 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: c.ink }}>{busy ? 'Making your PDF' : title}</Txt>
           <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{sub}</Txt>
         </View>
-        {busy ? <ActivityIndicator color={c.accentText} /> : <View style={{ width: 36, height: 36, borderRadius: radii.pill, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}><Download size={18} color={c.accentInk} /></View>}
+        {busy ? <ActivityIndicator color={c.ink} /> : <View style={{ width: 36, height: 36, borderRadius: radii.pill, backgroundColor: c.surface2, alignItems: 'center', justifyContent: 'center' }}><Download size={18} color={c.ink} /></View>}
       </Row>
     </Pressy>
   );

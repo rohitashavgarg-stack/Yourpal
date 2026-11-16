@@ -18,8 +18,8 @@ function WheelItem({ n, i, y, fmt, size }: { n: number; i: number; y: { value: n
     return { opacity: interpolate(d, [0, 1, 2.5], [1, 0.4, 0.08], Extrapolation.CLAMP), transform: [{ scale: interpolate(d, [0, 2.5], [1, 0.7], Extrapolation.CLAMP) }] };
   });
   return (
-    <Animated.View style={[{ height: ITEM, alignItems: 'center', justifyContent: 'center' }, a]}>
-      <Txt style={{ fontFamily: font.displayBold, fontSize: size, lineHeight: 72, letterSpacing: -1.5, color: c.ink }}>{fmt ? fmt(n) : n}</Txt>
+    <Animated.View style={[{ height: ITEM, width: '100%', alignItems: 'center', justifyContent: 'center' }, a]}>
+      <Txt style={{ fontFamily: font.displayBold, fontSize: size, lineHeight: 72, letterSpacing: -1.5, color: c.ink, textAlign: 'center', width: '100%' }}>{fmt ? fmt(n) : n}</Txt>
     </Animated.View>
   );
 }
@@ -46,11 +46,11 @@ export function Wheel({ value, onChange, min, max, unit, accessibilityLabel, fmt
       accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
       onAccessibilityAction={(e) => onChange(Math.min(max, Math.max(min, value + (e.nativeEvent.actionName === 'increment' ? 1 : -1))))}
       style={{ height: H, alignSelf: 'stretch', flex: fmt ? 1 : undefined }}>
-      <Animated.ScrollView ref={ref} onScroll={onScroll} scrollEventThrottle={16} showsVerticalScrollIndicator={false} snapToInterval={ITEM} decelerationRate="fast"
-        contentContainerStyle={{ paddingVertical: (H - ITEM) / 2 }}>
+      <Animated.ScrollView showsHorizontalScrollIndicator={false} ref={ref} onScroll={onScroll} scrollEventThrottle={16} showsVerticalScrollIndicator={false} snapToInterval={ITEM} decelerationRate="fast"
+        contentContainerStyle={{ paddingVertical: (H - ITEM) / 2, alignItems: 'center' }}>
         {items.map((n, i) => <WheelItem key={n} n={n} i={i} y={y} fmt={fmt} size={size} />)}
       </Animated.ScrollView>
-      <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: (H - ITEM) / 2, height: ITEM, borderTopWidth: 1, borderBottomWidth: 1, borderColor: c.line }} />
+      <View pointerEvents="none" style={{ position: 'absolute', left: 12, right: 12, top: (H - ITEM) / 2, height: ITEM, borderTopWidth: 1, borderBottomWidth: 1, borderColor: c.line, opacity: 0.55 }} />
       {!!unit && <Txt pointerEvents="none" style={{ position: 'absolute', right: 24, top: H / 2 - 8, fontFamily: font.semibold, fontSize: fontSizes.sm, letterSpacing: 1.4, color: c.muted }}>{unit}</Txt>}
     </View>
   );

@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/set-state-in-effect -- the effect resets local state when its input changes, as designed */
 import React, { useEffect, useRef, useState } from 'react';
+import { ProgressiveBlur } from '@/components/Glass';
 import { useLeaveIfPaused } from '@/lib/logGate';
 import { ScrollView, TextInput, View, type ScrollViewInstance } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, Path } from 'react-native-svg';
-import { Redirect, router } from 'expo-router';
+import { Redirect, router, useLocalSearchParams } from 'expo-router';
 import { ChevronLeft, ChevronRight, Ellipsis, Play, Plus, X } from '@/lib/icons';
 import { Button, Card, Field, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { Beat, CheckCircle, HeartIcon, PillBtn, RoundBtn, Tag } from '@/components/bits';
@@ -18,7 +19,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { fmt1, mmss, useNow } from '@/lib/useNow';
 import { useSessionActions } from '@/features/workout/actions';
-import { COL_LABEL, firstTodo, openSets, setLabel, stats } from '@/features/workout/session';
+import { COL_LABEL, firstTodo, newSession, openSets, setLabel, stats } from '@/features/workout/session';
 import { Draft, SetRow } from '@/features/workout/SetRow';
 import { RestPanel } from '@/features/workout/RestPanel';
 import { useTimerEnd } from '@/lib/useTimerEnd';
@@ -62,7 +63,16 @@ export default function Workout() {
   const { d, set } = useDomain();
   const A = useSessionActions();
   const { openSheet, closeSheet, toast } = useOverlay();
-  const s = d.session;
+  // Opened by Start: the page makes the new session itself, so it shows the workout from its first frame, and gives it to the app once the page covers Today.
+  const startParam = useLocalSearchParams<{ start?: string }>().start;
+  const [pending, setPending] = useState(() => (!d.session && startParam === '1' ? newSession() : null));
+  useEffect(() => {
+    if (!pending) return undefined;
+    const t = setTimeout(() => { set({ session: pending }); setPending(null); }, 340);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const s = d.session ?? pending;
   const now = useNow(!!s, 500);
   const [activeRow, setActiveRow] = useState<number | null>(null);
   const [reveal, setReveal] = useState<number | null>(null);
@@ -261,6 +271,9 @@ export default function Workout() {
 
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
+      {/* the header floats over the page with the progressive blur, no colour behind it */}
+      <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+      <ProgressiveBlur height={insets.top + 68 + 36} />
       <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }}>
         <RoundBtn label="Minimise workout" onPress={minimise} glass><X size={20} color={c.ink} /></RoundBtn>
         <View style={{ flex: 1, alignItems: 'center' }}>
@@ -272,8 +285,9 @@ export default function Workout() {
         </View>
         <PillBtn label="Finish" h={40} onPress={askFinish} style={{ paddingHorizontal: 16 }} />
       </Row>
+      </View>
 
-      <ScrollView ref={scroll} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: isList ? 28 + insets.bottom : dockH + 20, gap: 12 }} keyboardShouldPersistTaps="handled">
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} ref={scroll} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + 100, paddingBottom: isList ? 28 + insets.bottom : dockH + 20, gap: 12 }} keyboardShouldPersistTaps="handled">
         {isList ? (
           <FadeIn key={s.phase} style={{ gap: 12 }}>
             <View style={{ minHeight: 180, borderRadius: radii.xl, overflow: 'hidden', padding: 16, justifyContent: 'flex-end', gap: 4 }}>
@@ -343,8 +357,10 @@ export default function Workout() {
       </ScrollView>
 
       {!isList && e ? (
+        <>
+        <ProgressiveBlur edge="bottom" height={dockH + 28} />
         <View onLayout={(ev) => setDockH(ev.nativeEvent.layout.height)}
-          style={{ position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 12, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12) + 4, gap: 10, backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>
+          style={{ position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 12, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12) + 4, gap: 10 }}>
           {s.rest && <RestPanel docked rest={s.rest} now={now} onAdd30={A.add30} onSkip={A.skipRest} onDone={A.skipRest} />}
           {cur >= 0 && e.sets.some((x) => x.st === 'done') && (
             <Txt v="caption" style={{ textAlign: 'center' }}>{e.sets.filter((x) => x.st === 'todo').length} set{e.sets.filter((x) => x.st === 'todo').length === 1 ? '' : 's'} not done · you can come back to them</Txt>
@@ -358,6 +374,7 @@ export default function Workout() {
             <Button kind={cur < 0 || e.sets.some((x) => x.st === 'done') ? 'accent' : 'secondary'} label={cur < 0 || e.sets.some((x) => x.st === 'done') ? `Next: ${nextName}` : `Skip to ${nextName}`} onPress={nextEx} style={{ flex: 1 }} />
           </Row>
         </View>
+        </>
       ) : null}
       {isList && s.rest && <RestPanel rest={s.rest} now={now} onAdd30={A.add30} onSkip={A.skipRest} onDone={A.skipRest} />}
     </View>

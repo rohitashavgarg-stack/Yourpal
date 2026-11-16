@@ -18,7 +18,7 @@ export type OptionProps = {
   onPress: () => void;
   look?: OptionLook;
   /** radio (one of a set, the default) or tab (a segmented control). */
-  role?: 'radio' | 'tab';
+  role?: 'radio' | 'tab' | 'button';
   /** Spoken label when the content is not plain text. */
   accessibilityLabel?: string;
   /** Fixed height, or `minHeight` for a row that grows with its content. */
@@ -50,7 +50,7 @@ export function Option({ selected, onPress, look = 'fill', role = 'radio', acces
     ? { backgroundColor: c.surface, borderWidth: selected ? 2 : 1, borderColor: selected ? c.ink : offLine ?? c.line }
     : { backgroundColor: selected ? c.ink : offFill ?? 'transparent', ...(offLine ? { borderWidth: 1, borderColor: selected ? c.ink : offLine } : null) };
   return (
-    <Pressy accessibilityRole={role} accessibilityState={{ selected }} accessibilityLabel={accessibilityLabel} onPress={onPress} scaleTo={scaleTo}
+    <Pressy accessibilityRole={role} accessibilityState={role === 'button' ? undefined : { selected }} accessibilityLabel={accessibilityLabel} onPress={onPress} scaleTo={scaleTo}
       hitSlop={height !== undefined && height < 44 ? { top: (44 - height) / 2, bottom: (44 - height) / 2 } : undefined}
       style={[{
         ...(height !== undefined ? { height } : null), ...(minHeight !== undefined ? { minHeight } : null), ...(minWidth !== undefined ? { minWidth } : null),

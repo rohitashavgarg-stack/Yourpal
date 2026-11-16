@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/immutability -- reanimated shared values are written from gesture and animation callbacks */
 import React, { useCallback, useEffect, useState } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
-import Animated, { Easing, useAnimatedReaction, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedReaction, useAnimatedStyle, useSharedValue, withDecay, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -74,13 +74,17 @@ export function Ruler({ value, onChange, min, max, step, decimals = 0, majorEver
       pos.value = val;
     })
     .onEnd((e) => {
-      const glide = clampN(Math.round(pos.value + (v ? e.velocityY : -e.velocityX) / PX * 0.22), minS, maxS);
-      pos.value = withTiming(glide, { duration: 360, easing: Easing.out(Easing.cubic) });
+      const vel = (v ? e.velocityY : -e.velocityX) / PX; // marks per second
+      pos.value = withDecay({ velocity: vel, deceleration: 0.996, clamp: [minS, maxS] }, (done) => {
+        if (done) pos.value = withTiming(Math.round(pos.value), { duration: 160, easing: Easing.out(Easing.quad) });
+      });
     });
 
+  // The track sits at a fixed place (the middle) and moves only by the position, as a transform. Re-anchoring changes which ticks are drawn, not where the track is,
+  // so nothing can jump when it happens.
   const track = useAnimatedStyle(() => (v
-    ? { transform: [{ translateY: (pos.value - anchorSV.value) * PX }] }
-    : { transform: [{ translateX: (anchorSV.value - pos.value) * PX }] }));
+    ? { transform: [{ translateY: pos.value * PX }] }
+    : { transform: [{ translateX: -pos.value * PX }] }));
   const ticks: number[] = [];
   for (let i = Math.max(minS, anchor - HALF); i <= Math.min(maxS, anchor + HALF); i++) ticks.push(i);
   const fade = c.bg;
@@ -94,8 +98,8 @@ export function Ruler({ value, onChange, min, max, step, decimals = 0, majorEver
       <GestureDetector gesture={pan}>
         <View collapsable={false} style={{ flex: 1, cursor: v ? 'ns-resize' : 'ew-resize' } as any}>
           <Animated.View style={[v
-            ? { position: 'absolute', left: 0, right: 0, top: len / 2 + anchor * PX, height: 1 }
-            : { position: 'absolute', top: 0, bottom: 0, left: len / 2 - anchor * PX, width: 1 }, track]}>
+            ? { position: 'absolute', left: 0, right: 0, top: len / 2, height: 1 }
+            : { position: 'absolute', top: 0, bottom: 0, left: len / 2, width: 1 }, track]}>
             {ticks.map((i) => {
               const major = i % majorEvery === 0;
               const half = !major && i % mark === 0;

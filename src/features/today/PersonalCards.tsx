@@ -1,0 +1,110 @@
+import React from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+import { View } from 'react-native';
+import { router } from 'expo-router';
+import { Footprints, Flame, Lightbulb } from '@/lib/icons';
+import { Button, Pressy, Row, Txt } from '@/components/ui';
+import { Card } from '@/design-system/primitives/Card';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { useOverlay } from '@/components/Overlay';
+import { mealLog, totals, useDomain, workoutState } from '@/lib/domain';
+import { useLogsPaused } from '@/lib/logGate';
+import { haptic } from '@/lib/haptics';
+import { HEALTH_NAME } from '@/lib/health';
+import { useTheme } from '@/theme/ThemeProvider';
+import { font } from '@/theme/tokens';
+import { fontSizes, radii } from '@/design-system/tokens';
+import { dayPlan, usePlans } from '@/features/plans/store';
+import { nextMeal } from './meals';
+import { TIP_BUTTON, TIP_HEADS, TIP_LABEL, personalStore, tipOfDay, type Tip } from './personalise';
+
+// ---------- Quick tip ----------
+// The last thing on Today: one idea a day, a tip, a recipe or a workout to try. A violet tinted card with a big soft bulb behind the words, and one button that opens the detail.
+export function QuickTipCard() {
+  const { c } = useTheme();
+  const { openSheet } = useOverlay();
+  const on = personalStore.use().quickTip;
+  if (!on) return null;
+  const t = tipOfDay(new Date().getDate());
+  const tone = { bg: c.tSleep, fg: c.cSleep };
+  return (
+    <Card variant="tight" clip style={{ gap: 8, paddingVertical: 20 }}>
+      <LinearGradient pointerEvents="none" colors={[tone.bg, c.cardLift]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      <View pointerEvents="none" style={{ position: 'absolute', right: -14, bottom: -18, opacity: 0.14 }}><Lightbulb size={132} strokeWidth={1.4} color={tone.fg} /></View>
+      <Row style={{ gap: 8 }}>
+        <Lightbulb size={16} color={tone.fg} />
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.8, color: tone.fg }}>{TIP_LABEL[t.kind]}</Txt>
+      </Row>
+      <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.5, maxWidth: '88%' }}>{t.title}</Txt>
+      <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23, maxWidth: '88%' }}>{t.body}</Txt>
+      <View style={{ alignSelf: 'flex-start', marginTop: 6 }}>
+        <Button kind="secondary" small label={TIP_BUTTON[t.kind]} accessibilityLabel={`${TIP_BUTTON[t.kind]}: ${t.title}`} onPress={() => openSheet(<QuickTipSheet tip={t} />, { label: TIP_LABEL[t.kind] })} />
+      </View>
+    </Card>
+  );
+}
+
+// The detail behind the card: what you need, then how. A recipe has ingredients and a method, a workout its moves and how to do them, a tip what to do and why it helps.
+export function QuickTipSheet({ tip }: { tip: Tip }) {
+  const { c } = useTheme();
+  const tone = { bg: c.tSleep, fg: c.cSleep };
+  const [first, second] = TIP_HEADS[tip.kind];
+  return (
+    <View style={{ gap: 16, paddingBottom: 8 }}>
+      <View style={{ gap: 6 }}>
+        <Row style={{ gap: 8 }}>
+          <Lightbulb size={16} color={tone.fg} />
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, letterSpacing: 0.8, color: tone.fg }}>{TIP_LABEL[tip.kind]}</Txt>
+        </Row>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.5 }}>{tip.title}</Txt>
+        {!!tip.facts && <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{tip.facts}</Txt>}
+      </View>
+      <View style={{ gap: 8 }}>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{first}</Txt>
+        {tip.list.map((x, i) => <Txt key={i} muted style={{ fontSize: fontSizes.md, lineHeight: 22 }}>{x}</Txt>)}
+      </View>
+      <View style={{ gap: 10 }}>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{second}</Txt>
+        {tip.steps.map((x, i) => (
+          <Row key={i} style={{ gap: 12, alignItems: 'flex-start' }}>
+            <View style={{ width: 24, height: 24, borderRadius: radii.pill, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, lineHeight: 17 }}>{i + 1}</Txt>
+            </View>
+            <Txt style={{ flex: 1, fontSize: fontSizes.md, lineHeight: 22 }}>{x}</Txt>
+          </Row>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+// ---------- Connect Health: the sheet ----------
+// Tapping Connect Health in Trackers opens this: connect the health app to bring in steps and active energy.
+export function HealthConsentSheet() {
+  const { c } = useTheme();
+  const { set } = useDomain();
+  const { closeSheet, toast } = useOverlay();
+  const row = (icon: React.ReactNode, title: string, sub: string) => (
+    <Row style={{ gap: 12 }}>
+      {icon}
+      <View style={{ flex: 1 }}>
+        <Txt style={{ fontFamily: font.medium }}>{title}</Txt>
+        <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{sub}</Txt>
+      </View>
+    </Row>
+  );
+  return (
+    <View style={{ gap: 16, paddingBottom: 8 }}>
+      <View style={{ gap: 4 }}>
+        <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.4 }}>{`Connect ${HEALTH_NAME}`}</Txt>
+        <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>Bring your steps and energy into YourPal. They sync on their own.</Txt>
+      </View>
+      {row(<IconBadge size={40} radius={radii.sm} bg={c.goodSoft}><Footprints size={19} color={c.good} /></IconBadge>, 'Steps', 'Counted on Today')}
+      {row(<IconBadge size={40} radius={radii.sm} bg={c.warnSoft}><Flame size={19} color={c.warn} /></IconBadge>, 'Active energy', 'Fills your Burn today')}
+      <Button kind="primary" label={`Connect ${HEALTH_NAME}`} onPress={() => closeSheet(() => { set({ hc: true }); haptic.success(); toast(`${HEALTH_NAME} connected. Steps and energy sync automatically`); })} />
+      <Pressy accessibilityRole="button" onPress={() => closeSheet()} scaleTo={0.96} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 }}>
+        <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.base, lineHeight: 21, color: c.muted }}>Not now</Txt>
+      </Pressy>
+    </View>
+  );
+}

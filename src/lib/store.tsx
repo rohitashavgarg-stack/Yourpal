@@ -26,6 +26,8 @@ export type Profile = {
   age: string; // derived from dob
   dob: string; // YYYY-MM-DD, or empty
   gender?: string; // Male, Female, Other, or empty
+  email?: string; // optional, changed with a code sent to the new address
+  language?: string; // app language, English for now
   heightCm: string;
   weightKg: string;
   targetKg: string;

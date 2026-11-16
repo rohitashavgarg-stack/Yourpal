@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/refs -- the cards read a ref only when they are tapped (to remember where they are for the grow animation) */
 import React from 'react';
+import { useGrowOpen } from '@/lib/cardGrow';
 import Svg, { Line } from 'react-native-svg';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View } from 'react-native';
@@ -33,14 +35,19 @@ function GymMembership() {
   const ms = useMemberships();
   const active = ms.filter((m) => m.status === 'Active').sort((x, y) => y.pct - x.pct); // the one ending first on top
   const soon = active.some((m) => m.warn);
+  const upcoming = ms.find((m) => m.status === 'Upcoming');
+  const paused = ms.find((m) => m.status === 'Paused');
   const shown = active.slice(0, 2);
   const more = active.length - shown.length;
   // One line under the title says it all: how many are active and what needs a look. It turns amber when something does.
   const attention = d.onBreak || soon || active.length === 0;
-  const line = d.onBreak ? 'Paused for now' : active.length === 0 ? 'Nothing active right now' : soon ? `${active.length} active, one ends soon` : `${active.length} active, next ends on ${active[0].end}`;
+  const line = d.onBreak ? 'Paused for now' : active.length === 0 ? 'Nothing active right now' : soon ? `${active.length} active, one ends soon` : paused?.paused ? `${active.length} active, 1 paused until ${paused.paused.until}` : upcoming ? `${active.length} active, next plan starts ${upcoming.start}` : `${active.length} active, next ends on ${active[0].end}`;
+  const grow = useGrowOpen();
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={`Memberships. ${active.length} active${soon ? ', one ending soon' : ''}. See all`} onPress={() => router.push('/gym/membership')} scaleTo={0.985}
-      style={{ borderRadius: radii.lg, backgroundColor: c.surface, padding: 16, gap: 14 }}>
+    <View ref={grow.ref} collapsable={false}>
+    <Pressy accessibilityRole="button" accessibilityLabel={`Memberships. ${active.length} active${soon ? ', one ending soon' : ''}. See all`} onPressIn={grow.prime} onPress={() => router.push('/gym/membership')} scaleTo={0.985}
+      style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 14 }}>
+<CardEdge radius={radii.lg} />
       <CardEdge radius={radii.lg} />
       <Row style={{ gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: radii.md, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }}><CreditCard size={22} color={c.accentText} /></View>
@@ -76,6 +83,7 @@ function GymMembership() {
         <Txt muted style={{ fontSize: fontSizes.md }}>No active membership. Renew at the front desk to log again.</Txt>
       )}
     </Pressy>
+    </View>
   );
 }
 
@@ -86,7 +94,7 @@ function BreakCard() {
     <FadeIn exiting={fadeOut()}
       style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 16, paddingHorizontal: 18, gap: 2, borderWidth: 1.5, borderColor: c.accent }, cardShadow(isDark)]}>
       <Txt style={{ fontFamily: font.semibold }}>Membership paused until {dateLabel(g.breakUntil)}</Txt>
-      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Set by the front desk · streak frozen · reminders paused</Txt>
+      <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Set by the front desk · streak paused · reminders paused</Txt>
     </FadeIn>
   );
 }
@@ -220,6 +228,7 @@ function ChatCard() {
 function PTCard({ isPT }: { isPT: boolean }) {
   const { c } = useTheme();
   const { d } = useDomain();
+  const grow = useGrowOpen();
   const head = (title: string, sub: string, right?: React.ReactNode) => (
     <Row style={{ gap: 14 }}>
       <IconBadge size={48} radius={radii.md} bg={c.accentSoft}><Dumbbell size={24} strokeWidth={1.9} color={c.accentText} /></IconBadge>
@@ -232,7 +241,7 @@ function PTCard({ isPT }: { isPT: boolean }) {
   );
   if (!isPT) {
     return (
-      <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+      <View ref={grow.ref} collapsable={false} onTouchStart={grow.prime} onPointerDown={grow.prime} style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
       <CardEdge radius={radii.xl} />
         {head('Personal training', 'Workout and diet from a coach')}
         <Button kind="white" label="See how it works" onPress={() => router.push('/gym/pt')} />

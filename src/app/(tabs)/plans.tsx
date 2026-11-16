@@ -17,7 +17,7 @@ import { useDomain } from '@/lib/domain';
 import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { StickyLog, StickyStart, useCanLog, useCanStart, WorkoutPlan } from '@/features/plans/WorkoutPlan';
+import { StickyEdit, StickyLog, StickyStart, useCanEdit, useCanLog, useCanStart, WorkoutPlan } from '@/features/plans/WorkoutPlan';
 import { DietPlan } from '@/features/plans/DietPlan';
 import { DietMenuSheet, PlanMenuSheet } from '@/features/plans/Sheets';
 import { applyCoachUpdate, COACH_HL } from '@/features/plans/content';
@@ -52,7 +52,7 @@ function DayStrip() {
     <View style={{ marginBottom: 12 }}>
       <View style={{ paddingVertical: 4 }}>
       <View onLayout={(e) => setW(e.nativeEvent.layout.width)}>
-        <ScrollView ref={ref} horizontal pagingEnabled showsHorizontalScrollIndicator={false} accessibilityLabel="Weeks, swipe for earlier or later weeks" scrollEventThrottle={16}
+        <ScrollView showsVerticalScrollIndicator={false} ref={ref} horizontal pagingEnabled showsHorizontalScrollIndicator={false} accessibilityLabel="Weeks, swipe for earlier or later weeks" scrollEventThrottle={16}
           onScroll={(e) => { const k = Math.round(e.nativeEvent.contentOffset.x / (w || 1)); if (k !== page && k >= 0 && k < WEEKS.length) { setPage(k); haptic.tick(); } }}
           contentOffset={{ x: THIS * (w || 0), y: 0 }}>
           {WEEKS.map((wk) => (
@@ -141,6 +141,7 @@ export default function Plans() {
   const paused = useLogsPaused();
   const canStart = useCanStart() && !paused;
   const canLog = useCanLog() && !paused;
+  const canEdit = useCanEdit() && !paused;
   const insets = useSafeAreaInsets();
   const sy = useSharedValue(0);
   const startRef = useRef<ViewInstance>(null);
@@ -151,7 +152,7 @@ export default function Plans() {
   useAnimatedReaction(() => Math.round(sy.value / 12), (v, prev) => { if (v !== prev) scheduleOnRN(check); }, [under]);
   return (
     <View style={{ flex: 1 }}>
-    <TabScreen title="Plans" scrollY={sy} header={<GymHeader />} compactTitle={false} bottomPad={canStart || canLog ? 190 : 130} titleRight={(
+    <TabScreen title="Plans" scrollY={sy} header={<GymHeader />} compactTitle={false} bottomPad={canStart || canLog || canEdit ? 190 : 130} titleRight={(
       <Row style={{ gap: 8 }}>
         <Segmented iconOnly edge accessibilityLabel="Plan type" value={p.seg} onChange={(v) => setP({ seg: v })}
           options={[{ value: 'workout', label: 'Workout' }, { value: 'diet', label: 'Diet' }]}
@@ -183,6 +184,7 @@ export default function Plans() {
       </View>
     </TabScreen>
     {floating && (canStart ? <StickyStart /> : canLog ? <StickyLog /> : null)}
+    {canEdit && <StickyEdit />}
     </View>
   );
 }

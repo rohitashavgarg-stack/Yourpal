@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
+import { ProgressiveBlur } from '@/components/Glass';
 import { Image, StyleProp, View, ViewStyle } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { router } from 'expo-router';
@@ -20,17 +22,26 @@ import { Stepper as DSStepper, StepperProps } from '@/design-system/primitives/S
 export const goBackToPlans = () => (router.canGoBack() ? router.back() : router.replace('/plans'));
 
 // Header for pushed Plans pages: 44 px round close / back, centred title, optional right action.
+/** The height of the header row under the top inset: 8 above, the 44 px buttons, 8 below. */
+export const PAGE_HEADER_BODY = 60;
+/** Where a page's first content starts under the header: past the blur, so nothing is soft at first look. */
+export const PAGE_HEADER_CLEAR = 84;
 export function PageHeader({ title, icon = 'back', onClose, right }: { title: string; icon?: 'back' | 'close'; onClose?: () => void; right?: React.ReactNode }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   return (
-    <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 8, backgroundColor: c.bg }}>
+    // The header floats over the page: no colour behind it, only the progressive blur (the same as the Today header), so the page scrolls under it. The page adds
+    // `insets.top + PAGE_HEADER_BODY` to the top of its scrolling content.
+    <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+    <ProgressiveBlur height={insets.top + PAGE_HEADER_BODY + 36} />
+    <Row style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }}>
       <RoundBtn label={icon === 'close' ? 'Close' : 'Back'} onPress={onClose ?? goBackToPlans} glass>
         {icon === 'close' ? <X size={20} color={c.ink} /> : <ChevronLeft size={22} color={c.ink} />}
       </RoundBtn>
       <Txt v="headline" numberOfLines={1} accessibilityRole="header" style={{ flex: 1, textAlign: 'center' }}>{title}</Txt>
       {right ?? <View style={{ width: 44 }} />}
     </Row>
+    </View>
   );
 }
 
@@ -106,8 +117,11 @@ export function ExTile({ name, num, size = 56 }: { name: string; num?: string; s
 export function Highlight({ on, delay = 0, style, children }: { on: boolean; delay?: number; style?: StyleProp<ViewStyle>; children: React.ReactNode }) {
   const { c } = useTheme();
   const o = useSharedValue(0);
+  const reduce = useReduce(); // Reduce Motion: the loop does not run
   useEffect(() => {
     if (!on) { o.value = 0; return; }
+    // Reduce Motion: the highlight shows once, steady, then goes (it marks where to look, so it still shows)
+    if (reduce) { o.value = withDelay(delay, withSequence(withTiming(1, { duration: 0 }), withDelay(1400, withTiming(0, { duration: 0 })))); return; }
     o.value = withDelay(delay, withRepeat(withSequence(withTiming(1, { duration: 0 }), withDelay(770, withTiming(0, { duration: 630 }))), 2, false));
   }, [on]);
   const a = useAnimatedStyle(() => ({ opacity: o.value }));

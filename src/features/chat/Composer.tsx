@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Image, Keyboard, Platform, ScrollView, TextInput, View, type TextInputInstance } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 import { ArrowUp, Camera, Image as ImageIcon, Mic, Plus, Send, Smile, Trash2, X } from '@/lib/icons';
 import * as ImagePicker from 'expo-image-picker';
 import { RecordingPresets, requestRecordingPermissionsAsync, setAudioModeAsync, useAudioRecorder, useAudioRecorderState } from 'expo-audio';
@@ -24,7 +25,9 @@ const fmt = (ms: number) => {
 
 function Pulse() {
   const o = useSharedValue(1);
+  const reduce = useReduce(); // Reduce Motion: the loop does not run
   useEffect(() => {
+    if (reduce) return;
     o.value = withRepeat(withSequence(withTiming(0.25, { duration: 600 }), withTiming(1, { duration: 600 })), -1, false);
   }, []);
   const a = useAnimatedStyle(() => ({ opacity: o.value }));
@@ -43,7 +46,7 @@ function EmojiPanel({ onPick }: { onPick: (e: string) => void }) {
           </IconButton>
         ))}
       </View>
-      <ScrollView contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, paddingVertical: 6 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, paddingVertical: 6 }}>
         {EMOJI_GROUPS[g].list.map((e) => (
           <Pressy key={e} accessibilityRole="button" accessibilityLabel={e} onPress={() => { haptic.tick(); onPick(e); }} scaleTo={0.8}
             style={{ width: '12.5%', height: 44, alignItems: 'center', justifyContent: 'center' }}>

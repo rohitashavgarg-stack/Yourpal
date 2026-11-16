@@ -1,4 +1,5 @@
 import React from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import type { ViewInstance } from 'react-native';
 import { useLogsPaused } from '@/lib/logGate';
 import { StyleSheet, View } from 'react-native';
@@ -20,7 +21,6 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { COACH_BANNER } from './content';
-import { startCreate } from './openers';
 import { ExTile, Highlight, Moon } from './parts';
 import { DAYL, dateOf, dayPlan, exSub, monthOf, relDay, usePlans } from './store';
 import { radii, fontSizes } from '@/design-system/tokens';
@@ -99,7 +99,8 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
       {showUpdated && (
         <FadeIn i={0}>
           <Pressy accessibilityRole="button" accessibilityLabel={`Coach Vikram updated your plan. ${COACH_BANNER}. See what changed`} onPress={openUpdated} scaleTo={0.98}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 16, paddingHorizontal: 18, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1.5, borderColor: c.accent }}>
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 16, paddingHorizontal: 18, borderRadius: radii.xl, backgroundColor: c.cardLift, borderWidth: 1.5, borderColor: c.accent }}>
+<CardEdge radius={radii.xl} />
             <StatusDot size={10} color={c.accent} />
             <View style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.semibold }}>Coach Vikram updated your plan</Txt>
@@ -121,7 +122,8 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
       {d.planReq === 'ready' && (
         <FadeIn i={0}>
           <Pressy accessibilityRole="button" accessibilityLabel="Your new plan is ready. View" onPress={openUpdated} scaleTo={0.98}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, paddingHorizontal: 18, borderRadius: radii.xl, backgroundColor: c.surface, borderWidth: 1.5, borderColor: c.good }}>
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, paddingHorizontal: 18, borderRadius: radii.xl, backgroundColor: c.cardLift, borderWidth: 1.5, borderColor: c.good }}>
+<CardEdge radius={radii.xl} />
             <Check size={20} strokeWidth={2.4} color={c.good} />
             <Txt style={{ flex: 1, fontFamily: font.semibold }}>Your new plan is ready</Txt>
             <Txt style={{ fontFamily: font.semibold, color: c.accentText }}>View</Txt>
@@ -214,7 +216,6 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
           </>
           )}
           {!!plan.done && <FadeIn i={4}><LoggedMuscles ex={plan.ex} /></FadeIn>}
-          {!!plan.done && !paused && <View style={{ marginTop: 40 }}><Button kind="secondary" label="Edit logged workout" icon={<Dumbbell size={18} color={c.ink} />} onPress={() => openSheet(<LogPastWorkoutSheet day={p.day} week={p.week} />, { label: 'Edit logged workout' })} /></View>}
           {!plan.done && !!plan.cd?.length && <FadeIn i={4}><ListCard icon={<Snowflake size={20} color={c.ink} />} title="Cool-down" rows={plan.cd} done={!!plan.done} /></FadeIn>}
           {rel > 0 && <Txt muted style={{ textAlign: 'center', fontSize: fontSizes.sm }}>You can start this on {DAYL[p.day]}. Plans open on today by default.</Txt>}
         </LockedPlan>
@@ -224,7 +225,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
             <Moon />
             <Txt accessibilityRole="header" style={{ fontFamily: font.display, fontSize: fontSizes.xl2 }}>Rest day</Txt>
             <Txt muted style={{ textAlign: 'center', maxWidth: 280 }}>Recovery is part of the plan. A walk or a stretch still counts toward your week.</Txt>
-            {!paused && <Button kind="secondary" small label={`Create a workout for ${DAYL[p.day]}`} onPress={() => startCreate(d)} style={{ marginTop: 6 }} />}
+            {!paused && <Button kind="secondary" small label="Ask Coach Vikram for a workout" onPress={() => router.push({ pathname: '/plans/ask', params: { kind: 'workout' } })} style={{ marginTop: 6 }} />}
           </Card>
         </FadeIn>
       )}
@@ -264,6 +265,31 @@ export function useCanLog() {
   return !!plan && relDay(p) < 0 && !plan.done;
 }
 
+// Whether this day has a logged workout that can be edited (drives the floating Edit button and the scroll padding).
+export function useCanEdit() {
+  const { d } = useDomain();
+  const { p } = usePlans();
+  if (p.noPlan || p.seg !== 'workout') return false;
+  const plan = dayPlan(d, p, p.day);
+  return !!plan && !!plan.done;
+}
+
+// A logged day: "Edit logged workout" floats above the tab bar the whole time. It is a secondary action, so it is the white glass, not the blue main one.
+export function StickyEdit() {
+  const { c } = useTheme();
+  const { p } = usePlans();
+  const { openSheet } = useOverlay();
+  const insets = useSafeAreaInsets();
+  const hidden = useNavHidden();
+  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 20 }] }));
+  const bottom = Math.max(insets.bottom - 6, 14) + 84;
+  return (
+    <FadeIn pointerEvents="box-none" style={[{ position: 'absolute', left: 16, right: 16, bottom }, lift]}>
+      <Button kind="glassPrimary" label="Edit logged workout" icon={<Dumbbell size={18} color={c.bg} />} onPress={() => router.push({ pathname: '/plans/entries', params: { day: String(p.day), week: String(p.week) } })} />
+    </FadeIn>
+  );
+}
+
 // The same floating button for a past day: "Log this workout". It is not the blue main action, so it is the white glass.
 export function StickyLog() {
   const { c } = useTheme();
@@ -271,7 +297,7 @@ export function StickyLog() {
   const { openSheet } = useOverlay();
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
-  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 88 }] }));
+  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 20 }] }));
   const bottom = Math.max(insets.bottom - 6, 14) + 84;
   return (
     <FadeIn pointerEvents="box-none" style={[{ position: 'absolute', left: 16, right: 16, bottom }, lift]}>
@@ -288,7 +314,7 @@ export function StickyStart() {
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
   const live = !!d.session;
-  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 88 }] }));
+  const lift = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 20 }] }));
   const bottom = Math.max(insets.bottom - 6, 14) + 84;
   return (
     <FadeIn pointerEvents="box-none" style={[{ position: 'absolute', left: 16, right: 16, bottom }, lift]}>

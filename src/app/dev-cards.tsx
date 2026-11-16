@@ -101,7 +101,7 @@ function Harness() {
     if (p.w) goalCardStore.set({ weighDays: Number(p.w) });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: c.bg }} contentContainerStyle={{ padding: 16, paddingTop: insets.top + 24 }}>
+    <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} style={{ flex: 1, backgroundColor: c.bg }} contentContainerStyle={{ padding: 16, paddingTop: insets.top + 24 }}>
       <View>{card(p.c, p.s, p.v, p.w)}</View>
     </ScrollView>
   );

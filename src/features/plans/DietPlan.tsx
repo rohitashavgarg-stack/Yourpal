@@ -52,8 +52,9 @@ function KcalRing({ k }: { k: number }) {
         <ACircle cx={60} cy={60} r={48} fill="none" stroke={c.cAct} strokeWidth={10} strokeLinecap="round" strokeDasharray={`${C}`} animatedProps={props} transform="rotate(-90 60 60)" />
       </Svg>
       <View style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
-        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 34 }}>{inr(shown)}</Txt>
-        <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: c.muted, marginTop: 2 }}>of {inr(KCAL_TARGET)} kcal</Txt>
+        <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl3, lineHeight: 32 }}>{inr(shown)}</Txt>
+        <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: c.muted, marginTop: 2, textAlign: 'center' }}>{`of ${inr(KCAL_TARGET)}`}</Txt>
+        <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: c.muted, textAlign: 'center' }}>kcal</Txt>
       </View>
     </View>
   );
@@ -174,6 +175,7 @@ function MealCard({ mid, open }: { mid: MealId; open: boolean }) {
   const pickTime = () => openSheet(<TimeSheet title={`When did you eat ${m.n}?`} initial={at ?? d.min} max={d.min} onSave={(v) => A.setMealTime(mid, v)} />, { label: 'Ate at' });
 
   return (
+    // the meal is a standard card: lighter fill and the thin gradient stroke; the food cards inside keep their dotted outline
     <Card style={{ padding: 6, borderRadius: radii.card }}>
       <Row style={{ gap: 6 }}>
         <Pressy accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel={`${m.n}, ${sub}`}

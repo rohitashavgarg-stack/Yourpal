@@ -137,7 +137,7 @@ export default function Login() {
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: c.bg }}>
-      <ScrollView contentContainerStyle={{ paddingTop: insets.top + 8, paddingHorizontal: 20, paddingBottom: insets.bottom + 24, flexGrow: 1, gap: 16 }} keyboardShouldPersistTaps="handled">
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingTop: insets.top + 8, paddingHorizontal: 20, paddingBottom: insets.bottom + 24, flexGrow: 1, gap: 16 }} keyboardShouldPersistTaps="handled">
         {step === 'otp' || step === 'join' || step === 'programme' ? (
           <RoundBtn label="Back to phone number" onPress={() => { setStep('phone'); setErr('none'); setCode(''); setCodeState('idle'); }} glass>
             <ChevronLeft size={22} color={c.ink} />

@@ -15,7 +15,7 @@ export function CountrySheet({ value, onPick }: { value: Country; onPick: (c: Co
   return (
     <View style={{ gap: 8 }}>
       <Txt accessibilityRole="header" v="title">Country code</Txt>
-      <ScrollView style={{ maxHeight: 420 }} nestedScrollEnabled showsVerticalScrollIndicator={false}>
+      <ScrollView showsHorizontalScrollIndicator={false} style={{ maxHeight: 420 }} nestedScrollEnabled showsVerticalScrollIndicator={false}>
         {COUNTRIES.map((k, i) => {
           const on = k.name === value.name;
           return (

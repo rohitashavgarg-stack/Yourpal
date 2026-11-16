@@ -275,7 +275,7 @@ export function ReadyContent({ assess }: { assess: string }) {
       <Card variant="tight" flat gap={4}>
         <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs2, lineHeight: 15, letterSpacing: 1.3, color: c.muted, paddingBottom: 4 }}>SHARED WITH YOUR COACH</Txt>
         {shared.map(([k, v], i) => (
-          <Row key={k} style={{ justifyContent: 'space-between', gap: 12, minHeight: 48, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
+          <Row key={k} style={{ justifyContent: 'space-between', gap: 12, minHeight: 48 }}>
             <Txt muted>{k}</Txt>
             <Txt style={{ fontFamily: font.semibold, flexShrink: 1, textAlign: 'right' }}>{v}</Txt>
           </Row>

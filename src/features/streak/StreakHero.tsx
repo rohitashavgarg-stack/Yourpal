@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { LayoutChangeEvent, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Flame } from '@/lib/icons';
@@ -46,7 +47,8 @@ export function StreakHero() {
   const next = MILESTONES.find((m) => st.weeks < m);
 
   return (
-    <FadeIn style={[{ backgroundColor: c.surface, borderRadius: radii.xl, padding: 20, gap: 8, overflow: 'hidden' }, cardShadow(isDark)]}>
+    <FadeIn style={[{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 20, gap: 8, overflow: 'hidden' }, cardShadow(isDark)]}>
+<CardEdge radius={radii.xl} />
       <CornerGlow color={FLAME} size={300} />
       <Row style={{ alignItems: 'baseline', gap: 10 }}>
         <Txt style={{ fontFamily: font.displayBold, fontSize: 44, lineHeight: 56, letterSpacing: -1.2, color: FLAME }}>{st.weeks}</Txt>

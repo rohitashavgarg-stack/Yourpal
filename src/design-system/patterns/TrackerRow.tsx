@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { ScrollView, View } from 'react-native';
-import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { springTo, useReduce } from '@/lib/motionSafe';
 import Svg, { Circle, ClipPath, Defs, G, LinearGradient as SvgGradient, Path, Polyline, Rect, Stop } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GlassWater, Plus } from '@/lib/icons';
@@ -26,18 +27,21 @@ export type TrackerRowProps = {
   connect: React.ReactNode;
   water: React.ReactNode;
   health: React.ReactNode;
+  /** Health is connected but no watch is: a tile that says heart rate and sleep need one. */
+  watchHint?: React.ReactNode;
 };
 
-export function TrackerRow({ connected, wearable, weight, steps, connect, water, health }: TrackerRowProps) {
+export function TrackerRow({ connected, wearable, weight, steps, connect, water, health, watchHint }: TrackerRowProps) {
   return (
     <View style={{ marginHorizontal: -16, gap: 6 }}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} decelerationRate="fast" accessibilityLabel="Quick trackers, swipe for more"
+      <ScrollView showsVerticalScrollIndicator={false} horizontal showsHorizontalScrollIndicator={false} decelerationRate="fast" accessibilityLabel="Quick trackers, swipe for more"
         contentContainerStyle={{ gap: 12, paddingHorizontal: 16, paddingVertical: 2 }}>
         {/* the three default trackers first: weight, steps (or connect Health), water; then the watch ones */}
         {weight}
         {!connected ? connect : steps}
         {water}
         {connected && wearable && health}
+        {connected && !wearable && watchHint}
       </ScrollView>
     </View>
   );
@@ -89,7 +93,8 @@ const ARect = Animated.createAnimatedComponent(Rect);
 export function BottleFigma({ litres, id, w = 32, onLight = false }: { litres: number; id: string; w?: number; onLight?: boolean }) {
   const pct = Math.min(1, litres / TARGET);
   const top = useSharedValue(95 - pct * 65);
-  useEffect(() => { top.value = withSpring(95 - pct * 65, { damping: 14, stiffness: 90 }); }, [pct]);
+  const reduce = useReduce(); // Reduce Motion: no spring, the value just jumps
+  useEffect(() => { top.value = springTo(95 - pct * 65, { damping: 14, stiffness: 90 }, reduce); }, [pct]);
   const water = useAnimatedProps(() => ({ y: top.value, height: 95 - top.value }));
   return (
     <Svg width={w} height={(w * 95) / 32} viewBox="0 0 32 95">
@@ -231,16 +236,16 @@ export function HealthTile({ kind, onPress }: HealthTileProps) {
 }
 
 // ---------- Connect Health ----------
-export type ConnectTileProps = { /** "Apple Health" or "Health Connect". */ name: string; onPress: () => void };
+export type ConnectTileProps = { /** "Apple Health" or "Health Connect". */ name: string; onPress: () => void; /** Variant: Health is connected, a watch is not. Says heart rate and sleep need a watch. */ watch?: boolean };
 
-export function ConnectTile({ name, onPress }: ConnectTileProps) {
+export function ConnectTile({ name, onPress, watch }: ConnectTileProps) {
   const { c, isDark } = useTheme();
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel={`Connect ${name} for steps, heart rate, sleep and energy`} onPress={onPress}
+    <Pressy accessibilityRole="button" accessibilityLabel={watch ? 'Connect a watch for heart rate, sleep and energy' : `Connect ${name} for steps, heart rate, sleep and energy`} onPress={onPress}
       style={[SQ, { padding: 12, justifyContent: 'space-between', borderWidth: 1, borderStyle: 'dashed', borderColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface3, backgroundColor: isDark ? fixed.dark : c.surface }]}>
       <View style={{ width: 32, height: 32, borderRadius: radii.block, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : c.surface2, alignItems: 'center', justifyContent: 'center' }}><HeartIcon size={20} color={onDark.heart} /></View>
-      <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 28, color: c.ink }}>{`Connect ${name}`}</Txt>
-      <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: c.muted }}>Steps, heart rate, sleep and energy</Txt>
+      <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl, lineHeight: 28, color: c.ink }}>{watch ? 'Connect a watch' : `Connect ${name}`}</Txt>
+      <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: c.muted }}>{watch ? 'Heart rate and sleep need a watch' : 'Steps, heart rate, sleep and energy'}</Txt>
     </Pressy>
   );
 }

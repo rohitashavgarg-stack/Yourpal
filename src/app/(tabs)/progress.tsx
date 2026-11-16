@@ -181,8 +181,8 @@ function StreakEntry() {
         </View>
         <ChevronRight size={18} color={c.muted} />
       </Row>
-      <Callout size="xl" gap={12}>
-        <ProgressSegments height={6} gap={4} segments={Array.from({ length: st.target }, (_, i) => ({ color: i < st.weekDone ? FLAME : c.surface3, label: i < st.weekDone ? 'Session done' : 'Session to do' }))} />
+      <Callout tone="raised" size="xl" gap={12}>
+        <ProgressSegments height={6} gap={4} segments={Array.from({ length: st.target }, (_, i) => ({ color: i < st.weekDone ? FLAME : c.surface, label: i < st.weekDone ? 'Session done' : 'Session to do' }))} />
         <Txt v="caption" style={{ fontSize: fontSizes.sm, lineHeight: 19 }}><Txt v="caption" style={{ fontFamily: font.bold, color: c.ink, fontSize: fontSizes.sm, lineHeight: 19 }}>{st.weekDone}</Txt> of {st.target} sessions this week</Txt>
       </Callout>
     </PCard>

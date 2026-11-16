@@ -10,7 +10,7 @@ A soft block inside a page or a sheet: a notice (something to know), a tip, or a
 
 | Prop | Type | Default | What it does |
 |---|---|---|---|
-| `tone` | `'warn' | 'accent' | 'plain'` | `plain` | The fill: soft amber, soft blue, or the quiet surface |
+| `tone` | `'warn' | 'accent' | 'plain' | 'raised'` | `plain` | The fill: soft amber, soft blue, the quiet surface, or a lighter grey panel for inside a card |
 | `size` | `'compact' | 'sm' | 'md' | 'lg' | 'xl'` | `md` | Padding and corners, see States |
 | `gap` | number | none | Space between the children |
 | `style` | ViewStyle | none | Layout only: flex, width, margins, alignment. Not colours, radius or padding |
@@ -32,6 +32,7 @@ A soft block inside a page or a sheet: a notice (something to know), a tip, or a
 |---|---|---|
 | warn | `warnSoft` | the warn colour |
 | accent | `accentSoft` | the accent text colour |
+| raised | `surface3` | the normal text colour (a panel inside a card) |
 | plain | `surface2` | the normal or the muted colour |
 
 ## Do and don't

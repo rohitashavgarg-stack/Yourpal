@@ -41,13 +41,22 @@ export const SWAPS: Record<string, { n: string; q: string; k: number; p: number;
   any: [{ n: 'Curd', q: '200 g', k: 120, p: 7, type: 'veg' }, { n: 'Fruit', q: '1', k: 80, p: 1, type: 'veg' }, { n: 'Sprouts', q: '1 bowl', k: 120, p: 8, type: 'veg' }],
 };
 
-export type CatalogItem = { n: string; k: number; p: number; type?: FoodType };
+// What members eat most: the first shelf of the food library when they log something else.
+export const OFTEN = ['Roti, 1', 'Dal tadka, 1 katori', 'Banana, 1', 'Masala chai, 1 cup', 'Curd, 1 katori', 'Boiled eggs, 2', 'Rice, 1 katori', 'Poha, 1 plate', 'Milk, 1 cup', 'Idli, 2 pieces'];
+export type FoodCat = 'Breakfast' | 'Meals' | 'Snacks' | 'Drinks' | 'Protein';
+export const FOOD_CATS: FoodCat[] = ['Breakfast', 'Meals', 'Snacks', 'Drinks', 'Protein'];
+export type CatalogItem = { n: string; k: number; p: number; type?: FoodType; cat: FoodCat; meals: MealId[] }; // cat: its shelf in the library; meals: the meals it is suggested for
+const ci = (n: string, k: number, p: number, cat: FoodCat, meals: MealId[], type?: FoodType): CatalogItem => ({ n, k, p, cat, meals, ...(type ? { type } : null) });
 export const CATALOG: CatalogItem[] = [
-  { n: 'Curd, 1 katori', k: 100, p: 6 }, { n: 'Masala chai, 1 cup', k: 90, p: 3 }, { n: 'Roti, 1', k: 70, p: 2 }, { n: 'Banana, 1', k: 105, p: 1 },
-  { n: 'Dal tadka, 1 katori', k: 160, p: 9 }, { n: 'Poha, 1 plate', k: 250, p: 5 }, { n: 'Idli, 2 pieces', k: 150, p: 4 }, { n: 'Masala dosa, 1', k: 350, p: 6 },
-  { n: 'Rajma chawal, 1 plate', k: 420, p: 14 }, { n: 'Paneer bhurji, 100 g', k: 260, p: 16 }, { n: 'Sprouts chaat, 1 bowl', k: 150, p: 9 }, { n: 'Veg sandwich, 1', k: 230, p: 7 },
-  { n: 'Samosa, 1', k: 260, p: 4 }, { n: 'Milk, 1 cup', k: 150, p: 8 }, { n: 'Boiled eggs, 2', k: 150, p: 12, type: 'egg' }, { n: 'Oats, 1 bowl', k: 150, p: 5 },
-  { n: 'Chicken biryani, 1 plate', k: 500, p: 22, type: 'nv' },
+  ci('Poha, 1 plate', 250, 5, 'Breakfast', ['bf']), ci('Idli, 2 pieces', 150, 4, 'Breakfast', ['bf']), ci('Oats, 1 bowl', 150, 5, 'Breakfast', ['bf']), ci('Masala dosa, 1', 350, 6, 'Breakfast', ['bf']),
+  ci('Upma, 1 plate', 220, 5, 'Breakfast', ['bf']), ci('Besan chilla, 2', 200, 10, 'Breakfast', ['bf']),
+  ci('Dal tadka, 1 katori', 160, 9, 'Meals', ['lu', 'dn']), ci('Roti, 1', 70, 2, 'Meals', ['lu', 'dn']), ci('Rajma chawal, 1 plate', 420, 14, 'Meals', ['lu', 'dn']), ci('Rice, 1 katori', 200, 4, 'Meals', ['lu', 'dn']),
+  ci('Mixed veg sabzi, 1 katori', 120, 3, 'Meals', ['lu', 'dn']), ci('Chicken biryani, 1 plate', 500, 22, 'Meals', ['lu', 'dn'], 'nv'),
+  ci('Banana, 1', 105, 1, 'Snacks', ['sn', 'bf']), ci('Sprouts chaat, 1 bowl', 150, 9, 'Snacks', ['sn']), ci('Veg sandwich, 1', 230, 7, 'Snacks', ['sn']), ci('Samosa, 1', 260, 4, 'Snacks', ['sn']),
+  ci('Roasted chana, 1 handful', 120, 6, 'Snacks', ['sn']), ci('Apple, 1', 95, 0, 'Snacks', ['sn']),
+  ci('Masala chai, 1 cup', 90, 3, 'Drinks', ['bf', 'sn']), ci('Milk, 1 cup', 150, 8, 'Drinks', ['bf', 'sn']), ci('Buttermilk, 1 glass', 60, 3, 'Drinks', ['lu', 'sn']), ci('Protein shake, 1', 160, 24, 'Drinks', ['sn']),
+  ci('Curd, 1 katori', 100, 6, 'Protein', ['lu', 'dn', 'sn']), ci('Boiled eggs, 2', 150, 12, 'Protein', ['bf', 'sn'], 'egg'), ci('Paneer bhurji, 100 g', 260, 16, 'Protein', ['lu', 'dn']),
+  ci('Grilled chicken, 100 g', 165, 31, 'Protein', ['lu', 'dn'], 'nv'),
 ];
 
 // Parses "2 roti, 1 cup milk, 100 g paneer" into items with estimates.

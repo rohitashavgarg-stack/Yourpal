@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { ProgressiveBlur } from '@/components/Glass';
 import { useLeaveIfPaused } from '@/lib/logGate';
 import { ScrollView, View } from 'react-native';
 import { Redirect, router } from 'expo-router';
@@ -63,12 +64,12 @@ export default function ExerciseSearch() {
 
       <View style={{ paddingHorizontal: 16, gap: 12, paddingBottom: 8 }}>
         <Field value={q} onChangeText={setQ} autoFocus placeholder="Search exercises or muscles" accessibilityLabel="Search exercises" returnKeyType="search" autoCapitalize="none" />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ gap: 8 }}>
+        <ScrollView showsVerticalScrollIndicator={false} horizontal showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ gap: 8 }}>
           {GROUPS.map((g) => <Pill key={g} label={g} on={group === g} onPress={() => setGroup(g)} />)}
         </ScrollView>
       </View>
 
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 120, gap: 8 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 120, gap: 8 }}>
         {list.map((x) => (
           <Pressy key={x.n} accessibilityRole="button" accessibilityLabel={`${x.n}, ${x.g}. Swap`} onPress={() => pick(x.n)} scaleTo={0.985}
             style={{ minHeight: 68, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 12, borderRadius: 20, backgroundColor: c.surface }}>
@@ -90,7 +91,8 @@ export default function ExerciseSearch() {
         )}
       </ScrollView>
 
-      <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12) + 6, gap: 8, backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>
+      <ProgressiveBlur edge="bottom" height={Math.max(insets.bottom, 12) + 120} />
+      <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12) + 6, gap: 8 }}>
         <Row style={{ gap: 8 }}>
           <Pill label="Today only" on={!plan} onPress={() => setPlan(false)} style={{ flex: 1 }} />
           <Pill label="Also update my plan" on={plan} onPress={() => setPlan(true)} style={{ flex: 1 }} />

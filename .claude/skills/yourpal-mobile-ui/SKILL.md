@@ -1,6 +1,6 @@
 ---
 name: yourpal-mobile-ui
-description: How we design and build the YourPal member app (Expo / React Native) — visual language, data presentation rules, goal and tracker patterns, motion, copy, and the working process agreed with the designer (Rohitashav). Use for ANY UI or UX work in this repo — new screens, cards, Today, goal page, Progress, trackers, porting a Figma node, design suggestions or mockups — before writing UI code or proposing a design.
+description: SUPERSEDED by yourpal-mobile-app-ui (read that skill first; it includes everything below and the newer rules). How we design and build the YourPal member app (Expo / React Native) — visual language, data presentation rules, goal and tracker patterns, motion, copy, and the working process agreed with the designer (Rohitashav). Use for ANY UI or UX work in this repo — new screens, cards, Today, goal page, Progress, trackers, porting a Figma node, design suggestions or mockups — before writing UI code or proposing a design.
 ---
 
 # YourPal mobile app — UI and UX playbook

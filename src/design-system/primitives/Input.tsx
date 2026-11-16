@@ -9,11 +9,12 @@ import { ChevronDown } from '@/lib/icons';
  * Text inputs. Field is the one-line field (56 px, optional prefix), NoteField the multi-line note with a character count.
  * Both draw a 1 px line that becomes a 1.5 px accent line on focus and a 1.5 px amber line when `error` is set.
  */
-export const Field = React.forwardRef<TextInputInstance, TextInputProps & { error?: boolean; prefix?: string; onPrefixPress?: () => void; prefixLabel?: string }>(function Field({ error, prefix, onPrefixPress, prefixLabel, style, ...rest }, ref) {
+export const Field = React.forwardRef<TextInputInstance, TextInputProps & { error?: boolean; prefix?: string; onPrefixPress?: () => void; prefixLabel?: string; leading?: React.ReactNode; trailing?: React.ReactNode }>(function Field({ error, prefix, onPrefixPress, prefixLabel, leading, trailing, style, ...rest }, ref) {
   const { c } = useTheme();
   const [focus, setFocus] = React.useState(false);
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', height: 56, borderRadius: radii.xl, borderWidth: focus || error ? 1.5 : 1, borderColor: error ? c.warn : focus ? c.accent : c.line, backgroundColor: c.surface, paddingHorizontal: 18, gap: 10 }}>
+      {leading}
       {prefix && onPrefixPress ? (
         <Pressy accessibilityRole="button" accessibilityLabel={prefixLabel ?? `Change ${prefix}`} onPress={onPrefixPress} scaleTo={0.96} hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }} style={{ flexDirection: 'row', alignItems: 'center', gap: 4, minHeight: 44 }}>
           <Text style={{ fontFamily: font.medium, fontSize: fontSizes.basePlus, lineHeight: 21, color: c.ink }}>{prefix}</Text>
@@ -28,6 +29,7 @@ export const Field = React.forwardRef<TextInputInstance, TextInputProps & { erro
         onBlur={(e) => { setFocus(false); rest.onBlur?.(e); }}
         style={[{ flex: 1, fontFamily: font.medium, fontSize: fontSizes.basePlus, color: c.ink, height: '100%' as any, outlineStyle: 'none' as any }, style]}
       />
+      {trailing}
     </View>
   );
 });

@@ -1,4 +1,5 @@
 import React from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { View, StyleProp, ViewStyle } from 'react-native';
 import { Check, ChevronRight } from '@/lib/icons';
 import { Pressy, Row, Txt } from '@/components/ui';
@@ -30,7 +31,8 @@ export function ListCard(props: ListCardProps) {
 function RowsList({ rows, mono = true, style }: RowsProps) {
   const { c, isDark } = useTheme();
   return (
-    <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingVertical: 4, paddingHorizontal: 16 }, isDark ? {} : shadows.card, style]}>
+    <View style={[{ backgroundColor: c.cardLift, borderRadius: radii.xl, paddingVertical: 4, paddingHorizontal: 16 }, isDark ? {} : shadows.card, style]}>
+      <CardEdge radius={radii.xl} />
       {rows.map((r, i) => {
         const inner = (
           <>
@@ -55,7 +57,8 @@ function RowsList({ rows, mono = true, style }: RowsProps) {
 function ContainerList({ children, style }: ContainerProps) {
   const { c, isDark } = useTheme();
   return (
-    <View style={[{ backgroundColor: c.surface, borderRadius: radii.xl, paddingHorizontal: 18, paddingVertical: 4 }, !isDark && shadows.card, style]}>
+    <View style={[{ backgroundColor: c.cardLift, borderRadius: radii.xl, paddingHorizontal: 18, paddingVertical: 4 }, !isDark && shadows.card, style]}>
+      <CardEdge radius={radii.xl} />
       {children}
     </View>
   );

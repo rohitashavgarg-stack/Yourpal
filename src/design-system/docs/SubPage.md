@@ -27,6 +27,10 @@ There were two SubPages with small differences, so there are two variants. Both 
 | `toastLift` | number | 24 | progress | Raises the snackbar this much above the safe area |
 | `onBack` | () => boolean | none | progress | Runs first on back; return true when handled |
 
+## Opening from a card
+
+A page opened from a Progress card grows out of that card in about a third of a second (a plain ease-out, no bounce) and shrinks back into it when you tap Back. The card (PCard in src/features/progress/parts.tsx) calls setCardOrigin from src/lib/cardGrow.ts just before it navigates, and the next SubPage reads it once. Pages opened any other way do not animate. Swipe back and the device back button leave without the shrink.
+
 ## States
 
 | | `shell` (default) | `progress` |

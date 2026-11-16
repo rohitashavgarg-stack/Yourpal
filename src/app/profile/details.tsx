@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { ageFrom, defaultDob, fmtDob } from '@/lib/dob';
 import { PersonAvatar } from '@/components/Brand';
 import { View } from 'react-native';
@@ -52,6 +53,45 @@ export function ChangePhoneSheet() {
         <Field value={code} onChangeText={(t) => { setCode(t.replace(/D/g, '').slice(0, 6)); setErr(''); }} keyboardType="number-pad" placeholder="6-digit code" accessibilityLabel="Verification code" error={!!err} />
       ) : (
         <Field value={num} onChangeText={(t) => { setNum(t.replace(/D/g, '').slice(0, 10)); setErr(''); }} keyboardType="number-pad" prefix="+91" placeholder="New mobile number" accessibilityLabel="New mobile number" error={!!err} />
+      )}
+      {!!err && <Txt accessibilityRole="alert" style={{ color: c.warn, fontSize: fontSizes.md }}>{err}</Txt>}
+      <Button label={sent ? 'Verify and update' : 'Send code'} onPress={sent ? verify : send} />
+    </View>
+  );
+}
+
+const maskEmail = (e: string) => { const [u, h] = e.split('@'); return u.length > 1 ? u[0] + '****@' + h : e; };
+
+// Changing the email needs a code sent to the new address, so a typo cannot lock anyone out.
+export function ChangeEmailSheet() {
+  const { c } = useTheme();
+  const { state, setProfile } = useStore();
+  const { closeSheet, toast } = useOverlay();
+  const [mail, setMail] = useState('');
+  const [code, setCode] = useState('');
+  const [sent, setSent] = useState(false);
+  const [err, setErr] = useState('');
+  const had = !!state.profile.email;
+  const send = () => {
+    const m = mail.trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)) { setErr('Enter an email like name@example.com.'); haptic.error(); return; }
+    if (m === state.profile.email) { setErr('That is already your email.'); haptic.error(); return; }
+    setMail(m); setErr(''); setSent(true); haptic.light();
+  };
+  const verify = () => {
+    if (code.length !== 6 || code === '000000') { setErr('That code is not right. Try again.'); haptic.error(); return; }
+    setProfile({ email: mail });
+    haptic.success();
+    closeSheet(() => toast('Email updated'));
+  };
+  return (
+    <View style={{ gap: 12, paddingBottom: 8 }}>
+      <Txt v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>{sent ? 'Enter the code' : had ? 'Change email' : 'Add email'}</Txt>
+      <Txt muted style={{ fontSize: fontSizes.md }}>{sent ? `We sent a 6-digit code to ${mail}.` : 'We will send a code to this address to confirm it is yours. Your gym uses it for account notices.'}</Txt>
+      {sent ? (
+        <Field value={code} onChangeText={(t) => { setCode(t.replace(/\D/g, '').slice(0, 6)); setErr(''); }} keyboardType="number-pad" placeholder="6-digit code" accessibilityLabel="Verification code" error={!!err} />
+      ) : (
+        <Field value={mail} onChangeText={(t) => { setMail(t); setErr(''); }} keyboardType="email-address" autoCapitalize="none" placeholder="Email address" accessibilityLabel="Email address" error={!!err} />
       )}
       {!!err && <Txt accessibilityRole="alert" style={{ color: c.warn, fontSize: fontSizes.md }}>{err}</Txt>}
       <Button label={sent ? 'Verify and update' : 'Send code'} onPress={sent ? verify : send} />
@@ -155,19 +195,29 @@ export default function MyDetails() {
       )}
 
       <Label style={{ marginTop: 16 }}>Mobile number</Label>
-      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.surface }}>
+      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.cardLift }}>
+        <CardEdge radius={radii.lg} />
         <Txt v="mono" style={{ flex: 1 }}>{maskNum(state.phone)}</Txt>
-        <Button small kind="secondary" label="Change" accessibilityLabel="Change mobile number" onPress={() => openSheet(<ChangePhoneSheet />, { label: 'Change mobile number' })} />
+        <Button small kind="grey" label="Change" accessibilityLabel="Change mobile number" onPress={() => openSheet(<ChangePhoneSheet />, { label: 'Change mobile number' })} />
+      </Row>
+
+      <Label style={{ marginTop: 16 }}>Email</Label>
+      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.cardLift }}>
+        <CardEdge radius={radii.lg} />
+        <Txt style={{ flex: 1, fontFamily: font.semibold }} numberOfLines={1}>{p.email ? maskEmail(p.email) : 'Not set'}</Txt>
+        <Button small kind="grey" label={p.email ? 'Change' : 'Add'} accessibilityLabel={p.email ? 'Change email' : 'Add email'} onPress={() => openSheet(<ChangeEmailSheet />, { label: 'Email' })} />
       </Row>
 
       <Label style={{ marginTop: 16 }}>Gender</Label>
-      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.surface }}>
+      <Row style={{ gap: 10, marginTop: -6, minHeight: 56, paddingLeft: 18, paddingRight: 8, borderRadius: radii.lg, backgroundColor: c.cardLift }}>
+        <CardEdge radius={radii.lg} />
         <Txt style={{ flex: 1, fontFamily: font.semibold }}>{p.gender || 'Not set'}</Txt>
-        <Button small kind="secondary" label="Change" accessibilityLabel="Change gender" onPress={() => openSheet(<GenderSheet />, { label: 'Gender' })} />
+        <Button small kind="grey" label="Change" accessibilityLabel="Change gender" onPress={() => openSheet(<GenderSheet />, { label: 'Gender' })} />
       </Row>
 
       <Label style={{ marginTop: 16 }}>Body details</Label>
-      <View style={{ marginTop: -6, borderRadius: radii.lg, backgroundColor: c.surface, overflow: 'hidden' }}>
+      <View style={{ marginTop: -6, borderRadius: radii.lg, backgroundColor: c.cardLift, overflow: 'hidden' }}>
+        <CardEdge radius={radii.lg} />
         <BodyRow label="Date of birth" value={p.dob ? `${fmtDob(p.dob)} · ${ageFrom(p.dob)} yrs` : p.age ? `${p.age} years` : 'Add'} onPress={() => openSheet(<DobSheet />, { label: 'Date of birth' })} />
         <BodyRow label="Height" value={p.heightCm ? `${p.heightCm} cm` : 'Add'} onPress={() => router.push('/log-height')} />
         <BodyRow label="Weight" last value={shell.unitsW === 'lb' ? `${(d.weight * 2.20462).toFixed(1)} lb` : `${d.weight.toFixed(1)} kg`} onPress={() => router.push('/log-weight')} />

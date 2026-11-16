@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { Image, ScrollView, View } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import Animated, { cancelAnimation, Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -15,7 +17,7 @@ import { useScenarios } from '@/lib/store';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { histFor, tipFor } from '@/features/plans/content';
-import { ExTile, PageHeader } from '@/features/plans/parts';
+import { ExTile, PageHeader, PAGE_HEADER_CLEAR } from '@/features/plans/parts';
 import { artIdFor, ExerciseArt, hasPhoto } from '@/features/workout/ExerciseArt';
 import { CLIPS, THUMBS, clipIdFor } from '@/features/workout/clips';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
@@ -34,7 +36,8 @@ function PlanClip({ source, thumb, playing }: { source: number; thumb?: number; 
 
 function PlayBar({ dark }: { dark?: boolean }) {
   const w = useSharedValue(0);
-  useEffect(() => { w.value = withRepeat(withTiming(1, { duration: 6000, easing: Easing.linear }), -1, false); return () => cancelAnimation(w); }, []);
+  const reduce = useReduce(); // Reduce Motion: the loop does not run
+  useEffect(() => { if (reduce) return; w.value = withRepeat(withTiming(1, { duration: 6000, easing: Easing.linear }), -1, false); return () => cancelAnimation(w); }, []);
   const a = useAnimatedStyle(() => ({ width: `${w.value * 100}%` }));
   return (
     <View style={{ position: 'absolute', left: 14, right: 14, bottom: 12, height: 4, borderRadius: radii.xs, backgroundColor: dark ? 'rgba(11,11,13,0.15)' : 'rgba(255,255,255,0.25)', overflow: 'hidden' }}>
@@ -64,7 +67,7 @@ export default function ExerciseDetail() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title={name} />
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_CLEAR + 4, paddingBottom: insets.bottom + 28, gap: 12 }}>
         <View style={{ height: artId || clipId ? 250 : 210, borderRadius: radii.xl, overflow: 'hidden', backgroundColor: clipId ? fixed.white : artId ? lightBg : undefined }}>
           {clipId ? <PlanClip source={CLIPS[clipId]} thumb={THUMBS[clipId]} playing={playing} /> : artId ? (
             <View pointerEvents="none" style={{ position: 'absolute', top: 44, left: 12, right: 12, bottom: 18 }}>
@@ -94,7 +97,8 @@ export default function ExerciseDetail() {
             <View style={{ flex: 1 }}><Txt v="label">Your plan</Txt><Txt v="mono" style={{ fontSize: fontSizes.md }}>{sub}</Txt></View>
           </Row>
         ) : null}
-        <View style={{ height: 96, borderRadius: radii.lg, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 16 }}>
+        <View style={{ height: 96, borderRadius: radii.lg, backgroundColor: c.cardLift, flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 16 }}>
+<CardEdge radius={radii.lg} />
           <Svg width={64} height={64} viewBox="0 0 64 64">
             <Rect x={4} y={4} width={56} height={56} rx={16} fill={c.surface2} />
             <Path d="M18 46V18h6v10h16V18h6v28h-6V34H24v12z" fill={c.muted} />

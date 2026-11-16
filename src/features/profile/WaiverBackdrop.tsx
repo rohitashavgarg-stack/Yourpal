@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import Svg, { Circle, Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
-import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 import { fixed } from '@/design-system/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -24,7 +25,7 @@ function Stripes({ width }: { width: number }) {
 
 // A tiny star that fades in and out.
 function Twinkle({ x, y, size, delay, color }: { x: number; y: number; size: number; delay: number; color: string }) {
-  const still = useReducedMotion();
+  const still = useReduce();
   const p = useSharedValue(0);
   useEffect(() => {
     if (still) { p.value = 0.5; return; }
@@ -39,21 +40,20 @@ const STARS = [
   { x: 0.06, y: 0.7, s: 4, d: 1300 }, { x: 0.8, y: 0.66, s: 4, d: 700 }, { x: 0.5, y: 0.07, s: 3, d: 1100 }, { x: 0.34, y: 0.3, s: 3, d: 1700 },
 ];
 
-// The page behind the signed screen: a navy page with soft blue glows, the vertical lines at the top, and a few stars that twinkle.
-export function WaiverBackdrop() {
+// The page behind the signed screen: a black page with a blue glow at the top (the bottom half stays black), the vertical lines at the top, and a few stars that twinkle.
+export function WaiverBackdrop({ stars = true }: { /** The twinkling dots. Off on the workout finish page. */ stars?: boolean }) {
   const { c } = useTheme();
-  const { width, height } = useWindowDimensions();
+  // The size of the screen it sits on, not of the browser window: on the web the phone is a frame inside a wide window, and a glow sized to the window floods the whole phone blue.
+  const [box, setBox] = useState<{ w: number; h: number } | null>(null);
+  const width = box?.w ?? 0;
+  const height = box?.h ?? 0;
   return (
-    <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: fixed.dark }}>
+    <View pointerEvents="none" onLayout={(e) => setBox({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height })} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: fixed.dark }}>
       <Svg width={width} height={height} style={{ position: 'absolute', top: 0, left: 0 }}>
         <Defs>
           <RadialGradient id="wsTop" cx="50%" cy="50%" r="50%">
             <Stop offset="0" stopColor={c.accent} stopOpacity={0.62} />
             <Stop offset="1" stopColor={c.accent} stopOpacity={0} />
-          </RadialGradient>
-          <RadialGradient id="wsLow" cx="50%" cy="50%" r="50%">
-            <Stop offset="0" stopColor="#6D5CF0" stopOpacity={0.32} />
-            <Stop offset="1" stopColor="#6D5CF0" stopOpacity={0} />
           </RadialGradient>
           <RadialGradient id="wsSide" cx="50%" cy="50%" r="50%">
             <Stop offset="0" stopColor={c.accent} stopOpacity={0.28} />
@@ -61,11 +61,10 @@ export function WaiverBackdrop() {
           </RadialGradient>
         </Defs>
         <Circle cx={width * 0.45} cy={-20} r={width * 0.95} fill="url(#wsTop)" />
-        <Circle cx={width * 0.5} cy={height * 0.72} r={width * 0.8} fill="url(#wsLow)" />
         <Circle cx={width * 1.02} cy={height * 0.28} r={width * 0.5} fill="url(#wsSide)" />
       </Svg>
       <Stripes width={width} />
-      {STARS.map((s, i) => <Twinkle key={i} x={s.x * width} y={s.y * height} size={s.s} delay={s.d} color="#CFCBFF" />)}
+      {stars && STARS.map((s, i) => <Twinkle key={i} x={s.x * width} y={s.y * height} size={s.s} delay={s.d} color={fixed.white} />)}
     </View>
   );
 }

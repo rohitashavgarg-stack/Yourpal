@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { ProgressiveBlur } from '@/components/Glass';
 import { ScrollView, TextInput, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import { useReduce } from '@/lib/motionSafe';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useLeaveIfPaused } from '@/lib/logGate';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,7 +19,7 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { FOOD, macroLine, RECENT, SCAN_PHOTO } from '@/features/plans/content';
 import { useDietActions } from '@/features/plans/dietActions';
-import { PageHeader } from '@/features/plans/parts';
+import { PageHeader, PAGE_HEADER_CLEAR } from '@/features/plans/parts';
 import { fmtClock, TimeSheet } from '@/features/plans/TimeSheet';
 import { allowedFor, dietItems, Food, setP, usePlans } from '@/features/plans/store';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
@@ -32,7 +34,8 @@ type ScanSt = 'idle' | 'busy' | 'done' | 'fail';
 
 function ScanBeam() {
   const y = useSharedValue(0);
-  useEffect(() => { y.value = withRepeat(withTiming(1, { duration: 800, easing: Easing.inOut(Easing.quad) }), -1, true); }, []);
+  const reduce = useReduce(); // Reduce Motion: the loop does not run
+  useEffect(() => { if (reduce) return; y.value = withRepeat(withTiming(1, { duration: 800, easing: Easing.inOut(Easing.quad) }), -1, true); }, []);
   const a = useAnimatedStyle(() => ({ top: `${8 + y.value * 80}%` }));
   return <Animated.View style={[{ position: 'absolute', left: '12%', right: '12%', height: 2, backgroundColor: '#5CC2E6', shadowColor: '#5CC2E6', shadowOpacity: 1, shadowRadius: 8, shadowOffset: { width: 0, height: 0 } }, a]} />;
 }
@@ -168,9 +171,9 @@ export default function LogFood() {
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
       <PageHeader title={replaceIt ? `Swap ${replaceIt.n.toLowerCase()}` : 'What did you eat?'} icon="close" />
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: 16, gap: 12 }}>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: insets.top + PAGE_HEADER_CLEAR + 4, paddingBottom: insets.bottom + 170, gap: 12 }}>
         {!replaceIt && !forEdit && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6 }}>
+          <ScrollView showsVerticalScrollIndicator={false} horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6 }}>
             {MEALS.map((m) => <Pill key={m.id} label={m.n} on={meal === m.id} onPress={() => setMeal(m.id)} />)}
           </ScrollView>
         )}
@@ -298,7 +301,8 @@ export default function LogFood() {
         )}
       </ScrollView>
       {/* the log button stays in view at the bottom while the list scrolls */}
-      <View style={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 16), backgroundColor: c.bg, borderTopWidth: 1, borderTopColor: c.line }}>
+      <ProgressiveBlur edge="bottom" height={Math.max(insets.bottom, 16) + 150} />
+      <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 16) + 6 }}>
         {!!cur && !forEdit && !replaceIt && (() => {
           const shown = ateAt ?? mealLog(d, meal).at ?? d.min;
           return (

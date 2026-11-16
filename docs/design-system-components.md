@@ -38,6 +38,7 @@ Every component in `src/design-system/`, with its variants and states. Each has 
 | [MuscleBody](../src/design-system/docs/MuscleBody.md) | `primitives/MuscleBody.tsx` | A plain dark front or back view of the body with muscle groups lit in the accent blue | `side`, `lit`, `width` |
 | [MuscleThumb](../src/design-system/docs/MuscleThumb.md) | `primitives/MuscleThumb.tsx` | A small dark square with the part of the body for one muscle group lit, at the start of a muscle row | `muscle`, `size` |
 | [EffortSlider](../src/design-system/docs/EffortSlider.md) | `primitives/EffortSlider.tsx` | A drag slider from easy (blue) to max (red) with ticks and a round white handle | `value`, `onChange`, `label` |
+| [ChatBar](../src/design-system/docs/ChatBar.md) | `patterns/ChatBar.tsx` | The glass message bar of a chat: a glass button on the left, a glass pill with the field, a small camera and a glass mic or send | `value`, `onChangeText`, `leftIcon`, `onLeft`, `onCamera`, `onMic`, `onSend` |
 | [Beat](../src/design-system/docs/Beat.md) | `primitives/Beat.tsx` | A heartbeat pulse for a live value | children: any icon |
 | [HeartIcon](../src/design-system/docs/HeartIcon.md) | `primitives/HeartIcon.tsx` | A solid heart icon | `size`, `color` |
 | [Brand](../src/design-system/docs/Brand.md) | `primitives/Brand.tsx` | The gym logo mark, the premium badge and the person avatar | GymLogoMark `size`; PremiumBadge `size`; PersonAvatar who me, coach; `ring`, `square`, `photo` |

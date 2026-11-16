@@ -37,7 +37,7 @@ function Floating({ children }: { children: React.ReactNode }) {
   const insets = useSafeAreaInsets();
   const hidden = useNavHidden();
   const navBottom = Math.max(insets.bottom - 6, 14);
-  const a = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 74 }] }));
+  const a = useAnimatedStyle(() => ({ transform: [{ translateY: (hidden?.value ?? 0) * 20 }] }));
   return (
     <FadeIn style={[{ position: 'absolute', left: 16, right: 16, bottom: navBottom + 74, zIndex: 4 }, a]}>
       {children}
@@ -116,7 +116,8 @@ export function CheckInBar() {
   const label = `${title}${chip ? ` ${chip}` : ""}. ${sub}`;
   return (
     <Floating>
-      <View accessibilityRole="summary" style={[BAR, { backgroundColor: bg }, border && { borderWidth: 1, borderColor: c.line }]}>
+      <View accessibilityRole="summary" style={[BAR, { backgroundColor: bg }, border && { borderWidth: 1, borderColor: fixed.white + '2E' }]}>
+        <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radii.xl, backgroundColor: fixed.white + '14' }} />
         <Pressy accessibilityRole={open ? 'button' : undefined} accessibilityLabel={label} disabled={!open} onPress={open ?? undefined} scaleTo={0.98} haptics={false} style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 10, height: 52 }}>
           <IconBadge size={32} radius={radii.md} bg={icBg}>{icon}</IconBadge>
           <View style={{ flex: 1, minWidth: 0 }}>

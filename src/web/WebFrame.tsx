@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/refs -- the panel passes its handlers (which use a ref for the note timer) straight to its buttons */
 import React, { useEffect, useState , useRef} from 'react';
+import { PERSONAL_LABELS, personalStore } from '@/features/today/personalise';
 import { useShell } from '@/features/shell/state';
 import { router } from 'expo-router';
 import { workoutUiStore } from '@/features/workout/ui';
@@ -181,6 +182,8 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     { label: 'Greeting line', options: GREETING_STATES as unknown as string[], value: greet.state, onPick: (v: string) => greetStore.set({ state: v as GreetingState }) },
     // Plans: assigned by the coach, or not assigned (the member only tracks weight, water and Health or wearable data).
     { label: 'Plans', options: ['Assigned', 'Not assigned'], value: plan.assigned ? 'Assigned' : 'Not assigned', onPick: (v: string) => { planStore.set({ assigned: v === 'Assigned' }); setPlans({ noPlan: v !== 'Assigned' }); } },
+    // The gym waiver: signed (the card is gone from Today) or not signed (the Sign your gym waiver card shows).
+    { label: 'Waiver', options: ['Signed', 'Not signed'], value: state.profile.waiver ? 'Signed' : 'Not signed', onPick: (v: string) => setProfile({ waiver: v === 'Signed' ? { signedAt: '10 Nov 2026', path: 'M8 38 C 22 4, 40 66, 56 30 S 88 12, 112 36', w: 120, h: 60 } : undefined }) },
     // Comeback: how long the member has been away.
     { label: 'Days away (Comeback)', options: ['2 days', '4 days', '8 days', '15 days'], value: d.todayVariant === 'Comeback' ? `${d.awayDays} days` : '', onPick: (v: string) => { sit.pick('Comeback'); set({ awayDays: parseInt(v, 10) }); } },
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },
@@ -260,6 +263,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       {dd('Membership')}
       {dd('Goal type')}
       {dd('Plans')}
+      {d.hasGym && dd('Waiver')}
       {dd('Meals today')}
       {dd('Greeting line')}
       {dd('Workout time')}
@@ -267,6 +271,15 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
         <SwitchChip label="Health" on={d.hc} onPress={() => row('Health (steps)').onPick(d.hc ? 'Not connected' : 'Connected')} />
         <SwitchChip label="Wearable" on={d.wearable} onPress={() => row('Wearable (heart rate, sleep, energy)').onPick(d.wearable ? 'No wearable' : 'Has a wearable')} />
         <SwitchChip label="Dark" on={isDark} onPress={() => row('Theme').onPick(isDark ? 'Light' : 'Dark')} />
+      </View>
+    </PanelCard>
+  );
+  // Personal Today features: each one can be switched on and off, to show Today with and without it.
+  const pers = personalStore.use();
+  const personalCard = (
+    <PanelCard icon={Flag} title="Personalise" pill={{ label: `${PERSONAL_LABELS.filter(([k]) => pers[k]).length} of ${PERSONAL_LABELS.length} on` }}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
+        {PERSONAL_LABELS.map(([k, l]) => <View key={k} style={{ width: '48.5%' }}><SwitchChip label={l} on={pers[k]} onPress={() => personalStore.set({ [k]: !pers[k] })} /></View>)}
       </View>
     </PanelCard>
   );
@@ -299,7 +312,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     </PanelCard>
   );
   // One column of four short cards (it was three columns of long ones).
-  const columnsOf: React.ReactNode[][] = [[timeCard, situationCard, memberCard, reminderCard, goCard]];
+  const columnsOf: React.ReactNode[][] = [[timeCard, situationCard, memberCard, personalCard, reminderCard, goCard]];
   return (
     <View style={{ gap: 8 }}>
       <View style={{ backgroundColor: fixed.white, borderRadius: radii.md, borderWidth: 1, borderColor: P.line, paddingVertical: 8, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -329,7 +342,7 @@ function SidePanel({ height, phoneW }: { height: number; phoneW: number }) {
   const width = Math.min(room, 310);
   return (
     <View style={{ width, maxHeight: Math.max(height, win.height - 48), flexGrow: 0, flexShrink: 0 }}>
-      <ScrollView accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: 20, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 8 }}><PanelBody /></ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: radii.block, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 8 }}><PanelBody /></ScrollView>
     </View>
   );
 }
