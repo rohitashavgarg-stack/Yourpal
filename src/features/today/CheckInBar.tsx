@@ -1,6 +1,7 @@
 import React from 'react';
 import { useStartWorkout } from '@/features/workout/StartSheet';
 import { View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useAnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -42,6 +43,16 @@ function Floating({ children }: { children: React.ReactNode }) {
     <FadeIn style={[{ position: 'absolute', left: 16, right: 16, bottom: navBottom + 74, zIndex: 4 }, a]}>
       {children}
     </FadeIn>
+  );
+}
+
+// A very light white glow inside the bar, from the top edge and the bottom edge (an inner glow, clipped to the bar's corners).
+function InnerGlow() {
+  return (
+    <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radii.xl, overflow: 'hidden' }}>
+      <LinearGradient colors={[fixed.white + '24', fixed.white + '00']} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 18 }} />
+      <LinearGradient colors={[fixed.white + '00', fixed.white + '24']} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 18 }} />
+    </View>
   );
 }
 
@@ -117,6 +128,7 @@ export function CheckInBar() {
   return (
     <Floating>
       <View accessibilityRole="summary" style={[BAR, { backgroundColor: bg }, border && { borderWidth: 1, borderColor: c.line }]}>
+        <InnerGlow />
         <Pressy accessibilityRole={open ? 'button' : undefined} accessibilityLabel={label} disabled={!open} onPress={open ?? undefined} scaleTo={0.98} haptics={false} style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 10, height: 52 }}>
           <IconBadge size={32} radius={radii.md} bg={icBg}>{icon}</IconBadge>
           <View style={{ flex: 1, minWidth: 0 }}>
