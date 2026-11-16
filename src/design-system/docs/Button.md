@@ -34,7 +34,7 @@ Every action in the app. One `Button` with a kind (colour) and a size (shape), a
 |---|---|---|---|
 | `label` | string | required | The visible text, also the spoken label |
 | `onPress` | () => void | none | |
-| `kind` | `'primary' \| 'accent' \| 'secondary' \| 'ghost' \| 'white' \| 'outline' \| 'glass' \| 'dashed' \| 'line' \| 'quiet' \| 'soft' \| 'whiteLine' \| 'surface'` | `primary` | Colour, see below |
+| `kind` | `'primary' \| 'accent' \| 'secondary' \| 'ghost' \| 'white' \| 'outline' \| 'glass' \| 'dashed' \| 'line' \| 'quiet' \| 'soft' \| 'whiteLine' \| 'surface' \| 'grey'` | `primary` | Colour, see below |
 | `size` | `'large' \| 'medium' \| 'small' \| 'tight' \| 'compact' \| 'chip' \| 'xs'` | `large` | Shape, see below |
 | `small` | boolean | false | Old way to ask for `size="small"` (ignored when `size` is set) |
 | `height` | number | 36 | `compact` only: its height; the corner is half of it |
@@ -85,6 +85,7 @@ Every action in the app. One `Button` with a kind (colour) and a size (shape), a
 | soft | `accentSoft` | none | accent text | "This week", "About: ..." |
 | whiteLine | white | 1 px `fixed.lineOnWhite` (#C9D1DD) | dark | buttons on the white workout clip stage ("Finish", "Hide") |
 | surface | `surface` | none | ink | a button on a soft surface (Profile "Edit") |
+| grey | `surface3` | none | ink | a small button inside a card row, lighter than secondary (My details Change, Add) |
 | glassPrimary | transparent, glass tinted with the ink colour at 92% (white in dark mode, near-black in light) | none | the background colour | the same floating glass as glassAccent, in the primary colours: "Save meal" in the meal log sheet |
 | glassAccent | transparent, blue glass (`GlassBackdrop` tinted with `c.accent` at 92%) | none | white | the one main action that floats over scrolling content: "Start workout" on Plans. Real iOS 26 glass on a phone that has it, blurred blue glass elsewhere. Not for buttons inside a solid card |
 
