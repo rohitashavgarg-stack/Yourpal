@@ -4,7 +4,7 @@
   "screen": "Gym",
   "group": "Routes",
   "status": "done",
-  "hand": 9,
+  "hand": 11,
   "files": [
    "app/(tabs)/gym.tsx"
   ]
@@ -14,10 +14,11 @@
   "screen": "Today",
   "group": "Routes",
   "status": "not started",
-  "hand": 6,
+  "hand": 7,
   "files": [
    "app/(tabs)/index.tsx",
    "features/today/WorkoutCard.tsx",
+   "features/today/OtherWorkouts.tsx",
    "features/today/WeekCard.tsx",
    "features/today/timeline.ts",
    "features/today/ForYou.tsx",
@@ -42,12 +43,11 @@
   "screen": "Plans",
   "group": "Routes",
   "status": "not started",
-  "hand": 10,
+  "hand": 9,
   "files": [
    "app/(tabs)/plans.tsx",
-   "features/plans/WorkoutPlan.tsx",
    "features/plans/DietPlan.tsx",
-   "features/plans/LoggedDay.tsx",
+   "features/plans/DayTimeline.tsx",
    "features/plans/QtySheet.tsx",
    "features/plans/FoodActionsSheet.tsx",
    "features/plans/mealTime.ts"
@@ -133,9 +133,10 @@
   "screen": "Change goal",
   "group": "Routes",
   "status": "not started",
-  "hand": 0,
+  "hand": 2,
   "files": [
-   "app/goal.tsx"
+   "app/goal.tsx",
+   "features/shell/goals.ts"
   ]
  },
  {
@@ -197,7 +198,7 @@
   "screen": "/gym/membership-detail",
   "group": "Routes",
   "status": "not started",
-  "hand": 3,
+  "hand": 2,
   "files": [
    "app/gym/membership-detail.tsx"
   ]
@@ -207,7 +208,7 @@
   "screen": "Membership",
   "group": "Routes",
   "status": "not started",
-  "hand": 3,
+  "hand": 4,
   "files": [
    "app/gym/membership.tsx"
   ]
@@ -223,6 +224,26 @@
   ]
  },
  {
+  "id": "route:/gym/pt-pack",
+  "screen": "/gym/pt-pack",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/gym/pt-pack.tsx"
+  ]
+ },
+ {
+  "id": "route:/gym/pt-packs",
+  "screen": "/gym/pt-packs",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/gym/pt-packs.tsx"
+  ]
+ },
+ {
   "id": "route:/gym/pt",
   "screen": "PT package",
   "group": "Routes",
@@ -233,23 +254,15 @@
   ]
  },
  {
-  "id": "route:/gym/session",
-  "screen": "/gym/session",
-  "group": "Routes",
-  "status": "not started",
-  "hand": 5,
-  "files": [
-   "app/gym/session.tsx"
-  ]
- },
- {
   "id": "route:/gym/sessions",
   "screen": "/gym/sessions",
   "group": "Routes",
   "status": "not started",
-  "hand": 1,
+  "hand": 2,
   "files": [
-   "app/gym/sessions.tsx"
+   "app/gym/sessions.tsx",
+   "features/gym/SessionSheet.tsx",
+   "features/gym/SessionBits.tsx"
   ]
  },
  {
@@ -409,6 +422,16 @@
   ]
  },
  {
+  "id": "route:/plans/workout",
+  "screen": "/plans/workout",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/plans/workout.tsx"
+  ]
+ },
+ {
   "id": "route:/profile/appearance",
   "screen": "Appearance",
   "group": "Routes",
@@ -474,7 +497,7 @@
   "screen": "Profile",
   "group": "Routes",
   "status": "not started",
-  "hand": 4,
+  "hand": 5,
   "files": [
    "app/profile/index.tsx",
    "features/shell/sheets.tsx"
@@ -940,6 +963,26 @@
   "hand": 0,
   "files": [
    "features/goalv2/FinishBy.tsx"
+  ]
+ },
+ {
+  "id": "sheet:DeclinePtSheet",
+  "screen": "DeclinePtSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/gym/PtInviteSheet.tsx"
+  ]
+ },
+ {
+  "id": "sheet:SessionSheet",
+  "screen": "SessionSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "features/gym/SessionSheet.tsx"
   ]
  },
  {
@@ -1613,6 +1656,16 @@
   ]
  },
  {
+  "id": "shared:features/gym/PtInviteSheet.tsx",
+  "screen": "features/gym/PtInviteSheet.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/gym/PtInviteSheet.tsx"
+  ]
+ },
+ {
   "id": "shared:components/FloatingTabBar.tsx",
   "screen": "components/FloatingTabBar.tsx",
   "group": "Shared components and features",
@@ -1713,6 +1766,16 @@
   ]
  },
  {
+  "id": "shared:features/plans/WorkoutPlan.tsx",
+  "screen": "features/plans/WorkoutPlan.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 4,
+  "files": [
+   "features/plans/WorkoutPlan.tsx"
+  ]
+ },
+ {
   "id": "shared:features/plans/Sheets.tsx",
   "screen": "features/plans/Sheets.tsx",
   "group": "Shared components and features",
@@ -1730,6 +1793,16 @@
   "hand": 0,
   "files": [
    "features/plans/LogPastWorkoutSheet.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/plans/LoggedDay.tsx",
+  "screen": "features/plans/LoggedDay.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "features/plans/LoggedDay.tsx"
   ]
  },
  {
@@ -1763,16 +1836,6 @@
   ]
  },
  {
-  "id": "shared:features/goalv2/FinishBy.tsx",
-  "screen": "features/goalv2/FinishBy.tsx",
-  "group": "Shared components and features",
-  "status": "not started",
-  "hand": 0,
-  "files": [
-   "features/goalv2/FinishBy.tsx"
-  ]
- },
- {
   "id": "shared:features/body/BodyLog.tsx",
   "screen": "features/body/BodyLog.tsx",
   "group": "Shared components and features",
@@ -1780,6 +1843,16 @@
   "hand": 2,
   "files": [
    "features/body/BodyLog.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/goalv2/FinishBy.tsx",
+  "screen": "features/goalv2/FinishBy.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/goalv2/FinishBy.tsx"
   ]
  },
  {

@@ -1,5 +1,8 @@
 # Design changelog (generated)
 
+- 2026-11-17 `a86c838` PT packages with numbered session dots, invitations and the session sheet, Transferred tag, Lifts and Measurements trend pages with pills, primary goal chooser, Programme card on Profile, Pill icon option, copy and spacing fixes (screens, library, features)
+- 2026-11-17 `8ce3313` Two workouts a day on Today and Plans, PT packs with numbered session dots and session sheet, Transferred tag on memberships, free drag on card pages, copy and spacing fixes (docs, screens, library, tokens, features)
+
 - 2026-11-16 `b331bb0` Design handoff: refresh Storybook and the handoff zip, coverage audit updated (docs)
 - 2026-11-16 `63e37c3` Nav bar: glow removed, back to how it was (other)
 - 2026-11-16 `fba1004` Nav bar very light inner glow; Training and diet opens read-only with Edit and Save changes; lighter raised panel for the week count on Streaks (screens, library)

@@ -1,5 +1,5 @@
 {
- "lastCommit": "b331bb0f4d29ae05eaf2b63245cb9e70b92bb7c3",
+ "lastCommit": "b25d1de64d7247b1dd0d5162c2bc7e62d163e2dd",
  "components": [
   "AmountStepper",
   "Button, IconButton",
@@ -69,6 +69,7 @@
   "whiteLine",
   "surface",
   "grey",
+  "glassClear",
   "glassAccent",
   "glassPrimary",
   "warn"
