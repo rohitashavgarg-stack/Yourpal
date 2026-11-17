@@ -49,7 +49,7 @@ export default function Login() {
   // A new member (nobody has this number yet) only sees the join-code screen, then onboarding. An existing member sees their programmes and skips onboarding.
   const isNew = useSituation().current === 'New member'; // the New member choice in the demo panel
   // Past the join code step (a code accepted, or "I don't have one"): choose where to start, or go straight in.
-  const afterJoin = () => { if (multi && shell.sc.pick === 'Shown') setStep('programme'); else finish(); };
+  const afterJoin = () => { if (multi && (!isNew || shell.sc.pick === 'Shown')) setStep('programme'); else finish(); };
   const [joinCode, setJoinCode] = useState('');
   // Why a code was turned down (null: nothing wrong). Sample codes: GOLD21 works, OLD19 has expired, USED77 is already used.
   const [joinBad, setJoinBad] = useState<string | null>(null);
@@ -261,6 +261,7 @@ export default function Login() {
               </FadeIn>
             ))}
             <View style={{ flexGrow: 1 }} />
+            <Button kind="secondary" label="Join a programme" onPress={() => setStep('join')} />
             <Txt v="caption" style={{ textAlign: 'center' }}>Each programme keeps its own plan, progress and data.</Txt>
           </FadeIn>
         )}
