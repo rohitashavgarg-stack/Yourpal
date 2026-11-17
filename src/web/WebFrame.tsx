@@ -23,6 +23,7 @@ import { Activity, ChartLine, Dumbbell, Flag, Heart, House, LogIn, MapPin, Messa
 import { ActionChip, Choice, Dropdown, PanelCard, SwitchChip, P } from '@/web/ControlParts';
 import { SITUATIONS, SITUATION_HINT, Situation, useSituation } from '@/lib/situations';
 import { MISSED_AFTER, missedWkStore } from '@/features/today/WorkoutCard';
+import { ptInviteStore } from '@/features/gym/ptInvite';
 import { otherWkStore } from '@/features/today/OtherWorkouts';
 import { timeMin } from '@/features/plans/store';
 import { planStore } from '@/lib/planState';
@@ -219,6 +220,8 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     { label: 'Waiver', options: ['Signed', 'Not signed'], value: state.profile.waiver ? 'Signed' : 'Not signed', onPick: (v: string) => setProfile({ waiver: v === 'Signed' ? { signedAt: '10 Nov 2026', path: 'M8 38 C 22 4, 40 66, 56 30 S 88 12, 112 36', w: 120, h: 60 } : undefined }) },
     // Comeback: how long the member has been away.
     { label: 'Days away (Comeback)', options: ['2 days', '4 days', '8 days', '15 days'], value: d.todayVariant === 'Comeback' ? `${d.awayDays} days` : '', onPick: (v: string) => { sit.pick('Comeback'); set({ awayDays: parseInt(v, 10) }); } },
+    // A PT package invitation from Coach Vikram: waiting for your answer, accepted (starts when the current package ends) or declined.
+    { label: 'PT invitation', options: ['None', 'Waiting', 'Accepted', 'Declined'], value: ({ none: 'None', waiting: 'Waiting', accepted: 'Accepted', declined: 'Declined' } as Record<string, string>)[ptInviteStore.get().state], onPick: (v: string) => ptInviteStore.set({ state: v.toLowerCase() as any, reason: '' }) },
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },
     { label: 'Theme', options: ['Light', 'Dark'], value: isDark ? 'Dark' : 'Light', onPick: (v: string) => setSc({ theme: v as any }) },
     { label: 'Steps tracker design', options: STEPS_DESIGNS as string[], value: steps.design, onPick: (v: string) => stepsStore.set({ design: v as StepsDesign }) },
@@ -293,6 +296,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
   const memberCard = (
     <PanelCard icon={UserRound} title="Member" pill={{ label: state.sc.member }}>
       {seg('Member type')}
+      {state.sc.member === 'PT member' && dd('PT invitation')}
       {dd('Membership')}
       {dd('Goal type')}
       {dd('Plans')}

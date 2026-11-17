@@ -17,7 +17,10 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { CardTitle, cardShadow, GrowBar, PCard } from '@/features/progress/parts';
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
-import { useMemberships, usePtPackages } from '@/features/gym/memberships';
+import { ptKind, useMemberships, usePtPackages } from '@/features/gym/memberships';
+import { DeclinePtSheet, PtInviteFacts, useAcceptPtInvite } from '@/features/gym/PtInviteSheet';
+import { useOverlay } from '@/components/Overlay';
+import { PT_INVITE } from '@/features/gym/ptInvite';
 import { NumKey, compare, fmtAt, useAssessments } from '@/features/gym/assessmentData';
 import { TimeBar } from '@/app/gym/membership';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
@@ -228,7 +231,11 @@ function ChatCard() {
 function PTCard({ isPT }: { isPT: boolean }) {
   const { c } = useTheme();
   const { d } = useDomain();
-  const packs = usePtPackages().filter((x) => !x.past);
+  const every = usePtPackages();
+  const packs = every.filter((x) => ptKind(x) === 'active');
+  const invited = every.some((x) => ptKind(x) === 'invited'); // the trainer invited the member to another package
+  const { openSheet } = useOverlay();
+  const acceptInvite = useAcceptPtInvite();
   const grow = useGrowOpen();
   const head = (title: string, sub: string, right?: React.ReactNode) => (
     <Row style={{ gap: 14 }}>
@@ -249,12 +256,27 @@ function PTCard({ isPT }: { isPT: boolean }) {
       </View>
     );
   }
+  // An invitation and nothing active: the card is the invitation, with its details and Reject and Accept (no View packages).
+  if (invited && packs.length === 0) {
+    return (
+      <View ref={grow.ref} collapsable={false} onTouchStart={grow.prime} onPointerDown={grow.prime} style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+        <CardEdge radius={radii.xl} />
+        {head('PT package invitation', `Invited by ${PT_INVITE.trainer}`)}
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24, color: onDark.text }}>{PT_INVITE.name}</Txt>
+        <PtInviteFacts onDark />
+        <Row style={{ gap: 10 }}>
+          <View style={{ flex: 1 }}><Button kind="glassClear" label="Reject" onPress={() => openSheet(<DeclinePtSheet />, { label: 'Decline invitation' })} /></View>
+          <View style={{ flex: 1.4 }}><Button kind="white" label="Accept" onPress={acceptInvite} /></View>
+        </Row>
+      </View>
+    );
+  }
   // Several packs: the sessions left across every active pack, with one progress bar.
   if (packs.length > 1) {
     const left = packs.reduce((n, x) => n + x.left, 0);
     const total = packs.reduce((n, x) => n + x.total, 0);
     return (
-      <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+      <View ref={grow.ref} collapsable={false} onTouchStart={grow.prime} onPointerDown={grow.prime} style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
         <CardEdge radius={radii.xl} />
         {head('PT sessions', `${packs.length} active PT packages`)}
         <View style={{ gap: 10 }}>
@@ -266,14 +288,24 @@ function PTCard({ isPT }: { isPT: boolean }) {
     );
   }
   return (
-    <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+    <View ref={grow.ref} collapsable={false} onTouchStart={grow.prime} onPointerDown={grow.prime} style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
       <CardEdge radius={radii.xl} />
       {head('Your PT package', 'With Coach Vikram', <Chip label="Renews 30 Oct" onDark />)}
       <View style={{ gap: 10 }}>
         <Txt accessibilityLabel={`${d.ptLeft} of ${PT_TOTAL} sessions left`} style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39, color: onDark.text }}>{d.ptLeft}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: onDark.muted }}> of {PT_TOTAL} sessions left</Txt></Txt>
         <GrowBar pct={Math.round((d.ptLeft / PT_TOTAL) * 100)} color={c.accent} track="rgba(255,255,255,0.14)" />
       </View>
-      <Button kind="white" label="View sessions" onPress={() => router.push('/gym/sessions')} />
+      {invited ? (
+        <Pressy accessibilityRole="button" accessibilityLabel={`You are invited to ${PT_INVITE.name}, ${PT_INVITE.sessions} sessions. See it`} onPress={() => router.push('/gym/pt-packs')} scaleTo={0.98}
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: radii.lg, padding: 14 }}>
+          <PersonAvatar who="coach" size={36} />
+          <View style={{ flex: 1 }}>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: onDark.text }}>{`You are invited to ${PT_INVITE.name}`}</Txt>
+            <Txt v="caption" color={onDark.muted}>{`${PT_INVITE.sessions} sessions from ${PT_INVITE.trainer}`}</Txt>
+          </View>
+        </Pressy>
+      ) : null}
+      <Button kind="white" label="View packages" onPress={() => router.push('/gym/pt-packs')} />
     </View>
   );
 }

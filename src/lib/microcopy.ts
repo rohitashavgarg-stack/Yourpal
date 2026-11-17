@@ -102,7 +102,7 @@ export const updateCopy = {
   }),
   weight: (first: string, days: number) => ({ title: `Time to weigh in${nm(first)}`, body: `It has been ${days} days since your last weigh-in. A quick check keeps your goal on track.` }),
   steps: (first: string) => ({ title: `A short walk${nm(first)}?`, body: 'Your steps are behind today. Ten minutes outside gets you close.' }),
-  pt: { title: 'Did your session happen?', body: 'Coach Vikram marked Tue 23 Sep, 6 to 7 pm as done. Confirm it, or it confirms itself on Fri 26 Sep.' },
+  pt: { title: 'Did your session happen?', body: 'Coach Vikram marked Tue 23 Sep as done.' },
   membership: { title: 'Your membership ends in 12 days', body: 'It expires on 6 Oct. Renew at Wulf Fitness reception to keep going.' },
   plan: { title: 'Coach Vikram updated your plan', body: 'Leg workout has a few changes: lunges added, leg extension removed.' },
   reply: { title: 'Coach Vikram replied to you', body: '“Keep your back straight on rows.”' },

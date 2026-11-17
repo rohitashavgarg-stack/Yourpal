@@ -27,7 +27,7 @@ const FROM_BOTTOM = ['gym/payments', 'log-weight', 'log-height', 'food', 'food-l
 const NO_TRANSITION = ['index', 'welcome', '(tabs)', 'onboarding'];
 // Pages opened from inside a card page (one membership, one assessment...). They are normal pages: a back arrow, and they slide in from the right and leave to the right,
 // whatever the screen under them is. They are drawn over it (a transparent presentation), so the page under a detail page never goes blank or looks like it is closing.
-const DETAIL_PAGES = ['gym/membership-detail', 'gym/assessment', 'gym/sessions'];
+const DETAIL_PAGES = ['gym/membership-detail', 'gym/assessment', 'gym/sessions', 'gym/pt-pack'];
 // The pages a Progress card opens. They grow out of the card (and drag away) on their own, drawn over the page underneath, so the stack adds no slide and no background.
 // Web only: the stack drops a popped screen at once, so the slide-out is played first, then the real back runs.
 // True for a moment after a back: a screen that mounts then is being revealed, not pushed, so it must not slide in.

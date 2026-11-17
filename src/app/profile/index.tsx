@@ -20,8 +20,9 @@ import { useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { fadeOut } from '@/theme/motion';
-import { LineRow, ListCard, Note, SubPage } from '@/features/shell/parts';
+import { LineRow, ListCard, Note, ProgLogo, SubPage } from '@/features/shell/parts';
 import { resetShell, useShell } from '@/features/shell/state';
+import { ProgrammeSwitcherSheet } from '@/features/shell/Switcher';
 import { goalSummary } from '@/features/shell/goal';
 import { LogoutSheet } from '@/features/shell/sheets';
 import { openLegal } from '@/features/legal/links';
@@ -38,7 +39,7 @@ export default function Profile() {
   const { c } = useTheme();
   const { state, setSc } = useStore();
   const { d } = useDomain();
-  const { s, set } = useShell();
+  const { s, set, current, multi } = useShell();
   const { openSheet, toast } = useOverlay();
   const p = state.profile;
 
@@ -85,6 +86,19 @@ export default function Profile() {
           </View>
         </Row>
       </View>
+
+      {d.hasGym && (
+        <Pressy accessibilityRole="button" accessibilityLabel={`Programme: ${current.short}${multi ? '. Switch' : ''}`} onPress={() => openSheet(<ProgrammeSwitcherSheet />, { label: 'Switch programme' })} scaleTo={0.985}
+          style={{ minHeight: 96, borderRadius: radii.xl, backgroundColor: c.cardLift, paddingHorizontal: 18, paddingVertical: 16, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+          <CardEdge radius={radii.xl} />
+          <ProgLogo p={current} size={60} />
+          <View style={{ flex: 1, gap: 2 }}>
+            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Programme</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 28, letterSpacing: -0.4 }} numberOfLines={1}>{current.short}</Txt>
+          </View>
+          {multi ? <Row style={{ gap: 6 }}><Txt muted style={{ fontSize: fontSizes.md }}>Switch</Txt><ChevronRight size={18} color={c.muted} /></Row> : null}
+        </Pressy>
+      )}
 
       {s.deleting && (
         <FadeIn exiting={fadeOut()} style={{ paddingVertical: 14, paddingHorizontal: 18, borderRadius: radii.lg, backgroundColor: c.warnSoft, flexDirection: 'row', alignItems: 'center', gap: 10 }}>

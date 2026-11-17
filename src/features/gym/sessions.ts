@@ -15,16 +15,18 @@ const PULL = [{ n: 'Lat pulldown', d: '4 sets of 10 at 45 kg' }, { n: 'Seated ro
 
 // st: a session that is not simply confirmed (to come, skipped). The rest are confirmed.
 const BASE: (Omit<Session, 'status' | 'rating'> & { st?: SessionStatus })[] = [
-  { id: 's28', pack: 'pt2', st: 'upcoming', day: 'Thu 2', long: 'Thursday 2 Oct', time: '6 to 7 pm', focus: 'Pull day', exercises: [] },
   { id: 's30', pack: 'pt1', day: 'Tue 30', long: 'Tuesday 30 Sep', time: '6 to 7 pm', focus: 'Pull day', exercises: [] },
   { id: 's25', pack: 'pt2', day: 'Thu 25', long: 'Thursday 25 Sep', time: '6 to 7 pm', focus: 'Push day', exercises: [] },
   { id: 's23', pack: 'pt1', day: 'Tue 23', long: 'Tuesday 23 Sep', time: '6 to 7 pm', focus: 'Legs', note: 'Good depth on the squats. Add 5 kg next week if it stays this smooth.', exercises: LEGS },
   { id: 's22', pack: 'pt1', day: 'Mon 22', long: 'Monday 22 Sep', time: '7 to 8 am', focus: 'Push day', note: 'Strong bench today. Keep your elbows tucked on the way down.', exercises: PUSH },
+  { id: 'p13', pack: 'pt2', day: 'Sat 20', long: 'Saturday 20 Sep', time: '6 to 7 pm', focus: 'Pull day', exercises: [] },
+  { id: 'p14', pack: 'pt2', day: 'Thu 18', long: 'Thursday 18 Sep', time: '6 to 7 pm', focus: 'Legs', exercises: [] },
   { id: 's16', pack: 'pt1', day: 'Tue 16', long: 'Tuesday 16 Sep', time: '6 to 7 pm', focus: 'Pull day', note: 'Slow the lowering phase on the pulldown.', exercises: PULL },
   { id: 's14', pack: 'pt2', day: 'Sun 14', long: 'Sunday 14 Sep', time: '6 to 7 pm', focus: 'Legs', note: 'Solid session. Add a set to the leg press next time.', exercises: [] },
   { id: 's11', pack: 'pt1', day: 'Thu 11', long: 'Thursday 11 Sep', time: '6 to 7 pm', focus: 'Legs', note: 'First week back. Keep the weights light.', exercises: LEGS },
   { id: 's08', pack: 'pt2', day: 'Mon 8', long: 'Monday 8 Sep', time: '6 to 7 pm', focus: 'Push day', note: 'Good first session. We will build from here.', exercises: [] },
   { id: 's05', pack: 'pt1', day: 'Fri 5', long: 'Friday 5 Sep', time: '6 to 7 pm', focus: 'Pull day', note: 'Good first session of the pack. Keep the pulls controlled.', exercises: [] },
+  { id: 'p15', pack: 'pt2', day: 'Tue 2', long: 'Tuesday 2 Sep', time: '6 to 7 pm', focus: 'Push day', exercises: [] },
   { id: 'p01', pack: 'pt5', day: 'Fri 29', long: 'Friday 29 Aug', time: '6 to 7 pm', focus: 'Legs', exercises: [] },
   { id: 'p02', pack: 'pt5', day: 'Fri 22', long: 'Friday 22 Aug', time: '6 to 7 pm', focus: 'Push day', exercises: [] },
   { id: 'p03', pack: 'pt5', day: 'Fri 15', long: 'Friday 15 Aug', time: '6 to 7 pm', focus: 'Pull day', exercises: [] },

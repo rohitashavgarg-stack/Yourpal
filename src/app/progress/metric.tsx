@@ -1,9 +1,10 @@
 import React from 'react';
 import { HEALTH_NAME } from '@/lib/health';
+import { BicepsFlexed, Ruler, Shirt } from '@/lib/icons';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Button, Txt } from '@/components/ui';
+import { Button, Pill, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { StepsSheet } from '@/features/today/StepsCards';
 import { WaterSheet } from '@/features/today/Trackers';
@@ -18,7 +19,7 @@ import { METRIC_TITLES, MetricKey } from '@/features/progress/data';
 import { cardShadow, CornerGlow, Hint, ListCard, SubPage } from '@/features/progress/parts';
 import { useLook } from '@/features/progress/look';
 import { progressStore } from '@/features/progress/store';
-import { RANGES, Range, shift, trend } from '@/features/progress/trends';
+import { MEAS_PARTS, MeasPart, RANGES, Range, shift, trend } from '@/features/progress/trends';
 import { KCAL_TARGET } from '@/lib/data';
 import { RangeBar, TrendChart } from '@/features/progress/TrendUI';
 import { useProgressScenarios } from '@/features/progress/scenarios';
@@ -29,6 +30,7 @@ import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { useMembershipState } from '@/features/gym/memberships';
 
+const MEAS_ICON = { waist: Ruler, chest: Shirt, arm: BicepsFlexed } as const; // the icon on each measurement's pill
 const TIP_UNIT: Record<MetricKey, string> = { weight: ' kg', meas: ' cm', steps: ' steps', water: ' L', hr: ' bpm', sleep: '', diet: ' kcal', cons: ' workouts' };
 
 export default function MetricDetail() {
@@ -42,7 +44,7 @@ export default function MetricDetail() {
   const k: MetricKey = raw && raw in METRIC_TITLES ? (raw as MetricKey) : 'weight';
   const paused = useMembershipState() === 'Expired';
   const anchor = new Date(ps.anchor);
-  const t = trend(k, ps.range, anchor, { weight: d.weight, water: d.water });
+  const t = trend(k, ps.range, anchor, { weight: d.weight, water: d.water, part: ps.part });
 
   useProgressScenarios(`Progress · ${METRIC_TITLES[k]}`, [
     { label: 'Period', options: RANGES.map((r) => r.label), value: RANGES.find((r) => r.value === ps.range)!.label, onPick: (v) => progressStore.set({ range: RANGES.find((r) => r.label === v)!.value as Range }) },
@@ -74,6 +76,11 @@ export default function MetricDetail() {
   return (
     <SubPage title={METRIC_TITLES[k]} fallback="/progress" footer={action ?? undefined} floatingFooter>
       <RangeBar />
+      {k === 'meas' && (
+        <View accessibilityRole="radiogroup" style={{ flexDirection: 'row', gap: 8 }}>
+          {MEAS_PARTS.map((m) => { const Ic = MEAS_ICON[m.value]; return <Pill key={m.value} label={m.label} on={ps.part === m.value} icon={(col) => <Ic size={16} color={col} />} onPress={() => progressStore.set({ part: m.value })} />; })}
+        </View>
+      )}
       <Card variant="roomy" clip gap={8}>
         <CornerGlow color={look.tint} size={320} />
         <IconBadge size={36} radius={radii.md} bg={look.tint + '26'} style={{ position: 'absolute', top: 16, right: 16 }}><look.Icon size={19} color={look.tint} /></IconBadge>

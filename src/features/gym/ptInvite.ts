@@ -1,0 +1,20 @@
+import { createStore } from '@/features/progress/store';
+
+// A PT package invitation: Coach Vikram builds a package and sends it. Nothing is active until the member accepts.
+// waiting: the member has not answered. accepted: the package is theirs and starts when the current one ends. declined: it stays in Past as Declined.
+// Sample data; the real invitation comes from the trainer.
+export type PtInviteState = 'none' | 'waiting' | 'accepted' | 'declined';
+export const ptInviteStore = createStore(() => ({ state: 'waiting' as PtInviteState, reason: '' }), 'ptInvite');
+
+export const PT_INVITE = {
+  name: 'Strength block',
+  trainer: 'Coach Vikram',
+  sessions: 8,
+  validDays: 60,
+  price: 8000,
+  startsOn: '31 Oct', // the day after the current package ends
+  endsOn: '31 Dec',
+  note: 'Eight sessions to build your lifts after the 12 session pack.',
+};
+
+export const DECLINE_REASONS = ['Not now', 'Too many sessions', 'Price', 'Another trainer'];
