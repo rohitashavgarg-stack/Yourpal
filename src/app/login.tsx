@@ -14,6 +14,7 @@ import { LOGO_BLUE, YourPalLogo } from '@/components/YourPalLogo';
 import { OtpInput } from '@/components/OtpInput';
 import { useOverlay } from '@/components/Overlay';
 import { useScenarios, useStore } from '@/lib/store';
+import { useSituation } from '@/lib/situations';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
@@ -45,6 +46,8 @@ export default function Login() {
   const [lockIn, setLockIn] = useState(0);
   const [reading, setReading] = useState(false);
   const { s: shell, progs, multi } = useShell();
+  // A new member (nobody has this number yet) only sees the join-code screen, then onboarding. An existing member sees their programmes and skips onboarding.
+  const isNew = useSituation().current === 'New member'; // the New member choice in the demo panel
   // Past the join code step (a code accepted, or "I don't have one"): choose where to start, or go straight in.
   const afterJoin = () => { if (multi && shell.sc.pick === 'Shown') setStep('programme'); else finish(); };
   const [joinCode, setJoinCode] = useState('');
@@ -63,8 +66,8 @@ export default function Login() {
   };
   const finish = (id?: string) => {
     if (id) { const n = switchProgramme(id); if (n) haptic.success(); }
-    set({ loggedIn: true, phone });
-    router.replace(state.onboarded ? '/(tabs)' : '/onboarding');
+    set({ loggedIn: true, phone, ...(isNew ? {} : { onboarded: true }) });
+    router.replace(isNew ? '/onboarding' : '/(tabs)');
   };
 
   useScenarios({
@@ -109,8 +112,8 @@ export default function Login() {
     const t = setTimeout(() => {
       if (sc.otp === 'Correct') {
         setCodeState('ok'); haptic.success();
-        // Several programmes on this number: let the member choose where to start. One: go straight in.
-        setTimeout(() => setStep('join'), 650);
+        // New member: the join-code screen. Existing member: the choose-a-programme screen when the number is in more than one, or straight in when there is one.
+        setTimeout(() => (isNew ? setStep('join') : multi ? setStep('programme') : finish()), 650);
       } else {
         const n = tries + 1; setTries(n); haptic.error(); setShake((k) => k + 1);
         if (n >= 3) { setCodeState('locked'); setLockIn(59); }
@@ -205,19 +208,6 @@ export default function Login() {
                 <Pressable accessibilityRole="button" onPress={() => setStep('phone')}><Txt style={{ fontFamily: font.semibold, color: c.accentText }}>Change</Txt></Pressable>
               </Row>
             </View>
-            <FadeIn>
-              <Row style={{ gap: 12, padding: 12, borderRadius: 20, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line }}>
-                {progs.length > 1 ? (
-                  <View style={{ flexDirection: 'row', paddingRight: 14 }}>
-                    {progs.map((p, i) => <View key={p.id} style={{ marginRight: -14, zIndex: 10 - i, borderRadius: radii.lg, borderWidth: 2, borderColor: c.surface }}><ProgLogo p={p} size={36} /></View>)}
-                  </View>
-                ) : <ProgLogo p={progs[0]} size={40} />}
-                <View style={{ flex: 1 }}>
-                  <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21 }}>{progs.length > 1 ? `Found you in ${progs.length} programmes` : progs[0].name.split(' · ')[0]}</Txt>
-                  <Txt v="caption">{progs.length > 1 ? progs.map((p) => p.short).join(' · ') : progs[0].name.includes(' · ') ? progs[0].name.split(' · ')[1] : progs[0].kind}</Txt>
-                </View>
-              </Row>
-            </FadeIn>
             <OtpInput value={code} onChange={(v) => { setCode(v); if (err === 'offline') setErr('none'); }} state={codeState} shakeKey={shake} autoFocus={sc.autoRead !== 'On'} />
             {reading && <FadeIn><Txt v="label" color={c.accentText}>Reading the code from SMS…</Txt></FadeIn>}
             {codeState === 'error' && <FadeIn><Txt v="label" color={c.warn}>That code didn&apos;t match. {3 - tries} {3 - tries === 1 ? 'try' : 'tries'} left.</Txt></FadeIn>}

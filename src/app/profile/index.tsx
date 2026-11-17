@@ -23,6 +23,7 @@ import { fadeOut } from '@/theme/motion';
 import { LineRow, ListCard, Note, ProgLogo, SubPage } from '@/features/shell/parts';
 import { resetShell, useShell } from '@/features/shell/state';
 import { ProgrammeSwitcherSheet } from '@/features/shell/Switcher';
+import { CornerGlow } from '@/features/progress/parts';
 import { goalSummary } from '@/features/shell/goal';
 import { LogoutSheet } from '@/features/shell/sheets';
 import { openLegal } from '@/features/legal/links';
@@ -87,16 +88,23 @@ export default function Profile() {
         </Row>
       </View>
 
+      {/* The programme: a soft glow in its own colour, the logo, the name, and a Switch pill when there is more than one. */}
       {d.hasGym && (
         <Pressy accessibilityRole="button" accessibilityLabel={`Programme: ${current.short}${multi ? '. Switch' : ''}`} onPress={() => openSheet(<ProgrammeSwitcherSheet />, { label: 'Switch programme' })} scaleTo={0.985}
-          style={{ minHeight: 96, borderRadius: radii.xl, backgroundColor: c.cardLift, paddingHorizontal: 18, paddingVertical: 16, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+          style={{ position: 'relative', zIndex: 0, minHeight: 100, borderRadius: radii.xl, backgroundColor: c.cardLift, overflow: 'hidden', paddingHorizontal: 18, paddingVertical: 18, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+          <CornerGlow color={current.color} size={300} />
           <CardEdge radius={radii.xl} />
-          <ProgLogo p={current} size={60} />
+          <ProgLogo p={current} size={64} />
           <View style={{ flex: 1, gap: 2 }}>
             <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Programme</Txt>
-            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 28, letterSpacing: -0.4 }} numberOfLines={1}>{current.short}</Txt>
+            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 30, letterSpacing: -0.5 }} numberOfLines={1}>{current.short}</Txt>
           </View>
-          {multi ? <Row style={{ gap: 6 }}><Txt muted style={{ fontSize: fontSizes.md }}>Switch</Txt><ChevronRight size={18} color={c.muted} /></Row> : null}
+          {multi ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 36, paddingLeft: 14, paddingRight: 10, borderRadius: radii.pill, backgroundColor: c.surface3 }}>
+              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20 }}>Switch</Txt>
+              <ChevronRight size={16} color={c.ink} />
+            </View>
+          ) : null}
         </Pressy>
       )}
 

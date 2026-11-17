@@ -6,7 +6,7 @@ import { useStore } from '@/lib/store';
 import { haptic } from '@/lib/haptics';
 import { fontSizes } from '@/design-system/tokens';
 
-export const GENDERS = ['Male', 'Female', 'Other'];
+export const GENDERS = ['Male', 'Female', 'Other', 'Prefer not to say'];
 export const DIETS = ['Veg', 'Eggetarian', 'Non-veg', 'Jain', 'Vegan'];
 export const TRAIN_DAYS = [2, 3, 4, 5, 6];
 
@@ -18,8 +18,8 @@ export function GenderSheet() {
   return (
     <View style={{ gap: 12, paddingBottom: 8 }}>
       <Txt v="title" style={{ fontSize: fontSizes.xl2, lineHeight: 29 }}>Gender</Txt>
-      <Row style={{ gap: 6 }}>
-        {GENDERS.map((x) => <Pill key={x} label={x} on={g === x} style={{ flex: 1 }}
+      <Row style={{ gap: 6, flexWrap: 'wrap' }}>
+        {GENDERS.map((x) => <Pill key={x} label={x} on={g === x}
           onPress={() => { setProfile({ gender: x }); haptic.success(); closeSheet(() => toast('Gender updated')); }} />)}
       </Row>
     </View>

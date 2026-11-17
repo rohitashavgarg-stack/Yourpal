@@ -3,10 +3,11 @@ import { addDays, fmtDay, goalV2Store, kindOf } from '@/features/goalv2/model';
 import { FinishBy } from '@/features/goalv2/FinishBy';
 import { TODAY } from '@/features/progress/trends';
 import { WEEK_TARGET } from '@/features/streak/data';
-import { ageFrom, defaultDob } from '@/lib/dob';
+import { useSituation } from '@/lib/situations';
+import { ageFrom, daysIn, defaultDob, MAX_AGE, MIN_AGE, toDob } from '@/lib/dob';
 import { RoundBtn } from '@/components/bits';
 import { PersonAvatar } from '@/components/Brand';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, TextInput, View } from 'react-native';
 import { Switch } from '@/features/shell/parts';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
@@ -34,13 +35,23 @@ import { ProgLogo } from '@/features/shell/parts';
 import Svg, { Circle } from 'react-native-svg';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 import { Option } from '@/design-system/primitives/Option';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { ProgressBar } from '@/design-system/primitives/ProgressBar';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
-const ORDER = ['welcome', 'facility', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
+const ORDER = ['welcome', 'facility', 'name', 'gender', 'birth', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
 type Step = (typeof ORDER)[number];
-const COUNTED: Step[] = ['goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'basics'];
+const COUNTED: Step[] = ['name', 'gender', 'birth', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'basics'];
+const GENDER_OPTIONS = ['Male', 'Female', 'Other', 'Prefer not to say'];
+// Day, month and year typed as the member's birthday: the date as YYYY-MM-DD when it is a real date and the age is allowed, otherwise null.
+function birthDob(b: { d: string; m: string; y: string }) {
+  const d = +b.d, m = +b.m, y = +b.y;
+  if (b.d.length < 1 || b.m.length < 1 || b.y.length !== 4 || m < 1 || m > 12 || d < 1 || d > daysIn(y, m)) return null;
+  const dob = toDob(y, m, d);
+  const age = ageFrom(dob);
+  return age !== null && age >= MIN_AGE && age <= MAX_AGE ? dob : null;
+}
 const GOALS = ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness'];
 const EXPS = [
   { l: 'New to the gym', s: 'We start with the basics and good form' },
@@ -56,7 +67,12 @@ export default function Onboarding() {
   const p = state.profile;
   const sc = state.sc;
   const isPT = sc.member === 'PT member';
-  const [step, setStep] = useState<Step>((ORDER as readonly string[]).includes(state.onboardingStep) ? (state.onboardingStep as Step) : 'welcome');
+  const isNew = useSituation().current === 'New member'; // a new member (the New member choice in the demo panel): name, gender and age first, and no gym welcome screen
+  const [stepRaw, setStep] = useState<Step>(isNew && !['name', 'gender', 'birth'].includes(state.onboardingStep) ? 'name' : (ORDER as readonly string[]).includes(state.onboardingStep) ? (state.onboardingStep as Step) : 'welcome');
+  // a new member never sees the gym welcome, the gym picker or the old age step: they start on name
+  const step: Step = isNew && (stepRaw === 'welcome' || stepRaw === 'facility' || stepRaw === 'age') ? 'name' : stepRaw;
+  const [nm, setNm] = useState({ f: '', l: '' }); // first and last name
+  const [bd, setBd] = useState({ d: '', m: '', y: '' });
   const [dir, setDir] = useState(1);
   const [tried, setTried] = useState(false);
 
@@ -78,9 +94,12 @@ export default function Onboarding() {
   const go = (s: Step, d = 1) => { setDir(d); setTried(false); setStep(s); set({ onboardingStep: s }); };
   // Height, weight, target and the projection go together; target and projection need a weight goal.
   const { d: dom } = useDomain();
-  const flow = ORDER.filter((s) => !(s === 'facility' && !(dom.hasGym && dom.askGym)) && !(p.skipBody && (s === 'height' || s === 'weight' || s === 'target' || s === 'plan')) && !(!needsTarget(p.goal) && (s === 'target' || s === 'plan')));
+  const flow = ORDER.filter((s) => !(isNew && (s === 'welcome' || s === 'facility' || s === 'age')) && !(!isNew && (s === 'name' || s === 'gender' || s === 'birth')) && !(s === 'facility' && !(dom.hasGym && dom.askGym)) && !(p.skipBody && (s === 'height' || s === 'weight' || s === 'target' || s === 'plan')) && !(!needsTarget(p.goal) && (s === 'target' || s === 'plan')));
   const idx = Math.max(0, flow.indexOf(step));
   const next = () => {
+    if (step === 'name') { if (nm.f.trim().length < 2 || nm.l.trim().length < 1) { setTried(true); haptic.error(); return; } setProfile({ name: `${nm.f.trim()} ${nm.l.trim()}` }); }
+    if (step === 'gender' && !p.gender) { setTried(true); haptic.error(); return; }
+    if (step === 'birth') { const dob = birthDob(bd); if (!dob) { setTried(true); haptic.error(); return; } setProfile({ dob, age: String(ageFrom(dob)) }); }
     if (step === 'goal' && !p.goal) { setTried(true); haptic.error(); return; }
     if (step === 'exp' && !p.exp) { setTried(true); haptic.error(); return; }
     if (step === 'age' && !p.dob) setProfile({ dob: defaultDob(), age: String(ageFrom(defaultDob())) });
@@ -114,7 +133,7 @@ export default function Onboarding() {
     health: { label: 'Not now', run: () => { setDomain({ hc: false }); go(flow[idx + 1]); } },
   };
   // Skip and Skip all start with the questionnaire (the goal question); the welcome and gym screens have neither.
-  const questionnaire = step !== 'welcome' && step !== 'facility' && step !== 'building' && step !== 'ready';
+  const questionnaire = step !== 'welcome' && step !== 'facility' && step !== 'name' && step !== 'gender' && step !== 'birth' && step !== 'building' && step !== 'ready';
   const skip = questionnaire ? skipFor[step] : undefined;
   const back = () => { if (idx > 0) go(flow[idx - 1], -1); else { set({ loggedIn: false }); router.replace('/login'); } };
 
@@ -130,11 +149,11 @@ export default function Onboarding() {
   useScenarios({
     title: 'Onboarding',
     rows: [
-      { label: 'Jump to step', options: ['Welcome', 'Gym', 'Goal', 'Experience', 'Schedule', 'Age', 'Height', 'Weight', 'Target', 'Projection', 'Basics', 'Health', 'Privacy', 'Building', 'All set'], value: ({ welcome: 'Welcome', facility: 'Gym', goal: 'Goal', exp: 'Experience', sched: 'Schedule', age: 'Age', height: 'Height', weight: 'Weight', target: 'Target', plan: 'Projection', basics: 'Basics', health: 'Health', consent: 'Privacy', building: 'Building', ready: 'All set' } as any)[step], onPick: (v) => go(({ Welcome: 'welcome', Gym: 'facility', Goal: 'goal', Experience: 'exp', Schedule: 'sched', Age: 'age', Height: 'height', Weight: 'weight', Target: 'target', Projection: 'plan', Basics: 'basics', Health: 'health', Privacy: 'consent', Building: 'building', 'All set': 'ready' } as any)[v]) },
+      { label: 'Jump to step', options: ['Welcome', 'Gym', 'Name', 'Gender', 'Birthday', 'Goal', 'Experience', 'Schedule', 'Age', 'Height', 'Weight', 'Target', 'Projection', 'Basics', 'Health', 'Privacy', 'Building', 'All set'], value: ({ welcome: 'Welcome', facility: 'Gym', name: 'Name', gender: 'Gender', birth: 'Birthday', goal: 'Goal', exp: 'Experience', sched: 'Schedule', age: 'Age', height: 'Height', weight: 'Weight', target: 'Target', plan: 'Projection', basics: 'Basics', health: 'Health', consent: 'Privacy', building: 'Building', ready: 'All set' } as any)[step], onPick: (v) => go(({ Welcome: 'welcome', Gym: 'facility', Name: 'name', Gender: 'gender', Birthday: 'birth', Goal: 'goal', Experience: 'exp', Schedule: 'sched', Age: 'age', Height: 'height', Weight: 'weight', Target: 'target', Projection: 'plan', Basics: 'basics', Health: 'health', Privacy: 'consent', Building: 'building', 'All set': 'ready' } as any)[v]) },
       { label: 'Assessment', options: ['Scheduled', 'Not scheduled'], value: sc.assess, onPick: (v) => setSc({ assess: v as any }) },
       { label: 'Connection', options: ['Online', 'Offline'], value: sc.net, onPick: (v) => setSc({ net: v as any }) },
     ],
-    actions: [{ label: 'Restart onboarding', run: () => { setProfile({ goal: '', exp: '', injury: 'No', injuryNote: '' }); go('welcome', -1); } }],
+    actions: [{ label: 'Restart onboarding', run: () => { setProfile({ goal: '', exp: '', injury: 'No', injuryNote: '' }); setNm({ f: '', l: '' }); setBd({ d: '', m: '', y: '' }); go(isNew ? 'name' : 'welcome', -1); } }],
   }, [step, sc.assess, sc.net]);
 
   const qsteps = flow.filter((x) => COUNTED.includes(x));
@@ -171,6 +190,9 @@ export default function Onboarding() {
         <FadeIn key={step} exiting={fadeOut()} style={[{ gap: 14 }, step === 'building' && { flex: 1, justifyContent: 'center' }]}>
           {step === 'welcome' && <WelcomeStep isPT={isPT} assess={sc.assess} hasGym={dom.hasGym} />}
           {step === 'facility' && <FacilityStep />}
+          {step === 'name' && <NameStep value={nm} onChange={setNm} tried={tried} />}
+          {step === 'gender' && <GenderStep tried={tried} />}
+          {step === 'birth' && <BirthStep value={bd} onChange={setBd} tried={tried} />}
           {step === 'goal' && <GoalStep tried={tried} />}
           {step === 'exp' && <ExpStep tried={tried} />}
           {step === 'sched' && <SchedStep />}
@@ -369,6 +391,98 @@ function SchedStep() {
       <Txt v="label" style={{ marginTop: 8 }}>Usual time</Txt>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         {['Early morning', 'Morning', 'Afternoon', 'Evening', 'Changes a lot'].map((t) => <Pill key={t} label={t} on={p.time === t} onPress={() => setProfile({ time: t })} />)}
+      </View>
+    </>
+  );
+}
+
+// A big light question with a quiet line under it: the look of the three opening questions for a new member.
+function BigQuestion({ t, s }: { t: string; s: string }) {
+  return (
+    <View style={{ gap: 8, marginBottom: 10, paddingTop: 8 }}>
+      <Txt style={{ fontFamily: font.light, fontSize: fontSizes.xl4, lineHeight: 42, letterSpacing: -1.2 }}>{t}</Txt>
+      <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 22 }}>{s}</Txt>
+    </View>
+  );
+}
+
+// 1. Name: first name and last name, each one underlined line.
+function NameStep({ value, onChange, tried }: { value: { f: string; l: string }; onChange: (v: { f: string; l: string }) => void; tried: boolean }) {
+  const { c } = useTheme();
+  const badF = tried && value.f.trim().length < 2;
+  const badL = tried && value.l.trim().length < 1;
+  const line = (key: 'f' | 'l', label: string, bad: boolean, focus: boolean, last: boolean) => (
+    <View key={key} style={{ gap: 4 }}>
+      <Txt v="caption" style={{ color: bad ? c.warn : c.muted }}>{label}</Txt>
+      <TextInput accessibilityLabel={label} value={value[key]} onChangeText={(t) => onChange({ ...value, [key]: t })} autoFocus={focus} maxLength={30} autoCapitalize="words" autoCorrect={false} returnKeyType={last ? 'done' : 'next'} placeholder={label} placeholderTextColor={c.muted}
+        style={{ fontFamily: font.regular, fontSize: fontSizes.xl3, lineHeight: 36, color: c.ink, paddingVertical: 10, borderBottomWidth: 2, borderBottomColor: bad ? c.warn : value[key] ? c.ink : c.line, outlineStyle: 'none' as any }} />
+    </View>
+  );
+  return (
+    <>
+      <BigQuestion t="What's your name?" s="This is how Coach Vikram will greet you." />
+      <View style={{ gap: 22 }}>
+        {line('f', 'First name', badF, true, false)}
+        {line('l', 'Last name', badL, false, true)}
+      </View>
+      <Txt v="caption" style={{ color: badF || badL ? c.warn : c.muted }}>{badF ? 'Add at least two letters to your first name.' : badL ? 'Add your last name.' : 'You can change it later in Profile.'}</Txt>
+    </>
+  );
+}
+
+// 2. Gender: large rows, one picked.
+function GenderStep({ tried }: { tried: boolean }) {
+  const { c } = useTheme();
+  const { state, setProfile } = useStore();
+  const g = state.profile.gender;
+  return (
+    <>
+      <BigQuestion t="What's your gender?" s="It helps set your calorie and strength targets." />
+      <View accessibilityRole="radiogroup" style={{ gap: 10 }}>
+        {GENDER_OPTIONS.map((o) => {
+          const on = g === o;
+          return (
+            <Pressy key={o} accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={() => { haptic.tick(); setProfile({ gender: o }); }} scaleTo={0.985}
+              style={{ minHeight: 64, borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <CardEdge radius={radii.lg} />
+              {on ? <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radii.lg, borderWidth: 2, borderColor: c.accent }} /> : null}
+              <Txt style={{ fontFamily: on ? font.semibold : font.medium, fontSize: fontSizes.lg, lineHeight: 24 }}>{o}</Txt>
+              <View style={{ width: 24, height: 24, borderRadius: radii.pill, borderWidth: on ? 0 : 1.5, borderColor: c.muted, backgroundColor: on ? c.accent : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+                {on ? <Check size={14} strokeWidth={3} color={fixed.white} /> : null}
+              </View>
+            </Pressy>
+          );
+        })}
+      </View>
+      {tried && !g ? <Txt v="caption" style={{ color: c.warn }}>Pick one to continue.</Txt> : null}
+    </>
+  );
+}
+
+// 3. Birthday: day, month and year in three boxes, and the age underneath as you type.
+function BirthStep({ value, onChange, tried }: { value: { d: string; m: string; y: string }; onChange: (v: { d: string; m: string; y: string }) => void; tried: boolean }) {
+  const { c } = useTheme();
+  const dob = birthDob(value);
+  const age = dob ? ageFrom(dob) : null;
+  const full = value.d.length > 0 && value.m.length > 0 && value.y.length === 4;
+  const bad = (tried || full) && !dob;
+  const box = (key: 'd' | 'm' | 'y', ph: string, max: number, grow: number) => (
+    <View key={key} style={{ flex: grow }}>
+      <TextInput accessibilityLabel={{ d: 'Day', m: 'Month', y: 'Year' }[key]} value={value[key]} onChangeText={(t) => onChange({ ...value, [key]: t.replace(/\D/g, '').slice(0, max) })} keyboardType="number-pad" maxLength={max} placeholder={ph} placeholderTextColor={c.muted}
+        style={{ fontFamily: font.regular, fontSize: fontSizes.xl3, lineHeight: 36, color: c.ink, textAlign: 'center', paddingVertical: 10, borderBottomWidth: 2, borderBottomColor: bad ? c.warn : value[key] ? c.ink : c.line, outlineStyle: 'none' as any }} />
+    </View>
+  );
+  return (
+    <>
+      <BigQuestion t="When were you born?" s="We use this to set the right pace for you." />
+      <Row style={{ gap: 14 }}>
+        {box('d', 'DD', 2, 1)}
+        {box('m', 'MM', 2, 1)}
+        {box('y', 'YYYY', 4, 1.8)}
+      </Row>
+      <View style={{ minHeight: 40, justifyContent: 'center' }}>
+        {age !== null ? <Txt style={{ fontSize: fontSizes.base, color: c.muted }}>You are <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl, color: c.ink }}>{String(age)}</Txt></Txt>
+          : bad ? <Txt v="caption" style={{ color: c.warn }}>Enter a real date, for someone between {MIN_AGE} and {MAX_AGE}.</Txt> : null}
       </View>
     </>
   );

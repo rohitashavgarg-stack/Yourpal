@@ -169,7 +169,9 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       said(`Missed: ${v}`);
       router.navigate('/(tabs)' as any);
     } },
-    { label: 'Situation', options: SITUATIONS as string[], value: sit.current, onPick: (v: string) => { sit.pick(v as Situation); said(`Situation: ${v}`); } },
+    // Existing or new member: the first section of the panel. A new member gets the opening questions (name, gender, age) and no gym welcome.
+    { label: 'Member status', options: ['Existing member', 'New member'], value: sit.current === 'New member' ? 'New member' : 'Existing member', onPick: (v: string) => { if (v === 'New member') sit.pick('New member'); else if (sit.current === 'New member') sit.pick('Normal day'); said(`Member status: ${v}`); } },
+    { label: 'Situation', options: (SITUATIONS as string[]).filter((x) => x !== 'New member'), value: sit.current, onPick: (v: string) => { sit.pick(v as Situation); said(`Situation: ${v}`); } },
     { label: 'Goal type', options: ['Weight loss', 'Muscle gain', 'Lean body', 'Strength', 'Flexibility', 'Agility', 'General fitness', 'Not sure yet'], value: type, onPick: pickGoal },
     // What the member sees at the top of Today: a normal day, the updates card (plan changes, messages), or the welcome-back card after a break.
     { label: 'Today shows', options: ['Regular', 'With updates', 'Comeback'], value: d.todayVariant, onPick: (v: string) => sit.pick(v === 'Regular' ? 'Normal day' : (v as Situation)) },
@@ -284,6 +286,11 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       <Dropdown label="Jump to" options={QUICK.map(([l, t]) => `${l} ${t}`)} value="" placeholder="Workout, meals, night" short={(o) => o.split(' ').slice(1).join(' ')} onPick={(v) => { const hit = QUICK.find(([l, t]) => `${l} ${t}` === v); if (hit) pickMinute(hit[2]); }} />
     </PanelCard>
   );
+  const statusCard = (
+    <PanelCard icon={UserRound} title="Member status" pill={{ label: sit.current === 'New member' ? 'New' : 'Existing' }}>
+      {seg('Member status')}
+    </PanelCard>
+  );
   const situationCard = (
     <PanelCard icon={House} title="Situation" pill={{ label: sit.current }}>
       {dd('Situation')}
@@ -340,7 +347,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     </PanelCard>
   );
   // One column of four short cards (it was three columns of long ones).
-  const columnsOf: React.ReactNode[][] = [[timeCard, situationCard, workoutCard, memberCard, deviceCard, personalCard, goCard]];
+  const columnsOf: React.ReactNode[][] = [[statusCard, timeCard, situationCard, workoutCard, memberCard, deviceCard, personalCard, goCard]];
   return (
     <View style={{ gap: 8 }}>
       <View style={{ backgroundColor: fixed.white, borderRadius: radii.md, borderWidth: 1, borderColor: P.line, paddingVertical: 8, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
