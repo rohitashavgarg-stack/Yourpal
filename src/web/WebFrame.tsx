@@ -9,7 +9,7 @@ import { Dimensions, Platform, Pressable, ScrollView, Text, View, type ScaledSiz
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useStore } from '@/lib/store';
 import { bucketOf, mealsAt, plannedMin, useDomain } from '@/lib/domain';
-import { fmtT, MEALS } from '@/lib/data';
+import { basePlans, fmtT, MEALS, TODAY_IDX } from '@/lib/data';
 import { STEPS_DESIGNS, StepsDesign, stepsStore } from '@/features/today/StepsCards';
 import { goalV2Store } from '@/features/goalv2/model';
 import { WEEK_TARGET } from '@/features/streak/data';
@@ -19,18 +19,14 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { LinearGradient } from 'expo-linear-gradient';
 import { createStore } from '@/lib/createStore';
 import { usePathname } from 'expo-router';
-import { ChartLine, Dumbbell, Flag, House, LogIn, MapPin, MessageCircle, Minus, Moon, Plus, SlidersHorizontal, Sun, Sunrise, Sunset, UserRound } from '@/lib/icons';
+import { Activity, ChartLine, Dumbbell, Flag, Heart, House, LogIn, MapPin, MessageCircle, Minus, Moon, Plus, Smartphone, SlidersHorizontal, Sun, Sunrise, Sunset, UserRound } from '@/lib/icons';
 import { ActionChip, Choice, Dropdown, PanelCard, SwitchChip, P } from '@/web/ControlParts';
 import { SITUATIONS, SITUATION_HINT, Situation, useSituation } from '@/lib/situations';
-import { missedWkStore } from '@/features/today/WorkoutCard';
-import { reminderStore, useReminders } from '@/features/reminders/reminders';
-import { sendReminderPush } from '@/features/reminders/push';
-import { goalCardStore } from '@/features/today/goalCardState';
+import { MISSED_AFTER, missedWkStore } from '@/features/today/WorkoutCard';
+import { otherWkStore } from '@/features/today/OtherWorkouts';
+import { timeMin } from '@/features/plans/store';
 import { planStore } from '@/lib/planState';
 import { setP as setPlans } from '@/features/plans/store';
-import { greetStore } from '@/features/today/TodayGreeting';
-import { GREETING_STATES, GreetingState } from '@/lib/microcopy';
-import { Bell } from '@/lib/icons';
 import { radii, fontSizes, fixed } from '@/design-system/tokens';
 
 const PHONE_W = 390, PHONE_H = 844;
@@ -136,7 +132,6 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
   const shell = useShell();
   const { isDark } = useTheme();
   const plan = planStore.use();
-  const greet = greetStore.use();
   const { d, set } = useDomain();
   const steps = stepsStore.use();
   const wk = workoutUiStore.use();
@@ -155,6 +150,11 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     set(t !== d.time ? { min: m, time: t, ...meals, ciAt: null, ciStart: null, ciOut: null, ciExtend: 0, ciHold: null } : { min: m, ...meals });
   };
   const sit = useSituation();
+  // the workouts of today are equal: each row is named after the workout and its time
+  const wk1 = d.plans[TODAY_IDX];
+  const wk2 = wk1?.more?.[0];
+  const L1 = wk1 ? `${wk1.name}, ${wk1.time}` : 'Workout 1';
+  const L2 = wk2 ? `${wk2.name}, ${wk2.time}` : 'Workout 2';
   const rows = [
     // One situation at a time: picking it sets everything it implies (and a fitting time of day).
     // Missed states on Today: a meal whose time passed with nothing logged, a workout 2 h past its time and not started, or both.
@@ -178,9 +178,42 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     { label: 'Membership', options: ['Active', 'Expiring', 'Expired'], value: d.membership, onPick: (v: string) => set({ membership: v as any }) },
     // Meals: what the member has logged so far, or every meal of the day logged (the summary card).
     { label: 'Meals today', options: ['By time of day', 'All logged'], value: Object.keys(d.meals).length >= 4 ? 'All logged' : 'By time of day', onPick: (v: string) => set({ meals: mealsAt(v === 'All logged' ? 2000 : d.min), openMeal: null }) },
-    // The greeting at the top of Today: every state of the line.
-    { label: 'Greeting line', options: GREETING_STATES as unknown as string[], value: greet.state, onPick: (v: string) => greetStore.set({ state: v as GreetingState }) },
     // Plans: assigned by the coach, or not assigned (the member only tracks weight, water and Health or wearable data).
+    // How many workouts today's plan holds: one, or two (Coach Vikram adds the second; the Plans tab shows a timeline and Today shows the other one inside the card).
+    // The day: one workout, two workouts, or a rest day (no workout at all).
+    { label: 'Workouts today', options: ['One workout', 'Two workouts', 'Rest day'], value: d.wkScenario === 'Rest day' ? 'Rest day' : d.plans[TODAY_IDX]?.more?.length ? 'Two workouts' : 'One workout', onPick: (v: string) => {
+      if (v === 'Rest day') { sit.pick('Rest day'); said(v); return; }
+      const day = d.plans[TODAY_IDX];
+      if (!day) return;
+      if (d.wkScenario === 'Rest day') sit.pick('Normal day');
+      otherWkStore.set({ answer: null });
+      set({ plans: { ...d.plans, [TODAY_IDX]: { ...day, more: v === 'Two workouts' ? basePlans()[TODAY_IDX]?.more : undefined } } });
+      setPlans({ wi: -1 });
+      said(v);
+    } },
+    // Every workout of today is a row named after it, with the same states. To do: before its time (the clock goes to the morning), Missed: more than two hours past it (the clock goes to the evening).
+    { label: L2, options: ['To do', 'Running', 'Done', 'Missed', 'Moved', 'Skipped'],
+      value: otherWkStore.get().answer === 'running' ? 'Running' : otherWkStore.get().answer === 'moved' ? 'Moved' : otherWkStore.get().answer === 'skipped' ? 'Skipped' : wk2?.done ? 'Done' : wk2 && d.min - timeMin(wk2.time) > MISSED_AFTER ? 'Missed' : 'To do',
+      onPick: (v: string) => {
+        const day = d.plans[TODAY_IDX];
+        if (!day?.more?.length) { said('Today has one workout'); return; }
+        otherWkStore.set({ answer: v === 'Running' ? 'running' : v === 'Moved' ? 'moved' : v === 'Skipped' ? 'skipped' : null });
+        if (v === 'Running' && d.session) set({ session: null }); // only one workout runs at a time
+        set({ plans: { ...d.plans, [TODAY_IDX]: { ...day, more: day.more.map((m, i) => (i === 0 ? { ...m, done: v === 'Done' ? 'Done 7:00 – 7:42 am' : undefined } : m)) } } });
+        if (v === 'To do') pickMinute(380);
+        if (v === 'Missed') pickMinute(1100);
+        said(`${L2}: ${v}`);
+      } },
+    { label: L1, options: ['To do', 'Running', 'Done', 'Missed', 'Moved', 'Skipped'],
+      value: d.session ? 'Running' : d.wkDone || d.wkScenario === 'Done' ? 'Done' : missedWkStore.get().answer === 'moved' ? 'Moved' : missedWkStore.get().answer === 'skipped' ? 'Skipped' : d.min - plannedMin(state.profile.time) > MISSED_AFTER ? 'Missed' : 'To do',
+      onPick: (v: string) => {
+        missedWkStore.set({ answer: null });
+        if (v === 'To do') sit.pick('Normal day');
+        else if (v === 'Done') sit.pick('Workout done');
+        else if (v === 'Running') { if (otherWkStore.get().answer === 'running') otherWkStore.set({ answer: null }); set({ session: newSession(), wkScenario: 'Not started', wkDone: null }); } // only one workout runs at a time
+        else { rows.find((r) => r.label === 'Missed')!.onPick('Missed workout'); if (v !== 'Missed') missedWkStore.set({ answer: v === 'Moved' ? 'moved' : 'skipped' }); }
+        said(`${L1}: ${v}`);
+      } },
     { label: 'Plans', options: ['Assigned', 'Not assigned'], value: plan.assigned ? 'Assigned' : 'Not assigned', onPick: (v: string) => { planStore.set({ assigned: v === 'Assigned' }); setPlans({ noPlan: v !== 'Assigned' }); } },
     // The gym waiver: signed (the card is gone from Today) or not signed (the Sign your gym waiver card shows).
     { label: 'Waiver', options: ['Signed', 'Not signed'], value: state.profile.waiver ? 'Signed' : 'Not signed', onPick: (v: string) => setProfile({ waiver: v === 'Signed' ? { signedAt: '10 Nov 2026', path: 'M8 38 C 22 4, 40 66, 56 30 S 88 12, 112 36', w: 120, h: 60 } : undefined }) },
@@ -212,7 +245,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     { label: 'Workout design', options: ['Current', 'New'], value: wk.design, onPick: (v: string) => { workoutUiStore.set({ design: v as 'Current' | 'New' }); said(`Workout design: ${v}`); } },
     { label: 'Open a workout', options: ['Start'], value: '', onPick: () => {
       set({ session: newSession() });
-      said(wk.design === 'New' ? 'Started the workout with the 7 clip exercises' : 'Started Leg day');
+      said(wk.design === 'New' ? 'Started the workout with the 7 clip exercises' : 'Started Leg workout');
       router.push('/workout');
     } },
     // Steps need Health. Heart rate, sleep and energy also need a watch or band, which a member may not have.
@@ -245,7 +278,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
   const timeCard = (
     <PanelCard icon={period.icon} title="Time of day" pill={{ label: hourLabel(d.min) }}>
       <TimeSlider minutes={d.min} onPick={pickMinute} />
-      <Dropdown label="Jump to" options={QUICK.map(([l, t]) => `${l} ${t}`)} value="" placeholder="Workout, meals, night" onPick={(v) => { const hit = QUICK.find(([l, t]) => `${l} ${t}` === v); if (hit) pickMinute(hit[2]); }} />
+      <Dropdown label="Jump to" options={QUICK.map(([l, t]) => `${l} ${t}`)} value="" placeholder="Workout, meals, night" short={(o) => o.split(' ').slice(1).join(' ')} onPick={(v) => { const hit = QUICK.find(([l, t]) => `${l} ${t}` === v); if (hit) pickMinute(hit[2]); }} />
     </PanelCard>
   );
   const situationCard = (
@@ -265,12 +298,24 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       {dd('Plans')}
       {d.hasGym && dd('Waiver')}
       {dd('Meals today')}
-      {dd('Greeting line')}
+    </PanelCard>
+  );
+  // Every state of the workouts: one or two a day, the second one upcoming, missed or completed, and the main one to do, running, done, missed, moved, skipped or a rest day.
+  const workoutCard = (
+    <PanelCard icon={Dumbbell} title="Workout" pill={{ label: d.plans[TODAY_IDX]?.more?.length ? 'Two today' : 'One today' }}>
+      {dd('Workouts today')}
+      {wk2 ? dd(L2) : null}
+      {dd(L1)}
       {dd('Workout time')}
+    </PanelCard>
+  );
+  // The device and theme switches: Health, a wearable and dark mode.
+  const deviceCard = (
+    <PanelCard icon={Smartphone} title="Device and theme" pill={{ label: `${[d.hc, d.wearable, isDark].filter(Boolean).length} of 3 on` }}>
       <View style={{ flexDirection: 'row', gap: 4 }}>
-        <SwitchChip label="Health" on={d.hc} onPress={() => row('Health (steps)').onPick(d.hc ? 'Not connected' : 'Connected')} />
-        <SwitchChip label="Wearable" on={d.wearable} onPress={() => row('Wearable (heart rate, sleep, energy)').onPick(d.wearable ? 'No wearable' : 'Has a wearable')} />
-        <SwitchChip label="Dark" on={isDark} onPress={() => row('Theme').onPick(isDark ? 'Light' : 'Dark')} />
+        <SwitchChip icon={Heart} label="Health" on={d.hc} onPress={() => row('Health (steps)').onPick(d.hc ? 'Not connected' : 'Connected')} />
+        <SwitchChip icon={Activity} label="Wearable" on={d.wearable} onPress={() => row('Wearable (heart rate, sleep, energy)').onPick(d.wearable ? 'No wearable' : 'Has a wearable')} />
+        <SwitchChip icon={Moon} label="Dark" on={isDark} onPress={() => row('Theme').onPick(isDark ? 'Light' : 'Dark')} />
       </View>
     </PanelCard>
   );
@@ -283,27 +328,6 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       </View>
     </PanelCard>
   );
-  // Reminders: how long ago the last glass and the last weigh-in were, and a preview of the phone notification for what is due now.
-  const rem = useReminders();
-  const rs = reminderStore.use();
-  const gcs = goalCardStore.use();
-  const ago = rs.waterAt == null ? 'Nothing today' : d.min - rs.waterAt < 30 ? 'Just now' : d.min - rs.waterAt < 180 ? '2 hours ago' : '5 hours ago';
-  const reminderCard = (
-    <PanelCard icon={Bell} title="Reminders" pill={{ label: rem.length ? `${rem.length} due` : 'None due' }}>
-      <Dropdown label="Last water" options={['Just now', '2 hours ago', '5 hours ago', 'Nothing today']} value={ago}
-        onPick={(v) => reminderStore.set({ waterAt: v === 'Nothing today' ? null : Math.max(0, d.min - (v === 'Just now' ? 0 : v === '2 hours ago' ? 120 : 300)), snoozed: {} })} />
-      <Dropdown label="Last weigh-in" options={['Today', '6 days ago', '10+ days ago']} value={gcs.weighDays >= 10 ? '10+ days ago' : gcs.weighDays >= 5 ? '6 days ago' : 'Today'}
-        onPick={(v) => { goalCardStore.set({ weighDays: v === '10+ days ago' ? 12 : v === '6 days ago' ? 6 : 0 }); reminderStore.set({ snoozed: {} }); }} />
-      <Dropdown label="Phone notifications" options={['Allowed', 'Blocked', 'Not asked']} value={state.profile.notifications === 'on' ? 'Allowed' : state.profile.notifications === 'off' ? 'Blocked' : 'Not asked'}
-        onPick={(v) => setProfile({ notifications: v === 'Allowed' ? 'on' : v === 'Blocked' ? 'off' : 'unset' })} />
-      <View style={{ flexDirection: 'row' }}>
-        <ActionChip label="Send reminder push" onPress={async () => {
-          const r = await sendReminderPush(rem[0], { min: d.min, quiet: rs.quiet, permission: state.profile.notifications });
-          said(r === 'sent' ? 'Push sent' : r === 'quiet' ? 'Held: quiet hours' : r === 'blocked' ? 'Held: phone notifications are off' : 'Nothing is due right now');
-        }} />
-      </View>
-    </PanelCard>
-  );
   const here = SCREENS.find((sc) => sc.match(path))?.label ?? '';
   const goCard = (
     <PanelCard icon={Flag} title="Go to">
@@ -312,7 +336,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     </PanelCard>
   );
   // One column of four short cards (it was three columns of long ones).
-  const columnsOf: React.ReactNode[][] = [[timeCard, situationCard, memberCard, personalCard, reminderCard, goCard]];
+  const columnsOf: React.ReactNode[][] = [[timeCard, situationCard, workoutCard, memberCard, deviceCard, personalCard, goCard]];
   return (
     <View style={{ gap: 8 }}>
       <View style={{ backgroundColor: fixed.white, borderRadius: radii.md, borderWidth: 1, borderColor: P.line, paddingVertical: 8, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -339,7 +363,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
 function SidePanel({ height, phoneW }: { height: number; phoneW: number }) {
   const win = useWindow();
   const room = win.width - phoneW - 28 - 32; // what is left beside the phone
-  const width = Math.min(room, 310);
+  const width = Math.min(room, 560);
   return (
     <View style={{ width, maxHeight: Math.max(height, win.height - 48), flexGrow: 0, flexShrink: 0 }}>
       <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} accessibilityLabel="Edge cases and scenarios" style={{ backgroundColor: P.bg, borderRadius: radii.block, borderWidth: 1, borderColor: P.line }} contentContainerStyle={{ padding: 8 }}><PanelBody /></ScrollView>

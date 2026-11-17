@@ -1,9 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Row, Txt } from '@/components/ui';
+
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fontSizes, radii } from '@/design-system/tokens';
+
 import { MuscleRow } from '@/features/progress/MuscleRow';
 import { MuscleName } from '@/design-system/primitives/MuscleBody';
 import { MuscleRings } from '@/design-system/primitives/MuscleRings';
@@ -18,11 +18,8 @@ export default function Muscles() {
   const { c } = useTheme();
   const p = progressStore.use().range; // the same Day, Week, Month, Year switch and date row as the other Progress pages
   const g = musclesFor(p);
-  const done = g.reduce((a, x) => a + x.done, 0);
-  const target = g.reduce((a, x) => a + x.target, 0);
   return (
     <SubPage title="Muscles trained" fallback="/progress" backdrop={<TopGlow color={c.accent} />}>
-      <Txt v="caption" style={{ textAlign: 'center', fontSize: fontSizes.sm, lineHeight: 19 }}>{`${done} of ${target} sets`}</Txt>
       <RangeBar />
       <View style={{ alignItems: 'center', paddingVertical: 8 }}><MuscleRings groups={g} size={280} /></View>
       <View style={{ gap: 18, paddingTop: 6 }}>

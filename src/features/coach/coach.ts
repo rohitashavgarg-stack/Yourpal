@@ -29,6 +29,6 @@ export const WEEKLY = {
 
 export const NOTES: { when: string; ctx: string; t: string }[] = [
   { when: 'Wed 24 Sep', ctx: 'Plan update', t: "Romanian deadlift added and farmer's carry removed. Your hamstrings need the extra work." },
-  { when: 'Mon 22 Sep', ctx: 'Leg day', t: 'Nice depth on the squats. Film one set and send it if anything feels off.' },
+  { when: 'Mon 22 Sep', ctx: 'Leg workout', t: 'Nice depth on the squats. Film one set and send it if anything feels off.' },
   { when: 'Sat 20 Sep', ctx: 'Weekly review', t: 'Three workouts out of three. Add 2.5 kg to the leg press next time.' },
 ];

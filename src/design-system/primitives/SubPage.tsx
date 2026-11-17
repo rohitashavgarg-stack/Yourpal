@@ -76,7 +76,8 @@ export function GrowFrame({ children, handle, onClose, origin, grabber }: { chil
   const [box, setBox] = useState<CardRect | null>(Platform.OS === 'web' ? null : { x: 0, y: 0, w: win.width, h: win.height });
   const [late, setLate] = useState(false); // the measure took too long: show the page without the grow rather than leave it hidden
   const p = useSharedValue(origin ? 0 : 1);
-  const dy = useSharedValue(0); // how far the page has been dragged down
+  const dy = useSharedValue(0); // how far the page has been dragged down (up, while it is held)
+  const ox = useSharedValue(0); // how far it has been dragged sideways while held: the page follows the finger anywhere
   const dx = useSharedValue(0); // how far the page has been swiped to the right from the left edge (the back gesture)
   const reduce = useReduce(); // the system's Reduce Motion setting: the page is simply there, it does not grow out of the card
   useEffect(() => { if (origin && box) p.value = reduce ? 1 : withTiming(1, { duration: 420, easing: SMOOTH }); }, [origin, box, p, reduce]);
@@ -102,10 +103,12 @@ export function GrowFrame({ children, handle, onClose, origin, grabber }: { chil
     if (!origin) {
       // not opened from a card: the page still follows the drag down and leaves downward
       if (!grabber) { go(); return; }
+      ox.value = withTiming(0, { duration: reduce ? 0 : 260, easing: Easing.out(Easing.cubic) });
       dy.value = withTiming(win.height * 1.05, { duration: reduce ? 0 : 260, easing: Easing.out(Easing.cubic) }, (done) => { if (done) scheduleOnRN(go); });
       return;
     }
     if (!box) { go(); return; }
+    ox.value = withTiming(0, { duration: reduce ? 0 : 260, easing: Easing.out(Easing.cubic) });
     dy.value = withTiming(box.h * 1.05, { duration: reduce ? 0 : 260, easing: Easing.out(Easing.cubic) }, (done) => { if (done) scheduleOnRN(go); });
   };
   // Every way of going back gives the same tap the back button gives, and plays the same closing animation.
@@ -129,23 +132,24 @@ export function GrowFrame({ children, handle, onClose, origin, grabber }: { chil
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [origin, box]));
   const drag = Gesture.Pan()
-    .onUpdate((e) => { dy.value = Math.max(0, e.translationY); })
+    .onUpdate((e) => { dy.value = e.translationY; ox.value = e.translationX; })
     .onEnd((e) => {
       if (e.translationY > 130 || e.velocityY > 900) scheduleOnRN(dismiss);
-      else dy.value = withTiming(0, { duration: 320, easing: SMOOTH });
+      else { dy.value = withTiming(0, { duration: 320, easing: SMOOTH }); ox.value = withTiming(0, { duration: 320, easing: SMOOTH }); }
     });
   const style = useAnimatedStyle(() => {
-    if (!origin && grabber) return { transform: [{ translateY: dy.value }, { translateX: dx.value }], borderRadius: 28 * Math.min(1, dy.value / 40) };
+    const away = Math.hypot(dy.value, ox.value); // how far the page is from where it rests, in any direction
+    if (!origin && grabber) return { transform: [{ translateY: dy.value }, { translateX: dx.value + ox.value }], borderRadius: 28 * Math.min(1, away / 40) };
     if (!origin || late) return dx.value > 0 ? { borderRadius: 28 * Math.min(1, dx.value / 40), transform: [{ translateX: dx.value }] } : {};
     if (!box) return { opacity: 0 };
     const t = p.value;
-    const pull = Math.min(1, dy.value / 320);
+    const pull = Math.min(1, away / 320);
     const sc = origin.w / box.w;
     return {
       opacity: Math.min(1, t * 3),
-      borderRadius: 28 * Math.max(1 - t, Math.min(1, dy.value / 40)),
+      borderRadius: 28 * Math.max(1 - t, Math.min(1, away / 40)),
       transform: [
-        { translateX: (origin.x + origin.w / 2 - (box.x + box.w / 2)) * (1 - t) + dx.value },
+        { translateX: (origin.x + origin.w / 2 - (box.x + box.w / 2)) * (1 - t) + dx.value + ox.value },
         { translateY: (origin.y + origin.h / 2 - (box.y + box.h / 2)) * (1 - t) + dy.value * 0.9 },
         { scale: (sc + (1 - sc) * t) * (1 - 0.14 * pull) },
       ],
@@ -163,7 +167,7 @@ export function GrowFrame({ children, handle, onClose, origin, grabber }: { chil
       ) : null}
       {origin || grabber ? (
         <GestureDetector gesture={drag}>
-          <View accessible accessibilityLabel="Drag down to close" style={{ position: 'absolute', top: Math.max(insets.top - 4, 0), alignSelf: 'center', width: 140, height: 28, alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
+          <View accessible accessibilityLabel="Drag down to close" style={{ position: 'absolute', top: Math.max(insets.top - 4, 0), alignSelf: 'center', width: 200, height: 44, alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
             <View style={{ width: 40, height: 5, borderRadius: radii.pill, backgroundColor: c.muted, opacity: 0.55 }} />
           </View>
         </GestureDetector>
@@ -182,11 +186,12 @@ export function SubPage({ title, children, right, footer, floatingFooter, fallba
   const insets = useSafeAreaInsets();
   const { scrolled, onScroll } = useScrolled();
   const shell = variant === 'shell';
-  const headH = insets.top + 12 + 44 + 8;
+  const lift = isCardPage(path) ? 14 : 0; // a card page has the drag handle above the title: room between them
+  const headH = insets.top + 12 + lift + 44 + 8;
   const useScroll = shell ? true : scroll;
   const back = () => { if (!shell && onBack?.()) return; { const go = () => goBack(fallback); if (frame.current) frame.current.leave(go); else go(); } };
   const header = (
-    <Row style={[{ paddingTop: insets.top + 12, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }, useScroll && { position: 'absolute', top: 0, left: 0, right: 0 }]}>
+    <Row style={[{ paddingTop: insets.top + 12 + lift, paddingHorizontal: 16, paddingBottom: 8, gap: 8 }, useScroll && { position: 'absolute', top: 0, left: 0, right: 0 }]}>
       {origin || isCardPage(path) ? <View style={{ width: 44, height: 44 }} /> : (
         <RoundBtn label={close ? 'Close' : 'Back'} onPress={back} glass>
           {close ? <X size={20} color={c.ink} /> : <ChevronLeft size={shell ? 22 : 20} color={c.ink} />}
@@ -208,7 +213,7 @@ export function SubPage({ title, children, right, footer, floatingFooter, fallba
       {useScroll ? (
         <>
           <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled"
-            contentContainerStyle={shell ? { paddingHorizontal: 16, paddingTop: headH + 4, paddingBottom: footer ? (floatingFooter ? 110 + insets.bottom : 24) : 40 + insets.bottom, gap } : { paddingHorizontal: 16, paddingTop: insets.top + 12 + 44 + 8 + 4, paddingBottom: insets.bottom + (footer && floatingFooter ? 104 : 28), gap: 12 }}>
+            contentContainerStyle={shell ? { paddingHorizontal: 16, paddingTop: headH + 4, paddingBottom: footer ? (floatingFooter ? 110 + insets.bottom : 24) : 40 + insets.bottom, gap } : { paddingHorizontal: 16, paddingTop: insets.top + 12 + lift + 44 + 8 + 4, paddingBottom: insets.bottom + (footer && floatingFooter ? 104 : 28), gap: 12 }}>
             {backdrop}
             {shell ? <View style={{ gap }}>{children}</View> : children}
           </ScrollView>

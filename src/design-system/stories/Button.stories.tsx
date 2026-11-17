@@ -11,7 +11,7 @@ const meta = {
   component: Button,
   args: { label: 'Confirm', kind: 'primary', size: 'large', disabled: false, onPress: () => {} },
   argTypes: {
-    kind: { control: 'select', options: ['primary', 'accent', 'secondary', 'ghost', 'white', 'outline', 'glass', 'dashed', 'line', 'quiet', 'soft', 'whiteLine', 'surface', 'grey', 'glassAccent', 'glassPrimary'] },
+    kind: { control: 'select', options: ['primary', 'accent', 'secondary', 'ghost', 'white', 'outline', 'glass', 'dashed', 'line', 'quiet', 'soft', 'whiteLine', 'surface', 'grey', 'glassClear', 'glassAccent', 'glassPrimary'] },
     size: { control: 'select', options: ['large', 'medium', 'small', 'chip', 'fill', 'tight', 'compact', 'xs'] },
     weight: { control: 'select', options: [undefined, 'medium', 'semibold'] },
     muted: { control: 'boolean' },
@@ -66,6 +66,8 @@ export const WhiteLineXs: S = { args: { kind: 'whiteLine', size: 'xs', weight: '
 export const Surface: S = { args: { kind: 'surface', size: 'small', label: 'Edit' } };
 /** A lighter grey than secondary, for a small button inside a card row (My details Change and Add). */
 export const Grey: S = { args: { kind: 'grey', size: 'small', label: 'Change' } };
+/** Blurred and see-through, for a secondary action on a dark card. */
+export const GlassClear: S = { args: { kind: 'glassClear', label: 'Start today anyway' }, decorators: [(St) => <View style={{ backgroundColor: onDark.card, padding: 20, borderRadius: radii.card }}><St /></View>] };
 export const GlassPrimary: S = { args: { kind: 'glassPrimary', label: 'Save meal' }, decorators: [(St) => <View style={{ backgroundColor: onDark.card, padding: 16, borderRadius: radii.card }}><St /></View>] };
 export const GlassAccent: S = { args: { kind: 'glassAccent', label: 'Start workout' }, decorators: [(St) => <View style={{ backgroundColor: onDark.card, padding: 16, borderRadius: radii.card }}><St /></View>] };
 export const Chip: S = { args: { kind: 'line', size: 'chip', label: 'Pain or injury' } };

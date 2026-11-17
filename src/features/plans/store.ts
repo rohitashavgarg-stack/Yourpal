@@ -9,7 +9,7 @@ import { fmtT } from '@/lib/data';
 // Shared facts (the weekly plan, meal log, request status, offline) stay in the domain.
 
 export type PEx = { id: string; name: string; sets: number; reps: number; kg: number; mode: Mode; t?: number; by?: 'you' | 'coach' | 'created'; hl?: boolean; res?: 'skip' | 'swap'; from?: string };
-export type DayPlan = { name: string; time?: string; wu?: { n: string; s: string }[]; cd?: { n: string; s: string }[]; ex: PEx[]; done?: string; created?: boolean };
+export type DayPlan = { name: string; time?: string; wu?: { n: string; s: string }[]; cd?: { n: string; s: string }[]; ex: PEx[]; done?: string; created?: boolean; extra?: boolean; mins?: number };
 export type Food = { n: string; k: number; p: number; c?: number; f?: number; type?: FoodType; mine?: boolean; est?: boolean; written?: boolean };
 export type DietRow = { key: string; n: string; k: number; p: number; por: number; type: FoodType; mine: boolean; added?: Food };
 export type Draft =
@@ -21,6 +21,7 @@ export type PlansState = {
   seg: 'workout' | 'diet';
   day: number;
   week: number; // 0 = this week, -1 = last week, 1 = next week, ...
+  wi: number; // which workout of the day is open when the day has more than one (in time order); -1 = the next one that is not done
   created: Record<number, { name: string; ex: PEx[] }>;
   applied: boolean; // coach update applied ("Got it")
   hl: string[]; // exercise ids that are "New from Coach"
@@ -46,7 +47,7 @@ export type PlansState = {
 
 export function freshPlans(): PlansState {
   return {
-    seg: 'workout', day: TODAY_IDX, week: 0, created: {}, applied: false, hl: [], noPlan: false, mid: false, diet: 'Veg', detail: 'Detailed',
+    seg: 'workout', day: TODAY_IDX, week: 0, wi: -1, created: {}, applied: false, hl: [], noPlan: false, mid: false, diet: 'Veg', detail: 'Detailed',
     cam: 'Allowed', camOk: null, por: {}, skip: {}, order: {}, always: {}, myFoods: [], openMeal: null, draft: null, eiKey: null,
     cName: '', cDay: 4, cEx: [], cErr: '',
   };
@@ -94,7 +95,28 @@ function pastEx(past: Domain['pastLogs'][string] | undefined, e: PEx) {
   return { sets: done.length, reps: top.reps, kg: top.kg, ...(e.t != null ? { t: top.sec } : null) };
 }
 
+// "7:00 am" to minutes of the day, to put a day's workouts in time order.
+export const timeMin = (t?: string) => { const m = /(\d+):(\d+)\s*(am|pm)/i.exec(t ?? ''); return m ? ((Number(m[1]) % 12) + (m[3].toLowerCase() === 'pm' ? 12 : 0)) * 60 + Number(m[2]) : 0; };
+
+// Every workout of a day in time order. A day made by the member is one workout; a day from the trainer can hold more (`more`).
+export function dayWorkouts(d: Domain, p: PlansState, i: number): DayPlan[] {
+  const first = primaryPlan(d, p, i);
+  if (!first) return [];
+  const b = d.plans[i];
+  if (p.created[i] || !b?.more?.length) return [first];
+  const list: DayPlan[] = [first, ...b.more.map((m): DayPlan => ({ name: m.name, time: m.time, mins: m.mins, wu: m.wu, cd: m.cd, extra: true, done: p.week === 0 ? m.done : undefined, ex: m.ex.map((e) => ({ ...e })) }))];
+  return list.sort((a, c) => timeMin(a.time) - timeMin(c.time));
+}
+
+// The workout on screen for a day: the one picked on the timeline, or (not picked yet) the next one that is not done.
 export function dayPlan(d: Domain, p: PlansState, i: number): DayPlan | null {
+  const list = dayWorkouts(d, p, i);
+  if (!list.length) return null;
+  if (i !== p.day || p.wi < 0) { const k = list.findIndex((x) => !x.done); return list[i === p.day ? Math.max(k, 0) : 0]; }
+  return list[Math.min(p.wi, list.length - 1)];
+}
+
+function primaryPlan(d: Domain, p: PlansState, i: number): DayPlan | null {
   const cr = p.created[i];
   if (cr) return { name: cr.name, ex: cr.ex.map((e) => ({ ...e })), created: true };
   const b = d.plans[i];

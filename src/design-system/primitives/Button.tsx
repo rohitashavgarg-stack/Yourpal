@@ -12,7 +12,7 @@ import { Pressy } from './Pressy';
  * Every look here existed before; the old names (PillBtn, RoundBtn, StepBtn, and the two buttons on the workout card)
  * are now thin wrappers that pick a kind and a size.
  */
-export type ButtonKind = 'primary' | 'accent' | 'secondary' | 'ghost' | 'white' | 'outline' | 'glass' | 'dashed' | 'line' | 'quiet' | 'soft' | 'whiteLine' | 'surface' | 'grey' | 'glassAccent' | 'glassPrimary' | 'warn';
+export type ButtonKind = 'primary' | 'accent' | 'secondary' | 'ghost' | 'white' | 'outline' | 'glass' | 'dashed' | 'line' | 'quiet' | 'soft' | 'whiteLine' | 'surface' | 'grey' | 'glassClear' | 'glassAccent' | 'glassPrimary' | 'warn';
 export type ButtonSize = 'large' | 'medium' | 'small' | 'tight' | 'compact' | 'chip' | 'xs' | 'fill';
 
 export type ButtonProps = {
@@ -76,6 +76,8 @@ function kindSpec(kind: ButtonKind, c: ReturnType<typeof useTheme>['c']): KindSp
     case 'warn': return { bg: c.danger + '1F', fg: c.danger };
     // blue glass: real iOS glass tinted with the accent (blurred glass with a blue tint elsewhere). For the one main action that floats over scrolling content.
     // the same glass in the primary colours (white in dark mode, near-black in light), for a floating primary button that is not blue (Save meal)
+    // clear glass: blurred and see-through, white text, for a secondary action on a dark card (Start today anyway on a skipped or moved workout)
+    case 'glassClear': return { bg: 'transparent', fg: fixed.white, glass: 'rgba(255,255,255,0.16)', medium: true };
     case 'glassPrimary': return { bg: 'transparent', fg: c.bg, glass: `${c.ink}EB` };
     case 'glassAccent': return { bg: 'transparent', fg: c.accentInk, glass: `${c.accent}EB` };
   }

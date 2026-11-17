@@ -7,7 +7,7 @@
 The text component under every screen. Eight variants (display 34, title 28, headline 17, body 15, label 13, caption 12, mono 13, number 30). It always gives the text a line height of at least 1.3 times the font size, because Geist crops at the top when the leading is tight.
 
 ```tsx
-<Txt v="headline">Leg day</Txt>
+<Txt v="headline">Leg workout</Txt>
 <Txt muted>From your watch</Txt>
 <Txt style={{ fontSize: fontSizes.sm }}>Own size, line height follows</Txt>
 ```

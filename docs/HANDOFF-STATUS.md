@@ -3,17 +3,17 @@
 Checked on 26 Oct 2026 on branch `design-system-handoff`, after round 5 (see `docs/progress.md`). Each line was checked by running the command or opening the file or link. Light mode is out of scope by the designer's instruction, so nothing here covers it.
 
 <!-- numbers:start -->
-Numbers written by `scripts/publish.js` on 2026-11-04 07:11 from branch `staging` at `06d551c`:
+Numbers written by `scripts/publish.js` on 2026-11-16 07:17 from branch `remove-self-assessment` at `b331bb0`:
 
 | Measure | Value |
 |---|---|
 | Typecheck | 0 errors |
 | Lint | 0 errors, 741 warnings |
 | New hard-coded values on changed lines | 0 |
-| Library files | 45 (36 primitives, 9 patterns) |
-| Storybook stories | 245 |
-| Hand-built elements (outside the demo panel) | 164 (3 on purpose, 161 to build) |
-| Dot-separator lines left | 205 in 74 files |
+| Library files | 53 (43 primitives, 10 patterns) |
+| Storybook stories | 269 |
+| Hand-built elements (outside the demo panel) | 141 (3 on purpose, 138 to build) |
+| Dot-separator lines left | 201 in 74 files |
 <!-- numbers:end -->
 
 ## What changed since the last status (23 Oct)

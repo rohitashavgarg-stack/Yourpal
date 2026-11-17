@@ -75,7 +75,7 @@ function TodayMock() {
 
       <View style={[TILE, { gap: 2, padding: 12 }]}>
         <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM }}>Today&apos;s workout · Your coach</Txt>
-        <Txt style={{ fontSize: fontSizes.xl, lineHeight: 26, letterSpacing: -0.6, color: fixed.white, fontFamily: font.regular }}>Leg day</Txt>
+        <Txt style={{ fontSize: fontSizes.xl, lineHeight: 26, letterSpacing: -0.6, color: fixed.white, fontFamily: font.regular }}>Leg workout</Txt>
         <View style={{ marginTop: 6, height: 30, borderRadius: 15, backgroundColor: fixed.white, alignItems: 'center', justifyContent: 'center' }}>
           <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 15, color: fixed.black, fontFamily: font.semibold }}>Start workout</Txt>
         </View>
@@ -90,7 +90,7 @@ function WorkoutMock() {
   return (
     <View accessible accessibilityLabel="Preview of the workout screen: exercises with sets and weights" style={MOCK_BASE}>
       <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: DIM, paddingTop: 4 }}>Planned by your coach</Txt>
-      <Txt style={{ fontSize: 24, lineHeight: 31, letterSpacing: -0.6, color: fixed.white, fontFamily: font.semibold }}>Leg day</Txt>
+      <Txt style={{ fontSize: fontSizes.xl2Plus, lineHeight: 31, letterSpacing: -0.6, color: fixed.white, fontFamily: font.semibold }}>Leg workout</Txt>
       {rows.map(([n, sets, w, done]) => (
         <View key={n} style={[TILE, { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 9 }]}>
           <View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: done ? fixed.blue : 'transparent', borderWidth: done ? 0 : 1.5, borderColor: 'rgba(255,255,255,0.3)' }} />

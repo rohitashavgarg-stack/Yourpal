@@ -61,13 +61,13 @@ export default function CoachHub() {
         </Row>
       </Card>
 
-      <Pressy accessibilityRole="button" accessibilityLabel="Your plan. Leg day updated Wednesday. Open plans" onPress={() => router.navigate('/plans')} scaleTo={0.98}>
+      <Pressy accessibilityRole="button" accessibilityLabel="Your plan. Leg workout updated Wednesday. Open plans" onPress={() => router.navigate('/plans')} scaleTo={0.98}>
         <Card style={{ gap: 4 }}>
           <Row style={{ gap: 12 }}>
             <IconBadge size={40} radius={radii.sm} bg={c.accentSoft}><ClipboardList size={19} color={c.accentText} /></IconBadge>
             <View style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.semibold }}>Your plan</Txt>
-              <Txt v="caption">Leg day updated Wed 24 · Romanian deadlift added</Txt>
+              <Txt v="caption">Leg workout updated Wed 24 · Romanian deadlift added</Txt>
             </View>
             <ChevronRight size={18} color={c.muted} />
           </Row>

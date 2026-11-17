@@ -12,6 +12,7 @@ import { font } from '@/theme/tokens';
 import { ListCard, SubPage } from '@/features/progress/parts';
 import { LineRow, ListCard as CardList } from '@/features/shell/parts';
 import { PT_STATS, PT_TOTAL } from '@/features/gym/data';
+import { usePtPackages } from '@/features/gym/memberships';
 import { useGoalV2 } from '@/features/goalv2/model';
 import { gymStore, useGymScenarios } from '@/features/gym/state';
 import { CalendarCheck, CalendarClock, Dumbbell, Eye, HandHeart, Target, TrendingUp, UserCheck } from '@/lib/icons';
@@ -32,9 +33,9 @@ const BENEFITS = [
 export default function PersonalTraining() {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
-  const { d } = useDomain();
   const { state } = useStore();
   const isPT = state.sc.member === 'PT member';
+  const packs = usePtPackages();
   const gs = gymStore.use();
   const awaiting = isPT && gs.awaiting === 'Yes' && gs.sessionState === 'awaiting';
   const g = useGoalV2();
@@ -79,7 +80,15 @@ export default function PersonalTraining() {
         </Row>
       </View>
 
-      {isPT && <ListCard rows={[{ l: 'Sessions left', v: `${d.ptLeft} of ${PT_TOTAL}` }, { l: 'Next session', v: 'Thu 25, 6 pm' }, { l: 'Package renews', v: '30 Oct' }]} />}
+      {isPT && <Txt v="label" style={{ paddingHorizontal: 4 }}>ACTIVE PACKAGES</Txt>}
+      {isPT && packs.filter((p) => !p.past).map((p) => (
+        <ListCard key={p.id} rows={[{ l: p.name, v: `${p.left} of ${p.total} left` }, { l: 'Ends', v: p.ends }, { l: 'Source', v: p.source }]} />
+      ))}
+      {isPT && <Txt v="label" style={{ paddingHorizontal: 4 }}>PAST PACKAGES</Txt>}
+      {isPT && packs.filter((p) => p.past).map((p) => (
+        <ListCard key={p.id} rows={[{ l: p.name, v: `${p.total} sessions` }, { l: 'Ended', v: p.ends }]} />
+      ))}
+      {isPT && <ListCard rows={[{ l: 'Next session', v: 'Thu 25, 6 pm' }]} />}
 
       {isPT && (
         <CardList>

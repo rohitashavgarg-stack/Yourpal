@@ -131,7 +131,6 @@ export function PtConfirmCard() {
         <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => openSheet(<FlagSheet />, { label: 'Flag session' })} /></View>
         <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} /></View>
       </Row>
-      <Txt v="caption" style={{ textAlign: 'center' }}>Not confirmed? It confirms itself on Fri 26 Sep, so your package stays right.</Txt>
     </FadeIn>
   );
 }
@@ -218,7 +217,7 @@ function UpdIcon({ u }: { u: Upd }) {
   return <IconBadge size={40} radius={radii.sm} bg={bg}><I size={19} color={fg} /></IconBadge>;
 }
 
-const PLAN_CHANGES: [string, string][] = [['+ Walking lunges', '3×10'], ['− Leg extension', 'Leg day'], ['Squat 60 → 62.5 kg', 'Leg day']];
+const PLAN_CHANGES: [string, string][] = [['+ Walking lunges', '3×10'], ['− Leg extension', 'Leg workout'], ['Squat 60 → 62.5 kg', 'Leg workout']];
 function PlanChanges() {
   const { c } = useTheme();
   return (

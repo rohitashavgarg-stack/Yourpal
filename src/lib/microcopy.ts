@@ -17,7 +17,7 @@ export type TodayCtx = {
 };
 
 // The top of Today is two lines in one quiet grey: a greeting with the name ("Hey! Rohitashav"), then a line whose key phrase is brighter
-// ("It's your" in grey, "Leg day" in white). The name is only in the first line. The day of the month rotates the greeting wording.
+// ("It's your" in grey, "Leg workout" in white). The name is only in the first line. The day of the month rotates the greeting wording.
 // tail: optional grey words after the bright phrase ("1 of 4 workouts" + " this week").
 export type Greeting = { top: string; lead: string; hl: string; tail?: string };
 
@@ -42,7 +42,7 @@ function greetingBase(c: TodayCtx, first: string): Greeting {
   if (c.workout === 'live') return g(['Keep going! {n}', 'Hey! {n}'], 1, 'Workout', 'in progress');
   if (c.workout === 'rest') return g(timeGreet(c), 2, "It's your", 'rest day');
   if (c.workout === 'done') return c.weeks > 0 ? g(['Good job! {n}', 'Well done! {n}'], 3, '', `${c.weeks} week streak`) : g(['Good job! {n}', 'Well done! {n}'], 3, 'Workout', 'done');
-  if (c.workout === 'todo' && c.min < c.planned) return g(timeGreet(c), 4, "It's your", 'Leg day');
+  if (c.workout === 'todo' && c.min < c.planned) return g(timeGreet(c), 4, "It's your", 'Leg workout');
   if (c.nextMeal) return g(timeGreet(c), 5, 'Next up is', c.nextMeal);
   return { ...g(timeGreet(c), 6, '', `${c.weekDone} of ${c.target} workouts`), tail: ' this week' };
 }
@@ -95,7 +95,7 @@ export const updateCopy = {
       ? { title: `Did you have your ${m}${nm(first)}?`, body: `It was planned for ${planned}. Log what you ate, or skip it if you missed it.` }
       : { title: `${meal} time${nm(first)}`, body: 'Log it when you sit down to eat, so your total for today stays right.' };
   },
-  workout: (first: string, planned: string) => ({ title: `Did you train today${nm(first)}?`, body: `Leg day was planned for ${planned}. Log it if you went, or skip it.` }),
+  workout: (first: string, planned: string) => ({ title: `Did you train today${nm(first)}?`, body: `Leg workout was planned for ${planned}. Log it if you went, or skip it.` }),
   water: (first: string, last: string | null) => ({
     title: `Have some water${nm(first)}`,
     body: last ? `Your last glass was at ${last}. Have one now to stay on track for today.` : 'You have not logged any water today. Start with one glass.',
@@ -104,7 +104,7 @@ export const updateCopy = {
   steps: (first: string) => ({ title: `A short walk${nm(first)}?`, body: 'Your steps are behind today. Ten minutes outside gets you close.' }),
   pt: { title: 'Did your session happen?', body: 'Coach Vikram marked Tue 23 Sep, 6 to 7 pm as done. Confirm it, or it confirms itself on Fri 26 Sep.' },
   membership: { title: 'Your membership ends in 12 days', body: 'It expires on 6 Oct. Renew at Wulf Fitness reception to keep going.' },
-  plan: { title: 'Coach Vikram updated your plan', body: 'Leg day has a few changes: lunges added, leg extension removed.' },
+  plan: { title: 'Coach Vikram updated your plan', body: 'Leg workout has a few changes: lunges added, leg extension removed.' },
   reply: { title: 'Coach Vikram replied to you', body: '“Keep your back straight on rows.”' },
   reassess: (first: string) => ({ title: `Your next assessment is due${nm(first)}`, body: 'Book a slot at the front desk this week so Coach Vikram can update your plan.' }),
   memberSoon: { title: 'Your membership ends soon', body: 'It expires in 12 days. Renew at the front desk to keep your plan going.' },

@@ -32,6 +32,7 @@
    "features/profile/WaiverCard.tsx",
    "features/feedback/FeedbackCard.tsx",
    "features/today/GoalCards.tsx",
+   "features/today/MealLoggedSheet.tsx",
    "features/today/LogMealsSheet.tsx",
    "features/reminders/push.ts"
   ]
@@ -57,7 +58,7 @@
   "screen": "Progress",
   "group": "Routes",
   "status": "not started",
-  "hand": 4,
+  "hand": 3,
   "files": [
    "app/(tabs)/progress.tsx",
    "features/progress/MusclesCard.tsx",
@@ -98,6 +99,16 @@
   ]
  },
  {
+  "id": "route:/food-library",
+  "screen": "/food-library",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/food-library.tsx"
+  ]
+ },
+ {
   "id": "route:/food",
   "screen": "Food detail",
   "group": "Routes",
@@ -132,7 +143,7 @@
   "screen": "/gym/assessment",
   "group": "Routes",
   "status": "not started",
-  "hand": 2,
+  "hand": 4,
   "files": [
    "app/gym/assessment.tsx"
   ]
@@ -208,8 +219,7 @@
   "status": "not started",
   "hand": 0,
   "files": [
-   "app/gym/payments.tsx",
-   "features/reports/invoice.ts"
+   "app/gym/payments.tsx"
   ]
  },
  {
@@ -257,7 +267,7 @@
   "screen": "/log-chat",
   "group": "Routes",
   "status": "not started",
-  "hand": 4,
+  "hand": 3,
   "files": [
    "app/log-chat.tsx"
   ]
@@ -346,6 +356,16 @@
   "files": [
    "app/plans/edit.tsx",
    "features/plans/DragList.tsx"
+  ]
+ },
+ {
+  "id": "route:/plans/entries",
+  "screen": "/plans/entries",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "app/plans/entries.tsx"
   ]
  },
  {
@@ -471,11 +491,21 @@
   ]
  },
  {
+  "id": "route:/profile/language",
+  "screen": "/profile/language",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/language.tsx"
+  ]
+ },
+ {
   "id": "route:/profile/notifications",
   "screen": "Notification settings",
   "group": "Routes",
   "status": "not started",
-  "hand": 0,
+  "hand": 1,
   "files": [
    "app/profile/notifications.tsx"
   ]
@@ -553,7 +583,6 @@
    "features/profile/WaiverDetails.tsx",
    "features/profile/SignSheet.tsx",
    "features/profile/Signature.tsx",
-   "features/profile/WaiverBackdrop.tsx",
    "features/profile/WaiverBadge.tsx",
    "features/profile/WaiverIllustration.tsx"
   ]
@@ -826,6 +855,16 @@
  {
   "id": "sheet:ChangePhoneSheet",
   "screen": "ChangePhoneSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/details.tsx"
+  ]
+ },
+ {
+  "id": "sheet:ChangeEmailSheet",
+  "screen": "ChangeEmailSheet",
   "group": "Bottom sheets",
   "status": "not started",
   "hand": 0,
@@ -1194,6 +1233,36 @@
   ]
  },
  {
+  "id": "sheet:MealLoggedSheet",
+  "screen": "MealLoggedSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/MealLoggedSheet.tsx"
+  ]
+ },
+ {
+  "id": "sheet:QuickTipSheet",
+  "screen": "QuickTipSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/today/PersonalCards.tsx"
+  ]
+ },
+ {
+  "id": "sheet:HealthConsentSheet",
+  "screen": "HealthConsentSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/PersonalCards.tsx"
+  ]
+ },
+ {
   "id": "sheet:QuickLogSheet",
   "screen": "QuickLogSheet",
   "group": "Bottom sheets",
@@ -1528,7 +1597,7 @@
   "screen": "components/GymHeader.tsx",
   "group": "Shared components and features",
   "status": "not started",
-  "hand": 1,
+  "hand": 0,
   "files": [
    "components/GymHeader.tsx"
   ]
@@ -1571,6 +1640,16 @@
   "hand": 3,
   "files": [
    "features/shell/parts.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/today/PersonalCards.tsx",
+  "screen": "features/today/PersonalCards.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/today/PersonalCards.tsx"
   ]
  },
  {

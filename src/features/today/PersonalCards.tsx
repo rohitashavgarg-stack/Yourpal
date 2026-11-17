@@ -2,7 +2,7 @@ import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { Footprints, Flame, Lightbulb } from '@/lib/icons';
+import { ArrowRight, Footprints, Flame, Lightbulb } from '@/lib/icons';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Card } from '@/design-system/primitives/Card';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
@@ -13,7 +13,7 @@ import { haptic } from '@/lib/haptics';
 import { HEALTH_NAME } from '@/lib/health';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fontSizes, radii } from '@/design-system/tokens';
+import { fixed, fontSizes, radii } from '@/design-system/tokens';
 import { dayPlan, usePlans } from '@/features/plans/store';
 import { nextMeal } from './meals';
 import { TIP_BUTTON, TIP_HEADS, TIP_LABEL, personalStore, tipOfDay, type Tip } from './personalise';
@@ -38,7 +38,7 @@ export function QuickTipCard() {
       <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl2Plus, lineHeight: 30, letterSpacing: -0.5, maxWidth: '88%' }}>{t.title}</Txt>
       <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23, maxWidth: '88%' }}>{t.body}</Txt>
       <View style={{ alignSelf: 'flex-start', marginTop: 6 }}>
-        <Button kind="secondary" small label={TIP_BUTTON[t.kind]} accessibilityLabel={`${TIP_BUTTON[t.kind]}: ${t.title}`} onPress={() => openSheet(<QuickTipSheet tip={t} />, { label: TIP_LABEL[t.kind] })} />
+        <Button kind="white" size="small" iconAfter={<ArrowRight size={16} color={fixed.dark} />} label={TIP_BUTTON[t.kind]} accessibilityLabel={`${TIP_BUTTON[t.kind]}: ${t.title}`} onPress={() => openSheet(<QuickTipSheet tip={t} />, { label: TIP_LABEL[t.kind] })} />
       </View>
     </Card>
   );

@@ -157,7 +157,7 @@ export default function Workout() {
     return <FinishScreen s={finished} onDone={(feel, note) => {
       const mins = finished.mins, at = nowMin(d);
       const msg = note.trim();
-      set((x) => ({ session: null, wkDone: { a: at, b: at + mins, k: Math.max(40, mins * 7), ex: finished.exercises }, ...(msg ? { chat: [...x.chat, { me: true, t: msg, ctx: `Leg day · felt ${feel.toLowerCase()}`, meta: 'Just now · Delivered' }] } : {}) }));
+      set((x) => ({ session: null, wkDone: { a: at, b: at + mins, k: Math.max(40, mins * 7), ex: finished.exercises }, ...(msg ? { chat: [...x.chat, { me: true, t: msg, ctx: `Leg workout · felt ${feel.toLowerCase()}`, meta: 'Just now · Delivered' }] } : {}) }));
       if (msg) { coachStore.set({ unread: false }); toast('Note sent to Coach Vikram'); }
       router.canGoBack() ? router.back() : router.replace('/(tabs)');
     }} />;
@@ -279,7 +279,7 @@ export default function Workout() {
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Txt accessibilityLabel={`Elapsed ${elapsed}`} style={{ fontFamily: font.monoBold, fontSize: fontSizes.xl2 }}>{elapsed}</Txt>
           <Row style={{ gap: 6 }}>
-            <Txt v="caption">Leg day</Txt>
+            <Txt v="caption">Leg workout</Txt>
             {d.hc && d.wearable && <Row style={{ gap: 3 }}><Beat><HeartIcon size={11} color="#FF8A96" /></Beat><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xs, color: '#FF8A96' }}>{hr} bpm</Txt></Row>}
           </Row>
         </View>

@@ -17,7 +17,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { CardTitle, cardShadow, GrowBar, PCard } from '@/features/progress/parts';
 import { PT_TOTAL, VISITS } from '@/features/gym/data';
-import { useMemberships } from '@/features/gym/memberships';
+import { useMemberships, usePtPackages } from '@/features/gym/memberships';
 import { NumKey, compare, fmtAt, useAssessments } from '@/features/gym/assessmentData';
 import { TimeBar } from '@/app/gym/membership';
 import { dateLabel, gymStore, useGymScenarios } from '@/features/gym/state';
@@ -228,6 +228,7 @@ function ChatCard() {
 function PTCard({ isPT }: { isPT: boolean }) {
   const { c } = useTheme();
   const { d } = useDomain();
+  const packs = usePtPackages().filter((x) => !x.past);
   const grow = useGrowOpen();
   const head = (title: string, sub: string, right?: React.ReactNode) => (
     <Row style={{ gap: 14 }}>
@@ -245,6 +246,22 @@ function PTCard({ isPT }: { isPT: boolean }) {
       <CardEdge radius={radii.xl} />
         {head('Personal training', 'Workout and diet from a coach')}
         <Button kind="white" label="See how it works" onPress={() => router.push('/gym/pt')} />
+      </View>
+    );
+  }
+  // Several packs: the sessions left across every active pack, with one progress bar.
+  if (packs.length > 1) {
+    const left = packs.reduce((n, x) => n + x.left, 0);
+    const total = packs.reduce((n, x) => n + x.total, 0);
+    return (
+      <View style={{ backgroundColor: onDark.card, borderRadius: radii.xl, padding: 18, gap: 16 }}>
+        <CardEdge radius={radii.xl} />
+        {head('PT sessions', `${packs.length} active PT packages`)}
+        <View style={{ gap: 10 }}>
+          <Txt accessibilityLabel={`${left} of ${total} sessions left`} style={{ fontFamily: font.display, fontSize: fontSizes.xl4, lineHeight: 39, color: onDark.text }}>{left}<Txt style={{ fontFamily: font.display, fontSize: fontSizes.lg, color: onDark.muted }}> of {total} sessions left</Txt></Txt>
+          <GrowBar pct={Math.round((left / total) * 100)} color={c.accent} track="rgba(255,255,255,0.14)" />
+        </View>
+        <Button kind="white" label="View packages" onPress={() => router.push('/gym/pt-packs')} />
       </View>
     );
   }

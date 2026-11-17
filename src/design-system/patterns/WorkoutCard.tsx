@@ -5,6 +5,7 @@ import { CalendarClock, Check, Clock, Dumbbell, Lock, Moon, X, SkipForward, Zap 
 import { Chip, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { Button } from '@/design-system/primitives/Button';
+import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { MetaRow } from '@/design-system/primitives/MetaRow';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font, fontSizes, fixed, radii, onDark, gradients, round } from '@/design-system/tokens';
@@ -26,7 +27,7 @@ export type WorkoutCardState = 'upcoming' | 'due' | 'live' | 'missed' | 'moved' 
 
 export type WorkoutCardProps = {
   state: WorkoutCardState;
-  /** The workout name, "Leg day". */
+  /** The workout name, "Leg workout". */
   name: string;
   /** The planned time, "6:30 pm". Shown as a small pill after the name. */
   time?: string;
@@ -34,6 +35,8 @@ export type WorkoutCardProps = {
   when?: string;
   /** upcoming and due: facts under the name, each with an icon and a thin line between: "7 exercises", "~50 min". */
   meta?: { kind: 'exercises' | 'time'; text: string }[];
+  /** The line above the name. Default "Today's workout"; a day with two workouts says "Workout 1 of 2" and "Workout 2 of 2", in time order. */
+  heading?: string;
   /** The coach reply dot on the coach line. */
   coachUnread?: boolean;
   onOpenCoach?: () => void;
@@ -42,7 +45,7 @@ export type WorkoutCardProps = {
   /** live */
   live?: { elapsed: string; done: number; total: number; next?: string };
   /** done: "6:58 pm" and the two stats (value, unit, label): the exercises that were marked, and the calories. */
-  done?: { at: string; stats: [string, string, string][] };
+  done?: { at: string; stats: [string, string, string][]; /** Both workouts of the day are done: the title becomes "Workouts complete" and each workout is listed with when it finished, instead of the name chip. */ rows?: { name: string; at: string; sub?: string; status?: 'done' | 'skipped' | 'moved' }[]; /** The small line at the top, default "Done at 7:42 am" (or "Everything done today" with rows). */ label?: string; /** The title, default "Workout complete" ("Workouts complete" with rows). */ title?: string };
   /** rest and skipped: "Next: Pull, Thu 6:30 pm". */
   restNext?: string;
   /** moved: where the workout moved to, "Thu 25 at 6:30 pm". */
@@ -66,12 +69,12 @@ const LILAC = onDark.lilac;
 const W60 = 'rgba(255,255,255,0.65)';
 
 // The coach line at the top of the card (with the unread dot for a coach reply).
-function Coach({ dim = false, unread, onPress }: { dim?: boolean; unread?: boolean; onPress?: () => void }) {
+function Coach({ dim = false, unread, onPress, title = "Today's workout" }: { dim?: boolean; unread?: boolean; onPress?: () => void; title?: string }) {
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel="Today's workout, planned by Coach Vikram. Open your coach" onPress={onPress} scaleTo={0.97} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 1, opacity: dim ? 0.7 : 1 }}>
+    <Pressy accessibilityRole="button" accessibilityLabel={`${title}, planned by Coach Vikram. Open your coach`} onPress={onPress} scaleTo={0.97} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 1, opacity: dim ? 0.7 : 1 }}>
       <View><PersonAvatar who="coach" size={34} />{unread && <View accessibilityLabel="Unread reply" style={{ position: 'absolute', right: -1, top: -1, width: 9, height: 9, borderRadius: radii.dot, backgroundColor: MINT }} />}</View>
       <View style={{ flexShrink: 1 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.basePlus, lineHeight: 22, color: fixed.white }}>{"Today's workout"}</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.basePlus, lineHeight: 22, color: fixed.white }}>{title}</Txt>
         <Txt style={{ fontSize: fontSizes.xsPlus, lineHeight: 18, color: W60 }}>Planned by Coach Vikram</Txt>
       </View>
     </Pressy>
@@ -100,6 +103,7 @@ function WorkoutShell({ colors, edge, children, compact = false, label }: { colo
   return (
     <View accessibilityLabel={label} style={{ borderRadius: radii.card, padding: 16, paddingVertical: compact ? 14 : 16, gap: 12, overflow: 'hidden', borderWidth: edge ? 1.5 : 0, borderColor: edge }}>
       <LinearGradient colors={colors as any} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      {!edge && <CardEdge radius={radii.card} />}
       {!compact && <View pointerEvents="none" style={{ position: 'absolute', right: -70, top: -80, width: 220, height: 220, borderRadius: round(220), borderWidth: 14, borderColor: 'rgba(255,255,255,0.05)' }} />}
       {children}
     </View>
@@ -108,7 +112,7 @@ function WorkoutShell({ colors, edge, children, compact = false, label }: { colo
 
 const noop = () => {};
 
-export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, onOpenCoach, burned, live, done, restNext, tomorrow, onStart = noop, onResume = noop, onDidIt = noop, onMove = noop, onSkip = noop, onStartAnyway = noop, onUndo = noop, onNotToday = noop }: WorkoutCardProps) {
+export function WorkoutCard({ state, name, time, when, meta = [], heading, coachUnread, onOpenCoach, burned, live, done, restNext, tomorrow, onStart = noop, onResume = noop, onDidIt = noop, onMove = noop, onSkip = noop, onStartAnyway = noop, onUndo = noop, onNotToday = noop }: WorkoutCardProps) {
   const { c } = useTheme();
   const burnedRow = burned != null ? (
     <Row style={{ gap: 8, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.12)' }}>
@@ -139,7 +143,7 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
     return (
       <WorkoutShell label={moved ? `${name} moved to tomorrow` : `${name} skipped today`} colors={moved ? gradients.workoutPlanned : [onDark.card, onDark.card]} edge="rgba(255,255,255,0.12)">
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
-          <Coach dim unread={coachUnread} onPress={onOpenCoach} />
+          <Coach dim title={heading} unread={coachUnread} onPress={onOpenCoach} />
           <Chip label={moved ? 'Moved' : 'Skipped'} icon={moved ? <CalendarClock size={13} color={fixed.white} /> : <SkipForward size={13} color={fixed.white} />} onDark />
         </Row>
         <WorkoutTitle name={name} tone={moved ? 'default' : 'skipped'} />
@@ -151,7 +155,7 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
         </View>
         <Row style={{ gap: 10 }}>
           <Button kind="white" size="small" label="Undo" onPress={onUndo} />
-          <Button kind="secondary" size="small" label="Start today anyway" onPress={onStartAnyway} />
+          <Button kind="glassClear" size="small" label="Start today anyway" onPress={onStartAnyway} />
         </Row>
       </WorkoutShell>
     );
@@ -177,11 +181,11 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
           <Row style={{ gap: 8 }}>
             <View style={{ width: 28, height: 28, borderRadius: round(28), backgroundColor: MINT, alignItems: 'center', justifyContent: 'center' }}><Check size={16} strokeWidth={3} color={fixed.dark} /></View>
-            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: MINT }}>{`Done at ${done.at}`}</Txt>
+            <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.sm, lineHeight: 18, color: MINT }}>{done.label ?? (done.rows ? 'Everything done today' : `Done at ${done.at}`)}</Txt>
           </Row>
-          <Chip label={name} onDark />
+          {!done.rows && <Chip label={name} onDark />}
         </Row>
-        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 39, letterSpacing: -1.2, color: fixed.white }}>Workout complete</Txt>
+        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 39, letterSpacing: -1.2, color: fixed.white }}>{done.title ?? (done.rows ? 'Workouts complete' : 'Workout complete')}</Txt>
         <Row style={{ gap: 12 }}>
           {done.stats.map(([v, u, l]) => (
             <View key={l} style={{ flex: 1 }}>
@@ -190,6 +194,25 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
             </View>
           ))}
         </Row>
+        {done.rows && (
+          <View accessibilityRole="list" style={{ paddingTop: 12, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.14)' }}>
+            {done.rows.map((r, i) => {
+              const last = i === done.rows!.length - 1;
+              return (
+                <View key={r.name} accessible accessibilityLabel={`${r.name}, ${r.status === 'skipped' ? 'skipped' : r.status === 'moved' ? 'moved to tomorrow' : 'completed at ' + r.at}${r.sub ? ', ' + r.sub : ''}`} style={{ flexDirection: 'row', gap: 12 }}>
+                  <View style={{ width: 20, alignItems: 'center' }}>
+                    <View style={{ width: 20, height: 20, borderRadius: round(20), backgroundColor: r.status && r.status !== 'done' ? 'rgba(255,255,255,0.16)' : MINT, alignItems: 'center', justifyContent: 'center' }}>{r.status && r.status !== 'done' ? <SkipForward size={11} color={fixed.white} /> : <Check size={12} strokeWidth={3} color={fixed.dark} />}</View>
+                    {!last && <View style={{ flex: 1, width: 1, backgroundColor: 'rgba(124,240,200,0.5)', marginVertical: 3 }} />}
+                  </View>
+                  <View style={{ flex: 1, paddingBottom: last ? 0 : 14 }}>
+                    <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base, lineHeight: 21, color: fixed.white }}>{r.name}</Txt>
+                    <Txt style={{ fontSize: fontSizes.xs, lineHeight: 17, color: W60 }}>{r.status === 'skipped' ? 'Skipped for today' : r.status === 'moved' ? 'Moved to tomorrow' : `Completed at ${r.at}${r.sub ? ', ' + r.sub : ''}`}</Txt>
+                  </View>
+                </View>
+              );
+            })}
+          </View>
+        )}
         {burnedRow}
       </WorkoutShell>
     );
@@ -226,7 +249,7 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
     return (
       <WorkoutShell label={`${name} missed`} colors={gradients.workoutMissed} edge="rgba(242,179,91,0.28)">
         <Row style={{ justifyContent: 'space-between', gap: 8 }}>
-          <Coach dim unread={coachUnread} onPress={onOpenCoach} />
+          <Coach dim title={heading} unread={coachUnread} onPress={onOpenCoach} />
           <View style={{ height: 28, paddingHorizontal: 11, borderRadius: round(28), borderWidth: 1, borderColor: 'rgba(242,179,91,0.5)', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <Clock size={13} color={AMBER} /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 17, color: AMBER }}>Missed</Txt>
           </View>
@@ -269,9 +292,9 @@ export function WorkoutCard({ state, name, time, when, meta = [], coachUnread, o
   // upcoming / due now (a thin mint edge and a "Now" chip; the button stays white)
   const due = state === 'due';
   return (
-    <WorkoutShell label={`Today's workout, ${name}`} colors={gradients.workoutPlanned} edge={due ? 'rgba(124,240,200,0.45)' : undefined}>
+    <WorkoutShell label={`Today's workout, ${name}`} colors={gradients.workoutPlanned}>
       <Row style={{ justifyContent: 'space-between', gap: 8 }}>
-        <Coach unread={coachUnread} onPress={onOpenCoach} />
+        <Coach title={heading} unread={coachUnread} onPress={onOpenCoach} />
         {due ? (
           <View style={{ height: 28, paddingHorizontal: 11, borderRadius: round(28), borderWidth: 1, borderColor: 'rgba(124,240,200,0.6)', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <LiveDot /><Txt style={{ fontFamily: font.medium, fontSize: fontSizes.xs, lineHeight: 17, color: MINT }}>Now</Txt>
