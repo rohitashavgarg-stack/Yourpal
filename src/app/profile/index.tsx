@@ -20,10 +20,8 @@ import { useDomain } from '@/lib/domain';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { fadeOut } from '@/theme/motion';
-import { LineRow, ListCard, Note, ProgLogo, SubPage } from '@/features/shell/parts';
+import { LineRow, ListCard, Note, SubPage } from '@/features/shell/parts';
 import { resetShell, useShell } from '@/features/shell/state';
-import { ProgrammeSwitcherSheet } from '@/features/shell/Switcher';
-import { CornerGlow } from '@/features/progress/parts';
 import { goalSummary } from '@/features/shell/goal';
 import { LogoutSheet } from '@/features/shell/sheets';
 import { openLegal } from '@/features/legal/links';
@@ -40,7 +38,7 @@ export default function Profile() {
   const { c } = useTheme();
   const { state, setSc } = useStore();
   const { d } = useDomain();
-  const { s, set, current, multi } = useShell();
+  const { s, set } = useShell();
   const { openSheet, toast } = useOverlay();
   const p = state.profile;
 
@@ -87,25 +85,6 @@ export default function Profile() {
           </View>
         </Row>
       </View>
-
-      {/* The programme: a soft glow in its own colour, the logo, the name, and a Switch pill when there is more than one. */}
-      {d.hasGym && (
-        <Pressy accessibilityRole="button" accessibilityLabel={`Programme: ${current.short}${multi ? '. Switch' : ''}`} onPress={() => openSheet(<ProgrammeSwitcherSheet />, { label: 'Switch programme' })} scaleTo={0.985}
-          style={{ position: 'relative', zIndex: 0, minHeight: 100, borderRadius: radii.xl, backgroundColor: c.cardLift, overflow: 'hidden', paddingHorizontal: 18, paddingVertical: 18, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-          <CornerGlow color={current.color} size={320} side="left" />
-          <CardEdge radius={radii.xl} />
-          <ProgLogo p={current} size={64} />
-          <View style={{ flex: 1, gap: 2 }}>
-            <Txt v="caption" style={{ fontSize: fontSizes.sm }}>Programme</Txt>
-            <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 30, letterSpacing: -0.5 }} numberOfLines={1}>{current.short}</Txt>
-          </View>
-          {multi ? (
-            <View style={{ height: 36, paddingHorizontal: 16, borderRadius: radii.pill, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}>
-              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20 }}>Switch</Txt>
-            </View>
-          ) : null}
-        </Pressy>
-      )}
 
       {s.deleting && (
         <FadeIn exiting={fadeOut()} style={{ paddingVertical: 14, paddingHorizontal: 18, borderRadius: radii.lg, backgroundColor: c.warnSoft, flexDirection: 'row', alignItems: 'center', gap: 10 }}>

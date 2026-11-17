@@ -62,11 +62,13 @@ export default function Login() {
     if (why) { setJoinBad(why); haptic.error(); return; }
     haptic.success();
     toast("Code accepted. You're joining Wulf Fitness");
-    afterJoin();
+    // The same welcome screen for everyone: a new member then goes through every onboarding step, an existing member goes into the app after it.
+    if (isNew) { set({ loggedIn: true, phone, onboardingStep: 'welcome' }); router.replace('/onboarding'); }
+    else { set({ loggedIn: true, phone, onboarded: true }); router.replace({ pathname: '/onboarding', params: { welcome: '1' } }); }
   };
   const finish = (id?: string) => {
     if (id) { const n = switchProgramme(id); if (n) haptic.success(); }
-    set({ loggedIn: true, phone, ...(isNew ? {} : { onboarded: true }) });
+    set({ loggedIn: true, phone, ...(isNew ? { onboardingStep: 'welcome' } : { onboarded: true }) });
     router.replace(isNew ? '/onboarding' : '/(tabs)');
   };
 

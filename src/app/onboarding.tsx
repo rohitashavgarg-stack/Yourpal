@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { addDays, fmtDay, goalV2Store, kindOf } from '@/features/goalv2/model';
 import { FinishBy } from '@/features/goalv2/FinishBy';
 import { TODAY } from '@/features/progress/trends';
+import { createStore } from '@/features/progress/store';
 import { WEEK_TARGET } from '@/features/streak/data';
 import { useSituation } from '@/lib/situations';
 import { ageFrom, daysIn, defaultDob, MAX_AGE, MIN_AGE, toDob } from '@/lib/dob';
@@ -16,7 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GymLogoMark } from '@/components/Brand';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GlassBackdrop, WebLiquidGlass, hasLiquidGlass, ProgressiveBlur } from '@/components/Glass';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Activity, Bell, CalendarCheck, Check, ChevronLeft, ChevronRight, ChevronsRight, Compass, Dumbbell, Flame, Lock, PersonStanding, Scale, Zap, ShieldCheck, Trophy } from '@/lib/icons';
 import { Button, Card, Chip, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
@@ -43,6 +44,7 @@ import { FadeIn } from '@/design-system/primitives/FadeIn';
 const ORDER = ['welcome', 'facility', 'name', 'gender', 'birth', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'plan', 'basics', 'health', 'consent', 'building', 'ready'] as const;
 type Step = (typeof ORDER)[number];
 const COUNTED: Step[] = ['name', 'gender', 'birth', 'goal', 'exp', 'sched', 'age', 'height', 'weight', 'target', 'basics'];
+export const onbStore = createStore(() => ({ f: '', l: '', d: '', m: '', y: '' }), 'onboardingInputs');
 const GENDER_OPTIONS = ['Male', 'Female', 'Other', 'Prefer not to say'];
 // Day, month and year typed as the member's birthday: the date as YYYY-MM-DD when it is a real date and the age is allowed, otherwise null.
 function birthDob(b: { d: string; m: string; y: string }) {
@@ -67,12 +69,16 @@ export default function Onboarding() {
   const p = state.profile;
   const sc = state.sc;
   const isPT = sc.member === 'PT member';
-  const isNew = useSituation().current === 'New member'; // a new member (the New member choice in the demo panel): name, gender and age first, and no gym welcome screen
-  const [stepRaw, setStep] = useState<Step>(isNew && !['name', 'gender', 'birth'].includes(state.onboardingStep) ? 'name' : (ORDER as readonly string[]).includes(state.onboardingStep) ? (state.onboardingStep as Step) : 'welcome');
-  // a new member never sees the gym welcome, the gym picker or the old age step: they start on name
-  const step: Step = isNew && (stepRaw === 'welcome' || stepRaw === 'facility' || stepRaw === 'age') ? 'name' : stepRaw;
-  const [nm, setNm] = useState({ f: '', l: '' }); // first and last name
-  const [bd, setBd] = useState({ d: '', m: '', y: '' });
+  const isNew = useSituation().current === 'New member'; // a new member (the New member choice in the demo panel) also answers name, gender and birthday
+  // An existing member who joined another programme with a code only sees the welcome screen for it, then goes into the app.
+  const welcomeOnly = useLocalSearchParams<{ welcome?: string }>().welcome === '1';
+  const [stepRaw, setStep] = useState<Step>(welcomeOnly ? 'welcome' : (ORDER as readonly string[]).includes(state.onboardingStep) ? (state.onboardingStep as Step) : 'welcome');
+  const step: Step = welcomeOnly ? 'welcome' : isNew && stepRaw === 'age' ? 'birth' : stepRaw;
+  const onb = onbStore.use(); // what was typed for name and birthday: kept in a store, because this screen is re-created as you move through it
+  const nm = { f: onb.f, l: onb.l }; // first and last name
+  const setNm = (v: { f: string; l: string }) => onbStore.set(v);
+  const bd = { d: onb.d, m: onb.m, y: onb.y };
+  const setBd = (v: { d: string; m: string; y: string }) => onbStore.set(v);
   const [dir, setDir] = useState(1);
   const [tried, setTried] = useState(false);
 
@@ -94,9 +100,11 @@ export default function Onboarding() {
   const go = (s: Step, d = 1) => { setDir(d); setTried(false); setStep(s); set({ onboardingStep: s }); };
   // Height, weight, target and the projection go together; target and projection need a weight goal.
   const { d: dom } = useDomain();
-  const flow = ORDER.filter((s) => !(isNew && (s === 'welcome' || s === 'facility' || s === 'age')) && !(!isNew && (s === 'name' || s === 'gender' || s === 'birth')) && !(s === 'facility' && !(dom.hasGym && dom.askGym)) && !(p.skipBody && (s === 'height' || s === 'weight' || s === 'target' || s === 'plan')) && !(!needsTarget(p.goal) && (s === 'target' || s === 'plan')));
+  const flowAll = ORDER.filter((s) => !(isNew && s === 'age') && !(!isNew && (s === 'name' || s === 'gender' || s === 'birth')) && !(s === 'facility' && !(dom.hasGym && dom.askGym)) && !(p.skipBody && (s === 'height' || s === 'weight' || s === 'target' || s === 'plan')) && !(!needsTarget(p.goal) && (s === 'target' || s === 'plan')));
+  const flow: Step[] = welcomeOnly ? ['welcome'] : flowAll;
   const idx = Math.max(0, flow.indexOf(step));
   const next = () => {
+    if (welcomeOnly && step === 'welcome') { set({ onboarded: true }); haptic.success(); router.replace('/(tabs)'); return; }
     if (step === 'name') { if (nm.f.trim().length < 2 || nm.l.trim().length < 1) { setTried(true); haptic.error(); return; } setProfile({ name: `${nm.f.trim()} ${nm.l.trim()}` }); }
     if (step === 'gender' && !p.gender) { setTried(true); haptic.error(); return; }
     if (step === 'birth') { const dob = birthDob(bd); if (!dob) { setTried(true); haptic.error(); return; } setProfile({ dob, age: String(ageFrom(dob)) }); }
@@ -124,6 +132,8 @@ export default function Onboarding() {
     goal: { label: 'Not sure yet', run: () => { setProfile({ goal: 'Not sure yet' }); go('exp'); } },
     exp: { label: 'Not sure', run: () => go(flow[idx + 1]) },
     sched: { label: 'Decide later', run: () => go(flow[idx + 1]) },
+    gender: { label: 'Skip', run: () => go(flow[idx + 1]) },
+    birth: { label: 'Skip', run: () => go(flow[idx + 1]) },
     age: { label: 'Maybe later', run: () => go(flow[idx + 1]) },
     height: { label: 'Add later', run: skipBody },
     weight: { label: 'Add later', run: skipBody },
@@ -133,7 +143,7 @@ export default function Onboarding() {
     health: { label: 'Not now', run: () => { setDomain({ hc: false }); go(flow[idx + 1]); } },
   };
   // Skip and Skip all start with the questionnaire (the goal question); the welcome and gym screens have neither.
-  const questionnaire = step !== 'welcome' && step !== 'facility' && step !== 'name' && step !== 'gender' && step !== 'birth' && step !== 'building' && step !== 'ready';
+  const questionnaire = step !== 'welcome' && step !== 'facility' && step !== 'name' && step !== 'building' && step !== 'ready';
   const skip = questionnaire ? skipFor[step] : undefined;
   const back = () => { if (idx > 0) go(flow[idx - 1], -1); else { set({ loggedIn: false }); router.replace('/login'); } };
 
@@ -153,7 +163,7 @@ export default function Onboarding() {
       { label: 'Assessment', options: ['Scheduled', 'Not scheduled'], value: sc.assess, onPick: (v) => setSc({ assess: v as any }) },
       { label: 'Connection', options: ['Online', 'Offline'], value: sc.net, onPick: (v) => setSc({ net: v as any }) },
     ],
-    actions: [{ label: 'Restart onboarding', run: () => { setProfile({ goal: '', exp: '', injury: 'No', injuryNote: '' }); setNm({ f: '', l: '' }); setBd({ d: '', m: '', y: '' }); go(isNew ? 'name' : 'welcome', -1); } }],
+    actions: [{ label: 'Restart onboarding', run: () => { setProfile({ goal: '', exp: '', injury: 'No', injuryNote: '' }); onbStore.set({ f: '', l: '', d: '', m: '', y: '' }); go('welcome', -1); } }],
   }, [step, sc.assess, sc.net]);
 
   const qsteps = flow.filter((x) => COUNTED.includes(x));
@@ -396,14 +406,9 @@ function SchedStep() {
   );
 }
 
-// A big light question with a quiet line under it: the look of the three opening questions for a new member.
+// The opening questions use the same heading as every other step.
 function BigQuestion({ t, s }: { t: string; s: string }) {
-  return (
-    <View style={{ gap: 8, marginBottom: 10, paddingTop: 8 }}>
-      <Txt style={{ fontFamily: font.light, fontSize: fontSizes.xl4, lineHeight: 42, letterSpacing: -1.2 }}>{t}</Txt>
-      <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 22 }}>{s}</Txt>
-    </View>
-  );
+  return <StepTitle t={t} s={s} />;
 }
 
 // 1. Name: first name and last name, each one underlined line.
@@ -413,7 +418,6 @@ function NameStep({ value, onChange, tried }: { value: { f: string; l: string };
   const badL = tried && value.l.trim().length < 1;
   const line = (key: 'f' | 'l', label: string, bad: boolean, focus: boolean, last: boolean) => (
     <View key={key} style={{ gap: 4 }}>
-      <Txt v="caption" style={{ color: bad ? c.warn : c.muted }}>{label}</Txt>
       <TextInput accessibilityLabel={label} value={value[key]} onChangeText={(t) => onChange({ ...value, [key]: t })} autoFocus={focus} maxLength={30} autoCapitalize="words" autoCorrect={false} returnKeyType={last ? 'done' : 'next'} placeholder={label} placeholderTextColor={c.muted}
         style={{ fontFamily: font.regular, fontSize: fontSizes.xl3, lineHeight: 36, color: c.ink, paddingVertical: 10, borderBottomWidth: 2, borderBottomColor: bad ? c.warn : value[key] ? c.ink : c.line, outlineStyle: 'none' as any }} />
     </View>
