@@ -1,6 +1,6 @@
 # Screen map
 
-For the developer. Every screen of the app: where its code is, how a member gets there, where it leads, which sheets it opens, which library pieces it is built from and what data it reads. Generated from the code by `node scripts/audit/screen-map.js` (a first draft: confirm the data lists against the code before building the backend). Generated 2026-11-16.
+For the developer. Every screen of the app: where its code is, how a member gets there, where it leads, which sheets it opens, which library pieces it is built from and what data it reads. Generated from the code by `node scripts/audit/screen-map.js` (a first draft: confirm the data lists against the code before building the backend). Generated 2026-11-17.
 
 How to read it
 - **Route** is the address of the screen (Expo Router: the file under `src/app` is the route).
@@ -37,9 +37,9 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 
 | Screen | Route | Code | Opens from | Leads to |
 |---|---|---|---|---|
-| Gym | `/gym` | `src/app/(tabs)/gym.tsx` | Tab bar: Gym | [Membership](#membership), [Attendance](#attendance), [Assessments](#assessments), [Coach](#coach), [Coach chat](#coach-chat), [PT package](#pt-package), [/gym/sessions](#gym-sessions), [/gym/membership-detail](#gym-membership-detail) |
-| Today | `/` | `src/app/(tabs)/index.tsx` | Tab bar: Today | [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans), [Metric detail](#metric-detail), [Log weight](#log-weight), [Connected apps](#connected-apps), [Coach](#coach), [Active workout](#active-workout), [Progress](#progress), [Membership](#membership), [Log height](#log-height), [Check-in map](#check-in-map), [/profile/waiver](#profile-waiver), [Streaks and badges](#streaks-and-badges) |
-| Plans | `/plans` | `src/app/(tabs)/plans.tsx` | Tab bar: Plans | [What changed](#what-changed), [Exercise](#exercise), [Ask coach](#ask-coach), [Active workout](#active-workout), [/plans/entries](#plans-entries), [Food detail](#food-detail), [What did you eat?](#what-did-you-eat) |
+| Gym | `/gym` | `src/app/(tabs)/gym.tsx` | Tab bar: Gym | [Membership](#membership), [Attendance](#attendance), [Assessments](#assessments), [Coach](#coach), [Coach chat](#coach-chat), [PT package](#pt-package), [/gym/pt-packs](#gym-pt-packs), [/gym/membership-detail](#gym-membership-detail), [/gym/pt-pack](#gym-pt-pack) |
+| Today | `/` | `src/app/(tabs)/index.tsx` | Tab bar: Today | [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans), [Metric detail](#metric-detail), [Log weight](#log-weight), [Connected apps](#connected-apps), [Coach](#coach), [Active workout](#active-workout), [/plans/workout](#plans-workout), [Progress](#progress), [Membership](#membership), [Log height](#log-height), [Check-in map](#check-in-map), [/profile/waiver](#profile-waiver), [Streaks and badges](#streaks-and-badges) |
+| Plans | `/plans` | `src/app/(tabs)/plans.tsx` | Tab bar: Plans | [What changed](#what-changed), [Exercise](#exercise), [Ask coach](#ask-coach), [Active workout](#active-workout), [/plans/entries](#plans-entries), [Food detail](#food-detail), [What did you eat?](#what-did-you-eat), [/plans/workout](#plans-workout) |
 | Progress | `/progress` | `src/app/(tabs)/progress.tsx` | Tab bar: Progress | [Lift detail](#lift-detail), [Photos](#photos), [Metric detail](#metric-detail), [Streaks and badges](#streaks-and-badges), [/progress/muscles](#progress-muscles) |
 | Check-in map | `/checkin` | `src/app/checkin.tsx` | From features/today/CheckInBar | [Active workout](#active-workout) |
 | Coach | `/coach` | `src/app/coach.tsx` | From gym, gym/chat, features/gym/sheets, features/today/WorkoutCard | [Assessments](#assessments), [Plans](#plans), [Coach chat](#coach-chat) |
@@ -47,18 +47,19 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 | /food-library | `/food-library` | `src/app/food-library.tsx` | From log-chat, features/today/AteSomethingElse | none found |
 | Food detail | `/food` | `src/app/food.tsx` | From features/plans/DietPlan, features/plans/Sheets, features/today/LogMealsSheet | [Coach chat](#coach-chat) |
 | Your goal | `/goal-detail` | `src/app/goal-detail.tsx` | From design-system/patterns/GoalCard, features/today/TopCards | [Progress](#progress), [Change goal](#change-goal), [Assessments](#assessments) |
-| Change goal | `/goal` | `src/app/goal.tsx` | From goal-detail | [Plans](#plans) |
+| Change goal | `/goal` | `src/app/goal.tsx` | From goal-detail | none found |
 | /gym/assessment | `/gym/assessment` | `src/app/gym/assessment.tsx` | From gym/assessments | none found |
 | Assessments | `/gym/assessments` | `src/app/gym/assessments.tsx` | From gym, coach, goal-detail | [/gym/assessment](#gym-assessment) |
 | Attendance | `/gym/attendance` | `src/app/gym/attendance.tsx` | From gym | none found |
 | Coach chat | `/gym/chat` | `src/app/gym/chat.tsx` | From gym, gym/pt, features/coach/coach.ts | [Gym](#gym), [Coach](#coach) |
-| Confirm session | `/gym/confirm` | `src/app/gym/confirm.tsx` | From gym/session, features/today/ForYou, features/today/TopCards | [/gym/sessions](#gym-sessions), [Coach](#coach) |
-| /gym/membership-detail | `/gym/membership-detail` | `src/app/gym/membership-detail.tsx` | From gym/membership | none found |
-| Membership | `/gym/membership` | `src/app/gym/membership.tsx` | From gym, features/today/ForYou, features/today/PaymentBanner | [/gym/membership-detail](#gym-membership-detail) |
+| Confirm session | `/gym/confirm` | `src/app/gym/confirm.tsx` | From features/gym/SessionSheet, features/today/ForYou, features/today/TopCards | [/gym/sessions](#gym-sessions), [Coach](#coach) |
+| /gym/membership-detail | `/gym/membership-detail` | `src/app/gym/membership-detail.tsx` | From gym/membership | [/gym/pt-pack](#gym-pt-pack) |
+| Membership | `/gym/membership` | `src/app/gym/membership.tsx` | From gym, features/today/ForYou, features/today/PaymentBanner | [/gym/membership-detail](#gym-membership-detail), [/gym/pt-pack](#gym-pt-pack) |
 | /gym/payments | `/gym/payments` | `src/app/gym/payments.tsx` | Direct link | none found |
+| /gym/pt-pack | `/gym/pt-pack` | `src/app/gym/pt-pack.tsx` | From gym/membership, gym/pt-packs | [/gym/membership-detail](#gym-membership-detail), [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans) |
+| /gym/pt-packs | `/gym/pt-packs` | `src/app/gym/pt-packs.tsx` | From gym | [/gym/pt-pack](#gym-pt-pack), [/gym/membership-detail](#gym-membership-detail) |
 | PT package | `/gym/pt` | `src/app/gym/pt.tsx` | From gym | [Coach chat](#coach-chat), [/gym/sessions](#gym-sessions) |
-| /gym/session | `/gym/session` | `src/app/gym/session.tsx` | From gym/sessions | [Confirm session](#confirm-session), [Coach](#coach) |
-| /gym/sessions | `/gym/sessions` | `src/app/gym/sessions.tsx` | From gym, gym/confirm, gym/pt | [/gym/session](#gym-session), [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans) |
+| /gym/sessions | `/gym/sessions` | `src/app/gym/sessions.tsx` | From gym/confirm, gym/pt | [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans) |
 | Entry redirect | `/` | `src/app/index.tsx` | App start: sends the member to Welcome, Login or Today | [Welcome](#welcome), [Onboarding (frame)](#onboarding-frame) |
 | /log-chat | `/log-chat` | `src/app/log-chat.tsx` | From features/today/AteSomethingElse | [/food-library](#food-library) |
 | Log height | `/log-height` | `src/app/log-height.tsx` | From profile/details, features/today/ForYou | [Metric detail](#metric-detail) |
@@ -74,6 +75,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 | Workout history | `/plans/history` | `src/app/plans/history.tsx` | Direct link | [Ask coach](#ask-coach), [/plans/entries](#plans-entries), [Exercise](#exercise), [Food detail](#food-detail), [What did you eat?](#what-did-you-eat), [Plans](#plans) |
 | What did you eat? | `/plans/log` | `src/app/plans/log.tsx` | From plans/edit, features/plans/DietPlan, features/plans/Sheets | [Plans](#plans) |
 | What changed | `/plans/updated` | `src/app/plans/updated.tsx` | From features/plans/WorkoutPlan | [Plans](#plans) |
+| /plans/workout | `/plans/workout` | `src/app/plans/workout.tsx` | From features/plans/DayTimeline, features/today/OtherWorkouts | [Active workout](#active-workout), [What changed](#what-changed), [Exercise](#exercise), [Ask coach](#ask-coach), [/plans/entries](#plans-entries) |
 | Appearance | `/profile/appearance` | `src/app/profile/appearance.tsx` | Direct link | none found |
 | Delete account | `/profile/delete` | `src/app/profile/delete.tsx` | Direct link | none found |
 | My details | `/profile/details` | `src/app/profile/details.tsx` | Direct link | [Log height](#log-height), [Log weight](#log-weight), [Metric detail](#metric-detail) |
@@ -98,7 +100,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 | Photos | `/progress/photos` | `src/app/progress/photos.tsx` | From progress | none found |
 | Streaks and badges | `/progress/streaks` | `src/app/progress/streaks.tsx` | From progress, features/streak/StreakChip | none found |
 | Welcome | `/welcome` | `src/app/welcome.tsx` | From _layout, index, login | [Log in](#log-in) |
-| Active workout | `/workout` | `src/app/workout.tsx` | From checkin, exercise-search, features/plans/WorkoutPlan, features/today/CheckInBar | [Coach chat](#coach-chat), [Exercise search](#exercise-search) |
+| Active workout | `/workout` | `src/app/workout.tsx` | From checkin, exercise-search, plans/workout, features/plans/WorkoutPlan | [Coach chat](#coach-chat), [Exercise search](#exercise-search) |
 
 ## Each screen in detail
 
@@ -106,27 +108,27 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 
 - Route `/gym`, code `src/app/(tabs)/gym.tsx`
 - Opens from: [Coach chat](#coach-chat)
-- Leads to: [Membership](#membership), [Attendance](#attendance), [Assessments](#assessments), [Coach](#coach), [Coach chat](#coach-chat), [PT package](#pt-package), [/gym/sessions](#gym-sessions), [/gym/membership-detail](#gym-membership-detail)
-- Sheets it opens: none
-- Library pieces: `FadeIn`, `CardEdge`, `Button`, `Pressy`, `StatusDot`, `IconBadge`, `Chip`
-- Data it reads: app state `onBreak`, `chat`, `ptLeft`, `membership`, `offline`, `assess`; profile none; screen stores `gymStore`; sample data none
+- Leads to: [Membership](#membership), [Attendance](#attendance), [Assessments](#assessments), [Coach](#coach), [Coach chat](#coach-chat), [PT package](#pt-package), [/gym/pt-packs](#gym-pt-packs), [/gym/membership-detail](#gym-membership-detail), [/gym/pt-pack](#gym-pt-pack)
+- Sheets it opens: `DeclinePtSheet`
+- Library pieces: `CardEdge`, `FadeIn`, `Button`, `Pressy`, `StatusDot`, `IconBadge`, `Chip`
+- Data it reads: app state `onBreak`, `chat`, `ptLeft`, `membership`, `offline`, `assess`; profile none; screen stores `gymStore`, `ptInviteStore`; sample data none
 
 ### Today
 
 - Route `/`, code `src/app/(tabs)/index.tsx`
 - Opens from: Tab bar: Today
-- Leads to: [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans), [Metric detail](#metric-detail), [Log weight](#log-weight), [Connected apps](#connected-apps), [Coach](#coach), [Active workout](#active-workout), [Progress](#progress), [Membership](#membership), [Log height](#log-height), [Check-in map](#check-in-map), [/profile/waiver](#profile-waiver), [Streaks and badges](#streaks-and-badges)
-- Sheets it opens: `QuickTipSheet`, `FlagSheet`, `UpdatesSheet`, `WaterSheet`, `HealthSheet`, `HealthConsentSheet`, `LogMealsSheet`, `MealLoggedSheet`, `DaySheet`, `FeedbackSheet`, `StepsSheet`
-- Library pieces: `FadeIn`, `Button`, `Pressy`, `IconBadge`, `PageEnd`, `Card`, `CardEdge`, `Banner`
-- Data it reads: app state `loading`, `session`, `todayVariant`, `hc`, `wearable`, `time`, `wkDone`, `wkScenario`, `ci`, `scanFails`, `min`, `ciStart`, `ciOut`, `ciExtend`, `goal`, `awayDays`, `hasGym`, `dismissed`, `water`, `weight`, `openMeal`, `ciAt`; profile `name`, `time`, `waiver`, `feedback`; screen stores `personalStore`, `todayUiStore`, `planStore`, `goalStore`, `stepsStore`, `goalV2Store`, `goalSizeStore`, `goalCardStore`, `topCardStore`, `gymStore`, `missedWkStore`, `coachStore`, `reminderStore`, `greetStore`, `pushStore`; sample data `dur`, `fmtT`, `Meal`, `MealId`, `MEALS`, `KCAL_TARGET`, `TODAY_IDX`, `WEEK`, `MACRO_TARGET`
+- Leads to: [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans), [Metric detail](#metric-detail), [Log weight](#log-weight), [Connected apps](#connected-apps), [Coach](#coach), [Active workout](#active-workout), [/plans/workout](#plans-workout), [Progress](#progress), [Membership](#membership), [Log height](#log-height), [Check-in map](#check-in-map), [/profile/waiver](#profile-waiver), [Streaks and badges](#streaks-and-badges)
+- Sheets it opens: `QuickTipSheet`, `FlagSheet`, `UpdatesSheet`, `WaterSheet`, `HealthSheet`, `HealthConsentSheet`, `LogMealsSheet`, `MealLoggedSheet`, `DaySheet`, `DeclinePtSheet`, `FeedbackSheet`, `StepsSheet`
+- Library pieces: `FadeIn`, `Button`, `Pressy`, `IconBadge`, `WorkoutCardPattern`, `PageEnd`, `Card`, `CardEdge`
+- Data it reads: app state `loading`, `session`, `todayVariant`, `hc`, `wearable`, `time`, `wkDone`, `wkScenario`, `ci`, `scanFails`, `min`, `ciStart`, `ciOut`, `ciExtend`, `goal`, `awayDays`, `hasGym`, `dismissed`, `water`, `weight`, `plans`, `openMeal`, `ciAt`; profile `name`, `time`, `waiver`, `feedback`; screen stores `personalStore`, `todayUiStore`, `planStore`, `goalStore`, `stepsStore`, `goalV2Store`, `goalSizeStore`, `goalCardStore`, `topCardStore`, `gymStore`, `missedWkStore`, `coachStore`, `otherWkStore`, `ptInviteStore`, `reminderStore`, `greetStore`, `pushStore`; sample data `dur`, `fmtT`, `Meal`, `MealId`, `MEALS`, `KCAL_TARGET`, `TODAY_IDX`, `WEEK`, `MACRO_TARGET`
 
 ### Plans
 
 - Route `/plans`, code `src/app/(tabs)/plans.tsx`
-- Opens from: [Today](#today), [Coach](#coach), [Exercise search](#exercise-search), [Change goal](#change-goal), [/gym/sessions](#gym-sessions), [Ask coach](#ask-coach), [Create a workout](#create-a-workout), [Edit plan](#edit-plan), [/plans/entries](#plans-entries), [Exercise](#exercise), [Workout history](#workout-history), [What did you eat?](#what-did-you-eat), [What changed](#what-changed), [Goal (progress)](#goal-progress)
-- Leads to: [What changed](#what-changed), [Exercise](#exercise), [Ask coach](#ask-coach), [Active workout](#active-workout), [/plans/entries](#plans-entries), [Food detail](#food-detail), [What did you eat?](#what-did-you-eat)
+- Opens from: [Today](#today), [Coach](#coach), [Exercise search](#exercise-search), [/gym/pt-pack](#gym-pt-pack), [/gym/sessions](#gym-sessions), [Ask coach](#ask-coach), [Create a workout](#create-a-workout), [Edit plan](#edit-plan), [/plans/entries](#plans-entries), [Exercise](#exercise), [Workout history](#workout-history), [What did you eat?](#what-did-you-eat), [What changed](#what-changed), [Goal (progress)](#goal-progress)
+- Leads to: [What changed](#what-changed), [Exercise](#exercise), [Ask coach](#ask-coach), [Active workout](#active-workout), [/plans/entries](#plans-entries), [Food detail](#food-detail), [What did you eat?](#what-did-you-eat), [/plans/workout](#plans-workout)
 - Sheets it opens: `LogPastWorkoutSheet`, `QtySheet`, `FoodActionsSheet`, `TimeSheet`, `QuickLogSheet`, `LibrarySheet`, `ResetSheet`, `NutritionSheet`, `DietSwapSheet`
-- Library pieces: `FadeIn`, `Button`, `Card`, `Pressy`, `IconBadge`, `CardEdge`, `IconButton`, `ListCard`
+- Library pieces: `FadeIn`, `Button`, `Pressy`, `Card`, `IconBadge`, `IconButton`, `Segmented`, `Callout`
 - Data it reads: app state `coachUpdated`, `planReq`, `offline`, `scanFails`, `session`, `min`; profile `name`; screen stores none; sample data `basePlans`, `TODAY_IDX`, `KCAL_TARGET`, `MACRO_TARGET`, `MealId`, `MEALS`, `LIBRARY`, `SWAPS`, `PlanDay`, `FoodType`, `Mode`, `fmtT`
 
 ### Progress
@@ -150,7 +152,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 ### Coach
 
 - Route `/coach`, code `src/app/coach.tsx`
-- Opens from: [Gym](#gym), [Today](#today), [Coach chat](#coach-chat), [Confirm session](#confirm-session), [/gym/session](#gym-session)
+- Opens from: [Gym](#gym), [Today](#today), [Coach chat](#coach-chat), [Confirm session](#confirm-session)
 - Leads to: [Assessments](#assessments), [Plans](#plans), [Coach chat](#coach-chat)
 - Sheets it opens: none
 - Library pieces: `Button`, `Card`, `SectionLabel`, `Pressy`, `IconBadge`
@@ -186,7 +188,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 ### Your goal
 
 - Route `/goal-detail`, code `src/app/goal-detail.tsx`
-- Opens from: [Today](#today), [/gym/sessions](#gym-sessions)
+- Opens from: [Today](#today), [/gym/pt-pack](#gym-pt-pack), [/gym/sessions](#gym-sessions)
 - Leads to: [Progress](#progress), [Change goal](#change-goal), [Assessments](#assessments)
 - Sheets it opens: none
 - Library pieces: `Card`, `Button`, `IconBadge`, `Pressy`, `SectionLabel`, `ProgressBar`, `TopGlow`
@@ -196,10 +198,10 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 
 - Route `/goal`, code `src/app/goal.tsx`
 - Opens from: [Your goal](#your-goal)
-- Leads to: [Plans](#plans)
-- Sheets it opens: `DateSheet`
-- Library pieces: `Card`, `Pill`, `Button`, `FadeIn`
-- Data it reads: app state `goal`, `weight`; profile `goal2`; screen stores `goalV2Store`, `stepsStore`; sample data `KCAL_TARGET`
+- Leads to: none found
+- Sheets it opens: none
+- Library pieces: `Button`, `Pressy`, `CardEdge`, `Chip`
+- Data it reads: app state `goal`; profile none; screen stores `goalsStore`; sample data none
 
 ### /gym/assessment
 
@@ -240,7 +242,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 ### Confirm session
 
 - Route `/gym/confirm`, code `src/app/gym/confirm.tsx`
-- Opens from: [Today](#today), [/gym/session](#gym-session), [/gym/sessions](#gym-sessions)
+- Opens from: [Today](#today), [/gym/pt-pack](#gym-pt-pack), [/gym/sessions](#gym-sessions)
 - Leads to: [/gym/sessions](#gym-sessions), [Coach](#coach)
 - Sheets it opens: `FlagSheet`
 - Library pieces: `FadeIn`, `Pressy`, `Card`, `Field`, `Button`
@@ -249,20 +251,20 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 ### /gym/membership-detail
 
 - Route `/gym/membership-detail`, code `src/app/gym/membership-detail.tsx`
-- Opens from: [Gym](#gym), [Membership](#membership)
-- Leads to: none found
+- Opens from: [Gym](#gym), [Membership](#membership), [/gym/pt-pack](#gym-pt-pack), [/gym/pt-packs](#gym-pt-packs)
+- Leads to: [/gym/pt-pack](#gym-pt-pack)
 - Sheets it opens: none
-- Library pieces: `CardEdge`, `IconBadge`, `StatusDot`, `ProgressSegments`, `Pressy`, `Chip`, `Button`
-- Data it reads: app state `onBreak`, `membership`, `ptLeft`, `chat`, `offline`, `assess`; profile `name`; screen stores `gymStore`; sample data none
+- Library pieces: `IconBadge`, `CardEdge`, `ProgressSegments`, `Pressy`, `Chip`, `Button`
+- Data it reads: app state `onBreak`, `ptLeft`, `membership`, `chat`, `offline`, `assess`; profile `name`; screen stores `gymStore`, `ptInviteStore`; sample data none
 
 ### Membership
 
 - Route `/gym/membership`, code `src/app/gym/membership.tsx`
 - Opens from: [Gym](#gym), [Today](#today)
-- Leads to: [/gym/membership-detail](#gym-membership-detail)
+- Leads to: [/gym/membership-detail](#gym-membership-detail), [/gym/pt-pack](#gym-pt-pack)
 - Sheets it opens: none
-- Library pieces: `Chip`, `CardEdge`, `Pressy`, `TopGlow`, `Segmented`, `SectionLabel`
-- Data it reads: app state `membership`, `chat`, `offline`, `assess`, `onBreak`, `ptLeft`; profile none; screen stores `gymStore`; sample data none
+- Library pieces: `Chip`, `CardEdge`, `Pressy`, `NameAvatar`, `TopGlow`, `Segmented`, `SectionLabel`
+- Data it reads: app state `membership`, `chat`, `offline`, `assess`, `onBreak`, `ptLeft`; profile none; screen stores `gymStore`, `ptInviteStore`; sample data none
 
 ### /gym/payments
 
@@ -271,7 +273,25 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 - Leads to: none found
 - Sheets it opens: none
 - Library pieces: `SubPage`, `Chip`, `Button`
-- Data it reads: app state `membership`, `ptLeft`; profile `name`; screen stores none; sample data none
+- Data it reads: app state `ptLeft`, `membership`; profile `name`; screen stores `ptInviteStore`; sample data none
+
+### /gym/pt-pack
+
+- Route `/gym/pt-pack`, code `src/app/gym/pt-pack.tsx`
+- Opens from: [Gym](#gym), [/gym/membership-detail](#gym-membership-detail), [Membership](#membership), [/gym/pt-packs](#gym-pt-packs)
+- Leads to: [/gym/membership-detail](#gym-membership-detail), [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans)
+- Sheets it opens: `SessionSheet`, `FlagSheet`, `UpdatesSheet`
+- Library pieces: `Chip`, `CardEdge`
+- Data it reads: app state `membership`, `chat`, `offline`, `assess`, `onBreak`, `ptLeft`, `hc`, `wearable`, `awayDays`, `todayVariant`, `dismissed`; profile `name`; screen stores `gymStore`, `ptInviteStore`; sample data `KCAL_TARGET`
+
+### /gym/pt-packs
+
+- Route `/gym/pt-packs`, code `src/app/gym/pt-packs.tsx`
+- Opens from: [Gym](#gym)
+- Leads to: [/gym/pt-pack](#gym-pt-pack), [/gym/membership-detail](#gym-membership-detail)
+- Sheets it opens: `DeclinePtSheet`
+- Library pieces: `Pressy`, `CardEdge`, `TopGlow`
+- Data it reads: app state `membership`, `chat`, `offline`, `assess`, `onBreak`, `ptLeft`; profile none; screen stores `gymStore`, `ptInviteStore`; sample data none
 
 ### PT package
 
@@ -280,24 +300,15 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 - Leads to: [Coach chat](#coach-chat), [/gym/sessions](#gym-sessions)
 - Sheets it opens: none
 - Library pieces: `TopGlow`, `Button`, `IconBadge`, `CardEdge`
-- Data it reads: app state `ptLeft`, `goal`, `membership`, `chat`, `offline`, `assess`, `onBreak`; profile none; screen stores `gymStore`, `goalV2Store`; sample data none
-
-### /gym/session
-
-- Route `/gym/session`, code `src/app/gym/session.tsx`
-- Opens from: [/gym/sessions](#gym-sessions)
-- Leads to: [Confirm session](#confirm-session), [Coach](#coach)
-- Sheets it opens: `FlagSheet`
-- Library pieces: `CardEdge`, `Button`, `Pressy`, `Chip`
-- Data it reads: app state `membership`, `chat`, `offline`, `assess`, `onBreak`; profile none; screen stores `gymStore`; sample data none
+- Data it reads: app state `ptLeft`, `membership`, `goal`, `chat`, `offline`, `assess`, `onBreak`; profile none; screen stores `gymStore`, `ptInviteStore`, `goalV2Store`; sample data none
 
 ### /gym/sessions
 
 - Route `/gym/sessions`, code `src/app/gym/sessions.tsx`
-- Opens from: [Gym](#gym), [Confirm session](#confirm-session), [PT package](#pt-package)
-- Leads to: [/gym/session](#gym-session), [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans)
-- Sheets it opens: `FlagSheet`, `UpdatesSheet`
-- Library pieces: `Pressy`, `CardEdge`
+- Opens from: [Confirm session](#confirm-session), [PT package](#pt-package)
+- Leads to: [Your goal](#your-goal), [Confirm session](#confirm-session), [Plans](#plans)
+- Sheets it opens: `SessionSheet`, `FlagSheet`, `UpdatesSheet`
+- Library pieces: `CardEdge`, `Button`, `Pressy`
 - Data it reads: app state `hc`, `wearable`, `awayDays`, `todayVariant`, `dismissed`, `membership`, `chat`, `offline`, `assess`, `onBreak`; profile `name`; screen stores `gymStore`; sample data `KCAL_TARGET`
 
 ### Entry redirect
@@ -366,7 +377,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 ### Ask coach
 
 - Route `/plans/ask`, code `src/app/plans/ask.tsx`
-- Opens from: [Plans](#plans), [Create a workout](#create-a-workout), [Edit plan](#edit-plan), [Workout history](#workout-history)
+- Opens from: [Plans](#plans), [Create a workout](#create-a-workout), [Edit plan](#edit-plan), [Workout history](#workout-history), [/plans/workout](#plans-workout)
 - Leads to: [Plans](#plans)
 - Sheets it opens: none
 - Library pieces: `Pill`, `FadeIn`, `Button`
@@ -393,7 +404,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 ### /plans/entries
 
 - Route `/plans/entries`, code `src/app/plans/entries.tsx`
-- Opens from: [Plans](#plans), [Create a workout](#create-a-workout), [Edit plan](#edit-plan), [Workout history](#workout-history)
+- Opens from: [Plans](#plans), [Create a workout](#create-a-workout), [Edit plan](#edit-plan), [Workout history](#workout-history), [/plans/workout](#plans-workout)
 - Leads to: [Plans](#plans)
 - Sheets it opens: none
 - Library pieces: `AmountStepper`, `Pressy`, `CardEdge`, `Button`
@@ -402,7 +413,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 ### Exercise
 
 - Route `/plans/exercise`, code `src/app/plans/exercise.tsx`
-- Opens from: [Plans](#plans), [Create a workout](#create-a-workout), [Edit plan](#edit-plan), [Workout history](#workout-history)
+- Opens from: [Plans](#plans), [Create a workout](#create-a-workout), [Edit plan](#edit-plan), [Workout history](#workout-history), [/plans/workout](#plans-workout)
 - Leads to: [Coach chat](#coach-chat), [Plans](#plans)
 - Sheets it opens: none
 - Library pieces: `Card`, `IconButton`, `CardEdge`, `Button`
@@ -429,11 +440,20 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 ### What changed
 
 - Route `/plans/updated`, code `src/app/plans/updated.tsx`
-- Opens from: [Plans](#plans)
+- Opens from: [Plans](#plans), [/plans/workout](#plans-workout)
 - Leads to: [Plans](#plans)
 - Sheets it opens: none
 - Library pieces: `Card`, `FadeIn`, `Button`
 - Data it reads: app state `session`; profile none; screen stores none; sample data `TODAY_IDX`, `PlanDay`, `FoodType`, `MealId`, `MEALS`, `Mode`, `fmtT`
+
+### /plans/workout
+
+- Route `/plans/workout`, code `src/app/plans/workout.tsx`
+- Opens from: [Today](#today), [Plans](#plans)
+- Leads to: [Active workout](#active-workout), [What changed](#what-changed), [Exercise](#exercise), [Ask coach](#ask-coach), [/plans/entries](#plans-entries)
+- Sheets it opens: `LogPastWorkoutSheet`
+- Library pieces: `Button`, `TopGlow`
+- Data it reads: app state `session`, `coachUpdated`, `planReq`; profile none; screen stores none; sample data `TODAY_IDX`, `FoodType`, `MealId`, `MEALS`, `Mode`, `fmtT`
 
 ### Appearance
 
@@ -494,8 +514,8 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 - Route `/profile`, code `src/app/profile/index.tsx`
 - Opens from: From components/GymHeader
 - Leads to: [Join a programme](#join-a-programme), [Metric detail](#metric-detail), [Log weight](#log-weight), [Connected apps](#connected-apps), [Log in](#log-in)
-- Sheets it opens: `LogoutSheet`, `FeedbackSheet`, `StepsSheet`, `WaterSheet`, `HealthSheet`, `HealthConsentSheet`
-- Library pieces: `Button`, `Pressy`, `CardEdge`, `Chip`, `FadeIn`
+- Sheets it opens: `LogoutSheet`, `ProgrammeSwitcherSheet`, `FeedbackSheet`, `StepsSheet`, `WaterSheet`, `HealthSheet`, `HealthConsentSheet`
+- Library pieces: `Pressy`, `Button`, `CardEdge`, `Chip`, `FadeIn`
 - Data it reads: app state `hasGym`, `hc`, `water`, `min`, `weight`, `wearable`, `goal`; profile `language`, `timer`, `feedback`; screen stores `stepsStore`, `personalStore`, `goalV2Store`; sample data none
 
 ### Join a programme
@@ -602,8 +622,8 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 - Route `/progress/lift`, code `src/app/progress/lift.tsx`
 - Opens from: [Progress](#progress)
 - Leads to: none found
-- Sheets it opens: none
-- Library pieces: `Segmented`, `FadeIn`, `TopGlow`, `Pressy`
+- Sheets it opens: `CalendarSheet`
+- Library pieces: `FadeIn`, `TopGlow`, `Pill`, `Card`, `IconBadge`, `Pressy`
 - Data it reads: app state `goal`, `hc`, `assess`; profile none; screen stores `progressStore`, `goalV2Store`; sample data none
 
 ### Metric detail
@@ -612,8 +632,8 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 - Opens from: [Today](#today), [Progress](#progress), [Log height](#log-height), [Log weight](#log-weight), [Onboarding (frame)](#onboarding-frame), [My details](#my-details), [Profile](#profile), [Tracker designs](#tracker-designs)
 - Leads to: [Log weight](#log-weight), [Connected apps](#connected-apps)
 - Sheets it opens: `StepsSheet`, `WaterSheet`, `QuickLogSheet`, `ManualLogSheet`, `HealthSheet`, `HealthConsentSheet`, `CalendarSheet`
-- Library pieces: `Button`, `Card`, `IconBadge`, `FadeIn`, `Callout`, `Field`
-- Data it reads: app state `weight`, `water`, `hc`, `min`, `wearable`, `goal`, `assess`, `membership`, `ptLeft`; profile none; screen stores `progressStore`, `stepsStore`, `personalStore`, `goalV2Store`; sample data `KCAL_TARGET`, `dur`, `fmtT`, `Meal`, `MealId`, `MEALS`
+- Library pieces: `Button`, `Pill`, `Card`, `IconBadge`, `FadeIn`, `Callout`, `Field`
+- Data it reads: app state `weight`, `water`, `hc`, `min`, `wearable`, `goal`, `assess`, `ptLeft`, `membership`; profile none; screen stores `progressStore`, `stepsStore`, `personalStore`, `goalV2Store`, `ptInviteStore`; sample data `KCAL_TARGET`, `dur`, `fmtT`, `Meal`, `MealId`, `MEALS`
 
 ### /progress/muscles
 
@@ -654,7 +674,7 @@ Onboarding steps, in order: welcome, facility, goal, experience, schedule, age, 
 ### Active workout
 
 - Route `/workout`, code `src/app/workout.tsx`
-- Opens from: [Today](#today), [Plans](#plans), [Check-in map](#check-in-map), [Exercise search](#exercise-search)
+- Opens from: [Today](#today), [Plans](#plans), [Check-in map](#check-in-map), [Exercise search](#exercise-search), [/plans/workout](#plans-workout)
 - Leads to: [Coach chat](#coach-chat), [Exercise search](#exercise-search)
 - Sheets it opens: `SwapSheet`, `SetMenuSheet`, `AddExerciseSheet`, `FormTipsSheet`, `FinishConfirmSheet`, `WkMenuSheet`
 - Library pieces: `Button`, `FadeIn`, `Pressy`, `IconButton`, `Pill`, `IconBadge`, `Card`, `Stepper`
@@ -670,37 +690,38 @@ The member's day: time of day, workout session, meals eaten, check-in, membershi
 
 | Field | Screens | Which |
 |---|---|---|
-| `assess` | 17 | Gym, Progress, Coach, Your goal, Assessments, Attendance, ... |
-| `offline` | 15 | Gym, Plans, Assessments, Attendance, Coach chat, Confirm session, ... |
-| `hc` | 13 | Today, Progress, /gym/sessions, Connected apps, Profile, Notification settings, ... |
+| `assess` | 18 | Gym, Progress, Coach, Your goal, Assessments, Attendance, ... |
+| `offline` | 16 | Gym, Plans, Assessments, Attendance, Coach chat, Confirm session, ... |
+| `hc` | 14 | Today, Progress, /gym/pt-pack, /gym/sessions, Connected apps, Profile, ... |
+| `membership` | 13 | Gym, Assessments, Attendance, Coach chat, Confirm session, /gym/membership-detail, ... |
 | `goal` | 12 | Today, Progress, Your goal, Change goal, PT package, Onboarding (frame), ... |
-| `membership` | 12 | Gym, Assessments, Attendance, Coach chat, Confirm session, /gym/membership-detail, ... |
-| `weight` | 11 | Today, Progress, Your goal, Change goal, Log height, Log weight, ... |
-| `chat` | 10 | Gym, Assessments, Attendance, Coach chat, Confirm session, /gym/membership-detail, ... |
-| `onBreak` | 10 | Gym, Assessments, Attendance, Coach chat, Confirm session, /gym/membership-detail, ... |
-| `wearable` | 9 | Today, Progress, /gym/sessions, Connected apps, Profile, Tracker designs, ... |
+| `chat` | 11 | Gym, Assessments, Attendance, Coach chat, Confirm session, /gym/membership-detail, ... |
+| `onBreak` | 11 | Gym, Assessments, Attendance, Coach chat, Confirm session, /gym/membership-detail, ... |
+| `wearable` | 10 | Today, Progress, /gym/pt-pack, /gym/sessions, Connected apps, Profile, ... |
+| `weight` | 10 | Today, Progress, Your goal, Log height, Log weight, Onboarding (frame), ... |
+| `ptLeft` | 9 | Gym, Confirm session, /gym/membership-detail, Membership, /gym/payments, /gym/pt-pack, ... |
 | `min` | 8 | Today, Plans, /food-library, What did you eat?, Profile, Notification settings, ... |
-| `ptLeft` | 7 | Gym, Confirm session, /gym/membership-detail, Membership, /gym/payments, PT package, ... |
 | `water` | 7 | Today, Progress, Your goal, Profile, Notification settings, Tracker designs, ... |
-| `session` | 5 | Today, Plans, Exercise search, What changed, Active workout |
+| `session` | 6 | Today, Plans, Exercise search, What changed, /plans/workout, Active workout |
 | `meals` | 4 | /food-library, Food detail, /log-chat, What did you eat? |
+| `awayDays` | 3 | Today, /gym/pt-pack, /gym/sessions |
+| `dismissed` | 3 | Today, /gym/pt-pack, /gym/sessions |
 | `hasGym` | 3 | Today, Profile, Active workout |
 | `scanFails` | 3 | Today, Plans, What did you eat? |
-| `awayDays` | 2 | Today, /gym/sessions |
+| `todayVariant` | 3 | Today, /gym/pt-pack, /gym/sessions |
 | `ci` | 2 | Today, Check-in map |
 | `ciAt` | 2 | Today, Check-in map |
 | `ciExtend` | 2 | Today, Check-in map |
 | `ciOut` | 2 | Today, Check-in map |
 | `ciStart` | 2 | Today, Check-in map |
-| `dismissed` | 2 | Today, /gym/sessions |
-| `todayVariant` | 2 | Today, /gym/sessions |
+| `coachUpdated` | 2 | Plans, /plans/workout |
+| `planReq` | 2 | Plans, /plans/workout |
 | `wkScenario` | 2 | Today, Streaks and badges |
-| `coachUpdated` | 1 | Plans |
 | `loading` | 1 | Today |
 | `notifsRead` | 1 | Notifications |
 | `openMeal` | 1 | Today |
 | `pastLogs` | 1 | /plans/entries |
-| `planReq` | 1 | Plans |
+| `plans` | 1 | Today |
 | `time` | 1 | Today |
 | `wkDone` | 1 | Today |
 
@@ -710,9 +731,10 @@ Small stores for one area (plans, progress, gym, coach, streak, reminders). Defi
 
 | Store | Screens | Which |
 |---|---|---|
-| `goalV2Store` | 12 | Today, Progress, Your goal, Change goal, PT package, Onboarding (frame), ... |
-| `gymStore` | 12 | Gym, Today, Assessments, Attendance, Coach chat, Confirm session, ... |
-| `stepsStore` | 9 | Today, Progress, Your goal, Change goal, Onboarding (frame), Profile, ... |
+| `gymStore` | 13 | Gym, Today, Assessments, Attendance, Coach chat, Confirm session, ... |
+| `goalV2Store` | 11 | Today, Progress, Your goal, PT package, Onboarding (frame), Profile, ... |
+| `ptInviteStore` | 9 | Gym, Today, /gym/membership-detail, Membership, /gym/payments, /gym/pt-pack, ... |
+| `stepsStore` | 8 | Today, Progress, Your goal, Onboarding (frame), Profile, Tracker designs, ... |
 | `progressStore` | 6 | Progress, Goal (progress), Lift detail, Metric detail, /progress/muscles, Photos |
 | `personalStore` | 4 | Today, Profile, Tracker designs, Metric detail |
 | `coachStore` | 3 | Today, Coach, Coach chat |
@@ -722,9 +744,11 @@ Small stores for one area (plans, progress, gym, coach, streak, reminders). Defi
 | `workoutUiStore` | 2 | Check-in map, Active workout |
 | `designStore` | 1 | Tracker designs |
 | `goalSizeStore` | 1 | Today |
+| `goalsStore` | 1 | Change goal |
 | `goalStore` | 1 | Today |
 | `greetStore` | 1 | Today |
 | `missedWkStore` | 1 | Today |
+| `otherWkStore` | 1 | Today |
 | `planStore` | 1 | Today |
 | `pushStore` | 1 | Today |
 | `todayUiStore` | 1 | Today |
@@ -736,13 +760,13 @@ Made-up content: meals, food details, workouts, plans, the weekly strip, assessm
 
 | Export | Screens | Which |
 |---|---|---|
-| `fmtT` | 14 | Today, Plans, Check-in map, /food-library, Food detail, /log-chat, ... |
-| `MealId` | 13 | Today, Plans, /food-library, Food detail, /log-chat, Ask coach, ... |
-| `MEALS` | 13 | Today, Plans, /food-library, Food detail, /log-chat, Ask coach, ... |
-| `KCAL_TARGET` | 11 | Today, Plans, Progress, Food detail, Your goal, Change goal, ... |
-| `FoodType` | 9 | Plans, /food-library, Food detail, Ask coach, Create a workout, Edit plan, ... |
-| `Mode` | 9 | Plans, /food-library, Ask coach, Create a workout, Edit plan, /plans/entries, ... |
-| `TODAY_IDX` | 9 | Today, Plans, /food-library, Ask coach, Create a workout, Edit plan, ... |
+| `fmtT` | 15 | Today, Plans, Check-in map, /food-library, Food detail, /log-chat, ... |
+| `MealId` | 14 | Today, Plans, /food-library, Food detail, /log-chat, Ask coach, ... |
+| `MEALS` | 14 | Today, Plans, /food-library, Food detail, /log-chat, Ask coach, ... |
+| `KCAL_TARGET` | 11 | Today, Plans, Progress, Food detail, Your goal, /gym/pt-pack, ... |
+| `FoodType` | 10 | Plans, /food-library, Food detail, Ask coach, Create a workout, Edit plan, ... |
+| `Mode` | 10 | Plans, /food-library, Ask coach, Create a workout, Edit plan, /plans/entries, ... |
+| `TODAY_IDX` | 10 | Today, Plans, /food-library, Ask coach, Create a workout, Edit plan, ... |
 | `PlanDay` | 7 | Plans, Ask coach, Create a workout, Exercise, Workout history, What did you eat?, ... |
 | `LIBRARY` | 6 | Plans, Exercise search, Create a workout, Edit plan, Workout history, Active workout |
 | `dur` | 5 | Today, /food-library, Food detail, /log-chat, Metric detail |

@@ -56,7 +56,10 @@ export function shift(range: Range, anchor: Date, n: number): Date {
 // ---- daily values ----
 const rnd = (seed: number) => { const x = Math.sin(seed * 12.9898) * 43758.5453; return x - Math.floor(x); };
 const IDX: Record<MetricKey, number> = { weight: 1, cons: 2, diet: 3, steps: 4, meas: 5, hr: 6, sleep: 7, water: 8 };
-export type Live = { weight: number; water: number };
+/** The three body measurements (the Measurements page has a tab for each). */
+export type MeasPart = 'waist' | 'chest' | 'arm';
+export const MEAS_PARTS: { value: MeasPart; label: string }[] = [{ value: 'waist', label: 'Waist' }, { value: 'chest', label: 'Chest' }, { value: 'arm', label: 'Arm' }];
+export type Live = { weight: number; water: number; part?: MeasPart };
 
 export function dayVal(k: MetricKey, d: Date, live: Live): number | null {
   const day = sod(d);
@@ -64,7 +67,7 @@ export function dayVal(k: MetricKey, d: Date, live: Live): number | null {
   const i = dayIdx(day), r = rnd(i * 13 + IDX[k] * 101), today = same(day, TODAY);
   switch (k) {
     case 'weight': return today ? live.weight : Math.round((74.5 - 0.095 * i + (r - 0.5) * 0.3) * 10) / 10;
-    case 'meas': return Math.round((92 - 0.13 * i) * 10) / 10;
+    case 'meas': return Math.round((live.part === 'chest' ? 99.5 - 0.04 * i : live.part === 'arm' ? 31 + 0.025 * i : 92 - 0.13 * i) * 10) / 10; // waist by default
     case 'cons': return today ? 0 : [0, 2, 3, 5].includes(dow(day)) && r > 0.12 ? 1 : 0;
     case 'diet': return Math.round(1500 + r * 520); // calories eaten that day
     case 'steps': return today ? 5230 + stepsStore.get().manual.reduce((a, e) => a + e.n, 0) : Math.round(4200 + r * 5400 + (dow(day) >= 5 ? 900 : 0));

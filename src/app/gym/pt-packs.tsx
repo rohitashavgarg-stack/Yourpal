@@ -9,7 +9,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
 import { useGymScenarios } from '@/features/gym/state';
-import { PtPack, usePtPackages } from '@/features/gym/memberships';
+import { PtPack, ptKind, usePtPackages } from '@/features/gym/memberships';
+import { PtInviteCard } from '@/features/gym/PtInviteSheet';
 import { useSessions } from '@/features/gym/sessions';
 import { TimeBar } from '@/app/gym/membership';
 import { radii, round, fontSizes, fixed } from '@/design-system/tokens';
@@ -41,13 +42,15 @@ export function PackCard({ p }: { p: PtPack }) {
   const rejected = mine.filter((s) => s.status === 'flagged').length;
   const done = mine.filter((s) => s.status === 'confirmed').length;
   // the sessions in order, then the ones not booked yet, until the pack's total is reached; skipped and rejected ones are extra dots
+  const upcoming = p.state === 'upcoming';
+  const declined = p.state === 'declined';
   const kinds: DotKind[] = oldestFirst.map((s) => (s.status === 'confirmed' ? 'done' : s.status === 'skipped' ? 'skipped' : s.status === 'flagged' ? 'rejected' : 'booked'));
   const used = kinds.filter((k) => k !== 'skipped' && k !== 'rejected').length;
   for (let i = used; i < p.total; i++) kinds.push('open');
   const dots = kinds.map((k, i) => ({ k, n: kinds.slice(0, i + 1).filter((x) => x !== 'skipped' && x !== 'rejected').length }));
   const extra = [skipped ? `${skipped} skipped` : '', rejected ? `${rejected} under review` : ''].filter(Boolean).join(', ');
-  const head = p.past ? `${p.total} sessions` : `${done} of ${p.total} done${extra ? ', ' + extra : ''}`;
-  const line = waiting ? `To confirm: ${waiting.focus}, ${waiting.day}` : next ? `Next: ${next.focus}, ${next.day}` : p.past ? (last ? `Last session: ${last.day}` : 'All sessions used') : 'No session booked yet';
+  const head = declined ? 'Declined' : upcoming ? `${p.total} sessions` : p.past ? `${p.total} sessions` : `${done} of ${p.total} done${extra ? ', ' + extra : ''}`;
+  const line = waiting ? `To confirm: ${waiting.focus}, ${waiting.day}` : next ? `Next: ${next.focus}, ${next.day}` : declined ? 'You declined this invitation' : upcoming ? `Starts ${p.start}, ends ${p.ends}` : p.past ? (last ? `Last session: ${last.day}` : 'All sessions used') : 'No session booked yet';
   return (
     <Pressy accessibilityRole="button" accessibilityLabel={`${p.name}, ${head}. ${line}`}
       onPress={() => router.push({ pathname: '/gym/pt-pack', params: { id: p.id } })} scaleTo={0.985}
@@ -56,10 +59,15 @@ export function PackCard({ p }: { p: PtPack }) {
       <Row style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
         <Txt style={{ flex: 1, fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 26 }}>{p.name}</Txt>
       </Row>
-      {p.past ? (
+      {declined ? null : p.past ? (
         // a past pack: small plain dots, one for each session
         <View accessible={false} style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-          {dots.map((d, i) => <View key={i} style={{ width: 12, height: 12, borderRadius: round(12), backgroundColor: c.accent }} />)}
+          {dots.filter((d) => d.k === 'done').map((d, i) => <View key={i} style={{ width: 12, height: 12, borderRadius: round(12), backgroundColor: c.accent }} />)}
+        </View>
+      ) : upcoming ? (
+        // accepted, starts when the current package ends: the sessions, none used yet
+        <View accessible={false} style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
+          {dots.map((d, i) => <Dot key={i} kind="open" n={d.n} />)}
         </View>
       ) : (
         <>
@@ -86,17 +94,31 @@ export function PackCard({ p }: { p: PtPack }) {
   );
 }
 
-// All of the member's PT packs on one page: the active ones, then the past ones below. Tap a pack to see its sessions.
+// All of the member's PT packages on one page: an invitation waiting for your answer, then the active one, the one that starts next, and the past ones. Tap a pack to see its sessions.
 export default function PtPacks() {
   const { c } = useTheme();
   const packs = usePtPackages();
   useGymScenarios('Gym · PT packages');
-  const active = packs.filter((p) => !p.past);
-  const past = packs.filter((p) => p.past);
+  const invited = packs.some((p) => ptKind(p) === 'invited');
+  const active = packs.filter((p) => ptKind(p) === 'active');
+  const next = packs.filter((p) => ptKind(p) === 'upcoming');
+  const past = packs.filter((p) => ptKind(p) === 'past');
   return (
     <SubPage title="PT packages" fallback="/gym" backdrop={<TopGlow color={c.accent} />}>
-      <Txt v="label" style={{ paddingHorizontal: 4 }}>ACTIVE</Txt>
+      {invited && (
+        <>
+          <Txt v="label" style={{ paddingHorizontal: 4 }}>INVITATION</Txt>
+          <PtInviteCard />
+        </>
+      )}
+      <Txt v="label" style={{ paddingHorizontal: 4, marginTop: invited ? 6 : 0 }}>ACTIVE</Txt>
       {active.length ? active.map((p) => <PackCard key={p.id} p={p} />) : <Txt muted style={{ paddingHorizontal: 4 }}>No active PT packages.</Txt>}
+      {next.length > 0 && (
+        <>
+          <Txt v="label" style={{ paddingHorizontal: 4, marginTop: 6 }}>STARTS NEXT</Txt>
+          {next.map((p) => <PackCard key={p.id} p={p} />)}
+        </>
+      )}
       {past.length > 0 && (
         <>
           <Txt v="label" style={{ paddingHorizontal: 4, marginTop: 6 }}>PAST</Txt>

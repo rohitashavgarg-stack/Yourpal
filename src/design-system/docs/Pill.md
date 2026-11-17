@@ -17,6 +17,7 @@ A selectable pill for filters and options (44 px high, `radii.lg`). Selecting it
 | `label` | string | required | Text, 13 px medium |
 | `on` | boolean | required | Selected: ink fill, background-coloured text |
 | `onPress` | () => void | required | |
+| `icon` | (color) => ReactNode | none | An icon on the left of the label, for example `(col) => <Dumbbell size={16} color={col} />`; it gets the text colour of the current state |
 | `style` | ViewStyle | none | For width, for example `flex: 1` |
 
 ## States

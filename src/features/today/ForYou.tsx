@@ -13,6 +13,8 @@ import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { PersonAvatar } from '@/components/Brand';
 import { useOverlay } from '@/components/Overlay';
 import { FlagSheet } from '@/features/gym/sheets';
+import { DeclinePtSheet, useAcceptPtInvite } from '@/features/gym/PtInviteSheet';
+import { PT_INVITE, ptInviteStore } from '@/features/gym/ptInvite';
 import { usePtPending } from '@/features/shell/notifs';
 import { useDomain } from '@/lib/domain';
 import { useStore } from '@/lib/store';
@@ -40,7 +42,7 @@ export { GoalStrip } from '@/design-system/_archive/ForYouGoalStrip';
 type Item = {
   key: string; title: string; body: string; critical?: boolean; tone: 'accent' | 'warn' | 'good' | 'muted';
   who?: boolean; icon?: any; ring?: number; // ring: a circular progress (0 to 1) in place of the icon
-  btn?: string; act?: () => void; two?: boolean;
+  btn?: string; act?: () => void; two?: boolean; invite?: boolean; // invite: the two buttons answer a PT package invitation (Reject, Accept)
   chips?: string[]; full?: boolean; // small chips instead of a sentence, and a full-width button
 };
 
@@ -52,12 +54,14 @@ export function useForYou(): Item[] {
   const memState = useMembershipState();
   const reminders = logsPaused ? [] : allReminders; // nothing to log while logging is paused
   const ptPending = usePtPending();
+  const ptInvite = ptInviteStore.use().state;
   const { live } = useUpdates();
   const { state } = useStore();
   const profileStepOn = personalStore.use().profileStep;
   const first = (state.profile.name || '').trim().split(' ')[0];
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
+  if (ptInvite === 'waiting' && state.sc.member === 'PT member' && d.hasGym && !logsPaused) out.push({ key: 'pt-invite', title: `${PT_INVITE.trainer} invited you`, body: `${PT_INVITE.name}, ${PT_INVITE.sessions} sessions, starts ${PT_INVITE.startsOn}`, critical: true, tone: 'accent', who: true, two: true, invite: true });
   if (ptPending && d.hasGym && !logsPaused) out.push({ key: 'pt', title: updateCopy.pt.title, body: updateCopy.pt.body, critical: true, tone: 'accent', who: true, two: true });
   if (d.hasGym && memState === 'Expiring') out.push({ key: 'member-exp', title: updateCopy.membership.title, body: updateCopy.membership.body, tone: 'warn', icon: Clock, btn: 'See plan', act: () => router.push('/gym/membership') });
   const order = ['reassess', 'reply', 'plan', 'log'];
@@ -106,6 +110,7 @@ function ProgressRing({ pct }: { pct: number }) {
 const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDismiss }: { it: Item; i: number; n: number; prog: SharedValue<number>; inFlow: boolean; onDismiss: () => void }) {
   const { c, isDark } = useTheme();
   const { openSheet } = useOverlay();
+  const acceptInvite = useAcceptPtInvite();
   const fg = it.tone === 'warn' ? c.warn : it.tone === 'muted' ? c.ink : c.accentText;
   const bg = it.tone === 'warn' ? c.warnSoft : it.tone === 'good' ? c.goodSoft : c.accentSoft;
   const I = it.icon;
@@ -137,8 +142,8 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
             </Row>
             {it.two ? (
               <Row style={{ gap: 10 }}>
-                <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => openSheet(<FlagSheet />, { label: 'Flag session' })} /></View>
-                <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} /></View>
+                <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => (it.invite ? openSheet(<DeclinePtSheet />, { label: 'Decline invitation' }) : openSheet(<FlagSheet />, { label: 'Flag session' }))} /></View>
+                <View style={{ flex: 1.4 }}><Button label={it.invite ? 'Accept' : 'Confirm & rate'} onPress={() => (it.invite ? acceptInvite() : router.push('/gym/confirm'))} /></View>
               </Row>
             ) : it.btn ? (
               <Row style={{ justifyContent: 'flex-end' }}><Pressy accessibilityRole="button" onPress={it.act} style={{ height: 40, minWidth: 132, paddingHorizontal: 24, borderRadius: 20, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20, color: c.bg }}>{it.btn}</Txt></Pressy></Row>

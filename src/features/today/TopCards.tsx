@@ -124,7 +124,7 @@ export function PtConfirmCard() {
         <PersonAvatar who="coach" size={44} />
         <View style={{ flex: 1 }}>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, letterSpacing: -0.3 }}>Confirm your PT session</Txt>
-          <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Coach Vikram marked Tue 23 Sep, 6–7 pm as done.</Txt>
+          <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>Coach Vikram marked Tue 23 Sep as done.</Txt>
         </View>
       </Row>
       <Row style={{ gap: 10 }}>

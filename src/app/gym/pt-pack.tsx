@@ -36,7 +36,7 @@ export default function PtPack() {
         <Row style={{ justifyContent: 'space-between', gap: 8, paddingTop: 4 }}>
           <View style={{ flex: 1, gap: 2 }}>
             <Txt accessibilityRole="header" v="display">{p.name}</Txt>
-            <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23 }}>Extra PT package</Txt>
+            <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23 }}>Personal training package</Txt>
           </View>
           <Chip label={p.past ? 'Past' : 'Active'} tone={p.past ? 'default' : 'good'} />
         </Row>

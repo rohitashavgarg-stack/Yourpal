@@ -6,13 +6,13 @@ import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { NameAvatar } from '@/design-system/primitives/Brand';
-import { ArrowRightLeft, ChevronRight, Dumbbell, Pause } from '@/lib/icons';
+import { ArrowRightLeft, ChevronRight, Pause } from '@/lib/icons';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { Hint, SubPage } from '@/features/progress/parts';
 import { useGymScenarios } from '@/features/gym/state';
-import { MTABS, MTab, Membership, tabOf, useMemberships, usePtPackages } from '@/features/gym/memberships';
+import { MTABS, MTab, Membership, ptKind, tabOf, useMemberships, usePtPackages } from '@/features/gym/memberships';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { Chip } from '@/design-system/primitives/Chip';
 
@@ -64,38 +64,31 @@ function MembershipCard({ m }: { m: Membership }) {
         <Txt style={{ flex: 1, fontSize: fontSizes.md, color: m.warn ? c.warn : c.muted }}>{m.note}</Txt>
         <ChevronRight size={18} color={c.muted} />
       </Row>
-      {m.pt && m.status !== 'Expired' ? (
-        <Row style={{ gap: 8, borderTopWidth: 1, borderTopColor: c.line, paddingTop: 10 }}>
-          <Dumbbell size={16} color={c.muted} />
-          <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.muted }}>{`Personal training with ${m.pt.trainer}`}</Txt>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md }}>{`${m.pt.left} left`}</Txt>
-        </Row>
-      ) : null}
       <TransferTag m={m} />
     </Pressy>
   );
 }
 
-// PT packs bought on their own, outside a membership: a card for each, like a membership. It opens the pack's details (no sessions).
+// PT packages: a separate product from the gym membership, so each has its own card here, like a membership. It opens the pack's details (no sessions).
 function ExtraPtCards({ past }: { past?: boolean }) {
   const { c } = useTheme();
-  const extra = usePtPackages().filter((p) => !!p.past === !!past && !p.source.startsWith('With your'));
+  const extra = usePtPackages().filter((p) => (ptKind(p) === 'past') === !!past && ptKind(p) !== 'invited');
   return (
     <>
       {extra.map((p) => (
-        <Pressy key={p.id} accessibilityRole="button" accessibilityLabel={`Extra PT package, ${p.name}, ${p.past ? 'ended ' + p.ends : p.left + ' of ' + p.total + ' sessions left, ends ' + p.ends}`} onPress={() => router.push({ pathname: '/gym/pt-pack', params: { id: p.id, details: '1' } })} scaleTo={0.985}
+        <Pressy key={p.id} accessibilityRole="button" accessibilityLabel={`Personal training package, ${p.name}, ${p.past ? 'ended ' + p.ends : p.left + ' of ' + p.total + ' sessions left, ends ' + p.ends}`} onPress={() => router.push({ pathname: '/gym/pt-pack', params: { id: p.id, details: '1' } })} scaleTo={0.985}
           style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 10 }}>
           <CardEdge radius={radii.lg} />
           <Row style={{ justifyContent: 'space-between', gap: 8 }}>
             <View style={{ flex: 1 }}>
               <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{p.name}</Txt>
-              <Txt style={{ fontSize: fontSizes.md, color: c.muted }}>Extra PT package</Txt>
+              <Txt style={{ fontSize: fontSizes.md, color: c.muted }}>Personal training package</Txt>
             </View>
-            <Chip label={p.past ? 'Past' : 'Active'} tone={p.past ? 'default' : 'good'} />
+            <Chip label={p.state === 'declined' ? 'Declined' : p.state === 'upcoming' ? 'Upcoming' : p.past ? 'Past' : 'Active'} tone={p.past || p.state === 'upcoming' ? 'default' : 'good'} />
           </Row>
-          {p.past ? null : <TimeBar pct={p.pct} />}
+          {p.past || p.state === 'upcoming' ? null : <TimeBar pct={p.pct} />}
           <Row style={{ justifyContent: 'space-between' }}>
-            <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.muted }}>{p.past ? `${p.total} sessions, ended ${p.ends}` : `${p.left} of ${p.total} sessions left, ends ${p.ends}`}</Txt>
+            <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.muted }}>{p.state === 'declined' ? 'You declined this invitation' : p.state === 'upcoming' ? `${p.total} sessions, starts ${p.start}` : p.past ? `${p.total} sessions, ended ${p.ends}` : `${p.left} of ${p.total} sessions left, ends ${p.ends}`}</Txt>
             <ChevronRight size={18} color={c.muted} />
           </Row>
         </Pressy>

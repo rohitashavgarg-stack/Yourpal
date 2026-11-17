@@ -17,7 +17,6 @@ import { useMemberships } from '@/features/gym/memberships';
 import { PAUSE_HISTORY, PAUSE_TOTAL } from '@/features/gym/data';
 import { dateLabel, gymStore } from '@/features/gym/state';
 import { useDomain } from '@/lib/domain';
-import { StatusDot } from '@/design-system/primitives/StatusDot';
 import { StatusChip, TimeBar, TransferTag } from '@/app/gym/membership';
 import { shareStatement } from '@/features/reports/invoice';
 import { rupees } from '@/features/reports/payments';
@@ -140,28 +139,6 @@ export default function MembershipDetail() {
         {m.transferred?.on ? <LineRow title="Transferred on" right={value(m.transferred.on)} last /> : null}
       </PayList>
 
-      {m.pt && (
-        <>
-          <Txt v="label" style={{ paddingHorizontal: 6 }}>PERSONAL TRAINING</Txt>
-          <View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 14 }}>
-<CardEdge radius={radii.lg} />
-            <View style={{ gap: 1 }}>
-              <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.base }}>{m.pt.trainer}</Txt>
-              <Txt v="caption">Personal trainer</Txt>
-            </View>
-            {/* one dot for each session, six to a row: blue for the ones still to come, grey for the ones used. The count sits beside them. */}
-            <Row style={{ gap: 16, alignItems: 'center' }}>
-              <View style={{ width: 6 * 18 + 5 * 8, flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-                {Array.from({ length: m.pt.total }, (_, i) => <StatusDot key={i} size={18} color={i < m.pt!.total - m.pt!.left ? c.surface3 : c.accent} />)}
-              </View>
-              <View accessible accessibilityLabel={`${m.pt.left} of ${m.pt.total} sessions left`} style={{ flex: 1, alignItems: 'flex-end' }}>
-                <Txt style={{ fontFamily: font.displayBold, fontSize: 40, lineHeight: 48, letterSpacing: -1.2 }}>{m.pt.left}</Txt>
-                <Txt muted style={{ fontSize: fontSizes.sm }}>{`of ${m.pt.total} left`}</Txt>
-              </View>
-            </Row>
-          </View>
-        </>
-      )}
 
       {showPauses && (
         <>

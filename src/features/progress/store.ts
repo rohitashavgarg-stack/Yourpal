@@ -14,6 +14,7 @@ export const progressStore = createStore(() => ({
   refreshing: false,
   lift: 'Leg press' as LiftName,
   metric: 0 as 0 | 1 | 2,
+  part: 'waist' as 'waist' | 'chest' | 'arm', // which measurement the Measurements page shows
   stallGone: false,
   photos: [{ d: 'Sep 2' }, { d: 'Sep 30' }] as { d: string; fresh?: boolean }[],
 }), 'progress');

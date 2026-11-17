@@ -8,3 +8,5 @@ Things that changed since the skill was last reviewed. The yourpal-design-learne
 - New library components: MuscleRings, MuscleBody, MuscleThumb, EffortSlider, ChatBar, PageGlow, TopGlow. Add the pattern to SKILL.md (when to use it, what it replaces).
 - New Button kinds: grey. Say where each one is used.
 - 76 UI commit(s) since the last review (see CHANGELOG.md). Read the diffs for new patterns: states, copy, layout, motion.
+- New Button kinds: glassClear. Say where each one is used.
+- 2 UI commit(s) since the last review (see CHANGELOG.md). Read the diffs for new patterns: states, copy, layout, motion.

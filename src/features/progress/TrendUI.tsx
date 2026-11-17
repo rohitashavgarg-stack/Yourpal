@@ -243,3 +243,4 @@ export function MiniBars({ vals, color, w = 112, h = 44 }: { vals: (number | nul
     </View>
   );
 }
+
