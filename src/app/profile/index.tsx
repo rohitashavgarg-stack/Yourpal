@@ -92,7 +92,7 @@ export default function Profile() {
       {d.hasGym && (
         <Pressy accessibilityRole="button" accessibilityLabel={`Programme: ${current.short}${multi ? '. Switch' : ''}`} onPress={() => openSheet(<ProgrammeSwitcherSheet />, { label: 'Switch programme' })} scaleTo={0.985}
           style={{ position: 'relative', zIndex: 0, minHeight: 100, borderRadius: radii.xl, backgroundColor: c.cardLift, overflow: 'hidden', paddingHorizontal: 18, paddingVertical: 18, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-          <CornerGlow color={current.color} size={300} />
+          <CornerGlow color={current.color} size={320} side="left" />
           <CardEdge radius={radii.xl} />
           <ProgLogo p={current} size={64} />
           <View style={{ flex: 1, gap: 2 }}>
@@ -100,9 +100,8 @@ export default function Profile() {
             <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 30, letterSpacing: -0.5 }} numberOfLines={1}>{current.short}</Txt>
           </View>
           {multi ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 36, paddingLeft: 14, paddingRight: 10, borderRadius: radii.pill, backgroundColor: c.surface3 }}>
+            <View style={{ height: 36, paddingHorizontal: 16, borderRadius: radii.pill, backgroundColor: c.surface3, alignItems: 'center', justifyContent: 'center' }}>
               <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20 }}>Switch</Txt>
-              <ChevronRight size={16} color={c.ink} />
             </View>
           ) : null}
         </Pressy>

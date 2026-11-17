@@ -39,11 +39,11 @@ export function PCard({ onPress, label, children, style }: { onPress?: () => voi
 // Soft coloured glow tucked into a card corner. Sits behind the content (zIndex -1) and is clipped by the card.
 // Gaussian-like falloff so the glow has no visible edge.
 const STOPS: [number, number][] = [[0, 0.26], [0.15, 0.22], [0.3, 0.15], [0.45, 0.09], [0.6, 0.045], [0.75, 0.016], [0.9, 0.004], [1, 0]];
-export function CornerGlow({ color, size = 280 }: { color: string; size?: number }) {
+export function CornerGlow({ color, size = 280, side = 'right' }: { color: string; size?: number; /** which top corner the light comes from */ side?: 'left' | 'right' }) {
   const { isDark } = useTheme();
   const id = 'glow' + color.replace('#', '');
   return (
-    <View pointerEvents="none" style={{ position: 'absolute', top: -size * 0.5, right: -size * 0.4, width: size, height: size, zIndex: -1 }}>
+    <View pointerEvents="none" style={{ position: 'absolute', top: -size * 0.5, ...(side === 'left' ? { left: -size * 0.4 } : { right: -size * 0.4 }), width: size, height: size, zIndex: -1 }}>
       <Svg width={size} height={size}>
         <Defs><RadialGradient id={id} cx="50%" cy="50%" r="50%">{STOPS.map(([o, a]) => <Stop key={o} offset={o} stopColor={color} stopOpacity={a * (isDark ? 0.85 : 1)} />)}</RadialGradient></Defs>
         <Rect width={size} height={size} fill={"url(#" + id + ")"} />
