@@ -16,7 +16,7 @@ Every action in the app. One `Button` with a kind (colour) and a size (shape), a
 <Button size="compact" height={40} kind="secondary" label="Try again" />   // was PillBtn
 <Button kind="dashed" size="medium" label="Add set" icon={<Plus size={16} />} />
 <Button kind="quiet" size="small" muted label="Skip meal" />
-<Button kind="soft" size="xs" weight="medium" label="About: Leg day" iconAfter={<X size={14} />} />
+<Button kind="soft" size="xs" weight="medium" label="About: Leg workout" iconAfter={<X size={14} />} />
 <Button kind="line" size="chip" label="Form check" />
 <IconButton label="Close" onPress={back}><X size={20} /></IconButton>      // was RoundBtn
 <IconButton label="Play" onPress={play} size={36} radius={18} borderWidth={1} borderColor={c.line}><Play size={16} /></IconButton>
@@ -34,7 +34,7 @@ Every action in the app. One `Button` with a kind (colour) and a size (shape), a
 |---|---|---|---|
 | `label` | string | required | The visible text, also the spoken label |
 | `onPress` | () => void | none | |
-| `kind` | `'primary' \| 'accent' \| 'secondary' \| 'ghost' \| 'white' \| 'outline' \| 'glass' \| 'dashed' \| 'line' \| 'quiet' \| 'soft' \| 'whiteLine' \| 'surface' \| 'grey'` | `primary` | Colour, see below |
+| `kind` | `'primary' \| 'accent' \| 'secondary' \| 'ghost' \| 'white' \| 'outline' \| 'glass' \| 'dashed' \| 'line' \| 'quiet' \| 'soft' \| 'whiteLine' \| 'surface' \| 'grey' \| 'glassClear'` | `primary` | Colour, see below |
 | `size` | `'large' \| 'medium' \| 'small' \| 'tight' \| 'compact' \| 'chip' \| 'xs'` | `large` | Shape, see below |
 | `small` | boolean | false | Old way to ask for `size="small"` (ignored when `size` is set) |
 | `height` | number | 36 | `compact` only: its height; the corner is half of it |
@@ -85,6 +85,7 @@ Every action in the app. One `Button` with a kind (colour) and a size (shape), a
 | soft | `accentSoft` | none | accent text | "This week", "About: ..." |
 | whiteLine | white | 1 px `fixed.lineOnWhite` (#C9D1DD) | dark | buttons on the white workout clip stage ("Finish", "Hide") |
 | surface | `surface` | none | ink | a button on a soft surface (Profile "Edit") |
+| glassClear | blurred glass, white at 16% | none | white | a secondary action on a dark card (Start today anyway on a skipped or moved workout) |
 | grey | `surface3` | none | ink | a small button inside a card row, lighter than secondary (My details Change, Add) |
 | glassPrimary | transparent, glass tinted with the ink colour at 92% (white in dark mode, near-black in light) | none | the background colour | the same floating glass as glassAccent, in the primary colours: "Save meal" in the meal log sheet |
 | glassAccent | transparent, blue glass (`GlassBackdrop` tinted with `c.accent` at 92%) | none | white | the one main action that floats over scrolling content: "Start workout" on Plans. Real iOS 26 glass on a phone that has it, blurred blue glass elsewhere. Not for buttons inside a solid card |

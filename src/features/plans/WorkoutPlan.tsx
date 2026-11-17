@@ -55,7 +55,8 @@ function LockedPlan({ day, locked, children }: { day: string; locked: boolean; c
   );
 }
 
-export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInstance | null> }) {
+// hideStart: the page has its own floating Start at the bottom (the workout details page), so the one in the page is left out.
+export function WorkoutPlan({ startRef, hideStart = false, completedTag = false }: { startRef?: React.RefObject<ViewInstance | null>; hideStart?: boolean; completedTag?: boolean }) {
   const { c } = useTheme();
   const { d } = useDomain();
   const { p } = usePlans();
@@ -135,7 +136,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
       {plan ? (
         <LockedPlan day={DAYL[p.day]} locked={paused && !plan.done}>
           {plan.done ? (
-            <FadeIn i={1}><LoggedHeader name={plan.name} sets={plan.ex.filter((e) => e.res !== 'skip').reduce((n, e) => n + e.sets, 0)} byYou={!!plan.created} date={`${DAYL[p.day]} ${dateOf(p.day, p.week)} ${monthOf(p.day, p.week)}`} span={doneParts(plan).span} /></FadeIn>
+            <FadeIn i={1}><LoggedHeader name={plan.name} sets={plan.ex.filter((e) => e.res !== 'skip').reduce((n, e) => n + e.sets, 0)} byYou={!!plan.created} date={`${DAYL[p.day]} ${dateOf(p.day, p.week)} ${monthOf(p.day, p.week)}`} span={doneParts(plan).span} tag={completedTag ? 'Completed' : undefined} /></FadeIn>
           ) : (
             <FadeIn i={1}>
               <Row style={{ alignItems: 'flex-end', gap: 10, paddingTop: 4, paddingHorizontal: 4 }}>
@@ -170,7 +171,7 @@ export function WorkoutPlan({ startRef }: { startRef?: React.RefObject<ViewInsta
                       </>
                     )}
                   </Row>
-                  {canStart && <InlineStart innerRef={startRef} />}
+                  {canStart && !hideStart && <InlineStart innerRef={startRef} />}
                 </View>
               </Row>
               {!plan.done && rel < 0 && !paused && (
@@ -239,7 +240,7 @@ export function useCanStart() {
   const { p } = usePlans();
   if (p.noPlan || p.seg !== 'workout') return false;
   const plan = dayPlan(d, p, p.day);
-  return !!plan && relDay(p) === 0 && !plan.done;
+  return !!plan && relDay(p) === 0 && !plan.done && !plan.extra; // a second workout of the day cannot be started yet: a session runs the main workout
 }
 
 // The Start button in the page: under the coach pill. The page keeps its ref to know when it has scrolled out of view.

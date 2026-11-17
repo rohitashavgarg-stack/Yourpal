@@ -139,7 +139,7 @@ export const onDark = {
 export const gradients = {
   workoutPlanned: [fixed.dark, '#0E1B45', '#13327A'],
   workoutRest: [fixed.dark, fixed.shadow, '#1A1636'],
-  workoutDone: [fixed.dark, '#0D2A22', '#124A3A'],
+  workoutDone: [fixed.dark, '#14181E', '#1D222A'], // charcoal: green is for the check and the numbers, and Running (workoutLive) is the green card
   workoutLive: ['#06231B', '#0B3A2C', '#0F5A42'],
   workoutMissed: ['#17140F', '#17140F', '#1B1710'],
   water: ['#070B2B', '#1C2BC0'],

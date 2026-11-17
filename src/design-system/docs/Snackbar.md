@@ -44,6 +44,6 @@ The message bar at the foot of the screen (called Toast before). Show one with `
 
 ## Copy rules
 
-- Fact first, past tense, short: "Breakfast logged", "Leg day moved to tomorrow".
+- Fact first, past tense, short: "Breakfast logged", "Leg workout moved to tomorrow".
 - Say the number when there is one: "250 ml added".
 - No dot separators, no emoji, no exclamation marks.

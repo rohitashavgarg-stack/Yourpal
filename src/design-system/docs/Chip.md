@@ -7,7 +7,7 @@
 An outline chip for information: 28 px high, 14 px corner, 1 px line. A chip is never an action. It looks like a button, so actions use `Button`, and facts in a row use `MetaRow`.
 
 ```tsx
-<Chip label="Leg day" icon={<Dumbbell size={13} color={c.ink} />} />
+<Chip label="Leg workout" icon={<Dumbbell size={13} color={c.ink} />} />
 <Chip label="Live" tone="live" onDark />
 ```
 
@@ -37,7 +37,7 @@ An outline chip for information: 28 px high, 14 px corner, 1 px line. A chip is 
 
 ## Do and don't
 
-- Do use it for a label that names a thing or a state: "Leg day", "In 2 h", "Next: Pull, Thu 6:30 pm".
+- Do use it for a label that names a thing or a state: "Leg workout", "In 2 h", "Next: Pull, Thu 6:30 pm".
 - Don't put `onPress` on it (it has none) or wrap it in a Pressy. Chips are not for actions.
 - Don't line up several chips as a row of facts: use `MetaRow`.
 - Don't use `warn` for a paused membership or a comeback. Those are not failures.

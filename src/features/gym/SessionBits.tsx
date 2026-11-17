@@ -14,6 +14,7 @@ export function StatusTag({ s }: { s: Session }) {
     upcoming: { l: 'Upcoming', bg: c.surface2, fg: c.muted },
     awaiting: { l: 'To confirm', bg: c.accent, fg: fixed.white },
     confirmed: { l: 'Confirmed', bg: c.goodSoft, fg: c.good },
+    skipped: { l: 'Skipped', bg: c.surface2, fg: c.muted },
     flagged: { l: 'Under review', bg: c.warnSoft, fg: c.warn },
   }[s.status];
   return <Tag label={t.l} bg={t.bg} fg={t.fg} />;

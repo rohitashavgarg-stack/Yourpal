@@ -22,6 +22,17 @@ export const THUMBS: Record<string, number> = {
   dbp: require('../../../assets/exercises/thumbs/bench-press.jpg'),
 };
 
+// The same stills with the white background cut out (and the corner logo), cropped to the figure: they sit straight on a card with no tile behind them (the Plans timeline cards).
+export const THUMBS_CLEAR: Record<string, number> = {
+  dcr: require('../../../assets/exercises/thumbs-clear/crunch.png'),
+  dlr: require('../../../assets/exercises/thumbs-clear/leg-raise-crunch.png'),
+  dbe: require('../../../assets/exercises/thumbs-clear/back-extension.png'),
+  dbc: require('../../../assets/exercises/thumbs-clear/ball-crunch.png'),
+  dtd: require('../../../assets/exercises/thumbs-clear/triceps-dip.png'),
+  dfs: require('../../../assets/exercises/thumbs-clear/front-squat.png'),
+  dbp: require('../../../assets/exercises/thumbs-clear/bench-press.png'),
+};
+
 const S = (r: number, k: number, t = 0, w = false): SetT => ({ r, k, t, w, st: 'todo' });
 // A demo workout made of exactly the exercises we have clips for. Opened from the edge-case panel.
 export function clipDemoExercises(): Ex[] {

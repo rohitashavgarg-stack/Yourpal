@@ -27,7 +27,7 @@ export const SCAN_PHOTO: Food = { n: 'Rajma chawal + 1 roti', k: 490, p: 16, c: 
 export const macroLine = (f: Food) => `P ${f.p} · C ${f.c ?? Math.round((f.k * 0.5) / 4)} · F ${f.f ?? Math.round((f.k * 0.3) / 9)} g`;
 
 export const HIST = [
-  { t: 'Wed 17 · Leg day', s: 'Quick version', m: '48 min', b: 'Squat 4 × 8 · 60 kg\nLeg press 3 × 12 · 125 kg\nWalking lunges 3 × 10\nPlank 3 × 45 s' },
+  { t: 'Wed 17 · Leg workout', s: 'Quick version', m: '48 min', b: 'Squat 4 × 8 · 60 kg\nLeg press 3 × 12 · 125 kg\nWalking lunges 3 × 10\nPlank 3 × 45 s' },
   { t: 'Mon 22 · Push', s: '2 PRs', m: '45 min', b: 'Bench press 4 × 8 · 57.5 kg  PR\nShoulder press 3 × 10 · 22.5 kg  PR\nTricep pushdown 3 × 12 · 20 kg' },
   { t: 'Sat 20 · Home workout', s: 'No check-in', m: '25 min', b: 'Push-ups 3 × 15\nBodyweight squats 3 × 20\nPlank 3 × 45 s' },
   { t: 'Thu 18 · Pull', s: '', m: '52 min', b: 'Deadlift 3 × 5 · 80 kg\nLat pulldown 3 × 10 · 45 kg\nSeated row 3 × 12 · 40 kg' },
@@ -39,13 +39,13 @@ export const REASONS = {
   diet: ['Too hard to follow', 'Schedule changed', 'Eating out a lot', 'New goal'],
 };
 
-// Coach Vikram's update to Leg day (what "What changed" lists).
+// Coach Vikram's update to Leg workout (what "What changed" lists).
 export const COACH_CHANGES = [
-  { tag: 'Added', name: 'Romanian deadlift', meta: '3 × 10 · Leg day' },
-  { tag: 'Removed', name: "Farmer's carry", meta: 'Leg day' },
-  { tag: 'Changed', name: 'Squat 60 → 62.5 kg', meta: 'Leg day' },
+  { tag: 'Added', name: 'Romanian deadlift', meta: '3 × 10 · Leg workout' },
+  { tag: 'Removed', name: "Farmer's carry", meta: 'Leg workout' },
+  { tag: 'Changed', name: 'Squat 60 → 62.5 kg', meta: 'Leg workout' },
 ] as const;
-export const COACH_BANNER = "Leg day: Romanian deadlift added, farmer's carry removed";
+export const COACH_BANNER = "Leg workout: Romanian deadlift added, farmer's carry removed";
 export const COACH_HL = ['sq', 'rd'];
 
 export function applyCoachUpdate(plans: Record<number, PlanDay>): Record<number, PlanDay> {

@@ -22,7 +22,8 @@ import { DietPlan } from '@/features/plans/DietPlan';
 import { DietMenuSheet, PlanMenuSheet } from '@/features/plans/Sheets';
 import { applyCoachUpdate, COACH_HL } from '@/features/plans/content';
 import { haptic } from '@/lib/haptics';
-import { DAYL, DAYN, dateOf, monthOf, dayPlan, Diet, resetPlans, setP, usePlans } from '@/features/plans/store';
+import { DAYL, DAYN, dateOf, monthOf, dayWorkouts, Diet, resetPlans, setP, usePlans } from '@/features/plans/store';
+import { DayTimeline } from '@/features/plans/DayTimeline';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { Callout } from '@/design-system/primitives/Callout';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
@@ -59,18 +60,20 @@ function DayStrip() {
             <View key={wk} style={{ width: w || 358, flexDirection: 'row', gap: 4 }}>
               {DAYN.map((l, i) => {
                 const pw = { ...p, week: wk };
-                const plan = dayPlan(d, pw, i);
+                const list = dayWorkouts(d, pw, i);
+                const plan = list[0] ?? null;
+                const allDone = list.length > 0 && list.every((x) => !!x.done); // a day is logged when every workout of it is
                 const on = i === p.day && wk === p.week;
                 const isToday = wk === 0 && i === TODAY_IDX;
                 const rel = Math.sign(wk * 7 + i - TODAY_IDX);
                 const dot = isW ? (plan ? c.accent : 'transparent') : rel <= 0 && wk === 0 ? c.good : 'transparent';
-                const logged = isW && !!plan?.done;
-                const locked = isW && paused && !!plan && !plan.done;
-                const missed = isW && !!plan && !plan.done && rel < 0 && wk === 0 && !paused;
+                const logged = isW && allDone;
+                const locked = isW && paused && !!plan && !allDone;
+                const missed = isW && !!plan && !allDone && rel < 0 && wk === 0 && !paused;
                 return (
                   <Pressy key={i} accessibilityRole="button" accessibilityState={{ selected: on }}
                     accessibilityLabel={`${DAYL[i]} ${dateOf(i, wk)} ${monthOf(i, wk)}${isToday ? ', today' : ''}${isW ? (plan ? `${locked ? "" : ", " + plan.name}${logged ? ', logged' : locked ? ', locked' : missed ? ', not logged' : ''}` : ', rest day') : ''}`}
-                    onPress={() => setP({ day: i, week: wk })} scaleTo={0.94}
+                    onPress={() => setP({ day: i, week: wk, wi: -1 })} scaleTo={0.94}
                     style={{ flex: 1, height: 66, borderRadius: radii.lg, alignItems: 'center', justifyContent: 'center', gap: 2, backgroundColor: on ? c.ink : 'transparent', borderWidth: isToday ? 1.5 : 0, borderColor: c.accent }}>
                     <Txt style={{ fontSize: fontSizes.xs2, lineHeight: 14, color: on ? c.bg : c.ink, opacity: 0.7 }}>{l}</Txt>
                     <Txt style={{ fontFamily: font.semibold, fontSize: 16, lineHeight: 21, color: on ? c.bg : c.ink }}>{dateOf(i, wk)}</Txt>
@@ -103,7 +106,7 @@ export default function Plans() {
   // Deep links from Today (a future day in "This week", "Re-plan my week").
   useEffect(() => {
     const day = params.day != null ? Number(params.day) : NaN;
-    if (!Number.isNaN(day) && day >= 0 && day < 7) setP({ day, week: 0 });
+    if (!Number.isNaN(day) && day >= 0 && day < 7) setP({ day, week: 0, wi: -1 });
     if (params.seg === 'diet' || params.seg === 'workout') setP({ seg: params.seg });
   }, [params.day, params.seg]);
 
@@ -139,9 +142,11 @@ export default function Plans() {
   }, [p.seg, p.noPlan, p.mid, p.diet, p.detail, p.cam, p.day, p.applied, d.coachUpdated, d.planReq, d.offline, d.scanFails]);
 
   const paused = useLogsPaused();
-  const canStart = useCanStart() && !paused;
-  const canLog = useCanLog() && !paused;
-  const canEdit = useCanEdit() && !paused;
+  // a day with two or more workouts shows the timeline of cards; each workout's Start, Log and Edit live on its own page
+  const multi = isW && !p.noPlan && dayWorkouts(d, p, p.day).length > 1;
+  const canStart = useCanStart() && !paused && !multi;
+  const canLog = useCanLog() && !paused && !multi;
+  const canEdit = useCanEdit() && !paused && !multi;
   const insets = useSafeAreaInsets();
   const sy = useSharedValue(0);
   const startRef = useRef<ViewInstance>(null);
@@ -180,7 +185,7 @@ export default function Plans() {
       )}
       <DayStrip />
       <View key={p.seg} style={{ gap: isW ? 24 : 12 }}>
-        {isW ? <WorkoutPlan startRef={startRef} /> : <DietPlan />}
+        {multi ? <DayTimeline /> : isW ? <WorkoutPlan startRef={startRef} /> : <DietPlan />}
       </View>
     </TabScreen>
     {floating && (canStart ? <StickyStart /> : canLog ? <StickyLog /> : null)}

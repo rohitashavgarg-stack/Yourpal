@@ -53,10 +53,10 @@ function MiniWorkout() {
   const s = d.session!;
   const resting = s.rest && s.rest.endAt > now;
   return (
-    <Pressy accessibilityRole="button" accessibilityLabel="Leg day in progress, resume" onPress={() => router.push('/workout')} scaleTo={0.98} style={[BAR, { backgroundColor: fixed.dark }]}>
+    <Pressy accessibilityRole="button" accessibilityLabel="Leg workout in progress, resume" onPress={() => router.push('/workout')} scaleTo={0.98} style={[BAR, { backgroundColor: fixed.dark }]}>
       <Glow />
       <View style={{ flex: 1, minWidth: 0 }}>
-        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.white }}>Leg day in progress</Txt>
+        <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, color: fixed.white }}>Leg workout in progress</Txt>
         <Txt style={{ fontFamily: font.mono, fontSize: fontSizes.xs, color: 'rgba(255,255,255,0.7)' }}>{resting ? `Rest ${mmss((s.rest!.endAt - now) / 1000)}` : mmss((now - s.startAt) / 1000).padStart(5, '0')}</Txt>
       </View>
       <View style={{ height: 40, borderRadius: 20, paddingHorizontal: 16, backgroundColor: fixed.white, justifyContent: 'center' }}><Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.sm, color: fixed.dark }}>Resume</Txt></View>
@@ -98,7 +98,7 @@ export function CheckInBar() {
     title = 'You are checked in';
     chip = `${mins} min`;
     progress = Math.min(1, mins / limitOf(d));
-    sub = `Since ${fmtT(at!).full}. ${st === 'todo' ? 'Leg day is next.' : st === 'done' ? 'Workout done.' : 'Rest day.'}`;
+    sub = `Since ${fmtT(at!).full}. ${st === 'todo' ? 'Leg workout is next.' : st === 'done' ? 'Workout done.' : 'Rest day.'}`;
     if (st === 'todo') { btn = 'Start workout'; act = () => startWorkout(); }
     else { btn = 'Check out'; act = A.checkOut; }
     icon = <Check size={16} strokeWidth={2.6} color={c.good} />;

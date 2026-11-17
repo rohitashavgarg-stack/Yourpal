@@ -18,7 +18,7 @@ import { PAUSE_HISTORY, PAUSE_TOTAL } from '@/features/gym/data';
 import { dateLabel, gymStore } from '@/features/gym/state';
 import { useDomain } from '@/lib/domain';
 import { StatusDot } from '@/design-system/primitives/StatusDot';
-import { StatusChip, TimeBar } from '@/app/gym/membership';
+import { StatusChip, TimeBar, TransferTag } from '@/app/gym/membership';
 import { shareStatement } from '@/features/reports/invoice';
 import { rupees } from '@/features/reports/payments';
 import { radii, fontSizes } from '@/design-system/tokens';
@@ -127,6 +127,7 @@ export default function MembershipDetail() {
           </View>
         </Row>
         {m.status !== 'Active' && <Txt muted style={{ fontSize: fontSizes.md }}>{m.note}</Txt>}
+        <TransferTag m={m} />
       </View>
 
       <View style={{ height: 1, backgroundColor: c.line }} />
@@ -134,7 +135,9 @@ export default function MembershipDetail() {
       {/* Each part has its own heading and its own list, like Payments. */}
       <Txt v="label" style={{ paddingHorizontal: 6 }}>DETAILS</Txt>
       <PayList>
-        <LineRow title="Price" right={value(rupees(m.price))} last />
+        <LineRow title="Price" right={value(rupees(m.price))} last={!m.transferred} />
+        {m.transferred?.from ? <LineRow title="Transferred from" right={value(m.transferred.from)} last={!m.transferred.on} /> : null}
+        {m.transferred?.on ? <LineRow title="Transferred on" right={value(m.transferred.on)} last /> : null}
       </PayList>
 
       {m.pt && (

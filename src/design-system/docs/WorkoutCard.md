@@ -13,12 +13,15 @@ Today's workout, one look per state. The state is a prop; `TodayWorkoutCard` (ol
 | Prop | Type | Default | What it does |
 |---|---|---|---|
 | `state` | `WorkoutCardState` | required | See States |
-| `name` | string | required | The workout name, "Leg day" |
+| `name` | string | required | The workout name, "Leg workout" |
 | `time` | string | none | The planned time, "6:30 pm", as a small pill after the name |
 | `when` | string | none | upcoming: the chip at the top right, "in 2 h" |
 | `meta` | `{ kind: 'exercises' \| 'time', text }[]` | `[]` | upcoming and due: facts under the name as a MetaRow ("7 exercises", "~50 min") |
 | `coachUnread` | boolean | false | A mint dot on the coach's photo for an unread reply |
 | `onOpenCoach` | () => void | none | The coach line was tapped |
+| `done.label`, `done.title` | string | derived | The small line at the top and the title of the done card, when the default does not fit (a card that holds a skipped workout says "Settled today" and "Workouts so far") |
+| `done.rows` | `{ name, at }[]` | none | Both workouts of a day with two are done: the card says "Workouts complete" and lists each workout with when it finished, in place of the name chip |
+| `heading` | string | "Today's workout" | The line above the name. A day with two workouts says "Workout 1 of 2" and "Workout 2 of 2", in time order |
 | `burned` | number | none | With a watch: the "Burned today N kcal" row at the bottom (upcoming, due, rest, done) |
 | `live` | `{ elapsed, done, total, next? }` | none | live: timer and exercise count |
 | `done` | `{ at, stats: [value, unit, label][] }` | none | done: "Done at 6:58 pm" and three stats |
@@ -37,12 +40,12 @@ Today's workout, one look per state. The state is a prop; `TodayWorkoutCard` (ol
 | State | Look |
 |---|---|
 | upcoming | Dark blue gradient card with a faint ring top right. Coach line ("Today's workout", "Planned by Coach Vikram"), "in 2 h" chip, name and time pill, MetaRow, white **Start workout** |
-| due | Same with a thin mint edge and a mint "Now" chip with a live dot (15 minutes before the planned time or later) |
+| due | Same with a mint "Now" chip with a live dot (15 minutes before the planned time or later). No coloured outline: the thin gradient stroke runs round the whole card, like every card |
 | live | Green gradient. "Running" with a mint dot, name chip (live tone), the mono timer and "elapsed", "3 of 7 exercises" with "Next: ...", one segment per exercise, white **Resume workout** |
 | missed | Two hours past the plan with nothing logged. Muted dark card with an amber edge, dimmed coach line, amber "Missed" chip, the time struck through in amber, "Did you train without the app, or should it move?", **I did it** (white), **Move to tomorrow** and **Skip** (glass), and an underlined "Start it now anyway" |
 | moved | The same full card as the other states, blue-tinted. Coach line, a neutral outlined chip "Moved" with a calendar icon, the name, three short lines (what happened "Moved to tomorrow", when "Thu 25 at 6:30 pm", then the quiet "Coach Vikram is told."), a white **Undo** button (44 px) and a plain grey button "Start today anyway" |
 | skipped | The same full card on a flat dark fill. Coach line, a neutral outlined chip "Skipped" with the skip icon, the name faded and struck through, three short lines ("Skipped for today", the quiet "Your plan picks up tomorrow." and "Next: Pull, Thu 6:30 pm"), a white **Undo** button (44 px) and a plain grey button "Start today anyway" |
-| done | Dark green gradient. Mint tick and "Done at 6:58 pm", name chip, "Workout complete", three stats (value, unit, label) |
+| done | Charcoal gradient (not green: Running is the green card). Mint tick and "Done at 6:58 pm", name chip, "Workout complete", three stats (value, unit, label) |
 | rest | Dark purple gradient. Lilac moon and "Recovery", "Next: ..." chip, "Rest day", "Muscles grow on rest days. A 20 minute walk still counts." |
 | paused | Shown only while the membership is paused or ended, never the goal. Membership ended. Flat grey card (no gradient, no Start): lock tile, "Workouts are paused", "Renew at Wulf Fitness reception to see your plan and start again. Your history stays here." |
 | comeback | After a break. One small flat card (no gradient, no coach line): `surface2` fill, `radii.card` corners, 16 px padding. Title "Easy session" (semibold 17 / 24), a muted line "20 min", two chips "4 exercises" and "Half your usual load", then two buttons side by side: **Start easy session** (primary) and **Not today** (`surface`). No exercise names. The greeting is not in the card: the screen shows it as plain text above (`ComebackGreeting`: "Good to see you back, <first name>." and "It's been <n> days. Coach <coach> picked an easy one to ease you in.") with the card directly beneath |

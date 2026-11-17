@@ -7,7 +7,7 @@ import { WorkoutCard } from '@/design-system/patterns/WorkoutCard';
 const meta = {
   title: 'Patterns/WorkoutCard',
   component: WorkoutCard,
-  args: { state: 'upcoming', name: 'Leg day', time: '6:30 pm', when: 'in 2 h', meta: [{ kind: 'exercises', text: '7 exercises' }, { kind: 'time', text: '~50 min' }], coachUnread: false },
+  args: { state: 'upcoming', name: 'Leg workout', time: '6:30 pm', when: 'in 2 h', meta: [{ kind: 'exercises', text: '7 exercises' }, { kind: 'time', text: '~50 min' }], coachUnread: false },
   argTypes: { state: { control: 'select', options: ['upcoming', 'due', 'live', 'missed', 'moved', 'skipped', 'done', 'rest', 'paused', 'comeback'] } },
 } satisfies Meta<typeof WorkoutCard>;
 export default meta;
@@ -19,6 +19,8 @@ export const Missed: S = { args: { state: 'missed' } };
 export const Moved: S = { args: { state: 'moved', tomorrow: 'Thu 25 at 6:30 pm' } };
 export const Skipped: S = { args: { state: 'skipped', restNext: 'Next: Pull, Thu 6:30 pm' } };
 export const Done: S = { args: { state: 'done', burned: 380, done: { at: '7:28 pm', stats: [['6', '', 'Exercises'], ['380', ' kcal', 'Burned']] } } };
+/** A day with two workouts, both done: one card that lists both. */
+export const BothDone: S = { args: { state: 'done', done: { at: '7:42 am', stats: [['2', '', 'Workouts'], ['12', '', 'Exercises'], ['380', ' kcal', 'Burned']], rows: [{ name: 'Mobility', at: '7:42 am' }, { name: 'Leg workout', at: '7:01 pm' }] } } };
 export const Rest: S = { args: { state: 'rest', restNext: 'Next: Pull, Thu 6:30 pm' } };
 export const Paused: S = { args: { state: 'paused' } };
 export const Comeback: S = { args: { state: 'comeback' } };

@@ -18,6 +18,8 @@ export type Membership = {
   paused?: { from: string; until: string; days: number }; // a paused membership: the gym paused it for these dates, its end date moves by the days
   next?: { item: string; due: string; amount: number }; // the next payment that is coming up
   payments: Payment[];
+  /** A plan another member transferred to this member. It keeps its own state (Active, Suspended or Past) and only carries a tag. */
+  transferred?: { from?: string; on?: string; /** the other member's photo (a link from the CRM), when there is one */ photo?: string };
 };
 
 // How the admin's statuses show in the app. Paused is still an Active membership (the pause shows on it); Transferred is a Past one.
@@ -28,6 +30,22 @@ export const tabOf = (m: Membership): MTab => (m.status === 'Active' || m.status
 export const MTABS: MTab[] = ['Active', 'Suspended', 'Past'];
 
 const pay = (id: string, no: string, item: string, date: string, amount: number, method: string): Payment => ({ id, no, item, date, amount, method });
+
+/** A block of personal training sessions. One can come with a membership; others are bought on their own at the front desk. */
+export type PtPack = { id: string; name: string; source: string; trainer: string; total: number; left: number; ends: string; pct: number; start: string; price?: number; past?: boolean; /** days until it ends */ daysLeft?: number; /** how much of its time has gone, 0 to 100 */ timePct?: number };
+
+/** The member's PT packs: the active ones (the one in use first), then the past ones (past: true), which stay as history.  Empty unless the member is in personal training. Sample data; the real list comes from the gym. */
+export function usePtPackages(): PtPack[] {
+  const { d } = useDomain();
+  const { state } = useStore();
+  if (state.sc.member !== 'PT member') return [];
+  return [
+    { id: 'pt1', name: PT_TOTAL + ' session pack', source: 'With your Annual plan', trainer: 'Coach Vikram', total: PT_TOTAL, left: d.ptLeft, ends: '30 Oct', start: '1 Aug', daysLeft: 36, timePct: 60, pct: Math.round((d.ptLeft / PT_TOTAL) * 100) },
+    { id: 'pt2', name: 'Single sessions', source: 'At the front desk', trainer: 'Coach Vikram', total: 5, left: 3, ends: '15 Dec', start: '15 Sep', price: 5000, daysLeft: 82, timePct: 10, pct: 60 },
+    { id: 'pt5', name: '10 session pack', source: 'At the front desk', trainer: 'Coach Vikram', total: 10, left: 0, ends: '29 Aug 2025', start: '27 Jun 2025', price: 10000, pct: 0, past: true },
+    { id: 'pt6', name: 'Trial sessions', source: 'At the front desk', trainer: 'Coach Vikram', total: 2, left: 0, ends: '20 Jun 2025', start: '13 Jun 2025', price: 2000, pct: 0, past: true },
+  ];
+}
 
 /** All of the member's memberships. The first one is the main plan: the scenario switch (Active, Expiring, Expired) changes it. */
 export function useMemberships(): Membership[] {
@@ -59,7 +77,7 @@ export function useMemberships(): Membership[] {
     note: 'Paused until 30 Nov 2026. Your end date moves by the 28 days you are away', left: { n: '28', unit: 'days paused' },
     paused: { from: '2 Nov 2026', until: '30 Nov 2026', days: 28 }, payments: [pay('p8', 'INV-2026-0341', 'Couple membership', '1 Jul 2026', 9000, 'front desk')],
   };
-  return [
+  const all: Membership[] = [
     main,
     second,
     paused,
@@ -68,6 +86,9 @@ export function useMemberships(): Membership[] {
     { id: 'm4', name: 'Monthly plan', price: 1500, start: '1 Jun 2025', end: '30 Jun 2025', status: 'Expired', pct: 100, note: 'Ended on 30 Jun 2025', left: { n: '0', unit: 'days left' }, payments: [pay('p5', 'INV-2025-0201', 'Monthly membership', '1 Jun 2025', 1500, 'cash')] },
     { id: 'm5', name: 'Joining offer', price: 3600, start: '1 Mar 2025', end: '31 May 2025', status: 'Expired', pct: 100, note: 'Ended on 31 May 2025', left: { n: '0', unit: 'days left' }, payments: [pay('p6', 'INV-2025-0102', 'Joining offer', '1 Mar 2025', 3600, 'UPI')] },
   ];
+  // Plans other members transferred to this member (sample). Which plan, from whom and when comes from the CRM; the name is optional.
+  const TRANSFERRED: Record<string, Membership['transferred']> = { m2: { from: 'Rahul Mehta', on: '2 Aug 2026' }, m3: { from: 'Anita Rao', on: '28 Dec 2025' }, m4: { on: '28 May 2025' } };
+  return all.map((m) => (TRANSFERRED[m.id] ? { ...m, transferred: TRANSFERRED[m.id] } : m));
 }
 
 /** What the rest of the app reads: Expired when no membership is active (logging pauses), Expiring when every active one is ending soon, otherwise Active. */

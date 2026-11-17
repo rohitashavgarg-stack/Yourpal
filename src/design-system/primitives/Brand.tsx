@@ -58,6 +58,20 @@ function Initials({ name, size, box, border }: { name: string; size: number; box
   );
 }
 
+/** Another person (for example the member a plan was transferred from): their photo when there is one, otherwise their initials on a soft blue circle. */
+export function NameAvatar({ name, size = 32, photo }: { name: string; size?: number; photo?: string | null }) {
+  const { c } = useTheme();
+  const [failed, setFailed] = useState(false);
+  const letters = name.trim().split(/\s+/).slice(0, 2).map((w) => w.charAt(0).toUpperCase()).join('') || '?';
+  const box = { width: size, height: size, borderRadius: size / 2, flexShrink: 0 } as const;
+  if (photo && !failed) return <Image source={{ uri: photo }} onError={() => setFailed(true)} accessibilityIgnoresInvertColors importantForAccessibility="no-hide-descendants" style={[box, { backgroundColor: c.surface3 }]} />;
+  return (
+    <View importantForAccessibility="no-hide-descendants" style={[box, { backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' }]}>
+      <Text style={{ fontFamily: font.semibold, fontSize: Math.round(size * 0.42), lineHeight: Math.round(size * 0.52), color: c.accentText }}>{letters}</Text>
+    </View>
+  );
+}
+
 export function PersonAvatar({ who = 'me', size = 44, ring, square, photo }: { who?: 'me' | 'coach'; size?: number; ring?: boolean; square?: boolean; photo?: string | null }) {
   const { c } = useTheme();
   const { state } = useStore();

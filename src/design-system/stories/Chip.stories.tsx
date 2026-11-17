@@ -21,4 +21,4 @@ export const FilledEdge: S = { args: { label: 'Mon 22 Sep', filled: true, edge: 
 export const Good: S = { args: { tone: 'good', label: 'On plan' } };
 export const Warn: S = { args: { tone: 'warn', label: 'Needs a weigh-in' } };
 export const Live: S = { args: { tone: 'live', label: 'Now', icon: <Zap size={14} /> } };
-export const OnDark: S = { args: { onDark: true, label: 'Leg day' }, decorators: [(St) => <View style={{ backgroundColor: onDark.card, padding: 16, borderRadius: radii.card }}><St /></View>] };
+export const OnDark: S = { args: { onDark: true, label: 'Leg workout' }, decorators: [(St) => <View style={{ backgroundColor: onDark.card, padding: 16, borderRadius: radii.card }}><St /></View>] };

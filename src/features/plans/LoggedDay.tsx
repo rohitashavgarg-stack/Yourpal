@@ -1,9 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Row, Txt } from '@/components/ui';
+import { Check } from '@/lib/icons';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
-import { fontSizes, radii } from '@/design-system/tokens';
+import { fontSizes, radii, round } from '@/design-system/tokens';
 import type { PEx } from '@/features/plans/store';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MuscleBody, MuscleName } from '@/design-system/primitives/MuscleBody';
@@ -40,20 +41,29 @@ function LoggedFigures({ sets }: { sets: Partial<Record<MuscleName, number>> }) 
   return (
     <View accessible accessibilityLabel={`Muscles worked: ${Object.keys(sets).join(', ')}`} style={{ alignItems: 'center', paddingVertical: 8 }}>
       <Row style={{ gap: 28 }}>
-        <MuscleBody side="front" width={150} lit={lit} />
-        <MuscleBody side="back" width={150} lit={lit} />
+        <MuscleBody side="front" width={150} lit={lit} tone="good" />
+        <MuscleBody side="back" width={150} lit={lit} tone="good" />
       </Row>
     </View>
   );
 }
 
-// The top of a logged day: the name centred, one line about the work, and the date and time as two chips.
-export function LoggedHeader({ name, sets, byYou, date, span }: { name: string; sets: number; byYou: boolean; date: string; span: string }) {
+// The top of a logged day: a big green check above the name (when it is completed), with one soft transparent green circle behind it, the name centred, who planned it, and the date and time as two chips.
+// tag: what the check says to a screen reader ("Completed"); nothing is written next to it.
+export function LoggedHeader({ name, byYou, date, span, tag }: { name: string; sets?: number; byYou: boolean; date: string; span: string; tag?: string }) {
+  const { c } = useTheme();
   return (
     <View style={{ alignItems: 'center', gap: 6, paddingTop: 4 }}>
+      {!!tag && (
+        <View accessible accessibilityLabel={tag} style={{ width: 88, height: 88, borderRadius: round(88), backgroundColor: c.good + '26', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
+          <View style={{ width: 48, height: 48, borderRadius: round(48), backgroundColor: c.good, alignItems: 'center', justifyContent: 'center' }}>
+            <Check size={28} strokeWidth={3} color={c.bg} />
+          </View>
+        </View>
+      )}
       <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl4, lineHeight: 40, letterSpacing: -0.6, textAlign: 'center' }}>{name}</Txt>
-      <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23, textAlign: 'center' }}>{`${sets} hard sets. ${byYou ? 'Your plan' : "Coach Vikram's plan"}, done.`}</Txt>
-      <Row style={{ gap: 8, marginTop: 8 }}><Chip filled edge size="lg" label={date} />{!!span && <Chip filled edge size="lg" label={span} />}</Row>
+      <Txt muted style={{ fontSize: fontSizes.base, lineHeight: 23, textAlign: 'center' }}>{byYou ? 'Your own plan' : 'Planned by Coach Vikram'}</Txt>
+      <Row style={{ gap: 8, marginTop: 8, flexWrap: 'wrap', justifyContent: 'center' }}><Chip filled edge size="lg" label={date} />{!!span && <Chip filled edge size="lg" label={span} />}</Row>
     </View>
   );
 }
@@ -85,12 +95,11 @@ export function LoggedExercises({ ex }: { ex: PEx[] }) {
   );
 }
 
-// How it felt: the effort the member logged after the workout, as a word and a bar (it is a record, so there is nothing to drag).
+// How it felt: the effort the member logged after the workout, in a card as a word and a number (it is a record, so there is nothing to drag: no slider).
 const LOGGED_EFFORT = 0.62; // a sample value until the effort is stored with the workout
 const effortWord = (v: number) => (v < 0.2 ? 'Easy' : v < 0.45 ? 'Moderate' : v < 0.7 ? 'Hard' : v < 0.9 ? 'Very hard' : 'Max');
 export function LoggedFeel() {
   const { c } = useTheme();
-  const pct = Math.round(LOGGED_EFFORT * 100);
   return (
     <View style={{ gap: 8 }}>
       <View style={{ gap: 2, paddingHorizontal: 4 }}>
@@ -146,7 +155,7 @@ export function LoggedMuscles({ ex }: { ex: PEx[] }) {
       </View>
       <LoggedFigures sets={sets} />
       <View style={{ gap: 18, paddingHorizontal: 4 }}>
-        {names.map((m) => <MuscleRow key={m} name={m} done={sets[m] ?? 0} target={target[m] ?? sets[m] ?? 0} />)}
+        {names.map((m) => <MuscleRow key={m} name={m} tone="good" done={sets[m] ?? 0} target={target[m] ?? sets[m] ?? 0} />)}
       </View>
     </View>
   );

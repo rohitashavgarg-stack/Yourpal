@@ -27,7 +27,8 @@ export const BODY_H = 400;
  * A plain dark front or back view of the body with the muscle groups you pass lit in the accent blue. `lit` maps a group to how far along it is (0 to 1): a group that is
  * not in it stays dark, one that is part way is lit softer, one that is done is lit fully. The figure is drawn by react-native-body-highlighter.
  */
-export function MuscleBody({ side = 'front', lit, width = BODY_W }: { side?: BodySide; lit: Partial<Record<MuscleName, number>>; width?: number }) {
+// tone: the colour of the lit muscles. accent (blue) is the default; good (green) is for a workout that is done.
+export function MuscleBody({ side = 'front', lit, width = BODY_W, tone = 'accent' }: { side?: BodySide; lit: Partial<Record<MuscleName, number>>; width?: number; tone?: 'accent' | 'good' }) {
   const { c } = useTheme();
   const data: ExtendedBodyPart[] = ALL.map((slug) => ({ slug, color: c.surface3 }));
   (Object.keys(SLUGS[side]) as MuscleName[]).forEach((m) => {
@@ -40,7 +41,7 @@ export function MuscleBody({ side = 'front', lit, width = BODY_W }: { side?: Bod
   const cx = side === 'front' ? 362 : 1083;
   return (
     <View style={{ width, height: width * 2 }}>
-      <Body data={data} side={side} gender="male" scale={width / BODY_W} border="none" defaultFill={c.surface3} hiddenParts={['head', 'hair']} colors={[c.accent + '80', c.accent]} />
+      <Body data={data} side={side} gender="male" scale={width / BODY_W} border="none" defaultFill={c.surface3} hiddenParts={['head', 'hair']} colors={[(tone === 'good' ? c.good : c.accent) + '80', tone === 'good' ? c.good : c.accent]} />
       <Svg pointerEvents="none" width={width} height={width * 2} viewBox={viewBox} style={{ position: 'absolute', top: 0, left: 0 }}>
         <Path d={skull(cx)} fill={c.surface3} />
       </Svg>
