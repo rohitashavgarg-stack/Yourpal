@@ -142,7 +142,7 @@ const StackCard = React.memo(function StackCard({ it, i, n, prog, inFlow, onDism
             </Row>
             {it.two ? (
               <Row style={{ gap: 10 }}>
-                <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => (it.invite ? openSheet(<DeclinePtSheet />, { label: 'Decline invitation' }) : openSheet(<FlagSheet />, { label: 'Reject session' }))} /></View>
+                <View style={{ flex: 1 }}><Button kind="grey" label="Reject" onPress={() => (it.invite ? openSheet(<DeclinePtSheet />, { label: 'Decline invitation' }) : openSheet(<FlagSheet />, { label: 'Reject session' }))} /></View>
                 <View style={{ flex: it.invite ? 1 : 1.4 }}><Button label={it.invite ? 'Accept' : 'Confirm & rate'} onPress={() => (it.invite ? acceptInvite() : router.push('/gym/confirm'))} /></View>
               </Row>
             ) : it.btn ? (
