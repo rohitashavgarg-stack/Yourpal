@@ -20,7 +20,7 @@ export function useAcceptPtInvite() {
   return () => {
     ptInviteStore.set({ state: 'accepted' });
     haptic.success();
-    toast(`Accepted. ${PT_INVITE.name} starts on ${PT_INVITE.startsOn}. ${PT_INVITE.trainer} notified`);
+    toast(`Accepted. ${PT_INVITE.name} is now your active package. ${PT_INVITE.trainer} notified`);
   };
 }
 
@@ -45,24 +45,25 @@ export function DeclinePtSheet() {
   );
 }
 
-/** What the package is: three small tiles (sessions, days, price) and one quiet line for when it starts. Used on the invitation card so the details are right there. */
+/** What the package is, as plain text with no boxes: each number large with its small label beside it, a thin divider between. */
 export function PtInviteFacts({ onDark = false }: { onDark?: boolean }) {
   const { c } = useTheme();
   const muted = onDark ? onDarkTokens.soft : c.ink;
   const ink = onDark ? onDarkTokens.text : c.ink;
-  const tile = onDark ? 'rgba(255,255,255,0.08)' : c.surface2;
-  const tiles: [string, string][] = [[String(PT_INVITE.sessions), 'sessions'], [String(PT_INVITE.validDays), 'days valid']];
+  const facts: [string, string][] = [[String(PT_INVITE.sessions), 'sessions'], [String(PT_INVITE.validDays), 'days valid']];
   return (
-    <View style={{ gap: 12 }}>
-      <Row style={{ gap: 8 }}>
-        {tiles.map(([v, l]) => (
-          <View key={l} accessible accessibilityLabel={`${v} ${l}`} style={{ flex: 1, backgroundColor: tile, borderRadius: radii.md, paddingVertical: 12, paddingHorizontal: 12, gap: 2 }}>
-            <Txt style={{ fontFamily: font.display, fontSize: fontSizes.xl, lineHeight: 26, color: ink }}>{v}</Txt>
-            <Txt style={{ fontSize: fontSizes.sm, lineHeight: 18, color: muted }}>{l}</Txt>
-          </View>
+    <View style={{ gap: 10 }}>
+      <Row style={{ gap: 16, alignItems: 'center' }}>
+        {facts.map(([v, l], i) => (
+          <React.Fragment key={l}>
+            {i > 0 ? <View style={{ width: 1, height: 28, backgroundColor: onDark ? 'rgba(255,255,255,0.2)' : c.line }} /> : null}
+            <View accessible accessibilityLabel={`${v} ${l}`} style={{ flexDirection: 'row', gap: 6, alignItems: 'baseline' }}>
+              <Txt style={{ fontFamily: font.displayBold, fontSize: fontSizes.xl3, lineHeight: 34, letterSpacing: -0.6, color: ink }}>{v}</Txt>
+              <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: muted }}>{l}</Txt>
+            </View>
+          </React.Fragment>
         ))}
       </Row>
-      <Txt style={{ fontSize: fontSizes.md, lineHeight: 20, color: muted }}>{`Starts on ${PT_INVITE.startsOn}, after your current package.`}</Txt>
     </View>
   );
 }

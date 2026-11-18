@@ -12,9 +12,9 @@ export const PT_INVITE = {
   sessions: 8,
   validDays: 60,
   price: 8000,
-  startsOn: '31 Oct', // the day after the current package ends
-  endsOn: '31 Dec',
-  note: 'Eight sessions to build your lifts after the 12 session pack.',
+  activeFrom: '24 Sep', // accepting makes it the active package from today
+  endsOn: '23 Nov',
+  note: 'Eight sessions to build your lifts.',
 };
 
 export const DECLINE_REASONS = ['Not now', 'Too many sessions', 'Price', 'Another trainer'];

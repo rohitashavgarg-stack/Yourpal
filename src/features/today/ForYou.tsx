@@ -61,7 +61,7 @@ export function useForYou(): Item[] {
   const first = (state.profile.name || '').trim().split(' ')[0];
   const out: Item[] = [];
   // Order = priority: what blocks logging, then what has a deadline, then the rest.
-  if (ptInvite === 'waiting' && state.sc.member === 'PT member' && d.hasGym && !logsPaused) out.push({ key: 'pt-invite', title: `${PT_INVITE.trainer} invited you`, body: `${PT_INVITE.name}, ${PT_INVITE.sessions} sessions, starts ${PT_INVITE.startsOn}`, critical: true, tone: 'accent', who: true, two: true, invite: true });
+  if (ptInvite === 'waiting' && state.sc.member === 'PT member' && d.hasGym && !logsPaused) out.push({ key: 'pt-invite', title: `${PT_INVITE.trainer} invited you`, body: `${PT_INVITE.name}, ${PT_INVITE.sessions} sessions, ${PT_INVITE.validDays} days valid`, critical: true, tone: 'accent', who: true, two: true, invite: true });
   if (ptPending && d.hasGym && !logsPaused) out.push({ key: 'pt', title: updateCopy.pt.title, body: updateCopy.pt.body, critical: true, tone: 'accent', who: true, two: true });
   if (d.hasGym && memState === 'Expiring') out.push({ key: 'member-exp', title: updateCopy.membership.title, body: updateCopy.membership.body, tone: 'warn', icon: Clock, btn: 'See plan', act: () => router.push('/gym/membership') });
   const order = ['reassess', 'reply', 'plan', 'log'];
