@@ -11,7 +11,6 @@ import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { LIFT_DATA } from '@/features/progress/data';
 import { CornerGlow, DrawLine, ListCard, SubPage, toPts } from '@/features/progress/parts';
-import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { Card } from '@/design-system/primitives/Card';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { useLook } from '@/features/progress/look';
@@ -73,7 +72,7 @@ export default function LiftDetail() {
 
   const look = useLook('lifts'); // the amber of the Lifts card
   return (
-    <SubPage title="Lifts and PRs" fallback="/progress" backdrop={<TopGlow color={look.tint} />}>
+    <SubPage title="Lifts and PRs" fallback="/progress">
       <RangeBar ranges={RANGES_NO_DAY} />
       <View accessibilityRole="radiogroup" style={{ flexDirection: 'row', gap: 8 }}>
         {(Object.keys(LIFT_DATA) as LiftName[]).map((k) => {
