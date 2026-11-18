@@ -70,7 +70,7 @@ function MembershipCard({ m }: { m: Membership }) {
 }
 
 // PT packages: a separate product from the gym membership, so each has its own card here, like a membership. It opens the pack's details (no sessions).
-function ExtraPtCards({ kind }: { kind: 'active' | 'upcoming' | 'past' }) {
+function ExtraPtCards({ kind }: { kind: 'active' | 'past' }) {
   const { c } = useTheme();
   const extra = usePtPackages().filter((p) => ptKind(p) === kind);
   return (
@@ -84,11 +84,11 @@ function ExtraPtCards({ kind }: { kind: 'active' | 'upcoming' | 'past' }) {
               <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 24 }}>{p.name}</Txt>
               <Txt style={{ fontSize: fontSizes.md, color: c.muted }}>Personal training package</Txt>
             </View>
-            <Chip label={p.state === 'declined' ? 'Declined' : p.state === 'upcoming' ? 'Upcoming' : p.past ? 'Past' : 'Active'} tone={p.past || p.state === 'upcoming' ? 'default' : 'good'} />
+            <Chip label={p.state === 'declined' ? 'Declined' : p.past ? 'Past' : 'Active'} tone={p.past ? 'default' : 'good'} />
           </Row>
-          {p.past || p.state === 'upcoming' ? null : <TimeBar pct={p.pct} />}
+          {p.past ? null : <TimeBar pct={p.pct} />}
           <Row style={{ justifyContent: 'space-between' }}>
-            <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.muted }}>{p.state === 'declined' ? 'You declined this invitation' : p.state === 'upcoming' ? `${p.total} sessions, starts ${p.start}` : p.past ? `${p.total} sessions, ended ${p.ends}` : `${p.left} of ${p.total} sessions left, ends ${p.ends}`}</Txt>
+            <Txt style={{ flex: 1, fontSize: fontSizes.md, color: c.muted }}>{p.state === 'declined' ? 'You declined this invitation' : p.past ? `${p.total} sessions, ended ${p.ends}` : `${p.left} of ${p.total} sessions left, ends ${p.ends}`}</Txt>
             <ChevronRight size={18} color={c.muted} />
           </Row>
         </Pressy>
@@ -104,18 +104,16 @@ export default function Memberships() {
   const all = useMemberships();
   const [tab, setTab] = useState<MTab>('Active');
   const list = all.filter((m) => tabOf(m) === tab);
-  const upcomingPt = usePtPackages().some((p) => ptKind(p) === 'upcoming'); // an accepted PT package waiting for the current one to end
   return (
     <SubPage title="Memberships" fallback="/gym" backdrop={<TopGlow color={c.accent} />}>
       <Segmented accessibilityLabel="Memberships" value={tab} onChange={setTab} options={MTABS.map((t) => ({ value: t, label: t }))} />
       {list.filter((m) => m.status !== 'Upcoming').map((m) => <MembershipCard key={m.id} m={m} />)}
       {tab === 'Active' && <ExtraPtCards kind="active" />}
       {tab === 'Past' && <ExtraPtCards kind="past" />}
-      {(list.some((m) => m.status === 'Upcoming') || (tab === 'Active' && upcomingPt)) && (
+      {list.some((m) => m.status === 'Upcoming') && (
         <View style={{ gap: 10, marginTop: 6 }}>
           <SectionLabel>Starts next</SectionLabel>
           {list.filter((m) => m.status === 'Upcoming').map((m) => <MembershipCard key={m.id} m={m} />)}
-          {tab === 'Active' && <ExtraPtCards kind="upcoming" />}
         </View>
       )}
       {!list.length && (

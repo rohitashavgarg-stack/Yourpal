@@ -33,7 +33,7 @@ export const MTABS: MTab[] = ['Active', 'Suspended', 'Past'];
 const pay = (id: string, no: string, item: string, date: string, amount: number, method: string): Payment => ({ id, no, item, date, amount, method });
 
 /** A block of personal training sessions. One can come with a membership; others are bought on their own at the front desk. */
-export type PtPack = { id: string; name: string; source: string; trainer: string; total: number; left: number; ends: string; pct: number; start: string; price?: number; past?: boolean; /** invited: sent by the trainer, not answered. upcoming: accepted, starts when the current one ends. declined: said no (also past). */ state?: 'invited' | 'upcoming' | 'declined'; /** days until it ends */ daysLeft?: number; /** how much of its time has gone, 0 to 100 */ timePct?: number };
+export type PtPack = { id: string; name: string; source: string; trainer: string; total: number; left: number; ends: string; pct: number; start: string; price?: number; past?: boolean; /** invited: sent by the trainer, not answered. declined: said no (also past). Accepting makes it the one active package. */ state?: 'invited' | 'declined'; /** days until it ends */ daysLeft?: number; /** how much of its time has gone, 0 to 100 */ timePct?: number };
 
 /** The member's PT packs: the active ones (the one in use first), then the past ones (past: true), which stay as history.  Empty unless the member is in personal training. Sample data; the real list comes from the gym. */
 export function usePtPackages(): PtPack[] {
@@ -41,19 +41,22 @@ export function usePtPackages(): PtPack[] {
   const { state } = useStore();
   const inv = ptInviteStore.use().state;
   if (state.sc.member !== 'PT member') return [];
-  // the package the trainer invited the member to: waiting, accepted (starts next) or declined (kept in Past)
-  const invited: PtPack[] = inv === 'none' ? [] : [{ id: 'pt3', name: PT_INVITE.name, source: 'Invited by ' + PT_INVITE.trainer, trainer: PT_INVITE.trainer, total: PT_INVITE.sessions, left: PT_INVITE.sessions, start: inv === 'accepted' ? PT_INVITE.startsOn : '', ends: inv === 'accepted' ? PT_INVITE.endsOn : '', price: PT_INVITE.price, pct: 100,
-    state: inv === 'waiting' ? 'invited' : inv === 'accepted' ? 'upcoming' : 'declined', past: inv === 'declined' }];
-  return [
-    { id: 'pt1', name: PT_TOTAL + ' session pack', source: 'At the front desk', trainer: 'Coach Vikram', total: PT_TOTAL, left: d.ptLeft, ends: '30 Oct', start: '1 Aug', daysLeft: 36, timePct: 60, pct: Math.round((d.ptLeft / PT_TOTAL) * 100) },
+  // the package the trainer invited the member to: waiting for an answer, accepted (it becomes the one active package, and the one before it is past) or declined (kept in Past)
+  const invited: PtPack[] = inv === 'none' ? [] : [{ id: 'pt3', name: PT_INVITE.name, source: 'Invited by ' + PT_INVITE.trainer, trainer: PT_INVITE.trainer, total: PT_INVITE.sessions, left: PT_INVITE.sessions, start: inv === 'accepted' ? PT_INVITE.activeFrom : '', ends: inv === 'accepted' ? PT_INVITE.endsOn : '', price: PT_INVITE.price, pct: 100,
+    ...(inv === 'accepted' ? { daysLeft: PT_INVITE.validDays, timePct: 0 } : { state: inv === 'waiting' ? 'invited' : 'declined', past: inv === 'declined' }) } as PtPack];
+  const current: PtPack = { id: 'pt1', name: PT_TOTAL + ' session pack', source: 'At the front desk', trainer: 'Coach Vikram', total: PT_TOTAL, left: d.ptLeft, ends: '30 Oct', start: '1 Aug', daysLeft: 36, timePct: 60, pct: Math.round((d.ptLeft / PT_TOTAL) * 100) };
+  const older: PtPack[] = [
     { id: 'pt2', name: 'Single sessions', source: 'At the front desk', trainer: 'Coach Vikram', total: 5, left: 0, ends: '30 Sep 2025', start: '1 Aug 2025', price: 5000, pct: 0, past: true },
     { id: 'pt5', name: '10 session pack', source: 'At the front desk', trainer: 'Coach Vikram', total: 10, left: 0, ends: '29 Aug 2025', start: '27 Jun 2025', price: 10000, pct: 0, past: true },
     { id: 'pt6', name: 'Trial sessions', source: 'At the front desk', trainer: 'Coach Vikram', total: 2, left: 0, ends: '20 Jun 2025', start: '13 Jun 2025', price: 2000, pct: 0, past: true },
-  ].concat(invited as never[]);
+  ];
+  // only one package is active at a time: once the new one is accepted, the one before it moves to Past
+  if (inv === 'accepted') return [...invited, { ...current, past: true, daysLeft: undefined, timePct: undefined }, ...older];
+  return [current, ...older, ...invited];
 }
 
-/** Where a PT package stands: invited (not answered), active, upcoming (accepted, starts next) or past (finished or declined). */
-export const ptKind = (p: PtPack): 'invited' | 'active' | 'upcoming' | 'past' => (p.state === 'invited' ? 'invited' : p.state === 'upcoming' ? 'upcoming' : p.past ? 'past' : 'active');
+/** Where a PT package stands: invited (not answered), active (only one at a time) or past (finished or declined). */
+export const ptKind = (p: PtPack): 'invited' | 'active' | 'past' => (p.state === 'invited' ? 'invited' : p.past ? 'past' : 'active');
 
 /** All of the member's memberships. The first one is the main plan: the scenario switch (Active, Expiring, Expired) changes it. */
 export function useMemberships(): Membership[] {
