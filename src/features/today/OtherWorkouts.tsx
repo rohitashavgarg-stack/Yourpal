@@ -25,7 +25,7 @@ export const otherWkStore = createStore(() => ({ answer: null as null | 'moved' 
 // Today's workouts. A day can hold more than one (Coach Vikram adds them). They are all equal: what Today shows follows the clock, the way the Meals card follows meals.
 // Each workout is done, skipped, moved, running, missed (planned more than two hours ago and not marked), due (its time has come) or upcoming (its time has not come).
 // - nothing upcoming is shown
-// - everything settled (done, skipped or moved) is in one completed card, a row each, as long as one of them was done (that card is green)
+// - everything settled (done, skipped or moved) is in one completed card, below the workouts that still need you, a row each, as long as one of them was done (that card is green)
 // - if none was done (all skipped or moved) the same rows sit in a neutral card, with no green
 // - a running workout, a missed one (to log it) and the next one that is due each have their own full card; a later workout's card only appears once the ones before it are settled
 // - when every workout is missed, skipped or moved (and one is missed) they are one card, a row each
@@ -183,9 +183,10 @@ export function TodayWorkouts() {
   if (!missedAbove) own.unshift(...missedItems);
   return (
     <View style={{ gap: 12 }}>
-      {settledItems.length > 0 && (settledItems.some((x) => x.status === 'done') ? <CompletedCard items={settledItems} total={items.length} /> : <UnsettledCard items={settledItems} grey />)}
       {missedAbove && <UnsettledCard items={missedItems} grey />}
       {own.map((it) => <FullCard key={it.w.name} it={it} place={items.indexOf(it) + 1} />)}
+      {/* what is already done, skipped or moved sits at the bottom, below the workout that is next */}
+      {settledItems.length > 0 && (settledItems.some((x) => x.status === 'done') ? <CompletedCard items={settledItems} total={items.length} /> : <UnsettledCard items={settledItems} grey />)}
     </View>
   );
 }
