@@ -74,7 +74,7 @@ export function SessionSheet({ s }: { s: Session }) {
       {waiting ? (
         <View style={{ gap: 4 }}>
           <Row style={{ gap: 10 }}>
-            <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => closeSheet(() => openSheet(<FlagSheet />, { label: 'Reject session' }))} /></View>
+            <View style={{ flex: 1 }}><Button kind="grey" label="Reject" onPress={() => closeSheet(() => openSheet(<FlagSheet />, { label: 'Reject session' }))} /></View>
             <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => closeSheet(() => router.push('/gym/confirm'))} /></View>
           </Row>
         </View>
