@@ -11,7 +11,8 @@ import { SubPage } from '@/features/progress/parts';
 import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { musclesFor } from '@/features/progress/muscles';
 import { progressStore } from '@/features/progress/store';
-import { RangeBar } from '@/features/progress/TrendUI';
+import { RangeBarCompact } from '@/features/progress/TrendUI';
+import { RANGES } from '@/features/progress/trends';
 
 // Every muscle group with its sets against the target: the rings first, then one row of capsules for each muscle.
 export default function Muscles() {
@@ -20,7 +21,7 @@ export default function Muscles() {
   const g = musclesFor(p);
   return (
     <SubPage title="Muscles trained" fallback="/progress" backdrop={<TopGlow color={c.accent} />}>
-      <RangeBar />
+      <RangeBarCompact ranges={RANGES} />
       <View style={{ alignItems: 'center', paddingVertical: 8 }}><MuscleRings groups={g} size={280} /></View>
       <View style={{ gap: 18, paddingTop: 6 }}>
         {g.map((x) => <MuscleRow key={x.name} name={x.name as MuscleName} done={x.done} target={x.target} />)}

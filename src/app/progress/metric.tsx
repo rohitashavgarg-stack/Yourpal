@@ -19,9 +19,9 @@ import { METRIC_TITLES, MetricKey } from '@/features/progress/data';
 import { cardShadow, CornerGlow, Hint, ListCard, SubPage } from '@/features/progress/parts';
 import { useLook } from '@/features/progress/look';
 import { progressStore } from '@/features/progress/store';
-import { MEAS_PARTS, MeasPart, RANGES, Range, shift, trend } from '@/features/progress/trends';
+import { MEAS_PARTS, MeasPart, Range, rangesFor, shift, trend } from '@/features/progress/trends';
 import { KCAL_TARGET } from '@/lib/data';
-import { RangeBar, TrendChart } from '@/features/progress/TrendUI';
+import { RangeBarCompact, TrendChart } from '@/features/progress/TrendUI';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { Card } from '@/design-system/primitives/Card';
@@ -44,20 +44,22 @@ export default function MetricDetail() {
   const k: MetricKey = raw && raw in METRIC_TITLES ? (raw as MetricKey) : 'weight';
   const paused = useMembershipState() === 'Expired';
   const anchor = new Date(ps.anchor);
-  const t = trend(k, ps.range, anchor, { weight: d.weight, water: d.water, part: ps.part });
+  const allowed = rangesFor(k); // Day only where a day has an hourly chart
+  const range: Range = allowed.some((r) => r.value === ps.range) ? ps.range : 'week';
+  const t = trend(k, range, anchor, { weight: d.weight, water: d.water, part: ps.part });
 
   useProgressScenarios(`Progress · ${METRIC_TITLES[k]}`, [
-    { label: 'Period', options: RANGES.map((r) => r.label), value: RANGES.find((r) => r.value === ps.range)!.label, onPick: (v) => progressStore.set({ range: RANGES.find((r) => r.label === v)!.value as Range }) },
+    { label: 'Period', options: allowed.map((r) => r.label), value: (allowed.find((r) => r.value === range) ?? allowed[0]).label, onPick: (v) => progressStore.set({ range: allowed.find((r) => r.label === v)!.value as Range }) },
     ...(k === 'weight' ? [{ label: 'Membership (logging)', options: ['Active', 'Expired'], value: paused ? 'Expired' : 'Active', onPick: (v: string) => set({ membership: v as any }) }] : []),
   ], [], [ps.range, paused, k]);
 
   const swipe = (dir: 1 | -1) => {
     if ((dir > 0 && !t.win.canNext) || (dir < 0 && !t.win.canPrev)) { haptic.warn(); return; }
     haptic.tick();
-    progressStore.set({ anchor: shift(ps.range, anchor, dir).getTime() });
+    progressStore.set({ anchor: shift(range, anchor, dir).getTime() });
   };
 
-  const bigUnit = k === 'steps' ? (ps.range === 'day' ? ' steps' : ' steps / day') : k === 'water' ? (ps.range === 'day' ? ' L' : ' L / day') : k === 'cons' && Number(t.big) === 1 ? ' workout' : t.unit;
+  const bigUnit = k === 'steps' ? (range === 'day' ? ' steps' : ' steps / day') : k === 'water' ? (range === 'day' ? ' L' : ' L / day') : k === 'cons' && Number(t.big) === 1 ? ' workout' : t.unit;
   const extra = k === 'steps' ? [{ l: 'Source', v: HEALTH_NAME }, { l: 'Daily goal', v: '8,000' }]
     : k === 'water' ? [{ l: 'Daily target', v: '3 L' }]
     : k === 'diet' ? [{ l: 'Daily target', v: `${KCAL_TARGET.toLocaleString('en-IN')} kcal`, sub: 'Set by Coach Vikram' }]
@@ -75,7 +77,7 @@ export default function MetricDetail() {
 
   return (
     <SubPage title={METRIC_TITLES[k]} fallback="/progress" footer={action ?? undefined} floatingFooter>
-      <RangeBar />
+      <RangeBarCompact ranges={allowed} />
       {k === 'meas' && (
         <View accessibilityRole="radiogroup" style={{ flexDirection: 'row', gap: 8 }}>
           {MEAS_PARTS.map((m) => { const Ic = MEAS_ICON[m.value]; return <Pill key={m.value} label={m.label} on={ps.part === m.value} icon={(col) => <Ic size={16} color={col} />} onPress={() => progressStore.set({ part: m.value })} />; })}

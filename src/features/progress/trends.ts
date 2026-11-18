@@ -85,6 +85,10 @@ const HR_H = [58, 56, 66, 78, 74, 80, 96, 70];
 const NOW_BUCKET = 6; // it is about 6:20 pm
 
 export const HOURLY: MetricKey[] = ['steps', 'water', 'hr'];
+/** The periods a metric's page offers: Day only where a day has an hourly chart (steps, water, heart rate); the rest start at Week. */
+export const rangesFor = (k: MetricKey) => RANGES.filter((r) => r.value !== 'day' || HOURLY.includes(k));
+/** The periods for Lifts and Measurements: they are not logged by the hour, so no Day. */
+export const RANGES_NO_DAY = RANGES.filter((r) => r.value !== 'day');
 export type Bucket = { label: string; sub: string };
 export type Kind = 'bars' | 'line';
 export const KIND: Record<MetricKey, Kind> = { steps: 'bars', water: 'bars', cons: 'bars', diet: 'bars', sleep: 'bars', weight: 'line', hr: 'line', meas: 'line' };
