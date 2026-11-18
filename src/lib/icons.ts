@@ -63,6 +63,7 @@ export { default as Scale } from 'lucide-react-native/icons/scale';
 export { default as ScanLine } from 'lucide-react-native/icons/scan-line';
 export { default as Search } from 'lucide-react-native/icons/search';
 export { default as Send } from 'lucide-react-native/icons/send';
+export { default as Mail } from 'lucide-react-native/icons/mail';
 export { default as Share } from 'lucide-react-native/icons/share';
 export { default as ShieldCheck } from 'lucide-react-native/icons/shield-check';
 export { default as SkipForward } from 'lucide-react-native/icons/skip-forward';

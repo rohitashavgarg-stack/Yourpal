@@ -2,7 +2,7 @@ import { createStore } from '@/features/progress/store';
 import { Domain, initialDomain, useDomain } from '@/lib/domain';
 import { ScenarioAction, ScenarioRow, useScenarios, useStore } from '@/lib/store';
 
-export type SessionState = 'awaiting' | 'confirmed' | 'flagged';
+export type SessionState = 'awaiting' | 'confirmed' | 'rejected';
 
 // Gym-only screen state (the domain already holds membership, assess, ptLeft, onBreak, chat, offline).
 export const gymStore = createStore(() => ({

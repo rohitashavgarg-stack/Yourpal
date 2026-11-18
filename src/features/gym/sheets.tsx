@@ -19,16 +19,16 @@ export function FlagSheet() {
   const [reason, setReason] = useState<string | null>(null);
   return (
     <>
-      <Txt style={H}>This session didn’t happen?</Txt>
-      <Txt muted>We’ll flag it to the gym admin to check. It won’t count toward your package and Coach Vikram isn’t messaged directly.</Txt>
+      <Txt style={H}>Reject this session?</Txt>
+      <Txt muted>It won’t count toward your package. Coach Vikram will see that you rejected it.</Txt>
       <View accessibilityRole="radiogroup" style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         {FLAG_REASONS.map((l) => <Pill key={l} label={l} on={reason === l} onPress={() => setReason(l)} />)}
       </View>
-      <Button label="Flag to gym admin" onPress={() => closeSheet(() => {
-        gymStore.set({ sessionState: 'flagged' });
+      <Button label="Reject session" onPress={() => closeSheet(() => {
+        gymStore.set({ sessionState: 'rejected' });
         haptic.medium();
         if (router.canGoBack()) router.back();
-        toast('Flagged to the gym admin. Not counted');
+        toast('Session rejected. Not counted in your package');
       })} />
       <Button kind="secondary" label="Cancel" onPress={() => closeSheet()} />
     </>

@@ -17,7 +17,7 @@ import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { useLook } from '@/features/progress/look';
 import { LiftName, progressStore } from '@/features/progress/store';
 import { useProgressScenarios } from '@/features/progress/scenarios';
-import { RangeBarCompact } from '@/features/progress/TrendUI';
+import { RangeBar } from '@/features/progress/TrendUI';
 import { addDays, RANGES_NO_DAY, windowOf } from '@/features/progress/trends';
 import { fmtDay } from '@/features/goalv2/model';
 import { radii, fontSizes } from '@/design-system/tokens';
@@ -74,7 +74,7 @@ export default function LiftDetail() {
   const look = useLook('lifts'); // the amber of the Lifts card
   return (
     <SubPage title="Lifts and PRs" fallback="/progress" backdrop={<TopGlow color={look.tint} />}>
-      <RangeBarCompact ranges={RANGES_NO_DAY} />
+      <RangeBar ranges={RANGES_NO_DAY} />
       <View accessibilityRole="radiogroup" style={{ flexDirection: 'row', gap: 8 }}>
         {(Object.keys(LIFT_DATA) as LiftName[]).map((k) => {
           const Ic = LIFT_ICON[k];

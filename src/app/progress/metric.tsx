@@ -21,7 +21,7 @@ import { useLook } from '@/features/progress/look';
 import { progressStore } from '@/features/progress/store';
 import { MEAS_PARTS, MeasPart, Range, rangesFor, shift, trend } from '@/features/progress/trends';
 import { KCAL_TARGET } from '@/lib/data';
-import { RangeBarCompact, TrendChart } from '@/features/progress/TrendUI';
+import { RangeBar, TrendChart } from '@/features/progress/TrendUI';
 import { useProgressScenarios } from '@/features/progress/scenarios';
 import { radii, fontSizes } from '@/design-system/tokens';
 import { Card } from '@/design-system/primitives/Card';
@@ -77,7 +77,7 @@ export default function MetricDetail() {
 
   return (
     <SubPage title={METRIC_TITLES[k]} fallback="/progress" footer={action ?? undefined} floatingFooter>
-      <RangeBarCompact ranges={allowed} />
+      <RangeBar ranges={allowed} />
       {k === 'meas' && (
         <View accessibilityRole="radiogroup" style={{ flexDirection: 'row', gap: 8 }}>
           {MEAS_PARTS.map((m) => { const Ic = MEAS_ICON[m.value]; return <Pill key={m.value} label={m.label} on={ps.part === m.value} icon={(col) => <Ic size={16} color={col} />} onPress={() => progressStore.set({ part: m.value })} />; })}

@@ -28,7 +28,7 @@ function Stop({ s, first, last }: { s: Session; first: boolean; last: boolean })
   const { c } = useTheme();
   const { openSheet } = useOverlay();
   const done = s.status === 'confirmed';
-  const dot = s.status === 'awaiting' ? c.accent : done ? c.good : s.status === 'flagged' ? c.warn : c.surface3;
+  const dot = s.status === 'awaiting' ? c.accent : done ? c.good : s.status === 'rejected' ? c.warn : c.surface3;
   return (
     <Row style={{ alignItems: 'stretch', gap: 12 }}>
       <View style={{ width: 16, alignItems: 'center' }}>

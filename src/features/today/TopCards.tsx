@@ -128,7 +128,7 @@ export function PtConfirmCard() {
         </View>
       </Row>
       <Row style={{ gap: 10 }}>
-        <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => openSheet(<FlagSheet />, { label: 'Flag session' })} /></View>
+        <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => openSheet(<FlagSheet />, { label: 'Reject session' })} /></View>
         <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => router.push('/gym/confirm')} /></View>
       </Row>
     </FadeIn>
