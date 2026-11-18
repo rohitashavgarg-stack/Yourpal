@@ -2,8 +2,8 @@ import { useStore } from '@/lib/store';
 import { gymStore } from '@/features/gym/state';
 
 // A personal training session with the coach. Sample data; the real list comes from the gym.
-// awaiting: the coach marked it done and the member has to confirm it. upcoming: still to come. skipped: the coach marked it skipped.
-export type SessionStatus = 'upcoming' | 'awaiting' | 'confirmed' | 'flagged' | 'skipped';
+// awaiting: the coach marked it done and the member has to accept or reject it. confirmed: accepted. rejected: the member rejected it. upcoming: still to come. skipped: the coach marked it skipped.
+export type SessionStatus = 'upcoming' | 'awaiting' | 'confirmed' | 'rejected' | 'skipped';
 export type Session = {
   id: string; pack?: string; /** the PT pack this session belongs to */ day: string; long: string; time: string; focus: string; status: SessionStatus;
   rating?: number; remarks?: string; note?: string; exercises: { n: string; d: string }[];
@@ -23,6 +23,7 @@ const BASE: (Omit<Session, 'status' | 'rating'> & { st?: SessionStatus })[] = [
   { id: 'p14', pack: 'pt2', day: 'Thu 18', long: 'Thursday 18 Sep', time: '6 to 7 pm', focus: 'Legs', exercises: [] },
   { id: 's16', pack: 'pt1', day: 'Tue 16', long: 'Tuesday 16 Sep', time: '6 to 7 pm', focus: 'Pull day', note: 'Slow the lowering phase on the pulldown.', exercises: PULL },
   { id: 's14', pack: 'pt2', day: 'Sun 14', long: 'Sunday 14 Sep', time: '6 to 7 pm', focus: 'Legs', note: 'Solid session. Add a set to the leg press next time.', exercises: [] },
+  { id: 'p16', pack: 'pt2', st: 'rejected', day: 'Fri 12', long: 'Friday 12 Sep', time: '6 to 7 pm', focus: 'Pull day', exercises: [] },
   { id: 's11', pack: 'pt1', day: 'Thu 11', long: 'Thursday 11 Sep', time: '6 to 7 pm', focus: 'Legs', note: 'First week back. Keep the weights light.', exercises: LEGS },
   { id: 's08', pack: 'pt2', day: 'Mon 8', long: 'Monday 8 Sep', time: '6 to 7 pm', focus: 'Push day', note: 'Good first session. We will build from here.', exercises: [] },
   { id: 's05', pack: 'pt1', day: 'Fri 5', long: 'Friday 5 Sep', time: '6 to 7 pm', focus: 'Pull day', note: 'Good first session of the pack. Keep the pulls controlled.', exercises: [] },
@@ -30,6 +31,7 @@ const BASE: (Omit<Session, 'status' | 'rating'> & { st?: SessionStatus })[] = [
   { id: 'p01', pack: 'pt5', day: 'Fri 29', long: 'Friday 29 Aug', time: '6 to 7 pm', focus: 'Legs', exercises: [] },
   { id: 'p02', pack: 'pt5', day: 'Fri 22', long: 'Friday 22 Aug', time: '6 to 7 pm', focus: 'Push day', exercises: [] },
   { id: 'p03', pack: 'pt5', day: 'Fri 15', long: 'Friday 15 Aug', time: '6 to 7 pm', focus: 'Pull day', exercises: [] },
+  { id: 'p17', pack: 'pt5', st: 'skipped', day: 'Wed 13', long: 'Wednesday 13 Aug', time: '6 to 7 pm', focus: 'Push day', exercises: [] },
   { id: 'p04', pack: 'pt5', day: 'Fri 8', long: 'Friday 8 Aug', time: '6 to 7 pm', focus: 'Legs', exercises: [] },
   { id: 'p05', pack: 'pt5', day: 'Fri 1', long: 'Friday 1 Aug', time: '6 to 7 pm', focus: 'Push day', exercises: [] },
   { id: 'p06', pack: 'pt5', day: 'Fri 25', long: 'Friday 25 Jul', time: '6 to 7 pm', focus: 'Pull day', exercises: [] },

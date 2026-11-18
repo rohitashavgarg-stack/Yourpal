@@ -42,9 +42,9 @@ export function SessionSheet({ s }: { s: Session }) {
         <StatusTag s={s} />
       </Row>
 
-      {s.status === 'flagged' && (
+      {s.status === 'rejected' && (
         <View style={{ backgroundColor: c.warnSoft, borderRadius: radii.xl, padding: 16 }}>
-          <Txt style={{ color: c.warn, fontFamily: font.medium }}>The gym admin is checking this session. It isn’t counted in your package.</Txt>
+          <Txt style={{ color: c.warn, fontFamily: font.medium }}>You rejected this session. It isn’t counted in your package.</Txt>
         </View>
       )}
 
@@ -74,7 +74,7 @@ export function SessionSheet({ s }: { s: Session }) {
       {waiting ? (
         <View style={{ gap: 4 }}>
           <Row style={{ gap: 10 }}>
-            <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => closeSheet(() => openSheet(<FlagSheet />, { label: 'Flag session' }))} /></View>
+            <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => closeSheet(() => openSheet(<FlagSheet />, { label: 'Reject session' }))} /></View>
             <View style={{ flex: 1.4 }}><Button label="Confirm & rate" onPress={() => closeSheet(() => router.push('/gym/confirm'))} /></View>
           </Row>
         </View>

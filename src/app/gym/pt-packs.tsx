@@ -39,16 +39,16 @@ export function PackCard({ p }: { p: PtPack }) {
   const next = oldestFirst.find((s) => s.status === 'upcoming');
   const last = mine.find((s) => s.status === 'confirmed');
   const skipped = mine.filter((s) => s.status === 'skipped').length;
-  const rejected = mine.filter((s) => s.status === 'flagged').length;
+  const rejected = mine.filter((s) => s.status === 'rejected').length;
   const done = mine.filter((s) => s.status === 'confirmed').length;
   // the sessions in order, then the ones not booked yet, until the pack's total is reached; skipped and rejected ones are extra dots
   const upcoming = p.state === 'upcoming';
   const declined = p.state === 'declined';
-  const kinds: DotKind[] = oldestFirst.map((s) => (s.status === 'confirmed' ? 'done' : s.status === 'skipped' ? 'skipped' : s.status === 'flagged' ? 'rejected' : 'booked'));
+  const kinds: DotKind[] = oldestFirst.map((s) => (s.status === 'confirmed' ? 'done' : s.status === 'skipped' ? 'skipped' : s.status === 'rejected' ? 'rejected' : 'booked'));
   const used = kinds.filter((k) => k !== 'skipped' && k !== 'rejected').length;
   for (let i = used; i < p.total; i++) kinds.push('open');
   const dots = kinds.map((k, i) => ({ k, n: kinds.slice(0, i + 1).filter((x) => x !== 'skipped' && x !== 'rejected').length }));
-  const extra = [skipped ? `${skipped} skipped` : '', rejected ? `${rejected} under review` : ''].filter(Boolean).join(', ');
+  const extra = [skipped ? `${skipped} skipped` : '', rejected ? `${rejected} rejected` : ''].filter(Boolean).join(', ');
   const head = declined ? 'Declined' : upcoming ? `${p.total} sessions` : p.past ? `${p.total} sessions` : `${done} of ${p.total} done${extra ? ', ' + extra : ''}`;
   const line = waiting ? `To confirm: ${waiting.focus}, ${waiting.day}` : next ? `Next: ${next.focus}, ${next.day}` : declined ? 'You declined this invitation' : upcoming ? `Starts ${p.start}, ends ${p.ends}` : p.past ? (last ? `Last session: ${last.day}` : 'All sessions used') : 'No session booked yet';
   return (
@@ -60,9 +60,11 @@ export function PackCard({ p }: { p: PtPack }) {
         <Txt style={{ flex: 1, fontFamily: font.semibold, fontSize: fontSizes.xl, lineHeight: 26 }}>{p.name}</Txt>
       </Row>
       {declined ? null : p.past ? (
-        // a past pack: small plain dots, one for each session
+        // a past pack: small dots, one for each session: filled when done, a dashed ring when the trainer skipped it, an amber ring when you rejected it
         <View accessible={false} style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-          {dots.filter((d) => d.k === 'done').map((d, i) => <View key={i} style={{ width: 12, height: 12, borderRadius: round(12), backgroundColor: c.accent }} />)}
+          {dots.map((d, i) => (
+            <View key={i} style={{ width: 12, height: 12, borderRadius: round(12), backgroundColor: d.k === 'done' ? c.accent : 'transparent', borderWidth: d.k === 'done' ? 0 : 1.5, borderStyle: d.k === 'skipped' ? 'dashed' : 'solid', borderColor: d.k === 'rejected' ? c.warn : c.muted }} />
+          ))}
         </View>
       ) : upcoming ? (
         // accepted, starts when the current package ends: the sessions, none used yet

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { PersonAvatar } from '@/components/Brand';
 import { Button, Pill, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
@@ -8,8 +7,10 @@ import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
-import { rupees } from '@/features/reports/payments';
-import { radii, fontSizes, onDark as onDarkTokens } from '@/design-system/tokens';
+import { radii, fontSizes, fixed, onDark as onDarkTokens } from '@/design-system/tokens';
+import { LinearGradient } from 'expo-linear-gradient';
+import { IconBadge } from '@/design-system/primitives/IconBadge';
+import { Mail } from '@/lib/icons';
 import { DECLINE_REASONS, PT_INVITE, ptInviteStore } from '@/features/gym/ptInvite';
 
 const H = { fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29, letterSpacing: -0.5 } as const;
@@ -51,7 +52,7 @@ export function PtInviteFacts({ onDark = false }: { onDark?: boolean }) {
   const muted = onDark ? onDarkTokens.muted : c.muted;
   const ink = onDark ? onDarkTokens.text : c.ink;
   const tile = onDark ? 'rgba(255,255,255,0.08)' : c.surface2;
-  const tiles: [string, string][] = [[String(PT_INVITE.sessions), 'sessions'], [String(PT_INVITE.validDays), 'days valid'], [rupees(PT_INVITE.price), 'price']];
+  const tiles: [string, string][] = [[String(PT_INVITE.sessions), 'sessions'], [String(PT_INVITE.validDays), 'days valid']];
   return (
     <View style={{ gap: 12 }}>
       <Row style={{ gap: 8 }}>
@@ -73,13 +74,14 @@ export function PtInviteCard() {
   const { openSheet } = useOverlay();
   const accept = useAcceptPtInvite();
   return (
-    <FadeIn style={{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 18, gap: 14 }}>
+    <FadeIn style={{ borderRadius: radii.xl, padding: 18, gap: 16, overflow: 'hidden', backgroundColor: c.cardLift }}>
+      <LinearGradient pointerEvents="none" colors={[c.accentSoft, c.cardLift]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
       <CardEdge radius={radii.xl} />
-      <Row style={{ gap: 12 }}>
-        <PersonAvatar who="coach" size={44} />
-        <View style={{ flex: 1 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.lg, lineHeight: 25, letterSpacing: -0.3 }}>PT package invitation</Txt>
-          <Txt muted style={{ fontSize: fontSizes.sm, lineHeight: 19 }}>{`${PT_INVITE.trainer} invited you to ${PT_INVITE.name}, ${PT_INVITE.sessions} sessions.`}</Txt>
+      <Row style={{ gap: 14 }}>
+        <IconBadge size={52} radius={radii.lg} bg={c.accent}><Mail size={26} color={fixed.white} /></IconBadge>
+        <View style={{ flex: 1, gap: 2 }}>
+          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`${PT_INVITE.trainer} invited you`}</Txt>
+          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29, letterSpacing: -0.5 }}>{PT_INVITE.name}</Txt>
         </View>
       </Row>
       <PtInviteFacts />

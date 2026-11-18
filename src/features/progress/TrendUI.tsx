@@ -4,7 +4,7 @@ import { LayoutChangeEvent, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Circle, Line, Path } from 'react-native-svg';
-import { Check, ChevronDown, ChevronLeft, ChevronRight, ChevronsRight } from '@/lib/icons';
+import { ChevronLeft, ChevronRight, ChevronsRight } from '@/lib/icons';
 import { Pressy, Row, Segmented, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -18,23 +18,24 @@ import { Option } from '@/design-system/primitives/Option';
 import { FadeIn } from '@/design-system/primitives/FadeIn';
 
 // ============ Day | Week | Month | Year, with ‹ date › you can also swipe ============
-export function RangeBar() {
+export function RangeBar({ ranges = RANGES }: { ranges?: { value: Range; label: string }[] }) {
   const { c } = useTheme();
   const { openSheet } = useOverlay();
   const ps = progressStore.use();
+  const range: Range = ranges.some((r) => r.value === ps.range) ? ps.range : ranges[0].value; // a period this page does not have falls back to its first
   const anchor = new Date(ps.anchor);
-  const win = windowOf(ps.range, anchor);
+  const win = windowOf(range, anchor);
   const go = (n: number) => {
     if ((n > 0 && !win.canNext) || (n < 0 && !win.canPrev)) { haptic.warn(); return; }
     haptic.tick();
-    progressStore.set({ anchor: shift(ps.range, anchor, n).getTime() });
+    progressStore.set({ anchor: shift(range, anchor, n).getTime() });
   };
   // Swipe the date row: left = later, right = earlier.
   const swipe = Gesture.Pan().runOnJS(true).activeOffsetX([-14, 14]).failOffsetY([-12, 12])
     .onEnd((e) => { if (e.translationX < -40) go(1); else if (e.translationX > 40) go(-1); });
   return (
     <View style={{ gap: 10 }}>
-      <Segmented<Range> accessibilityLabel="Period" value={ps.range} onChange={(range) => progressStore.set({ range })} options={RANGES} />
+      <Segmented<Range> accessibilityLabel="Period" value={range} onChange={(r) => progressStore.set({ range: r })} options={ranges} />
       <GestureDetector gesture={swipe}>
         <Row collapsable={false} style={{ gap: 8 }}>
           <IconButton label="Earlier" disabled={!win.canPrev} onPress={() => go(-1)} style={{ opacity: win.canPrev ? 1 : 0.35 }}>
@@ -57,66 +58,6 @@ export function RangeBar() {
         </Row>
       </GestureDetector>
     </View>
-  );
-}
-
-// The period, chosen from a small sheet (used by the compact bar).
-function PeriodSheet({ ranges }: { ranges: { value: Range; label: string }[] }) {
-  const { c } = useTheme();
-  const { closeSheet } = useOverlay();
-  const ps = progressStore.use();
-  const cur = ranges.some((r) => r.value === ps.range) ? ps.range : ranges[0].value;
-  return (
-    <>
-      <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29, letterSpacing: -0.5 }}>Period</Txt>
-      {ranges.map((r) => (
-        <Pressy key={r.value} accessibilityRole="radio" accessibilityState={{ selected: r.value === cur }} onPress={() => { haptic.tick(); progressStore.set({ range: r.value }); closeSheet(); }} scaleTo={0.98}
-          style={{ minHeight: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Txt style={{ fontFamily: r.value === cur ? font.semibold : font.regular, fontSize: fontSizes.base }}>{r.label}</Txt>
-          {r.value === cur ? <Check size={18} color={c.accentText} /> : <View style={{ width: 18 }} />}
-        </Pressy>
-      ))}
-    </>
-  );
-}
-
-// ============ The compact bar for a card's own page: ‹ Week ⌄  This week, 22 to 28 Sep ›, one line of 44 px ============
-// The Progress tab keeps the full tabs and date row; a detail page inherits the same period and only needs a way to change it.
-// `ranges` are the periods this page has data for.
-export function RangeBarCompact({ ranges }: { ranges: { value: Range; label: string }[] }) {
-  const { c } = useTheme();
-  const { openSheet } = useOverlay();
-  const ps = progressStore.use();
-  const range: Range = ranges.some((r) => r.value === ps.range) ? ps.range : ranges[0].value;
-  const anchor = new Date(ps.anchor);
-  const win = windowOf(range, anchor);
-  const go = (n: number) => {
-    if ((n > 0 && !win.canNext) || (n < 0 && !win.canPrev)) { haptic.warn(); return; }
-    haptic.tick();
-    progressStore.set({ anchor: shift(range, anchor, n).getTime() });
-  };
-  const swipe = Gesture.Pan().runOnJS(true).activeOffsetX([-14, 14]).failOffsetY([-12, 12])
-    .onEnd((e) => { if (e.translationX < -40) go(1); else if (e.translationX > 40) go(-1); });
-  const cur = ranges.find((r) => r.value === range) ?? ranges[0];
-  return (
-    <GestureDetector gesture={swipe}>
-      <Row collapsable={false} style={{ gap: 8 }}>
-        <IconButton label="Earlier" disabled={!win.canPrev} onPress={() => go(-1)} style={{ opacity: win.canPrev ? 1 : 0.35 }}>
-          <ChevronLeft size={20} color={c.ink} />
-        </IconButton>
-        <Pressy accessibilityRole="button" accessibilityLabel={`Period: ${cur.label}. Change`} onPress={() => openSheet(<PeriodSheet ranges={ranges} />, { label: 'Period' })} scaleTo={0.97}
-          style={{ height: 44, paddingLeft: 14, paddingRight: 10, borderRadius: radii.pill, backgroundColor: c.surface2, flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-          <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.md, lineHeight: 20 }}>{cur.label}</Txt>
-          <ChevronDown size={16} color={c.muted} />
-        </Pressy>
-        <Pressy accessibilityRole="button" accessibilityLabel={`${win.label}. Pick a date`} onPress={() => openSheet(<CalendarSheet />, { label: 'Pick a date' })} style={{ flex: 1, minHeight: 44, justifyContent: 'center', alignItems: 'center' }}>
-          <Txt accessibilityLiveRegion="polite" numberOfLines={1} style={{ fontFamily: font.semibold, fontSize: fontSizes.md }}>{win.label}</Txt>
-        </Pressy>
-        <IconButton label="Later" disabled={!win.canNext} onPress={() => go(1)} style={{ opacity: win.canNext ? 1 : 0.35 }}>
-          <ChevronRight size={20} color={c.ink} />
-        </IconButton>
-      </Row>
-    </GestureDetector>
   );
 }
 
