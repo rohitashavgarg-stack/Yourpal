@@ -74,7 +74,7 @@ export function PtInviteCard() {
   const accept = useAcceptPtInvite();
   return (
     <View style={{ position: 'relative', zIndex: 0, borderRadius: radii.xl, padding: 18, gap: 16, overflow: 'hidden', backgroundColor: c.cardLift }}>
-      <CornerGlow color={c.accent} size={300} />
+      <CornerGlow color={c.accent} size={300} side="left" />
       <CardEdge radius={radii.xl} />
       <Row style={{ gap: 14 }}>
         <IconBadge size={52} radius={radii.lg} bg={c.accent}><Mail size={26} color={fixed.white} /></IconBadge>
