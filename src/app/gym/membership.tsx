@@ -70,9 +70,9 @@ function MembershipCard({ m }: { m: Membership }) {
 }
 
 // PT packages: a separate product from the gym membership, so each has its own card here, like a membership. It opens the pack's details (no sessions).
-function ExtraPtCards({ past }: { past?: boolean }) {
+function ExtraPtCards({ kind }: { kind: 'active' | 'upcoming' | 'past' }) {
   const { c } = useTheme();
-  const extra = usePtPackages().filter((p) => (ptKind(p) === 'past') === !!past && ptKind(p) !== 'invited');
+  const extra = usePtPackages().filter((p) => ptKind(p) === kind);
   return (
     <>
       {extra.map((p) => (
@@ -104,16 +104,18 @@ export default function Memberships() {
   const all = useMemberships();
   const [tab, setTab] = useState<MTab>('Active');
   const list = all.filter((m) => tabOf(m) === tab);
+  const upcomingPt = usePtPackages().some((p) => ptKind(p) === 'upcoming'); // an accepted PT package waiting for the current one to end
   return (
     <SubPage title="Memberships" fallback="/gym" backdrop={<TopGlow color={c.accent} />}>
       <Segmented accessibilityLabel="Memberships" value={tab} onChange={setTab} options={MTABS.map((t) => ({ value: t, label: t }))} />
       {list.filter((m) => m.status !== 'Upcoming').map((m) => <MembershipCard key={m.id} m={m} />)}
-      {tab === 'Active' && <ExtraPtCards />}
-      {tab === 'Past' && <ExtraPtCards past />}
-      {list.some((m) => m.status === 'Upcoming') && (
+      {tab === 'Active' && <ExtraPtCards kind="active" />}
+      {tab === 'Past' && <ExtraPtCards kind="past" />}
+      {(list.some((m) => m.status === 'Upcoming') || (tab === 'Active' && upcomingPt)) && (
         <View style={{ gap: 10, marginTop: 6 }}>
           <SectionLabel>Starts next</SectionLabel>
           {list.filter((m) => m.status === 'Upcoming').map((m) => <MembershipCard key={m.id} m={m} />)}
+          {tab === 'Active' && <ExtraPtCards kind="upcoming" />}
         </View>
       )}
       {!list.length && (
