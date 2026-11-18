@@ -85,7 +85,7 @@ export function PtInviteCard() {
       </Row>
       <PtInviteFacts />
       <Row style={{ gap: 10 }}>
-        <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => openSheet(<DeclinePtSheet />, { label: 'Decline invitation' })} /></View>
+        <View style={{ flex: 1 }}><Button kind="grey" label="Reject" onPress={() => openSheet(<DeclinePtSheet />, { label: 'Decline invitation' })} /></View>
         <View style={{ flex: 1 }}><Button label="Accept" onPress={accept} /></View>
       </Row>
     </View>
