@@ -10,7 +10,6 @@ import { font } from '@/theme/tokens';
 import { SubPage } from '@/features/progress/parts';
 import { useGymScenarios } from '@/features/gym/state';
 import { PtPack, ptKind, usePtPackages } from '@/features/gym/memberships';
-import { PtInviteCard } from '@/features/gym/PtInviteSheet';
 import { useSessions } from '@/features/gym/sessions';
 import { TimeBar } from '@/app/gym/membership';
 import { radii, round, fontSizes, fixed } from '@/design-system/tokens';
@@ -96,31 +95,17 @@ export function PackCard({ p }: { p: PtPack }) {
   );
 }
 
-// All of the member's PT packages on one page: an invitation waiting for your answer, then the active one, the one that starts next, and the past ones. Tap a pack to see its sessions.
+// All of the member's PT packages on one page: the one active package, then the past ones. Tap a pack to see its sessions.
 export default function PtPacks() {
   const { c } = useTheme();
   const packs = usePtPackages();
   useGymScenarios('Gym · PT packages');
-  const invited = packs.some((p) => ptKind(p) === 'invited');
   const active = packs.filter((p) => ptKind(p) === 'active');
-  const next = packs.filter((p) => ptKind(p) === 'upcoming');
   const past = packs.filter((p) => ptKind(p) === 'past');
   return (
     <SubPage title="PT packages" fallback="/gym" backdrop={<TopGlow color={c.accent} />}>
-      {invited && (
-        <>
-          <Txt v="label" style={{ paddingHorizontal: 4 }}>INVITATION</Txt>
-          <PtInviteCard />
-        </>
-      )}
-      <Txt v="label" style={{ paddingHorizontal: 4, marginTop: invited ? 6 : 0 }}>ACTIVE</Txt>
+      <Txt v="label" style={{ paddingHorizontal: 4, marginTop: 0 }}>ACTIVE</Txt>
       {active.length ? active.map((p) => <PackCard key={p.id} p={p} />) : <Txt muted style={{ paddingHorizontal: 4 }}>No active PT packages.</Txt>}
-      {next.length > 0 && (
-        <>
-          <Txt v="label" style={{ paddingHorizontal: 4, marginTop: 6 }}>STARTS NEXT</Txt>
-          {next.map((p) => <PackCard key={p.id} p={p} />)}
-        </>
-      )}
       {past.length > 0 && (
         <>
           <Txt v="label" style={{ paddingHorizontal: 4, marginTop: 6 }}>PAST</Txt>
