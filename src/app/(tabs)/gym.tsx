@@ -266,7 +266,7 @@ function PTCard({ isPT }: { isPT: boolean }) {
         <PtInviteFacts onDark />
         <Row style={{ gap: 10 }}>
           <View style={{ flex: 1 }}><Button kind="glassClear" label="Reject" onPress={() => openSheet(<DeclinePtSheet />, { label: 'Decline invitation' })} /></View>
-          <View style={{ flex: 1.4 }}><Button kind="white" label="Accept" onPress={acceptInvite} /></View>
+          <View style={{ flex: 1 }}><Button kind="white" label="Accept" onPress={acceptInvite} /></View>
         </Row>
       </View>
     );

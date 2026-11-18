@@ -3,12 +3,11 @@ import { View } from 'react-native';
 import { Button, Pill, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
-import { FadeIn } from '@/design-system/primitives/FadeIn';
 import { useTheme } from '@/theme/ThemeProvider';
 import { font } from '@/theme/tokens';
 import { haptic } from '@/lib/haptics';
 import { radii, fontSizes, fixed, onDark as onDarkTokens } from '@/design-system/tokens';
-import { LinearGradient } from 'expo-linear-gradient';
+import { CornerGlow } from '@/features/progress/parts';
 import { IconBadge } from '@/design-system/primitives/IconBadge';
 import { Mail } from '@/lib/icons';
 import { DECLINE_REASONS, PT_INVITE, ptInviteStore } from '@/features/gym/ptInvite';
@@ -49,7 +48,7 @@ export function DeclinePtSheet() {
 /** What the package is: three small tiles (sessions, days, price) and one quiet line for when it starts. Used on the invitation card so the details are right there. */
 export function PtInviteFacts({ onDark = false }: { onDark?: boolean }) {
   const { c } = useTheme();
-  const muted = onDark ? onDarkTokens.muted : c.muted;
+  const muted = onDark ? onDarkTokens.soft : c.ink;
   const ink = onDark ? onDarkTokens.text : c.ink;
   const tile = onDark ? 'rgba(255,255,255,0.08)' : c.surface2;
   const tiles: [string, string][] = [[String(PT_INVITE.sessions), 'sessions'], [String(PT_INVITE.validDays), 'days valid']];
@@ -74,21 +73,21 @@ export function PtInviteCard() {
   const { openSheet } = useOverlay();
   const accept = useAcceptPtInvite();
   return (
-    <FadeIn style={{ borderRadius: radii.xl, padding: 18, gap: 16, overflow: 'hidden', backgroundColor: c.cardLift }}>
-      <LinearGradient pointerEvents="none" colors={[c.accentSoft, c.cardLift]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+    <View style={{ position: 'relative', zIndex: 0, borderRadius: radii.xl, padding: 18, gap: 16, overflow: 'hidden', backgroundColor: c.cardLift }}>
+      <CornerGlow color={c.accent} size={300} />
       <CardEdge radius={radii.xl} />
       <Row style={{ gap: 14 }}>
         <IconBadge size={52} radius={radii.lg} bg={c.accent}><Mail size={26} color={fixed.white} /></IconBadge>
         <View style={{ flex: 1, gap: 2 }}>
-          <Txt v="caption" style={{ fontSize: fontSizes.sm }}>{`${PT_INVITE.trainer} invited you`}</Txt>
+          <Txt style={{ fontFamily: font.medium, fontSize: fontSizes.md, lineHeight: 20, color: c.ink }}>{`${PT_INVITE.trainer} invited you`}</Txt>
           <Txt style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29, letterSpacing: -0.5 }}>{PT_INVITE.name}</Txt>
         </View>
       </Row>
       <PtInviteFacts />
       <Row style={{ gap: 10 }}>
         <View style={{ flex: 1 }}><Button kind="secondary" label="Reject" onPress={() => openSheet(<DeclinePtSheet />, { label: 'Decline invitation' })} /></View>
-        <View style={{ flex: 1.4 }}><Button label="Accept" onPress={accept} /></View>
+        <View style={{ flex: 1 }}><Button label="Accept" onPress={accept} /></View>
       </Row>
-    </FadeIn>
+    </View>
   );
 }
