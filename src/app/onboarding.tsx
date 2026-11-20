@@ -198,7 +198,7 @@ export default function Onboarding() {
 
       <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: insets.bottom + 150, paddingTop: insets.top + 58 + 20, gap: 14, flexGrow: 1 }} keyboardShouldPersistTaps="handled">
         <FadeIn key={step} exiting={fadeOut()} style={[{ gap: 14 }, step === 'building' && { flex: 1, justifyContent: 'center' }]}>
-          {step === 'welcome' && <WelcomeStep isPT={isPT} assess={sc.assess} hasGym={dom.hasGym} />}
+          {step === 'welcome' && <WelcomeStep isPT={isPT} assess={sc.assess} hasGym={dom.hasGym} isNew={isNew} />}
           {step === 'facility' && <FacilityStep />}
           {step === 'name' && <NameStep value={nm} onChange={setNm} tried={tried} />}
           {step === 'gender' && <GenderStep tried={tried} />}
@@ -254,18 +254,18 @@ function StepTitle({ t, s }: { t: string; s?: string }) {
   );
 }
 
-function WelcomeStep({ isPT, assess, hasGym }: { isPT: boolean; assess: string; hasGym: boolean }) {
+function WelcomeStep({ isPT, assess, hasGym, isNew }: { isPT: boolean; assess: string; hasGym: boolean; isNew: boolean }) {
   const { c } = useTheme();
   return (
     <>
       <View style={{ gap: 12, paddingTop: 8, paddingBottom: 6 }}>
         {hasGym ? <GymLogoMark size={64} /> : <YourPalLogo height={34} color={c.ink} />}
-        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 42, letterSpacing: -1.2 }}>{hasGym ? 'Welcome to Wulf Fitness' : 'Welcome to YourPal'}</Txt>
-        <Txt muted>{!hasGym ? 'Answer a few quick questions and your plan is ready.' : isPT ? 'Your PT package is active. Your coach will build your plan.' : 'Your membership is active. Here is how your first week works.'}</Txt>
+        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 42, letterSpacing: -1.2 }}>{hasGym ? (isNew ? 'Welcome to Wulf Fitness' : 'Hi Rohitashav, welcome to Wulf Fitness') : (isNew ? 'Welcome to YourPal' : 'Hi Rohitashav, welcome to YourPal')}</Txt>
+        <Txt muted>{!hasGym ? 'Answer a few quick questions and your plan is ready.' : isPT ? (isNew ? 'Your PT package is active. Your coach will build your plan.' : 'Your PT package is active. Coach Vikram will build your plan.') : 'Your membership is active. Here is how your first week works.'}</Txt>
       </View>
       <Card plain style={{ gap: 0, padding: 6 }}>
-        {hasGym && <InfoRow icon={<PersonAvatar who="coach" size={30} />} t="Your coach" s="You can message them any time" />}
-        {hasGym && <InfoRow icon={<CalendarCheck size={19} color={c.muted} />} t={assess === 'Scheduled' ? 'Your first assessment' : 'Assessment not booked yet'} s={assess === 'Scheduled' ? 'About 30 min. Your coach will confirm the day and time with you.' : 'The front desk will book it. You can still set up now.'} warn={assess !== 'Scheduled'} />}
+        {hasGym && <InfoRow icon={<PersonAvatar who="coach" size={30} />} t={isNew ? 'Your coach' : 'Coach Vikram'} s={isNew ? 'You can message them any time' : 'You can message him any time'} />}
+        {hasGym && <InfoRow icon={<CalendarCheck size={19} color={c.muted} />} t={assess === 'Scheduled' ? (isNew ? 'Your first assessment' : 'Your first assessment with Coach Vikram') : 'Assessment not booked yet'} s={assess === 'Scheduled' ? (isNew ? 'About 30 min. Your coach will confirm the day and time with you.' : 'About 30 min. Coach Vikram will confirm the day and time with you.') : 'The front desk will book it. You can still set up now.'} warn={assess !== 'Scheduled'} />}
         <InfoRow icon={<Dumbbell size={19} color={c.muted} />} t="3 quick questions to set up your plan" s="About a minute. You can change answers later." last />
       </Card>
     </>
