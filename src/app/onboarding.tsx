@@ -18,7 +18,7 @@ import { GymLogoMark } from '@/components/Brand';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GlassBackdrop, WebLiquidGlass, hasLiquidGlass, ProgressiveBlur } from '@/components/Glass';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Activity, Bell, CalendarCheck, Check, ChevronLeft, ChevronRight, ChevronsRight, Compass, Dumbbell, Flame, Lock, PersonStanding, Scale, Zap, ShieldCheck, Trophy } from '@/lib/icons';
+import { Activity, Bell, CalendarCheck, Check, ChevronLeft, ChevronRight, ChevronsRight, Compass, Dumbbell, Flame, Lock, PersonStanding, Scale, UserRound, Zap, ShieldCheck, Trophy } from '@/lib/icons';
 import { Button, Card, Chip, NoteField, Pill, Pressy, Row, Txt } from '@/components/ui';
 import { useOverlay } from '@/components/Overlay';
 import { useScenarios, useStore } from '@/lib/store';
@@ -264,7 +264,7 @@ function WelcomeStep({ isPT, assess, hasGym, isNew }: { isPT: boolean; assess: s
         <Txt muted>{!hasGym ? 'Answer a few quick questions and your plan is ready.' : isPT ? (isNew ? 'Your PT package is active. Your coach will build your plan.' : 'Your PT package is active. Coach Vikram will build your plan.') : 'Your membership is active. Here is how your first week works.'}</Txt>
       </View>
       <Card plain style={{ gap: 0, padding: 6 }}>
-        {hasGym && <InfoRow icon={<PersonAvatar who="coach" size={30} />} t={isNew ? 'Your coach' : 'Coach Vikram'} s={isNew ? 'You can message them any time' : 'You can message him any time'} />}
+        {hasGym && <InfoRow icon={isNew ? <UserRound size={19} color={c.muted} /> : <PersonAvatar who="coach" size={30} />} t={isNew ? 'Your coach' : 'Coach Vikram'} s={isNew ? 'Your gym will assign your coach. You can message them then.' : 'You can message him any time'} />}
         {hasGym && <InfoRow icon={<CalendarCheck size={19} color={c.muted} />} t={assess === 'Scheduled' ? (isNew ? 'Your first assessment' : 'Your first assessment with Coach Vikram') : 'Assessment not booked yet'} s={assess === 'Scheduled' ? (isNew ? 'About 30 min. Your coach will confirm the day and time with you.' : 'About 30 min. Coach Vikram will confirm the day and time with you.') : 'The front desk will book it. You can still set up now.'} warn={assess !== 'Scheduled'} />}
         <InfoRow icon={<Dumbbell size={19} color={c.muted} />} t="3 quick questions to set up your plan" s="About a minute. You can change answers later." last />
       </Card>
