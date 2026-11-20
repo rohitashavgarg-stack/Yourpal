@@ -260,12 +260,12 @@ function WelcomeStep({ isPT, assess, hasGym }: { isPT: boolean; assess: string; 
     <>
       <View style={{ gap: 12, paddingTop: 8, paddingBottom: 6 }}>
         {hasGym ? <GymLogoMark size={64} /> : <YourPalLogo height={34} color={c.ink} />}
-        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 42, letterSpacing: -1.2 }}>{hasGym ? 'Hi Rohitashav, welcome to Wulf Fitness' : 'Hi Rohitashav, welcome to YourPal'}</Txt>
-        <Txt muted>{!hasGym ? 'Answer a few quick questions and your plan is ready.' : isPT ? 'Your PT package is active. Coach Vikram will build your plan.' : 'Your membership is active. Here is how your first week works.'}</Txt>
+        <Txt style={{ fontFamily: font.regular, fontSize: fontSizes.xl4, lineHeight: 42, letterSpacing: -1.2 }}>{hasGym ? 'Welcome to Wulf Fitness' : 'Welcome to YourPal'}</Txt>
+        <Txt muted>{!hasGym ? 'Answer a few quick questions and your plan is ready.' : isPT ? 'Your PT package is active. Your coach will build your plan.' : 'Your membership is active. Here is how your first week works.'}</Txt>
       </View>
       <Card plain style={{ gap: 0, padding: 6 }}>
-        {hasGym && <InfoRow icon={<PersonAvatar who="coach" size={30} />} t="Coach Vikram" s="You can message him any time" />}
-        {hasGym && <InfoRow icon={<CalendarCheck size={19} color={c.muted} />} t={assess === 'Scheduled' ? 'Your first assessment with Coach Vikram' : 'Assessment not booked yet'} s={assess === 'Scheduled' ? 'About 30 min. Coach Vikram will confirm the day and time with you.' : 'The front desk will book it. You can still set up now.'} warn={assess !== 'Scheduled'} />}
+        {hasGym && <InfoRow icon={<PersonAvatar who="coach" size={30} />} t="Your coach" s="You can message them any time" />}
+        {hasGym && <InfoRow icon={<CalendarCheck size={19} color={c.muted} />} t={assess === 'Scheduled' ? 'Your first assessment' : 'Assessment not booked yet'} s={assess === 'Scheduled' ? 'About 30 min. Your coach will confirm the day and time with you.' : 'The front desk will book it. You can still set up now.'} warn={assess !== 'Scheduled'} />}
         <InfoRow icon={<Dumbbell size={19} color={c.muted} />} t="3 quick questions to set up your plan" s="About a minute. You can change answers later." last />
       </Card>
     </>
