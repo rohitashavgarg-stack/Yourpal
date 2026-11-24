@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { Txt } from '@/components/ui';
 import { Pill } from '@/design-system/primitives/Pill';
@@ -11,8 +11,8 @@ import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { useSubscriptions } from '@/features/subscriptions/data';
 import { PaymentRow, useMemberName } from '@/features/subscriptions/parts';
 
-type Status = 'All' | 'Paid' | 'Failed';
-type Method = 'All' | 'UPI' | 'Card';
+type Filter = 'All' | 'Paid' | 'Failed' | 'UPI' | 'Card';
+const FILTERS: Filter[] = ['All', 'Paid', 'Failed', 'UPI', 'Card'];
 
 // Every payment of one subscription, newest first, filtered by status and how it was paid.
 export default function SubscriptionPayments() {
@@ -20,22 +20,14 @@ export default function SubscriptionPayments() {
   const { id } = useLocalSearchParams<{ id?: string }>();
   const s = useSubscriptions().find((x) => x.id === id);
   const member = useMemberName();
-  const [status, setStatus] = useState<Status>('All');
-  const [method, setMethod] = useState<Method>('All');
+  const [f, setF] = useState<Filter>('All');
   if (!s) return <SubPage title="Payment history" fallback="/profile/subscriptions"><Txt muted>This subscription is not here any more.</Txt></SubPage>;
-  const list = s.payments.filter((p) => (status === 'All' || p.status === status) && (method === 'All' || p.method === method));
-  const group = <T extends string>(label: string, opts: T[], v: T, set: (x: T) => void) => (
-    <View style={{ gap: 8 }}>
-      <Txt v="label" style={{ paddingHorizontal: 6 }}>{label}</Txt>
-      <View accessibilityRole="radiogroup" style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-        {opts.map((o) => <Pill key={o} label={o} on={v === o} onPress={() => set(o)} />)}
-      </View>
-    </View>
-  );
+  const list = s.payments.filter((p) => f === 'All' || p.status === f || p.method === f);
   return (
     <SubPage title="Payment history" fallback="/profile/subscriptions" backdrop={<TopGlow color={c.accent} />}>
-      {group<Status>('STATUS', ['All', 'Paid', 'Failed'], status, setStatus)}
-      {group<Method>('PAYMENT TYPE', ['All', 'UPI', 'Card'], method, setMethod)}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} accessibilityRole="radiogroup" contentContainerStyle={{ gap: 8 }} style={{ flexGrow: 0 }}>
+        {FILTERS.map((o) => <Pill key={o} label={o} on={f === o} onPress={() => setF(o)} />)}
+      </ScrollView>
       {list.length ? (
         <View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, overflow: 'hidden' }}>
           <CardEdge radius={radii.lg} />

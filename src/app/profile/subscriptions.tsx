@@ -9,10 +9,9 @@ import { radii, fontSizes } from '@/design-system/tokens';
 import { SubPage } from '@/design-system/primitives/SubPage';
 import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
-import { Chip } from '@/design-system/primitives/Chip';
 import { Hint } from '@/features/progress/parts';
 import { Subscription, isPast, useSubscriptions } from '@/features/subscriptions/data';
-import { ProviderLine, SubStatus } from '@/features/subscriptions/parts';
+import { SubStatus } from '@/features/subscriptions/parts';
 
 type Tab = 'Active' | 'Past';
 
@@ -22,17 +21,15 @@ function SubCard({ s }: { s: Subscription }) {
   return (
     <View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 12, overflow: 'hidden' }}>
       <CardEdge radius={radii.lg} />
-      <Row style={{ justifyContent: 'space-between' }}>
-        <Chip label={s.kind} />
+      <Row style={{ justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+        <View style={{ flex: 1, gap: 4 }}>
+          <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29, letterSpacing: -0.5 }}>{s.name}</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{`${s.months} months`}</Txt>
+        </View>
         <SubStatus s={s} />
       </Row>
-      <View style={{ gap: 4 }}>
-        <ProviderLine name={s.provider} />
-        <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29, letterSpacing: -0.5 }}>{s.name}</Txt>
-        <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{`${s.months} months`}</Txt>
-      </View>
       {isPast(s)
-        ? <Button kind="secondary" label="View payments" onPress={open('/profile/subscription-payments')} />
+        ? <Button kind="grey" label="View payments" onPress={open('/profile/subscription-payments')} />
         : <Button label="Manage" onPress={open('/profile/subscription')} />}
     </View>
   );
