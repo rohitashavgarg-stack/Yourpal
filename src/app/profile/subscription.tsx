@@ -13,7 +13,7 @@ import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { SectionLabel } from '@/design-system/primitives/SectionLabel';
 import { rupees } from '@/features/reports/payments';
 import { isPast, useSubscriptions } from '@/features/subscriptions/data';
-import { CancelSubSheet, PaymentRow, ProviderLine, SubStatus, useMemberName } from '@/features/subscriptions/parts';
+import { CancelSubSheet, PaymentRow, SubStatus, useMemberName } from '@/features/subscriptions/parts';
 
 // One subscription: what it is, what it includes, its latest payments with invoices, and cancelling.
 export default function SubscriptionDetail() {
@@ -27,7 +27,6 @@ export default function SubscriptionDetail() {
   return (
     <SubPage title="Subscription" fallback="/profile/subscriptions" backdrop={<TopGlow color={c.accent} />}>
       <View style={{ gap: 6 }}>
-        <ProviderLine name={s.provider} />
         <Row style={{ gap: 10, flexWrap: 'wrap' }}>
           <Txt accessibilityRole="header" v="display" style={{ includeFontPadding: false }}>{s.name}</Txt>
           <View style={{ marginTop: 4 }}><SubStatus s={s} /></View>
