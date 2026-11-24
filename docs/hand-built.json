@@ -1,23 +1,23 @@
 {
- "generated": "2026-11-17",
+ "generated": "2026-11-24",
  "rule": "unique elements outside src/web; on purpose = rows of docs/coverage-exceptions.md",
- "count": 154,
+ "count": 165,
  "onPurpose": 3,
- "toBuild": 151,
+ "toBuild": 162,
  "demoPanelExcluded": 21,
  "exceptionRows": 4,
  "byKind": {
-  "icon badge": 42,
-  "card": 44,
+  "icon badge": 44,
+  "card": 51,
   "button or pill": 30,
   "bar": 15,
   "chip": 9,
   "icon button": 8,
-  "input": 6
+  "input": 8
  },
  "byGroup": {
   "Other": {
-   "total": 21,
+   "total": 22,
    "onPurpose": 0
   },
   "Today": {
@@ -41,11 +41,11 @@
    "onPurpose": 0
   },
   "Onboarding and login": {
-   "total": 10,
+   "total": 14,
    "onPurpose": 1
   },
   "Profile and settings": {
-   "total": 19,
+   "total": 25,
    "onPurpose": 0
   },
   "Workout session": {
@@ -690,11 +690,11 @@
   },
   {
    "file": "app/gym/pt-packs.tsx",
-   "line": 65,
+   "line": 64,
    "kind": "icon badge",
    "look": "dot 12 px",
    "fn": "PackCard",
-   "text": "<View key={i} style={{ width: 12, height: 12, borderRadius: round(12), backgroundColor: c.accent }} />",
+   "text": "<View key={i} style={{ width: 12, height: 12, borderRadius: round(12), backgroundColor: d.k === 'done' ? c.acc",
    "onPurpose": false,
    "group": "Gym tab"
   },
@@ -810,11 +810,51 @@
   },
   {
    "file": "app/onboarding.tsx",
-   "line": 288,
+   "line": 320,
    "kind": "button or pill",
    "look": "button 108 px high, radius radii.lg",
    "fn": "GoalChoiceTile",
    "text": "<Pressy accessibilityRole=\"radio\" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onP",
+   "onPurpose": false,
+   "group": "Onboarding and login"
+  },
+  {
+   "file": "app/onboarding.tsx",
+   "line": 421,
+   "kind": "input",
+   "look": "text input",
+   "fn": "NameStep",
+   "text": "<TextInput accessibilityLabel={label} value={value[key]} onChangeText={(t) => onChange({ ...value, [key]: t })",
+   "onPurpose": false,
+   "group": "Onboarding and login"
+  },
+  {
+   "file": "app/onboarding.tsx",
+   "line": 449,
+   "kind": "button or pill",
+   "look": "button 64 px high, radius radii.lg",
+   "fn": "GenderStep",
+   "text": "<Pressy key={o} accessibilityRole=\"radio\" accessibilityState={{ selected: on }} onPress={() => { haptic.tick()",
+   "onPurpose": false,
+   "group": "Onboarding and login"
+  },
+  {
+   "file": "app/onboarding.tsx",
+   "line": 454,
+   "kind": "icon badge",
+   "look": "icon tile 24 px, radius radii.pill",
+   "fn": "GenderStep",
+   "text": "<View style={{ width: 24, height: 24, borderRadius: radii.pill, borderWidth: on ? 0 : 1.5, borderColor: c.mute",
+   "onPurpose": false,
+   "group": "Onboarding and login"
+  },
+  {
+   "file": "app/onboarding.tsx",
+   "line": 475,
+   "kind": "input",
+   "look": "text input",
+   "fn": "BirthStep",
+   "text": "<TextInput accessibilityLabel={{ d: 'Day', m: 'Month', y: 'Year' }[key]} value={value[key]} onChangeText={(t) ",
    "onPurpose": false,
    "group": "Onboarding and login"
   },
@@ -990,7 +1030,7 @@
   },
   {
    "file": "app/profile/index.tsx",
-   "line": 85,
+   "line": 86,
    "kind": "chip",
    "look": "chip 24 px high, radius radii.sm",
    "fn": "Profile",
@@ -1000,17 +1040,7 @@
   },
   {
    "file": "app/profile/index.tsx",
-   "line": 91,
-   "kind": "button or pill",
-   "look": "button 96 px high, radius radii.xl",
-   "fn": "Profile",
-   "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Programme: ${current.short}${multi ? '. Switch' : ''}`",
-   "onPurpose": false,
-   "group": "Profile and settings"
-  },
-  {
-   "file": "app/profile/index.tsx",
-   "line": 117,
+   "line": 105,
    "kind": "button or pill",
    "look": "button 64 px high, radius radii.lg",
    "fn": "Profile",
@@ -1020,7 +1050,7 @@
   },
   {
    "file": "app/profile/index.tsx",
-   "line": 170,
+   "line": 159,
    "kind": "button or pill",
    "look": "button 84 px high, radius radii.lg",
    "fn": "GoalSummaryTile",
@@ -1030,7 +1060,7 @@
   },
   {
    "file": "app/profile/index.tsx",
-   "line": 188,
+   "line": 177,
    "kind": "button or pill",
    "look": "button 196 px high, radius radii.xl",
    "fn": "TrackerPromo",
@@ -1085,6 +1115,76 @@
    "look": "card radius radii.xl, fill c.cardLift, padding 18",
    "fn": "SoundSettings",
    "text": "<View style={{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 18, gap: 14 }}>",
+   "onPurpose": false,
+   "group": "Profile and settings"
+  },
+  {
+   "file": "app/profile/subscription-pay.tsx",
+   "line": 74,
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.cardLift",
+   "fn": "SubscriptionPay",
+   "text": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, marginTop: 12, over",
+   "onPurpose": false,
+   "group": "Profile and settings"
+  },
+  {
+   "file": "app/profile/subscription-payments.tsx",
+   "line": 32,
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.cardLift",
+   "fn": "SubscriptionPayments",
+   "text": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, overflow: 'hidden' ",
+   "onPurpose": false,
+   "group": "Profile and settings"
+  },
+  {
+   "file": "app/profile/subscription-plan.tsx",
+   "line": 45,
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.cardLift",
+   "fn": "SubscriptionPlan",
+   "text": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, paddingVertical: 14",
+   "onPurpose": false,
+   "group": "Profile and settings"
+  },
+  {
+   "file": "app/profile/subscription-plan.tsx",
+   "line": 56,
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.cardLift",
+   "fn": "SubscriptionPlan",
+   "text": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, paddingVertical: 14",
+   "onPurpose": false,
+   "group": "Profile and settings"
+  },
+  {
+   "file": "app/profile/subscription-plan.tsx",
+   "line": 60,
+   "kind": "icon badge",
+   "look": "icon tile 28 px, radius radii.pill",
+   "fn": "SubscriptionPlan",
+   "text": "<View style={{ width: 28, height: 28, borderRadius: radii.pill, backgroundColor: c.surface2, alignItems: 'cent",
+   "onPurpose": false,
+   "group": "Profile and settings"
+  },
+  {
+   "file": "app/profile/subscriptions.tsx",
+   "line": 21,
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.cardLift, padding 16",
+   "fn": "SubCard",
+   "text": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 12, overflow: 'hidden' }",
+   "onPurpose": false,
+   "group": "Profile and settings"
+  },
+  {
+   "file": "app/profile/subscriptions.tsx",
+   "line": 46,
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.cardLift, padding 24",
+   "fn": "Subscriptions",
+   "text": "<View style={{ padding: 24, borderRadius: radii.lg, backgroundColor: c.cardLift, alignItems: 'center', gap: 6,",
    "onPurpose": false,
    "group": "Profile and settings"
   },
@@ -1290,11 +1390,11 @@
   },
   {
    "file": "features/gym/PtInviteSheet.tsx",
-   "line": 59,
+   "line": 77,
    "kind": "card",
-   "look": "card radius radii.md, fill tile",
-   "fn": "PtInviteFacts",
-   "text": "<View key={l} accessible accessibilityLabel={`${v} ${l}`} style={{ flex: 1, backgroundColor: tile, borderRadiu",
+   "look": "card radius radii.xl, fill c.cardLift, padding 18",
+   "fn": "PtInviteCard",
+   "text": "<View style={{ position: 'relative', zIndex: 0, borderRadius: radii.xl, padding: 18, gap: 16, overflow: 'hidde",
    "onPurpose": false,
    "group": "Bottom sheets"
   },
@@ -1490,7 +1590,7 @@
   },
   {
    "file": "features/progress/TrendUI.tsx",
-   "line": 80,
+   "line": 81,
    "kind": "card",
    "look": "card radius radii.md, fill c.surface2, padding 2",
    "fn": "RangeBarSlim",
@@ -1500,7 +1600,7 @@
   },
   {
    "file": "features/progress/TrendUI.tsx",
-   "line": 132,
+   "line": 133,
    "kind": "icon badge",
    "look": "dot 4 px",
    "fn": "CalendarSheet",
@@ -1510,7 +1610,7 @@
   },
   {
    "file": "features/progress/TrendUI.tsx",
-   "line": 180,
+   "line": 181,
    "kind": "bar",
    "look": "bar 3 px high, radius radii.xs",
    "fn": "TrendChart",
@@ -1577,6 +1677,16 @@
    "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Date: ${DAYS[day].full}. Change`} onPress={() => openS",
    "onPurpose": false,
    "group": "Progress"
+  },
+  {
+   "file": "features/subscriptions/plans.tsx",
+   "line": 52,
+   "kind": "card",
+   "look": "card radius radii.xl, fill c.cardLift, padding 18",
+   "fn": "PlanCard",
+   "text": "<View style={{ position: 'relative', zIndex: 0, borderRadius: radii.xl, backgroundColor: c.cardLift, padding: ",
+   "onPurpose": false,
+   "group": "Other"
   },
   {
    "file": "features/checkin/GymMap.native.tsx",

@@ -332,7 +332,7 @@
   "screen": "Onboarding (frame)",
   "group": "Routes",
   "status": "not started",
-  "hand": 0,
+  "hand": 4,
   "files": [
    "app/onboarding.tsx",
    "features/onboarding/plan.ts",
@@ -497,7 +497,7 @@
   "screen": "Profile",
   "group": "Routes",
   "status": "not started",
-  "hand": 5,
+  "hand": 4,
   "files": [
    "app/profile/index.tsx",
    "features/shell/sheets.tsx"
@@ -561,6 +561,56 @@
   "hand": 4,
   "files": [
    "app/profile/sound.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/subscription-pay",
+  "screen": "/profile/subscription-pay",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/profile/subscription-pay.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/subscription-payments",
+  "screen": "/profile/subscription-payments",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "app/profile/subscription-payments.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/subscription-plan",
+  "screen": "/profile/subscription-plan",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 3,
+  "files": [
+   "app/profile/subscription-plan.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/subscription",
+  "screen": "/profile/subscription",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "app/profile/subscription.tsx"
+  ]
+ },
+ {
+  "id": "route:/profile/subscriptions",
+  "screen": "/profile/subscriptions",
+  "group": "Routes",
+  "status": "not started",
+  "hand": 2,
+  "files": [
+   "app/profile/subscriptions.tsx"
   ]
  },
  {
@@ -1266,6 +1316,26 @@
   ]
  },
  {
+  "id": "sheet:CancelSubSheet",
+  "screen": "CancelSubSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/subscriptions/parts.tsx"
+  ]
+ },
+ {
+  "id": "sheet:BuyPlanSheet",
+  "screen": "BuyPlanSheet",
+  "group": "Bottom sheets",
+  "status": "not started",
+  "hand": 0,
+  "files": [
+   "features/subscriptions/plans.tsx"
+  ]
+ },
+ {
   "id": "sheet:LogMealsSheet",
   "screen": "LogMealsSheet",
   "group": "Bottom sheets",
@@ -1853,6 +1923,16 @@
   "hand": 0,
   "files": [
    "features/goalv2/FinishBy.tsx"
+  ]
+ },
+ {
+  "id": "shared:features/subscriptions/plans.tsx",
+  "screen": "features/subscriptions/plans.tsx",
+  "group": "Shared components and features",
+  "status": "not started",
+  "hand": 1,
+  "files": [
+   "features/subscriptions/plans.tsx"
   ]
  },
  {

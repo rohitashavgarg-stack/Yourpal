@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { Button, Segmented, Txt } from '@/components/ui';
@@ -10,10 +10,9 @@ import { SubPage } from '@/design-system/primitives/SubPage';
 import { TopGlow } from '@/design-system/primitives/TopGlow';
 import { CardEdge } from '@/design-system/primitives/CardEdge';
 import { Hint } from '@/features/progress/parts';
-import { Subscription, isPast, useSubscriptions } from '@/features/subscriptions/data';
+import { PlanTab, Subscription, isPast, subStore, useAvailablePlans, useSubscriptions } from '@/features/subscriptions/data';
+import { PlanCard } from '@/features/subscriptions/plans';
 import { SubStatus } from '@/features/subscriptions/parts';
-
-type Tab = 'Active' | 'Past';
 
 function SubCard({ s }: { s: Subscription }) {
   const { c } = useTheme();
@@ -24,7 +23,7 @@ function SubCard({ s }: { s: Subscription }) {
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
         <View style={{ flex: 1, gap: 4 }}>
           <Txt accessibilityRole="header" style={{ fontFamily: font.semibold, fontSize: fontSizes.xl2, lineHeight: 29, letterSpacing: -0.5 }}>{s.name}</Txt>
-          <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{`${s.months} months`}</Txt>
+          <Txt muted style={{ fontSize: fontSizes.md, lineHeight: 20 }}>{`${s.months} ${s.months === 1 ? 'month' : 'months'}`}</Txt>
         </View>
         <SubStatus s={s} />
       </Row>
@@ -35,22 +34,37 @@ function SubCard({ s }: { s: Subscription }) {
   );
 }
 
-// The plans the member bought from a provider, Active first and Past after. Not the gym membership: that is in Gym, Memberships.
+// Three tabs: the plans the member has (Active), the plans they can still buy (Available) and the ones that ended (Past). Not the gym membership: that is in Gym, Memberships.
 export default function Subscriptions() {
   const { c } = useTheme();
   const all = useSubscriptions();
-  const [tab, setTab] = useState<Tab>('Active');
+  const plans = useAvailablePlans();
+  const tab = subStore.use().tab;
+  const setTab = (t: PlanTab) => subStore.set({ tab: t });
   const list = all.filter((s) => (tab === 'Past') === isPast(s));
+  const empty = (title: string, line: string, action?: React.ReactNode) => (
+    <View style={{ padding: 24, borderRadius: radii.lg, backgroundColor: c.cardLift, alignItems: 'center', gap: 6, overflow: 'hidden' }}>
+      <CardEdge radius={radii.lg} />
+      <Txt style={{ fontFamily: font.semibold }}>{title}</Txt>
+      <Txt muted style={{ textAlign: 'center' }}>{line}</Txt>
+      {action ? <View style={{ alignSelf: 'stretch', marginTop: 8 }}>{action}</View> : null}
+    </View>
+  );
   return (
     <SubPage title="Subscriptions" fallback="/profile" backdrop={<TopGlow color={c.accent} />}>
-      <Segmented accessibilityLabel="Subscriptions" value={tab} onChange={setTab} options={[{ value: 'Active' as Tab, label: 'Active' }, { value: 'Past' as Tab, label: 'Past' }]} />
-      {list.map((s) => <SubCard key={s.id} s={s} />)}
-      {!list.length && (
-        <View style={{ padding: 24, borderRadius: radii.lg, backgroundColor: c.cardLift, alignItems: 'center', gap: 4 }}>
-          <CardEdge radius={radii.lg} />
-          <Txt style={{ fontFamily: font.semibold }}>{tab === 'Past' ? 'No past subscriptions' : 'No subscription plans yet'}</Txt>
-          <Txt muted style={{ textAlign: 'center' }}>{tab === 'Past' ? 'Plans that end or are cancelled show here.' : 'Your provider adds a plan here when you buy one. For help, ask Contact us in Profile.'}</Txt>
-        </View>
+      <Segmented accessibilityLabel="Subscriptions" value={tab} onChange={setTab} options={[{ value: 'Active' as PlanTab, label: 'Active' }, { value: 'Available' as PlanTab, label: 'Available' }, { value: 'Past' as PlanTab, label: 'Past' }]} />
+      {tab === 'Available' ? (
+        <>
+          {plans.map((p) => <PlanCard key={p.id} p={p} />)}
+          {!plans.length && empty('You have every plan', 'New plans show here when your provider adds them.')}
+        </>
+      ) : (
+        <>
+          {list.map((s) => <SubCard key={s.id} s={s} />)}
+          {!list.length && (tab === 'Past'
+            ? empty('No past subscriptions', 'Plans that end or are cancelled show here.')
+            : empty('No active plans', 'Pick a plan for your goal and it starts at once.', <Button label="See available plans" onPress={() => setTab('Available')} />))}
+        </>
       )}
       <Hint>Your gym membership is in Gym, Memberships.</Hint>
     </SubPage>

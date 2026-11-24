@@ -27,6 +27,7 @@ export { default as Clock } from 'lucide-react-native/icons/clock';
 export { default as CreditCard } from 'lucide-react-native/icons/credit-card';
 export { default as Crosshair } from 'lucide-react-native/icons/crosshair';
 export { default as Crown } from 'lucide-react-native/icons/crown';
+export { default as TriangleAlert } from 'lucide-react-native/icons/triangle-alert';
 export { default as LayoutGrid } from 'lucide-react-native/icons/layout-grid';
 export { default as Droplets } from 'lucide-react-native/icons/droplets';
 export { default as Beef } from 'lucide-react-native/icons/beef';

@@ -1,5 +1,23 @@
 # Design changelog (generated)
 
+- 2026-11-24 `f2e07c4` Subscriptions: payment pages use a stable clock (screens, features)
+- 2026-11-24 `5a9a770` Subscriptions: Available tab with plan cards and plan pages, review and pay sheet, payment successful and payment failed pages, demo switch; design handoff and Storybook refreshed (docs, screens, features)
+- 2026-11-24 `cdee4c3` Subscriptions: plan card shows name, duration, Active tag and Manage only; greyer View payments; no provider name; one filter line on payment history (screens)
+- 2026-11-24 `9c10dd4` Profile: Subscriptions (programme plans from a provider): list with Active and Past, plan page with benefits and payments, payment history with filters, cancel (docs, screens, features)
+- 2026-11-18 `8fd81a4` Accepting a PT invitation makes it the one active package (the previous one moves to Past); invitation facts as plain text; trainer app data document (screens, features)
+- 2026-11-18 `e6bfbec` PT packages page shows only the one active package and the past ones; an accepted package waiting for the current one shows under Starts next in Memberships (screens)
+- 2026-11-18 `df6eaa8` Reject buttons on cards use the light grey fill so they show on the dark card (features)
+- 2026-11-18 `0b47dad` Invitation card: Reject button has a lighter grey fill so it shows on the card (features)
+- 2026-11-18 `55ee4de` Remove the yellow top glow from the Lifts and PRs page (screens)
+- 2026-11-18 `ca1c0e2` Invitation card glow from the top left (features)
+- 2026-11-18 `ada10bc` Invitation card: soft glow from the top right instead of a gradient, stronger text, Reject and Accept the same width (screens, features)
+- 2026-11-18 `1f2f45d` Invitation card with a gradient, an invitation icon and no price; sessions are accepted, rejected or skipped (no under review) and past packs show skipped and rejected sessions; full period tabs back on inside pages with Day only where it has hourly data (screens, features)
+- 2026-11-18 `795b93c` Compact period control on Progress detail pages, Day only where a day has an hourly chart, weekday and week labels on the Lifts chart, completed workout card below the next workout on Today (screens, features)
+- 2026-11-17 `80a0270` A code always leads to the welcome screen; new members then answer every onboarding step; Skip and Skip all on gender and birthday; name and birthday answers survive the screen being re-created; Programme card removed from Profile (screens)
+- 2026-11-17 `ba11f36` Programme card glows from the top left and the Switch pill has no arrow; existing members can join a programme from the programme list after the code (screens, features)
+- 2026-11-17 `b8dd9ca` New member onboarding: name, gender and birthday first and no gym welcome; login shows join code for new members and programmes for existing ones; Member status section in the demo panel; Programme card with glow on Profile (docs, screens, features)
+- 2026-11-17 `c588234` Update the coverage exception line number after the panel rows moved (docs)
+
 - 2026-11-17 `a86c838` PT packages with numbered session dots, invitations and the session sheet, Transferred tag, Lifts and Measurements trend pages with pills, primary goal chooser, Programme card on Profile, Pill icon option, copy and spacing fixes (screens, library, features)
 - 2026-11-17 `8ce3313` Two workouts a day on Today and Plans, PT packs with numbered session dots and session sheet, Transferred tag on memberships, free drag on card pages, copy and spacing fixes (docs, screens, library, tokens, features)
 

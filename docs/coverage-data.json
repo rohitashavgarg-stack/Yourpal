@@ -284,7 +284,7 @@
     },
     {
      "comp": "FlagSheet",
-     "label": "Flag session",
+     "label": "Reject session",
      "line": 145,
      "in": "StackCard",
      "file": "features/today/ForYou.tsx"
@@ -360,7 +360,6 @@
     "app/exercise-search.tsx",
     "app/food.tsx",
     "app/index.tsx",
-    "app/login.tsx",
     "app/onboarding.tsx",
     "app/profile/waiver.tsx",
     "app/welcome.tsx",
@@ -1205,7 +1204,7 @@
    "sheets": [
     {
      "comp": "FlagSheet",
-     "label": "Flag session",
+     "label": "Reject session",
      "line": 107,
      "in": "ConfirmSession",
      "file": "app/gym/confirm.tsx"
@@ -1382,14 +1381,14 @@
      "kind": "icon badge",
      "sig": "dot 12 px",
      "fn": "PackCard",
-     "line": 65,
+     "line": 64,
      "tag": "View",
-     "text": "<View key={i} style={{ width: 12, height: 12, borderRadius: round(12), backgroundColor: c.accent }} />",
+     "text": "<View key={i} style={{ width: 12, height: 12, borderRadius: round(12), backgroundColor: d.k === 'done' ? c.acc",
      "file": "app/gym/pt-packs.tsx"
     }
    ],
    "ds": {
-    "Txt": 10,
+    "Txt": 8,
     "Pressy": 1,
     "CardEdge": 1,
     "Row": 3,
@@ -1504,7 +1503,7 @@
     },
     {
      "comp": "FlagSheet",
-     "label": "Flag session",
+     "label": "Reject session",
      "line": 77,
      "in": "SessionSheet",
      "file": "features/gym/SessionSheet.tsx"
@@ -1533,7 +1532,6 @@
     "app/exercise-search.tsx",
     "app/food.tsx",
     "app/index.tsx",
-    "app/login.tsx",
     "app/onboarding.tsx",
     "app/profile/waiver.tsx",
     "app/welcome.tsx",
@@ -1650,19 +1648,19 @@
     }
    ],
    "ds": {
-    "FadeIn": 14,
-    "Txt": 32,
+    "FadeIn": 13,
+    "Txt": 30,
     "Field": 2,
     "Callout": 2,
-    "Row": 5,
-    "Button": 5,
+    "Row": 4,
+    "Button": 6,
     "Pressy": 3
    },
    "sheets": [
     {
      "comp": "CountrySheet",
      "label": "Country code",
-     "line": 136,
+     "line": 141,
      "in": "pickCountry",
      "file": "app/login.tsx"
     }
@@ -1748,9 +1746,45 @@
      "kind": "button or pill",
      "sig": "button 108 px high, radius radii.lg",
      "fn": "GoalChoiceTile",
-     "line": 288,
+     "line": 320,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"radio\" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onP",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "input",
+     "sig": "text input",
+     "fn": "NameStep",
+     "line": 421,
+     "tag": "TextInput",
+     "text": "<TextInput accessibilityLabel={label} value={value[key]} onChangeText={(t) => onChange({ ...value, [key]: t })",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "button or pill",
+     "sig": "button 64 px high, radius radii.lg",
+     "fn": "GenderStep",
+     "line": 449,
+     "tag": "Pressy",
+     "text": "<Pressy key={o} accessibilityRole=\"radio\" accessibilityState={{ selected: on }} onPress={() => { haptic.tick()",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "sig": "icon tile 24 px, radius radii.pill",
+     "fn": "GenderStep",
+     "line": 454,
+     "tag": "View",
+     "text": "<View style={{ width: 24, height: 24, borderRadius: radii.pill, borderWidth: on ? 0 : 1.5, borderColor: c.mute",
+     "file": "app/onboarding.tsx"
+    },
+    {
+     "kind": "input",
+     "sig": "text input",
+     "fn": "BirthStep",
+     "line": 475,
+     "tag": "TextInput",
+     "text": "<TextInput accessibilityLabel={{ d: 'Day', m: 'Month', y: 'Year' }[key]} value={value[key]} onChangeText={(t) ",
      "file": "app/onboarding.tsx"
     },
     {
@@ -1774,15 +1808,16 @@
    ],
    "ds": {
     "IconBadge": 10,
-    "Txt": 79,
+    "Txt": 85,
     "Button": 3,
-    "Pressy": 4,
+    "Pressy": 5,
     "FadeIn": 8,
     "ProgressBar": 1,
     "Card": 4,
-    "Row": 15,
+    "Row": 16,
     "Option": 3,
     "Pill": 4,
+    "CardEdge": 1,
     "Chip": 3,
     "NoteField": 1,
     "IconButton": 1
@@ -1791,7 +1826,7 @@
     {
      "comp": "View",
      "label": "Notifications",
-     "line": 121,
+     "line": 150,
      "in": "askNotifications",
      "file": "app/onboarding.tsx"
     }
@@ -1800,7 +1835,7 @@
     {
      "title": "Onboarding",
      "rows": [
-      "Jump to step: Welcome, Gym, Goal, Experience, Schedule, Age, Height, Weight, Target, Projection, Basics, Health, Privacy, Building, All set",
+      "Jump to step: Welcome, Gym, Name, Gender, Birthday, Goal, Experience, Schedule, Age, Height, Weight, Target, Projection, Basics, Health, Privacy, Building, All set",
       "Assessment: Scheduled, Not scheduled",
       "Connection: Online, Offline"
      ],
@@ -1813,6 +1848,7 @@
    "reachedFrom": [
     "app/(tabs)/_layout.tsx",
     "app/index.tsx",
+    "app/login.tsx",
     "web/WebFrame.tsx"
    ]
   },
@@ -2479,25 +2515,16 @@
      "kind": "chip",
      "sig": "chip 24 px high, radius radii.sm",
      "fn": "Profile",
-     "line": 85,
+     "line": 86,
      "tag": "View",
      "text": "<View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, borderRadius: radii.s",
      "file": "app/profile/index.tsx"
     },
     {
      "kind": "button or pill",
-     "sig": "button 96 px high, radius radii.xl",
-     "fn": "Profile",
-     "line": 91,
-     "tag": "Pressy",
-     "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Programme: ${current.short}${multi ? '. Switch' : ''}`",
-     "file": "app/profile/index.tsx"
-    },
-    {
-     "kind": "button or pill",
      "sig": "button 64 px high, radius radii.lg",
      "fn": "Profile",
-     "line": 117,
+     "line": 105,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Goal: ${g2.name}. Change goal`} onPress={go('/goal')} ",
      "file": "app/profile/index.tsx"
@@ -2506,7 +2533,7 @@
      "kind": "button or pill",
      "sig": "button 84 px high, radius radii.lg",
      "fn": "GoalSummaryTile",
-     "line": 170,
+     "line": 159,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`${title} goal ${value}. Edit`} onPressIn={grow.prime} ",
      "file": "app/profile/index.tsx"
@@ -2515,47 +2542,40 @@
      "kind": "button or pill",
      "sig": "button 196 px high, radius radii.xl",
      "fn": "TrackerPromo",
-     "line": 188,
+     "line": 177,
      "tag": "Pressy",
      "text": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Tracker designs. Choose how your trackers look\" onPress",
      "file": "app/profile/index.tsx"
     }
    ],
    "ds": {
-    "Txt": 20,
-    "Row": 7,
+    "Txt": 17,
+    "Row": 6,
     "Chip": 1,
-    "Pressy": 4,
-    "CardEdge": 3,
     "FadeIn": 1,
-    "Button": 4
+    "Button": 4,
+    "Pressy": 3,
+    "CardEdge": 2
    },
    "sheets": [
     {
      "comp": "LogoutSheet",
      "label": "Log out",
-     "line": 54,
-     "in": "Profile",
-     "file": "app/profile/index.tsx"
-    },
-    {
-     "comp": "ProgrammeSwitcherSheet",
-     "label": "Switch programme",
-     "line": 91,
+     "line": 55,
      "in": "Profile",
      "file": "app/profile/index.tsx"
     },
     {
      "comp": "FeedbackSheet",
      "label": "Feedback",
-     "line": 152,
+     "line": 141,
      "in": "Profile",
      "file": "app/profile/index.tsx"
     },
     {
      "comp": "LogoutSheet",
      "label": "Log out",
-     "line": 157,
+     "line": 146,
      "in": "Profile",
      "file": "app/profile/index.tsx"
     }
@@ -2774,6 +2794,200 @@
    "reachedFrom": []
   },
   {
+   "route": "/profile/subscription-pay",
+   "file": "app/profile/subscription-pay.tsx",
+   "files": [
+    "app/profile/subscription-pay.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "sig": "card radius radii.lg, fill c.cardLift",
+     "fn": "SubscriptionPay",
+     "line": 74,
+     "tag": "View",
+     "text": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, marginTop: 12, over",
+     "file": "app/profile/subscription-pay.tsx"
+    }
+   ],
+   "ds": {
+    "Txt": 5,
+    "SubPage": 2,
+    "Row": 1,
+    "TopGlow": 1,
+    "Button": 4,
+    "CardEdge": 1
+   },
+   "sheets": [
+    {
+     "comp": "BuyPlanSheet",
+     "label": "Review and pay",
+     "line": 62,
+     "in": "SubscriptionPay",
+     "file": "app/profile/subscription-pay.tsx"
+    }
+   ],
+   "scenarios": [],
+   "reachedFrom": [
+    "features/subscriptions/plans.tsx"
+   ]
+  },
+  {
+   "route": "/profile/subscription-payments",
+   "file": "app/profile/subscription-payments.tsx",
+   "files": [
+    "app/profile/subscription-payments.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "sig": "card radius radii.lg, fill c.cardLift",
+     "fn": "SubscriptionPayments",
+     "line": 32,
+     "tag": "View",
+     "text": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, overflow: 'hidden' ",
+     "file": "app/profile/subscription-payments.tsx"
+    }
+   ],
+   "ds": {
+    "SubPage": 2,
+    "Txt": 2,
+    "TopGlow": 1,
+    "Pill": 1,
+    "CardEdge": 1
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": [
+    "app/profile/subscription.tsx"
+   ]
+  },
+  {
+   "route": "/profile/subscription-plan",
+   "file": "app/profile/subscription-plan.tsx",
+   "files": [
+    "app/profile/subscription-plan.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "sig": "card radius radii.lg, fill c.cardLift",
+     "fn": "SubscriptionPlan",
+     "line": 45,
+     "tag": "View",
+     "text": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, paddingVertical: 14",
+     "file": "app/profile/subscription-plan.tsx"
+    },
+    {
+     "kind": "card",
+     "sig": "card radius radii.lg, fill c.cardLift",
+     "fn": "SubscriptionPlan",
+     "line": 56,
+     "tag": "View",
+     "text": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, paddingVertical: 14",
+     "file": "app/profile/subscription-plan.tsx"
+    },
+    {
+     "kind": "icon badge",
+     "sig": "icon tile 28 px, radius radii.pill",
+     "fn": "SubscriptionPlan",
+     "line": 60,
+     "tag": "View",
+     "text": "<View style={{ width: 28, height: 28, borderRadius: radii.pill, backgroundColor: c.surface2, alignItems: 'cent",
+     "file": "app/profile/subscription-plan.tsx"
+    }
+   ],
+   "ds": {
+    "SubPage": 2,
+    "Txt": 7,
+    "TopGlow": 1,
+    "Button": 1,
+    "Row": 3,
+    "SectionLabel": 2,
+    "CardEdge": 2
+   },
+   "sheets": [
+    {
+     "comp": "BuyPlanSheet",
+     "label": "Review and pay",
+     "line": 30,
+     "in": "SubscriptionPlan",
+     "file": "app/profile/subscription-plan.tsx"
+    }
+   ],
+   "scenarios": [],
+   "reachedFrom": [
+    "features/subscriptions/plans.tsx"
+   ]
+  },
+  {
+   "route": "/profile/subscription",
+   "file": "app/profile/subscription.tsx",
+   "files": [
+    "app/profile/subscription.tsx"
+   ],
+   "hand": [],
+   "ds": {
+    "SubPage": 2,
+    "Txt": 6,
+    "TopGlow": 1,
+    "Row": 5,
+    "SectionLabel": 2,
+    "CardEdge": 2,
+    "Button": 2
+   },
+   "sheets": [
+    {
+     "comp": "CancelSubSheet",
+     "label": "Cancel subscription",
+     "line": 66,
+     "in": "SubscriptionDetail",
+     "file": "app/profile/subscription.tsx"
+    }
+   ],
+   "scenarios": [],
+   "reachedFrom": []
+  },
+  {
+   "route": "/profile/subscriptions",
+   "file": "app/profile/subscriptions.tsx",
+   "files": [
+    "app/profile/subscriptions.tsx"
+   ],
+   "hand": [
+    {
+     "kind": "card",
+     "sig": "card radius radii.lg, fill c.cardLift, padding 16",
+     "fn": "SubCard",
+     "line": 21,
+     "tag": "View",
+     "text": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 12, overflow: 'hidden' }",
+     "file": "app/profile/subscriptions.tsx"
+    },
+    {
+     "kind": "card",
+     "sig": "card radius radii.lg, fill c.cardLift, padding 24",
+     "fn": "Subscriptions",
+     "line": 46,
+     "tag": "View",
+     "text": "<View style={{ padding: 24, borderRadius: radii.lg, backgroundColor: c.cardLift, alignItems: 'center', gap: 6,",
+     "file": "app/profile/subscriptions.tsx"
+    }
+   ],
+   "ds": {
+    "CardEdge": 2,
+    "Row": 1,
+    "Txt": 4,
+    "Button": 3,
+    "SubPage": 1,
+    "TopGlow": 1,
+    "Segmented": 1
+   },
+   "sheets": [],
+   "scenarios": [],
+   "reachedFrom": []
+  },
+  {
    "route": "/profile/tracker-designs",
    "file": "app/profile/tracker-designs.tsx",
    "files": [
@@ -2938,12 +3152,11 @@
    ],
    "hand": [],
    "ds": {
-    "TopGlow": 1,
     "Pill": 1,
     "Card": 1,
     "IconBadge": 1,
     "FadeIn": 3,
-    "Txt": 5,
+    "Txt": 6,
     "Row": 1,
     "Pressy": 1
    },
@@ -2975,28 +3188,28 @@
     {
      "comp": "StepsSheet",
      "label": "Add steps",
-     "line": 69,
+     "line": 71,
      "in": "action",
      "file": "app/progress/metric.tsx"
     },
     {
      "comp": "WaterSheet",
      "label": "Water",
-     "line": 70,
+     "line": 72,
      "in": "action",
      "file": "app/progress/metric.tsx"
     },
     {
      "comp": "QuickLogSheet",
      "label": "Log a meal",
-     "line": 71,
+     "line": 73,
      "in": "action",
      "file": "app/progress/metric.tsx"
     },
     {
      "comp": "ManualLogSheet",
      "label": "",
-     "line": 72,
+     "line": 74,
      "in": "action",
      "file": "app/progress/metric.tsx"
     }
@@ -3428,27 +3641,27 @@
    "hand": [
     {
      "kind": "card",
-     "sig": "card radius radii.md, fill tile",
-     "fn": "PtInviteFacts",
-     "line": 59,
+     "sig": "card radius radii.xl, fill c.cardLift, padding 18",
+     "fn": "PtInviteCard",
+     "line": 77,
      "tag": "View",
-     "text": "<View key={l} accessible accessibilityLabel={`${v} ${l}`} style={{ flex: 1, backgroundColor: tile, borderRadiu",
+     "text": "<View style={{ position: 'relative', zIndex: 0, borderRadius: radii.xl, padding: 18, gap: 16, overflow: 'hidde",
      "file": "features/gym/PtInviteSheet.tsx"
     }
    ],
    "ds": {
-    "Txt": 7,
+    "Txt": 6,
     "Pill": 1,
     "Button": 4,
     "Row": 3,
-    "FadeIn": 1,
-    "CardEdge": 1
+    "CardEdge": 1,
+    "IconBadge": 1
    },
    "sheets": [
     {
      "comp": "DeclinePtSheet",
      "label": "Decline invitation",
-     "line": 87,
+     "line": 89,
      "in": "PtInviteCard",
      "file": "features/gym/PtInviteSheet.tsx"
     }
@@ -3621,7 +3834,7 @@
    "sheets": [
     {
      "comp": "FlagSheet",
-     "label": "Flag session",
+     "label": "Reject session",
      "line": 131,
      "in": "PtConfirmCard",
      "file": "features/today/TopCards.tsx"
@@ -3971,7 +4184,7 @@
      "kind": "card",
      "sig": "card radius radii.md, fill c.surface2, padding 2",
      "fn": "RangeBarSlim",
-     "line": 80,
+     "line": 81,
      "tag": "View",
      "text": "<View accessibilityRole=\"radiogroup\" accessibilityLabel=\"Period\" style={{ flex: 1, flexDirection: 'row', gap: ",
      "file": "features/progress/TrendUI.tsx"
@@ -3980,7 +4193,7 @@
      "kind": "icon badge",
      "sig": "dot 4 px",
      "fn": "CalendarSheet",
-     "line": 132,
+     "line": 133,
      "tag": "View",
      "text": "<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.xs, backgroundColor: ",
      "file": "features/progress/TrendUI.tsx"
@@ -3989,7 +4202,7 @@
      "kind": "bar",
      "sig": "bar 3 px high, radius radii.xs",
      "fn": "TrendChart",
-     "line": 180,
+     "line": 181,
      "tag": "View",
      "text": "<View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2 }} />",
      "file": "features/progress/TrendUI.tsx"
@@ -4009,14 +4222,14 @@
     {
      "comp": "CalendarSheet",
      "label": "Pick a date",
-     "line": 45,
+     "line": 46,
      "in": "RangeBar",
      "file": "features/progress/TrendUI.tsx"
     },
     {
      "comp": "CalendarSheet",
      "label": "Pick a date",
-     "line": 92,
+     "line": 93,
      "in": "RangeBarSlim",
      "file": "features/progress/TrendUI.tsx"
     }
@@ -4163,6 +4376,31 @@
      "file": "features/goalv2/FinishBy.tsx"
     }
    ],
+   "scenarios": []
+  },
+  {
+   "file": "features/subscriptions/plans.tsx",
+   "hand": [
+    {
+     "kind": "card",
+     "sig": "card radius radii.xl, fill c.cardLift, padding 18",
+     "fn": "PlanCard",
+     "line": 52,
+     "tag": "View",
+     "text": "<View style={{ position: 'relative', zIndex: 0, borderRadius: radii.xl, backgroundColor: c.cardLift, padding: ",
+     "file": "features/subscriptions/plans.tsx"
+    }
+   ],
+   "ds": {
+    "IconBadge": 1,
+    "Row": 4,
+    "Txt": 14,
+    "CardEdge": 1,
+    "Chip": 1,
+    "Button": 2,
+    "Pill": 1
+   },
+   "sheets": [],
    "scenarios": []
   },
   {
@@ -4347,7 +4585,7 @@
      "kind": "bar",
      "sig": "bar 4 px high, radius radii.xs",
      "fn": "TimeSlider",
-     "line": 113,
+     "line": 114,
      "tag": "View",
      "text": "<View pointerEvents=\"none\" style={{ height: 4, borderRadius: radii.xs, backgroundColor: P.track }}>",
      "file": "web/WebFrame.tsx"
@@ -4356,7 +4594,7 @@
      "kind": "bar",
      "sig": "bar 4 px high, radius radii.xs",
      "fn": "TimeSlider",
-     "line": 114,
+     "line": 115,
      "tag": "View",
      "text": "<View style={{ width: `${pct}%`, height: 4, borderRadius: radii.xs, backgroundColor: P.ink }} />",
      "file": "web/WebFrame.tsx"
@@ -4365,7 +4603,7 @@
      "kind": "icon badge",
      "sig": "dot 6 px",
      "fn": "TimeSlider",
-     "line": 116,
+     "line": 117,
      "tag": "View",
      "text": "<View key={h} pointerEvents=\"none\" style={{ position: 'absolute', left: `${(h / 23) * 100}%`, marginLeft: -3, ",
      "file": "web/WebFrame.tsx"
@@ -4374,7 +4612,7 @@
      "kind": "icon badge",
      "sig": "icon tile 22 px, radius radii.sm",
      "fn": "TimeSlider",
-     "line": 117,
+     "line": 118,
      "tag": "View",
      "text": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: `${pct}%`, marginLeft: -11, top: 4, width: 22,",
      "file": "web/WebFrame.tsx"
@@ -4383,7 +4621,7 @@
      "kind": "card",
      "sig": "card radius radii.md, fill fixed.white",
      "fn": "PanelBody",
-     "line": 346,
+     "line": 357,
      "tag": "View",
      "text": "<View style={{ backgroundColor: fixed.white, borderRadius: radii.md, borderWidth: 1, borderColor: P.line, padd",
      "file": "web/WebFrame.tsx"
@@ -4392,7 +4630,7 @@
      "kind": "icon badge",
      "sig": "icon tile 30 px, radius 15",
      "fn": "PanelBody",
-     "line": 347,
+     "line": 358,
      "tag": "View",
      "text": "<View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: P.ink, alignItems: 'center', justifyC",
      "file": "web/WebFrame.tsx"
@@ -4401,7 +4639,7 @@
      "kind": "icon button",
      "sig": "icon button 30 px, radius 15",
      "fn": "PanelBody",
-     "line": 352,
+     "line": 363,
      "tag": "Pressable",
      "text": "<Pressable accessibilityRole=\"button\" accessibilityLabel={open ? 'Collapse the controls' : 'Expand the control",
      "file": "web/WebFrame.tsx"
@@ -4410,7 +4648,7 @@
      "kind": "card",
      "sig": "card radius 20, fill fixed.white, padding 12",
      "fn": "useOpenEdgeCases",
-     "line": 381,
+     "line": 392,
      "tag": "View",
      "text": "<View style={{ backgroundColor: fixed.white, borderRadius: 20, padding: 12 }}>",
      "file": "web/WebFrame.tsx"
@@ -4419,7 +4657,7 @@
      "kind": "card",
      "sig": "card radius 20, fill fixed.white, padding 12",
      "fn": "EdgeTab",
-     "line": 389,
+     "line": 400,
      "tag": "View",
      "text": "<View style={{ backgroundColor: fixed.white, borderRadius: 20, padding: 12 }}>",
      "file": "web/WebFrame.tsx"
@@ -4430,14 +4668,14 @@
     {
      "comp": "View",
      "label": "Edge cases",
-     "line": 381,
+     "line": 392,
      "in": "useOpenEdgeCases",
      "file": "web/WebFrame.tsx"
     },
     {
      "comp": "View",
      "label": "Edge cases",
-     "line": 389,
+     "line": 400,
      "in": "EdgeTab",
      "file": "web/WebFrame.tsx"
     }

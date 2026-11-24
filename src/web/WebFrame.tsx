@@ -24,6 +24,7 @@ import { ActionChip, Choice, Dropdown, PanelCard, SwitchChip, P } from '@/web/Co
 import { SITUATIONS, SITUATION_HINT, Situation, useSituation } from '@/lib/situations';
 import { MISSED_AFTER, missedWkStore } from '@/features/today/WorkoutCard';
 import { ptInviteStore } from '@/features/gym/ptInvite';
+import { subStore } from '@/features/subscriptions/data';
 import { otherWkStore } from '@/features/today/OtherWorkouts';
 import { timeMin } from '@/features/plans/store';
 import { planStore } from '@/lib/planState';
@@ -223,6 +224,8 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
     // Comeback: how long the member has been away.
     { label: 'Days away (Comeback)', options: ['2 days', '4 days', '8 days', '15 days'], value: d.todayVariant === 'Comeback' ? `${d.awayDays} days` : '', onPick: (v: string) => { sit.pick('Comeback'); set({ awayDays: parseInt(v, 10) }); } },
     // A PT package invitation from Coach Vikram: waiting for your answer, accepted (starts when the current package ends) or declined.
+    // A subscription payment in the app: it goes through (Payment successful) or does not (Payment failed).
+    { label: 'Subscription payment', options: ['Succeeds', 'Fails'], value: subStore.get().pay, onPick: (v: string) => subStore.set({ pay: v as 'Succeeds' | 'Fails' }) },
     { label: 'PT invitation', options: ['None', 'Waiting', 'Accepted', 'Declined'], value: ({ none: 'None', waiting: 'Waiting', accepted: 'Accepted', declined: 'Declined' } as Record<string, string>)[ptInviteStore.get().state], onPick: (v: string) => ptInviteStore.set({ state: v.toLowerCase() as any, reason: '' }) },
     { label: 'Member type', options: ['Regular', 'PT member'], value: state.sc.member, onPick: (v: string) => setSc({ member: v as any }) },
     { label: 'Theme', options: ['Light', 'Dark'], value: isDark ? 'Dark' : 'Light', onPick: (v: string) => setSc({ theme: v as any }) },
@@ -307,6 +310,7 @@ function PanelBody({ onDone, columns = 1 }: { onDone?: (msg: string) => void; co
       {dd('Membership')}
       {dd('Goal type')}
       {dd('Plans')}
+      {dd('Subscription payment')}
       {d.hasGym && dd('Waiver')}
       {dd('Meals today')}
     </PanelCard>
