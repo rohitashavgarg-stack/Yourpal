@@ -84,7 +84,8 @@ export function BuyPlanSheet({ p }: { p: Plan }) {
   const { closeSheet } = useOverlay();
   const [method, setMethod] = useState<Method>('UPI');
   const [paying, setPaying] = useState(false);
-  const end = new Date(Date.now() + p.days * 86400000);
+  const [now] = useState(() => Date.now());
+  const end = new Date(now + p.days * 86400000);
   const pay = () => {
     setPaying(true);
     setTimeout(() => {

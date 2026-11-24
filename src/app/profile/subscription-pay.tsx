@@ -30,10 +30,11 @@ export default function SubscriptionPay() {
   const { openSheet, toast } = useOverlay();
   const member = useMemberName();
   const [busy, setBusy] = useState(false);
+  const [now] = useState(() => Date.now());
   if (!p) return <SubPage title="Payment" close fallback="/profile/subscriptions"><Txt muted>This plan is not here any more.</Txt></SubPage>;
   const ok = status === 'ok';
   // after a reload the purchase is gone from memory: still say when the plan ends
-  const till = sub?.validTill ?? dateText(new Date(Date.now() + p.days * 86400000));
+  const till = sub?.validTill ?? dateText(new Date(now + p.days * 86400000));
   const toPlans = () => { subStore.set({ tab: 'Active' }); router.dismissTo('/profile/subscriptions'); };
   const invoice = async () => {
     const pay = sub?.payments[0];
@@ -75,7 +76,7 @@ export default function SubscriptionPay() {
         {row('Plan', p.name)}
         {row('Amount', rupees(p.price))}
         {row('Paid with', method === 'Card' ? 'Card' : 'UPI')}
-        {ok && sub ? row('Invoice', sub.payments[0].no, true) : row('Date', dateText(new Date()), true)}
+        {ok && sub ? row('Invoice', sub.payments[0].no, true) : row('Date', dateText(new Date(now)), true)}
       </View>
     </SubPage>
   );
