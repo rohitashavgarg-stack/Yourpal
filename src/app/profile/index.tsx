@@ -10,7 +10,8 @@ import { useGoalV2 } from '@/features/goalv2/model';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { router } from 'expo-router';
-import { FileText, Volume2, Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Languages, Lock, LogOut, MessageCircle, Star, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
+import { useSubscriptions, isPast } from '@/features/subscriptions/data';
+import { Crown, FileText, Volume2, Activity, ArrowRight, Bell, Check, ChevronRight, ClipboardList, Languages, Lock, LogOut, MessageCircle, Star, PenLine, Ruler, Share, ShieldCheck, Smartphone, SlidersHorizontal, Sun, Trash2, UserRound } from '@/lib/icons';
 import { Chip, ChipTone } from '@/design-system/primitives/Chip';
 import { Button, Pressy, Row, Txt } from '@/components/ui';
 import { Avatar } from '@/components/GymHeader';
@@ -41,6 +42,7 @@ export default function Profile() {
   const { s, set } = useShell();
   const { openSheet, toast } = useOverlay();
   const p = state.profile;
+  const activeSubs = useSubscriptions().filter((x) => !isPast(x)).length;
 
   useScenarios({
     title: 'Profile',
@@ -116,6 +118,7 @@ export default function Profile() {
       {group('ACCOUNT', [
         { l: 'My details', icon: <UserRound size={18} color={c.ink} />, go: go('/profile/details') },
         { l: 'Training and diet', icon: <SlidersHorizontal size={18} color={c.ink} />, go: go('/profile/preferences') },
+        { l: 'Subscriptions', icon: <Crown size={18} color={c.ink} />, chip: activeSubs ? { label: activeSubs + ' active', tone: 'good' as ChipTone } : { label: 'None active' }, go: go('/profile/subscriptions') },
         ...(d.hasGym ? [{ l: 'Payments and invoices', icon: <FileText size={18} color={c.ink} />, go: go('/gym/payments') }] : []),
         ...(d.hasGym ? [{ l: 'Waiver', icon: <PenLine size={18} color={c.ink} />, chip: p.waiver ? { label: 'Signed', tone: 'good' as ChipTone } : { label: 'Pending', tone: 'warn' as ChipTone }, go: go('/profile/waiver') }] : []),
       ])}
