@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-17",
+ "generated": "2026-11-24",
  "library": [
   {
    "name": "AmountStepper",
@@ -51,8 +51,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Brand.tsx",
    "doc": true,
-   "uses": 22,
-   "files": 19,
+   "uses": 21,
+   "files": 18,
    "inLibrary": 1
   },
   {
@@ -60,8 +60,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Button.tsx",
    "doc": true,
-   "uses": 188,
-   "files": 79,
+   "uses": 204,
+   "files": 85,
    "inLibrary": 11
   },
   {
@@ -96,8 +96,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/CardEdge.tsx",
    "doc": false,
-   "uses": 54,
-   "files": 33,
+   "uses": 63,
+   "files": 40,
    "inLibrary": 7
   },
   {
@@ -123,8 +123,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Chip.tsx",
    "doc": true,
-   "uses": 28,
-   "files": 16,
+   "uses": 31,
+   "files": 18,
    "inLibrary": 8
   },
   {
@@ -141,8 +141,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/FadeIn.tsx",
    "doc": true,
-   "uses": 151,
-   "files": 48,
+   "uses": 149,
+   "files": 47,
    "inLibrary": 4
   },
   {
@@ -195,8 +195,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/IconBadge.tsx",
    "doc": true,
-   "uses": 70,
-   "files": 43,
+   "uses": 72,
+   "files": 45,
    "inLibrary": 1
   },
   {
@@ -276,8 +276,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Pill.tsx",
    "doc": true,
-   "uses": 40,
-   "files": 22,
+   "uses": 42,
+   "files": 24,
    "inLibrary": 0
   },
   {
@@ -321,8 +321,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Row.tsx",
    "doc": true,
-   "uses": 304,
-   "files": 89,
+   "uses": 319,
+   "files": 95,
    "inLibrary": 55
   },
   {
@@ -348,8 +348,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/SectionLabel.tsx",
    "doc": true,
-   "uses": 21,
-   "files": 11,
+   "uses": 25,
+   "files": 13,
    "inLibrary": 1
   },
   {
@@ -411,8 +411,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/SubPage.tsx",
    "doc": true,
-   "uses": 44,
-   "files": 41,
+   "uses": 53,
+   "files": 46,
    "inLibrary": 0
   },
   {
@@ -429,8 +429,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/TopGlow.tsx",
    "doc": true,
-   "uses": 13,
-   "files": 13,
+   "uses": 17,
+   "files": 17,
    "inLibrary": 0
   },
   {
@@ -447,8 +447,8 @@
    "group": "primitives",
    "file": "src/design-system/primitives/Txt.tsx",
    "doc": true,
-   "uses": 1096,
-   "files": 122,
+   "uses": 1140,
+   "files": 129,
    "inLibrary": 142
   },
   {
@@ -623,13 +623,13 @@
    "inLibrary": 0
   }
  ],
- "count": 154,
- "toBuild": 151,
+ "count": 165,
+ "toBuild": 162,
  "onPurpose": 3,
  "demoPanelExcluded": 21,
  "byGroup": {
   "Other": {
-   "total": 21,
+   "total": 22,
    "onPurpose": 0
   },
   "Today": {
@@ -653,11 +653,11 @@
    "onPurpose": 0
   },
   "Onboarding and login": {
-   "total": 10,
+   "total": 14,
    "onPurpose": 1
   },
   "Profile and settings": {
-   "total": 19,
+   "total": 25,
    "onPurpose": 0
   },
   "Workout session": {
@@ -727,7 +727,7 @@
    "group": "Plans and food logging"
   },
   {
-   "where": "src/features/progress/TrendUI.tsx:180",
+   "where": "src/features/progress/TrendUI.tsx:181",
    "kind": "bar",
    "look": "bar 3 px high, radius radii.xs",
    "jsx": "<View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2 }} />",
@@ -811,10 +811,17 @@
    "group": "Progress"
   },
   {
-   "where": "src/app/onboarding.tsx:288",
+   "where": "src/app/onboarding.tsx:320",
    "kind": "button or pill",
    "look": "button 108 px high, radius radii.lg",
    "jsx": "<Pressy accessibilityRole=\"radio\" accessibilityState={{ selected: on }} accessibilityLabel={goal} onPress={onP",
+   "group": "Onboarding and login"
+  },
+  {
+   "where": "src/app/onboarding.tsx:449",
+   "kind": "button or pill",
+   "look": "button 64 px high, radius radii.lg",
+   "jsx": "<Pressy key={o} accessibilityRole=\"radio\" accessibilityState={{ selected: on }} onPress={() => { haptic.tick()",
    "group": "Onboarding and login"
   },
   {
@@ -832,31 +839,24 @@
    "group": "Bottom sheets"
   },
   {
-   "where": "src/app/profile/index.tsx:117",
+   "where": "src/app/profile/index.tsx:105",
    "kind": "button or pill",
    "look": "button 64 px high, radius radii.lg",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Goal: ${g2.name}. Change goal`} onPress={go('/goal')} ",
    "group": "Profile and settings"
   },
   {
-   "where": "src/app/profile/index.tsx:170",
+   "where": "src/app/profile/index.tsx:159",
    "kind": "button or pill",
    "look": "button 84 px high, radius radii.lg",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`${title} goal ${value}. Edit`} onPressIn={grow.prime} ",
    "group": "Profile and settings"
   },
   {
-   "where": "src/app/profile/index.tsx:188",
+   "where": "src/app/profile/index.tsx:177",
    "kind": "button or pill",
    "look": "button 196 px high, radius radii.xl",
    "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel=\"Tracker designs. Choose how your trackers look\" onPress",
-   "group": "Profile and settings"
-  },
-  {
-   "where": "src/app/profile/index.tsx:91",
-   "kind": "button or pill",
-   "look": "button 96 px high, radius radii.xl",
-   "jsx": "<Pressy accessibilityRole=\"button\" accessibilityLabel={`Programme: ${current.short}${multi ? '. Switch' : ''}`",
    "group": "Profile and settings"
   },
   {
@@ -1196,6 +1196,48 @@
    "group": "Profile and settings"
   },
   {
+   "where": "src/app/profile/subscription-pay.tsx:74",
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.cardLift",
+   "jsx": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, marginTop: 12, over",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/profile/subscription-payments.tsx:32",
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.cardLift",
+   "jsx": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, overflow: 'hidden' ",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/profile/subscription-plan.tsx:45",
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.cardLift",
+   "jsx": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, paddingVertical: 14",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/profile/subscription-plan.tsx:56",
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.cardLift",
+   "jsx": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16, paddingVertical: 14",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/profile/subscriptions.tsx:21",
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.cardLift, padding 16",
+   "jsx": "<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 12, overflow: 'hidden' }",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/profile/subscriptions.tsx:46",
+   "kind": "card",
+   "look": "card radius radii.lg, fill c.cardLift, padding 24",
+   "jsx": "<View style={{ padding: 24, borderRadius: radii.lg, backgroundColor: c.cardLift, alignItems: 'center', gap: 6,",
+   "group": "Profile and settings"
+  },
+  {
    "where": "src/app/progress/streaks.tsx:32",
    "kind": "card",
    "look": "card radius radii.card, fill c.cardLift",
@@ -1217,10 +1259,10 @@
    "group": "Shared components (outside the library)"
   },
   {
-   "where": "src/features/gym/PtInviteSheet.tsx:59",
+   "where": "src/features/gym/PtInviteSheet.tsx:77",
    "kind": "card",
-   "look": "card radius radii.md, fill tile",
-   "jsx": "<View key={l} accessible accessibilityLabel={`${v} ${l}`} style={{ flex: 1, backgroundColor: tile, borderRadiu",
+   "look": "card radius radii.xl, fill c.cardLift, padding 18",
+   "jsx": "<View style={{ position: 'relative', zIndex: 0, borderRadius: radii.xl, padding: 18, gap: 16, overflow: 'hidde",
    "group": "Bottom sheets"
   },
   {
@@ -1266,7 +1308,7 @@
    "group": "Other"
   },
   {
-   "where": "src/features/progress/TrendUI.tsx:80",
+   "where": "src/features/progress/TrendUI.tsx:81",
    "kind": "card",
    "look": "card radius radii.md, fill c.surface2, padding 2",
    "jsx": "<View accessibilityRole=\"radiogroup\" accessibilityLabel=\"Period\" style={{ flex: 1, flexDirection: 'row', gap: ",
@@ -1278,6 +1320,13 @@
    "look": "card radius 20, fill bg",
    "jsx": "<View style={[{ paddingVertical: 14, paddingHorizontal: 16, borderRadius: 20, backgroundColor: bg }, style]}>",
    "group": "Profile and settings"
+  },
+  {
+   "where": "src/features/subscriptions/plans.tsx:52",
+   "kind": "card",
+   "look": "card radius radii.xl, fill c.cardLift, padding 18",
+   "jsx": "<View style={{ position: 'relative', zIndex: 0, borderRadius: radii.xl, backgroundColor: c.cardLift, padding: ",
+   "group": "Other"
   },
   {
    "where": "src/features/today/CheckInBar.tsx:62",
@@ -1301,7 +1350,7 @@
    "group": "Progress"
   },
   {
-   "where": "src/app/profile/index.tsx:85",
+   "where": "src/app/profile/index.tsx:86",
    "kind": "chip",
    "look": "chip 24 px high, radius radii.sm",
    "jsx": "<View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, borderRadius: radii.s",
@@ -1413,10 +1462,10 @@
    "group": "Gym tab"
   },
   {
-   "where": "src/app/gym/pt-packs.tsx:65",
+   "where": "src/app/gym/pt-packs.tsx:64",
    "kind": "icon badge",
    "look": "dot 12 px",
-   "jsx": "<View key={i} style={{ width: 12, height: 12, borderRadius: round(12), backgroundColor: c.accent }} />",
+   "jsx": "<View key={i} style={{ width: 12, height: 12, borderRadius: round(12), backgroundColor: d.k === 'done' ? c.acc",
    "group": "Gym tab"
   },
   {
@@ -1432,6 +1481,13 @@
    "look": "dot 9 px",
    "jsx": "<View accessibilityElementsHidden style={{ width: 9, height: 9, marginTop: 4, borderRadius: radii.pill, backgr",
    "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/onboarding.tsx:454",
+   "kind": "icon badge",
+   "look": "icon tile 24 px, radius radii.pill",
+   "jsx": "<View style={{ width: 24, height: 24, borderRadius: radii.pill, borderWidth: on ? 0 : 1.5, borderColor: c.mute",
+   "group": "Onboarding and login"
   },
   {
    "where": "src/app/plans/entries.tsx:103",
@@ -1452,6 +1508,13 @@
    "kind": "icon badge",
    "look": "icon tile 30 px, radius radii.pill",
    "jsx": "<View pointerEvents=\"none\" style={{ position: 'absolute', left: w ? value * w - 15 : 0, top: 7, width: 30, hei",
+   "group": "Profile and settings"
+  },
+  {
+   "where": "src/app/profile/subscription-plan.tsx:60",
+   "kind": "icon badge",
+   "look": "icon tile 28 px, radius radii.pill",
+   "jsx": "<View style={{ width: 28, height: 28, borderRadius: radii.pill, backgroundColor: c.surface2, alignItems: 'cent",
    "group": "Profile and settings"
   },
   {
@@ -1581,7 +1644,7 @@
    "group": "Other"
   },
   {
-   "where": "src/features/progress/TrendUI.tsx:132",
+   "where": "src/features/progress/TrendUI.tsx:133",
    "kind": "icon badge",
    "look": "dot 4 px",
    "jsx": "<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.xs, backgroundColor: ",
@@ -1686,6 +1749,20 @@
    "group": "Today"
   },
   {
+   "where": "src/app/onboarding.tsx:421",
+   "kind": "input",
+   "look": "text input",
+   "jsx": "<TextInput accessibilityLabel={label} value={value[key]} onChangeText={(t) => onChange({ ...value, [key]: t })",
+   "group": "Onboarding and login"
+  },
+  {
+   "where": "src/app/onboarding.tsx:475",
+   "kind": "input",
+   "look": "text input",
+   "jsx": "<TextInput accessibilityLabel={{ d: 'Day', m: 'Month', y: 'Year' }[key]} value={value[key]} onChangeText={(t) ",
+   "group": "Onboarding and login"
+  },
+  {
    "where": "src/app/plans/ask.tsx:67",
    "kind": "input",
    "look": "text input",
@@ -1745,7 +1822,7 @@
    "why": "An image button. `IconButton` draws a fill and an icon; it does not clip a photo to its corners. One place in the app."
   },
   {
-   "where": "src/web/WebFrame.tsx:352",
+   "where": "src/web/WebFrame.tsx:363",
    "what": "Collapse / expand on the demo controls panel (web only, beside the phone)",
    "why": "Part of the demo tooling, not the app. It uses a plain Pressable on purpose (no press scale, no haptic); `IconButton` would add both."
   }

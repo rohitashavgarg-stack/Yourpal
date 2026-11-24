@@ -10,3 +10,4 @@ Things that changed since the skill was last reviewed. The yourpal-design-learne
 - 76 UI commit(s) since the last review (see CHANGELOG.md). Read the diffs for new patterns: states, copy, layout, motion.
 - New Button kinds: glassClear. Say where each one is used.
 - 2 UI commit(s) since the last review (see CHANGELOG.md). Read the diffs for new patterns: states, copy, layout, motion.
+- 17 UI commit(s) since the last review (see CHANGELOG.md). Read the diffs for new patterns: states, copy, layout, motion.

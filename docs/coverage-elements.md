@@ -190,9 +190,9 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## /gym/pt-packs (routes)
 
 - Files: `app/gym/pt-packs.tsx`
-- Library components used: Txt x10, Row x3, Pressy x1, CardEdge x1, TopGlow x1
+- Library components used: Txt x8, Row x3, Pressy x1, CardEdge x1, TopGlow x1
 - Hand-built:
-  - `app/gym/pt-packs.tsx:65` icon badge: `<View key={i} style={{ width: 12, height: 12, borderRadius: round(12), backgroundColor: c.`
+  - `app/gym/pt-packs.tsx:64` icon badge: `<View key={i} style={{ width: 12, height: 12, borderRadius: round(12), backgroundColor: d.`
 
 ## PT package (routes)
 
@@ -239,7 +239,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Log in (routes)
 
 - Files: `app/login.tsx`, `components/OtpInput.tsx`, `features/shell/CountrySheet.tsx`
-- Library components used: Txt x32, FadeIn x14, Row x5, Button x5, Pressy x3, Field x2, Callout x2
+- Library components used: Txt x30, FadeIn x13, Button x6, Row x4, Pressy x3, Field x2, Callout x2
 - States and edge cases: Phone number: In CRM, Not found; Code entered: Correct, Wrong; Android SMS auto-read: Off, On; Connection: Online, Offline; Programmes on this number: Three, Only one; (action) Fill a valid number; (action) Jump to code step
 - Hand-built:
   - `components/OtpInput.tsx:25` input: `<TextInput ref={ref} value={value} onChangeText={(t) => onChange(t.replace(/\D/g, '').slic`
@@ -255,9 +255,13 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Onboarding (frame) (routes)
 
 - Files: `app/onboarding.tsx`, `features/onboarding/plan.ts`, `features/onboarding/Steps.tsx`, `features/onboarding/path.ts`
-- Library components used: Txt x79, Row x15, IconBadge x10, FadeIn x8, Pressy x4, Card x4, Pill x4, Button x3, Option x3, Chip x3, ProgressBar x1, NoteField x1, IconButton x1
-- States and edge cases: Jump to step: Welcome, Gym, Goal, Experience, Schedule, Age, Height, Weight, Target, Projection, Basics, Health, Privacy, Building, All set; Assessment: Scheduled, Not scheduled; Connection: Online, Offline; (action) Restart onboarding
-- Hand-built: none
+- Library components used: Txt x85, Row x16, IconBadge x10, FadeIn x8, Pressy x5, Card x4, Pill x4, Button x3, Option x3, Chip x3, ProgressBar x1, CardEdge x1, NoteField x1, IconButton x1
+- States and edge cases: Jump to step: Welcome, Gym, Name, Gender, Birthday, Goal, Experience, Schedule, Age, Height, Weight, Target, Projection, Basics, Health, Privacy, Building, All set; Assessment: Scheduled, Not scheduled; Connection: Online, Offline; (action) Restart onboarding
+- Hand-built:
+  - `app/onboarding.tsx:421` input: `<TextInput accessibilityLabel={label} value={value[key]} onChangeText={(t) => onChange({ .`
+  - `app/onboarding.tsx:449` button or pill: `<Pressy key={o} accessibilityRole="radio" accessibilityState={{ selected: on }} onPress={(`
+  - `app/onboarding.tsx:454` icon badge: `<View style={{ width: 24, height: 24, borderRadius: radii.pill, borderWidth: on ? 0 : 1.5,`
+  - `app/onboarding.tsx:475` input: `<TextInput accessibilityLabel={{ d: 'Day', m: 'Month', y: 'Year' }[key]} value={value[key]`
 
 ## Ask coach (routes)
 
@@ -377,14 +381,13 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Profile (routes)
 
 - Files: `app/profile/index.tsx`, `features/shell/sheets.tsx`
-- Library components used: Txt x20, Row x7, Pressy x4, Button x4, CardEdge x3, Chip x1, FadeIn x1
+- Library components used: Txt x17, Row x6, Button x4, Pressy x3, CardEdge x2, Chip x1, FadeIn x1
 - States and edge cases: Member type (privacy wording): Regular, PT member; Programmes joined: Three, Only one; Account deletion: Not scheduled, Scheduled; (action) Log out (confirm sheet); (action) Open an invite link (WhatsApp); (action) Reset profile settings
 - Hand-built:
-  - `app/profile/index.tsx:85` chip: `<View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, b`
-  - `app/profile/index.tsx:91` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Programme: ${current.short}${multi`
-  - `app/profile/index.tsx:117` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Goal: ${g2.name}. Change goal'} on`
-  - `app/profile/index.tsx:170` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'${title} goal ${value}. Edit'} onP`
-  - `app/profile/index.tsx:188` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Tracker designs. Choose how your tr`
+  - `app/profile/index.tsx:86` chip: `<View style={{ alignSelf: 'flex-start', marginTop: 2, height: 24, paddingHorizontal: 10, b`
+  - `app/profile/index.tsx:105` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'Goal: ${g2.name}. Change goal'} on`
+  - `app/profile/index.tsx:159` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel={'${title} goal ${value}. Edit'} onP`
+  - `app/profile/index.tsx:177` button or pill: `<Pressy accessibilityRole="button" accessibilityLabel="Tracker designs. Choose how your tr`
 
 ## Join a programme (routes)
 
@@ -430,6 +433,43 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
   - `app/profile/sound.tsx:46` icon badge: `<View pointerEvents="none" style={{ position: 'absolute', left: w ? value * w - 15 : 0, to`
   - `app/profile/sound.tsx:64` card: `<View style={{ backgroundColor: c.cardLift, borderRadius: radii.xl, padding: 18, gap: 14 }`
 
+## /profile/subscription-pay (routes)
+
+- Files: `app/profile/subscription-pay.tsx`
+- Library components used: Txt x5, Button x4, SubPage x2, Row x1, TopGlow x1, CardEdge x1
+- Hand-built:
+  - `app/profile/subscription-pay.tsx:74` card: `<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16,`
+
+## /profile/subscription-payments (routes)
+
+- Files: `app/profile/subscription-payments.tsx`
+- Library components used: SubPage x2, Txt x2, TopGlow x1, Pill x1, CardEdge x1
+- Hand-built:
+  - `app/profile/subscription-payments.tsx:32` card: `<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16,`
+
+## /profile/subscription-plan (routes)
+
+- Files: `app/profile/subscription-plan.tsx`
+- Library components used: Txt x7, Row x3, SubPage x2, SectionLabel x2, CardEdge x2, TopGlow x1, Button x1
+- Hand-built:
+  - `app/profile/subscription-plan.tsx:45` card: `<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16,`
+  - `app/profile/subscription-plan.tsx:56` card: `<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, paddingHorizontal: 16,`
+  - `app/profile/subscription-plan.tsx:60` icon badge: `<View style={{ width: 28, height: 28, borderRadius: radii.pill, backgroundColor: c.surface`
+
+## /profile/subscription (routes)
+
+- Files: `app/profile/subscription.tsx`
+- Library components used: Txt x6, Row x5, SubPage x2, SectionLabel x2, CardEdge x2, Button x2, TopGlow x1
+- Hand-built: none
+
+## /profile/subscriptions (routes)
+
+- Files: `app/profile/subscriptions.tsx`
+- Library components used: Txt x4, Button x3, CardEdge x2, Row x1, SubPage x1, TopGlow x1, Segmented x1
+- Hand-built:
+  - `app/profile/subscriptions.tsx:21` card: `<View style={{ borderRadius: radii.lg, backgroundColor: c.cardLift, padding: 16, gap: 12, `
+  - `app/profile/subscriptions.tsx:46` card: `<View style={{ padding: 24, borderRadius: radii.lg, backgroundColor: c.cardLift, alignItem`
+
 ## Tracker designs (routes)
 
 - Files: `app/profile/tracker-designs.tsx`
@@ -468,7 +508,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## Lift detail (routes)
 
 - Files: `app/progress/lift.tsx`
-- Library components used: Txt x5, FadeIn x3, TopGlow x1, Pill x1, Card x1, IconBadge x1, Row x1, Pressy x1
+- Library components used: Txt x6, FadeIn x3, Pill x1, Card x1, IconBadge x1, Row x1, Pressy x1
 - Hand-built: none
 
 ## Metric detail (routes)
@@ -545,7 +585,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `app/onboarding.tsx`, `features/onboarding/Steps.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `app/onboarding.tsx:288` button or pill: `<Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel`
+  - `app/onboarding.tsx:320` button or pill: `<Pressy accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel`
 
 ## Onboarding: Experience (onboarding steps)
 
@@ -826,7 +866,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `features/progress/TrendUI.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `features/progress/TrendUI.tsx:132` icon badge: `<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.x`
+  - `features/progress/TrendUI.tsx:133` icon badge: `<View style={{ position: 'absolute', bottom: 4, width: 4, height: 4, borderRadius: radii.x`
 
 ## ProgressMenuSheet (bottom sheets)
 
@@ -862,6 +902,18 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 ## JoinConsentSheet (bottom sheets)
 
 - Files: `features/shell/Switcher.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## CancelSubSheet (bottom sheets)
+
+- Files: `features/subscriptions/parts.tsx`
+- Library components used: (see the screen's files)
+- Hand-built: none
+
+## BuyPlanSheet (bottom sheets)
+
+- Files: `features/subscriptions/plans.tsx`
 - Library components used: (see the screen's files)
 - Hand-built: none
 
@@ -1113,7 +1165,7 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `features/gym/PtInviteSheet.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `features/gym/PtInviteSheet.tsx:59` card: `<View key={l} accessible accessibilityLabel={'${v} ${l}'} style={{ flex: 1, backgroundColo`
+  - `features/gym/PtInviteSheet.tsx:77` card: `<View style={{ position: 'relative', zIndex: 0, borderRadius: radii.xl, padding: 18, gap: `
 
 ## components/FloatingTabBar.tsx (shared components and features)
 
@@ -1218,8 +1270,8 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `features/progress/TrendUI.tsx`
 - Library components used: (see the screen's files)
 - Hand-built:
-  - `features/progress/TrendUI.tsx:80` card: `<View accessibilityRole="radiogroup" accessibilityLabel="Period" style={{ flex: 1, flexDir`
-  - `features/progress/TrendUI.tsx:180` bar: `<View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2`
+  - `features/progress/TrendUI.tsx:81` card: `<View accessibilityRole="radiogroup" accessibilityLabel="Period" style={{ flex: 1, flexDir`
+  - `features/progress/TrendUI.tsx:181` bar: `<View style={{ width: barW, height: 3, borderRadius: radii.xs, backgroundColor: c.surface2`
 
 ## features/today/AteSomethingElse.tsx (shared components and features)
 
@@ -1250,6 +1302,13 @@ For each row of `docs/coverage.md`: the design-system components it uses (count 
 - Files: `features/goalv2/FinishBy.tsx`
 - Library components used: (see the screen's files)
 - Hand-built: none
+
+## features/subscriptions/plans.tsx (shared components and features)
+
+- Files: `features/subscriptions/plans.tsx`
+- Library components used: (see the screen's files)
+- Hand-built:
+  - `features/subscriptions/plans.tsx:52` card: `<View style={{ position: 'relative', zIndex: 0, borderRadius: radii.xl, backgroundColor: c`
 
 ## features/checkin/CheckInEngine.tsx (shared components and features)
 
